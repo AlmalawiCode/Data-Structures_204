@@ -89,53 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
 
-    // Add copy button to code blocks
-    const codeContainers = document.querySelectorAll('.code-container');
-
-    codeContainers.forEach(container => {
-        const copyButton = document.createElement('button');
-        copyButton.textContent = 'Copy';
-        copyButton.className = 'copy-btn';
-        copyButton.style.cssText = `
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-        `;
-
-        container.style.position = 'relative';
-        container.appendChild(copyButton);
-
-        copyButton.addEventListener('click', function() {
-            const code = container.querySelector('code').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                copyButton.textContent = 'Copied!';
-                copyButton.style.background = '#3b82f6';
-
-                setTimeout(() => {
-                    copyButton.textContent = 'Copy';
-                    copyButton.style.background = '#10b981';
-                }, 2000);
-            });
-        });
-
-        copyButton.addEventListener('mouseenter', function() {
-            this.style.background = '#059669';
-        });
-
-        copyButton.addEventListener('mouseleave', function() {
-            if (this.textContent === 'Copy') {
-                this.style.background = '#10b981';
-            }
-        });
-    });
+    // Copy button removed - not working properly
 
     // Add progress bar
     const progressBar = document.createElement('div');
