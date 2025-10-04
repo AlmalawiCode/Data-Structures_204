@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Analysis Tutorial - CPCS204</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo-container">
+            <div class="logo-box">
+                <img src="fcit.png" alt="FCIT Logo" class="fcit-logo">
+            </div>
+            <div class="course-details">
+                <h2>Data Structures - I</h2>
+                <p class="course-code">CPCS 204</p>
+                <p class="topic">Algorithm Analysis</p>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#introduction" class="active">Introduction</a></li>
+            <li><a href="#java-to-polynomial">Java to Polynomial</a></li>
+            <li><a href="#big-o-notation">Big O Notation</a></li>
+            <li><a href="#time-calculation">Time Calculation</a></li>
+            <li><a href="#examples">Practice Examples</a></li>
+            <li><a href="#challenging">Challenging Problems</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <header>
+            <div class="header-logo">
+                <img src="fcit.png" alt="FCIT Logo" style="width: 60px; height: auto; margin-right: 1rem; vertical-align: middle;">
+                <div style="display: inline-block; vertical-align: middle;">
+                    <h1>Algorithm Analysis Tutorial</h1>
+                    <p class="subtitle">Data Structures - I (CPCS 204)</p>
+                    <p class="subtitle" style="font-size: 0.95rem;">Learn how to analyze algorithms, convert code to polynomials, and find Big O notation</p>
+                </div>
+            </div>
+        </header>
+
+        <section id="introduction" class="section">
+            <h2>Introduction to Algorithm Analysis</h2>
+            <div class="card">
+                <h3>Why Algorithm Analysis?</h3>
+                <p>Algorithm analysis helps us understand:</p>
+                <ul>
+                    <li><strong>Time Complexity:</strong> How much time an algorithm takes</li>
+                    <li><strong>Space Complexity:</strong> How much memory an algorithm uses</li>
+                    <li><strong>Efficiency:</strong> How well an algorithm performs as input size grows</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Common Complexity Classes</h3>
+                <table class="complexity-table">
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>Name</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>O(1)</td>
+                            <td>Constant</td>
+                            <td>Array access</td>
+                        </tr>
+                        <tr>
+                            <td>O(log n)</td>
+                            <td>Logarithmic</td>
+                            <td>Binary search</td>
+                        </tr>
+                        <tr>
+                            <td>O(n)</td>
+                            <td>Linear</td>
+                            <td>Linear search</td>
+                        </tr>
+                        <tr>
+                            <td>O(n log n)</td>
+                            <td>Linearithmic</td>
+                            <td>Merge sort</td>
+                        </tr>
+                        <tr>
+                            <td>O(n²)</td>
+                            <td>Quadratic</td>
+                            <td>Nested loops</td>
+                        </tr>
+                        <tr>
+                            <td>O(n³)</td>
+                            <td>Cubic</td>
+                            <td>Triple nested loops</td>
+                        </tr>
+                        <tr>
+                            <td>O(2ⁿ)</td>
+                            <td>Exponential</td>
+                            <td>Recursive fibonacci</td>
+                        </tr>
+                        <tr>
+                            <td>O(n!)</td>
+                            <td>Factorial</td>
+                            <td>Permutations</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="java-to-polynomial" class="section">
+            <h2>Step 1: Converting Java Code to Polynomial Equations</h2>
+
+            <div class="card">
+                <h3>Basic Rules</h3>
+                <ol>
+                    <li><strong>Simple Statement:</strong> Each statement = 1 operation</li>
+                    <li><strong>Loop:</strong> Multiply iterations by operations inside</li>
+                    <li><strong>Nested Loops:</strong> Multiply all loop iterations together</li>
+                    <li><strong>Sequential Code:</strong> Add operations together</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 1: Single Loop</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    sum = sum + i;  // 1 operation
+}</code></pre>
+                </div>
+                <div class="solution">
+                    <h4>Analysis:</h4>
+                    <p><strong>Loop runs:</strong> n times</p>
+                    <p><strong>Operations per iteration:</strong> 1</p>
+                    <p><strong>Total operations:</strong> T(n) = n × 1 = n</p>
+                    <p class="polynomial">f(n) = n</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 2: Nested Loops</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        matrix[i][j] = 0;  // 1 operation
+    }
+}</code></pre>
+                </div>
+                <div class="solution">
+                    <h4>Analysis:</h4>
+                    <p><strong>Outer loop runs:</strong> n times</p>
+                    <p><strong>Inner loop runs:</strong> n times (for each outer iteration)</p>
+                    <p><strong>Operations per inner iteration:</strong> 1</p>
+                    <p><strong>Total operations:</strong> T(n) = n × n × 1 = n²</p>
+                    <p class="polynomial">f(n) = n²</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 3: Sequential Loops</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    sum += i;  // 1 operation
+}
+
+for (int j = 0; j < n*n; j++) {
+    delta += 1;  // 1 operation
+}</code></pre>
+                </div>
+                <div class="solution">
+                    <h4>Analysis:</h4>
+                    <p><strong>First loop:</strong> n operations</p>
+                    <p><strong>Second loop:</strong> n² operations</p>
+                    <p><strong>Total operations (add them):</strong> T(n) = n + n²</p>
+                    <p class="polynomial">f(n) = n² + n</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 4: Logarithmic Loop</h3>
+                <div class="code-container">
+                    <pre><code>while (n > 0) {
+    System.out.println(n);
+    n = n / 2;
+}</code></pre>
+                </div>
+                <div class="solution">
+                    <h4>Analysis:</h4>
+                    <p><strong>Initial value:</strong> n</p>
+                    <p><strong>After 1st iteration:</strong> n/2</p>
+                    <p><strong>After 2nd iteration:</strong> n/4</p>
+                    <p><strong>After 3rd iteration:</strong> n/8</p>
+                    <p><strong>After kth iteration:</strong> n/2<sup>k</sup></p>
+                    <p><strong>Loop ends when:</strong> n/2<sup>k</sup> = 1, so k = log₂(n)</p>
+                    <p class="polynomial">f(n) = log₂(n)</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 5: Complex Nested Loop</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    for (int j = 0; j < i; j++) {
+        sum += i * j;  // 1 operation
+    }
+}</code></pre>
+                </div>
+                <div class="solution">
+                    <h4>Analysis:</h4>
+                    <p><strong>Outer loop:</strong> runs n times</p>
+                    <p><strong>Inner loop:</strong> runs 0, 1, 2, ..., n-1 times</p>
+                    <p><strong>Total:</strong> 0 + 1 + 2 + ... + (n-1) = n(n-1)/2</p>
+                    <p><strong>Expanding:</strong> (n² - n)/2 = n²/2 - n/2</p>
+                    <p class="polynomial">f(n) = (1/2)n² - (1/2)n</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="big-o-notation" class="section">
+            <h2>Step 2: Finding Big O Notation from Polynomials</h2>
+
+            <div class="card">
+                <h3>Rules for Converting to Big O</h3>
+                <ol>
+                    <li><strong>Keep only the highest order term</strong> (term with largest exponent)</li>
+                    <li><strong>Drop all coefficients</strong> (constants multiplying the term)</li>
+                    <li><strong>Drop all lower order terms</strong></li>
+                </ol>
+            </div>
+
+            <div class="card info-card">
+                <h3>Why These Rules?</h3>
+                <p>As n grows large, the highest order term dominates. For example:</p>
+                <p>If f(n) = 4n² + 3n + 10</p>
+                <ul>
+                    <li>When n = 10: 4(100) + 3(10) + 10 = 440</li>
+                    <li>When n = 1000: 4(1,000,000) + 3(1000) + 10 = 4,003,010</li>
+                    <li>The n² term (4,000,000) dominates!</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 1</h3>
+                <p class="polynomial">f(n) = 4n² + 3n + 10</p>
+                <div class="solution">
+                    <p><strong>Step 1:</strong> Identify highest order term → 4n²</p>
+                    <p><strong>Step 2:</strong> Drop coefficient → n²</p>
+                    <p><strong>Step 3:</strong> Drop lower terms → (already done)</p>
+                    <p class="big-o">Big O = O(n²)</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 2</h3>
+                <p class="polynomial">f(n) = 76,756,234n² + 427,913n + 7</p>
+                <div class="solution">
+                    <p><strong>Step 1:</strong> Highest order term → 76,756,234n²</p>
+                    <p><strong>Step 2:</strong> Drop coefficient → n²</p>
+                    <p class="big-o">Big O = O(n²)</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 3</h3>
+                <p class="polynomial">f(n) = 74n⁸ - 62n⁵ - 71,562n³ + 3n² - 5</p>
+                <div class="solution">
+                    <p><strong>Step 1:</strong> Highest order term → 74n⁸</p>
+                    <p><strong>Step 2:</strong> Drop coefficient → n⁸</p>
+                    <p class="big-o">Big O = O(n⁸)</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 4</h3>
+                <p class="polynomial">f(n) = 42n⁴(12n⁶ - 73n² + 11)</p>
+                <div class="solution">
+                    <p><strong>Step 1:</strong> Expand → 42n⁴ × 12n⁶ = 504n¹⁰ (highest term)</p>
+                    <p><strong>Step 2:</strong> Drop coefficient → n¹⁰</p>
+                    <p class="big-o">Big O = O(n¹⁰)</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 5</h3>
+                <p class="polynomial">f(n) = 75n log(n) - 415</p>
+                <div class="solution">
+                    <p><strong>Step 1:</strong> Highest order term → 75n log(n)</p>
+                    <p><strong>Step 2:</strong> Drop coefficient → n log(n)</p>
+                    <p class="big-o">Big O = O(n log n)</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 6: Constant Time</h3>
+                <p class="polynomial">f(n) = 5</p>
+                <div class="solution">
+                    <p><strong>Analysis:</strong> No n term, constant operations</p>
+                    <p class="big-o">Big O = O(1)</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="time-calculation" class="section">
+            <h2>Step 3: Calculating Algorithm Execution Time</h2>
+
+            <div class="card">
+                <h3>Formula</h3>
+                <p>If T(n) = O(g(n)), then:</p>
+                <p class="formula">T(n) = c × g(n)</p>
+                <p>Where c is a constant that depends on the implementation and hardware.</p>
+            </div>
+
+            <div class="card info-card">
+                <h3>Process</h3>
+                <ol>
+                    <li>Use known time for one input size to find constant c</li>
+                    <li>Apply c to predict time for different input sizes</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 1: O(n) Algorithm</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm runs in O(n) time</li>
+                        <li>For n = 10, time = 2 ms</li>
+                    </ul>
+                    <p><strong>Find:</strong> Time when n = 500</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution:</h4>
+                    <p><strong>Step 1:</strong> T(n) = c × n</p>
+                    <p><strong>Step 2:</strong> Find c using known values:</p>
+                    <p>2 = c × 10</p>
+                    <p>c = 2/10 = 1/5</p>
+                    <p><strong>Step 3:</strong> Calculate T(500):</p>
+                    <p>T(500) = (1/5) × 500 = 100 ms</p>
+                    <p class="answer">Answer: 100 milliseconds</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 2: O(n²) Algorithm</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm runs in O(n²) time</li>
+                        <li>For n = 4, time = 10 ms</li>
+                    </ul>
+                    <p><strong>Find:</strong> Time when n = 16</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution:</h4>
+                    <p><strong>Step 1:</strong> T(n) = c × n²</p>
+                    <p><strong>Step 2:</strong> Find c:</p>
+                    <p>10 = c × 4²</p>
+                    <p>10 = c × 16</p>
+                    <p>c = 10/16 = 5/8</p>
+                    <p><strong>Step 3:</strong> Calculate T(16):</p>
+                    <p>T(16) = (5/8) × 16² = (5/8) × 256 = 160 ms</p>
+                    <p class="answer">Answer: 160 milliseconds</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 3: O(log₂ n) Algorithm</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm runs in O(log₂ n) time</li>
+                        <li>For n = 16, time = 28 ms</li>
+                    </ul>
+                    <p><strong>Find:</strong> Time when n = 64</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution:</h4>
+                    <p><strong>Step 1:</strong> T(n) = c × log₂(n)</p>
+                    <p><strong>Step 2:</strong> Find c:</p>
+                    <p>28 = c × log₂(16)</p>
+                    <p>28 = c × 4</p>
+                    <p>c = 7</p>
+                    <p><strong>Step 3:</strong> Calculate T(64):</p>
+                    <p>T(64) = 7 × log₂(64) = 7 × 6 = 42 ms</p>
+                    <p class="answer">Answer: 42 milliseconds</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example 4: Finding Input Size</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm runs in O(n²) time</li>
+                        <li>For n = 10, time = 30 ms</li>
+                    </ul>
+                    <p><strong>Find:</strong> Input size n when time = 120 ms</p>
+                </div>
+                <div class="solution">
+                    <h4>Solution:</h4>
+                    <p><strong>Step 1:</strong> T(n) = c × n²</p>
+                    <p><strong>Step 2:</strong> Find c:</p>
+                    <p>30 = c × 10²</p>
+                    <p>30 = c × 100</p>
+                    <p>c = 3/10</p>
+                    <p><strong>Step 3:</strong> Solve for n when T(n) = 120:</p>
+                    <p>120 = (3/10) × n²</p>
+                    <p>n² = 120 × 10/3 = 400</p>
+                    <p>n = 20</p>
+                    <p class="answer">Answer: n = 20</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="examples" class="section">
+            <h2>Practice Examples</h2>
+
+            <div class="example-box practice">
+                <h3>Practice 1: Simple Loop</h3>
+                <div class="code-container">
+                    <pre><code>int count = 0;
+for (int i = 0; i < n; i++) {
+    count++;
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+                <div id="sol1" class="solution hidden">
+                    <p><strong>Polynomial:</strong> f(n) = n</p>
+                    <p><strong>Big O:</strong> O(n)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 2: Nested Loop with Variable Inner</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    for (int j = i; j < n; j++) {
+        sum += array[i][j];
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+                <div id="sol2" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>i=0: inner loop runs n times</p>
+                    <p>i=1: inner loop runs n-1 times</p>
+                    <p>i=2: inner loop runs n-2 times</p>
+                    <p>Total: n + (n-1) + (n-2) + ... + 1 = n(n+1)/2</p>
+                    <p><strong>Polynomial:</strong> f(n) = n²/2 + n/2</p>
+                    <p><strong>Big O:</strong> O(n²)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 3: Three Nested Loops</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        for (int k = 0; k < n; k++) {
+            cube[i][j][k] = i + j + k;
+        }
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+                <div id="sol3" class="solution hidden">
+                    <p><strong>Analysis:</strong> n × n × n</p>
+                    <p><strong>Polynomial:</strong> f(n) = n³</p>
+                    <p><strong>Big O:</strong> O(n³)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 4: Loop with Division</h3>
+                <div class="code-container">
+                    <pre><code>int i = 1;
+while (i < n) {
+    System.out.println(i);
+    i = i * 2;
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol4')">Show Solution</button>
+                <div id="sol4" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>i starts at 1, doubles each iteration: 1, 2, 4, 8, ..., 2^k</p>
+                    <p>Loop ends when 2^k >= n, so k = log₂(n)</p>
+                    <p><strong>Polynomial:</strong> f(n) = log₂(n)</p>
+                    <p><strong>Big O:</strong> O(log n)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 5: Mixed Loops</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        matrix[i][j] = 0;
+    }
+}
+
+for (int k = 0; k < n; k++) {
+    sum += array[k];
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol5')">Show Solution</button>
+                <div id="sol5" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>First nested loop: n²</p>
+                    <p>Second loop: n</p>
+                    <p>Total (add them): n² + n</p>
+                    <p><strong>Polynomial:</strong> f(n) = n² + n</p>
+                    <p><strong>Big O:</strong> O(n²)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 6: Array Search</h3>
+                <div class="code-container">
+                    <pre><code>boolean found = false;
+for (int i = 0; i < n && !found; i++) {
+    if (array[i] == target) {
+        found = true;
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol6')">Show Solution</button>
+                <div id="sol6" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Loop runs at most n times</p>
+                    <p>Each iteration: 1 operation</p>
+                    <p><strong>Polynomial:</strong> f(n) = n</p>
+                    <p><strong>Big O:</strong> O(n)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 7: Triangular Pattern</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= i; j++) {
+        System.out.print("*");
+    }
+    System.out.println();
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol7')">Show Solution</button>
+                <div id="sol7" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>i=1: inner runs 1 time</p>
+                    <p>i=2: inner runs 2 times</p>
+                    <p>i=n: inner runs n times</p>
+                    <p>Total: 1 + 2 + 3 + ... + n = n(n+1)/2</p>
+                    <p><strong>Polynomial:</strong> f(n) = n²/2 + n/2</p>
+                    <p><strong>Big O:</strong> O(n²)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 8: Constant Time Operations</h3>
+                <div class="code-container">
+                    <pre><code>int first = array[0];
+int last = array[n-1];
+int mid = array[n/2];
+int sum = first + last + mid;</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol8')">Show Solution</button>
+                <div id="sol8" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>4 simple operations (no loops)</p>
+                    <p>Operations don't depend on n</p>
+                    <p><strong>Polynomial:</strong> f(n) = 4</p>
+                    <p><strong>Big O:</strong> O(1)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 9: Decreasing Loop</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = n; i > 0; i--) {
+    sum += array[i-1];
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol9')">Show Solution</button>
+                <div id="sol9" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Loop runs from n down to 1: n iterations</p>
+                    <p>Each iteration: 1 operation</p>
+                    <p><strong>Polynomial:</strong> f(n) = n</p>
+                    <p><strong>Big O:</strong> O(n)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 10: Step by 2</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i += 2) {
+    process(array[i]);
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol10')">Show Solution</button>
+                <div id="sol10" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Loop runs: 0, 2, 4, 6, ..., n-2</p>
+                    <p>Total iterations: n/2</p>
+                    <p><strong>Polynomial:</strong> f(n) = n/2</p>
+                    <p><strong>Big O:</strong> O(n)</p>
+                    <p><em>Note: Constants are dropped in Big O</em></p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 11: Nested with Different Bounds</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+        matrix[i][j] = i + j;
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol11')">Show Solution</button>
+                <div id="sol11" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Outer loop: n times</p>
+                    <p>Inner loop: m times</p>
+                    <p>Total: n × m</p>
+                    <p><strong>Polynomial:</strong> f(n,m) = n × m</p>
+                    <p><strong>Big O:</strong> O(n × m)</p>
+                    <p><em>Note: Two variables in complexity</em></p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 12: Half Array Processing</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n/2; i++) {
+    for (int j = 0; j < n/2; j++) {
+        sum += matrix[i][j];
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol12')">Show Solution</button>
+                <div id="sol12" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Outer loop: n/2 times</p>
+                    <p>Inner loop: n/2 times</p>
+                    <p>Total: (n/2) × (n/2) = n²/4</p>
+                    <p><strong>Polynomial:</strong> f(n) = n²/4</p>
+                    <p><strong>Big O:</strong> O(n²)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 13: Reverse Triangular</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = n; i > 0; i--) {
+    for (int j = 0; j < i; j++) {
+        System.out.print("*");
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol13')">Show Solution</button>
+                <div id="sol13" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>i=n: inner runs n times</p>
+                    <p>i=n-1: inner runs n-1 times</p>
+                    <p>i=1: inner runs 1 time</p>
+                    <p>Total: n + (n-1) + ... + 1 = n(n+1)/2</p>
+                    <p><strong>Polynomial:</strong> f(n) = n²/2 + n/2</p>
+                    <p><strong>Big O:</strong> O(n²)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 14: Division by 3</h3>
+                <div class="code-container">
+                    <pre><code>int i = n;
+while (i > 1) {
+    System.out.println(i);
+    i = i / 3;
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol14')">Show Solution</button>
+                <div id="sol14" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>i: n, n/3, n/9, n/27, ..., 1</p>
+                    <p>After k iterations: n/3^k = 1</p>
+                    <p>Solving: k = log₃(n)</p>
+                    <p><strong>Polynomial:</strong> f(n) = log₃(n)</p>
+                    <p><strong>Big O:</strong> O(log n)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 15: Multiple Sequential Loops</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 0; i < n; i++) {
+    array[i] = i;
+}
+
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        matrix[i][j] = i * j;
+    }
+}
+
+for (int i = 0; i < n; i++) {
+    sum += array[i];
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol15')">Show Solution</button>
+                <div id="sol15" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>First loop: n</p>
+                    <p>Second loop (nested): n²</p>
+                    <p>Third loop: n</p>
+                    <p>Total: n + n² + n = n² + 2n</p>
+                    <p><strong>Polynomial:</strong> f(n) = n² + 2n</p>
+                    <p><strong>Big O:</strong> O(n²)</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 16: Time Calculation Problem 1</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm runs in O(n) time</li>
+                        <li>For n = 50, time = 5 ms</li>
+                    </ul>
+                    <p><strong>Find:</strong> Time when n = 200</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol16')">Show Solution</button>
+                <div id="sol16" class="solution hidden">
+                    <p><strong>T(n) = c × n</strong></p>
+                    <p>5 = c × 50</p>
+                    <p>c = 1/10</p>
+                    <p>T(200) = (1/10) × 200 = 20 ms</p>
+                    <p class="answer">Answer: 20 milliseconds</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 17: Time Calculation Problem 2</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm runs in O(n²) time</li>
+                        <li>For n = 5, time = 25 ms</li>
+                    </ul>
+                    <p><strong>Find:</strong> Time when n = 20</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol17')">Show Solution</button>
+                <div id="sol17" class="solution hidden">
+                    <p><strong>T(n) = c × n²</strong></p>
+                    <p>25 = c × 5²</p>
+                    <p>25 = c × 25</p>
+                    <p>c = 1</p>
+                    <p>T(20) = 1 × 20² = 400 ms</p>
+                    <p class="answer">Answer: 400 milliseconds</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 18: Time Calculation Problem 3</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm runs in O(log₂ n) time</li>
+                        <li>For n = 32, time = 10 ms</li>
+                    </ul>
+                    <p><strong>Find:</strong> Time when n = 256</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol18')">Show Solution</button>
+                <div id="sol18" class="solution hidden">
+                    <p><strong>T(n) = c × log₂(n)</strong></p>
+                    <p>10 = c × log₂(32)</p>
+                    <p>10 = c × 5</p>
+                    <p>c = 2</p>
+                    <p>T(256) = 2 × log₂(256) = 2 × 8 = 16 ms</p>
+                    <p class="answer">Answer: 16 milliseconds</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 19: Finding Input Size</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm runs in O(n²) time</li>
+                        <li>For n = 20, time = 80 ms</li>
+                    </ul>
+                    <p><strong>Find:</strong> What is n when time = 320 ms?</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol19')">Show Solution</button>
+                <div id="sol19" class="solution hidden">
+                    <p><strong>T(n) = c × n²</strong></p>
+                    <p>80 = c × 20²</p>
+                    <p>80 = c × 400</p>
+                    <p>c = 1/5</p>
+                    <p>320 = (1/5) × n²</p>
+                    <p>n² = 320 × 5 = 1600</p>
+                    <p>n = 40</p>
+                    <p class="answer">Answer: n = 40</p>
+                </div>
+            </div>
+
+            <div class="example-box practice">
+                <h3>Practice 20: Polynomial to Big O</h3>
+                <div class="problem">
+                    <p>Convert the following polynomials to Big O notation:</p>
+                    <ol>
+                        <li>f(n) = 5n³ + 2n² + 100</li>
+                        <li>f(n) = 1000n + 500</li>
+                        <li>f(n) = n² log(n) + 3n²</li>
+                        <li>f(n) = 2^n + n³</li>
+                        <li>f(n) = 15</li>
+                    </ol>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('sol20')">Show Solution</button>
+                <div id="sol20" class="solution hidden">
+                    <p><strong>Solutions:</strong></p>
+                    <ol>
+                        <li>f(n) = 5n³ + 2n² + 100 → <strong>O(n³)</strong></li>
+                        <li>f(n) = 1000n + 500 → <strong>O(n)</strong></li>
+                        <li>f(n) = n² log(n) + 3n² → <strong>O(n² log n)</strong></li>
+                        <li>f(n) = 2^n + n³ → <strong>O(2^n)</strong> (exponential dominates)</li>
+                        <li>f(n) = 15 → <strong>O(1)</strong></li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="challenging" class="section">
+            <h2>Challenging Problems</h2>
+
+            <div class="example-box challenge">
+                <h3>Challenge 1: Logarithmic with Nested Loop</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 1; i < n; i = i * 2) {
+    for (int j = 0; j < n; j++) {
+        process(i, j);
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('chal1')">Show Solution</button>
+                <div id="chal1" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Outer loop: runs log₂(n) times (i doubles)</p>
+                    <p>Inner loop: runs n times for each outer iteration</p>
+                    <p><strong>Polynomial:</strong> f(n) = n × log₂(n)</p>
+                    <p><strong>Big O:</strong> O(n log n)</p>
+                </div>
+            </div>
+
+            <div class="example-box challenge">
+                <h3>Challenge 2: Complex Condition</h3>
+                <div class="code-container">
+                    <pre><code>int i = 0, j = 0;
+while (i < n) {
+    while (j < n && array[i][j] == 1) {
+        j++;
+    }
+    i++;
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('chal2')">Show Solution</button>
+                <div id="chal2" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Important: j is NOT reset in outer loop!</p>
+                    <p>i increments n times total</p>
+                    <p>j increments at most n times total (never reset)</p>
+                    <p>Maximum total increments: 2n</p>
+                    <p><strong>Polynomial:</strong> f(n) = 2n</p>
+                    <p><strong>Big O:</strong> O(n)</p>
+                </div>
+            </div>
+
+            <div class="example-box challenge">
+                <h3>Challenge 3: Recursive Doubling</h3>
+                <div class="code-container">
+                    <pre><code>void mystery(int n) {
+    if (n <= 1) return;
+
+    for (int i = 0; i < n; i++) {
+        System.out.println(i);
+    }
+
+    mystery(n/2);
+    mystery(n/2);
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('chal3')">Show Solution</button>
+                <div id="chal3" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Recurrence: T(n) = 2T(n/2) + n</p>
+                    <p>Each level does n work total</p>
+                    <p>Number of levels: log₂(n)</p>
+                    <p>Total: n × log₂(n)</p>
+                    <p><strong>Big O:</strong> O(n log n)</p>
+                </div>
+            </div>
+
+            <div class="example-box challenge">
+                <h3>Challenge 4: Square Root Loop</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 1; i * i <= n; i++) {
+    for (int j = 0; j < n; j++) {
+        process(i, j);
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('chal4')">Show Solution</button>
+                <div id="chal4" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>Outer loop: runs while i² ≤ n, so i ≤ √n</p>
+                    <p>Outer loop runs √n times</p>
+                    <p>Inner loop runs n times</p>
+                    <p><strong>Polynomial:</strong> f(n) = √n × n = n^(3/2)</p>
+                    <p><strong>Big O:</strong> O(n√n) or O(n^1.5)</p>
+                </div>
+            </div>
+
+            <div class="example-box challenge">
+                <h3>Challenge 5: Factorial-like Pattern</h3>
+                <div class="code-container">
+                    <pre><code>for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= i; j++) {
+        for (int k = 1; k <= j; k++) {
+            sum++;
+        }
+    }
+}</code></pre>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('chal5')">Show Solution</button>
+                <div id="chal5" class="solution hidden">
+                    <p><strong>Analysis:</strong></p>
+                    <p>For i=1: 1 operation</p>
+                    <p>For i=2: 1+2 = 3 operations</p>
+                    <p>For i=3: 1+2+3 = 6 operations</p>
+                    <p>For i=n: 1+2+3+...+n = n(n+1)/2 operations</p>
+                    <p>Total: sum of all triangular numbers = n(n+1)(n+2)/6</p>
+                    <p><strong>Polynomial:</strong> f(n) ≈ n³/6</p>
+                    <p><strong>Big O:</strong> O(n³)</p>
+                </div>
+            </div>
+
+            <div class="example-box challenge">
+                <h3>Challenge 6: Time Calculation Problem</h3>
+                <div class="problem">
+                    <p><strong>Given:</strong></p>
+                    <ul>
+                        <li>Algorithm A runs in O(n log n) time</li>
+                        <li>For n = 8, time = 24 ms</li>
+                        <li>Algorithm B runs in O(n²) time</li>
+                        <li>For n = 10, time = 50 ms</li>
+                    </ul>
+                    <p><strong>Question:</strong> Which algorithm is faster for n = 100?</p>
+                </div>
+                <button class="toggle-btn" onclick="toggleSolution('chal6')">Show Solution</button>
+                <div id="chal6" class="solution hidden">
+                    <p><strong>Algorithm A:</strong></p>
+                    <p>24 = c × 8 × log₂(8) = c × 8 × 3</p>
+                    <p>c = 24/24 = 1</p>
+                    <p>T(100) = 1 × 100 × log₂(100) ≈ 100 × 6.64 = 664 ms</p>
+                    <p><strong>Algorithm B:</strong></p>
+                    <p>50 = c × 10² = c × 100</p>
+                    <p>c = 0.5</p>
+                    <p>T(100) = 0.5 × 100² = 0.5 × 10,000 = 5,000 ms</p>
+                    <p class="answer">Algorithm A is faster! (664 ms vs 5,000 ms)</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 CPCS204 Algorithm Analysis Tutorial</p>
+            <p>Based on material by Dr. Jonathan (Yahya) Cazalas and Dr. Muhammad Umair Ramzan</p>
+            <p>Created and enhanced by Dr. Almalawi with additional examples and clarifications</p>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
