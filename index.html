@@ -4,48 +4,198 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CPCS 204 - Data Structures I</title>
-    <link rel="stylesheet" href="home-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header img {
+            width: 8cm;
+            height: 4cm;
+            object-fit: contain;
+        }
+
+        header .header-text {
+            text-align: left;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        .card, .intro-card {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .topic-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+            border-color: #764ba2;
+        }
+
+        .topic-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .topic-card h3 {
+            color: #667eea;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .topic-card p {
+            color: #666;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .topic-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .status-badge {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .topic-items {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
-    <nav class="sidebar">
-        <div class="logo-container">
-            <div class="logo-box">
-                <img src="fcit.png" alt="FCIT Logo" class="fcit-logo">
-            </div>
-            <div class="course-details">
-                <h2>Data Structures - I</h2>
-                <p class="course-code">CPCS 204</p>
-            </div>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#introduction" class="active">Home</a></li>
-            <li><a href="#topics">Course Topics</a></li>
-            <li><a href="#about">About</a></li>
-        </ul>
-    </nav>
-
-    <main class="content">
-        <header class="hero">
-            <div class="hero-content">
-                <img src="fcit.png" alt="FCIT Logo" class="hero-logo">
-                <div>
-                    <h1>Data Structures - I</h1>
-                    <p class="course-code-header">CPCS 204</p>
-                    <p class="subtitle">Interactive Tutorials and Learning Resources</p>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="fcit.png" alt="FCIT Logo">
+                <div class="header-text">
+                    <h1>🎓 Data Structures - I</h1>
+                    <p class="course-code">CPCS 204</p>
+                    <p>Interactive Tutorials and Learning Resources</p>
                 </div>
             </div>
         </header>
 
-        <section id="introduction" class="section">
+        <div class="content">
+
+        <section id="introduction">
             <h2>Welcome to CPCS 204</h2>
-            <div class="card intro-card">
+            <div class="intro-card">
                 <h3>About This Course</h3>
                 <p>Data Structures - I is a fundamental course in computer science that covers essential concepts and techniques for organizing and managing data efficiently.</p>
                 <p>This website provides interactive tutorials, examples, and practice problems to help you master the course material.</p>
             </div>
         </section>
 
-        <section id="topics" class="section">
+        <section id="topics">
             <h2>Course Topics</h2>
 
             <div class="topics-grid">
@@ -58,10 +208,20 @@
                         <span class="topic-items">20+ Examples</span>
                     </div>
                 </a>
+
+                <a href="stack-tutorial.html" class="topic-card available">
+                    <div class="topic-icon">📚</div>
+                    <h3>Stack Data Structure</h3>
+                    <p>Complete guide to stacks with LIFO operations, implementations, and interactive animations for infix-to-postfix conversion.</p>
+                    <div class="topic-meta">
+                        <span class="status-badge available">Available Now</span>
+                        <span class="topic-items">Interactive Animations</span>
+                    </div>
+                </a>
             </div>
         </section>
 
-        <section id="about" class="section">
+        <section id="about">
             <h2>About</h2>
             <div class="card">
                 <h3>Course Information</h3>
@@ -71,61 +231,13 @@
             </div>
         </section>
 
+        </div>
+
         <footer>
             <p>&copy; 2024 CPCS 204 - Data Structures I</p>
             <p>Based on material by Dr. Jonathan (Yahya) Cazalas and Dr. Muhammad Umair Ramzan</p>
             <p>Created and enhanced by Dr. Almalawi with additional examples and clarifications</p>
         </footer>
-    </main>
-
-    <script>
-        // Smooth scrolling for navigation
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Remove active class from all links
-                document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-
-                // Add active class to clicked link
-                this.classList.add('active');
-
-                // Scroll to section
-                const targetId = this.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-
-                if (targetSection) {
-                    targetSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Update active link on scroll
-        window.addEventListener('scroll', function() {
-            const sections = document.querySelectorAll('.section');
-            const navLinks = document.querySelectorAll('.nav-links a');
-
-            let current = '';
-
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-
-                if (pageYOffset >= (sectionTop - 100)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
+    </div>
 </body>
 </html>

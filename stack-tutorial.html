@@ -1,0 +1,3121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Data Structure - Complete Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header img {
+            width: 8cm;
+            height: 4cm;
+            object-fit: contain;
+        }
+
+        header .header-text {
+            text-align: left;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .code-container {
+            margin: 20px 0;
+        }
+
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .code-header:hover {
+            background: #5568d3;
+        }
+
+        .code-toggle {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .code-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre;
+            max-height: 600px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+        }
+
+        .code-block.collapsed {
+            max-height: 0;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+
+        .code-block .comment {
+            color: #6272a4;
+        }
+
+        /* Algorithm Steps Styling */
+        .algorithm-steps {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .algorithm-steps h4 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .algorithm-steps ol {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .algorithm-steps ol > li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 15px 15px 60px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .algorithm-steps ol > li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            background: white;
+            color: #667eea;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .algorithm-steps ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .algorithm-steps ul li {
+            margin: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .algorithm-steps ul li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .algorithm-steps ul ul li::before {
+            content: "•";
+            color: #90caf9;
+        }
+
+        .algorithm-steps code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .algorithm-steps strong {
+            color: #ffd700;
+        }
+
+        .step-example {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border-left: 4px solid #ffd700;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+
+        .code-block .keyword {
+            color: #ff79c6;
+        }
+
+        .code-block .class-name {
+            color: #50fa7b;
+        }
+
+        .code-block .method {
+            color: #8be9fd;
+        }
+
+        .code-block .string {
+            color: #f1fa8c;
+        }
+
+        /* Stack Visualization */
+        .stack-visualization {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            min-height: 300px;
+            justify-content: flex-start;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+
+        .stack-item {
+            width: 200px;
+            padding: 15px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            animation: pushItem 0.5s ease;
+        }
+
+        @keyframes pushItem {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stack-label {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Calculator Styles */
+        .calculator {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .calculator h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            background: white;
+            border: 2px solid #4caf50;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+
+        .result-box h4 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .steps-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .step {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f0f4ff;
+            border-left: 3px solid #667eea;
+            border-radius: 3px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .stack-state {
+            display: inline-block;
+            background: #764ba2;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin: 5px 5px 5px 0;
+            font-family: monospace;
+        }
+
+        .error {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .example-card {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .example-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .example-card p {
+            color: #555;
+        }
+
+        /* Interactive Demo */
+        .interactive-demo {
+            background: #f9f9f9;
+            border: 2px solid #764ba2;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .demo-stack {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            min-height: 350px;
+            border: 3px dashed #764ba2;
+            border-radius: 10px;
+            padding: 20px;
+            background: white;
+            position: relative;
+        }
+
+        .demo-stack-item {
+            width: 250px;
+            padding: 20px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            animation: pushAnimation 0.5s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes pushAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .demo-stack-item.popping {
+            animation: popAnimation 0.5s ease;
+        }
+
+        @keyframes popAnimation {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.8);
+            }
+        }
+
+        .top-pointer {
+            position: absolute;
+            right: -80px;
+            top: 20px;
+            color: #764ba2;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .top-pointer::before {
+            content: "← TOP";
+        }
+
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Animated Visualization Styles */
+        .animation-container {
+            background: #f9f9f9;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+
+        .animation-area {
+            display: grid;
+            grid-template-columns: 1fr 250px 1fr;
+            gap: 30px;
+            align-items: start;
+            min-height: 500px;
+            margin: 30px 0;
+        }
+
+        /* Waiting symbol in top-left corner of stack */
+        .waiting-symbol {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.6);
+            border: 3px solid white;
+            z-index: 10;
+            animation: pulse 1.5s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 12px rgba(255, 152, 0, 0.6);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 6px 16px rgba(255, 152, 0, 0.8);
+            }
+        }
+
+        .waiting-label {
+            position: absolute;
+            top: -35px;
+            left: 40px;
+            background: #ffc107;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .input-area, .output-area {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .input-area h4, .output-area h4 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .animation-stack {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            min-height: 400px;
+            border: 3px dashed #764ba2;
+            border-radius: 10px;
+            padding: 20px;
+            background: white;
+            position: relative;
+        }
+
+        .animation-stack h4 {
+            position: absolute;
+            top: -30px;
+            background: #f9f9f9;
+            padding: 5px 15px;
+            color: #764ba2;
+            font-weight: bold;
+        }
+
+        .token {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1565c0;
+            cursor: default;
+        }
+
+        .token.number {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .token.operator {
+            background: #fff3e0;
+            border-color: #ff9800;
+            color: #e65100;
+        }
+
+        .stack-token {
+            width: 180px;
+            padding: 15px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .output-token {
+            display: inline-block;
+            padding: 12px 18px;
+            margin: 5px;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Flying animation for tokens */
+        @keyframes flyToStack {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(200px, -50px) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(400px, 0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes flyToOutput {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(200px, 50px) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(400px, 0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes popFromStack {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-30px) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pushToStack {
+            0% {
+                transform: translateY(50px) scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .flying {
+            animation: flyToStack 1s ease;
+        }
+
+        .flying-out {
+            animation: flyToOutput 1s ease;
+        }
+
+        .animation-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .animation-controls input {
+            width: 60%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 10px;
+        }
+
+        .status-message {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+            min-height: 50px;
+        }
+
+        .eval-animation-area {
+            display: grid;
+            grid-template-columns: 300px 250px 300px;
+            gap: 30px;
+            align-items: start;
+            min-height: 500px;
+            margin: 30px 0;
+        }
+
+        .computation-area {
+            background: white;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .computation-area h4 {
+            color: #4caf50;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .computation-display {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 30px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes highlight {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 8px 15px rgba(255, 152, 0, 0.5);
+            }
+        }
+
+        .highlight-token {
+            animation: highlight 1s ease;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .animation-area {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .eval-animation-area {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .animation-stack {
+                order: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-home-btn">🏠 Home</a>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="fcit.png" alt="FCIT Logo">
+                <div class="header-text">
+                    <h1>📚 Stack Data Structure</h1>
+                    <p class="course-code">CPCS 204 - Data Structures I</p>
+                    <p>A Complete Tutorial with Interactive Examples</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Section 1: Introduction -->
+            <section id="introduction">
+                <h2>1. What is a Stack?</h2>
+
+                <div class="definition">
+                    <strong>Definition:</strong> A stack is a data structure that stores information in the form of a linear collection where elements are added and removed from only one end, called the <strong>top</strong>. It follows the <strong>LIFO (Last In, First Out)</strong> principle.
+                </div>
+
+                <h3>Real-World Examples of Stacks</h3>
+                <div class="examples-grid">
+                    <div class="example-card">
+                        <h4>�盘 Stack of Plates</h4>
+                        <p>You add plates to the top and remove from the top. The last plate placed is the first one removed.</p>
+                    </div>
+                    <div class="example-card">
+                        <h4>📚 Stack of Books</h4>
+                        <p>Books are stacked vertically. You take the top book first.</p>
+                    </div>
+                    <div class="example-card">
+                        <h4>↩️ Browser History</h4>
+                        <p>The back button takes you to the last visited page (LIFO).</p>
+                    </div>
+                    <div class="example-card">
+                        <h4>↶ Undo Operation</h4>
+                        <p>The last action performed is the first one undone.</p>
+                    </div>
+                </div>
+
+                <h3>Key Characteristics of a Stack</h3>
+                <ul>
+                    <li><strong>Linear Data Structure:</strong> Elements are arranged in a sequential manner</li>
+                    <li><strong>Homogeneous:</strong> All elements are of the same data type</li>
+                    <li><strong>One-End Access:</strong> Elements can only be accessed from the top</li>
+                    <li><strong>LIFO Policy:</strong> Last In, First Out - the most recently added element is removed first</li>
+                </ul>
+            </section>
+
+            <!-- Section 2: Stack as Abstract Data Type -->
+            <section id="adt">
+                <h2>2. Stack as an Abstract Data Type (ADT)</h2>
+
+                <div class="important">
+                    <h3>Why is Stack an Abstract Data Type?</h3>
+                    <p>A stack is considered an <strong>Abstract Data Type (ADT)</strong> because it defines the behavior of the data structure through its operations, without specifying how these operations are implemented internally.</p>
+                </div>
+
+                <h3>Logical vs Physical Structure</h3>
+                <div class="highlight-box">
+                    <h4>Logical Data Structure</h4>
+                    <p>A stack is a <strong>logical data structure</strong> - it describes HOW data is organized and accessed (LIFO behavior), but NOT how it's stored in memory.</p>
+
+                    <h4>Physical Implementation</h4>
+                    <p>To actually use a stack, it must be built on top of a <strong>physical data structure</strong>:</p>
+                    <ul>
+                        <li><strong>Array-based implementation</strong> - Uses contiguous memory</li>
+                        <li><strong>Linked List-based implementation</strong> - Uses dynamic memory allocation</li>
+                    </ul>
+                </div>
+
+                <h3>Abstract Operations</h3>
+                <p>The operations of a stack remain the same regardless of the underlying implementation:</p>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Description</th>
+                            <th>Array Implementation</th>
+                            <th>Linked List Implementation</th>
+                        </tr>
+                        <tr>
+                            <td><strong>push()</strong></td>
+                            <td>Add element to top</td>
+                            <td>arr[++top] = element</td>
+                            <td>Add node at head</td>
+                        </tr>
+                        <tr>
+                            <td><strong>pop()</strong></td>
+                            <td>Remove top element</td>
+                            <td>return arr[top--]</td>
+                            <td>Remove node from head</td>
+                        </tr>
+                        <tr>
+                            <td><strong>top()/peek()</strong></td>
+                            <td>View top element</td>
+                            <td>return arr[top]</td>
+                            <td>return head.data</td>
+                        </tr>
+                        <tr>
+                            <td><strong>isEmpty()</strong></td>
+                            <td>Check if empty</td>
+                            <td>return top == -1</td>
+                            <td>return head == null</td>
+                        </tr>
+                        <tr>
+                            <td><strong>isFull()</strong></td>
+                            <td>Check if full</td>
+                            <td>return top == size-1</td>
+                            <td>N/A (dynamic)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="important">
+                    <strong>Key Point:</strong> You can change the physical implementation (array ↔ linked list), but the abstract operations and their behavior remain unchanged. This is the essence of abstraction!
+                </div>
+            </section>
+
+            <!-- Section 3: Stack Operations -->
+            <section id="operations">
+                <h2>3. Stack Operations</h2>
+
+                <h3>3.1 push(element)</h3>
+                <div class="highlight-box">
+                    <p><strong>Purpose:</strong> Adds an element to the top of the stack</p>
+                    <p><strong>Steps:</strong></p>
+                    <ol>
+                        <li>Check if stack is full (for array implementation)</li>
+                        <li>Increment the top pointer</li>
+                        <li>Insert the element at the top position</li>
+                    </ol>
+                    <p><strong>Time Complexity:</strong> O(1)</p>
+                </div>
+
+                <h3>3.2 pop()</h3>
+                <div class="highlight-box">
+                    <p><strong>Purpose:</strong> Removes and returns the top element from the stack</p>
+                    <p><strong>Steps:</strong></p>
+                    <ol>
+                        <li>Check if stack is empty</li>
+                        <li>Retrieve the element at top position</li>
+                        <li>Decrement the top pointer</li>
+                        <li>Return the retrieved element</li>
+                    </ol>
+                    <p><strong>Time Complexity:</strong> O(1)</p>
+                </div>
+
+                <h3>3.3 top() / peek()</h3>
+                <div class="highlight-box">
+                    <p><strong>Purpose:</strong> Returns the top element without removing it</p>
+                    <p><strong>Steps:</strong></p>
+                    <ol>
+                        <li>Check if stack is empty</li>
+                        <li>Return the element at top position</li>
+                    </ol>
+                    <p><strong>Time Complexity:</strong> O(1)</p>
+                </div>
+
+                <h3>3.4 isEmpty()</h3>
+                <div class="highlight-box">
+                    <p><strong>Purpose:</strong> Checks whether the stack is empty</p>
+                    <p><strong>Returns:</strong> true if stack has no elements, false otherwise</p>
+                    <p><strong>Time Complexity:</strong> O(1)</p>
+                </div>
+
+                <h3>3.5 isFull()</h3>
+                <div class="highlight-box">
+                    <p><strong>Purpose:</strong> Checks whether the stack is full (mainly for array implementation)</p>
+                    <p><strong>Returns:</strong> true if stack cannot accept more elements, false otherwise</p>
+                    <p><strong>Note:</strong> Not applicable for linked list implementation (dynamic size)</p>
+                    <p><strong>Time Complexity:</strong> O(1)</p>
+                </div>
+            </section>
+
+            <!-- Interactive Demo -->
+            <section id="demo">
+                <h2>4. Interactive Stack Demonstration</h2>
+
+                <div class="interactive-demo">
+                    <h3>Try Stack Operations Yourself!</h3>
+                    <p>Enter a value and click Push to add it to the stack, or click Pop to remove the top element.</p>
+
+                    <div class="demo-controls">
+                        <input type="text" id="pushValue" placeholder="Enter value" />
+                        <button class="btn" onclick="demoPush()">Push</button>
+                        <button class="btn" onclick="demoPop()">Pop</button>
+                        <button class="btn" onclick="demoPeek()">Peek</button>
+                        <button class="btn" onclick="demoClear()">Clear Stack</button>
+                    </div>
+
+                    <div id="demoMessage" style="text-align: center; margin: 10px 0; font-weight: bold; color: #667eea;"></div>
+
+                    <div class="demo-stack" id="demoStack">
+                        <div class="stack-label">↑ STACK (LIFO) ↑</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Implementation -->
+            <section id="implementation">
+                <h2>5. Stack Implementation in Java</h2>
+
+                <h3>5.1 Array-Based Implementation</h3>
+                <p>Using ArrayList provides dynamic sizing while maintaining array-like access patterns.</p>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        <span>📄 StackUsingArrayList.java</span>
+                        <span class="code-toggle">▼</span>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">import</span> java.util.ArrayList;
+
+<span class="keyword">public class</span> <span class="class-name">StackUsingArrayList</span>&lt;T&gt; {
+    <span class="keyword">private</span> ArrayList&lt;T&gt; stack;
+    <span class="keyword">private int</span> maxSize;
+
+    <span class="comment">// Constructor</span>
+    <span class="keyword">public</span> <span class="method">StackUsingArrayList</span>(<span class="keyword">int</span> size) {
+        stack = <span class="keyword">new</span> ArrayList&lt;&gt;();
+        maxSize = size;
+    }
+
+    <span class="comment">// Push operation - O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">push</span>(T element) {
+        <span class="keyword">if</span> (isFull()) {
+            System.out.println(<span class="string">"Stack Overflow! Cannot push "</span> + element);
+            <span class="keyword">return false</span>;
+        }
+        stack.add(element);
+        <span class="keyword">return true</span>;
+    }
+
+    <span class="comment">// Pop operation - O(1)</span>
+    <span class="keyword">public</span> T <span class="method">pop</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack Underflow! Stack is empty"</span>);
+            <span class="keyword">return null</span>;
+        }
+        <span class="keyword">return</span> stack.remove(stack.size() - 1);
+    }
+
+    <span class="comment">// Peek/Top operation - O(1)</span>
+    <span class="keyword">public</span> T <span class="method">top</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack is empty"</span>);
+            <span class="keyword">return null</span>;
+        }
+        <span class="keyword">return</span> stack.get(stack.size() - 1);
+    }
+
+    <span class="comment">// Check if stack is empty - O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() {
+        <span class="keyword">return</span> stack.isEmpty();
+    }
+
+    <span class="comment">// Check if stack is full - O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">isFull</span>() {
+        <span class="keyword">return</span> stack.size() >= maxSize;
+    }
+
+    <span class="comment">// Get current size - O(1)</span>
+    <span class="keyword">public int</span> <span class="method">size</span>() {
+        <span class="keyword">return</span> stack.size();
+    }
+
+    <span class="comment">// Display stack contents</span>
+    <span class="keyword">public void</span> <span class="method">display</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack is empty"</span>);
+            <span class="keyword">return</span>;
+        }
+        System.out.println(<span class="string">"Stack (top to bottom): "</span>);
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = stack.size() - 1; i >= 0; i--) {
+            System.out.println(<span class="string">"  "</span> + stack.get(i));
+        }
+    }
+}
+
+<span class="comment">// Example Usage</span>
+<span class="keyword">public class</span> <span class="class-name">Main</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        StackUsingArrayList&lt;Integer&gt; stack = <span class="keyword">new</span> StackUsingArrayList&lt;&gt;(5);
+
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+        stack.display();
+
+        System.out.println(<span class="string">"Top element: "</span> + stack.top());
+        System.out.println(<span class="string">"Popped: "</span> + stack.pop());
+        stack.display();
+    }
+}
+                    </div>
+                </div>
+
+                <h3>5.2 Linked List-Based Implementation</h3>
+                <p>Using a linked list provides truly dynamic sizing without capacity constraints.</p>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        <span>📄 StackUsingLinkedList.java</span>
+                        <span class="code-toggle">▼</span>
+                    </div>
+                    <div class="code-block">
+<span class="comment">// Node class for Linked List</span>
+<span class="keyword">class</span> <span class="class-name">Node</span>&lt;T&gt; {
+    T data;
+    Node&lt;T&gt; next;
+
+    <span class="keyword">public</span> <span class="method">Node</span>(T data) {
+        <span class="keyword">this</span>.data = data;
+        <span class="keyword">this</span>.next = <span class="keyword">null</span>;
+    }
+}
+
+<span class="keyword">public class</span> <span class="class-name">StackUsingLinkedList</span>&lt;T&gt; {
+    <span class="keyword">private</span> Node&lt;T&gt; top;
+    <span class="keyword">private int</span> size;
+
+    <span class="comment">// Constructor</span>
+    <span class="keyword">public</span> <span class="method">StackUsingLinkedList</span>() {
+        top = <span class="keyword">null</span>;
+        size = 0;
+    }
+
+    <span class="comment">// Push operation - O(1)</span>
+    <span class="keyword">public void</span> <span class="method">push</span>(T element) {
+        Node&lt;T&gt; newNode = <span class="keyword">new</span> Node&lt;&gt;(element);
+        newNode.next = top;
+        top = newNode;
+        size++;
+    }
+
+    <span class="comment">// Pop operation - O(1)</span>
+    <span class="keyword">public</span> T <span class="method">pop</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack Underflow! Stack is empty"</span>);
+            <span class="keyword">return null</span>;
+        }
+        T data = top.data;
+        top = top.next;
+        size--;
+        <span class="keyword">return</span> data;
+    }
+
+    <span class="comment">// Peek/Top operation - O(1)</span>
+    <span class="keyword">public</span> T <span class="method">top</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack is empty"</span>);
+            <span class="keyword">return null</span>;
+        }
+        <span class="keyword">return</span> top.data;
+    }
+
+    <span class="comment">// Check if stack is empty - O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() {
+        <span class="keyword">return</span> top == <span class="keyword">null</span>;
+    }
+
+    <span class="comment">// Note: isFull() is not needed for linked list implementation</span>
+    <span class="comment">// as it grows dynamically</span>
+
+    <span class="comment">// Get current size - O(1)</span>
+    <span class="keyword">public int</span> <span class="method">size</span>() {
+        <span class="keyword">return</span> size;
+    }
+
+    <span class="comment">// Display stack contents</span>
+    <span class="keyword">public void</span> <span class="method">display</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack is empty"</span>);
+            <span class="keyword">return</span>;
+        }
+        System.out.println(<span class="string">"Stack (top to bottom): "</span>);
+        Node&lt;T&gt; current = top;
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            System.out.println(<span class="string">"  "</span> + current.data);
+            current = current.next;
+        }
+    }
+}
+
+<span class="comment">// Example Usage</span>
+<span class="keyword">public class</span> <span class="class-name">Main</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        StackUsingLinkedList&lt;String&gt; stack = <span class="keyword">new</span> StackUsingLinkedList&lt;&gt;();
+
+        stack.push(<span class="string">"Java"</span>);
+        stack.push(<span class="string">"Python"</span>);
+        stack.push(<span class="string">"C++"</span>);
+        stack.display();
+
+        System.out.println(<span class="string">"Top element: "</span> + stack.top());
+        System.out.println(<span class="string">"Popped: "</span> + stack.pop());
+        stack.display();
+    }
+}
+                    </div>
+                </div>
+
+                <h3>Comparison: Array vs Linked List Implementation</h3>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Array-Based</th>
+                            <th>Linked List-Based</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory</strong></td>
+                            <td>Fixed size, contiguous memory</td>
+                            <td>Dynamic size, non-contiguous</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Size Limit</strong></td>
+                            <td>Has maximum capacity</td>
+                            <td>No fixed limit (until memory runs out)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory Overhead</strong></td>
+                            <td>Lower (just elements)</td>
+                            <td>Higher (elements + pointers)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cache Performance</strong></td>
+                            <td>Better (contiguous)</td>
+                            <td>Worse (scattered)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>isFull() Operation</strong></td>
+                            <td>Needed and meaningful</td>
+                            <td>Not applicable</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 5: Applications -->
+            <section id="applications">
+                <h2>6. Stack Applications</h2>
+
+                <div class="important">
+                    <p><strong>Important:</strong> Stacks are fundamental data structures with countless applications in computer science. The applications are virtually infinite and depend on the problem domain. We will focus on one of the most important applications: <strong>Arithmetic Expression Evaluation</strong>.</p>
+                </div>
+
+                <h3>Common Stack Applications</h3>
+                <ul>
+                    <li><strong>Expression Evaluation and Conversion</strong> (Infix, Postfix, Prefix)</li>
+                    <li><strong>Function Call Management</strong> (Call Stack in programming)</li>
+                    <li><strong>Undo/Redo Operations</strong> (Text editors, graphics software)</li>
+                    <li><strong>Browser History</strong> (Back and Forward buttons)</li>
+                    <li><strong>Syntax Parsing</strong> (Checking balanced parentheses, brackets)</li>
+                    <li><strong>Backtracking Algorithms</strong> (Maze solving, chess games)</li>
+                    <li><strong>Memory Management</strong> (Stack memory allocation)</li>
+                    <li><strong>Tree and Graph Traversals</strong> (DFS - Depth First Search)</li>
+                </ul>
+
+                <h3>Focus Application: Arithmetic Expression Evaluation</h3>
+
+                <div class="highlight-box">
+                    <h4>The Problem</h4>
+                    <p>How does a computer solve mathematical expressions like <code>3 + 5 * 2 - 8 / 4</code>?</p>
+                    <p>As humans, we understand operator precedence and can evaluate expressions written in <strong>infix notation</strong> (operators between operands). But computers process instructions sequentially from left to right. They need a systematic way to evaluate expressions while respecting operator precedence.</p>
+                </div>
+
+                <h3>6.1 Types of Arithmetic Expressions</h3>
+
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Notation</th>
+                            <th>Format</th>
+                            <th>Example</th>
+                            <th>Used By</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Infix</strong></td>
+                            <td>operand operator operand</td>
+                            <td>A + B</td>
+                            <td>Humans</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Postfix (RPN)</strong></td>
+                            <td>operand operand operator</td>
+                            <td>A B +</td>
+                            <td>Computers</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prefix</strong></td>
+                            <td>operator operand operand</td>
+                            <td>+ A B</td>
+                            <td>Some compilers</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h4>Example Comparison</h4>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Infix (Human)</th>
+                            <th>Postfix (Computer)</th>
+                        </tr>
+                        <tr>
+                            <td>3 + 5</td>
+                            <td>3 5 +</td>
+                        </tr>
+                        <tr>
+                            <td>(3 + 5) * 2</td>
+                            <td>3 5 + 2 *</td>
+                        </tr>
+                        <tr>
+                            <td>3 + 5 * 2</td>
+                            <td>3 5 2 * +</td>
+                        </tr>
+                        <tr>
+                            <td>((3 + 5) * 2 - 8) / 4</td>
+                            <td>3 5 + 2 * 8 - 4 /</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>6.2 Why Postfix Notation?</h3>
+                <div class="definition">
+                    <p><strong>Postfix notation (also called Reverse Polish Notation - RPN)</strong> is preferred by computers because:</p>
+                    <ul>
+                        <li>No need for parentheses</li>
+                        <li>No need to remember operator precedence</li>
+                        <li>Can be evaluated in a single left-to-right scan</li>
+                        <li>Easy to implement using a stack</li>
+                        <li>More efficient for computation</li>
+                    </ul>
+                </div>
+
+                <h3>6.3 Operator Precedence and Associativity</h3>
+                <p>Before converting expressions, we need to understand operator precedence:</p>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Precedence</th>
+                            <th>Associativity</th>
+                        </tr>
+                        <tr>
+                            <td>^</td>
+                            <td>3 (Highest)</td>
+                            <td>Right to Left</td>
+                        </tr>
+                        <tr>
+                            <td>*, /, %</td>
+                            <td>2</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>+, -</td>
+                            <td>1 (Lowest)</td>
+                            <td>Left to Right</td>
+                        </tr>
+                        <tr>
+                            <td>( )</td>
+                            <td>Overrides precedence</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>6.4 Algorithm: Infix to Postfix Conversion</h3>
+                <div class="algorithm-steps">
+                    <h4>📋 Steps:</h4>
+                    <ol>
+                        <li>Create an empty stack for operators</li>
+                        <li>Create an empty string for output</li>
+                        <li>Scan the infix expression from left to right:
+                            <ul>
+                                <li><strong>If operand (A-Z, 0-9):</strong> Add it directly to output</li>
+                                <li><strong>If '(':</strong> Push it onto stack</li>
+                                <li><strong>If ')':</strong> Pop operators from stack to output until '(' is found (discard both parentheses)</li>
+                                <li><strong>If operator:</strong>
+                                    <ul>
+                                        <li><strong>While</strong> stack is not empty AND stack top is not '(' AND stack top has higher or equal precedence than scanned operator:
+                                            <ul>
+                                                <li>Pop stack top to output</li>
+                                                <li>Re-check condition (repeat)</li>
+                                            </ul>
+                                        </li>
+                                        <li>Push current operator onto stack</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Pop any remaining operators from stack to output</li>
+                    </ol>
+                </div>
+
+                <h3>6.5 Algorithm: Postfix Evaluation</h3>
+                <div class="algorithm-steps">
+                    <h4>📋 Steps:</h4>
+                    <ol>
+                        <li>Create an empty stack for operands</li>
+                        <li>Scan the postfix expression from left to right:
+                            <ul>
+                                <li><strong>If operand:</strong> Push it onto stack</li>
+                                <li><strong>If operator:</strong>
+                                    <ul>
+                                        <li>Pop and store in <code>var1</code> (this was on top)</li>
+                                        <li>Pop and store in <code>var2</code> (this was below var1)</li>
+                                        <li>Apply operator as: <code>result = var2 operator var1</code></li>
+                                        <li><div class="step-example">
+                                            <strong>Example:</strong> For "5 3 -"<br>
+                                            Stack has [5, 3] where 3 is top<br>
+                                            Pop var1 = 3 (top)<br>
+                                            Pop var2 = 5 (was below)<br>
+                                            Compute: 5 - 3 = 2
+                                        </div></li>
+                                        <li>Push result back onto stack</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>The final value in stack is the result</li>
+                    </ol>
+                </div>
+
+                <h3>Manual Example: Converting and Evaluating</h3>
+                <div class="definition">
+                    <h4>Example: Convert and evaluate <code>3 + 5 * 2</code></h4>
+
+                    <p><strong>Step 1: Infix to Postfix Conversion</strong></p>
+                    <table style="width: 100%; margin: 10px 0;">
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Action</th>
+                            <th>Stack</th>
+                            <th>Output</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Operand → Output</td>
+                            <td>[ ]</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>+</td>
+                            <td>Operator → Stack</td>
+                            <td>[ + ]</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Operand → Output</td>
+                            <td>[ + ]</td>
+                            <td>3 5</td>
+                        </tr>
+                        <tr>
+                            <td>*</td>
+                            <td>Higher precedence → Stack</td>
+                            <td>[ +, * ]</td>
+                            <td>3 5</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Operand → Output</td>
+                            <td>[ +, * ]</td>
+                            <td>3 5 2</td>
+                        </tr>
+                        <tr>
+                            <td>End</td>
+                            <td>Pop all operators</td>
+                            <td>[ ]</td>
+                            <td>3 5 2 * +</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Postfix Result: <code>3 5 2 * +</code></strong></p>
+
+                    <p><strong>Step 2: Evaluate Postfix Expression</strong></p>
+                    <table style="width: 100%; margin: 10px 0;">
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Action</th>
+                            <th>Stack</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Push operand</td>
+                            <td>[ 3 ]</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Push operand</td>
+                            <td>[ 3, 5 ]</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Push operand</td>
+                            <td>[ 3, 5, 2 ]</td>
+                        </tr>
+                        <tr>
+                            <td>*</td>
+                            <td>Pop 2 & 5, compute 5*2=10, push</td>
+                            <td>[ 3, 10 ]</td>
+                        </tr>
+                        <tr>
+                            <td>+</td>
+                            <td>Pop 10 & 3, compute 3+10=13, push</td>
+                            <td>[ 13 ]</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Final Result: 13</strong></p>
+                </div>
+            </section>
+
+            <!-- Animated Visualizations -->
+            <section id="animations">
+                <h2>7. Animated Visualizations</h2>
+
+                <!-- Infix to Postfix Animation -->
+                <div class="animation-container">
+                    <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">🎬 Infix to Postfix Conversion Animation</h3>
+                    <p style="text-align: center; margin-bottom: 20px;">Watch how symbols move from input → stack → output during conversion!</p>
+
+                    <div class="animation-controls">
+                        <input type="text" id="animInfixInput" placeholder="Enter infix expression (e.g., 3+5*2 or (3+5)*2)" />
+                        <br>
+                        <button class="btn" onclick="startInfixAnimation()">🔄 Load Expression</button>
+                        <button class="btn" onclick="prevInfixStep()" id="infixPrevBtn" disabled>◀ Previous</button>
+                        <button class="btn" onclick="nextInfixStep()" id="infixNextBtn" disabled>Next ▶</button>
+                        <button class="btn" onclick="resetInfixAnimation()">↻ Reset</button>
+                    </div>
+
+                    <div class="status-message" id="animStatus">Enter an infix expression and click "Load Expression"</div>
+                    <div class="status-message" id="animNextAction" style="background: #fff3cd; border-color: #ffc107; display: none;">
+                        <strong>➡️ What will happen next:</strong> <span id="nextActionText"></span>
+                    </div>
+
+                    <div class="animation-area">
+                        <div class="input-area">
+                            <h4>📥 INPUT</h4>
+                            <div id="animInputTokens"></div>
+                        </div>
+
+                        <div class="animation-stack" id="animStack">
+                            <h4>STACK</h4>
+                        </div>
+
+                        <div class="output-area">
+                            <h4>📤 OUTPUT (Postfix)</h4>
+                            <div id="animOutputTokens"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Postfix Evaluation Animation -->
+                <div class="animation-container">
+                    <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">🎬 Postfix Evaluation Animation</h3>
+                    <p style="text-align: center; margin-bottom: 20px;">Watch how operands are pushed and popped during evaluation!</p>
+
+                    <div class="animation-controls">
+                        <input type="text" id="animPostfixInput" placeholder="Enter postfix expression (e.g., 3 5 2 * +)" />
+                        <br>
+                        <button class="btn" onclick="startEvalAnimation()">🔄 Load Expression</button>
+                        <button class="btn" onclick="prevEvalStep()" id="evalPrevBtn" disabled>◀ Previous</button>
+                        <button class="btn" onclick="nextEvalStep()" id="evalNextBtn" disabled>Next ▶</button>
+                        <button class="btn" onclick="resetEvalAnimation()">↻ Reset</button>
+                    </div>
+
+                    <div class="status-message" id="evalAnimStatus">Enter a postfix expression and click "Load Expression"</div>
+                    <div class="status-message" id="evalNextAction" style="background: #fff3cd; border-color: #ffc107; display: none;">
+                        <strong>➡️ What will happen next:</strong> <span id="evalNextActionText"></span>
+                    </div>
+
+                    <div class="eval-animation-area">
+                        <div class="input-area">
+                            <h4>📥 INPUT (Postfix)</h4>
+                            <div id="evalInputTokens"></div>
+                        </div>
+
+                        <div class="animation-stack" id="evalStack">
+                            <h4>STACK</h4>
+                        </div>
+
+                        <div class="computation-area">
+                            <h4>🧮 COMPUTATION</h4>
+                            <div class="computation-display" id="computationDisplay">
+                                Ready
+                            </div>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                                    <strong>Final Result:</strong>
+                                    <div id="finalResult" style="font-size: 2em; color: #4caf50; margin-top: 10px;">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Calculators -->
+            <section id="calculators">
+                <h2>8. Interactive Calculators</h2>
+
+                <!-- Calculator 1: Infix to Postfix -->
+                <div class="calculator">
+                    <h3>🔄 Calculator 1: Infix to Postfix Converter</h3>
+                    <p>Enter an infix expression (e.g., <code>3+5*2</code> or <code>(3+5)*2-8/4</code>)</p>
+                    <p><small>Supported operators: +, -, *, /, ^, ( )</small></p>
+
+                    <div class="input-group">
+                        <label for="infixInput">Infix Expression:</label>
+                        <input type="text" id="infixInput" placeholder="e.g., (3+5)*2-8/4" />
+                    </div>
+
+                    <button class="btn" onclick="convertToPostfix()">Convert to Postfix</button>
+
+                    <div id="postfixResult" style="display: none;">
+                        <div class="result-box">
+                            <h4>Postfix Expression:</h4>
+                            <div class="result-value" id="postfixOutput"></div>
+                        </div>
+
+                        <div class="steps-box">
+                            <h4>Conversion Steps:</h4>
+                            <div id="conversionSteps"></div>
+                        </div>
+                    </div>
+
+                    <div id="conversionError" style="display: none;"></div>
+                </div>
+
+                <!-- Calculator 2: Postfix Evaluator -->
+                <div class="calculator">
+                    <h3>🧮 Calculator 2: Postfix Expression Evaluator</h3>
+                    <p>Enter a postfix expression (e.g., <code>3 5 2 * +</code> or <code>3 5 + 2 * 8 - 4 /</code>)</p>
+                    <p><small>Use spaces between numbers and operators</small></p>
+
+                    <div class="input-group">
+                        <label for="postfixInput">Postfix Expression:</label>
+                        <input type="text" id="postfixInput" placeholder="e.g., 3 5 + 2 * 8 - 4 /" />
+                    </div>
+
+                    <button class="btn" onclick="evaluatePostfix()">Evaluate</button>
+
+                    <div id="evalResult" style="display: none;">
+                        <div class="result-box">
+                            <h4>Result:</h4>
+                            <div class="result-value" id="evalOutput"></div>
+                        </div>
+
+                        <div class="steps-box">
+                            <h4>Evaluation Steps:</h4>
+                            <div id="evalSteps"></div>
+                        </div>
+                    </div>
+
+                    <div id="evalError" style="display: none;"></div>
+                </div>
+
+                <!-- Combined Calculator -->
+                <div class="calculator" style="background: #fff3cd; border-color: #ffc107;">
+                    <h3>🎯 Combined Calculator: Infix → Postfix → Result</h3>
+                    <p>Enter an infix expression to see conversion and evaluation in one go!</p>
+
+                    <div class="input-group">
+                        <label for="combinedInput">Infix Expression:</label>
+                        <input type="text" id="combinedInput" placeholder="e.g., (3+5)*2-8/4" />
+                    </div>
+
+                    <button class="btn" onclick="combinedCalculation()">Convert & Evaluate</button>
+
+                    <div id="combinedResult" style="display: none;">
+                        <div class="result-box" style="border-color: #ffc107;">
+                            <h4>Original Infix:</h4>
+                            <div class="result-value" id="combinedInfix" style="color: #666;"></div>
+                        </div>
+
+                        <div class="result-box" style="border-color: #667eea;">
+                            <h4>Converted Postfix:</h4>
+                            <div class="result-value" id="combinedPostfix" style="color: #667eea;"></div>
+                        </div>
+
+                        <div class="result-box" style="border-color: #4caf50;">
+                            <h4>Final Result:</h4>
+                            <div class="result-value" id="combinedFinal" style="color: #4caf50; font-size: 2em;"></div>
+                        </div>
+
+                        <div class="steps-box">
+                            <h4>Complete Process:</h4>
+                            <div id="combinedSteps"></div>
+                        </div>
+                    </div>
+
+                    <div id="combinedError" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- Section 6: Summary -->
+            <section id="summary">
+                <h2>9. Summary</h2>
+
+                <div class="highlight-box">
+                    <h3>Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Stack</strong> is a LIFO (Last In, First Out) data structure</li>
+                        <li>It is an <strong>Abstract Data Type (ADT)</strong> - defines behavior, not implementation</li>
+                        <li>Stack is a <strong>logical structure</strong> that must be implemented using physical structures (array or linked list)</li>
+                        <li>Core operations: <code>push()</code>, <code>pop()</code>, <code>top()</code>, <code>isEmpty()</code>, <code>isFull()</code></li>
+                        <li>All operations are <strong>O(1)</strong> - constant time</li>
+                        <li>Can be implemented using <strong>ArrayList</strong> (fixed/dynamic array) or <strong>LinkedList</strong></li>
+                        <li>Applications are <strong>infinite</strong> and problem-dependent</li>
+                        <li>Important application: <strong>Expression evaluation</strong> (infix to postfix conversion)</li>
+                        <li>Computers prefer <strong>postfix notation</strong> because it's easier to evaluate using stacks</li>
+                    </ul>
+                </div>
+
+                <div class="important">
+                    <h3>Why Study Stacks?</h3>
+                    <p>Stacks are fundamental to computer science and appear everywhere:</p>
+                    <ul>
+                        <li>Every program you run uses a call stack for function calls</li>
+                        <li>Your web browser uses stacks for back/forward navigation</li>
+                        <li>Compilers use stacks to parse and evaluate expressions</li>
+                        <li>Undo/Redo functionality in applications relies on stacks</li>
+                        <li>Many algorithms (DFS, backtracking) depend on stack behavior</li>
+                    </ul>
+                    <p><strong>Understanding stacks is essential for becoming a proficient programmer!</strong></p>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Stack Data Structure Tutorial | Created for Educational Purposes</p>
+            <p>Interactive tutorial with live demonstrations and calculators by Dr.Almalawi</p>
+        </footer>
+    </div>
+
+    <script>
+        // Code Folding Toggle
+        function toggleCode(header) {
+            const codeBlock = header.nextElementSibling;
+            const toggle = header.querySelector('.code-toggle');
+
+            codeBlock.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+
+        // Interactive Demo Stack
+        let demoStackArray = [];
+        const MAX_DEMO_SIZE = 8;
+
+        function demoPush() {
+            const input = document.getElementById('pushValue');
+            const value = input.value.trim();
+            const message = document.getElementById('demoMessage');
+
+            if (!value) {
+                message.textContent = '⚠️ Please enter a value!';
+                message.style.color = '#f44336';
+                return;
+            }
+
+            if (demoStackArray.length >= MAX_DEMO_SIZE) {
+                message.textContent = '⚠️ Stack Overflow! Stack is full.';
+                message.style.color = '#f44336';
+                return;
+            }
+
+            demoStackArray.push(value);
+            message.textContent = `✓ Pushed "${value}" onto stack`;
+            message.style.color = '#4caf50';
+            input.value = '';
+            renderDemoStack();
+        }
+
+        function demoPop() {
+            const message = document.getElementById('demoMessage');
+
+            if (demoStackArray.length === 0) {
+                message.textContent = '⚠️ Stack Underflow! Stack is empty.';
+                message.style.color = '#f44336';
+                return;
+            }
+
+            const popped = demoStackArray.pop();
+            message.textContent = `✓ Popped "${popped}" from stack`;
+            message.style.color = '#4caf50';
+            renderDemoStack();
+        }
+
+        function demoPeek() {
+            const message = document.getElementById('demoMessage');
+
+            if (demoStackArray.length === 0) {
+                message.textContent = '⚠️ Stack is empty!';
+                message.style.color = '#f44336';
+                return;
+            }
+
+            const top = demoStackArray[demoStackArray.length - 1];
+            message.textContent = `👁️ Top element is: "${top}"`;
+            message.style.color = '#667eea';
+        }
+
+        function demoClear() {
+            demoStackArray = [];
+            document.getElementById('demoMessage').textContent = '✓ Stack cleared';
+            document.getElementById('demoMessage').style.color = '#667eea';
+            renderDemoStack();
+        }
+
+        function renderDemoStack() {
+            const stackDiv = document.getElementById('demoStack');
+            stackDiv.innerHTML = '<div class="stack-label">↑ STACK (LIFO) ↑</div>';
+
+            if (demoStackArray.length > 0) {
+                const topPointer = document.createElement('div');
+                topPointer.className = 'top-pointer';
+                stackDiv.appendChild(topPointer);
+            }
+
+            demoStackArray.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'demo-stack-item';
+                itemDiv.textContent = item;
+                stackDiv.appendChild(itemDiv);
+            });
+        }
+
+        // Allow Enter key for push
+        document.getElementById('pushValue').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') demoPush();
+        });
+
+        // Infix to Postfix Converter
+        function getPrecedence(op) {
+            if (op === '^') return 3;
+            if (op === '*' || op === '/' || op === '%') return 2;
+            if (op === '+' || op === '-') return 1;
+            return 0;
+        }
+
+        function isOperator(ch) {
+            return ['+', '-', '*', '/', '^', '%'].includes(ch);
+        }
+
+        function isOperand(ch) {
+            return /[a-zA-Z0-9]/.test(ch);
+        }
+
+        function convertToPostfix() {
+            const infix = document.getElementById('infixInput').value.trim();
+            const resultDiv = document.getElementById('postfixResult');
+            const errorDiv = document.getElementById('conversionError');
+            const outputDiv = document.getElementById('postfixOutput');
+            const stepsDiv = document.getElementById('conversionSteps');
+
+            errorDiv.style.display = 'none';
+            resultDiv.style.display = 'none';
+
+            if (!infix) {
+                errorDiv.innerHTML = '<div class="error">Please enter an infix expression!</div>';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            const stack = [];
+            let postfix = '';
+            let steps = [];
+            let stepNumber = 1;
+
+            try {
+                for (let i = 0; i < infix.length; i++) {
+                    const ch = infix[i];
+
+                    if (ch === ' ') continue;
+
+                    if (isOperand(ch)) {
+                        // Read complete number
+                        let num = ch;
+                        while (i + 1 < infix.length && isOperand(infix[i + 1])) {
+                            num += infix[++i];
+                        }
+                        postfix += num + ' ';
+                        steps.push(`<div class="step"><strong>Step ${stepNumber++}:</strong> "${num}" is operand → Add to output<br>Output: <code>${postfix.trim()}</code> | Stack: [${stack.join(', ')}]</div>`);
+                    }
+                    else if (ch === '(') {
+                        stack.push(ch);
+                        steps.push(`<div class="step"><strong>Step ${stepNumber++}:</strong> "(" → Push to stack<br>Output: <code>${postfix.trim()}</code> | Stack: [${stack.join(', ')}]</div>`);
+                    }
+                    else if (ch === ')') {
+                        while (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                            postfix += stack.pop() + ' ';
+                        }
+                        if (stack.length === 0) {
+                            throw new Error('Mismatched parentheses!');
+                        }
+                        stack.pop(); // Remove '('
+                        steps.push(`<div class="step"><strong>Step ${stepNumber++}:</strong> ")" → Pop until "(" found<br>Output: <code>${postfix.trim()}</code> | Stack: [${stack.join(', ')}]</div>`);
+                    }
+                    else if (isOperator(ch)) {
+                        while (stack.length > 0 &&
+                               getPrecedence(stack[stack.length - 1]) >= getPrecedence(ch) &&
+                               stack[stack.length - 1] !== '(') {
+                            postfix += stack.pop() + ' ';
+                        }
+                        stack.push(ch);
+                        steps.push(`<div class="step"><strong>Step ${stepNumber++}:</strong> "${ch}" → Pop higher/equal precedence, then push<br>Output: <code>${postfix.trim()}</code> | Stack: [${stack.join(', ')}]</div>`);
+                    }
+                }
+
+                while (stack.length > 0) {
+                    const op = stack.pop();
+                    if (op === '(' || op === ')') {
+                        throw new Error('Mismatched parentheses!');
+                    }
+                    postfix += op + ' ';
+                }
+
+                steps.push(`<div class="step"><strong>Step ${stepNumber++}:</strong> End of expression → Pop all remaining operators<br>Output: <code>${postfix.trim()}</code> | Stack: [${stack.join(', ')}]</div>`);
+
+                outputDiv.textContent = postfix.trim();
+                stepsDiv.innerHTML = steps.join('');
+                resultDiv.style.display = 'block';
+
+            } catch (error) {
+                errorDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Postfix Evaluator
+        function evaluatePostfix() {
+            const postfix = document.getElementById('postfixInput').value.trim();
+            const resultDiv = document.getElementById('evalResult');
+            const errorDiv = document.getElementById('evalError');
+            const outputDiv = document.getElementById('evalOutput');
+            const stepsDiv = document.getElementById('evalSteps');
+
+            errorDiv.style.display = 'none';
+            resultDiv.style.display = 'none';
+
+            if (!postfix) {
+                errorDiv.innerHTML = '<div class="error">Please enter a postfix expression!</div>';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            const tokens = postfix.split(/\s+/);
+            const stack = [];
+            let steps = [];
+            let stepNumber = 1;
+
+            try {
+                for (let token of tokens) {
+                    if (!token) continue;
+
+                    if (!isNaN(token)) {
+                        // It's a number
+                        stack.push(parseFloat(token));
+                        steps.push(`<div class="step"><strong>Step ${stepNumber++}:</strong> "${token}" is operand → Push to stack<br>Stack: [${stack.join(', ')}]</div>`);
+                    }
+                    else if (isOperator(token)) {
+                        if (stack.length < 2) {
+                            throw new Error('Invalid postfix expression: not enough operands!');
+                        }
+
+                        const b = stack.pop();
+                        const a = stack.pop();
+                        let result;
+
+                        switch(token) {
+                            case '+': result = a + b; break;
+                            case '-': result = a - b; break;
+                            case '*': result = a * b; break;
+                            case '/':
+                                if (b === 0) throw new Error('Division by zero!');
+                                result = a / b;
+                                break;
+                            case '^': result = Math.pow(a, b); break;
+                            case '%': result = a % b; break;
+                        }
+
+                        stack.push(result);
+                        steps.push(`<div class="step"><strong>Step ${stepNumber++}:</strong> "${token}" is operator → Pop ${b} and ${a}, compute ${a} ${token} ${b} = ${result}, push result<br>Stack: [${stack.join(', ')}]</div>`);
+                    }
+                    else {
+                        throw new Error(`Invalid token: ${token}`);
+                    }
+                }
+
+                if (stack.length !== 1) {
+                    throw new Error('Invalid postfix expression: too many operands!');
+                }
+
+                const finalResult = stack[0];
+                steps.push(`<div class="step" style="background: #e8f5e9; border-color: #4caf50;"><strong>Final Result:</strong> ${finalResult}</div>`);
+
+                outputDiv.textContent = finalResult;
+                stepsDiv.innerHTML = steps.join('');
+                resultDiv.style.display = 'block';
+
+            } catch (error) {
+                errorDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Combined Calculator
+        function combinedCalculation() {
+            const infix = document.getElementById('combinedInput').value.trim();
+            const resultDiv = document.getElementById('combinedResult');
+            const errorDiv = document.getElementById('combinedError');
+
+            errorDiv.style.display = 'none';
+            resultDiv.style.display = 'none';
+
+            if (!infix) {
+                errorDiv.innerHTML = '<div class="error">Please enter an infix expression!</div>';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                // Step 1: Convert to postfix
+                const stack1 = [];
+                let postfix = '';
+                let conversionSteps = [];
+
+                for (let i = 0; i < infix.length; i++) {
+                    const ch = infix[i];
+
+                    if (ch === ' ') continue;
+
+                    if (isOperand(ch)) {
+                        let num = ch;
+                        while (i + 1 < infix.length && isOperand(infix[i + 1])) {
+                            num += infix[++i];
+                        }
+                        postfix += num + ' ';
+                        conversionSteps.push(`<div class="step">Operand "${num}" → Add to output</div>`);
+                    }
+                    else if (ch === '(') {
+                        stack1.push(ch);
+                        conversionSteps.push(`<div class="step">"${ch}" → Push to stack</div>`);
+                    }
+                    else if (ch === ')') {
+                        while (stack1.length > 0 && stack1[stack1.length - 1] !== '(') {
+                            postfix += stack1.pop() + ' ';
+                        }
+                        if (stack1.length === 0) throw new Error('Mismatched parentheses!');
+                        stack1.pop();
+                        conversionSteps.push(`<div class="step">"${ch}" → Pop until "(" found</div>`);
+                    }
+                    else if (isOperator(ch)) {
+                        while (stack1.length > 0 &&
+                               getPrecedence(stack1[stack1.length - 1]) >= getPrecedence(ch) &&
+                               stack1[stack1.length - 1] !== '(') {
+                            postfix += stack1.pop() + ' ';
+                        }
+                        stack1.push(ch);
+                        conversionSteps.push(`<div class="step">Operator "${ch}" → Push to stack</div>`);
+                    }
+                }
+
+                while (stack1.length > 0) {
+                    const op = stack1.pop();
+                    if (op === '(' || op === ')') throw new Error('Mismatched parentheses!');
+                    postfix += op + ' ';
+                }
+
+                postfix = postfix.trim();
+
+                // Step 2: Evaluate postfix
+                const tokens = postfix.split(/\s+/);
+                const stack2 = [];
+                let evalSteps = [];
+
+                for (let token of tokens) {
+                    if (!token) continue;
+
+                    if (!isNaN(token)) {
+                        stack2.push(parseFloat(token));
+                        evalSteps.push(`<div class="step">Push operand ${token} to stack → [${stack2.join(', ')}]</div>`);
+                    }
+                    else if (isOperator(token)) {
+                        if (stack2.length < 2) throw new Error('Invalid expression!');
+
+                        const b = stack2.pop();
+                        const a = stack2.pop();
+                        let result;
+
+                        switch(token) {
+                            case '+': result = a + b; break;
+                            case '-': result = a - b; break;
+                            case '*': result = a * b; break;
+                            case '/':
+                                if (b === 0) throw new Error('Division by zero!');
+                                result = a / b;
+                                break;
+                            case '^': result = Math.pow(a, b); break;
+                            case '%': result = a % b; break;
+                        }
+
+                        stack2.push(result);
+                        evalSteps.push(`<div class="step">Compute ${a} ${token} ${b} = ${result} → [${stack2.join(', ')}]</div>`);
+                    }
+                }
+
+                if (stack2.length !== 1) throw new Error('Invalid expression!');
+
+                const finalResult = stack2[0];
+
+                // Display results
+                document.getElementById('combinedInfix').textContent = infix;
+                document.getElementById('combinedPostfix').textContent = postfix;
+                document.getElementById('combinedFinal').textContent = finalResult;
+
+                const allSteps = [
+                    '<h4 style="color: #667eea; margin-top: 20px;">Phase 1: Infix to Postfix Conversion</h4>',
+                    ...conversionSteps,
+                    `<div class="step" style="background: #e3f2fd;">Postfix Result: <strong>${postfix}</strong></div>`,
+                    '<h4 style="color: #667eea; margin-top: 20px;">Phase 2: Postfix Evaluation</h4>',
+                    ...evalSteps,
+                    `<div class="step" style="background: #e8f5e9; border-color: #4caf50;">Final Answer: <strong>${finalResult}</strong></div>`
+                ];
+
+                document.getElementById('combinedSteps').innerHTML = allSteps.join('');
+                resultDiv.style.display = 'block';
+
+            } catch (error) {
+                errorDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Allow Enter key for calculators
+        document.getElementById('infixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') convertToPostfix();
+        });
+
+        document.getElementById('postfixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') evaluatePostfix();
+        });
+
+        document.getElementById('combinedInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') combinedCalculation();
+        });
+
+        // ========================================
+        // INFIX TO POSTFIX ANIMATION
+        // ========================================
+        let infixAnimationSteps = [];
+        let currentInfixStep = -1;
+
+        function startInfixAnimation() {
+            const infix = document.getElementById('animInfixInput').value.trim();
+            if (!infix) {
+                document.getElementById('animStatus').innerHTML = '⚠️ Please enter an infix expression!';
+                document.getElementById('animNextAction').style.display = 'none';
+                return;
+            }
+
+            infixAnimationSteps = generateInfixAnimationSteps(infix);
+
+            if (infixAnimationSteps.length === 0) {
+                document.getElementById('animStatus').innerHTML = '❌ Invalid expression!';
+                document.getElementById('animNextAction').style.display = 'none';
+                return;
+            }
+
+            currentInfixStep = -1;
+            document.getElementById('animStatus').innerHTML = '✅ Expression loaded! Ready to convert to postfix. Click "Next" to start scanning from left to right.';
+            document.getElementById('infixNextBtn').disabled = false;
+            document.getElementById('infixPrevBtn').disabled = true;
+
+            // Show ALL input tokens initially
+            const inputDiv = document.getElementById('animInputTokens');
+            inputDiv.innerHTML = '';
+            const firstStep = infixAnimationSteps[0];
+            if (firstStep) {
+                // Show all tokens at the beginning
+                const allTokens = [{ value: firstStep.token, type: firstStep.tokenType }, ...firstStep.input];
+                allTokens.forEach(token => {
+                    const tokenEl = document.createElement('span');
+                    tokenEl.className = `token ${token.type}`;
+                    tokenEl.textContent = token.value;
+                    inputDiv.appendChild(tokenEl);
+                });
+            }
+
+            // Clear stack and output
+            document.getElementById('animStack').innerHTML = '<h4>STACK</h4>';
+            document.getElementById('animOutputTokens').innerHTML = '';
+
+            // Show what happens next
+            showNextInfixAction();
+        }
+
+        function nextInfixStep() {
+            if (currentInfixStep < infixAnimationSteps.length - 1) {
+                currentInfixStep++;
+                executeInfixStep();
+                updateInfixButtons();
+                showNextInfixAction();
+            }
+        }
+
+        function prevInfixStep() {
+            if (currentInfixStep > -1) {
+                currentInfixStep--;
+                if (currentInfixStep >= 0) {
+                    executeInfixStep();
+                } else {
+                    // Reset to initial state
+                    currentInfixStep = -1;
+                    const tokens = document.getElementById('animInfixInput').value.trim().replace(/\s+/g, '').split('');
+                    const inputDiv = document.getElementById('animInputTokens');
+                    inputDiv.innerHTML = '';
+                    tokens.forEach(token => {
+                        const tokenEl = document.createElement('span');
+                        tokenEl.className = isOperator(token) ? 'token operator' : (token === '(' || token === ')' ? 'token' : 'token number');
+                        tokenEl.textContent = token;
+                        inputDiv.appendChild(tokenEl);
+                    });
+                    document.getElementById('animStack').innerHTML = '<h4>STACK</h4>';
+                    document.getElementById('animOutputTokens').innerHTML = '';
+                    document.getElementById('infixAnimStatus').innerHTML = '✅ Expression loaded! Click "Next" to start step-by-step animation.';
+                }
+                updateInfixButtons();
+                showNextInfixAction();
+            }
+        }
+
+        function updateInfixButtons() {
+            document.getElementById('infixPrevBtn').disabled = (currentInfixStep <= -1);
+            document.getElementById('infixNextBtn').disabled = (currentInfixStep >= infixAnimationSteps.length - 1);
+        }
+
+        function showNextInfixAction() {
+            // Special case: if we haven't started yet (currentInfixStep === -1),
+            // show what will happen with the FIRST token
+            if (currentInfixStep === -1) {
+                if (infixAnimationSteps.length > 0) {
+                    const firstStep = infixAnimationSteps[0];
+                    const firstToken = firstStep.token;
+                    const firstTokenType = firstStep.tokenType;
+
+                    let firstDesc = '';
+                    if (firstTokenType === 'number') {
+                        firstDesc = `The first symbol is "${firstToken}" which is an <strong>operand</strong>. <br><strong>Rule:</strong> Operands are scanned from left to right and added directly to postfix expression.`;
+                    } else if (firstToken === '(') {
+                        firstDesc = `The first symbol is "${firstToken}" which is <strong>left parenthesis</strong>. <br><strong>Rule:</strong> "(" has highest precedence outside stack, so it will be pushed to stack.`;
+                    } else if (firstTokenType === 'operator') {
+                        firstDesc = `The first symbol is "${firstToken}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Stack is empty, so the operator will be pushed to stack.`;
+                    }
+
+                    document.getElementById('nextActionText').innerHTML = firstDesc;
+                    document.getElementById('animNextAction').style.display = 'block';
+                }
+            } else {
+                // Normal case: show the nextActionDescription from the CURRENT step
+                // (not the next step - the current step already has the description of what comes after it)
+                if (currentInfixStep < infixAnimationSteps.length) {
+                    const currentStep = infixAnimationSteps[currentInfixStep];
+                    document.getElementById('nextActionText').innerHTML = currentStep.nextActionDescription;
+                    document.getElementById('animNextAction').style.display = 'block';
+                } else {
+                    document.getElementById('animNextAction').style.display = 'none';
+                }
+            }
+        }
+
+        function generateInfixAnimationSteps(infix) {
+            const steps = [];
+            const stack = [];
+            const output = [];
+            const inputTokens = [];
+
+            // Parse input into tokens
+            for (let i = 0; i < infix.length; i++) {
+                const ch = infix[i];
+                if (ch === ' ') continue;
+
+                if (isOperand(ch)) {
+                    let num = ch;
+                    while (i + 1 < infix.length && isOperand(infix[i + 1])) {
+                        num += infix[++i];
+                    }
+                    inputTokens.push({ value: num, type: 'number' });
+                } else if (isOperator(ch) || ch === '(' || ch === ')') {
+                    inputTokens.push({ value: ch, type: ch === '(' || ch === ')' ? 'paren' : 'operator' });
+                }
+            }
+
+            // Generate animation steps with detailed descriptions
+            try {
+                for (let i = 0; i < inputTokens.length; i++) {
+                    const token = inputTokens[i];
+                    const remainingInput = inputTokens.slice(i + 1);
+                    const nextToken = i + 1 < inputTokens.length ? inputTokens[i + 1] : null;
+
+                    // Store current token info for next action descriptions
+                    const currentTokenForNextStep = token;
+
+                    // OPERAND: Add to postfix expression
+                    if (token.type === 'number') {
+                        output.push(token.value);
+
+                        let nextDesc = '';
+                        if (nextToken) {
+                            if (nextToken.type === 'number') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operand</strong>. <br><strong>Rule:</strong> Operands are added directly to postfix expression.`;
+                            } else if (nextToken.value === '(') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is <strong>left parenthesis</strong>. <br><strong>Rule:</strong> "(" has highest precedence outside stack, so it will be pushed to stack. (Inside stack, it has lowest precedence)`;
+                            } else if (nextToken.value === ')') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is <strong>right parenthesis</strong>. <br><strong>Rule:</strong> Pop operators from stack to output until "(" is found, then discard both parentheses.`;
+                            } else if (nextToken.type === 'operator') {
+                                if (stack.length === 0) {
+                                    nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Stack is <strong>empty</strong> → Push incoming operator to stack.`;
+                                } else if (stack[stack.length - 1] === '(') {
+                                    nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Stack top is "(" → Push incoming operator to stack.`;
+                                } else {
+                                    const topOp = stack[stack.length - 1];
+                                    const topPrec = getPrecedence(topOp);
+                                    const incomingPrec = getPrecedence(nextToken.value);
+                                    if (incomingPrec > topPrec) {
+                                        nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Incoming "${nextToken.value}" has <strong>greater precedence</strong> than stack top "${topOp}" → Push to stack.`;
+                                    } else if (incomingPrec === topPrec) {
+                                        nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Incoming "${nextToken.value}" has <strong>equal precedence</strong> to stack top "${topOp}" → Pop "${topOp}" to output, then re-check.`;
+                                    } else {
+                                        nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Incoming "${nextToken.value}" has <strong>less precedence</strong> than stack top "${topOp}" → Pop "${topOp}" to output, then re-check.`;
+                                    }
+                                }
+                            }
+                        } else {
+                            nextDesc = `Expression scanned completely. <br><strong>Rule:</strong> Pop all remaining operators from stack to output.`;
+                        }
+
+                        steps.push({
+                            action: 'output',
+                            token: token.value,
+                            tokenType: 'number',
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            output: [...output],
+                            message: `Scanned "${token.value}" which is an <strong>operand</strong> → Add directly to postfix expression (as per rule)`,
+                            nextActionDescription: nextDesc
+                        });
+                    }
+                    // LEFT PARENTHESIS: Push to stack
+                    else if (token.value === '(') {
+                        stack.push(token.value);
+
+                        let nextDesc = '';
+                        if (nextToken) {
+                            if (nextToken.type === 'number') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operand</strong>. <br><strong>Rule:</strong> Add directly to postfix expression.`;
+                            } else if (nextToken.value === '(') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is <strong>left parenthesis</strong>. <br><strong>Rule:</strong> Push to stack.`;
+                            } else if (nextToken.type === 'operator') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Stack top is "(", so push incoming operator.`;
+                            }
+                        }
+
+                        steps.push({
+                            action: 'push',
+                            token: token.value,
+                            tokenType: 'paren',
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            output: [...output],
+                            message: `Scanned "${token.value}" which is <strong>left parenthesis</strong> → Push to stack (has highest precedence outside, lowest inside)`,
+                            nextActionDescription: nextDesc
+                        });
+                    }
+                    // RIGHT PARENTHESIS: Pop until (
+                    else if (token.value === ')') {
+                        // Pop operators until we find (
+                        while (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                            const op = stack.pop();
+                            output.push(op);
+
+                            let popNextDesc = '';
+                            if (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                                popNextDesc = `<strong>Rule:</strong> Continue popping operators until "(" is found. Next: pop "${stack[stack.length - 1]}".`;
+                            } else if (stack.length > 0 && stack[stack.length - 1] === '(') {
+                                popNextDesc = `<strong>Rule:</strong> "(" found! Discard both "(" and ")" parentheses.`;
+                            }
+
+                            steps.push({
+                                action: 'pop_to_output',
+                                token: op,
+                                tokenType: 'operator',
+                                input: [...remainingInput],
+                                stack: [...stack],
+                                output: [...output],
+                                message: `Scanned ")" → Pop "${op}" from stack to postfix expression (searching for matching "(")`,
+                                nextActionDescription: popNextDesc
+                            });
+                        }
+
+                        if (stack.length > 0) {
+                            stack.pop(); // Remove '('
+
+                            let nextDesc = '';
+                            if (nextToken) {
+                                if (nextToken.type === 'number') {
+                                    nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operand</strong>. <br><strong>Rule:</strong> Add to postfix expression.`;
+                                } else if (nextToken.type === 'operator') {
+                                    if (stack.length === 0) {
+                                        nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Stack is empty → Push to stack.`;
+                                    } else {
+                                        nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Compare precedence with stack top.`;
+                                    }
+                                }
+                            } else {
+                                nextDesc = `Expression scanned completely. <br><strong>Rule:</strong> Pop all remaining operators to output.`;
+                            }
+
+                            steps.push({
+                                action: 'discard_parens',
+                                token: '(',
+                                tokenType: 'paren',
+                                input: [...remainingInput],
+                                stack: [...stack],
+                                output: [...output],
+                                message: `"(" found in stack → Discard both "(" and ")" parentheses (as per rule)`,
+                                nextActionDescription: nextDesc
+                            });
+                        }
+                    }
+                    // OPERATOR: Compare precedence
+                    else if (isOperator(token.value)) {
+                        // Check if we need to pop (comparison needed)
+                        const needsComparison = stack.length > 0 &&
+                                               stack[stack.length - 1] !== '(' &&
+                                               getPrecedence(stack[stack.length - 1]) >= getPrecedence(token.value);
+
+                        // If comparison/popping is needed, show operator as WAITING
+                        if (needsComparison) {
+                            const topOp = stack[stack.length - 1];
+                            const topPrec = getPrecedence(topOp);
+                            const incomingPrec = getPrecedence(token.value);
+
+                            let waitDesc = '';
+                            if (incomingPrec === topPrec) {
+                                waitDesc = `<strong>Rule:</strong> "${token.value}" has equal precedence to "${topOp}" → "${topOp}" must be popped first, then re-check.`;
+                            } else {
+                                waitDesc = `<strong>Rule:</strong> "${token.value}" has less precedence than "${topOp}" → "${topOp}" must be popped first, then re-check.`;
+                            }
+
+                            steps.push({
+                                action: 'wait_for_comparison',
+                                token: token.value,
+                                tokenType: 'operator',
+                                input: [...remainingInput],
+                                stack: [...stack],
+                                output: [...output],
+                                waiting: token.value,  // Show in top-left corner
+                                message: `Scanned "${token.value}" which is an <strong>operator</strong> → Will wait (has less/equal precedence than stack top, stack must pop first)`,
+                                nextActionDescription: waitDesc
+                            });
+                        }
+
+                        // Pop operators with higher or equal precedence
+                        while (stack.length > 0 &&
+                               stack[stack.length - 1] !== '(' &&
+                               getPrecedence(stack[stack.length - 1]) >= getPrecedence(token.value)) {
+                            const op = stack.pop();
+                            output.push(op);
+
+                            let popNextDesc = '';
+                            if (stack.length === 0 || stack[stack.length - 1] === '(') {
+                                popNextDesc = `<strong>Rule:</strong> Stack is now empty (or has "(") → Push "${token.value}" to stack.`;
+                            } else if (getPrecedence(stack[stack.length - 1]) >= getPrecedence(token.value)) {
+                                popNextDesc = `<strong>Rule:</strong> "${stack[stack.length - 1]}" still has higher/equal precedence → Continue popping.`;
+                            } else {
+                                popNextDesc = `<strong>Rule:</strong> "${token.value}" now has greater precedence than "${stack[stack.length - 1]}" → Push "${token.value}" to stack.`;
+                            }
+
+                            const popReason = getPrecedence(op) === getPrecedence(token.value)
+                                ? `<strong>equal precedence</strong>`
+                                : `<strong>higher precedence</strong>`;
+
+                            steps.push({
+                                action: 'pop_to_output',
+                                token: op,
+                                tokenType: 'operator',
+                                input: [...remainingInput],
+                                stack: [...stack],
+                                output: [...output],
+                                waiting: token.value,  // Keep showing waiting operator in corner
+                                message: `"${token.value}" still waiting → "${op}" has ${popReason}, pop "${op}" to output and check again`,
+                                nextActionDescription: popNextDesc
+                            });
+                        }
+
+                        stack.push(token.value);
+
+                        let nextDesc = '';
+                        if (nextToken) {
+                            if (nextToken.type === 'number') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is an <strong>operand</strong>. <br><strong>Rule:</strong> Add directly to postfix expression.`;
+                            } else if (nextToken.value === '(') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is <strong>left parenthesis</strong>. <br><strong>Rule:</strong> Push to stack.`;
+                            } else if (nextToken.value === ')') {
+                                nextDesc = `Next symbol is "${nextToken.value}" which is <strong>right parenthesis</strong>. <br><strong>Rule:</strong> Pop until "(" found.`;
+                            }
+                        } else {
+                            nextDesc = `Expression scanned completely. <br><strong>Rule:</strong> Pop all remaining operators from stack to output.`;
+                        }
+
+                        let pushReason = '';
+                        if (stack.length === 1) {
+                            pushReason = `<strong>Rule:</strong> Stack is <strong>empty</strong> → Push "${token.value}" to stack`;
+                        } else if (stack.length === 2 && stack[0] === '(') {
+                            pushReason = `<strong>Rule:</strong> Stack only has "(" → Push "${token.value}" to stack`;
+                        } else {
+                            pushReason = `<strong>Rule:</strong> "${token.value}" has <strong>greater precedence</strong> than lower stack operators → Push to stack`;
+                        }
+
+                        steps.push({
+                            action: needsComparison ? 'push_from_waiting' : 'push',
+                            token: token.value,
+                            tokenType: 'operator',
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            output: [...output],
+                            waiting: null,  // No more waiting
+                            message: needsComparison
+                                ? `${pushReason} → Push "${token.value}" to STACK (comparison complete)`
+                                : `Scanned "${token.value}" which is an <strong>operator</strong> → ${pushReason}`,
+                            nextActionDescription: nextDesc
+                        });
+                    }
+                }
+
+                // Pop remaining operators
+                while (stack.length > 0) {
+                    const op = stack.pop();
+                    output.push(op);
+
+                    let nextDesc = stack.length > 0
+                        ? `<strong>Rule:</strong> Continue popping remaining operators. Next: "${stack[stack.length - 1]}" will be popped.`
+                        : `All operators popped. Conversion complete!`;
+
+                    steps.push({
+                        action: 'pop_to_output',
+                        token: op,
+                        tokenType: 'operator',
+                        input: [],
+                        stack: [...stack],
+                        output: [...output],
+                        message: `<strong>Rule:</strong> Expression scanned completely → Pop "${op}" from stack and add to postfix expression`,
+                        nextActionDescription: nextDesc
+                    });
+                }
+
+                steps.push({
+                    action: 'done',
+                    input: [],
+                    stack: [],
+                    output: [...output],
+                    message: `✅ Conversion Complete! Postfix Expression: <strong>${output.join(' ')}</strong>`,
+                    nextActionDescription: 'Animation finished. All rules applied successfully!'
+                });
+
+            } catch (error) {
+                return [];
+            }
+
+            return steps;
+        }
+
+        function executeInfixStep() {
+            if (currentInfixStep < 0 || currentInfixStep >= infixAnimationSteps.length) {
+                return;
+            }
+
+            const step = infixAnimationSteps[currentInfixStep];
+
+            // Update status message
+            document.getElementById('animStatus').innerHTML = `<strong>Step ${currentInfixStep + 1}:</strong> ${step.message}`;
+
+            // Update input area
+            const inputDiv = document.getElementById('animInputTokens');
+            inputDiv.innerHTML = '';
+            step.input.forEach(token => {
+                const tokenEl = document.createElement('span');
+                tokenEl.className = `token ${token.type}`;
+                tokenEl.textContent = token.value;
+                inputDiv.appendChild(tokenEl);
+            });
+
+            // Update stack
+            const stackDiv = document.getElementById('animStack');
+            stackDiv.innerHTML = '<h4>STACK</h4>';
+
+            // Add waiting symbol if present (in top-left corner)
+            if (step.waiting) {
+                const waitingSymbol = document.createElement('div');
+                waitingSymbol.className = 'waiting-symbol';
+                waitingSymbol.textContent = step.waiting;
+                stackDiv.appendChild(waitingSymbol);
+
+                const waitingLabel = document.createElement('div');
+                waitingLabel.className = 'waiting-label';
+                waitingLabel.textContent = 'Waiting';
+                stackDiv.appendChild(waitingLabel);
+            }
+
+            step.stack.forEach(item => {
+                const stackItem = document.createElement('div');
+                stackItem.className = 'stack-token';
+                stackItem.textContent = item;
+                stackItem.style.animation = 'pushToStack 0.5s ease';
+                stackDiv.appendChild(stackItem);
+            });
+
+            // Update output
+            const outputDiv = document.getElementById('animOutputTokens');
+            outputDiv.innerHTML = '';
+            step.output.forEach(item => {
+                const outputToken = document.createElement('span');
+                outputToken.className = 'output-token';
+                outputToken.textContent = item;
+                outputToken.style.animation = 'fadeIn 0.5s ease';
+                outputDiv.appendChild(outputToken);
+            });
+        }
+
+        function resetInfixAnimation() {
+            currentInfixStep = -1;
+            infixAnimationSteps = [];
+            document.getElementById('animInputTokens').innerHTML = '';
+            document.getElementById('animStack').innerHTML = '<h4>STACK</h4>';
+            document.getElementById('animOutputTokens').innerHTML = '';
+            document.getElementById('animStatus').innerHTML = 'Enter an infix expression and click "Load Expression"';
+            document.getElementById('animNextAction').style.display = 'none';
+            document.getElementById('infixNextBtn').disabled = true;
+            document.getElementById('infixPrevBtn').disabled = true;
+            document.getElementById('animInfixInput').value = '';
+        }
+
+        // ========================================
+        // POSTFIX EVALUATION ANIMATION
+        // ========================================
+        let evalAnimationSteps = [];
+        let currentEvalStep = -1;
+
+        function startEvalAnimation() {
+            const postfix = document.getElementById('animPostfixInput').value.trim();
+            if (!postfix) {
+                document.getElementById('evalAnimStatus').innerHTML = '⚠️ Please enter a postfix expression!';
+                document.getElementById('evalNextAction').style.display = 'none';
+                return;
+            }
+
+            evalAnimationSteps = generateEvalAnimationSteps(postfix);
+
+            if (evalAnimationSteps.length === 0) {
+                document.getElementById('evalAnimStatus').innerHTML = '❌ Invalid expression!';
+                document.getElementById('evalNextAction').style.display = 'none';
+                return;
+            }
+
+            currentEvalStep = -1;
+            document.getElementById('evalAnimStatus').innerHTML = '✅ Expression loaded! Click "Next" to start step-by-step animation.';
+            document.getElementById('evalNextBtn').disabled = false;
+            document.getElementById('evalPrevBtn').disabled = true;
+
+            // Display all input tokens
+            const tokens = postfix.split(/\s+/).filter(t => t);
+            const inputDiv = document.getElementById('evalInputTokens');
+            inputDiv.innerHTML = '';
+            tokens.forEach(token => {
+                const tokenEl = document.createElement('span');
+                tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
+                tokenEl.textContent = token;
+                inputDiv.appendChild(tokenEl);
+            });
+
+            // Clear other displays
+            document.getElementById('evalStack').innerHTML = '<h4>STACK</h4>';
+            document.getElementById('computationDisplay').innerHTML = 'Ready';
+            document.getElementById('finalResult').textContent = '-';
+
+            // Show what happens next
+            showNextEvalAction();
+        }
+
+        function nextEvalStep() {
+            if (currentEvalStep < evalAnimationSteps.length - 1) {
+                currentEvalStep++;
+                executeEvalStep();
+                updateEvalButtons();
+                showNextEvalAction();
+            }
+        }
+
+        function prevEvalStep() {
+            if (currentEvalStep > -1) {
+                currentEvalStep--;
+                if (currentEvalStep >= 0) {
+                    executeEvalStep();
+                } else {
+                    // Reset to initial state
+                    currentEvalStep = -1;
+                    const postfix = document.getElementById('animPostfixInput').value.trim();
+                    const tokens = postfix.split(/\s+/).filter(t => t);
+                    const inputDiv = document.getElementById('evalInputTokens');
+                    inputDiv.innerHTML = '';
+                    tokens.forEach(token => {
+                        const tokenEl = document.createElement('span');
+                        tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
+                        tokenEl.textContent = token;
+                        inputDiv.appendChild(tokenEl);
+                    });
+                    document.getElementById('evalStack').innerHTML = '<h4>STACK</h4>';
+                    document.getElementById('computationDisplay').innerHTML = 'Ready';
+                    document.getElementById('finalResult').textContent = '-';
+                    document.getElementById('evalAnimStatus').innerHTML = '✅ Expression loaded! Click "Next" to start step-by-step animation.';
+                }
+                updateEvalButtons();
+                showNextEvalAction();
+            }
+        }
+
+        function updateEvalButtons() {
+            document.getElementById('evalPrevBtn').disabled = (currentEvalStep <= -1);
+            document.getElementById('evalNextBtn').disabled = (currentEvalStep >= evalAnimationSteps.length - 1);
+        }
+
+        function showNextEvalAction() {
+            // Special case: if we haven't started yet (currentEvalStep === -1),
+            // show what will happen with the FIRST token
+            if (currentEvalStep === -1) {
+                if (evalAnimationSteps.length > 0) {
+                    const firstStep = evalAnimationSteps[0];
+                    const firstToken = firstStep.token;
+
+                    let firstDesc = '';
+                    if (!isNaN(firstToken)) {
+                        firstDesc = `The first symbol is "${firstToken}" which is an <strong>operand</strong>. <br><strong>Rule:</strong> Operands are pushed directly to stack.`;
+                    } else if (isOperator(firstToken)) {
+                        firstDesc = `The first symbol is "${firstToken}" which is an <strong>operator</strong>. <br><strong>Rule:</strong> Operators pop two operands, compute, and push result back.`;
+                    }
+
+                    document.getElementById('evalNextActionText').innerHTML = firstDesc;
+                    document.getElementById('evalNextAction').style.display = 'block';
+                }
+            } else {
+                // Normal case: show the nextActionDescription from the CURRENT step
+                if (currentEvalStep < evalAnimationSteps.length) {
+                    const currentStep = evalAnimationSteps[currentEvalStep];
+                    document.getElementById('evalNextActionText').innerHTML = currentStep.nextActionDescription;
+                    document.getElementById('evalNextAction').style.display = 'block';
+                } else {
+                    document.getElementById('evalNextAction').style.display = 'none';
+                }
+            }
+        }
+
+        function generateEvalAnimationSteps(postfix) {
+            const steps = [];
+            const tokens = postfix.split(/\s+/).filter(t => t);
+            const stack = [];
+
+            try {
+                for (let i = 0; i < tokens.length; i++) {
+                    const token = tokens[i];
+                    const remainingInput = tokens.slice(i + 1);
+                    const nextToken = i + 1 < tokens.length ? tokens[i + 1] : null;
+
+                    // OPERAND: Push to stack
+                    if (!isNaN(token)) {
+                        stack.push(parseFloat(token));
+
+                        let nextDesc = '';
+                        if (nextToken) {
+                            if (!isNaN(nextToken)) {
+                                nextDesc = `Operand "${nextToken}" will be scanned and pushed to stack.`;
+                            } else if (isOperator(nextToken)) {
+                                nextDesc = `Operator "${nextToken}" will pop top two operands (${stack[stack.length - 1]} and ${stack[stack.length - 2]}) and perform ${nextToken} operation.`;
+                            }
+                        } else {
+                            nextDesc = `Expression scanned completely. The final result is at top of stack.`;
+                        }
+
+                        steps.push({
+                            action: 'push',
+                            token: token,
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            computation: '',
+                            message: `Scanned operand "${token}" → Push to stack`,
+                            nextActionDescription: nextDesc
+                        });
+                    }
+                    // OPERATOR: Pop, compute, push result
+                    else if (isOperator(token)) {
+                        if (stack.length < 2) {
+                            throw new Error('Invalid expression');
+                        }
+
+                        const b = stack.pop();
+                        const a = stack.pop();
+                        let result;
+
+                        switch(token) {
+                            case '+': result = a + b; break;
+                            case '-': result = a - b; break;
+                            case '*': result = a * b; break;
+                            case '/':
+                                if (b === 0) throw new Error('Division by zero');
+                                result = a / b;
+                                break;
+                            case '^': result = Math.pow(a, b); break;
+                            case '%': result = a % b; break;
+                        }
+
+                        let computeNextDesc = `The computed result ${result} will be pushed back to stack.`;
+
+                        steps.push({
+                            action: 'compute',
+                            token: token,
+                            input: [...remainingInput],
+                            stack: [a, b],
+                            computation: `${a} ${token} ${b} = ${result}`,
+                            message: `Operator "${token}" found → Pop top two operands: ${b} (top) and ${a}, then compute ${a} ${token} ${b} = ${result}`,
+                            nextActionDescription: computeNextDesc
+                        });
+
+                        stack.push(result);
+
+                        let pushNextDesc = '';
+                        if (nextToken) {
+                            if (!isNaN(nextToken)) {
+                                pushNextDesc = `Next operand "${nextToken}" will be pushed to stack.`;
+                            } else if (isOperator(nextToken)) {
+                                if (stack.length >= 2) {
+                                    pushNextDesc = `Operator "${nextToken}" will pop ${stack[stack.length - 1]} and ${stack[stack.length - 2]} to perform computation.`;
+                                } else {
+                                    pushNextDesc = `Operator "${nextToken}" will be processed next.`;
+                                }
+                            }
+                        } else {
+                            pushNextDesc = `Expression scanned completely. Stack top ${result} is the final result.`;
+                        }
+
+                        steps.push({
+                            action: 'push_result',
+                            token: result,
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            computation: `Result: ${result}`,
+                            message: `Push computed result ${result} back to stack`,
+                            nextActionDescription: pushNextDesc
+                        });
+                    }
+                }
+
+                if (stack.length === 1) {
+                    steps.push({
+                        action: 'done',
+                        input: [],
+                        stack: [...stack],
+                        computation: '',
+                        finalResult: stack[0],
+                        message: `✅ Evaluation Complete! Final Result: ${stack[0]}`,
+                        nextActionDescription: 'Animation finished.'
+                    });
+                }
+
+            } catch (error) {
+                return [];
+            }
+
+            return steps;
+        }
+
+        function executeEvalStep() {
+            if (currentEvalStep < 0 || currentEvalStep >= evalAnimationSteps.length) {
+                return;
+            }
+
+            const step = evalAnimationSteps[currentEvalStep];
+
+            // Update status message
+            document.getElementById('evalAnimStatus').innerHTML = `<strong>Step ${currentEvalStep + 1}:</strong> ${step.message}`;
+
+            // Update input area
+            const inputDiv = document.getElementById('evalInputTokens');
+            inputDiv.innerHTML = '';
+            step.input.forEach(token => {
+                const tokenEl = document.createElement('span');
+                tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
+                tokenEl.textContent = token;
+                inputDiv.appendChild(tokenEl);
+            });
+
+            // Update stack
+            const stackDiv = document.getElementById('evalStack');
+            stackDiv.innerHTML = '<h4>STACK</h4>';
+            step.stack.forEach(item => {
+                const stackItem = document.createElement('div');
+                stackItem.className = 'stack-token';
+                stackItem.textContent = item;
+                stackItem.style.animation = 'pushToStack 0.5s ease';
+                stackDiv.appendChild(stackItem);
+            });
+
+            // Update computation display
+            const compDisplay = document.getElementById('computationDisplay');
+            if (step.computation) {
+                compDisplay.innerHTML = step.computation;
+                compDisplay.style.animation = 'highlight 1s ease';
+            } else {
+                compDisplay.innerHTML = 'Ready';
+                compDisplay.style.animation = 'none';
+            }
+
+            // Update final result if done
+            if (step.action === 'done') {
+                document.getElementById('finalResult').textContent = step.finalResult;
+                document.getElementById('finalResult').style.animation = 'highlight 1s ease';
+            }
+        }
+
+        function resetEvalAnimation() {
+            currentEvalStep = -1;
+            evalAnimationSteps = [];
+            document.getElementById('evalInputTokens').innerHTML = '';
+            document.getElementById('evalStack').innerHTML = '<h4>STACK</h4>';
+            document.getElementById('computationDisplay').innerHTML = 'Ready';
+            document.getElementById('finalResult').textContent = '-';
+            document.getElementById('evalAnimStatus').innerHTML = 'Enter a postfix expression and click "Load Expression"';
+            document.getElementById('evalNextAction').style.display = 'none';
+            document.getElementById('evalNextBtn').disabled = true;
+            document.getElementById('evalPrevBtn').disabled = true;
+            document.getElementById('animPostfixInput').value = '';
+        }
+
+        // Allow Enter key for animation inputs
+        document.getElementById('animInfixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') startInfixAnimation();
+        });
+
+        document.getElementById('animPostfixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') startEvalAnimation();
+        });
+    </script>
+</body>
+</html>

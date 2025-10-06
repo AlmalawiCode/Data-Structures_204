@@ -3,235 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithm Analysis Tutorial - CPCS 204</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        header .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        header img {
-            width: 8cm;
-            height: 4cm;
-            object-fit: contain;
-        }
-
-        header .header-text {
-            text-align: left;
-        }
-
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 40px;
-        }
-
-        section {
-            margin-bottom: 50px;
-        }
-
-        h2 {
-            color: #667eea;
-            font-size: 2em;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        h3 {
-            color: #764ba2;
-            font-size: 1.5em;
-            margin: 25px 0 15px 0;
-        }
-
-        h4 {
-            color: #555;
-            font-size: 1.2em;
-            margin: 20px 0 10px 0;
-        }
-
-        .highlight-box, .card {
-            background: #f0f4ff;
-            border-left: 5px solid #667eea;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-
-        .definition {
-            background: #e8f5e9;
-            border-left: 5px solid #4caf50;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-            font-size: 1.1em;
-        }
-
-        .important {
-            background: #fff3cd;
-            border-left: 5px solid #ffc107;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-
-        ul, ol {
-            margin-left: 30px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        li {
-            margin: 8px 0;
-        }
-
-        table, .complexity-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: bold;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        code {
-            background: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            color: #e83e8c;
-        }
-
-        pre {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            margin: 20px 0;
-        }
-
-        .example-box {
-            background: #f9f9f9;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .example-title {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin: -20px -20px 15px -20px;
-            font-weight: bold;
-        }
-
-        footer {
-            background: #2d2d2d;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        footer p {
-            margin: 5px 0;
-        }
-
-        .back-home-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .back-home-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-    </style>
+    <title>Algorithm Analysis Tutorial - CPCS204</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <a href="index.html" class="back-home-btn">🏠 Home</a>
-    <div class="container">
+    <nav class="sidebar">
+        <div class="logo-container">
+            <div class="logo-box">
+                <img src="fcit.png" alt="FCIT Logo" class="fcit-logo">
+            </div>
+            <div class="course-details">
+                <h2>Data Structures - I</h2>
+                <p class="course-code">CPCS 204</p>
+                <p class="topic">Algorithm Analysis</p>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#introduction" class="active">Introduction</a></li>
+            <li><a href="#java-to-polynomial">Java to Polynomial</a></li>
+            <li><a href="#big-o-notation">Big O Notation</a></li>
+            <li><a href="#time-calculation">Time Calculation</a></li>
+            <li><a href="#examples">Practice Examples</a></li>
+            <li><a href="#challenging">Challenging Problems</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
         <header>
-            <div class="header-content">
-                <img src="fcit.png" alt="FCIT Logo">
-                <div class="header-text">
-                    <h1>📊 Algorithm Analysis</h1>
-                    <p class="course-code">CPCS 204 - Data Structures I</p>
-                    <p>Learn how to analyze algorithms and determine Big O notation</p>
+            <div class="header-logo">
+                <img src="fcit.png" alt="FCIT Logo" style="width: 60px; height: auto; margin-right: 1rem; vertical-align: middle;">
+                <div style="display: inline-block; vertical-align: middle;">
+                    <h1>Algorithm Analysis Tutorial</h1>
+                    <p class="subtitle">Data Structures - I (CPCS 204)</p>
+                    <p class="subtitle" style="font-size: 0.95rem;">Learn how to analyze algorithms, convert code to polynomials, and find Big O notation</p>
                 </div>
             </div>
         </header>
-
-        <div class="content">
 
         <section id="introduction" class="section">
             <h2>Introduction to Algorithm Analysis</h2>
@@ -1164,13 +971,13 @@ while (i < n) {
             </div>
         </section>
 
-        </div>
-
         <footer>
-            <p>&copy; 2024 CPCS 204 - Algorithm Analysis Tutorial</p>
+            <p>&copy; 2024 CPCS204 Algorithm Analysis Tutorial</p>
             <p>Based on material by Dr. Jonathan (Yahya) Cazalas and Dr. Muhammad Umair Ramzan</p>
             <p>Created and enhanced by Dr. Almalawi with additional examples and clarifications</p>
         </footer>
-    </div>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
