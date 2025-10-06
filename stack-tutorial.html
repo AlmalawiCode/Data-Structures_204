@@ -636,6 +636,98 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
+        /* ADT Diagram Styling */
+        .adt-diagram {
+            background: #f9f9f9;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .adt-operations {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .adt-operations h4 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .operations-box {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .operation {
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .adt-arrow {
+            font-size: 3em;
+            color: #667eea;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .adt-implementations {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .implementation-box {
+            background: white;
+            border: 3px solid #4caf50;
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+        }
+
+        .implementation-box h4 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .implementation-box p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .implementation-box code {
+            background: #2d2d2d;
+            color: #f1fa8c;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .adt-or {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #764ba2;
+            padding: 10px;
+        }
+
         /* Animated Visualization Styles */
         .animation-container {
             background: #f9f9f9;
@@ -1018,6 +1110,33 @@
                 <div class="important">
                     <h3>Why is Stack an Abstract Data Type?</h3>
                     <p>A stack is considered an <strong>Abstract Data Type (ADT)</strong> because it defines the behavior of the data structure through its operations, without specifying how these operations are implemented internally.</p>
+                </div>
+
+                <div class="adt-diagram">
+                    <div class="adt-operations">
+                        <h4>📋 Stack Operations (Abstract Interface)</h4>
+                        <div class="operations-box">
+                            <span class="operation">push()</span>
+                            <span class="operation">pop()</span>
+                            <span class="operation">top()</span>
+                            <span class="operation">isEmpty()</span>
+                            <span class="operation">isFull()</span>
+                        </div>
+                    </div>
+                    <div class="adt-arrow">↓</div>
+                    <div class="adt-implementations">
+                        <div class="implementation-box">
+                            <h4>🔢 Array Implementation</h4>
+                            <p>Using contiguous memory</p>
+                            <code>stack[top++] = element</code>
+                        </div>
+                        <div class="adt-or">OR</div>
+                        <div class="implementation-box">
+                            <h4>🔗 Linked List Implementation</h4>
+                            <p>Using nodes and pointers</p>
+                            <code>newNode.next = top</code>
+                        </div>
+                    </div>
                 </div>
 
                 <h3>Logical vs Physical Structure</h3>
