@@ -1284,25 +1284,30 @@
             <section id="implementation">
                 <h2>5. Stack Implementation in Java</h2>
 
-                <h3>5.1 Array-Based Implementation</h3>
-                <p>Using ArrayList provides dynamic sizing while maintaining array-like access patterns.</p>
+                <h3>5.1 Array-Based Implementation (Fixed Size)</h3>
+                <p>Using a <strong>fixed-size array</strong> with a maximum capacity set at initialization. Once the array is full, no more elements can be added unless elements are removed.</p>
+
+                <div class="important">
+                    <strong>Important:</strong> Arrays in Java have a <strong>fixed size</strong>. You cannot increase the size of an array after it's created. The size must be specified at initialization and remains constant throughout the array's lifetime.
+                </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        <span>📄 StackUsingArrayList.java</span>
+                        <span>📄 StackUsingArray.java (Fixed Size)</span>
                         <span class="code-toggle">▼</span>
                     </div>
                     <div class="code-block">
-<span class="keyword">import</span> java.util.ArrayList;
-
-<span class="keyword">public class</span> <span class="class-name">StackUsingArrayList</span>&lt;T&gt; {
-    <span class="keyword">private</span> ArrayList&lt;T&gt; stack;
+<span class="keyword">public class</span> <span class="class-name">StackUsingArray</span>&lt;T&gt; {
+    <span class="keyword">private</span> T[] stack;
+    <span class="keyword">private int</span> top;
     <span class="keyword">private int</span> maxSize;
 
-    <span class="comment">// Constructor</span>
-    <span class="keyword">public</span> <span class="method">StackUsingArrayList</span>(<span class="keyword">int</span> size) {
-        stack = <span class="keyword">new</span> ArrayList&lt;&gt;();
+    <span class="comment">// Constructor - Array size MUST be specified and is FIXED</span>
+    @SuppressWarnings(<span class="string">"unchecked"</span>)
+    <span class="keyword">public</span> <span class="method">StackUsingArray</span>(<span class="keyword">int</span> size) {
         maxSize = size;
+        stack = (T[]) <span class="keyword">new</span> Object[maxSize];  <span class="comment">// Fixed size array</span>
+        top = -1;  <span class="comment">// Stack is initially empty</span>
     }
 
     <span class="comment">// Push operation - O(1)</span>
@@ -1311,7 +1316,7 @@
             System.out.println(<span class="string">"Stack Overflow! Cannot push "</span> + element);
             <span class="keyword">return false</span>;
         }
-        stack.add(element);
+        stack[++top] = element;  <span class="comment">// Increment top, then add element</span>
         <span class="keyword">return true</span>;
     }
 
@@ -1321,7 +1326,9 @@
             System.out.println(<span class="string">"Stack Underflow! Stack is empty"</span>);
             <span class="keyword">return null</span>;
         }
-        <span class="keyword">return</span> stack.remove(stack.size() - 1);
+        T element = stack[top];
+        stack[top--] = <span class="keyword">null</span>;  <span class="comment">// Remove reference, then decrement top</span>
+        <span class="keyword">return</span> element;
     }
 
     <span class="comment">// Peek/Top operation - O(1)</span>
@@ -1330,22 +1337,22 @@
             System.out.println(<span class="string">"Stack is empty"</span>);
             <span class="keyword">return null</span>;
         }
-        <span class="keyword">return</span> stack.get(stack.size() - 1);
+        <span class="keyword">return</span> stack[top];
     }
 
     <span class="comment">// Check if stack is empty - O(1)</span>
     <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() {
-        <span class="keyword">return</span> stack.isEmpty();
+        <span class="keyword">return</span> top == -1;
     }
 
     <span class="comment">// Check if stack is full - O(1)</span>
     <span class="keyword">public boolean</span> <span class="method">isFull</span>() {
-        <span class="keyword">return</span> stack.size() >= maxSize;
+        <span class="keyword">return</span> top == maxSize - 1;
     }
 
     <span class="comment">// Get current size - O(1)</span>
     <span class="keyword">public int</span> <span class="method">size</span>() {
-        <span class="keyword">return</span> stack.size();
+        <span class="keyword">return</span> top + 1;
     }
 
     <span class="comment">// Display stack contents</span>
@@ -1355,8 +1362,8 @@
             <span class="keyword">return</span>;
         }
         System.out.println(<span class="string">"Stack (top to bottom): "</span>);
-        <span class="keyword">for</span> (<span class="keyword">int</span> i = stack.size() - 1; i >= 0; i--) {
-            System.out.println(<span class="string">"  "</span> + stack.get(i));
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = top; i >= 0; i--) {
+            System.out.println(<span class="string">"  "</span> + stack[i]);
         }
     }
 }
@@ -1364,7 +1371,7 @@
 <span class="comment">// Example Usage</span>
 <span class="keyword">public class</span> <span class="class-name">Main</span> {
     <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
-        StackUsingArrayList&lt;Integer&gt; stack = <span class="keyword">new</span> StackUsingArrayList&lt;&gt;(5);
+        StackUsingArray&lt;Integer&gt; stack = <span class="keyword">new</span> StackUsingArray&lt;&gt;(5);  <span class="comment">// Fixed size of 5</span>
 
         stack.push(10);
         stack.push(20);
@@ -1374,6 +1381,11 @@
         System.out.println(<span class="string">"Top element: "</span> + stack.top());
         System.out.println(<span class="string">"Popped: "</span> + stack.pop());
         stack.display();
+
+        <span class="comment">// Try to exceed capacity</span>
+        stack.push(40);
+        stack.push(50);
+        stack.push(60);  <span class="comment">// This will cause Stack Overflow!</span>
     }
 }
                     </div>
