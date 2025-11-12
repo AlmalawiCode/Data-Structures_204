@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Sort Partition - Interactive Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        /* Animation Container */
+        .animation-container {
+            background: #f9f9f9;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+
+        /* Input Controls */
+        .input-controls {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            font-size: 1.05em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+
+        /* Split View: Code + Animation */
+        .split-view {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 25px;
+            margin: 30px 0;
+            min-height: 600px;
+        }
+
+        @media (max-width: 1200px) {
+            .split-view {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Code Panel */
+        .code-panel {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 700px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .code-panel h4 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid #555;
+            padding-bottom: 8px;
+        }
+
+        .code-line {
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            padding: 4px 12px;
+            margin: 2px 0;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .code-line.highlight {
+            background: #ffd700;
+            color: #2d2d2d;
+            font-weight: bold;
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .code-line .keyword {
+            color: #ff79c6;
+        }
+
+        .code-line .type {
+            color: #8be9fd;
+        }
+
+        .code-line .method {
+            color: #50fa7b;
+        }
+
+        .code-line .var {
+            color: #f1fa8c;
+        }
+
+        .code-line .comment {
+            color: #6272a4;
+        }
+
+        /* Animation Panel */
+        .animation-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            border: 2px solid #667eea;
+        }
+
+        /* Array Visualization */
+        .array-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 30px 0;
+            padding: 20px;
+            min-height: 180px;
+        }
+
+        .array-element {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .array-box {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            font-weight: bold;
+            border: 3px solid #333;
+            border-radius: 8px;
+            background: #e3f2fd;
+            color: #1565c0;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-box.pivot {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-color: #f57f17;
+            color: #f57f17;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
+            transform: scale(1.1);
+        }
+
+        .array-box.left-partition {
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .array-box.right-partition {
+            background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%);
+            border-color: #ff5722;
+            color: #d84315;
+        }
+
+        .array-box.swapping {
+            animation: swap-pulse 0.6s ease;
+        }
+
+        @keyframes swap-pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2) rotate(5deg);
+                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+            }
+        }
+
+        .array-index {
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* Pointer Indicators */
+        .pointer {
+            position: absolute;
+            top: -35px;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .pointer.pointer-i {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .pointer.pointer-j {
+            background: linear-gradient(135deg, #f44336 0%, #e91e63 100%);
+        }
+
+        .pointer.pointer-pivot {
+            background: linear-gradient(135deg, #ffd700 0%, #ff9800 100%);
+            top: -60px;
+        }
+
+        /* Variables Display */
+        .variables-display {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .variables-display h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .variable-item {
+            display: inline-block;
+            background: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05em;
+            font-weight: 600;
+        }
+
+        .variable-item .var-name {
+            color: #764ba2;
+        }
+
+        .variable-item .var-value {
+            color: #e91e63;
+            margin-left: 8px;
+        }
+
+        /* Step Description */
+        .step-description {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.15em;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Control Buttons */
+        .animation-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        /* Legend */
+        .legend {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .legend h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            border: 2px solid #333;
+        }
+
+        .legend-box.pivot {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-color: #f57f17;
+        }
+
+        .legend-box.left {
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            border-color: #4caf50;
+        }
+
+        .legend-box.right {
+            background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%);
+            border-color: #ff5722;
+        }
+
+        .legend-box.normal {
+            background: #e3f2fd;
+            border-color: #333;
+        }
+
+        /* Algorithm Steps */
+        .algorithm-steps {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            margin: 25px 0;
+        }
+
+        .algorithm-steps h4 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .algorithm-steps ol {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .algorithm-steps ol > li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 15px 15px 60px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .algorithm-steps ol > li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            background: white;
+            color: #667eea;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .algorithm-steps code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        /* Speed Control */
+        .speed-control {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .speed-control label {
+            font-weight: 600;
+            margin-right: 10px;
+            color: #555;
+        }
+
+        .speed-control select {
+            padding: 8px 15px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Quick Sort Partition Algorithm</h1>
+            <p>Interactive Visualization of Partitioning Process</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+                <div class="definition">
+                    <strong>Partition Algorithm:</strong> The partition method is the core operation of Quick Sort. It rearranges an array such that all elements less than or equal to the pivot are placed to its left, and all elements greater than the pivot are placed to its right. The pivot element ends up in its final sorted position.
+                </div>
+
+                <div class="important">
+                    <strong>Key Concept:</strong> This implementation uses two pointers (i and j) that move towards each other, swapping elements when they find values that are on the wrong side of the pivot.
+                </div>
+            </section>
+
+            <!-- Algorithm Steps -->
+            <section id="algorithm">
+                <h2>2. Algorithm Steps</h2>
+                <div class="algorithm-steps">
+                    <h4>Partition Algorithm Process</h4>
+                    <ol>
+                        <li><strong>Select pivot:</strong> User chooses which element to use as the pivot</li>
+                        <li><strong>Set pivot value:</strong> <code>pivot = A[p]</code> where <code>p</code> is the selected pivot index</li>
+                        <li><strong>Initialize pointers:</strong> <code>i = l - 1</code> and <code>j = h + 1</code> (start outside bounds)</li>
+                        <li><strong>Do-while for i:</strong> Increment <code>i</code> first, then check if <code>A[i] &lt;= pivot</code>. Continue until we find <code>A[i] &gt; pivot</code></li>
+                        <li><strong>Do-while for j:</strong> Decrement <code>j</code> first, then check if <code>A[j] &gt; pivot</code>. Continue until we find <code>A[j] &lt;= pivot</code></li>
+                        <li><strong>Swap if needed:</strong> If <code>i &lt; j</code>, swap <code>A[i]</code> and <code>A[j]</code></li>
+                        <li><strong>Repeat:</strong> Steps 4-6 until <code>i &gt;= j</code></li>
+                        <li><strong>Final swap:</strong> Swap pivot <code>A[p]</code> with <code>A[j]</code> to place pivot in correct position</li>
+                        <li><strong>Return:</strong> <code>j</code> as the partition index</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Interactive Animation -->
+            <section id="visualization">
+                <h2>3. Interactive Visualization</h2>
+
+                <div class="animation-container">
+                    <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">Partition Animation</h3>
+
+                    <!-- Input Controls -->
+                    <div class="input-controls">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">Array Input</h4>
+
+                        <div class="input-group">
+                            <label>Enter Array Values (comma-separated):</label>
+                            <input type="text" id="arrayInput" placeholder="e.g., 7, 6, 10, 5, 9, 2, 1, 15, 7" value="7, 6, 10, 5, 9, 2, 1, 15, 7">
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn" onclick="loadCustomArray()">Load Custom Array</button>
+                            <button class="btn btn-secondary" onclick="generateRandomArray()">Generate Random Array</button>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                            <div class="input-group">
+                                <label>Array Size (for random):</label>
+                                <input type="number" id="arraySize" min="5" max="15" value="9">
+                            </div>
+                            <div class="input-group">
+                                <label>Max Value (for random):</label>
+                                <input type="number" id="maxValue" min="10" max="100" value="20">
+                            </div>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 20px;">
+                            <label>Select Pivot Index (which element to use as pivot):</label>
+                            <input type="number" id="pivotIndex" min="0" value="0">
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                                The selected element will remain in its original position during partitioning.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!-- Split View: Code + Animation -->
+                    <div class="split-view">
+                        <!-- Code Panel -->
+                        <div class="code-panel">
+                            <h4>Java Code</h4>
+                            <div id="codeDisplay"></div>
+                        </div>
+
+                        <!-- Animation Panel -->
+                        <div class="animation-panel">
+                            <!-- Variables Display -->
+                            <div class="variables-display">
+                                <h4>Current Variables</h4>
+                                <div id="variablesDisplay">
+                                    <div class="variable-item">
+                                        <span class="var-name">pivot:</span>
+                                        <span class="var-value" id="pivotValue">-</span>
+                                    </div>
+                                    <div class="variable-item">
+                                        <span class="var-name">i:</span>
+                                        <span class="var-value" id="iValue">-</span>
+                                    </div>
+                                    <div class="variable-item">
+                                        <span class="var-name">j:</span>
+                                        <span class="var-value" id="jValue">-</span>
+                                    </div>
+                                    <div class="variable-item">
+                                        <span class="var-name">l:</span>
+                                        <span class="var-value" id="lValue">-</span>
+                                    </div>
+                                    <div class="variable-item">
+                                        <span class="var-name">h:</span>
+                                        <span class="var-value" id="hValue">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step Description -->
+                            <div class="step-description" id="stepDescription">
+                                Click "Start Animation" to begin
+                            </div>
+
+                            <!-- Array Visualization -->
+                            <div class="array-container" id="arrayContainer"></div>
+
+                            <!-- Animation Controls -->
+                            <div class="animation-controls">
+                                <button class="btn btn-secondary" id="stepBtn" onclick="nextStep()">Next Step</button>
+                                <button class="btn btn-warning" onclick="resetAnimation()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Java code lines
+        const javaCode = [
+            { line: 'public static int partition(int[] A, int l, int h, int p) {', num: 0 },
+            { line: '    int pivot = A[p];', num: 1 },
+            { line: '    int i = l - 1;', num: 2 },
+            { line: '    int j = h + 1;', num: 3 },
+            { line: '', num: 4 },
+            { line: '    while (i < j) {', num: 5 },
+            { line: '        do {', num: 6 },
+            { line: '            i++;', num: 7 },
+            { line: '        } while (A[i] <= pivot);', num: 8 },
+            { line: '', num: 9 },
+            { line: '        do {', num: 10 },
+            { line: '            j--;', num: 11 },
+            { line: '        } while (A[j] > pivot);', num: 12 },
+            { line: '', num: 13 },
+            { line: '        if (i < j) swap(A, i, j);', num: 14 },
+            { line: '    }', num: 15 },
+            { line: '', num: 16 },
+            { line: '    swap(A, p, j);', num: 17 },
+            { line: '    return j;', num: 18 },
+            { line: '}', num: 19 },
+            { line: '', num: 20 },
+            { line: 'private static void swap(int[] A, int i, int j) {', num: 21 },
+            { line: '    int t = A[i];', num: 22 },
+            { line: '    A[i] = A[j];', num: 23 },
+            { line: '    A[j] = t;', num: 24 },
+            { line: '}', num: 25 }
+        ];
+
+        // Animation state
+        let array = [];
+        let originalArray = [];
+        let l = 0;
+        let h = 0;
+        let pivot = 0;
+        let i = 0;
+        let j = 0;
+        let steps = [];
+        let currentStep = 0;
+
+        // Initialize code display
+        function initCodeDisplay() {
+            const codeDisplay = document.getElementById('codeDisplay');
+            codeDisplay.innerHTML = '';
+
+            javaCode.forEach(line => {
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'code-line';
+                lineDiv.id = `code-line-${line.num}`;
+                lineDiv.textContent = line.line; // Set as plain text first
+                codeDisplay.appendChild(lineDiv);
+            });
+        }
+
+        function highlightCodeLine(lineNum) {
+            document.querySelectorAll('.code-line').forEach(line => {
+                line.classList.remove('highlight');
+            });
+            if (lineNum >= 0) {
+                const line = document.getElementById(`code-line-${lineNum}`);
+                if (line) {
+                    line.classList.add('highlight');
+                    line.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        // Array generation
+        function generateRandomArray() {
+            const size = parseInt(document.getElementById('arraySize').value) || 9;
+            const maxVal = parseInt(document.getElementById('maxValue').value) || 20;
+            const arr = [];
+            for (let i = 0; i < size; i++) {
+                arr.push(Math.floor(Math.random() * maxVal) + 1);
+            }
+            // Add a sentinel value at the end (larger than max)
+            arr.push(maxVal + 100);
+
+            document.getElementById('arrayInput').value = arr.slice(0, -1).join(', ');
+            loadCustomArray();
+        }
+
+        function loadCustomArray() {
+            const input = document.getElementById('arrayInput').value;
+            const arr = input.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+
+            if (arr.length < 2) {
+                alert('Please enter at least 2 numbers');
+                return;
+            }
+
+            // Add sentinel value
+            const maxVal = Math.max(...arr);
+            arr.push(maxVal + 100);
+
+            originalArray = [...arr];
+
+            // Update pivot index max value
+            document.getElementById('pivotIndex').max = arr.length - 2; // Exclude sentinel
+
+            resetAnimation();
+        }
+
+        // Render array
+        function renderArray(highlightI = -1, highlightJ = -1, pivotIndex = -1, showFinal = false) {
+            const container = document.getElementById('arrayContainer');
+            container.innerHTML = '';
+
+            array.forEach((value, index) => {
+                // Skip sentinel value in display
+                if (index === array.length - 1) return;
+
+                const element = document.createElement('div');
+                element.className = 'array-element';
+
+                const box = document.createElement('div');
+                box.className = 'array-box';
+                box.textContent = value;
+
+                // Apply colors
+                if (showFinal) {
+                    if (index === pivotIndex) {
+                        box.classList.add('pivot');
+                    } else if (index < pivotIndex) {
+                        box.classList.add('left-partition');
+                    } else {
+                        box.classList.add('right-partition');
+                    }
+                } else {
+                    if (index === l && index === pivotIndex) {
+                        box.classList.add('pivot');
+                    }
+                }
+
+                // Add pointers
+                if (index === highlightI && highlightI >= 0) {
+                    const pointerI = document.createElement('div');
+                    pointerI.className = 'pointer pointer-i';
+                    pointerI.textContent = 'i';
+                    element.appendChild(pointerI);
+                }
+
+                if (index === highlightJ && highlightJ >= 0) {
+                    const pointerJ = document.createElement('div');
+                    pointerJ.className = 'pointer pointer-j';
+                    pointerJ.textContent = 'j';
+                    element.appendChild(pointerJ);
+                }
+
+                if (index === pivotIndex && pivotIndex >= 0 && !showFinal) {
+                    const pointerPivot = document.createElement('div');
+                    pointerPivot.className = 'pointer pointer-pivot';
+                    pointerPivot.textContent = 'pivot';
+                    element.appendChild(pointerPivot);
+                }
+
+                const indexLabel = document.createElement('div');
+                indexLabel.className = 'array-index';
+                indexLabel.textContent = index;
+
+                element.appendChild(box);
+                element.appendChild(indexLabel);
+                container.appendChild(element);
+            });
+        }
+
+        // Update variables display
+        function updateVariables() {
+            document.getElementById('pivotValue').textContent = pivot;
+            document.getElementById('iValue').textContent = i;
+            document.getElementById('jValue').textContent = j;
+            document.getElementById('lValue').textContent = l;
+            document.getElementById('hValue').textContent = h;
+        }
+
+        // Generate steps
+        function generateSteps() {
+            steps = [];
+            array = [...originalArray];
+            l = 0;
+            h = array.length - 1;
+
+            // Get user-selected pivot index
+            const selectedPivotIndex = parseInt(document.getElementById('pivotIndex').value) || 0;
+
+            // Step 0: Show initial array
+            steps.push({
+                array: [...array],
+                i: -1,
+                j: -1,
+                pivot: -1,
+                l: l,
+                h: h,
+                description: `Initial array. Parameter: l=${l}, h=${h}, p=${selectedPivotIndex}`,
+                codeLine: 0,
+                pivotIndex: -1,
+                showPointers: false
+            });
+
+            // Step 1: Set pivot value (no swap, keep pivot at original position)
+            const selectedValue = array[selectedPivotIndex];
+            pivot = selectedValue;
+
+            steps.push({
+                array: [...array],
+                i: -1,
+                j: -1,
+                pivot: pivot,
+                l: l,
+                h: h,
+                description: `Set pivot = A[${selectedPivotIndex}] = ${pivot}`,
+                codeLine: 1,
+                pivotIndex: selectedPivotIndex,
+                showPointers: false
+            });
+
+            // Step 2: Initialize i = l - 1
+            i = l - 1;
+            steps.push({
+                array: [...array],
+                i: i,
+                j: -1,
+                pivot: pivot,
+                l: l,
+                h: h,
+                description: `Initialize i = ${l} - 1 = ${i}`,
+                codeLine: 2,
+                pivotIndex: selectedPivotIndex,
+                showPointers: false
+            });
+
+            // Step 3: Initialize j = h + 1
+            j = h + 1;
+            steps.push({
+                array: [...array],
+                i: i,
+                j: j,
+                pivot: pivot,
+                l: l,
+                h: h,
+                description: `Initialize j = ${h} + 1 = ${j} (beyond array bounds, will decrement first in do-while)`,
+                codeLine: 3,
+                pivotIndex: selectedPivotIndex,
+                showPointers: false
+            });
+
+            // Main loop
+            let stepCount = 0;
+            const maxSteps = 1000; // Prevent infinite loop
+            let currentPivotIndex = selectedPivotIndex; // Track pivot position
+
+            while (i < j && stepCount < maxSteps) {
+                stepCount++;
+
+                // Increment i
+                let iStarted = false;
+                do {
+                    i++;
+                    if (!iStarted) {
+                        steps.push({
+                            array: [...array],
+                            i: i,
+                            j: j,
+                            pivot: pivot,
+                            l: l,
+                            h: h,
+                            description: `Increment i to ${i}. Check if A[${i}] = ${array[i]} <= pivot (${pivot})`,
+                            codeLine: 7,
+                            pivotIndex: currentPivotIndex,
+                            showPointers: true
+                        });
+                        iStarted = true;
+                    } else {
+                        steps.push({
+                            array: [...array],
+                            i: i,
+                            j: j,
+                            pivot: pivot,
+                            l: l,
+                            h: h,
+                            description: `A[${i}] = ${array[i]} <= ${pivot}, continue incrementing i`,
+                            codeLine: 8,
+                            pivotIndex: currentPivotIndex,
+                            showPointers: true
+                        });
+                    }
+                } while (array[i] <= pivot);
+
+                steps.push({
+                    array: [...array],
+                    i: i,
+                    j: j,
+                    pivot: pivot,
+                    l: l,
+                    h: h,
+                    description: `Found A[${i}] = ${array[i]} > pivot (${pivot}). Stop incrementing i.`,
+                    codeLine: 8,
+                    pivotIndex: currentPivotIndex,
+                    showPointers: true
+                });
+
+                // Decrement j
+                let jStarted = false;
+                do {
+                    j--;
+                    if (!jStarted) {
+                        steps.push({
+                            array: [...array],
+                            i: i,
+                            j: j,
+                            pivot: pivot,
+                            l: l,
+                            h: h,
+                            description: `Decrement j to ${j}. Check if A[${j}] = ${array[j]} > pivot (${pivot})`,
+                            codeLine: 11,
+                            pivotIndex: currentPivotIndex,
+                            showPointers: true
+                        });
+                        jStarted = true;
+                    } else {
+                        steps.push({
+                            array: [...array],
+                            i: i,
+                            j: j,
+                            pivot: pivot,
+                            l: l,
+                            h: h,
+                            description: `A[${j}] = ${array[j]} > ${pivot}, continue decrementing j`,
+                            codeLine: 12,
+                            pivotIndex: currentPivotIndex,
+                            showPointers: true
+                        });
+                    }
+                } while (array[j] > pivot);
+
+                steps.push({
+                    array: [...array],
+                    i: i,
+                    j: j,
+                    pivot: pivot,
+                    l: l,
+                    h: h,
+                    description: `Found A[${j}] = ${array[j]} <= pivot (${pivot}). Stop decrementing j.`,
+                    codeLine: 12,
+                    pivotIndex: currentPivotIndex,
+                    showPointers: true
+                });
+
+                // Check if i < j
+                if (i < j) {
+                    steps.push({
+                        array: [...array],
+                        i: i,
+                        j: j,
+                        pivot: pivot,
+                        l: l,
+                        h: h,
+                        description: `i (${i}) < j (${j}), so swap A[${i}] = ${array[i]} with A[${j}] = ${array[j]}`,
+                        codeLine: 14,
+                        pivotIndex: currentPivotIndex,
+                        showPointers: true
+                    });
+
+                    // Perform swap and track if pivot moves
+                    if (i === currentPivotIndex) {
+                        currentPivotIndex = j;
+                    } else if (j === currentPivotIndex) {
+                        currentPivotIndex = i;
+                    }
+
+                    [array[i], array[j]] = [array[j], array[i]];
+
+                    steps.push({
+                        array: [...array],
+                        i: i,
+                        j: j,
+                        pivot: pivot,
+                        l: l,
+                        h: h,
+                        description: `After swap: A[${i}] = ${array[i]}, A[${j}] = ${array[j]}`,
+                        codeLine: 14,
+                        pivotIndex: currentPivotIndex,
+                        swapped: true,
+                        showPointers: true
+                    });
+                } else {
+                    steps.push({
+                        array: [...array],
+                        i: i,
+                        j: j,
+                        pivot: pivot,
+                        l: l,
+                        h: h,
+                        description: `i (${i}) >= j (${j}), exit while loop`,
+                        codeLine: 5,
+                        pivotIndex: currentPivotIndex,
+                        showPointers: true
+                    });
+                }
+            }
+
+            // Final swap
+            steps.push({
+                array: [...array],
+                i: i,
+                j: j,
+                pivot: pivot,
+                l: l,
+                h: h,
+                description: `Swap pivot A[${currentPivotIndex}] = ${array[currentPivotIndex]} with A[${j}] = ${array[j]} to place pivot in correct position`,
+                codeLine: 17,
+                pivotIndex: currentPivotIndex,
+                showPointers: true
+            });
+
+            [array[currentPivotIndex], array[j]] = [array[j], array[currentPivotIndex]];
+
+            steps.push({
+                array: [...array],
+                i: i,
+                j: j,
+                pivot: pivot,
+                l: l,
+                h: h,
+                description: `Partition complete! Pivot ${pivot} is now at index ${j}. Return ${j}.`,
+                codeLine: 18,
+                pivotIndex: j,
+                final: true
+            });
+        }
+
+        // Animation functions
+        function nextStep() {
+            // Generate steps on first call
+            if (steps.length === 0) {
+                if (originalArray.length === 0) {
+                    loadCustomArray();
+                }
+                generateSteps();
+                currentStep = 0;
+            }
+
+            if (currentStep >= steps.length) {
+                return;
+            }
+
+            showStep(currentStep);
+            currentStep++;
+
+            if (currentStep >= steps.length) {
+                document.getElementById('stepBtn').disabled = true;
+            }
+        }
+
+        function showStep(stepIndex) {
+            const step = steps[stepIndex];
+
+            array = [...step.array];
+            i = step.i;
+            j = step.j;
+            pivot = step.pivot;
+            l = step.l;
+            h = step.h;
+
+            updateVariables();
+            document.getElementById('stepDescription').textContent = step.description;
+            highlightCodeLine(step.codeLine);
+
+            // Don't show pointers if they're out of bounds or if showPointers is false
+            const showI = step.showPointers !== false && step.i >= 0 && step.i < array.length - 1;
+            const showJ = step.showPointers !== false && step.j >= 0 && step.j < array.length;
+
+            if (step.final) {
+                renderArray(-1, -1, step.pivotIndex, true);
+            } else {
+                renderArray(showI ? step.i : -1, showJ ? step.j : -1, step.pivotIndex, false);
+            }
+
+            if (step.swapped) {
+                const boxes = document.querySelectorAll('.array-box');
+                boxes[step.i]?.classList.add('swapping');
+                boxes[step.j]?.classList.add('swapping');
+            }
+        }
+
+        function resetAnimation() {
+            if (originalArray.length === 0 && document.getElementById('arrayInput').value) {
+                loadCustomArray();
+                return;
+            }
+
+            currentStep = 0;
+            steps = [];
+
+            if (originalArray.length > 0) {
+                array = [...originalArray];
+                l = 0;
+                h = array.length - 1;
+                pivot = array[l];
+                i = l;
+                j = h;
+
+                updateVariables();
+                renderArray(-1, -1, -1, false);
+                document.getElementById('stepDescription').textContent = 'Click "Next Step" to begin';
+                highlightCodeLine(-1);
+            }
+
+            document.getElementById('stepBtn').disabled = false;
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            initCodeDisplay();
+            loadCustomArray();
+        };
+    </script>
+</body>
+</html>
