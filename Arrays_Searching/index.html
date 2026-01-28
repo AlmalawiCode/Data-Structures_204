@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrays & Searching - CPCS 204</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        /* Back Button */
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #4f46e5;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-home-btn:hover {
+            background: #4f46e5;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        header {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #4f46e5;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #4f46e5;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #6366f1;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Code Styles - Matching linkedlist-tutorial */
+        .code-container {
+            margin: 20px 0;
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+        }
+
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        .keyword {
+            color: #ff79c6;
+        }
+
+        .type {
+            color: #8be9fd;
+        }
+
+        .string {
+            color: #f1fa8c;
+        }
+
+        .comment {
+            color: #6272a4;
+        }
+
+        .number {
+            color: #bd93f9;
+        }
+
+        .method {
+            color: #50fa7b;
+        }
+
+        /* Box Styles */
+        .reminder-box {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition-box {
+            background: #e0f2fe;
+            border-left: 5px solid #0ea5e9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .important-box {
+            background: #fce7f3;
+            border-left: 5px solid #ec4899;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #d1fae5;
+            border-left: 5px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .question-box {
+            background: #ede9fe;
+            border-left: 5px solid #8b5cf6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fee2e2;
+            border-left: 5px solid #ef4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        /* Array Visualization */
+        .array-container {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .array-visual {
+            display: flex;
+            gap: 0;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .array-cell {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #4f46e5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .array-cell:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .array-cell:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .array-cell .value {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #4f46e5;
+        }
+
+        .array-cell .index {
+            position: absolute;
+            bottom: -25px;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .array-cell.highlight {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .array-cell.found {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .array-cell.not-found {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .array-cell.mid {
+            background: #e0f2fe;
+            border-color: #0ea5e9;
+        }
+
+        .array-cell.eliminated {
+            background: #f1f5f9;
+            opacity: 0.4;
+        }
+
+        .array-cell.empty {
+            background: #f8fafc;
+            border-style: dashed;
+        }
+
+        .array-cell.empty .value {
+            color: #94a3b8;
+        }
+
+        .array-cell.new-item {
+            background: #d1fae5;
+            border-color: #10b981;
+            animation: pulse 0.5s ease;
+        }
+
+        .array-cell.shifting {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Memory Address */
+        .memory-address {
+            font-size: 0.7em;
+            color: #94a3b8;
+            position: absolute;
+            top: -20px;
+        }
+
+        /* Operation Table */
+        .operation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+        }
+
+        .operation-table th,
+        .operation-table td {
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .operation-table th {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .operation-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .operation-table tr:hover {
+            background: #e0f2fe;
+        }
+
+        .complexity-o1 {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .complexity-on {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .complexity-logn {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        /* Step Visualization */
+        .step-container {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .step-header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .step-content {
+            padding: 15px;
+        }
+
+        /* Halving Visualization */
+        .halving-container {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 3px solid #0ea5e9;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .halving-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .halving-step-number {
+            background: linear-gradient(135deg, #0ea5e9, #0369a1);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .halving-step-content {
+            flex-grow: 1;
+        }
+
+        .halving-step-formula {
+            font-size: 1.4em;
+            color: #0369a1;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .halving-step-description {
+            color: #64748b;
+        }
+
+        .halving-visual-bar {
+            height: 30px;
+            background: linear-gradient(90deg, #0ea5e9, #06b6d4);
+            border-radius: 15px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .halving-visual-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.3), transparent);
+        }
+
+        /* Math Box */
+        .math-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 3px solid #f59e0b;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .math-formula {
+            font-size: 1.8em;
+            color: #92400e;
+            margin: 20px 0;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .math-formula sub {
+            font-size: 0.6em;
+            vertical-align: sub;
+        }
+
+        .math-formula sup {
+            font-size: 0.6em;
+            vertical-align: super;
+        }
+
+        /* Math Derivation */
+        .math-derivation {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 3px solid #22c55e;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .derivation-title {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .derivation-step {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border-left: 5px solid #22c55e;
+            align-items: flex-start;
+        }
+
+        .derivation-step-number {
+            background: #22c55e;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .derivation-step-content {
+            flex-grow: 1;
+        }
+
+        .derivation-step-formula {
+            font-size: 1.5em;
+            color: #166534;
+            font-family: 'Times New Roman', serif;
+            margin-bottom: 10px;
+        }
+
+        .derivation-step-explanation {
+            color: #4b5563;
+            font-size: 1em;
+        }
+
+        .math-rule-box {
+            background: #fef3c7;
+            border: 2px dashed #f59e0b;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .math-rule-box strong {
+            color: #92400e;
+        }
+
+        /* Formula Box */
+        .formula-box {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .formula {
+            font-size: 1.5em;
+            font-family: 'Times New Roman', serif;
+            color: #0369a1;
+            margin: 15px 0;
+        }
+
+        /* Comparison Table */
+        .comparison-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-width: 150px;
+        }
+
+        .comparison-item .label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .comparison-item .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .vs-circle {
+            width: 50px;
+            height: 50px;
+            background: #4f46e5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Key Point Box */
+        .key-point-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 3px solid #ef4444;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .key-point-title {
+            background: #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* Exercise Section */
+        .exercise-box {
+            background: #f8fafc;
+            border: 2px solid #4f46e5;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .exercise-header {
+            background: #4f46e5;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: -25px -25px 20px -25px;
+            font-weight: bold;
+        }
+
+        .solution-toggle {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .solution-toggle:hover {
+            background: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed #e2e8f0;
+        }
+
+        .solution-content.show {
+            display: block;
+        }
+
+        /* Summary Table for Binary Search */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            border: 2px solid #4f46e5;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .summary-table th {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .summary-table tr:nth-child(even) {
+            background: #f0f4ff;
+        }
+
+        /* Footer */
+        footer {
+            background: #1e1e1e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .array-cell {
+                width: 45px;
+                height: 45px;
+            }
+
+            .array-cell .value {
+                font-size: 1em;
+            }
+
+            .comparison-visual {
+                flex-direction: column;
+            }
+
+            .halving-step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .derivation-step {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-home-btn">Home</a>
+
+    <div class="container">
+        <header>
+            <h1>Arrays & Searching</h1>
+            <p>CPCS 204 - Data Structures I</p>
+            <p>Linear Search vs Binary Search</p>
+        </header>
+
+        <div class="content">
+
+            <!-- Part 1: Arrays Reminder -->
+            <section id="arrays-reminder">
+                <h2>Part 1: Arrays - A Quick Reminder</h2>
+
+                <div class="reminder-box">
+                    <h4>You Should Already Know This!</h4>
+                    <p>Arrays are fundamental data structures that you learned in your programming courses. Let's quickly review what makes arrays special and understand their limitations.</p>
+                </div>
+
+                <h3>What is an Array?</h3>
+                <p>An array is a collection of elements stored in <strong>contiguous (consecutive) memory locations</strong>. Each element can be accessed directly using its <strong>index</strong>.</p>
+
+                <div class="array-container">
+                    <h4 style="text-align: center; color: #4f46e5; margin-bottom: 20px;">Example: Array of 10 Random Values</h4>
+                    <div class="array-visual" style="margin-bottom: 40px;">
+                        <div class="array-cell">
+                            <span class="memory-address">1000</span>
+                            <span class="value">42</span>
+                            <span class="index">0</span>
+                        </div>
+                        <div class="array-cell">
+                            <span class="memory-address">1004</span>
+                            <span class="value">17</span>
+                            <span class="index">1</span>
+                        </div>
+                        <div class="array-cell">
+                            <span class="memory-address">1008</span>
+                            <span class="value">85</span>
+                            <span class="index">2</span>
+                        </div>
+                        <div class="array-cell">
+                            <span class="memory-address">1012</span>
+                            <span class="value">33</span>
+                            <span class="index">3</span>
+                        </div>
+                        <div class="array-cell">
+                            <span class="memory-address">1016</span>
+                            <span class="value">91</span>
+                            <span class="index">4</span>
+                        </div>
+                        <div class="array-cell">
+                            <span class="memory-address">1020</span>
+                            <span class="value">56</span>
+                            <span class="index">5</span>
+                        </div>
+                        <div class="array-cell">
+                            <span class="memory-address">1024</span>
+                            <span class="value">28</span>
+                            <span class="index">6</span>
+                        </div>
+                        <div class="array-cell">
+                            <span class="memory-address">1028</span>
+                            <span class="value">74</span>
+                            <span class="index">7</span>
+                        </div>
+                        <div class="array-cell empty">
+                            <span class="memory-address">1032</span>
+                            <span class="value">-</span>
+                            <span class="index">8</span>
+                        </div>
+                        <div class="array-cell empty">
+                            <span class="memory-address">1036</span>
+                            <span class="value">-</span>
+                            <span class="index">9</span>
+                        </div>
+                    </div>
+                    <p style="text-align: center; color: #666;">
+                        <strong>Size:</strong> 10 | <strong>Used:</strong> 8 (indices 0-7) | <strong>Empty:</strong> 2 (indices 8-9)
+                    </p>
+                </div>
+
+                <div class="definition-box">
+                    <h4>Key Properties of Arrays</h4>
+                    <ul>
+                        <li><strong>Contiguous Memory:</strong> Elements are stored one after another in memory</li>
+                        <li><strong>Fixed Size:</strong> Once created, the size cannot change</li>
+                        <li><strong>Direct Access:</strong> Any element can be accessed instantly using its index</li>
+                        <li><strong>Same Type:</strong> All elements must be of the same data type</li>
+                    </ul>
+                </div>
+
+                <h3>Array Operations - How Fast Are They?</h3>
+
+                <div class="question-box">
+                    <h4>Think About This...</h4>
+                    <p>If we want to add a new item to our array, how fast can we do it? Does it matter WHERE we add it?</p>
+                </div>
+
+                <!-- Add at End -->
+                <h4>1. Adding at the End</h4>
+                <p>If the array is not full, adding at the end is <strong>super fast</strong>!</p>
+
+                <div class="array-container">
+                    <p><strong>Before:</strong> Array has 8 elements, we want to add <span style="color: #10b981; font-weight: bold;">99</span></p>
+                    <div class="array-visual" style="margin-bottom: 40px;">
+                        <div class="array-cell"><span class="value">42</span><span class="index">0</span></div>
+                        <div class="array-cell"><span class="value">17</span><span class="index">1</span></div>
+                        <div class="array-cell"><span class="value">85</span><span class="index">2</span></div>
+                        <div class="array-cell"><span class="value">33</span><span class="index">3</span></div>
+                        <div class="array-cell"><span class="value">91</span><span class="index">4</span></div>
+                        <div class="array-cell"><span class="value">56</span><span class="index">5</span></div>
+                        <div class="array-cell"><span class="value">28</span><span class="index">6</span></div>
+                        <div class="array-cell"><span class="value">74</span><span class="index">7</span></div>
+                        <div class="array-cell new-item"><span class="value">99</span><span class="index">8</span></div>
+                        <div class="array-cell empty"><span class="value">-</span><span class="index">9</span></div>
+                    </div>
+                    <p style="text-align: center;"><strong>Action:</strong> Just jump to index 8 and put the value. <span class="complexity-o1">O(1)</span> - Done!</p>
+                </div>
+
+                <!-- Add at Beginning -->
+                <h4>2. Adding at the Beginning</h4>
+                <p>This is <strong>challenging</strong>! We need to shift ALL existing elements to make room.</p>
+
+                <div class="array-container">
+                    <p><strong>Goal:</strong> Add <span style="color: #10b981; font-weight: bold;">5</span> at the beginning</p>
+
+                    <p><strong>Step 1:</strong> Shift all elements to the right</p>
+                    <div class="array-visual" style="margin-bottom: 30px;">
+                        <div class="array-cell empty"><span class="value">?</span><span class="index">0</span></div>
+                        <div class="array-cell shifting"><span class="value">42</span><span class="index">1</span></div>
+                        <div class="array-cell shifting"><span class="value">17</span><span class="index">2</span></div>
+                        <div class="array-cell shifting"><span class="value">85</span><span class="index">3</span></div>
+                        <div class="array-cell shifting"><span class="value">33</span><span class="index">4</span></div>
+                        <div class="array-cell shifting"><span class="value">91</span><span class="index">5</span></div>
+                        <div class="array-cell shifting"><span class="value">56</span><span class="index">6</span></div>
+                        <div class="array-cell shifting"><span class="value">28</span><span class="index">7</span></div>
+                        <div class="array-cell shifting"><span class="value">74</span><span class="index">8</span></div>
+                        <div class="array-cell empty"><span class="value">-</span><span class="index">9</span></div>
+                    </div>
+                    <p style="text-align: center; color: #f59e0b;">Each shift is O(1), but we do n shifts = <span class="complexity-on">O(n)</span></p>
+
+                    <p><strong>Step 2:</strong> Insert the new value at index 0</p>
+                    <div class="array-visual" style="margin-bottom: 30px;">
+                        <div class="array-cell new-item"><span class="value">5</span><span class="index">0</span></div>
+                        <div class="array-cell"><span class="value">42</span><span class="index">1</span></div>
+                        <div class="array-cell"><span class="value">17</span><span class="index">2</span></div>
+                        <div class="array-cell"><span class="value">85</span><span class="index">3</span></div>
+                        <div class="array-cell"><span class="value">33</span><span class="index">4</span></div>
+                        <div class="array-cell"><span class="value">91</span><span class="index">5</span></div>
+                        <div class="array-cell"><span class="value">56</span><span class="index">6</span></div>
+                        <div class="array-cell"><span class="value">28</span><span class="index">7</span></div>
+                        <div class="array-cell"><span class="value">74</span><span class="index">8</span></div>
+                        <div class="array-cell empty"><span class="value">-</span><span class="index">9</span></div>
+                    </div>
+                </div>
+
+                <!-- Summary Table -->
+                <h3>Summary: Array Operations Time Complexity</h3>
+
+                <table class="operation-table">
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Time Complexity</th>
+                            <th>Why?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Add at End</strong></td>
+                            <td><span class="complexity-o1">O(1)</span></td>
+                            <td>Jump directly to the position, no shifting needed</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Add at Beginning</strong></td>
+                            <td><span class="complexity-on">O(n)</span></td>
+                            <td>Must shift ALL n elements to the right</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Add in Middle</strong></td>
+                            <td><span class="complexity-on">O(n)</span></td>
+                            <td>Must shift elements after the insertion point</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Delete from End</strong></td>
+                            <td><span class="complexity-o1">O(1)</span></td>
+                            <td>Just remove, no shifting needed</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Delete from Beginning</strong></td>
+                            <td><span class="complexity-on">O(n)</span></td>
+                            <td>Must shift ALL elements to the left</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Delete from Middle</strong></td>
+                            <td><span class="complexity-on">O(n)</span></td>
+                            <td>Must shift elements to fill the gap</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Access by Index</strong></td>
+                            <td><span class="complexity-o1">O(1)</span></td>
+                            <td>Direct access using address calculation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Part 2: What is O(1)? -->
+            <section id="big-o">
+                <h2>Part 2: What Does O(1) Mean?</h2>
+
+                <div class="question-box">
+                    <h4>You might be wondering...</h4>
+                    <p>We keep saying O(1) and O(n), but what do these actually mean?</p>
+                </div>
+
+                <div class="definition-box">
+                    <h4>Big O Notation - Simple Explanation</h4>
+                    <p><strong>Big O notation</strong> describes how the time (or space) an algorithm needs grows as the input size increases.</p>
+                    <ul>
+                        <li><strong>O(1) - Constant Time:</strong> The operation takes the same amount of time regardless of how much data you have. It's the <strong>fastest possible</strong>!</li>
+                        <li><strong>O(n) - Linear Time:</strong> The time grows proportionally with the data size. Double the data = double the time.</li>
+                        <li><strong>O(log<sub>2</sub>n) - Logarithmic Time:</strong> The time grows very slowly even as data increases dramatically. Very efficient!</li>
+                    </ul>
+                </div>
+
+                <h3>Visualizing O(1) - Constant Time</h3>
+
+                <div class="formula-box">
+                    <h4>O(1) = "One Operation"</h4>
+                    <p>No matter if you have 10 items or 10 million items, O(1) takes the same time.</p>
+                    <div class="comparison-visual">
+                        <div class="comparison-item">
+                            <div class="label">10 items</div>
+                            <div class="value" style="color: #10b981;">1 step</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">1,000 items</div>
+                            <div class="value" style="color: #10b981;">1 step</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">1,000,000 items</div>
+                            <div class="value" style="color: #10b981;">1 step</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h4>Why is Array Access O(1)?</h4>
+                    <p>Because of the address calculation formula:</p>
+                    <p style="text-align: center; font-size: 1.2em; margin: 15px 0;">
+                        <strong>Element Address = Base Address + (Index × Element Size)</strong>
+                    </p>
+                    <p>The CPU can calculate this instantly, regardless of array size!</p>
+                </div>
+            </section>
+
+            <!-- Part 3: Linear Search -->
+            <section id="linear-search">
+                <h2>Part 3: Linear Search</h2>
+
+                <div class="definition-box">
+                    <h4>What is Linear Search?</h4>
+                    <p><strong>Linear Search</strong> is the simplest search algorithm. You start from the beginning and check each element one by one until you find what you're looking for.</p>
+                </div>
+
+                <h3>When to Use Linear Search?</h3>
+                <p>Linear search works on <strong>any array</strong> - sorted or unsorted. It's simple but can be slow for large datasets.</p>
+
+                <div class="array-container">
+                    <h4 style="text-align: center; color: #4f46e5; margin-bottom: 20px;">Example: Search for value 56 in this unsorted array</h4>
+                    <div class="array-visual" style="margin-bottom: 40px;">
+                        <div class="array-cell"><span class="value">42</span><span class="index">0</span></div>
+                        <div class="array-cell"><span class="value">17</span><span class="index">1</span></div>
+                        <div class="array-cell"><span class="value">85</span><span class="index">2</span></div>
+                        <div class="array-cell"><span class="value">33</span><span class="index">3</span></div>
+                        <div class="array-cell"><span class="value">91</span><span class="index">4</span></div>
+                        <div class="array-cell highlight"><span class="value">56</span><span class="index">5</span></div>
+                        <div class="array-cell"><span class="value">28</span><span class="index">6</span></div>
+                        <div class="array-cell"><span class="value">74</span><span class="index">7</span></div>
+                    </div>
+                </div>
+
+                <h3>Step-by-Step Linear Search</h3>
+
+                <div class="step-container">
+                    <div class="step-header">Searching for: 56</div>
+                    <div class="step-content">
+                        <p><strong>Step 1:</strong> Check index 0 → 42 ≠ 56 ❌</p>
+                        <p><strong>Step 2:</strong> Check index 1 → 17 ≠ 56 ❌</p>
+                        <p><strong>Step 3:</strong> Check index 2 → 85 ≠ 56 ❌</p>
+                        <p><strong>Step 4:</strong> Check index 3 → 33 ≠ 56 ❌</p>
+                        <p><strong>Step 5:</strong> Check index 4 → 91 ≠ 56 ❌</p>
+                        <p><strong>Step 6:</strong> Check index 5 → 56 = 56 ✅ <strong style="color: #10b981;">FOUND at index 5!</strong></p>
+                    </div>
+                </div>
+
+                <h3>Time Complexity Analysis</h3>
+
+                <div class="important-box">
+                    <h4>Worst Case Scenario</h4>
+                    <p>In algorithm analysis, we <strong>always consider the worst case</strong>. For linear search, the worst case is when the target element is at the <strong>very end</strong> of the array (or not present at all).</p>
+                    <p style="text-align: center; margin-top: 15px;">
+                        <span class="complexity-on" style="font-size: 1.3em;">Linear Search = O(n)</span>
+                    </p>
+                </div>
+
+                <h3>Why is it Called "Linear"?</h3>
+
+                <div class="formula-box">
+                    <h4>Time Grows Linearly with Data Size</h4>
+                    <div class="comparison-visual">
+                        <div class="comparison-item">
+                            <div class="label">10 items</div>
+                            <div class="value" style="color: #ef4444;">~1 sec</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">20 items</div>
+                            <div class="value" style="color: #ef4444;">~2 sec</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">30 items</div>
+                            <div class="value" style="color: #ef4444;">~3 sec</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">100 items</div>
+                            <div class="value" style="color: #ef4444;">~10 sec</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px;">If you double the data, you double the search time. This is <strong>linear growth</strong>.</p>
+                </div>
+
+                <h3>Linear Search Code</h3>
+
+                <div class="code-container">
+                    <div class="code-header">Linear Search - Java Implementation</div>
+                    <pre><span class="comment">/**
+ * Linear Search Algorithm
+ * Searches for a target value in an array by checking each element one by one.
+ *
+ * Time Complexity: O(n) - worst case checks all elements
+ * Space Complexity: O(1) - no extra space needed
+ *
+ * @param arr    The array to search in
+ * @param target The value we are looking for
+ * @return       The index of target if found, -1 otherwise
+ */</span>
+<span class="keyword">public static int</span> <span class="method">linearSearch</span>(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> target) {
+
+    <span class="comment">// Loop through each element in the array</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) {
+
+        <span class="comment">// Check if current element matches the target</span>
+        <span class="keyword">if</span> (arr[i] == target) {
+            <span class="keyword">return</span> i;  <span class="comment">// Found! Return the index</span>
+        }
+    }
+
+    <span class="comment">// Target not found in the array</span>
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</pre>
+                </div>
+            </section>
+
+            <!-- Part 4: Binary Search -->
+            <section id="binary-search">
+                <h2>Part 4: Binary Search - The Fast Way!</h2>
+
+                <div class="question-box">
+                    <h4>Can We Do Better Than Linear Search?</h4>
+                    <p>Yes! But there's a requirement: <strong>the data must be sorted</strong>.</p>
+                </div>
+
+                <div class="definition-box">
+                    <h4>What is Binary Search?</h4>
+                    <p><strong>Binary Search</strong> is a divide-and-conquer algorithm. Instead of checking every element, it:</p>
+                    <ol>
+                        <li>Looks at the <strong>middle</strong> element</li>
+                        <li>If the target is smaller, search the <strong>left half</strong></li>
+                        <li>If the target is larger, search the <strong>right half</strong></li>
+                        <li>Repeat until found (or not found)</li>
+                    </ol>
+                </div>
+
+                <div class="important-box">
+                    <h4>Key Requirement</h4>
+                    <p><strong>Binary Search ONLY works on SORTED data!</strong> If your data is not sorted, you must either:</p>
+                    <ul>
+                        <li>Sort it first (which has its own cost), or</li>
+                        <li>Use Linear Search instead</li>
+                    </ul>
+                </div>
+
+                <h3>The Power of Binary Search</h3>
+
+                <div class="success-box">
+                    <h4>Each comparison eliminates HALF the data!</h4>
+                    <div class="comparison-visual">
+                        <div class="comparison-item">
+                            <div class="label">1,000 items</div>
+                            <div class="value" style="color: #0ea5e9;">~10 steps</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">1,000,000 items</div>
+                            <div class="value" style="color: #0ea5e9;">~20 steps</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="label">1,000,000,000 items</div>
+                            <div class="value" style="color: #0ea5e9;">~30 steps</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px; text-align: center;"><strong>WOW!</strong> Search 1 billion items in just 30 comparisons!</p>
+                </div>
+
+                <h3>Binary Search Code</h3>
+
+                <div class="code-container">
+                    <div class="code-header">Binary Search - Java Implementation</div>
+                    <pre><span class="comment">/**
+ * Binary Search Algorithm
+ * Searches for a target value in a SORTED array using divide-and-conquer.
+ *
+ * Time Complexity: O(log₂n) - halves the search space each step
+ * Space Complexity: O(1) - no extra space needed
+ *
+ * IMPORTANT: The array MUST be sorted for this to work!
+ *
+ * @param arr    The SORTED array to search in
+ * @param target The value we are looking for
+ * @return       The index of target if found, -1 otherwise
+ */</span>
+<span class="keyword">public static int</span> <span class="method">binarySearch</span>(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> target) {
+
+    <span class="comment">// Initialize low and high pointers</span>
+    <span class="keyword">int</span> low = <span class="number">0</span>;
+    <span class="keyword">int</span> high = arr.length - <span class="number">1</span>;
+
+    <span class="comment">// Continue searching while the range is valid</span>
+    <span class="keyword">while</span> (low &lt;= high) {
+
+        <span class="comment">// Calculate the middle index</span>
+        <span class="keyword">int</span> mid = (low + high) / <span class="number">2</span>;
+
+        <span class="comment">// Check if we found the target</span>
+        <span class="keyword">if</span> (arr[mid] == target) {
+            <span class="keyword">return</span> mid;  <span class="comment">// Found! Return the index</span>
+        }
+        <span class="comment">// If target is greater, ignore left half</span>
+        <span class="keyword">else if</span> (arr[mid] &lt; target) {
+            low = mid + <span class="number">1</span>;  <span class="comment">// Search in right half</span>
+        }
+        <span class="comment">// If target is smaller, ignore right half</span>
+        <span class="keyword">else</span> {
+            high = mid - <span class="number">1</span>;  <span class="comment">// Search in left half</span>
+        }
+    }
+
+    <span class="comment">// Target not found (low > high)</span>
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</pre>
+                </div>
+
+                <div class="reminder-box">
+                    <h4>Remember These Rules:</h4>
+                    <ul>
+                        <li>If target <strong>&gt;</strong> mid value → search <strong>right</strong> (set low = mid + 1)</li>
+                        <li>If target <strong>&lt;</strong> mid value → search <strong>left</strong> (set high = mid - 1)</li>
+                        <li>If target <strong>=</strong> mid value → <strong>FOUND!</strong></li>
+                        <li>If low <strong>&gt;</strong> high → <strong>NOT FOUND</strong></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Part 5: Understanding O(log₂n) -->
+            <section id="log-n">
+                <h2>Part 5: Understanding O(log<sub>2</sub>n)</h2>
+
+                <div class="question-box">
+                    <h4>Where Does log<sub>2</sub>n Come From?</h4>
+                    <p>Let's understand mathematically why binary search has time complexity O(log<sub>2</sub>n). The base is 2 because we divide by 2 (binary = two parts) at each step!</p>
+                </div>
+
+                <h3>The Halving Process - Visualized</h3>
+
+                <p>In binary search, we <strong>halve</strong> the search space with each comparison. Let's trace this step by step:</p>
+
+                <div class="halving-container">
+                    <h4 style="text-align: center; color: #0369a1; margin-bottom: 25px; font-size: 1.3em;">How Binary Search Reduces the Problem Size</h4>
+
+                    <div class="halving-step">
+                        <div class="halving-step-number">Start</div>
+                        <div class="halving-step-content">
+                            <div class="halving-step-formula">n items</div>
+                            <div class="halving-step-description">We begin with n elements to search through</div>
+                            <div class="halving-visual-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="halving-step">
+                        <div class="halving-step-number">1</div>
+                        <div class="halving-step-content">
+                            <div class="halving-step-formula">n / 2 items</div>
+                            <div class="halving-step-description">After 1st comparison, we eliminate half. Only n/2 remains.</div>
+                            <div class="halving-visual-bar" style="width: 50%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="halving-step">
+                        <div class="halving-step-number">2</div>
+                        <div class="halving-step-content">
+                            <div class="halving-step-formula">n / 4 = n / 2<sup>2</sup> items</div>
+                            <div class="halving-step-description">After 2nd comparison, we halve again. Only n/4 remains.</div>
+                            <div class="halving-visual-bar" style="width: 25%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="halving-step">
+                        <div class="halving-step-number">3</div>
+                        <div class="halving-step-content">
+                            <div class="halving-step-formula">n / 8 = n / 2<sup>3</sup> items</div>
+                            <div class="halving-step-description">After 3rd comparison, only n/8 remains.</div>
+                            <div class="halving-visual-bar" style="width: 12.5%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="halving-step">
+                        <div class="halving-step-number">4</div>
+                        <div class="halving-step-content">
+                            <div class="halving-step-formula">n / 16 = n / 2<sup>4</sup> items</div>
+                            <div class="halving-step-description">After 4th comparison, only n/16 remains.</div>
+                            <div class="halving-visual-bar" style="width: 6.25%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="halving-step" style="background: linear-gradient(135deg, #e0f2fe, #bae6fd);">
+                        <div class="halving-step-number" style="background: linear-gradient(135deg, #0369a1, #075985);">k</div>
+                        <div class="halving-step-content">
+                            <div class="halving-step-formula" style="font-size: 1.6em;">n / 2<sup>k</sup> items</div>
+                            <div class="halving-step-description"><strong>General Pattern:</strong> After k comparisons, we have n / 2<sup>k</sup> items remaining!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>When Do We Stop?</h3>
+
+                <div class="math-box">
+                    <h4>The search ends when only 1 item remains:</h4>
+                    <div class="math-formula" style="font-size: 2em;">
+                        n / 2<sup>k</sup> = 1
+                    </div>
+                    <p style="margin-top: 15px;">Now we need to solve for <strong>k</strong> (the number of steps).</p>
+                </div>
+
+                <h3>Mathematical Derivation: Solving for k</h3>
+
+                <div class="math-derivation">
+                    <div class="derivation-title">Step-by-Step Derivation of k = log<sub>2</sub>(n)</div>
+
+                    <div class="derivation-step">
+                        <div class="derivation-step-number">1</div>
+                        <div class="derivation-step-content">
+                            <div class="derivation-step-formula">n / 2<sup>k</sup> = 1</div>
+                            <div class="derivation-step-explanation">
+                                <strong>Starting equation:</strong> After k steps, we have 1 item left.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="derivation-step">
+                        <div class="derivation-step-number">2</div>
+                        <div class="derivation-step-content">
+                            <div class="derivation-step-formula">2<sup>k</sup> · (n / 2<sup>k</sup>) = 1 · 2<sup>k</sup></div>
+                            <div class="derivation-step-explanation">
+                                <strong>Multiply both sides by 2<sup>k</sup>:</strong> We multiply both the left and right sides by 2<sup>k</sup> to eliminate the denominator.
+                            </div>
+                            <div class="math-rule-box">
+                                <strong>Algebraic Rule:</strong> If we multiply both sides of an equation by the same value, the equation remains balanced.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="derivation-step">
+                        <div class="derivation-step-number">3</div>
+                        <div class="derivation-step-content">
+                            <div class="derivation-step-formula">n = 2<sup>k</sup></div>
+                            <div class="derivation-step-explanation">
+                                <strong>Simplify:</strong> On the left, 2<sup>k</sup> cancels with 2<sup>k</sup> in the denominator, leaving n. On the right, 1 · 2<sup>k</sup> = 2<sup>k</sup>.
+                            </div>
+                            <div class="math-rule-box">
+                                <strong>Cancellation Rule:</strong> (a/b) × b = a (the b's cancel out)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="derivation-step">
+                        <div class="derivation-step-number">4</div>
+                        <div class="derivation-step-content">
+                            <div class="derivation-step-formula">log<sub>2</sub>(n) = log<sub>2</sub>(2<sup>k</sup>)</div>
+                            <div class="derivation-step-explanation">
+                                <strong>Take log base 2 of both sides:</strong> We use log base 2 because we are dividing by 2 (binary).
+                            </div>
+                            <div class="math-rule-box">
+                                <strong>Logarithm Definition:</strong> If b<sup>x</sup> = y, then log<sub>b</sub>(y) = x<br>
+                                In other words: "log base b of y asks: what power do we raise b to get y?"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="derivation-step">
+                        <div class="derivation-step-number">5</div>
+                        <div class="derivation-step-content">
+                            <div class="derivation-step-formula">log<sub>2</sub>(n) = k × log<sub>2</sub>(2)</div>
+                            <div class="derivation-step-explanation">
+                                <strong>Apply the Power Rule of Logarithms:</strong> The exponent k comes down as a multiplier.
+                            </div>
+                            <div class="math-rule-box">
+                                <strong>Power Rule:</strong> log<sub>b</sub>(x<sup>k</sup>) = k × log<sub>b</sub>(x)<br>
+                                This rule says: "the log of a power equals the exponent times the log of the base"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="derivation-step">
+                        <div class="derivation-step-number">6</div>
+                        <div class="derivation-step-content">
+                            <div class="derivation-step-formula">log<sub>2</sub>(n) = k × 1</div>
+                            <div class="derivation-step-explanation">
+                                <strong>Simplify log<sub>2</sub>(2):</strong> Log base 2 of 2 equals 1.
+                            </div>
+                            <div class="math-rule-box">
+                                <strong>Identity Rule:</strong> log<sub>b</sub>(b) = 1<br>
+                                Why? Because b<sup>1</sup> = b. So "what power of b gives b?" The answer is 1.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="derivation-step" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0); border-left-color: #16a34a;">
+                        <div class="derivation-step-number" style="background: #16a34a;">7</div>
+                        <div class="derivation-step-content">
+                            <div class="derivation-step-formula" style="font-size: 1.8em; color: #166534;">k = log<sub>2</sub>(n)</div>
+                            <div class="derivation-step-explanation">
+                                <strong>Final Result:</strong> The number of steps k equals log base 2 of n!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-point-box">
+                    <div class="key-point-title">KEY POINT</div>
+                    <p style="font-size: 1.2em;">The number of steps <strong>k</strong> required to reduce <strong>n</strong> items to 1 by repeatedly halving is:</p>
+                    <p style="text-align: center; font-size: 2em; color: #dc2626; margin: 20px 0; font-family: 'Times New Roman', serif;">
+                        k = log<sub>2</sub>(n)
+                    </p>
+                    <p>Therefore, <strong>Binary Search runs in O(log<sub>2</sub>n) time</strong>.</p>
+                    <p style="margin-top: 15px; color: #666;"><em>Note: In Big O notation, we often write O(log n) without the base because changing the base only changes the constant factor, not the growth rate. However, for binary search, the base is specifically 2 because we divide by 2!</em></p>
+                </div>
+
+                <h3>Why Base 2? Because It's BINARY!</h3>
+
+                <div class="definition-box">
+                    <h4>The Connection to "Binary"</h4>
+                    <p>The word <strong>"binary"</strong> means <strong>two</strong>. In binary search:</p>
+                    <ul>
+                        <li>We divide the array into <strong>2 parts</strong></li>
+                        <li>We keep <strong>1 part</strong> and discard <strong>1 part</strong></li>
+                        <li>We divide by <strong>2</strong> at each step</li>
+                    </ul>
+                    <p>This is why the logarithm has base <strong>2</strong> - because we're doing <strong>binary</strong> (two-way) division!</p>
+                </div>
+
+                <h3>Practical Examples: How Many Steps?</h3>
+
+                <table class="operation-table">
+                    <thead>
+                        <tr>
+                            <th>Number of Items (n)</th>
+                            <th>Linear Search (n steps)</th>
+                            <th>Binary Search (log<sub>2</sub>n steps)</th>
+                            <th>Calculation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>8</td>
+                            <td><span class="complexity-on">8</span></td>
+                            <td><span class="complexity-logn">3</span></td>
+                            <td>log<sub>2</sub>(8) = log<sub>2</sub>(2<sup>3</sup>) = 3</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td><span class="complexity-on">16</span></td>
+                            <td><span class="complexity-logn">4</span></td>
+                            <td>log<sub>2</sub>(16) = log<sub>2</sub>(2<sup>4</sup>) = 4</td>
+                        </tr>
+                        <tr>
+                            <td>1,024</td>
+                            <td><span class="complexity-on">1,024</span></td>
+                            <td><span class="complexity-logn">10</span></td>
+                            <td>log<sub>2</sub>(1024) = log<sub>2</sub>(2<sup>10</sup>) = 10</td>
+                        </tr>
+                        <tr>
+                            <td>1,000,000</td>
+                            <td><span class="complexity-on">1,000,000</span></td>
+                            <td><span class="complexity-logn">~20</span></td>
+                            <td>log<sub>2</sub>(1,000,000) ≈ 19.93</td>
+                        </tr>
+                        <tr>
+                            <td>1,000,000,000</td>
+                            <td><span class="complexity-on">1,000,000,000</span></td>
+                            <td><span class="complexity-logn">~30</span></td>
+                            <td>log<sub>2</sub>(1,000,000,000) ≈ 29.90</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="success-box">
+                    <h4>Amazing Efficiency!</h4>
+                    <p>To search through <strong>1 billion items</strong>:</p>
+                    <ul>
+                        <li><strong>Linear Search:</strong> Up to 1,000,000,000 comparisons!</li>
+                        <li><strong>Binary Search:</strong> Only about 30 comparisons!</li>
+                    </ul>
+                    <p>That's the power of O(log<sub>2</sub>n)!</p>
+                </div>
+
+                <div class="important-box">
+                    <h4>The Trade-Off</h4>
+                    <p>Binary search is much faster, BUT:</p>
+                    <ul>
+                        <li>Data must be <strong>sorted first</strong></li>
+                        <li>Sorting takes time (usually O(n log n))</li>
+                        <li>Worth it if you search many times on the same data</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Part 6: Exercises -->
+            <section id="exercises">
+                <h2>Part 6: Practice Exercises</h2>
+
+                <!-- Exercise 1 -->
+                <div class="exercise-box">
+                    <div class="exercise-header">Exercise 1: Binary Search - Finding a Number</div>
+
+                    <p>Perform binary search to find the value <strong>3</strong> in the following sorted array:</p>
+
+                    <div class="array-container">
+                        <div class="array-visual" style="margin-bottom: 40px; font-size: 0.85em;">
+                            <div class="array-cell"><span class="value">1</span><span class="index">0</span></div>
+                            <div class="array-cell"><span class="value">3</span><span class="index">1</span></div>
+                            <div class="array-cell"><span class="value">5</span><span class="index">2</span></div>
+                            <div class="array-cell"><span class="value">7</span><span class="index">3</span></div>
+                            <div class="array-cell"><span class="value">9</span><span class="index">4</span></div>
+                            <div class="array-cell"><span class="value">11</span><span class="index">5</span></div>
+                            <div class="array-cell"><span class="value">13</span><span class="index">6</span></div>
+                            <div class="array-cell"><span class="value">15</span><span class="index">7</span></div>
+                            <div class="array-cell"><span class="value">17</span><span class="index">8</span></div>
+                            <div class="array-cell"><span class="value">19</span><span class="index">9</span></div>
+                            <div class="array-cell"><span class="value">21</span><span class="index">10</span></div>
+                            <div class="array-cell"><span class="value">23</span><span class="index">11</span></div>
+                            <div class="array-cell"><span class="value">25</span><span class="index">12</span></div>
+                            <div class="array-cell"><span class="value">27</span><span class="index">13</span></div>
+                            <div class="array-cell"><span class="value">29</span><span class="index">14</span></div>
+                            <div class="array-cell"><span class="value">31</span><span class="index">15</span></div>
+                        </div>
+                    </div>
+
+                    <p><strong>Question:</strong> Fill in the values for low, high, mid, and value at each step.</p>
+
+                    <button class="solution-toggle" onclick="toggleSolution('solution1')">Show Solution</button>
+
+                    <div id="solution1" class="solution-content">
+                        <h4>Solution:</h4>
+
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Step</th>
+                                    <th>low</th>
+                                    <th>high</th>
+                                    <th>mid</th>
+                                    <th>value at mid</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Initial</td>
+                                    <td>0</td>
+                                    <td>15</td>
+                                    <td>7</td>
+                                    <td>15</td>
+                                    <td>3 < 15, go left (high = 6)</td>
+                                </tr>
+                                <tr>
+                                    <td>After 1st</td>
+                                    <td>0</td>
+                                    <td>6</td>
+                                    <td>3</td>
+                                    <td>7</td>
+                                    <td>3 < 7, go left (high = 2)</td>
+                                </tr>
+                                <tr>
+                                    <td>After 2nd</td>
+                                    <td>0</td>
+                                    <td>2</td>
+                                    <td>1</td>
+                                    <td>3</td>
+                                    <td style="color: #10b981; font-weight: bold;">FOUND at index 1!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="step-container">
+                            <div class="step-header">Step-by-Step Explanation</div>
+                            <div class="step-content">
+                                <p><strong>Initial:</strong> low=0, high=15, mid = floor((0+15)/2) = 7</p>
+                                <p>Value at index 7 is <strong>15</strong>. Since 3 < 15, search left half (high = mid - 1 = 6)</p>
+
+                                <p style="margin-top: 15px;"><strong>After 1st:</strong> low=0, high=6, mid = floor((0+6)/2) = 3</p>
+                                <p>Value at index 3 is <strong>7</strong>. Since 3 < 7, search left half (high = mid - 1 = 2)</p>
+
+                                <p style="margin-top: 15px;"><strong>After 2nd:</strong> low=0, high=2, mid = floor((0+2)/2) = 1</p>
+                                <p>Value at index 1 is <strong>3</strong>. <span style="color: #10b981; font-weight: bold;">FOUND!</span> Return index 1.</p>
+                            </div>
+                        </div>
+
+                        <div class="success-box">
+                            <p><strong>Result:</strong> Found value 3 at index 1 in only <strong>3 comparisons</strong>!</p>
+                            <p>Note: log<sub>2</sub>(16) = 4, so worst case would be 4 comparisons. We found it in 3!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercise 2 -->
+                <div class="exercise-box">
+                    <div class="exercise-header">Exercise 2: Binary Search - Element Not Found</div>
+
+                    <p>Perform binary search to find <strong>"Salma"</strong> in this sorted array of names:</p>
+
+                    <div class="array-container">
+                        <table class="summary-table" style="margin: 20px auto;">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>0</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                    <th>6</th>
+                                    <th>7</th>
+                                    <th>8</th>
+                                    <th>9</th>
+                                    <th>10</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Value</strong></td>
+                                    <td>Ali</td>
+                                    <td>Ahmed</td>
+                                    <td>Fatima</td>
+                                    <td>Huda</td>
+                                    <td>Khalid</td>
+                                    <td>Lina</td>
+                                    <td>Omar</td>
+                                    <td>Rania</td>
+                                    <td>Saeed</td>
+                                    <td>Youssef</td>
+                                    <td>Zain</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p><strong>Note:</strong> "Salma" does NOT exist in this array. What happens?</p>
+
+                    <button class="solution-toggle" onclick="toggleSolution('solution2')">Show Solution</button>
+
+                    <div id="solution2" class="solution-content">
+                        <h4>Solution:</h4>
+
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Step</th>
+                                    <th>low</th>
+                                    <th>high</th>
+                                    <th>mid</th>
+                                    <th>value at mid</th>
+                                    <th>Comparison & Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Initial</td>
+                                    <td>0</td>
+                                    <td>10</td>
+                                    <td>5</td>
+                                    <td>Lina</td>
+                                    <td>"Salma" > "Lina", go right (low = 6)</td>
+                                </tr>
+                                <tr>
+                                    <td>After 1st</td>
+                                    <td>6</td>
+                                    <td>10</td>
+                                    <td>8</td>
+                                    <td>Saeed</td>
+                                    <td>"Salma" < "Saeed", go left (high = 7)</td>
+                                </tr>
+                                <tr>
+                                    <td>After 2nd</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                    <td>6</td>
+                                    <td>Omar</td>
+                                    <td>"Salma" > "Omar", go right (low = 7)</td>
+                                </tr>
+                                <tr>
+                                    <td>After 3rd</td>
+                                    <td>7</td>
+                                    <td>7</td>
+                                    <td>7</td>
+                                    <td>Rania</td>
+                                    <td>"Salma" > "Rania", go right (low = 8)</td>
+                                </tr>
+                                <tr>
+                                    <td>After 4th</td>
+                                    <td>8</td>
+                                    <td>7</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td style="color: #ef4444; font-weight: bold;">low > high, NOT FOUND!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="warning-box">
+                            <h4>Conclusion</h4>
+                            <p>When <strong>low > high</strong>, it means we've exhausted all possibilities and the element is <strong>NOT in the array</strong>.</p>
+                            <p>The algorithm correctly concludes that "Salma" does not exist after only <strong>4 comparisons</strong>!</p>
+                            <p>Note: log<sub>2</sub>(11) ≈ 3.46, so we need at most 4 comparisons for an array of 11 elements.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary">
+                <h2>Summary</h2>
+
+                <div class="success-box">
+                    <h4>What We Learned</h4>
+                    <table class="operation-table">
+                        <thead>
+                            <tr>
+                                <th>Topic</th>
+                                <th>Key Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Arrays</strong></td>
+                                <td>Contiguous memory, fixed size, O(1) access, O(n) insert/delete at beginning</td>
+                            </tr>
+                            <tr>
+                                <td><strong>O(1)</strong></td>
+                                <td>Constant time - fastest possible, independent of data size</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Linear Search</strong></td>
+                                <td>Check one by one, works on any array, O(n) time</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Binary Search</strong></td>
+                                <td>Divide and conquer, requires sorted data, O(log<sub>2</sub>n) time</td>
+                            </tr>
+                            <tr>
+                                <td><strong>O(log<sub>2</sub>n)</strong></td>
+                                <td>Each step halves the problem. Derived from: n/2<sup>k</sup> = 1 → k = log<sub>2</sub>(n)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="formula-box">
+                    <h4>Linear vs Binary Search</h4>
+                    <div class="comparison-visual">
+                        <div class="comparison-item" style="border: 3px solid #ef4444;">
+                            <div class="label">Linear Search</div>
+                            <div class="value" style="color: #ef4444;">O(n)</div>
+                            <p style="font-size: 0.9em; color: #666;">Works on any array</p>
+                        </div>
+                        <div class="vs-circle">VS</div>
+                        <div class="comparison-item" style="border: 3px solid #10b981;">
+                            <div class="label">Binary Search</div>
+                            <div class="value" style="color: #10b981;">O(log<sub>2</sub>n)</div>
+                            <p style="font-size: 0.9em; color: #666;">Requires sorted array</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            <p><strong>CPCS204</strong> - Data Structures I</p>
+            <p>Faculty of Computing and Information Technology</p>
+            <p>King Abdulaziz University</p>
+            <p>Prepared by Dr. Almalawi</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSolution(id) {
+            const solution = document.getElementById(id);
+            const button = solution.previousElementSibling;
+
+            if (solution.classList.contains('show')) {
+                solution.classList.remove('show');
+                button.textContent = 'Show Solution';
+            } else {
+                solution.classList.add('show');
+                button.textContent = 'Hide Solution';
+            }
+        }
+    </script>
+</body>
+</html>

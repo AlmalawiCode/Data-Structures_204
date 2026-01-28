@@ -1,0 +1,2831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List Tutorial - CPCS 204</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header img {
+            width: 8cm;
+            height: 4cm;
+            object-fit: contain;
+        }
+
+        header .header-text {
+            text-align: left;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .question-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .question-box strong {
+            color: #1565c0;
+        }
+
+        .teacher-says {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .teacher-says::before {
+            content: "Teacher: ";
+            font-weight: bold;
+            color: #7b1fa2;
+        }
+
+        .student-asks {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .student-asks::before {
+            content: "Student: ";
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Memory Visualization Styles */
+        .memory-diagram {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .memory-row {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .memory-label {
+            width: 120px;
+            font-weight: bold;
+            color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .memory-cell {
+            width: 80px;
+            height: 50px;
+            border: 2px solid #667eea;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            margin: 2px;
+        }
+
+        .memory-cell.empty {
+            background: #e0e0e0;
+            color: #999;
+            border-color: #bbb;
+        }
+
+        .memory-cell.occupied {
+            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+            border-color: #c62828;
+        }
+
+        .memory-cell.new-array {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            border-color: #2e7d32;
+        }
+
+        .memory-cell.free {
+            background: linear-gradient(135deg, #8bc34a 0%, #558b2f 100%);
+            border-color: #558b2f;
+        }
+
+        .memory-address {
+            font-size: 0.7em;
+            opacity: 0.8;
+        }
+
+        .memory-value {
+            font-size: 1.1em;
+        }
+
+        /* Arrow styles */
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+
+        .arrow-down {
+            display: block;
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        /* Student Object Visualization */
+        .student-object {
+            display: inline-block;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 10px;
+            min-width: 150px;
+        }
+
+        .student-object-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .student-object-body {
+            padding: 15px;
+        }
+
+        .student-object-field {
+            margin: 8px 0;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .student-object-field .field-name {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+
+        .student-object-field .field-value {
+            color: #333;
+            font-size: 1em;
+        }
+
+        .student-object-field.reference {
+            background: #e3f2fd;
+            border: 2px dashed #2196f3;
+        }
+
+        .student-object-field.reference .field-value {
+            color: #1565c0;
+            font-weight: bold;
+        }
+
+        /* Linked List Node Visualization */
+        .linkedlist-diagram {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .node-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .node {
+            display: flex;
+            border: 3px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .node-data {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .node-next {
+            padding: 15px 20px;
+            background: #f0f4ff;
+            color: #667eea;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+        }
+
+        .node-pointer {
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 0 5px;
+        }
+
+        .null-pointer {
+            background: #ffebee;
+            color: #f44336;
+            padding: 15px 20px;
+            border: 2px dashed #f44336;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .head-label {
+            background: #4caf50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .variable-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin-right: 20px;
+            text-align: center;
+        }
+
+        .variable-name {
+            font-weight: bold;
+            color: #856404;
+        }
+
+        .variable-value {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Comparison Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .good {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .bad {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        /* Code Styles */
+        .code-container {
+            margin: 20px 0;
+        }
+
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+        }
+
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        .keyword {
+            color: #ff79c6;
+        }
+
+        .type {
+            color: #8be9fd;
+        }
+
+        .string {
+            color: #f1fa8c;
+        }
+
+        .comment {
+            color: #6272a4;
+        }
+
+        .number {
+            color: #bd93f9;
+        }
+
+        .method {
+            color: #50fa7b;
+        }
+
+        /* Algorithm Steps */
+        .algorithm-steps {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            margin: 20px 0;
+        }
+
+        .algorithm-steps h4 {
+            color: white;
+            margin-top: 0;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .algorithm-steps ol {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .algorithm-steps ol > li {
+            counter-increment: step-counter;
+            position: relative;
+            padding: 15px 15px 15px 60px;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        .algorithm-steps ol > li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            background: white;
+            color: #667eea;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .algorithm-steps code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #ffd700;
+        }
+
+        /* Step-by-step visualization */
+        .step-visualization {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .step-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .step-description {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+
+        /* RAM Visualization */
+        .ram-diagram {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .ram-title {
+            text-align: center;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .ram-bar {
+            height: 60px;
+            background: #333;
+            border-radius: 8px;
+            display: flex;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .ram-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .ram-used {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .ram-free {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+        }
+
+        .ram-needed {
+            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+            border: 3px dashed #ffc107;
+        }
+
+        .ram-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        /* Objects Flow Diagram */
+        .objects-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        /* Back Home Button */
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .memory-cell {
+                width: 60px;
+                height: 40px;
+                font-size: 0.8em;
+            }
+
+            .node-data, .node-next {
+                padding: 10px 15px;
+            }
+
+            .student-object {
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-home-btn">Home</a>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="../fcit.png" alt="FCIT Logo">
+                <div class="header-text">
+                    <h1>Linked List Data Structure</h1>
+                    <p class="course-code">CPCS 204 - Data Structures I</p>
+                    <p>Understanding Why We Need Linked Lists and How They Work</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- Section 1: Introduction - The Problem with Arrays -->
+            <section id="why-linkedlist">
+                <h2>Part 1: Why Do We Need Linked Lists?</h2>
+
+                <div class="highlight-box">
+                    <p>Before we learn about linked lists, we must first understand <strong>the problem they solve</strong>. To do this, let's review what you already know: <strong>Arrays</strong>.</p>
+                </div>
+
+                <h3>Let's Start with Arrays</h3>
+                <p>You already know that an array stores elements in <strong>contiguous (consecutive) memory locations</strong>. Let's visualize an array of 5 integers:</p>
+
+                <div class="memory-diagram">
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Array of 5 Elements in Memory</h4>
+                    <div class="memory-row">
+                        <span class="memory-label">Array:</span>
+                        <div class="memory-cell">
+                            <span class="memory-value">10</span>
+                            <span class="memory-address">1000</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">20</span>
+                            <span class="memory-address">1004</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">30</span>
+                            <span class="memory-address">1008</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">40</span>
+                            <span class="memory-address">1012</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">50</span>
+                            <span class="memory-address">1016</span>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; color: #666;">
+                        <em>Notice: Each element is exactly 4 bytes apart (integer size). Memory addresses are consecutive!</em>
+                    </p>
+                </div>
+
+                <div class="question-box">
+                    <strong>Question:</strong> If we created this array with 5 elements, can we extend it to add more elements (like a 6th element)?
+                </div>
+
+                <div class="warning">
+                    <strong>Answer: NO!</strong> An array has a <strong>fixed size</strong>. Once created, it cannot be extended.
+                </div>
+
+                <h3>But WHY is an Array Fixed?</h3>
+
+                <p>The array is fixed because it <strong>MUST use contiguous memory locations</strong>. But why is contiguous memory so important?</p>
+
+                <div class="definition">
+                    <h4>The Benefit of Contiguous Memory</h4>
+                    <p>When elements are stored consecutively, the CPU can access <strong>any element instantly</strong> using this simple formula:</p>
+                    <p style="text-align: center; font-size: 1.2em; margin: 15px 0;">
+                        <code class="inline-code">Element Address = Base Address + (Index × Element Size)</code>
+                    </p>
+                    <p><strong>Example:</strong> To find element at index 3:</p>
+                    <p style="text-align: center;">
+                        <code class="inline-code">Address = 1000 + (3 × 4) = 1000 + 12 = 1012</code>
+                    </p>
+                    <p>The CPU only asks the Memory Management Unit (MMU) <strong>once</strong> for the base address, then uses simple math (offset) to find any element. This is called <strong>O(1) Random Access</strong> - incredibly fast!</p>
+                </div>
+
+                <h3>The Extension Problem</h3>
+
+                <p>Now let's understand why we cannot extend the array:</p>
+
+                <div class="memory-diagram">
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Memory is Shared by Many Programs</h4>
+                    <div class="memory-row">
+                        <span class="memory-label">Our Array:</span>
+                        <div class="memory-cell">
+                            <span class="memory-value">10</span>
+                            <span class="memory-address">1000</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">20</span>
+                            <span class="memory-address">1004</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">30</span>
+                            <span class="memory-address">1008</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">40</span>
+                            <span class="memory-address">1012</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">50</span>
+                            <span class="memory-address">1016</span>
+                        </div>
+                        <div class="memory-cell occupied">
+                            <span class="memory-value">??</span>
+                            <span class="memory-address">1020</span>
+                        </div>
+                        <div class="memory-cell occupied">
+                            <span class="memory-value">??</span>
+                            <span class="memory-address">1024</span>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; color: #c62828;">
+                        <strong>The next memory locations (1020, 1024...) are OCCUPIED by another program!</strong>
+                    </p>
+                </div>
+
+                <div class="important">
+                    <h4>Key Understanding</h4>
+                    <p>Memory (RAM) is not only for your program. <strong>Many programs run simultaneously</strong> and share the same memory. The locations right after your array might be used by:</p>
+                    <ul>
+                        <li>Another program's data</li>
+                        <li>The operating system</li>
+                        <li>Another array in your own program</li>
+                    </ul>
+                    <p>Since we <strong>cannot guarantee</strong> that the next locations are free, we <strong>cannot extend</strong> the array!</p>
+                </div>
+
+                <div class="question-box">
+                    <strong>But what if we allocate a new block of memory that's NOT contiguous with our array?</strong>
+                </div>
+
+                <div class="memory-diagram">
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Non-Contiguous Memory - The Problem</h4>
+                    <div class="memory-row">
+                        <span class="memory-label">Original Array:</span>
+                        <div class="memory-cell">
+                            <span class="memory-value">10</span>
+                            <span class="memory-address">1000</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">20</span>
+                            <span class="memory-address">1004</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">30</span>
+                            <span class="memory-address">1008</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">40</span>
+                            <span class="memory-address">1012</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">50</span>
+                            <span class="memory-address">1016</span>
+                        </div>
+                    </div>
+                    <div class="memory-row" style="margin-top: 20px;">
+                        <span class="memory-label">New Block:</span>
+                        <span style="color: #666; margin-right: 20px;">... gap in memory ...</span>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value">60</span>
+                            <span class="memory-address">2000</span>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; color: #f44336;">
+                        <strong>Problem:</strong> Address 2000 is NOT at offset 5 from 1000!<br>
+                        The formula <code class="inline-code">1000 + (5 × 4) = 1020</code> gives the WRONG address!<br>
+                        We lose the O(1) random access benefit!
+                    </p>
+                </div>
+
+                <div class="warning">
+                    <strong>Conclusion:</strong> If memory is not contiguous, we <strong>cannot use the offset formula</strong>. The CPU would need to search for where each element is stored, making access very slow. This defeats the main purpose of arrays!
+                </div>
+            </section>
+
+            <!-- Section 2: The Java Solution -->
+            <section id="java-solution">
+                <h2>Part 2: How Java Handles Array Extension</h2>
+
+                <p>So how does Java let you "add" elements to an array (like in ArrayList)? The answer is: <strong>Create a new, larger array and copy everything!</strong></p>
+
+                <div class="memory-diagram">
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">The Copy Process</h4>
+
+                    <p style="text-align: center; margin-bottom: 15px;"><strong>Step 1:</strong> Original array is full</p>
+                    <div class="memory-row" style="justify-content: center;">
+                        <div class="memory-cell">
+                            <span class="memory-value">10</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">20</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">30</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">40</span>
+                        </div>
+                        <div class="memory-cell">
+                            <span class="memory-value">50</span>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">&#8595;</div>
+
+                    <p style="text-align: center; margin-bottom: 15px;"><strong>Step 2:</strong> Create NEW larger array (at different memory location)</p>
+                    <div class="memory-row" style="justify-content: center;">
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">&#8595;</div>
+
+                    <p style="text-align: center; margin-bottom: 15px;"><strong>Step 3:</strong> Copy ALL elements to new array + add new element</p>
+                    <div class="memory-row" style="justify-content: center;">
+                        <div class="memory-cell new-array">
+                            <span class="memory-value">10</span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value">20</span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value">30</span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value">40</span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value">50</span>
+                        </div>
+                        <div class="memory-cell" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); border-color: #ff9800;">
+                            <span class="memory-value">60</span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                        <div class="memory-cell new-array">
+                            <span class="memory-value"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Problems with This Approach</h3>
+
+                <div class="warning">
+                    <h4>Problem 1: Very Slow!</h4>
+                    <p>If you have 1 million elements and want to add just ONE more, you must:</p>
+                    <ol>
+                        <li>Create a new array with 1,000,001 spaces</li>
+                        <li>Copy ALL 1 million elements one by one</li>
+                        <li>Add the new element</li>
+                    </ol>
+                    <p>This is <strong>O(n)</strong> time complexity - very slow for large arrays!</p>
+                </div>
+
+                <div class="warning">
+                    <h4>Problem 2: Memory Fragmentation (The Critical Problem!)</h4>
+                    <p>This is the most important problem to understand. Let's see a real scenario:</p>
+                </div>
+
+                <div class="ram-diagram">
+                    <div class="ram-title">Scenario: 2GB RAM Computer</div>
+
+                    <p style="text-align: center; margin-bottom: 10px;">Current Memory State:</p>
+                    <div class="ram-bar">
+                        <div class="ram-section ram-used" style="width: 50%;">
+                            Your Array<br>(1 GB)
+                        </div>
+                        <div class="ram-section ram-free" style="width: 50%;">
+                            FREE<br>(1 GB)
+                        </div>
+                    </div>
+
+                    <div class="ram-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                            <span>Your Array (1 GB)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);"></div>
+                            <span>Free Space (1 GB)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-box">
+                    <strong>Question:</strong> You want to add just <strong>1 KB</strong> of data to your 1 GB array. You have 1 GB free. Can you do it?
+                </div>
+
+                <div class="ram-diagram">
+                    <div class="ram-title">What You NEED vs What You HAVE</div>
+
+                    <p style="text-align: center; margin-bottom: 10px;">You need a NEW array of size: 1 GB + 1 KB</p>
+                    <div class="ram-bar">
+                        <div class="ram-section ram-needed" style="width: 51%;">
+                            Needed: 1 GB + 1 KB<br>(Cannot create!)
+                        </div>
+                        <div class="ram-section" style="width: 49%; background: #333;">
+
+                        </div>
+                    </div>
+
+                    <p style="text-align: center; margin: 20px 0; color: #f44336; font-size: 1.2em;">
+                        <strong>IMPOSSIBLE!</strong> You only have 1 GB free, but need 1 GB + 1 KB!
+                    </p>
+
+                    <p style="text-align: center; margin-bottom: 10px;">Even though you have 1 GB FREE, you CANNOT add just 1 KB!</p>
+                </div>
+
+                <div class="important">
+                    <h4>The Irony</h4>
+                    <p>You have <strong>1 GB of free memory</strong> but cannot add <strong>1 KB</strong> of data!</p>
+                    <p>This is because you need to create a completely new array that's <strong>larger</strong> than the current one, and there's not enough contiguous space for it.</p>
+                </div>
+
+                <h3>The "Disk Swap" Alternative</h3>
+
+                <p>A student might suggest: "Why not save the old array to the hard disk, create the new larger array, then copy back?"</p>
+
+                <div class="definition">
+                    <p><strong>Yes, this is technically possible, but...</strong></p>
+                    <ul>
+                        <li>Hard disk read/write is <strong>1000x slower</strong> than RAM</li>
+                        <li>Writing 1 GB to disk takes significant time</li>
+                        <li>Reading 1 GB back takes significant time</li>
+                        <li>This would make a simple "add" operation take seconds or minutes!</li>
+                    </ul>
+                    <p>This solution is <strong>impractical</strong> for most applications.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>We Need a Better Solution!</h4>
+                    <p>These problems with arrays led developers to think: <strong>Is there a way to link data together without needing contiguous memory?</strong></p>
+                    <p>Let's explore this idea using something you already know from Object-Oriented Programming...</p>
+                </div>
+            </section>
+
+            <!-- Section 3: Building the Idea with OOP -->
+            <section id="oop-idea">
+                <h2>Part 3: Let's Build the Idea Together</h2>
+
+                <div class="teacher-says">
+                    You already know Object-Oriented Programming. You know how to create classes and objects. Let me show you something interesting that will help us solve the array problem.
+                </div>
+
+                <h3>Step 1: A Simple Student Class</h3>
+
+                <p>Let's start with a simple class you're familiar with:</p>
+
+                <div class="code-container">
+                    <div class="code-header">Student.java - Simple Version</div>
+                    <pre><span class="keyword">public class</span> <span class="type">Student</span> {
+    <span class="type">String</span> name;
+    <span class="keyword">int</span> age;
+
+    <span class="keyword">public</span> <span class="method">Student</span>(<span class="type">String</span> name, <span class="keyword">int</span> age) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.age = age;
+    }
+}</pre>
+                </div>
+
+                <p>Now let's create a student object:</p>
+
+                <div class="code-container">
+                    <div class="code-header">Creating a Student Object</div>
+                    <pre><span class="type">Student</span> s1 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ahmed"</span>, <span class="number">20</span>);</pre>
+                </div>
+
+                <div class="memory-diagram">
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">What Happens in Memory</h4>
+                    <div class="objects-flow">
+                        <div class="variable-box">
+                            <div class="variable-name">s1</div>
+                            <div class="variable-value">(reference)</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object">
+                            <div class="student-object-header">Student Object</div>
+                            <div class="student-object-body">
+                                <div class="student-object-field">
+                                    <span class="field-name">name:</span>
+                                    <span class="field-value">"Ahmed"</span>
+                                </div>
+                                <div class="student-object-field">
+                                    <span class="field-name">age:</span>
+                                    <span class="field-value">20</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; color: #666;">
+                        <em>The variable <code class="inline-code">s1</code> holds a <strong>reference</strong> (memory address) to the Student object.</em>
+                    </p>
+                </div>
+
+                <h3>Step 2: What If We Add a Reference to Another Student?</h3>
+
+                <div class="teacher-says">
+                    Now, here's the interesting part. What if we add a variable inside the Student class that can hold a reference to <strong>another Student object</strong>?
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">Student.java - With a Reference to Another Student</div>
+                    <pre><span class="keyword">public class</span> <span class="type">Student</span> {
+    <span class="type">String</span> name;
+    <span class="keyword">int</span> age;
+    <span class="type">Student</span> nextStudent;  <span class="comment">// Reference to another Student!</span>
+
+    <span class="keyword">public</span> <span class="method">Student</span>(<span class="type">String</span> name, <span class="keyword">int</span> age) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.age = age;
+        <span class="keyword">this</span>.nextStudent = <span class="keyword">null</span>;  <span class="comment">// Initially points to nothing</span>
+    }
+}</pre>
+                </div>
+
+                <div class="highlight-box">
+                    <p><strong>Notice:</strong> We added <code class="inline-code">Student nextStudent</code> - this is a variable of type <code class="inline-code">Student</code> that can hold a reference to another Student object!</p>
+                </div>
+
+                <h3>Step 3: Let's Create Two Students and Link Them</h3>
+
+                <div class="code-container">
+                    <div class="code-header">Creating and Linking Students</div>
+                    <pre><span class="comment">// Create first student</span>
+<span class="type">Student</span> s1 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ahmed"</span>, <span class="number">20</span>);
+
+<span class="comment">// Create second student</span>
+<span class="type">Student</span> s2 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Sara"</span>, <span class="number">22</span>);
+
+<span class="comment">// Link them: s1's nextStudent points to s2</span>
+s1.nextStudent = s2;</pre>
+                </div>
+
+                <div class="memory-diagram">
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Two Students Linked Together</h4>
+                    <div class="objects-flow">
+                        <div class="variable-box">
+                            <div class="variable-name">s1</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object">
+                            <div class="student-object-header">Student Object</div>
+                            <div class="student-object-body">
+                                <div class="student-object-field">
+                                    <span class="field-name">name:</span>
+                                    <span class="field-value">"Ahmed"</span>
+                                </div>
+                                <div class="student-object-field">
+                                    <span class="field-name">age:</span>
+                                    <span class="field-value">20</span>
+                                </div>
+                                <div class="student-object-field reference">
+                                    <span class="field-name">nextStudent:</span>
+                                    <span class="field-value">&#8594;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object">
+                            <div class="student-object-header">Student Object</div>
+                            <div class="student-object-body">
+                                <div class="student-object-field">
+                                    <span class="field-name">name:</span>
+                                    <span class="field-value">"Sara"</span>
+                                </div>
+                                <div class="student-object-field">
+                                    <span class="field-name">age:</span>
+                                    <span class="field-value">22</span>
+                                </div>
+                                <div class="student-object-field reference">
+                                    <span class="field-name">nextStudent:</span>
+                                    <span class="field-value">null</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px; color: #4caf50;">
+                        <strong>Ahmed's <code class="inline-code">nextStudent</code> points to Sara!</strong>
+                    </p>
+                </div>
+
+                <h3>Step 4: Let's Add More Students!</h3>
+
+                <div class="code-container">
+                    <div class="code-header">Creating 5 Students and Linking Them</div>
+                    <pre><span class="comment">// Create all students</span>
+<span class="type">Student</span> s1 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ahmed"</span>, <span class="number">20</span>);
+<span class="type">Student</span> s2 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Sara"</span>, <span class="number">22</span>);
+<span class="type">Student</span> s3 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Omar"</span>, <span class="number">19</span>);
+<span class="type">Student</span> s4 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Fatima"</span>, <span class="number">21</span>);
+<span class="type">Student</span> s5 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ali"</span>, <span class="number">23</span>);
+
+<span class="comment">// Link them together in a chain</span>
+s1.nextStudent = s2;
+s2.nextStudent = s3;
+s3.nextStudent = s4;
+s4.nextStudent = s5;
+<span class="comment">// s5.nextStudent remains null (end of chain)</span></pre>
+                </div>
+
+                <div class="memory-diagram">
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Five Students Linked in a Chain</h4>
+                    <div class="objects-flow" style="flex-wrap: wrap;">
+                        <div class="variable-box">
+                            <div class="variable-name">s1</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object" style="min-width: 100px;">
+                            <div class="student-object-header">Ahmed, 20</div>
+                            <div class="student-object-body">
+                                <div class="student-object-field reference">
+                                    <span class="field-value">next &#8594;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object" style="min-width: 100px;">
+                            <div class="student-object-header">Sara, 22</div>
+                            <div class="student-object-body">
+                                <div class="student-object-field reference">
+                                    <span class="field-value">next &#8594;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object" style="min-width: 100px;">
+                            <div class="student-object-header">Omar, 19</div>
+                            <div class="student-object-body">
+                                <div class="student-object-field reference">
+                                    <span class="field-value">next &#8594;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object" style="min-width: 100px;">
+                            <div class="student-object-header">Fatima, 21</div>
+                            <div class="student-object-body">
+                                <div class="student-object-field reference">
+                                    <span class="field-value">next &#8594;</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object" style="min-width: 100px;">
+                            <div class="student-object-header">Ali, 23</div>
+                            <div class="student-object-body">
+                                <div class="student-object-field reference">
+                                    <span class="field-value">null</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="definition">
+                    <h4>Amazing Discovery!</h4>
+                    <p>We can keep adding students <strong>as long as we have memory</strong>! No need to:</p>
+                    <ul>
+                        <li>Declare a fixed size</li>
+                        <li>Copy old data to new arrays</li>
+                        <li>Find contiguous memory</li>
+                    </ul>
+                    <p>Each new student can be created <strong>anywhere in memory</strong> - we just link it to the chain!</p>
+                </div>
+
+                <h3>Step 5: How Do We Access These Students?</h3>
+
+                <div class="teacher-says">
+                    Good question! Let's say we want to print all the students' names. How do we access them?
+                </div>
+
+                <h4>The Direct Way (Using the Dot Notation)</h4>
+
+                <div class="code-container">
+                    <div class="code-header">Accessing Each Student Directly</div>
+                    <pre><span class="comment">// Access first student (Ahmed)</span>
+System.out.println(s1.name);  <span class="comment">// Output: Ahmed</span>
+
+<span class="comment">// Access second student (Sara)</span>
+System.out.println(s1.nextStudent.name);  <span class="comment">// Output: Sara</span>
+
+<span class="comment">// Access third student (Omar)</span>
+System.out.println(s1.nextStudent.nextStudent.name);  <span class="comment">// Output: Omar</span>
+
+<span class="comment">// Access fourth student (Fatima)</span>
+System.out.println(s1.nextStudent.nextStudent.nextStudent.name);  <span class="comment">// Output: Fatima</span>
+
+<span class="comment">// Access fifth student (Ali)</span>
+System.out.println(s1.nextStudent.nextStudent.nextStudent.nextStudent.name);  <span class="comment">// Output: Ali</span></pre>
+                </div>
+
+                <div class="student-asks">
+                    Wait... this works, but what if we have 1 MILLION students? Do we write <code class="inline-code">.nextStudent</code> a million times?! That's impossible!
+                </div>
+
+                <div class="teacher-says">
+                    Excellent observation! You're absolutely right. We need a smarter way. Let's use a <strong>loop</strong>!
+                </div>
+
+                <h4>The Smart Way (Using a Loop)</h4>
+
+                <div class="code-container">
+                    <div class="code-header">Traversing with a Loop</div>
+                    <pre><span class="comment">// Create a temporary variable to "walk" through the chain</span>
+<span class="type">Student</span> current = s1;  <span class="comment">// Start at the first student</span>
+
+<span class="comment">// Keep going while there is a student to visit</span>
+<span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+    <span class="comment">// Print current student's info</span>
+    System.out.println(<span class="string">"Name: "</span> + current.name + <span class="string">", Age: "</span> + current.age);
+
+    <span class="comment">// Move to the next student</span>
+    current = current.nextStudent;
+}
+
+<span class="comment">/* Output:
+   Name: Ahmed, Age: 20
+   Name: Sara, Age: 22
+   Name: Omar, Age: 19
+   Name: Fatima, Age: 21
+   Name: Ali, Age: 23
+*/</span></pre>
+                </div>
+
+                <div class="step-visualization">
+                    <span class="step-title">How the Loop Works</span>
+
+                    <p><strong>Iteration 1:</strong> <code class="inline-code">current</code> points to Ahmed</p>
+                    <div class="objects-flow" style="margin: 10px 0;">
+                        <div class="variable-box" style="background: #e8f5e9; border-color: #4caf50;">
+                            <div class="variable-name" style="color: #2e7d32;">current</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object" style="min-width: 80px; border-color: #4caf50;">
+                            <div class="student-object-header" style="background: #4caf50;">Ahmed</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object" style="min-width: 80px;">
+                            <div class="student-object-header">Sara</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <span>...</span>
+                    </div>
+                    <p style="color: #4caf50;">Print: "Name: Ahmed, Age: 20" → Then: <code class="inline-code">current = current.nextStudent</code></p>
+
+                    <p><strong>Iteration 2:</strong> <code class="inline-code">current</code> points to Sara</p>
+                    <div class="objects-flow" style="margin: 10px 0;">
+                        <div class="student-object" style="min-width: 80px;">
+                            <div class="student-object-header">Ahmed</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="variable-box" style="background: #e8f5e9; border-color: #4caf50;">
+                            <div class="variable-name" style="color: #2e7d32;">current</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <div class="student-object" style="min-width: 80px; border-color: #4caf50;">
+                            <div class="student-object-header" style="background: #4caf50;">Sara</div>
+                        </div>
+                        <span class="flow-arrow">&#8594;</span>
+                        <span>...</span>
+                    </div>
+                    <p style="color: #4caf50;">Print: "Name: Sara, Age: 22" → Then move to next...</p>
+
+                    <p><strong>...continues until <code class="inline-code">current</code> becomes <code class="inline-code">null</code></strong></p>
+                </div>
+
+                <div class="definition">
+                    <h4>Key Insight</h4>
+                    <p>This loop works for <strong>any number of students</strong> - whether we have 5 or 5 million! The loop keeps going until it reaches the end (when <code class="inline-code">nextStudent</code> is <code class="inline-code">null</code>).</p>
+                </div>
+            </section>
+
+            <!-- Section 4: The Need for a Reusable Data Structure -->
+            <section id="need-datastructure">
+                <h2>Part 4: Creating a Reusable Data Structure</h2>
+
+                <div class="teacher-says">
+                    What we built works great! But let me ask you something...
+                </div>
+
+                <div class="question-box">
+                    <strong>Question:</strong> What if tomorrow we need to link <strong>Car</strong> objects? Or <strong>Product</strong> objects? Or <strong>Employee</strong> objects? Should we add a <code class="inline-code">nextCar</code> variable to the Car class? A <code class="inline-code">nextProduct</code> to Product class?
+                </div>
+
+                <div class="warning">
+                    <h4>Problems with Our Current Approach</h4>
+                    <ul>
+                        <li>We have to <strong>modify every class</strong> we want to link</li>
+                        <li>Adding <code class="inline-code">nextStudent</code>, <code class="inline-code">nextCar</code>, etc. to every class is <strong>not good practice</strong></li>
+                        <li>The linking logic is <strong>mixed with the data class</strong></li>
+                        <li>We have to <strong>rewrite the traversal code</strong> for every type</li>
+                    </ul>
+                </div>
+
+                <div class="teacher-says">
+                    Why not create our own <strong>reusable data structure</strong> that can hold <strong>ANY type of object</strong>? Let's call it... a <strong>Linked List</strong>!
+                </div>
+
+                <h3>The Linked List Concept</h3>
+
+                <div class="definition">
+                    <h4>What is a Linked List?</h4>
+                    <p>A <strong>Linked List</strong> is a data structure that consists of:</p>
+                    <ol>
+                        <li><strong>Nodes</strong> - containers that hold data and link to each other</li>
+                        <li><strong>A Control Class</strong> - manages the nodes (add, remove, find, etc.)</li>
+                    </ol>
+                </div>
+
+                <h3>The Node: A Universal Container</h3>
+
+                <p>Instead of adding a "next" reference to every class (Student, Car, Product...), we create a <strong>separate container</strong> called a <strong>Node</strong>:</p>
+
+                <div class="memory-diagram">
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">The Node Concept</h4>
+
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <p style="margin-bottom: 10px; font-weight: bold;">A Node has two parts:</p>
+                            <div class="node" style="transform: scale(1.2);">
+                                <div class="node-data" style="min-width: 100px;">
+                                    <small style="font-size: 0.7em;">DATA</small><br>
+                                    (any object)
+                                </div>
+                                <div class="node-next" style="min-width: 100px;">
+                                    <small style="font-size: 0.7em;">NEXT</small><br>
+                                    (reference)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="text-align: center; margin-top: 25px; color: #666;">
+                        <strong>DATA:</strong> Like a "car" or "box" - it carries any object (Student, Car, Integer, anything!)<br>
+                        <strong>NEXT:</strong> Points to the next Node in the chain
+                    </p>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>Think of it Like a Train</h4>
+                    <p>Each train car (Node) has:</p>
+                    <ul>
+                        <li><strong>A cargo area (DATA)</strong> - where you put whatever you want to transport</li>
+                        <li><strong>A coupler (NEXT)</strong> - connects to the next train car</li>
+                    </ul>
+                    <p>The train cars don't care what's inside them - they just carry and connect!</p>
+                </div>
+
+                <h3>The Control Class: LinkedList</h3>
+
+                <p>We also need a <strong>control class</strong> that manages all the nodes. This class is responsible for:</p>
+
+                <div class="memory-diagram">
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                        <div style="background: #e8f5e9; padding: 15px 25px; border-radius: 8px; text-align: center;">
+                            <strong style="color: #2e7d32;">Add</strong><br>
+                            <small>Add new nodes</small>
+                        </div>
+                        <div style="background: #e3f2fd; padding: 15px 25px; border-radius: 8px; text-align: center;">
+                            <strong style="color: #1565c0;">Remove</strong><br>
+                            <small>Delete nodes</small>
+                        </div>
+                        <div style="background: #fff3cd; padding: 15px 25px; border-radius: 8px; text-align: center;">
+                            <strong style="color: #856404;">Insert</strong><br>
+                            <small>Insert at position</small>
+                        </div>
+                        <div style="background: #f3e5f5; padding: 15px 25px; border-radius: 8px; text-align: center;">
+                            <strong style="color: #7b1fa2;">Search</strong><br>
+                            <small>Find elements</small>
+                        </div>
+                        <div style="background: #ffebee; padding: 15px 25px; border-radius: 8px; text-align: center;">
+                            <strong style="color: #c62828;">Traverse</strong><br>
+                            <small>Visit all nodes</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="definition">
+                    <h4>Structure Overview</h4>
+                    <pre style="background: #f5f5f5; color: #333; border-radius: 8px; padding: 15px;">
+LinkedList (Control Class)
+│
+├── head (reference to first Node)
+│
+└── Node (Inner Class)
+    ├── data (the actual object)
+    └── next (reference to next Node)</pre>
+                </div>
+
+                <div class="teacher-says">
+                    Now let's build this step by step! We'll start simple and add more features as we go.
+                </div>
+            </section>
+
+            <!-- Section 5: Building the LinkedList - Step by Step -->
+            <section id="building-linkedlist">
+                <h2>Part 5: Building Our LinkedList - Step by Step</h2>
+
+                <h3>Step 1: Create the Node Class (Generic)</h3>
+
+                <p>First, let's create our Node class. We'll make it <strong>generic</strong> using <code class="inline-code">&lt;T&gt;</code> so it can store <strong>any type of object</strong> - Student, Car, Product, Integer, or anything else!</p>
+
+                <div class="code-container">
+                    <div class="code-header">Node Class (Generic)</div>
+                    <pre><span class="comment">/**
+ * Node class - A container that holds data and links to the next node.
+ * Think of it as a "train car" that carries cargo and connects to the next car.
+ *
+ * &lt;T&gt; is a "type parameter" - it means "any type"
+ * When we create a Node, we specify what type T is (e.g., Student, Integer, etc.)
+ */</span>
+<span class="keyword">class</span> <span class="type">Node</span>&lt;<span class="type">T</span>&gt; {
+    <span class="comment">// The data this node carries (the "cargo")</span>
+    <span class="comment">// T means it can be ANY type: Student, Car, Integer, String, etc.</span>
+    <span class="type">T</span> data;
+
+    <span class="comment">// Reference to the next node (the "coupler")</span>
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; next;
+
+    <span class="comment">// Constructor: Create a node with given data</span>
+    <span class="keyword">public</span> <span class="method">Node</span>(<span class="type">T</span> data) {
+        <span class="keyword">this</span>.data = data;
+        <span class="keyword">this</span>.next = <span class="keyword">null</span>;  <span class="comment">// Initially not connected to anything</span>
+    }
+}</pre>
+                </div>
+
+                <div class="definition">
+                    <h4>What is <code class="inline-code">&lt;T&gt;</code>?</h4>
+                    <p><code class="inline-code">&lt;T&gt;</code> is called a <strong>type parameter</strong> (or generic type). It's like a placeholder that says "I can hold any type". When you create a node, you specify what <code class="inline-code">T</code> actually is:</p>
+                    <ul>
+                        <li><code class="inline-code">Node&lt;Student&gt;</code> - A node that holds Student objects</li>
+                        <li><code class="inline-code">Node&lt;Integer&gt;</code> - A node that holds Integer objects</li>
+                        <li><code class="inline-code">Node&lt;Car&gt;</code> - A node that holds Car objects</li>
+                        <li><code class="inline-code">Node&lt;String&gt;</code> - A node that holds String objects</li>
+                    </ul>
+                    <p>This is the power of generics - <strong>one class works for all types!</strong></p>
+                </div>
+
+                <h3>Step 2: Create the LinkedList Control Class (Generic)</h3>
+
+                <div class="code-container">
+                    <div class="code-header">LinkedList Class - Basic Structure (Generic)</div>
+                    <pre><span class="comment">/**
+ * LinkedList class - Controls and manages a chain of nodes.
+ * Responsible for adding, removing, and traversing the list.
+ *
+ * &lt;T&gt; is the type parameter - this list can hold any type of object!
+ */</span>
+<span class="keyword">public class</span> <span class="type">LinkedList</span>&lt;<span class="type">T</span>&gt; {
+
+    <span class="comment">// Reference to the first node (we call it "head")</span>
+    <span class="comment">// This is our entry point to the entire list</span>
+    <span class="keyword">private</span> <span class="type">Node</span>&lt;<span class="type">T</span>&gt; head;
+
+    <span class="comment">// Constructor: Create an empty linked list</span>
+    <span class="keyword">public</span> <span class="method">LinkedList</span>() {
+        <span class="keyword">this</span>.head = <span class="keyword">null</span>;  <span class="comment">// Empty list = no head</span>
+    }
+
+    <span class="comment">// Check if the list is empty</span>
+    <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() {
+        <span class="keyword">return</span> head == <span class="keyword">null</span>;
+    }
+
+    <span class="comment">// We will add more methods here...</span>
+}</pre>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>How to Use the Generic LinkedList</h4>
+                    <p>When creating a LinkedList, you specify what type it will hold:</p>
+                    <pre style="background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; margin-top: 10px;"><span class="comment">// A LinkedList that holds Student objects</span>
+<span class="type">LinkedList</span>&lt;<span class="type">Student</span>&gt; studentList = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
+
+<span class="comment">// A LinkedList that holds Integer objects</span>
+<span class="type">LinkedList</span>&lt;<span class="type">Integer</span>&gt; numberList = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
+
+<span class="comment">// A LinkedList that holds Car objects</span>
+<span class="type">LinkedList</span>&lt;<span class="type">Car</span>&gt; carList = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();</pre>
+                </div>
+
+                <div class="important">
+                    <h4>Why "head"?</h4>
+                    <p>We call the first node <code class="inline-code">head</code> because:</p>
+                    <ul>
+                        <li>It's the <strong>starting point</strong> of our list</li>
+                        <li>Like the head of a snake - where it begins</li>
+                        <li>To access ANY node, we must start from the head and follow the chain</li>
+                    </ul>
+                </div>
+
+                <h3>Step 3: Add at Beginning (addFirst)</h3>
+
+                <p>Let's add our first operation: adding a new node at the <strong>beginning</strong> of the list.</p>
+
+                <div class="algorithm-steps">
+                    <h4>Algorithm: Add at Beginning</h4>
+                    <ol>
+                        <li>Create a new node with the given data</li>
+                        <li>Make the new node point to the current head</li>
+                        <li>Update head to point to the new node</li>
+                    </ol>
+                </div>
+
+                <p>Let's build a list step by step by adding three nodes. Watch how the <strong>same code</strong> works every time!</p>
+
+                <!-- Adding First Node -->
+                <div class="step-visualization">
+                    <span class="step-title">Adding the 1st Node: addFirst(10)</span>
+
+                    <p><strong>Before:</strong> Empty list (head = null)</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box">
+                            <div class="variable-name">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <span style="color: #999; font-style: italic;">null</span>
+                    </div>
+
+                    <p><strong>Step 1:</strong> Create new node with data = 10</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node" style="border-color: #4caf50;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                        <span style="margin-left: 20px; color: #4caf50;">← newNode created</span>
+                    </div>
+
+                    <p><strong>Step 2:</strong> <code class="inline-code">newNode.next = head</code></p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node" style="border-color: #4caf50;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                        <span style="margin-left: 20px; color: #666;">← head is null, so newNode.next = null (correct!)</span>
+                    </div>
+
+                    <p><strong>Step 3:</strong> <code class="inline-code">head = newNode</code></p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box" style="border-color: #4caf50; background: #e8f5e9;">
+                            <div class="variable-name" style="color: #2e7d32;">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #4caf50;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Result:</strong> List is now <strong>[10]</strong></p>
+                </div>
+
+                <!-- Adding Second Node -->
+                <div class="step-visualization" style="margin-top: 30px;">
+                    <span class="step-title">Adding the 2nd Node: addFirst(20)</span>
+
+                    <p><strong>Before:</strong> List has [10]</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box">
+                            <div class="variable-name">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Step 1:</strong> Create new node with data = 20</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node" style="border-color: #2196f3;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);">20</div>
+                            <div class="node-next">null</div>
+                        </div>
+                        <span style="margin-left: 20px; color: #2196f3;">← newNode created</span>
+                    </div>
+
+                    <p><strong>Step 2:</strong> <code class="inline-code">newNode.next = head</code></p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node" style="border-color: #2196f3;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);">20</div>
+                            <div class="node-next" style="background: #e3f2fd;">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                        <span style="margin-left: 20px; color: #666;">← newNode.next now points to node 10</span>
+                    </div>
+
+                    <p><strong>Step 3:</strong> <code class="inline-code">head = newNode</code></p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box" style="border-color: #2196f3; background: #e3f2fd;">
+                            <div class="variable-name" style="color: #1565c0;">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #2196f3;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Result:</strong> List is now <strong>[20 → 10]</strong></p>
+                </div>
+
+                <!-- Adding Third Node -->
+                <div class="step-visualization" style="margin-top: 30px;">
+                    <span class="step-title">Adding the 3rd Node: addFirst(30)</span>
+
+                    <p><strong>Before:</strong> List has [20 → 10]</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box">
+                            <div class="variable-name">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Step 1:</strong> Create new node with data = 30</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node" style="border-color: #9c27b0;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);">30</div>
+                            <div class="node-next">null</div>
+                        </div>
+                        <span style="margin-left: 20px; color: #9c27b0;">← newNode created</span>
+                    </div>
+
+                    <p><strong>Step 2:</strong> <code class="inline-code">newNode.next = head</code></p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node" style="border-color: #9c27b0;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);">30</div>
+                            <div class="node-next" style="background: #f3e5f5;">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                        <span style="margin-left: 20px; color: #666;">← newNode.next now points to node 20</span>
+                    </div>
+
+                    <p><strong>Step 3:</strong> <code class="inline-code">head = newNode</code></p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box" style="border-color: #9c27b0; background: #f3e5f5;">
+                            <div class="variable-name" style="color: #7b1fa2;">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #9c27b0;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);">30</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Result:</strong> List is now <strong>[30 → 20 → 10]</strong></p>
+                </div>
+
+                <div class="definition" style="margin-top: 30px;">
+                    <h4>Key Observation: The Same Code Works Every Time!</h4>
+                    <p>Did you notice? We used the <strong>exact same 3 steps</strong> for adding the 1st, 2nd, and 3rd node:</p>
+                    <ol>
+                        <li><code class="inline-code">Node newNode = new Node(data)</code> - Create new node</li>
+                        <li><code class="inline-code">newNode.next = head</code> - Point to current head (even if null!)</li>
+                        <li><code class="inline-code">head = newNode</code> - Update head to new node</li>
+                    </ol>
+                    <p style="margin-top: 15px;"><strong>This is the power of good algorithm design</strong> - no special cases needed for empty vs non-empty list!</p>
+                </div>
+
+                <div class="important">
+                    <h4>Notice: addFirst() Adds in Reverse Order</h4>
+                    <p>We called: <code class="inline-code">addFirst(10)</code>, then <code class="inline-code">addFirst(20)</code>, then <code class="inline-code">addFirst(30)</code></p>
+                    <p>But the list is: <strong>[30 → 20 → 10]</strong></p>
+                    <p>This is because each new node is added at the <strong>beginning</strong>, pushing older nodes back!</p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">addFirst() Method</div>
+                    <pre><span class="comment">/**
+ * Adds a new node at the BEGINNING of the list.
+ * Time Complexity: O(1) - Always constant time!
+ *
+ * @param data The object to add (can be any type: Student, Car, Integer, etc.)
+ */</span>
+<span class="keyword">public void</span> <span class="method">addFirst</span>(<span class="type">T</span> data) {
+    <span class="comment">// Step 1: Create a new node</span>
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; newNode = <span class="keyword">new</span> <span class="type">Node</span>&lt;&gt;(data);
+
+    <span class="comment">// Step 2: New node's next points to current head</span>
+    newNode.next = head;
+
+    <span class="comment">// Step 3: Head now points to new node</span>
+    head = newNode;
+}</pre>
+                </div>
+
+                <h3>Step 4: Print the List (Traversal)</h3>
+
+                <p>Now let's add a method to print all elements - this is how we <strong>traverse</strong> the list.</p>
+
+                <div class="code-container">
+                    <div class="code-header">printList() Method</div>
+                    <pre><span class="comment">/**
+ * Prints all elements in the list.
+ * Time Complexity: O(n) - Must visit every node
+ */</span>
+<span class="keyword">public void</span> <span class="method">printList</span>() {
+    <span class="comment">// Handle empty list</span>
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+        System.out.println(<span class="string">"List is empty!"</span>);
+        <span class="keyword">return</span>;
+    }
+
+    <span class="comment">// Start from the head</span>
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; current = head;
+
+    System.out.print(<span class="string">"List: "</span>);
+
+    <span class="comment">// Traverse until we reach the end (null)</span>
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="comment">// Print current node's data</span>
+        System.out.print(current.data);
+
+        <span class="comment">// Add arrow if not the last node</span>
+        <span class="keyword">if</span> (current.next != <span class="keyword">null</span>) {
+            System.out.print(<span class="string">" -> "</span>);
+        }
+
+        <span class="comment">// Move to the next node</span>
+        current = current.next;
+    }
+
+    System.out.println(<span class="string">" -> null"</span>);
+}</pre>
+                </div>
+
+                <h3>Step 5: Let's Test What We Have!</h3>
+
+                <div class="code-container">
+                    <div class="code-header">Testing addFirst() and printList()</div>
+                    <pre><span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
+    <span class="comment">// Create a LinkedList of Integer</span>
+    <span class="type">LinkedList</span>&lt;<span class="type">Integer</span>&gt; numberList = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
+
+    <span class="comment">// Add elements at the beginning</span>
+    numberList.addFirst(<span class="number">30</span>);
+    numberList.addFirst(<span class="number">20</span>);
+    numberList.addFirst(<span class="number">10</span>);
+
+    <span class="comment">// Print the list</span>
+    numberList.printList();
+    <span class="comment">// Output: List: 10 -> 20 -> 30 -> null</span>
+
+    <span class="comment">// Add another element at the beginning</span>
+    numberList.addFirst(<span class="number">5</span>);
+    numberList.printList();
+    <span class="comment">// Output: List: 5 -> 10 -> 20 -> 30 -> null</span>
+
+    <span class="comment">// ========================================</span>
+    <span class="comment">// Now let's create a LinkedList of Students!</span>
+    <span class="comment">// ========================================</span>
+    <span class="type">LinkedList</span>&lt;<span class="type">Student</span>&gt; studentList = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
+
+    studentList.addFirst(<span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ahmed"</span>, <span class="number">20</span>));
+    studentList.addFirst(<span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Sara"</span>, <span class="number">22</span>));
+    studentList.addFirst(<span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Omar"</span>, <span class="number">19</span>));
+
+    studentList.printList();
+    <span class="comment">// Output: List: Omar(19) -> Sara(22) -> Ahmed(20) -> null</span>
+}</pre>
+                </div>
+
+                <div class="definition">
+                    <h4>It Works!</h4>
+                    <p>We now have a working linked list that can:</p>
+                    <ul>
+                        <li>Add elements at the beginning</li>
+                        <li>Print all elements</li>
+                    </ul>
+                    <p>Let's add more operations!</p>
+                </div>
+
+                <h3>Step 6: Add at End (addLast)</h3>
+
+                <p>Sometimes we want to add elements at the <strong>end</strong> of the list.</p>
+
+                <div class="algorithm-steps">
+                    <h4>Algorithm: Add at End</h4>
+                    <ol>
+                        <li>Create a new node with the given data</li>
+                        <li>If the list is empty, make the new node the head</li>
+                        <li>Otherwise, traverse to the last node (where <code>next</code> is null)</li>
+                        <li>Set the last node's <code>next</code> to point to the new node</li>
+                    </ol>
+                </div>
+
+                <div class="step-visualization">
+                    <span class="step-title">Visual: Adding 40 at End</span>
+
+                    <p><strong>Before:</strong> List has [10 → 20 → 30]</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box">
+                            <div class="variable-name">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #ffc107;">
+                            <div class="node-data">30</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+                    <p style="color: #ffc107;"><em>We need to find the last node (where next is null)</em></p>
+
+                    <p><strong>After:</strong> Link the last node to new node</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box">
+                            <div class="variable-name">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">30</div>
+                            <div class="node-next" style="background: #e8f5e9;">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #4caf50;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">40</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">addLast() Method</div>
+                    <pre><span class="comment">/**
+ * Adds a new node at the END of the list.
+ * Time Complexity: O(n) - Must traverse to the end
+ *
+ * @param data The object to add (can be any type)
+ */</span>
+<span class="keyword">public void</span> <span class="method">addLast</span>(<span class="type">T</span> data) {
+    <span class="comment">// Step 1: Create a new node</span>
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; newNode = <span class="keyword">new</span> <span class="type">Node</span>&lt;&gt;(data);
+
+    <span class="comment">// Step 2: If list is empty, new node becomes head</span>
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+        head = newNode;
+        <span class="keyword">return</span>;
+    }
+
+    <span class="comment">// Step 3: Traverse to find the last node</span>
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; current = head;
+    <span class="keyword">while</span> (current.next != <span class="keyword">null</span>) {
+        current = current.next;
+    }
+
+    <span class="comment">// Step 4: Link the last node to the new node</span>
+    current.next = newNode;
+}</pre>
+                </div>
+
+                <h3>Step 7: Insert After a Value (addAfter)</h3>
+
+                <p>What if we want to insert a new node <strong>after</strong> a specific value?</p>
+
+                <div class="step-visualization">
+                    <span class="step-title">Visual: Insert 25 After 20</span>
+
+                    <p><strong>Before:</strong> [10 → 20 → 30 → 40]</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #ffc107;">
+                            <div class="node-data">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">30</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">40</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+
+                    <p><strong>After:</strong> [10 → 20 → <span style="color: #4caf50; font-weight: bold;">25</span> → 30 → 40]</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">20</div>
+                            <div class="node-next" style="background: #e8f5e9;">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #4caf50;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">25</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">30</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">40</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">addAfter() Method</div>
+                    <pre><span class="comment">/**
+ * Adds a new node AFTER a node containing the target object.
+ * Time Complexity: O(n) - Must search for the target
+ *
+ * @param target The object to search for
+ * @param data The object for the new node
+ * @return true if successful, false if target not found
+ */</span>
+<span class="keyword">public boolean</span> <span class="method">addAfter</span>(<span class="type">T</span> target, <span class="type">T</span> data) {
+    <span class="comment">// Search for the target node</span>
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; current = head;
+
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="comment">// Use .equals() to compare objects (not == which compares references)</span>
+        <span class="keyword">if</span> (current.data.equals(target)) {
+            <span class="comment">// Found it! Create new node</span>
+            <span class="type">Node</span>&lt;<span class="type">T</span>&gt; newNode = <span class="keyword">new</span> <span class="type">Node</span>&lt;&gt;(data);
+
+            <span class="comment">// New node points to what target was pointing to</span>
+            newNode.next = current.next;
+
+            <span class="comment">// Target now points to new node</span>
+            current.next = newNode;
+
+            <span class="keyword">return true</span>;
+        }
+        current = current.next;
+    }
+
+    <span class="comment">// Target not found</span>
+    System.out.println(<span class="string">"Object not found in the list!"</span>);
+    <span class="keyword">return false</span>;
+}</pre>
+                </div>
+
+                <h3>Step 8: Delete First Node (deleteFirst)</h3>
+
+                <div class="step-visualization">
+                    <span class="step-title">Visual: Delete First Node</span>
+
+                    <p><strong>Before:</strong> [10 → 20 → 30]</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box">
+                            <div class="variable-name">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #f44336;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #f44336 0%, #c62828 100%);">10</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">30</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+
+                    <p><strong>After:</strong> <code class="inline-code">head = head.next</code></p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="variable-box" style="border-color: #4caf50; background: #e8f5e9;">
+                            <div class="variable-name" style="color: #2e7d32;">head</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">30</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+                    <p style="color: #f44336;"><em>Node with 10 is now disconnected and will be garbage collected</em></p>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">deleteFirst() Method</div>
+                    <pre><span class="comment">/**
+ * Deletes the FIRST node from the list.
+ * Time Complexity: O(1) - Always constant time!
+ *
+ * @return The deleted object, or null if list is empty
+ */</span>
+<span class="keyword">public</span> <span class="type">T</span> <span class="method">deleteFirst</span>() {
+    <span class="comment">// Check if list is empty</span>
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+        System.out.println(<span class="string">"List is empty! Nothing to delete."</span>);
+        <span class="keyword">return null</span>;
+    }
+
+    <span class="comment">// Save the data to return</span>
+    <span class="type">T</span> deletedData = head.data;
+
+    <span class="comment">// Move head to the next node</span>
+    head = head.next;
+
+    <span class="keyword">return</span> deletedData;
+}</pre>
+                </div>
+
+                <h3>Step 9: Delete Last Node (deleteLast)</h3>
+
+                <div class="code-container">
+                    <div class="code-header">deleteLast() Method</div>
+                    <pre><span class="comment">/**
+ * Deletes the LAST node from the list.
+ * Time Complexity: O(n) - Must traverse to second-to-last node
+ *
+ * @return The deleted object, or null if list is empty
+ */</span>
+<span class="keyword">public</span> <span class="type">T</span> <span class="method">deleteLast</span>() {
+    <span class="comment">// Check if list is empty</span>
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+        System.out.println(<span class="string">"List is empty! Nothing to delete."</span>);
+        <span class="keyword">return null</span>;
+    }
+
+    <span class="comment">// If only one node, delete it</span>
+    <span class="keyword">if</span> (head.next == <span class="keyword">null</span>) {
+        <span class="type">T</span> deletedData = head.data;
+        head = <span class="keyword">null</span>;
+        <span class="keyword">return</span> deletedData;
+    }
+
+    <span class="comment">// Traverse to find second-to-last node</span>
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; current = head;
+    <span class="keyword">while</span> (current.next.next != <span class="keyword">null</span>) {
+        current = current.next;
+    }
+
+    <span class="comment">// Save the last node's data</span>
+    <span class="type">T</span> deletedData = current.next.data;
+
+    <span class="comment">// Remove the last node</span>
+    current.next = <span class="keyword">null</span>;
+
+    <span class="keyword">return</span> deletedData;
+}</pre>
+                </div>
+
+                <h3>Step 10: Delete by Value (deleteByValue)</h3>
+
+                <div class="step-visualization">
+                    <span class="step-title">Visual: Delete Node with Value 20</span>
+
+                    <p><strong>Before:</strong> [10 → 20 → 30]</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node" style="border-color: #f44336;">
+                            <div class="node-data" style="background: linear-gradient(135deg, #f44336 0%, #c62828 100%);">20</div>
+                            <div class="node-next">&#8594;</div>
+                        </div>
+                        <span class="node-pointer">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">30</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+
+                    <p><strong>After:</strong> Previous node skips over the deleted node</p>
+                    <div class="node-container" style="margin: 15px 0;">
+                        <div class="node">
+                            <div class="node-data">10</div>
+                            <div class="node-next" style="background: #e8f5e9;">&#8594;</div>
+                        </div>
+                        <span class="node-pointer" style="font-size: 2em;">&#8594;</span>
+                        <div class="node">
+                            <div class="node-data">30</div>
+                            <div class="node-next">null</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">deleteByValue() Method</div>
+                    <pre><span class="comment">/**
+ * Deletes the first node containing the specified object.
+ * Time Complexity: O(n) - Must search for the object
+ *
+ * @param value The object to delete
+ * @return true if deleted, false if not found
+ */</span>
+<span class="keyword">public boolean</span> <span class="method">deleteByValue</span>(<span class="type">T</span> value) {
+    <span class="comment">// Check if list is empty</span>
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+        System.out.println(<span class="string">"List is empty!"</span>);
+        <span class="keyword">return false</span>;
+    }
+
+    <span class="comment">// If head contains the value</span>
+    <span class="keyword">if</span> (head.data.equals(value)) {
+        head = head.next;
+        <span class="keyword">return true</span>;
+    }
+
+    <span class="comment">// Search for the node BEFORE the one to delete</span>
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; current = head;
+    <span class="keyword">while</span> (current.next != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (current.next.data.equals(value)) {
+            <span class="comment">// Skip over the node to delete</span>
+            current.next = current.next.next;
+            <span class="keyword">return true</span>;
+        }
+        current = current.next;
+    }
+
+    <span class="comment">// Value not found</span>
+    System.out.println(<span class="string">"Object not found!"</span>);
+    <span class="keyword">return false</span>;
+}</pre>
+                </div>
+
+                <h3>Step 11: Search (contains)</h3>
+
+                <div class="code-container">
+                    <div class="code-header">contains() Method</div>
+                    <pre><span class="comment">/**
+ * Checks if the list contains a specific object.
+ * Time Complexity: O(n) - Must search through the list
+ *
+ * @param value The object to search for
+ * @return true if found, false otherwise
+ */</span>
+<span class="keyword">public boolean</span> <span class="method">contains</span>(<span class="type">T</span> value) {
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; current = head;
+
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (current.data.equals(value)) {
+            <span class="keyword">return true</span>;
+        }
+        current = current.next;
+    }
+
+    <span class="keyword">return false</span>;
+}</pre>
+                </div>
+
+                <h3>Step 12: Get Size</h3>
+
+                <div class="code-container">
+                    <div class="code-header">size() Method</div>
+                    <pre><span class="comment">/**
+ * Returns the number of nodes in the list.
+ * Time Complexity: O(n) - Must count all nodes
+ *
+ * @return The number of nodes
+ */</span>
+<span class="keyword">public int</span> <span class="method">size</span>() {
+    <span class="keyword">int</span> count = <span class="number">0</span>;
+    <span class="type">Node</span>&lt;<span class="type">T</span>&gt; current = head;
+
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        count++;
+        current = current.next;
+    }
+
+    <span class="keyword">return</span> count;
+}</pre>
+                </div>
+            </section>
+
+            <!-- Section 6: Complete Implementation -->
+            <section id="complete-code">
+                <h2>Part 6: Complete Generic LinkedList Implementation</h2>
+
+                <p>Here is the complete <strong>Generic LinkedList</strong> class that can store <strong>any type of object</strong>:</p>
+
+                <div class="code-container">
+                    <div class="code-header">Complete LinkedList.java (Generic)</div>
+                    <pre><span class="comment">/**
+ * Complete Generic Singly Linked List Implementation
+ * CPCS 204 - Data Structures I
+ *
+ * This linked list can store ANY type of object: Student, Car, Integer, String, etc.
+ * The type is specified when creating the list using &lt;T&gt;
+ */</span>
+<span class="keyword">public class</span> <span class="type">LinkedList</span>&lt;<span class="type">T</span>&gt; {
+
+    <span class="comment">// ==================== Inner Node Class ====================</span>
+    <span class="comment">/**
+     * Node: A generic container that holds data of type T and links to the next node.
+     */</span>
+    <span class="keyword">private class</span> <span class="type">Node</span> {
+        <span class="type">T</span> data;           <span class="comment">// The data stored in this node (any type!)</span>
+        <span class="type">Node</span> next;        <span class="comment">// Reference to the next node</span>
+
+        <span class="type">Node</span>(<span class="type">T</span> data) {
+            <span class="keyword">this</span>.data = data;
+            <span class="keyword">this</span>.next = <span class="keyword">null</span>;
+        }
+    }
+
+    <span class="comment">// ==================== LinkedList Properties ====================</span>
+    <span class="keyword">private</span> <span class="type">Node</span> head;  <span class="comment">// Reference to the first node</span>
+
+    <span class="comment">// ==================== Constructor ====================</span>
+    <span class="keyword">public</span> <span class="method">LinkedList</span>() {
+        <span class="keyword">this</span>.head = <span class="keyword">null</span>;
+    }
+
+    <span class="comment">// ==================== Basic Operations ====================</span>
+
+    <span class="comment">/** Check if the list is empty */</span>
+    <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() {
+        <span class="keyword">return</span> head == <span class="keyword">null</span>;
+    }
+
+    <span class="comment">/** Get the size of the list - O(n) */</span>
+    <span class="keyword">public int</span> <span class="method">size</span>() {
+        <span class="keyword">int</span> count = <span class="number">0</span>;
+        <span class="type">Node</span> current = head;
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            count++;
+            current = current.next;
+        }
+        <span class="keyword">return</span> count;
+    }
+
+    <span class="comment">// ==================== Insertion Operations ====================</span>
+
+    <span class="comment">/** Add at the beginning - O(1) */</span>
+    <span class="keyword">public void</span> <span class="method">addFirst</span>(<span class="type">T</span> data) {
+        <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    <span class="comment">/** Add at the end - O(n) */</span>
+    <span class="keyword">public void</span> <span class="method">addLast</span>(<span class="type">T</span> data) {
+        <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            head = newNode;
+            <span class="keyword">return</span>;
+        }
+
+        <span class="type">Node</span> current = head;
+        <span class="keyword">while</span> (current.next != <span class="keyword">null</span>) {
+            current = current.next;
+        }
+        current.next = newNode;
+    }
+
+    <span class="comment">/** Add after a specific object - O(n) */</span>
+    <span class="keyword">public boolean</span> <span class="method">addAfter</span>(<span class="type">T</span> target, <span class="type">T</span> data) {
+        <span class="type">Node</span> current = head;
+
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            <span class="keyword">if</span> (current.data.equals(target)) {
+                <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+                newNode.next = current.next;
+                current.next = newNode;
+                <span class="keyword">return true</span>;
+            }
+            current = current.next;
+        }
+        <span class="keyword">return false</span>;
+    }
+
+    <span class="comment">// ==================== Deletion Operations ====================</span>
+
+    <span class="comment">/** Delete the first node - O(1) */</span>
+    <span class="keyword">public</span> <span class="type">T</span> <span class="method">deleteFirst</span>() {
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            System.out.println(<span class="string">"List is empty!"</span>);
+            <span class="keyword">return null</span>;
+        }
+        <span class="type">T</span> data = head.data;
+        head = head.next;
+        <span class="keyword">return</span> data;
+    }
+
+    <span class="comment">/** Delete the last node - O(n) */</span>
+    <span class="keyword">public</span> <span class="type">T</span> <span class="method">deleteLast</span>() {
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            System.out.println(<span class="string">"List is empty!"</span>);
+            <span class="keyword">return null</span>;
+        }
+
+        <span class="keyword">if</span> (head.next == <span class="keyword">null</span>) {
+            <span class="type">T</span> data = head.data;
+            head = <span class="keyword">null</span>;
+            <span class="keyword">return</span> data;
+        }
+
+        <span class="type">Node</span> current = head;
+        <span class="keyword">while</span> (current.next.next != <span class="keyword">null</span>) {
+            current = current.next;
+        }
+        <span class="type">T</span> data = current.next.data;
+        current.next = <span class="keyword">null</span>;
+        <span class="keyword">return</span> data;
+    }
+
+    <span class="comment">/** Delete by object - O(n) */</span>
+    <span class="keyword">public boolean</span> <span class="method">deleteByValue</span>(<span class="type">T</span> value) {
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            <span class="keyword">return false</span>;
+        }
+
+        <span class="keyword">if</span> (head.data.equals(value)) {
+            head = head.next;
+            <span class="keyword">return true</span>;
+        }
+
+        <span class="type">Node</span> current = head;
+        <span class="keyword">while</span> (current.next != <span class="keyword">null</span>) {
+            <span class="keyword">if</span> (current.next.data.equals(value)) {
+                current.next = current.next.next;
+                <span class="keyword">return true</span>;
+            }
+            current = current.next;
+        }
+        <span class="keyword">return false</span>;
+    }
+
+    <span class="comment">// ==================== Search Operations ====================</span>
+
+    <span class="comment">/** Check if object exists - O(n) */</span>
+    <span class="keyword">public boolean</span> <span class="method">contains</span>(<span class="type">T</span> value) {
+        <span class="type">Node</span> current = head;
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            <span class="keyword">if</span> (current.data.equals(value)) {
+                <span class="keyword">return true</span>;
+            }
+            current = current.next;
+        }
+        <span class="keyword">return false</span>;
+    }
+
+    <span class="comment">/** Get object at index - O(n) */</span>
+    <span class="keyword">public</span> <span class="type">T</span> <span class="method">get</span>(<span class="keyword">int</span> index) {
+        <span class="keyword">if</span> (index < <span class="number">0</span>) {
+            <span class="keyword">return null</span>;
+        }
+
+        <span class="type">Node</span> current = head;
+        <span class="keyword">int</span> count = <span class="number">0</span>;
+
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            <span class="keyword">if</span> (count == index) {
+                <span class="keyword">return</span> current.data;
+            }
+            count++;
+            current = current.next;
+        }
+        <span class="keyword">return null</span>;  <span class="comment">// Index out of bounds</span>
+    }
+
+    <span class="comment">// ==================== Display ====================</span>
+
+    <span class="comment">/** Print the entire list - O(n) */</span>
+    <span class="keyword">public void</span> <span class="method">printList</span>() {
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            System.out.println(<span class="string">"List is empty!"</span>);
+            <span class="keyword">return</span>;
+        }
+
+        System.out.print(<span class="string">"List: "</span>);
+        <span class="type">Node</span> current = head;
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            System.out.print(current.data);
+            <span class="keyword">if</span> (current.next != <span class="keyword">null</span>) {
+                System.out.print(<span class="string">" -> "</span>);
+            }
+            current = current.next;
+        }
+        System.out.println(<span class="string">" -> null"</span>);
+    }
+}</pre>
+                </div>
+
+                <h3>Example: Using LinkedList with Different Types</h3>
+
+                <div class="code-container">
+                    <div class="code-header">Main.java - Testing with Different Types</div>
+                    <pre><span class="keyword">public class</span> <span class="type">Main</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
+
+        <span class="comment">// ========================================</span>
+        <span class="comment">// Example 1: LinkedList of Integers</span>
+        <span class="comment">// ========================================</span>
+        System.out.println(<span class="string">"=== LinkedList of Integers ==="</span>);
+
+        <span class="type">LinkedList</span>&lt;<span class="type">Integer</span>&gt; numbers = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
+
+        numbers.addFirst(<span class="number">30</span>);
+        numbers.addFirst(<span class="number">20</span>);
+        numbers.addFirst(<span class="number">10</span>);
+        numbers.addLast(<span class="number">40</span>);
+
+        numbers.printList();
+        <span class="comment">// Output: List: 10 -> 20 -> 30 -> 40 -> null</span>
+
+        System.out.println(<span class="string">"Contains 20? "</span> + numbers.contains(<span class="number">20</span>));
+        System.out.println(<span class="string">"Size: "</span> + numbers.size());
+        System.out.println();
+
+        <span class="comment">// ========================================</span>
+        <span class="comment">// Example 2: LinkedList of Strings</span>
+        <span class="comment">// ========================================</span>
+        System.out.println(<span class="string">"=== LinkedList of Strings ==="</span>);
+
+        <span class="type">LinkedList</span>&lt;<span class="type">String</span>&gt; names = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
+
+        names.addFirst(<span class="string">"Omar"</span>);
+        names.addFirst(<span class="string">"Sara"</span>);
+        names.addFirst(<span class="string">"Ahmed"</span>);
+
+        names.printList();
+        <span class="comment">// Output: List: Ahmed -> Sara -> Omar -> null</span>
+
+        names.addAfter(<span class="string">"Sara"</span>, <span class="string">"Fatima"</span>);
+        names.printList();
+        <span class="comment">// Output: List: Ahmed -> Sara -> Fatima -> Omar -> null</span>
+        System.out.println();
+
+        <span class="comment">// ========================================</span>
+        <span class="comment">// Example 3: LinkedList of Student Objects</span>
+        <span class="comment">// ========================================</span>
+        System.out.println(<span class="string">"=== LinkedList of Students ==="</span>);
+
+        <span class="type">LinkedList</span>&lt;<span class="type">Student</span>&gt; students = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
+
+        students.addFirst(<span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ahmed"</span>, <span class="number">20</span>));
+        students.addFirst(<span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Sara"</span>, <span class="number">22</span>));
+        students.addFirst(<span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Omar"</span>, <span class="number">19</span>));
+        students.addLast(<span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Fatima"</span>, <span class="number">21</span>));
+
+        students.printList();
+        <span class="comment">// Output: List: Omar(19) -> Sara(22) -> Ahmed(20) -> Fatima(21) -> null</span>
+
+        System.out.println(<span class="string">"First student: "</span> + students.get(<span class="number">0</span>));
+        System.out.println(<span class="string">"Size: "</span> + students.size());
+
+        <span class="comment">// Delete first</span>
+        <span class="type">Student</span> deleted = students.deleteFirst();
+        System.out.println(<span class="string">"Deleted: "</span> + deleted);
+        students.printList();
+    }
+}
+
+<span class="comment">// Student class (needs toString() and equals() for proper printing and comparison)</span>
+<span class="keyword">class</span> <span class="type">Student</span> {
+    <span class="type">String</span> name;
+    <span class="keyword">int</span> age;
+
+    <span class="keyword">public</span> <span class="method">Student</span>(<span class="type">String</span> name, <span class="keyword">int</span> age) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.age = age;
+    }
+
+    <span class="comment">// toString() is called when we print the object</span>
+    @Override
+    <span class="keyword">public</span> <span class="type">String</span> <span class="method">toString</span>() {
+        <span class="keyword">return</span> name + <span class="string">"("</span> + age + <span class="string">")"</span>;
+    }
+
+    <span class="comment">// equals() is used for comparison in contains(), deleteByValue(), etc.</span>
+    @Override
+    <span class="keyword">public boolean</span> <span class="method">equals</span>(<span class="type">Object</span> obj) {
+        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">Student</span>) {
+            <span class="type">Student</span> other = (<span class="type">Student</span>) obj;
+            <span class="keyword">return</span> <span class="keyword">this</span>.name.equals(other.name) && <span class="keyword">this</span>.age == other.age;
+        }
+        <span class="keyword">return false</span>;
+    }
+}</pre>
+                </div>
+
+                <div class="important">
+                    <h4>Important: toString() and equals() Methods</h4>
+                    <p>When using the LinkedList with custom objects (like Student), make sure to override:</p>
+                    <ul>
+                        <li><code class="inline-code">toString()</code> - So the object prints nicely</li>
+                        <li><code class="inline-code">equals()</code> - So comparison methods (contains, deleteByValue, addAfter) work correctly</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 7: Summary -->
+            <section id="summary">
+                <h2>Part 7: Summary</h2>
+
+                <div class="highlight-box">
+                    <h3>What We Learned</h3>
+                    <ol>
+                        <li><strong>Arrays are fixed</strong> because they need contiguous memory for O(1) access</li>
+                        <li><strong>Memory fragmentation</strong> can prevent array extension even with free space</li>
+                        <li><strong>OOP concepts</strong> (objects with references) can link data together</li>
+                        <li><strong>Linked Lists</strong> are a reusable data structure built on this idea</li>
+                        <li><strong>Nodes</strong> are generic containers with data of type T and a next reference</li>
+                        <li><strong>Generics (<code>&lt;T&gt;</code>)</strong> allow the LinkedList to store ANY type of object</li>
+                        <li><strong>The control class</strong> manages all operations (add, remove, search, etc.)</li>
+                    </ol>
+                </div>
+
+                <h3>Time Complexity Summary</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Time Complexity</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>addFirst()</td>
+                            <td class="good">O(1)</td>
+                            <td>Just change head pointer</td>
+                        </tr>
+                        <tr>
+                            <td>addLast()</td>
+                            <td>O(n)</td>
+                            <td>Must traverse to end</td>
+                        </tr>
+                        <tr>
+                            <td>addAfter()</td>
+                            <td>O(n)</td>
+                            <td>Must search for target</td>
+                        </tr>
+                        <tr>
+                            <td>deleteFirst()</td>
+                            <td class="good">O(1)</td>
+                            <td>Just change head pointer</td>
+                        </tr>
+                        <tr>
+                            <td>deleteLast()</td>
+                            <td>O(n)</td>
+                            <td>Must find second-to-last</td>
+                        </tr>
+                        <tr>
+                            <td>deleteByValue()</td>
+                            <td>O(n)</td>
+                            <td>Must search for value</td>
+                        </tr>
+                        <tr>
+                            <td>contains()</td>
+                            <td>O(n)</td>
+                            <td>Must search</td>
+                        </tr>
+                        <tr>
+                            <td>get(index)</td>
+                            <td>O(n)</td>
+                            <td>Must traverse to index</td>
+                        </tr>
+                        <tr>
+                            <td>size()</td>
+                            <td>O(n)</td>
+                            <td>Must count all nodes</td>
+                        </tr>
+                        <tr>
+                            <td>printList()</td>
+                            <td>O(n)</td>
+                            <td>Must visit all nodes</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="important">
+                    <h4>Coming Next</h4>
+                    <p>In the next tutorials, we will explore:</p>
+                    <ul>
+                        <li><strong>Doubly Linked Lists</strong> - Nodes with both next AND previous references</li>
+                        <li><strong>Circular Linked Lists</strong> - The last node points back to the first</li>
+                        <li><strong>Stacks and Queues</strong> - Built using linked lists for efficient operations</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            <p>&copy; 2024 CPCS 204 - Linked List Tutorial</p>
+            <p>Data Structures I - Faculty of Computing and Information Technology</p>
+        </footer>
+    </div>
+
+</body>
+</html>
