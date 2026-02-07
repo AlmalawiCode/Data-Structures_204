@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List Coding Questions 1-10 - CPCS 204</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.2em; opacity: 0.9; }
+
+        .content { padding: 40px; }
+
+        /* Navigation links */
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05em;
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Section header */
+        .section-header {
+            color: #667eea;
+            font-size: 2em;
+            margin: 10px 0 10px 0;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section-desc {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+        }
+
+        /* Question cards */
+        .coding-question {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .coding-question:hover { border-color: #667eea; }
+
+        .q-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .q-difficulty {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .q-difficulty.easy { background: #e8f5e9; color: #2e7d32; }
+        .q-difficulty.medium { background: #fff3e0; color: #e65100; }
+        .q-difficulty.hard { background: #ffebee; color: #c62828; }
+
+        .q-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+
+        .q-description {
+            color: #555;
+            margin: 10px 0 15px;
+        }
+
+        .q-description code {
+            background: #f0f4ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        /* Visual linked list diagrams */
+        .ll-visual {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .node {
+            display: inline-block;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+
+        .node-data {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .node-next {
+            background: #f0f4ff;
+            padding: 8px 12px;
+            display: inline-block;
+            color: #667eea;
+            font-size: 0.85em;
+        }
+
+        .arrow {
+            display: inline-block;
+            color: #667eea;
+            font-size: 1.5em;
+            vertical-align: middle;
+            margin: 0 3px;
+        }
+
+        .null-box {
+            display: inline-block;
+            color: #999;
+            font-style: italic;
+            font-weight: bold;
+            font-size: 0.95em;
+            vertical-align: middle;
+            padding: 8px 5px;
+        }
+
+        .visual-desc {
+            display: block;
+            color: #555;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .head-label {
+            display: inline-block;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: bold;
+            font-size: 0.85em;
+            color: #856404;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .head-label::after {
+            content: ' →';
+            color: #667eea;
+        }
+
+        /* Code container */
+        .code-container {
+            margin: 20px 0;
+        }
+
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .keyword { color: #ff79c6; }
+        .type { color: #8be9fd; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .number { color: #bd93f9; }
+        .method { color: #50fa7b; }
+
+        /* Solution reveal */
+        .solution-toggle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            background: #e8f5e9;
+            border-left: 5px solid #27ae60;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            animation: slideDown 0.3s ease;
+        }
+
+        .solution-content.visible { display: block; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .solution-content h4 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        .solution-explanation {
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .solution-explanation code {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .complexity-info {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 6px;
+            font-size: 0.95em;
+            color: #444;
+        }
+
+        .complexity-info strong { color: #667eea; }
+
+        /* Back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #999;
+            border-top: 1px solid #eee;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .content { padding: 20px; }
+            .ll-visual { font-size: 0.8em; }
+            .nav-links { flex-direction: column; align-items: stretch; text-align: center; }
+            .section-header { font-size: 1.5em; }
+            .q-title { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Linked List Coding Questions</h1>
+        <p>CPCS 204 - Data Structures | Questions 1-10</p>
+    </header>
+
+    <div class="content">
+
+        <!-- Navigation Links -->
+        <div class="nav-links">
+            <a href="linkedlist-questions.html">&larr; Back to Questions Hub</a>
+            <a href="linkedlist-coding-q11-20.html">Next: Questions 11-20 &rarr;</a>
+        </div>
+
+        <h2 class="section-header">Coding Questions 1-10</h2>
+        <p class="section-desc">Practice fundamental linked list operations. Each question includes a visual diagram and a hidden solution with Java code and explanation. Click "Show Solution" to reveal the answer.</p>
+
+        <!-- ==================== Q1 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q1</span><span class="q-difficulty easy">Easy</span>
+            <div class="q-title">Traverse and Print a Singly Linked List</div>
+            <div class="q-description">Write a method <code>void printList(Node head)</code> that prints all elements of a singly linked list separated by <code> -> </code>, ending with <code>null</code>.</div>
+
+            <div class="ll-visual">
+                <span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <div class="q-description">Expected Output: <code>10 -> 20 -> 30 -> null</code></div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">printList() Method</div>
+                    <pre><span class="keyword">public void</span> <span class="type">printList</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        System.out.print(current.data + <span class="string">" -> "</span>);
+        current = current.next;
+    }
+    System.out.println(<span class="string">"null"</span>);
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> We use a <code>current</code> pointer initialized to <code>head</code>. In each iteration of the while loop, we print the current node's data followed by <code>" -> "</code>, then advance the pointer with <code>current = current.next</code>. When <code>current</code> becomes <code>null</code>, we exit the loop and print <code>"null"</code> to indicate the end of the list.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) &mdash; we visit each node exactly once.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only one pointer variable is used.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q2 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q2</span><span class="q-difficulty easy">Easy</span>
+            <div class="q-title">Count Nodes in a Linked List</div>
+            <div class="q-description">Write a method <code>int countNodes(Node head)</code> that returns the total number of nodes in the list.</div>
+
+            <div class="ll-visual">
+                <span class="head-label">head</span>
+                <span class="node"><span class="node-data">5</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">12</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">7</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <div class="q-description">Expected Output: <code>4</code></div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">countNodes() Method</div>
+                    <pre><span class="keyword">public int</span> <span class="type">countNodes</span>(<span class="type">Node</span> head) {
+    <span class="keyword">int</span> count = <span class="number">0</span>;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        count++;
+        current = current.next;
+    }
+    <span class="keyword">return</span> count;
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> Initialize a <code>count</code> variable to 0. Traverse the list using a <code>current</code> pointer, incrementing <code>count</code> at each node. When <code>current</code> reaches <code>null</code>, <code>count</code> holds the total number of nodes.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) &mdash; we traverse the entire list once.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only a counter and a pointer are used.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q3 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q3</span><span class="q-difficulty easy">Easy</span>
+            <div class="q-title">Insert at the Beginning</div>
+            <div class="q-description">Write a method <code>Node insertAtHead(Node head, int data)</code> that inserts a new node at the beginning of the list and returns the new head.</div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+            <div class="ll-visual">
+                <div class="visual-desc">After inserting 10:</div><span class="head-label">head</span>
+                <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">insertAtHead() Method</div>
+                    <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtHead</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
+    <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+    newNode.next = head;
+    <span class="keyword">return</span> newNode;
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> Create a new node with the given data. Set the new node's <code>next</code> pointer to the current <code>head</code>. Return the new node as the new head of the list. This works even if <code>head</code> is <code>null</code> (empty list).
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(1) &mdash; no traversal needed.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only one new node is created.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q4 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q4</span><span class="q-difficulty easy">Easy</span>
+            <div class="q-title">Insert at the End</div>
+            <div class="q-description">Write a method <code>Node insertAtEnd(Node head, int data)</code> that inserts a new node at the end of the list and returns the head.</div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+            <div class="ll-visual">
+                <div class="visual-desc">After inserting 30:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">insertAtEnd() Method</div>
+                    <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
+    <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return</span> newNode;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current.next != <span class="keyword">null</span>) {
+        current = current.next;
+    }
+    current.next = newNode;
+    <span class="keyword">return</span> head;
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> Create a new node. If the list is empty (<code>head == null</code>), return the new node as the head. Otherwise, traverse to the last node (where <code>current.next == null</code>) and set its <code>next</code> pointer to the new node.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) &mdash; we must traverse to the end of the list.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only one new node and one pointer are used.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q5 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q5</span><span class="q-difficulty easy">Easy</span>
+            <div class="q-title">Search for a Value</div>
+            <div class="q-description">Write a method <code>boolean search(Node head, int target)</code> that returns <code>true</code> if the target value exists in the list, <code>false</code> otherwise.</div>
+
+            <div class="ll-visual">
+                <span class="head-label">head (searching for 15)</span>
+                <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">8</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">15</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">23</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <div class="q-description">Search for <code>15</code> &rarr; returns <code>true</code></div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">search() Method</div>
+                    <pre><span class="keyword">public boolean</span> <span class="type">search</span>(<span class="type">Node</span> head, <span class="keyword">int</span> target) {
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (current.data == target) {
+            <span class="keyword">return true</span>;
+        }
+        current = current.next;
+    }
+    <span class="keyword">return false</span>;
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> Perform a linear search by traversing each node and comparing <code>current.data</code> with <code>target</code>. If a match is found, return <code>true</code> immediately. If we reach the end of the list without finding the target, return <code>false</code>.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) &mdash; worst case, we check every node.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only one pointer variable is used.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q6 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q6</span><span class="q-difficulty easy">Easy</span>
+            <div class="q-title">Delete the First Node</div>
+            <div class="q-description">Write a method <code>Node deleteFirst(Node head)</code> that removes the first node from the list and returns the new head.</div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">10</span><span class="node-next">del</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+            <div class="ll-visual">
+                <div class="visual-desc">After:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">deleteFirst() Method</div>
+                    <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteFirst</span>(<span class="type">Node</span> head) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
+    <span class="keyword">return</span> head.next;
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> Simply return <code>head.next</code>, which becomes the new head. The old head node is no longer referenced and becomes eligible for garbage collection in Java. We handle the edge case of an empty list by checking if <code>head</code> is <code>null</code>.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(1) &mdash; no traversal needed.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; no extra space used.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q7 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q7</span><span class="q-difficulty medium">Medium</span>
+            <div class="q-title">Delete the Last Node</div>
+            <div class="q-description">Write a method <code>Node deleteLast(Node head)</code> that removes the last node from the list and returns the head.</div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">30</span><span class="node-next">del</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+            <div class="ll-visual">
+                <div class="visual-desc">After:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">deleteLast() Method</div>
+                    <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteLast</span>(<span class="type">Node</span> head) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>) {
+        <span class="keyword">return null</span>;
+    }
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current.next.next != <span class="keyword">null</span>) {
+        current = current.next;
+    }
+    current.next = <span class="keyword">null</span>;
+    <span class="keyword">return</span> head;
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> We need to reach the second-to-last node so we can set its <code>next</code> to <code>null</code>. We traverse using the condition <code>current.next.next != null</code> to stop one node before the last. Edge cases: if the list is empty or has only one node, return <code>null</code>.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) &mdash; we traverse nearly the entire list.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only one pointer variable is used.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q8 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q8</span><span class="q-difficulty medium">Medium</span>
+            <div class="q-title">Delete a Node by Value</div>
+            <div class="q-description">Write a method <code>Node deleteByValue(Node head, int value)</code> that deletes the first occurrence of the given value from the list.</div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Delete 20:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">20</span><span class="node-next">del</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+            <div class="ll-visual">
+                <div class="visual-desc">After:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">deleteByValue() Method</div>
+                    <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteByValue</span>(<span class="type">Node</span> head, <span class="keyword">int</span> value) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
+    <span class="comment">// If the head node holds the value to delete</span>
+    <span class="keyword">if</span> (head.data == value) <span class="keyword">return</span> head.next;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current.next != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (current.next.data == value) {
+            current.next = current.next.next;
+            <span class="keyword">return</span> head;
+        }
+        current = current.next;
+    }
+    <span class="keyword">return</span> head; <span class="comment">// value not found</span>
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> First, check if the head itself contains the value; if so, return <code>head.next</code>. Otherwise, traverse the list looking at <code>current.next.data</code>. When found, skip over the target node by setting <code>current.next = current.next.next</code>. If the value is not in the list, the original head is returned unchanged.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) &mdash; worst case, the value is at the end or not present.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only one pointer variable is used.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q9 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q9</span><span class="q-difficulty medium">Medium</span>
+            <div class="q-title">Insert at a Given Position</div>
+            <div class="q-description">Write a method <code>Node insertAtPosition(Node head, int data, int position)</code> that inserts a new node at the given position (0-indexed).</div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+            <div class="ll-visual">
+                <div class="visual-desc">After inserting 25 at position 2:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">25</span><span class="node-next">new</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">insertAtPosition() Method</div>
+                    <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtPosition</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data, <span class="keyword">int</span> position) {
+    <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+    <span class="comment">// Insert at the beginning</span>
+    <span class="keyword">if</span> (position == <span class="number">0</span>) {
+        newNode.next = head;
+        <span class="keyword">return</span> newNode;
+    }
+    <span class="type">Node</span> current = head;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; position - <span class="number">1</span> &amp;&amp; current != <span class="keyword">null</span>; i++) {
+        current = current.next;
+    }
+    <span class="keyword">if</span> (current == <span class="keyword">null</span>) <span class="keyword">return</span> head; <span class="comment">// position out of bounds</span>
+    newNode.next = current.next;
+    current.next = newNode;
+    <span class="keyword">return</span> head;
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> If <code>position</code> is 0, insert at the head. Otherwise, navigate to the node at index <code>position - 1</code>. Then insert the new node by pointing <code>newNode.next</code> to <code>current.next</code>, and updating <code>current.next</code> to point to <code>newNode</code>. We also handle the case where the position exceeds the list length.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) &mdash; we may traverse up to n nodes to reach the position.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only one new node and one pointer are used.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q10 ==================== -->
+        <div class="coding-question">
+            <span class="q-number">Q10</span><span class="q-difficulty medium">Medium</span>
+            <div class="q-title">Reverse a Linked List</div>
+            <div class="q-description">Write a method <code>Node reverse(Node head)</code> that reverses the linked list in-place and returns the new head.</div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+            <div class="ll-visual">
+                <div class="visual-desc">After:</div><span class="head-label">head</span>
+                <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <div class="solution-content">
+                <h4>Solution:</h4>
+                <div class="code-container">
+                    <div class="code-header">reverse() Method</div>
+                    <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">reverse</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> prev = <span class="keyword">null</span>;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="type">Node</span> nextTemp = current.next; <span class="comment">// save next node</span>
+        current.next = prev;            <span class="comment">// reverse the link</span>
+        prev = current;                 <span class="comment">// move prev forward</span>
+        current = nextTemp;             <span class="comment">// move current forward</span>
+    }
+    <span class="keyword">return</span> prev; <span class="comment">// prev is the new head</span>
+}</pre>
+                </div>
+                <div class="solution-explanation">
+                    <strong>Explanation:</strong> Use three pointers: <code>prev</code> (starts at <code>null</code>), <code>current</code> (starts at <code>head</code>), and <code>nextTemp</code> (to save the next node before we overwrite the link). In each iteration: (1) save <code>current.next</code> in <code>nextTemp</code>, (2) reverse the link by pointing <code>current.next</code> to <code>prev</code>, (3) advance <code>prev</code> and <code>current</code> one step forward. When <code>current</code> becomes <code>null</code>, <code>prev</code> points to the new head of the reversed list.
+                </div>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) &mdash; we visit each node exactly once.<br>
+                    <strong>Space Complexity:</strong> O(1) &mdash; only three pointer variables are used (in-place reversal).
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="nav-links" style="margin-top: 40px;">
+            <a href="linkedlist-questions.html">&larr; Back to Questions Hub</a>
+            <a href="linkedlist-coding-q11-20.html">Next: Questions 11-20 &rarr;</a>
+        </div>
+
+    </div><!-- end .content -->
+
+    <div class="footer">
+        CPCS 204 - Data Structures I | Linked List Coding Questions 1-10
+    </div>
+</div><!-- end .container -->
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">&#8679;</button>
+
+<script>
+    // Toggle solution visibility
+    function toggleSolution(button) {
+        var content = button.nextElementSibling;
+        if (content.classList.contains('visible')) {
+            content.classList.remove('visible');
+            button.textContent = 'Show Solution';
+        } else {
+            content.classList.add('visible');
+            button.textContent = 'Hide Solution';
+        }
+    }
+
+    // Back to top button visibility
+    window.addEventListener('scroll', function() {
+        var btn = document.getElementById('backToTop');
+        if (window.pageYOffset > 400) {
+            btn.style.display = 'block';
+        } else {
+            btn.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

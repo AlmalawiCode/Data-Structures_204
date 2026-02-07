@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Types of Linked Lists - CPCS 204</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .teacher-says {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .teacher-says::before {
+            content: "";
+        }
+
+        .student-asks {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .student-asks::before {
+            content: "Student: ";
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .application-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .application-box strong {
+            color: #1565c0;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Circular Linked List Visualization */
+        .circular-diagram {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .node-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .node {
+            display: flex;
+            border: 3px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .node-data {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .node-next {
+            padding: 15px 20px;
+            background: #f0f4ff;
+            color: #667eea;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+        }
+
+        .node-pointer {
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 0 5px;
+        }
+
+        .null-pointer {
+            background: #ffebee;
+            color: #f44336;
+            padding: 15px 20px;
+            border: 2px dashed #f44336;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .head-label, .tail-label {
+            background: #4caf50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .tail-label {
+            background: #ff9800;
+        }
+
+        /* Circular Arrow */
+        .circular-arrow {
+            position: relative;
+            margin-top: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .circular-arrow svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Doubly Linked List Node - Vertical Style */
+        .doubly-node {
+            display: flex;
+            flex-direction: column;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .doubly-node .prev-section {
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .doubly-node .data-section {
+            padding: 20px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .doubly-node .next-section {
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .doubly-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .arrow-bidirectional {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #667eea;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .arrow-bidirectional .top-arrow {
+            color: #4caf50;
+        }
+
+        .arrow-bidirectional .bottom-arrow {
+            color: #f44336;
+        }
+
+        /* Step Box */
+        .step-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .step-number {
+            background: #4caf50;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #2e7d32;
+            font-size: 1.1em;
+        }
+
+        /* Code Styles */
+        .code-container {
+            margin: 20px 0;
+        }
+
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+        }
+
+        .inline-code {
+            background: #f4f4f4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        .keyword { color: #ff79c6; }
+        .type { color: #8be9fd; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .number { color: #bd93f9; }
+        .method { color: #50fa7b; }
+
+        /* Comparison Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .good { color: #4caf50; font-weight: bold; }
+        .bad { color: #f44336; font-weight: bold; }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Visual SVG Container */
+        .svg-container {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .svg-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Pointer Labels */
+        .pointer-label {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.85em;
+            margin: 5px;
+        }
+
+        .pointer-label.head {
+            background: #4caf50;
+            color: white;
+        }
+
+        .pointer-label.tail {
+            background: #ff9800;
+            color: white;
+        }
+
+        .pointer-label.current {
+            background: #2196f3;
+            color: white;
+        }
+
+        /* Section Links */
+        .section-nav {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .section-nav h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .section-nav a {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: transform 0.2s;
+        }
+
+        .section-nav a:hover {
+            transform: scale(1.05);
+        }
+
+        /* Legend Box */
+        .legend {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legend-color.prev { background: linear-gradient(135deg, #f44336 0%, #c62828 100%); }
+        .legend-color.data { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .legend-color.next { background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); }
+
+        footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer a {
+            color: #c4b5fd;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .doubly-container {
+                gap: 15px;
+            }
+
+            .doubly-node {
+                min-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Types of Linked Lists</h1>
+            <p>CPCS 204 - Data Structures I</p>
+            <p>Circular, Doubly, and Circular Doubly Linked Lists</p>
+        </header>
+
+        <div class="content">
+            <!-- Navigation -->
+            <div class="section-nav">
+                <h4>Quick Navigation</h4>
+                <a href="#introduction">Introduction</a>
+                <a href="#circular-singly">Circular Singly Linked List</a>
+                <a href="#doubly">Doubly Linked List</a>
+                <a href="#circular-doubly">Circular Doubly Linked List</a>
+                <a href="#comparison">Comparison</a>
+            </div>
+
+            <!-- Introduction -->
+            <section id="introduction">
+                <h2>Introduction</h2>
+
+                <div class="teacher-says">
+                    <strong>As we previously discussed</strong>, in a singly linked list, each node points to the next node, and the last node points to <span class="inline-code">null</span>. Now, we will explore <strong>three important variants</strong> of linked lists:
+                    <ol>
+                        <li><strong>Circular Singly Linked List</strong></li>
+                        <li><strong>Doubly Linked List</strong></li>
+                        <li><strong>Circular Doubly Linked List</strong></li>
+                    </ol>
+                    Each variant solves specific problems and has its own use cases. Let's start with the circular linked list!
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Recall:</strong> In a singly linked list, each node has:
+                    <ul>
+                        <li><strong>Data</strong> - The value stored in the node</li>
+                        <li><strong>Next</strong> - A reference to the next node (or null if it's the last)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Circular Singly Linked List -->
+            <section id="circular-singly">
+                <h2>1. Circular Singly Linked List</h2>
+
+                <h3>What is a Circular Linked List?</h3>
+
+                <div class="definition">
+                    A <strong>Circular Singly Linked List</strong> is a variation of the singly linked list where the last node's <span class="inline-code">next</span> pointer points back to the <strong>first node</strong> instead of <span class="inline-code">null</span>. This creates a circular chain with no end!
+                </div>
+
+                <div class="teacher-says">
+                    Think of it like a circle of friends holding hands. The last person doesn't let go - they hold hands with the first person, completing the circle!
+                </div>
+
+                <h3>Visual Representation</h3>
+
+                <div class="svg-container">
+                    <svg width="700" height="200" viewBox="0 0 700 200">
+                        <!-- Node 1 -->
+                        <rect x="100" y="70" width="50" height="60" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="125" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="18">1</text>
+                        <rect x="150" y="70" width="50" height="60" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="175" y="105" text-anchor="middle" fill="#667eea" font-weight="bold" font-size="12">next</text>
+
+                        <!-- Arrow 1 to 2 -->
+                        <line x1="200" y1="100" x2="250" y2="100" stroke="#667eea" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+                        <!-- Node 2 -->
+                        <rect x="260" y="70" width="50" height="60" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="285" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="18">2</text>
+                        <rect x="310" y="70" width="50" height="60" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="335" y="105" text-anchor="middle" fill="#667eea" font-weight="bold" font-size="12">next</text>
+
+                        <!-- Arrow 2 to 3 -->
+                        <line x1="360" y1="100" x2="410" y2="100" stroke="#667eea" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+                        <!-- Node 3 -->
+                        <rect x="420" y="70" width="50" height="60" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="445" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="18">3</text>
+                        <rect x="470" y="70" width="50" height="60" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="495" y="105" text-anchor="middle" fill="#667eea" font-weight="bold" font-size="12">next</text>
+
+                        <!-- Circular Arrow (from node 3 back to node 1) -->
+                        <path d="M 520 100 Q 570 100 570 150 Q 570 180 335 180 Q 100 180 100 150 Q 100 130 100 130"
+                              fill="none" stroke="#f44336" stroke-width="3" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Labels -->
+                        <text x="125" y="55" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="14">head</text>
+                        <text x="445" y="55" text-anchor="middle" fill="#ff9800" font-weight="bold" font-size="14">tail</text>
+                        <text x="570" y="150" text-anchor="start" fill="#f44336" font-weight="bold" font-size="12">Points back to first node</text>
+
+                        <!-- Gradient Definition -->
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea"/>
+                                <stop offset="100%" style="stop-color:#764ba2"/>
+                            </linearGradient>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#667eea"/>
+                            </marker>
+                            <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#f44336"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="important">
+                    <strong>Key Observation:</strong> In a circular linked list, there is <strong>no null pointer</strong>! The last node always points back to the first node.
+                </div>
+
+                <h3>Real-World Applications</h3>
+
+                <div class="application-box">
+                    <strong>Application 1: CPU Process Scheduling (Round Robin)</strong>
+                    <p>Imagine a CPU needs to execute 3 processes: P1, P2, and P3. Using a circular linked list:</p>
+                    <ul>
+                        <li>CPU gives P1 a time slice (e.g., 5 milliseconds)</li>
+                        <li>Then moves to P2 (5 milliseconds)</li>
+                        <li>Then moves to P3 (5 milliseconds)</li>
+                        <li>Then <strong>automatically goes back to P1</strong> and continues the cycle!</li>
+                    </ul>
+                    <p>This is called <strong>Round Robin Scheduling</strong> - a circular linked list is perfect for this!</p>
+                </div>
+
+                <div class="application-box">
+                    <strong>Application 2: Multiplayer Board Games</strong>
+                    <p>Think of a game like Monopoly with 4 players:</p>
+                    <ul>
+                        <li>Player 1 takes their turn</li>
+                        <li>Then Player 2, Player 3, Player 4</li>
+                        <li>Then it goes back to Player 1 automatically!</li>
+                    </ul>
+                    <p>A circular linked list naturally represents this turn-taking pattern.</p>
+                </div>
+
+                <h3>Implementation with Head and Tail</h3>
+
+                <div class="teacher-says">
+                    To make our implementation easier, we'll use <strong>both head and tail pointers</strong>. The tail pointer makes adding to the end much more efficient - O(1) instead of O(n)!
+                </div>
+
+                <h4>Node Class for Circular Linked List</h4>
+
+                <div class="code-container">
+                    <div class="code-header">Node.java - Same as Singly Linked List</div>
+                    <pre><code><span class="keyword">public class</span> <span class="type">Node</span> {
+    <span class="type">int</span> data;
+    <span class="type">Node</span> next;
+
+    <span class="keyword">public</span> <span class="method">Node</span>(<span class="type">int</span> data) {
+        <span class="keyword">this</span>.data = data;
+        <span class="keyword">this</span>.next = <span class="keyword">null</span>;
+    }
+}</code></pre>
+                </div>
+
+                <h3>Adding the First Node</h3>
+
+                <div class="step-box">
+                    <span class="step-number">1</span>
+                    <span class="step-title">Initial State - Empty List</span>
+                    <p>Both <span class="inline-code">head</span> and <span class="inline-code">tail</span> are <span class="inline-code">null</span></p>
+                </div>
+
+                <div class="svg-container">
+                    <svg width="500" height="120" viewBox="0 0 500 120">
+                        <!-- Head pointer box -->
+                        <rect x="60" y="40" width="70" height="40" fill="#4caf50" stroke="#2e7d32" stroke-width="2" rx="5"/>
+                        <text x="95" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="14">head</text>
+
+                        <!-- Arrow from head to null -->
+                        <line x1="130" y1="60" x2="170" y2="60" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green-init)"/>
+
+                        <!-- Null symbol for head (ground symbol style) -->
+                        <line x1="180" y1="50" x2="180" y2="70" stroke="#999" stroke-width="3"/>
+                        <line x1="175" y1="55" x2="175" y2="65" stroke="#999" stroke-width="2"/>
+                        <line x1="170" y1="58" x2="170" y2="62" stroke="#999" stroke-width="1"/>
+                        <text x="180" y="90" text-anchor="middle" fill="#666" font-size="12" font-style="italic">null</text>
+
+                        <!-- Tail pointer box -->
+                        <rect x="280" y="40" width="70" height="40" fill="#ff9800" stroke="#e65100" stroke-width="2" rx="5"/>
+                        <text x="315" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="14">tail</text>
+
+                        <!-- Arrow from tail to null -->
+                        <line x1="350" y1="60" x2="390" y2="60" stroke="#ff9800" stroke-width="2" marker-end="url(#arrowhead-orange-init)"/>
+
+                        <!-- Null symbol for tail (ground symbol style) -->
+                        <line x1="400" y1="50" x2="400" y2="70" stroke="#999" stroke-width="3"/>
+                        <line x1="395" y1="55" x2="395" y2="65" stroke="#999" stroke-width="2"/>
+                        <line x1="390" y1="58" x2="390" y2="62" stroke="#999" stroke-width="1"/>
+                        <text x="400" y="90" text-anchor="middle" fill="#666" font-size="12" font-style="italic">null</text>
+
+                        <defs>
+                            <marker id="arrowhead-green-init" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#4caf50"/>
+                            </marker>
+                            <marker id="arrowhead-orange-init" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#ff9800"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="step-box">
+                    <span class="step-number">2</span>
+                    <span class="step-title">Create First Node (data = 10)</span>
+                    <p>When we add the first node:</p>
+                    <ul>
+                        <li><span class="inline-code">head</span> and <span class="inline-code">tail</span> both point to this node</li>
+                        <li>The node's <span class="inline-code">next</span> points to <strong>itself</strong>!</li>
+                    </ul>
+                </div>
+
+                <div class="svg-container">
+                    <svg width="400" height="180" viewBox="0 0 400 180">
+                        <!-- Node -->
+                        <rect x="150" y="80" width="50" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="175" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">10</text>
+                        <rect x="200" y="80" width="50" height="50" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="225" y="110" text-anchor="middle" fill="#667eea" font-weight="bold" font-size="12">next</text>
+
+                        <!-- Self-referencing arrow -->
+                        <path d="M 250 105 Q 290 105 290 60 Q 290 30 175 30 Q 100 30 100 80 Q 100 105 150 105"
+                              fill="none" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Head label -->
+                        <rect x="100" y="140" width="60" height="30" fill="#4caf50" rx="5"/>
+                        <text x="130" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="12">head</text>
+                        <line x1="130" y1="140" x2="175" y2="130" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+
+                        <!-- Tail label -->
+                        <rect x="240" y="140" width="60" height="30" fill="#ff9800" rx="5"/>
+                        <text x="270" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="12">tail</text>
+                        <line x1="270" y1="140" x2="225" y2="130" stroke="#ff9800" stroke-width="2" marker-end="url(#arrowhead-orange)"/>
+
+                        <!-- Label -->
+                        <text x="300" y="40" fill="#f44336" font-weight="bold" font-size="11">Points to itself!</text>
+
+                        <defs>
+                            <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#4caf50"/>
+                            </marker>
+                            <marker id="arrowhead-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#ff9800"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">Adding First Node</div>
+                    <pre><code><span class="comment">// If list is empty (head == null)</span>
+<span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">10</span>);
+head = newNode;
+tail = newNode;
+tail.next = head;  <span class="comment">// Points to itself - making it circular!</span></code></pre>
+                </div>
+
+                <h3>Adding the Second Node (at the end)</h3>
+
+                <div class="step-box">
+                    <span class="step-number">3</span>
+                    <span class="step-title">Add Second Node (data = 20)</span>
+                    <p>Steps to add at the end:</p>
+                    <ol>
+                        <li>Create new node</li>
+                        <li>New node's next points to head</li>
+                        <li>Current tail's next points to new node</li>
+                        <li>Update tail to new node</li>
+                    </ol>
+                </div>
+
+                <div class="svg-container">
+                    <svg width="500" height="200" viewBox="0 0 500 200">
+                        <!-- Node 1 (10) -->
+                        <rect x="100" y="80" width="50" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="125" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">10</text>
+                        <rect x="150" y="80" width="50" height="50" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="175" y="110" text-anchor="middle" fill="#667eea" font-weight="bold" font-size="12">next</text>
+
+                        <!-- Arrow from 10 to 20 -->
+                        <line x1="200" y1="105" x2="250" y2="105" stroke="#667eea" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+                        <!-- Node 2 (20) -->
+                        <rect x="260" y="80" width="50" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="285" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">20</text>
+                        <rect x="310" y="80" width="50" height="50" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="335" y="110" text-anchor="middle" fill="#667eea" font-weight="bold" font-size="12">next</text>
+
+                        <!-- Circular arrow from 20 back to 10 -->
+                        <path d="M 360 105 Q 400 105 400 50 Q 400 20 230 20 Q 60 20 60 60 Q 60 105 100 105"
+                              fill="none" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Head label -->
+                        <rect x="90" y="150" width="60" height="25" fill="#4caf50" rx="5"/>
+                        <text x="120" y="167" text-anchor="middle" fill="white" font-weight="bold" font-size="11">head</text>
+
+                        <!-- Tail label -->
+                        <rect x="270" y="150" width="60" height="25" fill="#ff9800" rx="5"/>
+                        <text x="300" y="167" text-anchor="middle" fill="white" font-weight="bold" font-size="11">tail</text>
+
+                        <!-- Annotation -->
+                        <text x="410" y="50" fill="#f44336" font-weight="bold" font-size="11">Back to first node</text>
+                    </svg>
+                </div>
+
+                <h3>Adding the Third Node</h3>
+
+                <div class="step-box">
+                    <span class="step-number">4</span>
+                    <span class="step-title">Add Third Node (data = 30)</span>
+                    <p>Same process - tail now points to node with 30, and 30's next points back to head!</p>
+                </div>
+
+                <div class="svg-container">
+                    <svg width="650" height="200" viewBox="0 0 650 200">
+                        <!-- Node 1 (10) -->
+                        <rect x="100" y="80" width="50" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="125" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">10</text>
+                        <rect x="150" y="80" width="50" height="50" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+
+                        <!-- Arrow 1 to 2 -->
+                        <line x1="200" y1="105" x2="250" y2="105" stroke="#667eea" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+                        <!-- Node 2 (20) -->
+                        <rect x="260" y="80" width="50" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="285" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">20</text>
+                        <rect x="310" y="80" width="50" height="50" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+
+                        <!-- Arrow 2 to 3 -->
+                        <line x1="360" y1="105" x2="410" y2="105" stroke="#667eea" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+                        <!-- Node 3 (30) -->
+                        <rect x="420" y="80" width="50" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="3" rx="5"/>
+                        <text x="445" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">30</text>
+                        <rect x="470" y="80" width="50" height="50" fill="#f0f4ff" stroke="#667eea" stroke-width="3" rx="5"/>
+
+                        <!-- Circular arrow back to head -->
+                        <path d="M 520 105 Q 570 105 570 50 Q 570 15 335 15 Q 50 15 50 60 Q 50 105 100 105"
+                              fill="none" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Labels -->
+                        <rect x="90" y="150" width="60" height="25" fill="#4caf50" rx="5"/>
+                        <text x="120" y="167" text-anchor="middle" fill="white" font-weight="bold" font-size="11">head</text>
+
+                        <rect x="430" y="150" width="60" height="25" fill="#ff9800" rx="5"/>
+                        <text x="460" y="167" text-anchor="middle" fill="white" font-weight="bold" font-size="11">tail</text>
+
+                        <text x="580" y="50" fill="#f44336" font-weight="bold" font-size="11">Back to first node</text>
+                    </svg>
+                </div>
+
+                <h3>Complete Implementation</h3>
+
+                <div class="code-container">
+                    <div class="code-header">CircularLinkedList.java</div>
+                    <pre><code><span class="keyword">public class</span> <span class="type">CircularLinkedList</span> {
+    <span class="type">Node</span> head;
+    <span class="type">Node</span> tail;
+
+    <span class="comment">// Add node at the end</span>
+    <span class="keyword">public void</span> <span class="method">addLast</span>(<span class="type">int</span> data) {
+        <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            <span class="comment">// First node - points to itself</span>
+            head = newNode;
+            tail = newNode;
+            tail.next = head;
+        } <span class="keyword">else</span> {
+            <span class="comment">// Add after tail, update circular reference</span>
+            newNode.next = head;     <span class="comment">// New node points to head</span>
+            tail.next = newNode;     <span class="comment">// Old tail points to new node</span>
+            tail = newNode;          <span class="comment">// Update tail</span>
+        }
+    }
+
+    <span class="comment">// Add node at the beginning</span>
+    <span class="keyword">public void</span> <span class="method">addFirst</span>(<span class="type">int</span> data) {
+        <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            head = newNode;
+            tail = newNode;
+            tail.next = head;
+        } <span class="keyword">else</span> {
+            newNode.next = head;     <span class="comment">// New node points to old head</span>
+            head = newNode;          <span class="comment">// Update head</span>
+            tail.next = head;        <span class="comment">// Tail must point to new head!</span>
+        }
+    }
+}</code></pre>
+                </div>
+
+                <h3>Traversing a Circular Linked List</h3>
+
+                <div class="warning">
+                    <strong>DANGER: Infinite Loop!</strong>
+                    <p>Since there is no <span class="inline-code">null</span> to stop at, using a regular while loop like <span class="inline-code">while (current != null)</span> will run <strong>forever</strong>!</p>
+                </div>
+
+                <div class="teacher-says">
+                    We need a special condition to stop. We can either:
+                    <ol>
+                        <li>Use a <strong>do-while</strong> loop and stop when we come back to head</li>
+                        <li>Use a <strong>while</strong> loop with a careful condition</li>
+                    </ol>
+                </div>
+
+                <h4>Method 1: Using do-while Loop</h4>
+
+                <div class="code-container">
+                    <div class="code-header">Traversal with do-while</div>
+                    <pre><code><span class="keyword">public void</span> <span class="method">printList</span>() {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+        System.out.println(<span class="string">"List is empty"</span>);
+        <span class="keyword">return</span>;
+    }
+
+    <span class="type">Node</span> current = head;
+
+    <span class="comment">// do-while ensures we visit at least once, then stop when back at head</span>
+    <span class="keyword">do</span> {
+        System.out.print(current.data + <span class="string">" -> "</span>);
+        current = current.next;
+    } <span class="keyword">while</span> (current != head);
+
+    System.out.println(<span class="string">"(back to head)"</span>);
+}
+
+<span class="comment">// Output: 10 -> 20 -> 30 -> (back to head)</span></code></pre>
+                </div>
+
+                <div class="important">
+                    <strong>Why do-while?</strong>
+                    <p>The <span class="inline-code">do-while</span> loop executes at least once before checking the condition. This is perfect because:</p>
+                    <ul>
+                        <li>We start at head and want to process it</li>
+                        <li>We keep going until we return to head</li>
+                        <li>If we used <span class="inline-code">while (current != head)</span>, we'd never enter the loop!</li>
+                    </ul>
+                </div>
+
+                <h4>Method 2: Using while Loop with Counter</h4>
+
+                <div class="code-container">
+                    <div class="code-header">Traversal with while Loop (Alternative)</div>
+                    <pre><code><span class="keyword">public void</span> <span class="method">printListWhile</span>() {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+        System.out.println(<span class="string">"List is empty"</span>);
+        <span class="keyword">return</span>;
+    }
+
+    <span class="type">Node</span> current = head;
+    <span class="type">boolean</span> firstIteration = <span class="keyword">true</span>;
+
+    <span class="keyword">while</span> (firstIteration || current != head) {
+        System.out.print(current.data + <span class="string">" -> "</span>);
+        current = current.next;
+        firstIteration = <span class="keyword">false</span>;
+    }
+
+    System.out.println(<span class="string">"(back to head)"</span>);
+}</code></pre>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Best Practice:</strong> The <span class="inline-code">do-while</span> approach is cleaner and more commonly used for circular list traversal.
+                </div>
+            </section>
+
+            <!-- Doubly Linked List -->
+            <section id="doubly">
+                <h2>2. Doubly Linked List</h2>
+
+                <h3>The Problem with Singly Linked Lists</h3>
+
+                <div class="student-asks">
+                    Professor, what if I'm in the middle of a singly linked list and I need to go back to the previous node?
+                </div>
+
+                <div class="teacher-says">
+                    Excellent question! In a singly linked list, <strong>you cannot go backwards</strong>. Once you move forward, you've lost the reference to the previous node. To go back, you'd have to start from the head again - that's O(n) every time!
+                </div>
+
+                <div class="definition">
+                    A <strong>Doubly Linked List</strong> solves this problem by having <strong>two pointers</strong> in each node:
+                    <ul>
+                        <li><strong>next</strong> - Points to the next node (forward direction)</li>
+                        <li><strong>prev</strong> - Points to the previous node (backward direction)</li>
+                    </ul>
+                    This allows <strong>bidirectional traversal</strong>!
+                </div>
+
+                <h3>Node Structure (Vertical Representation)</h3>
+
+                <div class="legend">
+                    <span style="font-weight: bold;">Legend:</span>
+                    <div class="legend-item">
+                        <div class="legend-color next"></div>
+                        <span>Next Pointer</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color data"></div>
+                        <span>Data</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color prev"></div>
+                        <span>Prev Pointer</span>
+                    </div>
+                </div>
+
+                <div class="svg-container">
+                    <svg width="200" height="200" viewBox="0 0 200 200">
+                        <!-- Node structure -->
+                        <rect x="50" y="20" width="100" height="40" fill="url(#gradNext)" stroke="#4caf50" stroke-width="3" rx="5"/>
+                        <text x="100" y="45" text-anchor="middle" fill="white" font-weight="bold" font-size="14">next</text>
+
+                        <rect x="50" y="60" width="100" height="60" fill="url(#grad1)" stroke="#667eea" stroke-width="3"/>
+                        <text x="100" y="95" text-anchor="middle" fill="white" font-weight="bold" font-size="18">DATA</text>
+
+                        <rect x="50" y="120" width="100" height="40" fill="url(#gradPrev)" stroke="#f44336" stroke-width="3" rx="5"/>
+                        <text x="100" y="145" text-anchor="middle" fill="white" font-weight="bold" font-size="14">prev</text>
+
+                        <!-- Labels -->
+                        <text x="100" y="180" text-anchor="middle" fill="#333" font-weight="bold" font-size="12">Doubly Linked Node</text>
+
+                        <defs>
+                            <linearGradient id="gradNext" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#4caf50"/>
+                                <stop offset="100%" style="stop-color:#2e7d32"/>
+                            </linearGradient>
+                            <linearGradient id="gradPrev" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f44336"/>
+                                <stop offset="100%" style="stop-color:#c62828"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+
+                <h3>Doubly Linked List Visualization</h3>
+
+                <div class="svg-container">
+                    <svg width="800" height="280" viewBox="0 0 800 280">
+                        <!-- NULL at start (ground symbol) -->
+                        <g transform="translate(50, 155)">
+                            <line x1="0" y1="-15" x2="0" y2="15" stroke="#999" stroke-width="4"/>
+                            <line x1="-8" y1="-10" x2="-8" y2="10" stroke="#999" stroke-width="3"/>
+                            <line x1="-14" y1="-5" x2="-14" y2="5" stroke="#999" stroke-width="2"/>
+                            <text x="0" y="30" text-anchor="middle" fill="#888" font-size="11" font-style="italic">null</text>
+                        </g>
+
+                        <!-- Arrow from first node's prev to NULL -->
+                        <line x1="140" y1="165" x2="65" y2="165" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 1 -->
+                        <g transform="translate(140, 70)">
+                            <rect x="0" y="0" width="80" height="35" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="40" y="23" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+
+                            <rect x="0" y="35" width="80" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="40" y="68" text-anchor="middle" fill="white" font-weight="bold" font-size="20">10</text>
+
+                            <rect x="0" y="85" width="80" height="35" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="40" y="108" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                        </g>
+
+                        <!-- Bidirectional arrows between Node 1 and Node 2 -->
+                        <!-- Next arrow (top, green) -->
+                        <line x1="220" y1="87" x2="300" y2="87" stroke="#4caf50" stroke-width="3" marker-end="url(#arrowhead-green)"/>
+                        <!-- Prev arrow (bottom, red) -->
+                        <line x1="300" y1="175" x2="220" y2="175" stroke="#f44336" stroke-width="3" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 2 -->
+                        <g transform="translate(310, 70)">
+                            <rect x="0" y="0" width="80" height="35" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="40" y="23" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+
+                            <rect x="0" y="35" width="80" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="40" y="68" text-anchor="middle" fill="white" font-weight="bold" font-size="20">20</text>
+
+                            <rect x="0" y="85" width="80" height="35" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="40" y="108" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                        </g>
+
+                        <!-- Bidirectional arrows between Node 2 and Node 3 -->
+                        <line x1="390" y1="87" x2="470" y2="87" stroke="#4caf50" stroke-width="3" marker-end="url(#arrowhead-green)"/>
+                        <line x1="470" y1="175" x2="390" y2="175" stroke="#f44336" stroke-width="3" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 3 -->
+                        <g transform="translate(480, 70)">
+                            <rect x="0" y="0" width="80" height="35" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="40" y="23" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+
+                            <rect x="0" y="35" width="80" height="50" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="40" y="68" text-anchor="middle" fill="white" font-weight="bold" font-size="20">30</text>
+
+                            <rect x="0" y="85" width="80" height="35" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="40" y="108" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                        </g>
+
+                        <!-- Arrow from Node 3 next to NULL -->
+                        <line x1="560" y1="87" x2="620" y2="87" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+
+                        <!-- NULL at end (ground symbol) -->
+                        <g transform="translate(640, 87)">
+                            <line x1="0" y1="-15" x2="0" y2="15" stroke="#999" stroke-width="4"/>
+                            <line x1="6" y1="-10" x2="6" y2="10" stroke="#999" stroke-width="3"/>
+                            <line x1="12" y1="-5" x2="12" y2="5" stroke="#999" stroke-width="2"/>
+                            <text x="6" y="30" text-anchor="middle" fill="#888" font-size="11" font-style="italic">null</text>
+                        </g>
+
+                        <!-- Head and Tail labels -->
+                        <rect x="150" y="210" width="60" height="25" fill="#4caf50" rx="5"/>
+                        <text x="180" y="227" text-anchor="middle" fill="white" font-weight="bold" font-size="11">head</text>
+                        <line x1="180" y1="210" x2="180" y2="195" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+
+                        <rect x="490" y="210" width="60" height="25" fill="#ff9800" rx="5"/>
+                        <text x="520" y="227" text-anchor="middle" fill="white" font-weight="bold" font-size="11">tail</text>
+                        <line x1="520" y1="210" x2="520" y2="195" stroke="#ff9800" stroke-width="2" marker-end="url(#arrowhead-orange)"/>
+
+                        <!-- Arrow direction labels -->
+                        <text x="260" y="75" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="10">forward</text>
+                        <text x="260" y="200" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="10">backward</text>
+                    </svg>
+                </div>
+
+                <h3>Real-World Applications</h3>
+
+                <div class="application-box">
+                    <strong>Application 1: Browser History</strong>
+                    <p>When you browse the web:</p>
+                    <ul>
+                        <li>Click "Back" button - go to previous page (use <span class="inline-code">prev</span> pointer)</li>
+                        <li>Click "Forward" button - go to next page (use <span class="inline-code">next</span> pointer)</li>
+                    </ul>
+                    <p>A doubly linked list is perfect for browser navigation!</p>
+                </div>
+
+                <h3>Node Class for Doubly Linked List</h3>
+
+                <h3>Adding Node at the End - Step by Step</h3>
+
+                <div class="step-box">
+                    <span class="step-number">1</span>
+                    <span class="step-title">Initial State - Empty List</span>
+                    <p>Both <span class="inline-code">head</span> and <span class="inline-code">tail</span> are <span class="inline-code">null</span></p>
+                </div>
+
+                <div class="step-box">
+                    <span class="step-number">2</span>
+                    <span class="step-title">Add First Node (data = 10)</span>
+                    <p>When list is empty:</p>
+                    <ul>
+                        <li>Create new node</li>
+                        <li>Both <span class="inline-code">head</span> and <span class="inline-code">tail</span> point to it</li>
+                        <li>Both <span class="inline-code">prev</span> and <span class="inline-code">next</span> are null</li>
+                    </ul>
+                </div>
+
+                <div class="svg-container">
+                    <svg width="300" height="200" viewBox="0 0 300 200">
+                        <!-- NULL left (ground symbol) -->
+                        <g transform="translate(45, 100)">
+                            <line x1="0" y1="-12" x2="0" y2="12" stroke="#999" stroke-width="3"/>
+                            <line x1="-6" y1="-8" x2="-6" y2="8" stroke="#999" stroke-width="2"/>
+                            <line x1="-10" y1="-4" x2="-10" y2="4" stroke="#999" stroke-width="1"/>
+                            <text x="-3" y="25" text-anchor="middle" fill="#888" font-size="9" font-style="italic">null</text>
+                        </g>
+
+                        <!-- Node 1 -->
+                        <g transform="translate(100, 40)">
+                            <rect x="0" y="0" width="70" height="30" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="35" y="20" text-anchor="middle" fill="white" font-weight="bold" font-size="10">next</text>
+
+                            <rect x="0" y="30" width="70" height="45" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="35" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="18">10</text>
+
+                            <rect x="0" y="75" width="70" height="30" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="35" y="95" text-anchor="middle" fill="white" font-weight="bold" font-size="10">prev</text>
+                        </g>
+
+                        <!-- NULL right (ground symbol) -->
+                        <g transform="translate(215, 55)">
+                            <line x1="0" y1="-12" x2="0" y2="12" stroke="#999" stroke-width="3"/>
+                            <line x1="6" y1="-8" x2="6" y2="8" stroke="#999" stroke-width="2"/>
+                            <line x1="10" y1="-4" x2="10" y2="4" stroke="#999" stroke-width="1"/>
+                            <text x="5" y="25" text-anchor="middle" fill="#888" font-size="9" font-style="italic">null</text>
+                        </g>
+
+                        <!-- Arrows -->
+                        <line x1="100" y1="100" x2="55" y2="100" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+                        <line x1="170" y1="55" x2="205" y2="55" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+
+                        <!-- Labels -->
+                        <text x="135" y="160" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="12">head & tail</text>
+                        <line x1="135" y1="150" x2="135" y2="145" stroke="#4caf50" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <div class="step-box">
+                    <span class="step-number">3</span>
+                    <span class="step-title">Add Second Node (data = 20) at End</span>
+                    <p>Steps:</p>
+                    <ol>
+                        <li>Create new node with data 20</li>
+                        <li>Set new node's <span class="inline-code">prev</span> to current tail (node 10)</li>
+                        <li>Set current tail's <span class="inline-code">next</span> to new node</li>
+                        <li>Update <span class="inline-code">tail</span> to new node</li>
+                    </ol>
+                </div>
+
+                <div class="svg-container">
+                    <svg width="500" height="220" viewBox="0 0 500 220">
+                        <!-- NULL left (ground symbol) -->
+                        <g transform="translate(40, 108)">
+                            <line x1="0" y1="-10" x2="0" y2="10" stroke="#999" stroke-width="3"/>
+                            <line x1="-5" y1="-6" x2="-5" y2="6" stroke="#999" stroke-width="2"/>
+                            <line x1="-9" y1="-3" x2="-9" y2="3" stroke="#999" stroke-width="1"/>
+                            <text x="-3" y="22" text-anchor="middle" fill="#888" font-size="8" font-style="italic">null</text>
+                        </g>
+
+                        <!-- Arrow from Node 1 prev to NULL -->
+                        <line x1="90" y1="108" x2="50" y2="108" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 1 (10) -->
+                        <g transform="translate(90, 40)">
+                            <rect x="0" y="0" width="70" height="28" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="35" y="18" text-anchor="middle" fill="white" font-weight="bold" font-size="10">next</text>
+
+                            <rect x="0" y="28" width="70" height="40" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="35" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">10</text>
+
+                            <rect x="0" y="68" width="70" height="28" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="35" y="86" text-anchor="middle" fill="white" font-weight="bold" font-size="10">prev</text>
+                        </g>
+
+                        <!-- Bidirectional arrows -->
+                        <line x1="160" y1="54" x2="220" y2="54" stroke="#4caf50" stroke-width="3" marker-end="url(#arrowhead-green)"/>
+                        <line x1="220" y1="108" x2="160" y2="108" stroke="#f44336" stroke-width="3" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 2 (20) -->
+                        <g transform="translate(230, 40)">
+                            <rect x="0" y="0" width="70" height="28" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="35" y="18" text-anchor="middle" fill="white" font-weight="bold" font-size="10">next</text>
+
+                            <rect x="0" y="28" width="70" height="40" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="35" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">20</text>
+
+                            <rect x="0" y="68" width="70" height="28" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="35" y="86" text-anchor="middle" fill="white" font-weight="bold" font-size="10">prev</text>
+                        </g>
+
+                        <!-- Arrow to NULL right -->
+                        <line x1="300" y1="54" x2="340" y2="54" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+
+                        <!-- NULL right (ground symbol) -->
+                        <g transform="translate(360, 54)">
+                            <line x1="0" y1="-10" x2="0" y2="10" stroke="#999" stroke-width="3"/>
+                            <line x1="5" y1="-6" x2="5" y2="6" stroke="#999" stroke-width="2"/>
+                            <line x1="9" y1="-3" x2="9" y2="3" stroke="#999" stroke-width="1"/>
+                            <text x="5" y="22" text-anchor="middle" fill="#888" font-size="8" font-style="italic">null</text>
+                        </g>
+
+                        <!-- Labels -->
+                        <rect x="100" y="160" width="50" height="22" fill="#4caf50" rx="4"/>
+                        <text x="125" y="175" text-anchor="middle" fill="white" font-weight="bold" font-size="10">head</text>
+
+                        <rect x="240" y="160" width="50" height="22" fill="#ff9800" rx="4"/>
+                        <text x="265" y="175" text-anchor="middle" fill="white" font-weight="bold" font-size="10">tail</text>
+
+                        <!-- Arrow labels -->
+                        <text x="190" y="45" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
+                        <text x="190" y="125" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+                    </svg>
+                </div>
+
+                <div class="step-box">
+                    <span class="step-number">4</span>
+                    <span class="step-title">Add Third Node (data = 30) at End</span>
+                    <p>Same process repeats - now we have 3 nodes connected bidirectionally!</p>
+                </div>
+
+                <div class="svg-container">
+                    <svg width="650" height="220" viewBox="0 0 650 220">
+                        <!-- NULL left (ground symbol) -->
+                        <g transform="translate(35, 105)">
+                            <line x1="0" y1="-10" x2="0" y2="10" stroke="#999" stroke-width="3"/>
+                            <line x1="-5" y1="-6" x2="-5" y2="6" stroke="#999" stroke-width="2"/>
+                            <line x1="-9" y1="-3" x2="-9" y2="3" stroke="#999" stroke-width="1"/>
+                            <text x="-3" y="20" text-anchor="middle" fill="#888" font-size="8" font-style="italic">null</text>
+                        </g>
+                        <line x1="75" y1="105" x2="45" y2="105" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 1 (10) -->
+                        <g transform="translate(75, 45)">
+                            <rect x="0" y="0" width="60" height="25" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="30" y="16" text-anchor="middle" fill="white" font-weight="bold" font-size="9">next</text>
+
+                            <rect x="0" y="25" width="60" height="35" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="30" y="48" text-anchor="middle" fill="white" font-weight="bold" font-size="14">10</text>
+
+                            <rect x="0" y="60" width="60" height="25" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="30" y="76" text-anchor="middle" fill="white" font-weight="bold" font-size="9">prev</text>
+                        </g>
+
+                        <!-- Arrows 1-2 -->
+                        <line x1="135" y1="57" x2="185" y2="57" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+                        <line x1="185" y1="105" x2="135" y2="105" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 2 (20) -->
+                        <g transform="translate(195, 45)">
+                            <rect x="0" y="0" width="60" height="25" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="30" y="16" text-anchor="middle" fill="white" font-weight="bold" font-size="9">next</text>
+
+                            <rect x="0" y="25" width="60" height="35" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="30" y="48" text-anchor="middle" fill="white" font-weight="bold" font-size="14">20</text>
+
+                            <rect x="0" y="60" width="60" height="25" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="30" y="76" text-anchor="middle" fill="white" font-weight="bold" font-size="9">prev</text>
+                        </g>
+
+                        <!-- Arrows 2-3 -->
+                        <line x1="255" y1="57" x2="305" y2="57" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+                        <line x1="305" y1="105" x2="255" y2="105" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 3 (30) -->
+                        <g transform="translate(315, 45)">
+                            <rect x="0" y="0" width="60" height="25" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="30" y="16" text-anchor="middle" fill="white" font-weight="bold" font-size="9">next</text>
+
+                            <rect x="0" y="25" width="60" height="35" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="30" y="48" text-anchor="middle" fill="white" font-weight="bold" font-size="14">30</text>
+
+                            <rect x="0" y="60" width="60" height="25" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="30" y="76" text-anchor="middle" fill="white" font-weight="bold" font-size="9">prev</text>
+                        </g>
+
+                        <!-- NULL right (ground symbol) -->
+                        <line x1="375" y1="57" x2="405" y2="57" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+                        <g transform="translate(425, 57)">
+                            <line x1="0" y1="-10" x2="0" y2="10" stroke="#999" stroke-width="3"/>
+                            <line x1="5" y1="-6" x2="5" y2="6" stroke="#999" stroke-width="2"/>
+                            <line x1="9" y1="-3" x2="9" y2="3" stroke="#999" stroke-width="1"/>
+                            <text x="5" y="20" text-anchor="middle" fill="#888" font-size="8" font-style="italic">null</text>
+                        </g>
+
+                        <!-- Labels -->
+                        <rect x="85" y="160" width="45" height="20" fill="#4caf50" rx="4"/>
+                        <text x="107" y="174" text-anchor="middle" fill="white" font-weight="bold" font-size="9">head</text>
+
+                        <rect x="325" y="160" width="45" height="20" fill="#ff9800" rx="4"/>
+                        <text x="347" y="174" text-anchor="middle" fill="white" font-weight="bold" font-size="9">tail</text>
+                    </svg>
+                </div>
+
+                <h3>Complete Implementation</h3>
+
+                <div class="code-container">
+                    <div class="code-header">DoublyLinkedList.java</div>
+                    <pre><code><span class="keyword">public class</span> <span class="type">DoublyLinkedList</span> {
+
+    <span class="comment">// Inner Node class</span>
+    <span class="keyword">class</span> <span class="type">Node</span> {
+        <span class="type">int</span> data;
+        <span class="type">Node</span> next;
+        <span class="type">Node</span> prev;
+
+        <span class="keyword">public</span> <span class="method">Node</span>(<span class="type">int</span> data) {
+            <span class="keyword">this</span>.data = data;
+            <span class="keyword">this</span>.next = <span class="keyword">null</span>;
+            <span class="keyword">this</span>.prev = <span class="keyword">null</span>;
+        }
+    }
+
+    <span class="type">Node</span> head;
+    <span class="type">Node</span> tail;
+
+    <span class="comment">// Add node at the end</span>
+    <span class="keyword">public void</span> <span class="method">addLast</span>(<span class="type">int</span> data) {
+        <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            <span class="comment">// First node - both head and tail point to it</span>
+            head = newNode;
+            tail = newNode;
+        } <span class="keyword">else</span> {
+            <span class="comment">// Link new node with current tail</span>
+            newNode.prev = tail;     <span class="comment">// New node's prev points to old tail</span>
+            tail.next = newNode;     <span class="comment">// Old tail's next points to new node</span>
+            tail = newNode;          <span class="comment">// Update tail to new node</span>
+        }
+    }
+
+    <span class="comment">// Add node at the beginning</span>
+    <span class="keyword">public void</span> <span class="method">addFirst</span>(<span class="type">int</span> data) {
+        <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            head = newNode;
+            tail = newNode;
+        } <span class="keyword">else</span> {
+            newNode.next = head;     <span class="comment">// New node points to old head</span>
+            head.prev = newNode;     <span class="comment">// Old head's prev points to new node</span>
+            head = newNode;          <span class="comment">// Update head to new node</span>
+        }
+    }
+
+    <span class="comment">// Print list forward</span>
+    <span class="keyword">public void</span> <span class="method">printForward</span>() {
+        <span class="type">Node</span> current = head;
+        System.out.print(<span class="string">"Forward: "</span>);
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            System.out.print(current.data + <span class="string">" <-> "</span>);
+            current = current.next;
+        }
+        System.out.println(<span class="string">"null"</span>);
+    }
+
+    <span class="comment">// Print list backward (starting from tail!)</span>
+    <span class="keyword">public void</span> <span class="method">printBackward</span>() {
+        <span class="type">Node</span> current = tail;
+        System.out.print(<span class="string">"Backward: "</span>);
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            System.out.print(current.data + <span class="string">" <-> "</span>);
+            current = current.prev;
+        }
+        System.out.println(<span class="string">"null"</span>);
+    }
+}</code></pre>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Key Advantage:</strong> In a doubly linked list, we can traverse in <strong>both directions</strong>! This makes operations like deleting a specific node much easier - we don't need to track the previous node separately.
+                </div>
+            </section>
+
+            <!-- Circular Doubly Linked List -->
+            <section id="circular-doubly">
+                <h2>3. Circular Doubly Linked List</h2>
+
+                <div class="definition">
+                    A <strong>Circular Doubly Linked List</strong> combines the features of both:
+                    <ul>
+                        <li><strong>Circular</strong> - Last node connects back to first node</li>
+                        <li><strong>Doubly</strong> - Each node has both next and prev pointers</li>
+                    </ul>
+                    This creates a <strong>bidirectional circle</strong> where you can traverse infinitely in both directions!
+                </div>
+
+                <div class="teacher-says">
+                    Think of it as a merry-go-round where you can walk in either direction and you'll eventually return to where you started!
+                </div>
+
+                <h3>Visual Representation</h3>
+
+                <div class="svg-container">
+                    <svg width="700" height="300" viewBox="0 0 700 300">
+                        <!-- Node 1 (10) -->
+                        <g transform="translate(120, 80)">
+                            <rect x="0" y="0" width="70" height="28" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="35" y="18" text-anchor="middle" fill="white" font-weight="bold" font-size="10">next</text>
+
+                            <rect x="0" y="28" width="70" height="40" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="35" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">10</text>
+
+                            <rect x="0" y="68" width="70" height="28" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="35" y="86" text-anchor="middle" fill="white" font-weight="bold" font-size="10">prev</text>
+                        </g>
+
+                        <!-- Arrows 1-2 -->
+                        <line x1="190" y1="94" x2="250" y2="94" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+                        <line x1="250" y1="148" x2="190" y2="148" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 2 (20) -->
+                        <g transform="translate(260, 80)">
+                            <rect x="0" y="0" width="70" height="28" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="35" y="18" text-anchor="middle" fill="white" font-weight="bold" font-size="10">next</text>
+
+                            <rect x="0" y="28" width="70" height="40" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="35" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">20</text>
+
+                            <rect x="0" y="68" width="70" height="28" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="35" y="86" text-anchor="middle" fill="white" font-weight="bold" font-size="10">prev</text>
+                        </g>
+
+                        <!-- Arrows 2-3 -->
+                        <line x1="330" y1="94" x2="390" y2="94" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+                        <line x1="390" y1="148" x2="330" y2="148" stroke="#f44336" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Node 3 (30) -->
+                        <g transform="translate(400, 80)">
+                            <rect x="0" y="0" width="70" height="28" fill="url(#gradNext)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="35" y="18" text-anchor="middle" fill="white" font-weight="bold" font-size="10">next</text>
+
+                            <rect x="0" y="28" width="70" height="40" fill="url(#grad1)" stroke="#667eea" stroke-width="2"/>
+                            <text x="35" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="16">30</text>
+
+                            <rect x="0" y="68" width="70" height="28" fill="url(#gradPrev)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="35" y="86" text-anchor="middle" fill="white" font-weight="bold" font-size="10">prev</text>
+                        </g>
+
+                        <!-- Circular arrow (next): from Node 3 back to Node 1 (top) -->
+                        <path d="M 470 94 Q 530 94 530 50 Q 530 20 295 20 Q 60 20 60 50 Q 60 94 120 94"
+                              fill="none" stroke="#4caf50" stroke-width="3" marker-end="url(#arrowhead-green)"/>
+
+                        <!-- Circular arrow (prev): from Node 1 back to Node 3 (bottom) -->
+                        <path d="M 120 176 Q 60 176 60 210 Q 60 250 295 250 Q 530 250 530 210 Q 530 176 470 176"
+                              fill="none" stroke="#f44336" stroke-width="3" marker-end="url(#arrowhead-red)"/>
+
+                        <!-- Labels -->
+                        <text x="540" y="50" fill="#4caf50" font-weight="bold" font-size="11">next: back to first node</text>
+                        <text x="540" y="220" fill="#f44336" font-weight="bold" font-size="11">prev: back to last node</text>
+
+                        <!-- Head label -->
+                        <rect x="130" y="195" width="50" height="22" fill="#4caf50" rx="4"/>
+                        <text x="155" y="210" text-anchor="middle" fill="white" font-weight="bold" font-size="10">head</text>
+
+                        <!-- Tail label -->
+                        <rect x="410" y="195" width="50" height="22" fill="#ff9800" rx="4"/>
+                        <text x="435" y="210" text-anchor="middle" fill="white" font-weight="bold" font-size="10">tail</text>
+                    </svg>
+                </div>
+
+                <div class="important">
+                    <strong>Key Points:</strong>
+                    <ul>
+                        <li><span class="inline-code">tail.next = head</span> (last node's next points to first)</li>
+                        <li><span class="inline-code">head.prev = tail</span> (first node's prev points to last)</li>
+                        <li>No null pointers anywhere!</li>
+                        <li>Can traverse infinitely in both directions</li>
+                    </ul>
+                </div>
+
+                <h3>Real-World Application</h3>
+
+                <div class="application-box">
+                    <strong>Application: Media Player with Repeat Mode</strong>
+                    <p>When "Repeat All" is enabled on a playlist:</p>
+                    <ul>
+                        <li>After the last track, go back to the first track (circular)</li>
+                        <li>User can press "Next" or "Previous" (doubly)</li>
+                        <li>Never stops - keeps cycling through the playlist!</li>
+                    </ul>
+                </div>
+
+                <h3>Implementation</h3>
+
+                <div class="code-container">
+                    <div class="code-header">CircularDoublyLinkedList.java</div>
+                    <pre><code><span class="keyword">public class</span> <span class="type">CircularDoublyLinkedList</span> {
+
+    <span class="comment">// Inner Node class</span>
+    <span class="keyword">class</span> <span class="type">Node</span> {
+        <span class="type">int</span> data;
+        <span class="type">Node</span> next;
+        <span class="type">Node</span> prev;
+
+        <span class="keyword">public</span> <span class="method">Node</span>(<span class="type">int</span> data) {
+            <span class="keyword">this</span>.data = data;
+        }
+    }
+
+    <span class="type">Node</span> head;
+    <span class="type">Node</span> tail;
+
+    <span class="comment">// Add node at the end</span>
+    <span class="keyword">public void</span> <span class="method">addLast</span>(<span class="type">int</span> data) {
+        <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            <span class="comment">// First node - points to itself in both directions</span>
+            head = newNode;
+            tail = newNode;
+            newNode.next = newNode;  <span class="comment">// Points to itself</span>
+            newNode.prev = newNode;  <span class="comment">// Points to itself</span>
+        } <span class="keyword">else</span> {
+            <span class="comment">// Insert between tail and head</span>
+            newNode.prev = tail;     <span class="comment">// New node's prev = old tail</span>
+            newNode.next = head;     <span class="comment">// New node's next = head (circular!)</span>
+            tail.next = newNode;     <span class="comment">// Old tail's next = new node</span>
+            head.prev = newNode;     <span class="comment">// Head's prev = new node (circular!)</span>
+            tail = newNode;          <span class="comment">// Update tail</span>
+        }
+    }
+
+    <span class="comment">// Add node at the beginning</span>
+    <span class="keyword">public void</span> <span class="method">addFirst</span>(<span class="type">int</span> data) {
+        <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            head = newNode;
+            tail = newNode;
+            newNode.next = newNode;
+            newNode.prev = newNode;
+        } <span class="keyword">else</span> {
+            <span class="comment">// Insert between tail and head</span>
+            newNode.next = head;     <span class="comment">// New node's next = old head</span>
+            newNode.prev = tail;     <span class="comment">// New node's prev = tail (circular!)</span>
+            head.prev = newNode;     <span class="comment">// Old head's prev = new node</span>
+            tail.next = newNode;     <span class="comment">// Tail's next = new node (circular!)</span>
+            head = newNode;          <span class="comment">// Update head</span>
+        }
+    }
+
+    <span class="comment">// Print list (be careful of infinite loop!)</span>
+    <span class="keyword">public void</span> <span class="method">printList</span>() {
+        <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
+            System.out.println(<span class="string">"List is empty"</span>);
+            <span class="keyword">return</span>;
+        }
+
+        <span class="type">Node</span> current = head;
+        System.out.print(<span class="string">"List: "</span>);
+
+        <span class="keyword">do</span> {
+            System.out.print(current.data + <span class="string">" <-> "</span>);
+            current = current.next;
+        } <span class="keyword">while</span> (current != head);
+
+        System.out.println(<span class="string">"(back to head)"</span>);
+    }
+}</code></pre>
+                </div>
+
+                <div class="warning">
+                    <strong>Remember:</strong> Always use <span class="inline-code">do-while</span> with the condition <span class="inline-code">current != head</span> to avoid infinite loops when traversing circular lists!
+                </div>
+            </section>
+
+            <!-- Comparison Section -->
+            <section id="comparison">
+                <h2>Comparison of All Types</h2>
+
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Singly Linked List</th>
+                        <th>Circular Singly</th>
+                        <th>Doubly Linked List</th>
+                        <th>Circular Doubly</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Traversal Direction</strong></td>
+                        <td>Forward only</td>
+                        <td>Forward only (circular)</td>
+                        <td>Forward & Backward</td>
+                        <td>Forward & Backward (circular)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Node Points To</strong></td>
+                        <td class="bad">null</td>
+                        <td class="good">Head (first node)</td>
+                        <td class="bad">null</td>
+                        <td class="good">Head (first node)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>First Node's prev</strong></td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td class="bad">null</td>
+                        <td class="good">Tail (last node)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory per Node</strong></td>
+                        <td>Data + 1 pointer</td>
+                        <td>Data + 1 pointer</td>
+                        <td>Data + 2 pointers</td>
+                        <td>Data + 2 pointers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Go to Previous Node</strong></td>
+                        <td class="bad">O(n) - start from head</td>
+                        <td class="bad">O(n) - start from head</td>
+                        <td class="good">O(1) - use prev</td>
+                        <td class="good">O(1) - use prev</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Case</strong></td>
+                        <td>Simple lists</td>
+                        <td>Round-robin, cycling</td>
+                        <td>Browser history</td>
+                        <td>Media players with repeat</td>
+                    </tr>
+                </table>
+
+                <h3>Summary</h3>
+
+                <div class="highlight-box">
+                    <strong>When to Use Each Type:</strong>
+                    <ul>
+                        <li><strong>Singly Linked List:</strong> When you only need forward traversal and want minimal memory usage</li>
+                        <li><strong>Circular Singly:</strong> When you need continuous cycling (CPU scheduling, turn-based games)</li>
+                        <li><strong>Doubly Linked List:</strong> When you need bidirectional traversal (undo/redo, browser history)</li>
+                        <li><strong>Circular Doubly:</strong> When you need both circular and bidirectional access (music player with repeat)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div class="nav-buttons">
+                <a href="linkedlist-tutorial.html" class="nav-btn">Previous: Linked List Basics</a>
+                <a href="../index.html" class="nav-btn">Back to Home</a>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>CPCS204</strong> - Data Structures I</p>
+            <p>Faculty of Computing and Information Technology</p>
+            <p>King Abdulaziz University</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List MCQ (1-10) - CPCS 204</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        /* Score Bar */
+        .score-bar {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .score-item {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .score-item .label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 2px;
+        }
+
+        .score-item .value {
+            font-size: 1.8em;
+            color: #667eea;
+        }
+
+        .score-item .value.correct {
+            color: #27ae60;
+        }
+
+        .progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .progress-bar-bg {
+            width: 200px;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+            transition: width 0.4s ease;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Question Card */
+        .question-card {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .question-card:hover {
+            border-color: #c0c0c0;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .q-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+
+        .difficulty {
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .difficulty.easy {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .difficulty.medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .difficulty.hard {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        /* MCQ Options */
+        .options-list {
+            list-style: none;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: inherit;
+            color: #333;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
+
+        .option-btn.selected-correct {
+            background: #e8f5e9;
+            border-color: #27ae60;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .option-btn.selected-wrong {
+            background: #ffebee;
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .option-btn.show-correct {
+            background: #e8f5e9;
+            border-color: #27ae60;
+        }
+
+        /* Feedback */
+        .feedback {
+            display: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            border-left: 5px solid #27ae60;
+            color: #2e7d32;
+            display: block;
+        }
+
+        .feedback.wrong {
+            background: #ffebee;
+            border-left: 5px solid #e74c3c;
+            color: #c62828;
+            display: block;
+        }
+
+        .feedback strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn.back {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: 2px solid transparent;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 1.4em;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 200;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #999;
+            font-size: 0.9em;
+            border-top: 1px solid #eee;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+
+            header h1 { font-size: 1.8em; }
+            header p { font-size: 1em; }
+
+            .content { padding: 20px; }
+
+            .score-bar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .score-item .value { font-size: 1.4em; }
+
+            .progress-bar-bg { width: 160px; }
+
+            .question-card { padding: 18px; }
+
+            .question-header { gap: 8px; }
+
+            .question-text { font-size: 1em; }
+
+            .option-btn { padding: 10px 15px; font-size: 0.95em; }
+
+            .nav-buttons {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 44px;
+                height: 44px;
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 { font-size: 1.4em; }
+            .content { padding: 15px; }
+            .question-card { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Linked List MCQ - Part 1</h1>
+        <p>CPCS 204 | Questions 1-10</p>
+    </header>
+
+    <div class="content">
+        <!-- Score Bar -->
+        <div class="score-bar" id="scoreBar">
+            <div class="score-item">
+                <div class="label">Score</div>
+                <div class="value correct" id="scoreCorrect">0</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Out of</div>
+                <div class="value" id="scoreTotal">10</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Answered</div>
+                <div class="value" id="scoreAnswered">0</div>
+            </div>
+            <div class="progress-container">
+                <div class="label" style="color:#666; font-weight:bold; font-size:0.9em;">Progress</div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetAll()">Reset All</button>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-card" id="q1">
+            <div class="question-header">
+                <span class="q-number">Q1</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+            <div class="question-text">What is the time complexity of inserting a node at the beginning of a singly linked list?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, true, 1)">A) O(1)</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 1)">B) O(n)</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 1)">C) O(log n)</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 1)">D) O(n log n)</button>
+            </div>
+            <div class="feedback" id="feedback1"></div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card" id="q2">
+            <div class="question-header">
+                <span class="q-number">Q2</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+            <div class="question-text">What does a node in a singly linked list contain?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, false, 2)">A) Only data</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 2)">B) Data and a reference to the next node</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 2)">C) Data, next, and previous references</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 2)">D) An index and data</button>
+            </div>
+            <div class="feedback" id="feedback2"></div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card" id="q3">
+            <div class="question-header">
+                <span class="q-number">Q3</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+            <div class="question-text">Given the linked list: 5 &rarr; 10 &rarr; 15 &rarr; 20 &rarr; null, what is the value of <code>head.next.next.data</code>?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, false, 3)">A) 5</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 3)">B) 10</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 3)">C) 15</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 3)">D) 20</button>
+            </div>
+            <div class="feedback" id="feedback3"></div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-card" id="q4">
+            <div class="question-header">
+                <span class="q-number">Q4</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+            <div class="question-text">Which of the following is <strong>NOT</strong> an advantage of linked lists over arrays?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, false, 4)">A) Dynamic size</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 4)">B) Easy insertion/deletion</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 4)">C) Random access of elements</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 4)">D) No memory waste from pre-allocation</button>
+            </div>
+            <div class="feedback" id="feedback4"></div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-card" id="q5">
+            <div class="question-header">
+                <span class="q-number">Q5</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+            <div class="question-text">What happens when you execute <code>head = head.next</code> on a singly linked list?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, false, 5)">A) The last node is removed</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 5)">B) The first node is effectively removed</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 5)">C) A new node is added</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 5)">D) The list is reversed</button>
+            </div>
+            <div class="feedback" id="feedback5"></div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-card" id="q6">
+            <div class="question-header">
+                <span class="q-number">Q6</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+            <div class="question-text">In a singly linked list, what does the last node's <code>next</code> field point to?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, true, 6)">A) null</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 6)">B) head</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 6)">C) itself</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 6)">D) the previous node</button>
+            </div>
+            <div class="feedback" id="feedback6"></div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-card" id="q7">
+            <div class="question-header">
+                <span class="q-number">Q7</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">What is the time complexity of searching for a specific element in an unsorted singly linked list?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, false, 7)">A) O(1)</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 7)">B) O(n)</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 7)">C) O(log n)</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 7)">D) O(n&sup2;)</button>
+            </div>
+            <div class="feedback" id="feedback7"></div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-card" id="q8">
+            <div class="question-header">
+                <span class="q-number">Q8</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">What differentiates a doubly linked list (DLL) from a singly linked list (SLL)?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, false, 8)">A) It has two data fields</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 8)">B) Each node has both a next and a prev pointer</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 8)">C) It can only store integers</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 8)">D) It always forms a cycle</button>
+            </div>
+            <div class="feedback" id="feedback8"></div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-card" id="q9">
+            <div class="question-header">
+                <span class="q-number">Q9</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">In a circular linked list, the last node's <code>next</code> pointer points to:</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, false, 9)">A) null</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 9)">B) the head node</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 9)">C) itself</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 9)">D) the second node</button>
+            </div>
+            <div class="feedback" id="feedback9"></div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-card" id="q10">
+            <div class="question-header">
+                <span class="q-number">Q10</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">Floyd's cycle detection algorithm uses which technique?</div>
+            <div class="options-list">
+                <button class="option-btn" onclick="checkMCQ(this, false, 10)">A) Binary search</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 10)">B) Hash table</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 10)">C) Two pointers (slow and fast)</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 10)">D) Recursion</button>
+            </div>
+            <div class="feedback" id="feedback10"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="linkedlist-questions.html" class="nav-btn back">&larr; Back</a>
+            <a href="linkedlist-mcq-q11-20.html" class="nav-btn next">Next: MCQ 11-20 &rarr;</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        CPCS 204 - Data Structures | Linked List MCQ Practice
+    </div>
+</div>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#9650;</button>
+
+<script>
+    // State
+    let correctCount = 0;
+    let answeredCount = 0;
+    const totalQuestions = 10;
+
+    // Explanations data
+    const explanations = {
+        1: {
+            correct: "Inserting at the head is O(1) because you only update the head pointer \u2014 no traversal needed.",
+            wrong: "Inserting at the beginning requires no traversal. We just create a new node, point it to the current head, and update head. This is O(1)."
+        },
+        2: {
+            correct: "A singly linked list node contains data and a reference (pointer) to the next node.",
+            wrong: "A singly linked list node has exactly two parts: the data and a reference to the next node. A doubly linked list also has a prev pointer."
+        },
+        3: {
+            correct: "head.data = 5, head.next.data = 10, head.next.next.data = 15. We follow two next pointers from head.",
+            wrong: "Start from head (5), follow next to get 10, follow next again to get 15. head.next.next.data = 15."
+        },
+        4: {
+            correct: "Linked lists do NOT support random access. To access element at index i, you must traverse from the head. Arrays support O(1) random access.",
+            wrong: "Random access (accessing by index in O(1)) is NOT possible with linked lists. You must traverse from the head, making it O(n)."
+        },
+        5: {
+            correct: "Setting head = head.next makes head point to the second node, effectively removing the first node from the list.",
+            wrong: "head = head.next moves the head pointer forward, so the old first node is no longer accessible through head, effectively removing it."
+        },
+        6: {
+            correct: "In a singly linked list (non-circular), the last node's next pointer is null, indicating the end of the list.",
+            wrong: "The last node's next field is null in a standard singly linked list. This is how we know we've reached the end during traversal."
+        },
+        7: {
+            correct: "Searching requires traversing the list node by node. In the worst case, the element is at the end or not present, giving O(n).",
+            wrong: "Since linked lists don't support random access, we must check each node sequentially. Worst case is O(n)."
+        },
+        8: {
+            correct: "A doubly linked list has both next and prev pointers, allowing traversal in both directions.",
+            wrong: "The key difference is that each node in a DLL has both a next pointer and a prev pointer, enabling bidirectional traversal."
+        },
+        9: {
+            correct: "In a circular linked list, the last node's next points back to the head, forming a circle.",
+            wrong: "A circular linked list forms a cycle where the last node points back to the head node, not to null."
+        },
+        10: {
+            correct: "Floyd's algorithm uses two pointers: slow (moves 1 step) and fast (moves 2 steps). If they meet, there's a cycle.",
+            wrong: "Floyd's Tortoise and Hare algorithm uses two pointers moving at different speeds to detect cycles."
+        }
+    };
+
+    // Track which questions have been answered
+    const answered = {};
+
+    function checkMCQ(button, isCorrect, qNum) {
+        // Prevent re-answering
+        if (answered[qNum]) return;
+        answered[qNum] = true;
+
+        // Get all option buttons in this question
+        const questionCard = document.getElementById('q' + qNum);
+        const allButtons = questionCard.querySelectorAll('.option-btn');
+
+        // Disable all buttons
+        allButtons.forEach(function(btn) {
+            btn.disabled = true;
+        });
+
+        // Highlight the selected button
+        if (isCorrect) {
+            button.classList.add('selected-correct');
+        } else {
+            button.classList.add('selected-wrong');
+            // Also highlight the correct answer
+            allButtons.forEach(function(btn) {
+                if (btn.getAttribute('onclick').includes('true')) {
+                    btn.classList.add('show-correct');
+                }
+            });
+        }
+
+        // Show feedback
+        const feedback = document.getElementById('feedback' + qNum);
+        if (isCorrect) {
+            correctCount++;
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = '<strong>Correct!</strong> ' + explanations[qNum].correct;
+        } else {
+            feedback.className = 'feedback wrong';
+            feedback.innerHTML = '<strong>Incorrect.</strong> ' + explanations[qNum].wrong;
+        }
+
+        // Update score
+        answeredCount++;
+        updateScoreBar();
+    }
+
+    function updateScoreBar() {
+        document.getElementById('scoreCorrect').textContent = correctCount;
+        document.getElementById('scoreAnswered').textContent = answeredCount;
+
+        // Update progress bar
+        const pct = (answeredCount / totalQuestions) * 100;
+        document.getElementById('progressFill').style.width = pct + '%';
+    }
+
+    function resetAll() {
+        correctCount = 0;
+        answeredCount = 0;
+
+        // Clear answered state
+        for (var key in answered) {
+            delete answered[key];
+        }
+
+        // Reset all question cards
+        for (let i = 1; i <= totalQuestions; i++) {
+            const card = document.getElementById('q' + i);
+            const buttons = card.querySelectorAll('.option-btn');
+            buttons.forEach(function(btn) {
+                btn.disabled = false;
+                btn.classList.remove('selected-correct', 'selected-wrong', 'show-correct');
+            });
+
+            const feedback = document.getElementById('feedback' + i);
+            feedback.className = 'feedback';
+            feedback.innerHTML = '';
+        }
+
+        updateScoreBar();
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Back to top button visibility
+    window.addEventListener('scroll', function() {
+        var btn = document.getElementById('backToTop');
+        if (window.scrollY > 400) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    });
+</script>
+
+</body>
+</html>

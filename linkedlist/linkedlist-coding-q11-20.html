@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List Coding Questions 11-17 &amp; 19 - CPCS 204</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.2em; opacity: 0.9; }
+
+        .content { padding: 40px; }
+
+        /* Navigation */
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+        }
+
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Question cards */
+        .coding-question {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .coding-question:hover { border-color: #667eea; }
+
+        .q-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .q-difficulty {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .q-difficulty.easy { background: #e8f5e9; color: #2e7d32; }
+        .q-difficulty.medium { background: #fff3e0; color: #e65100; }
+        .q-difficulty.hard { background: #ffebee; color: #c62828; }
+
+        .q-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+
+        .q-description {
+            color: #555;
+            margin: 10px 0 15px;
+        }
+
+        .method-signature {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        /* Visual linked list diagrams */
+        .ll-visual {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .ll-visual-label {
+            display: block;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            text-align: left;
+            white-space: normal;
+        }
+
+        .node {
+            display: inline-block;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+
+        .node-data {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .node-next {
+            background: #f0f4ff;
+            padding: 8px 12px;
+            display: inline-block;
+            color: #667eea;
+            font-size: 0.85em;
+        }
+
+        .arrow {
+            display: inline-block;
+            color: #667eea;
+            font-size: 1.5em;
+            vertical-align: middle;
+            margin: 0 3px;
+        }
+
+        .null-box {
+            display: inline-block;
+            color: #999;
+            font-style: italic;
+            font-weight: bold;
+            font-size: 0.95em;
+            vertical-align: middle;
+            padding: 8px 5px;
+        }
+
+        .visual-desc {
+            display: block;
+            color: #555;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .head-label {
+            display: inline-block;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: bold;
+            font-size: 0.85em;
+            color: #856404;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .head-label::after {
+            content: ' →';
+            color: #667eea;
+        }
+
+        /* Green highlighted nodes (new/special) */
+        .node.green {
+            border-color: #27ae60;
+        }
+
+        .node.green .node-data {
+            background: linear-gradient(135deg, #27ae60, #2e7d32);
+        }
+
+        /* Red highlighted nodes (target/delete) */
+        .node.red {
+            border-color: #e74c3c;
+        }
+
+        .node.red .node-data {
+            background: #e74c3c;
+        }
+
+        /* Cycle indicator */
+        .cycle-arrow {
+            display: inline-block;
+            color: #e74c3c;
+            font-size: 1.2em;
+            vertical-align: middle;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+
+        .cycle-label {
+            display: inline-block;
+            background: #ffebee;
+            color: #c62828;
+            border: 1px dashed #c62828;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+
+        /* Doubly linked list arrows */
+        .double-arrow {
+            display: inline-block;
+            color: #667eea;
+            font-size: 1.5em;
+            vertical-align: middle;
+            margin: 0 3px;
+        }
+
+        /* Code container */
+        .code-container {
+            margin: 20px 0;
+        }
+
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .keyword { color: #ff79c6; }
+        .type { color: #8be9fd; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .number { color: #bd93f9; }
+        .method { color: #50fa7b; }
+
+        /* Solution reveal */
+        .solution-toggle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            background: #e8f5e9;
+            border-left: 5px solid #27ae60;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            animation: slideDown 0.3s ease;
+        }
+
+        .solution-content.visible { display: block; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .solution-content h4 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        .solution-explanation {
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .complexity-info {
+            background: #f0f4ff;
+            border: 1px solid #667eea;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+
+        .complexity-info strong { color: #667eea; }
+
+        /* Back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .content { padding: 20px; }
+            .nav-links { flex-direction: column; text-align: center; }
+            .q-title { font-size: 1.1em; }
+            .ll-visual { padding: 15px 10px; }
+            .method-signature { font-size: 0.85em; }
+        }
+
+        @media (max-width: 480px) {
+            header h1 { font-size: 1.4em; }
+            header p { font-size: 1em; }
+            .content { padding: 15px; }
+            .coding-question { padding: 15px; }
+            pre { font-size: 0.8em; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Linked List Coding Questions</h1>
+        <p>CPCS 204 - Data Structures | Questions 11-17 &amp; 19: Intermediate &amp; Advanced</p>
+    </header>
+
+    <div class="content">
+
+        <!-- Navigation Links -->
+        <div class="nav-links">
+            <a href="linkedlist-coding-q1-10.html">&larr; Questions 1-10</a>
+            <a href="linkedlist-questions.html">MCQ Questions</a>
+            <a href="linkedlist-tutorial.html">Tutorial</a>
+            <a href="linkedlist-types-tutorial.html">Types Tutorial</a>
+        </div>
+
+        <!-- ==================== Q11 ==================== -->
+        <div class="coding-question" id="q11">
+            <span class="q-number">Q11</span>
+            <span class="q-difficulty medium">Medium</span>
+            <h3 class="q-title">Find the Middle Node</h3>
+            <p class="q-description">
+                Write a method that finds and returns the middle node of a singly linked list using the
+                <strong>slow and fast pointer technique</strong> (also known as the tortoise and hare approach).
+                If the list has an even number of nodes, return the second middle node.
+            </p>
+            <div class="method-signature">
+                <span class="type">Node</span> <span class="keyword">findMiddle</span>(<span class="type">Node</span> head)
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">Example: Find the middle node</span>
+                <span class="head-label">head</span>
+                <span class="arrow">&#8595;</span>
+                <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node red"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">5</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+                <br><br>
+                <span style="color: #e74c3c; font-weight: bold;">&#9650; Middle Node (returned)</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution('sol11')">Show Solution</button>
+            <div class="solution-content" id="sol11">
+                <h4>Solution: Slow &amp; Fast Pointer Technique</h4>
+                <p class="solution-explanation">
+                    Use two pointers: <strong>slow</strong> moves one step at a time, and <strong>fast</strong> moves
+                    two steps at a time. When the fast pointer reaches the end of the list (or null),
+                    the slow pointer will be exactly at the middle node. This works because fast traverses
+                    at double the speed, so when it finishes, slow has covered exactly half the distance.
+                </p>
+                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">findMiddle</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> slow = head;
+    <span class="type">Node</span> fast = head;
+    <span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    <span class="keyword">return</span> slow;
+}</pre></div>
+                <p class="solution-explanation">
+                    <strong>Trace through the example [1, 2, 3, 4, 5]:</strong><br>
+                    Step 0: slow = 1, fast = 1<br>
+                    Step 1: slow = 2, fast = 3<br>
+                    Step 2: slow = 3, fast = 5<br>
+                    Now fast.next == null, so loop ends. slow points to node 3 (the middle).
+                </p>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) - single pass through the list<br>
+                    <strong>Space Complexity:</strong> O(1) - only two pointer variables used
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q12 ==================== -->
+        <div class="coding-question" id="q12">
+            <span class="q-number">Q12</span>
+            <span class="q-difficulty medium">Medium</span>
+            <h3 class="q-title">Detect a Cycle (Floyd's Algorithm)</h3>
+            <p class="q-description">
+                Write a method that detects whether a singly linked list contains a cycle using
+                <strong>Floyd's Cycle Detection Algorithm</strong>. A cycle exists if a node's next pointer
+                points back to a previous node in the list, creating an infinite loop.
+            </p>
+            <div class="method-signature">
+                <span class="keyword">boolean</span> <span class="keyword">hasCycle</span>(<span class="type">Node</span> head)
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">Example: Linked list with a cycle (node 4 points back to node 3)</span>
+                <span class="head-label">head</span>
+                <span class="arrow">&#8595;</span>
+                <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node red"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="cycle-arrow">&#8629;</span>
+                <span class="cycle-label">back to node 3</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution('sol12')">Show Solution</button>
+            <div class="solution-content" id="sol12">
+                <h4>Solution: Floyd's Cycle Detection (Tortoise &amp; Hare)</h4>
+                <p class="solution-explanation">
+                    Use two pointers moving at different speeds. The <strong>slow</strong> pointer moves one node at a time,
+                    while the <strong>fast</strong> pointer moves two nodes at a time. If there is a cycle, the fast pointer
+                    will eventually "lap" the slow pointer and they will meet at the same node. If there is no cycle,
+                    the fast pointer will reach null.
+                </p>
+                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="keyword">hasCycle</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> slow = head, fast = head;
+    <span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) {
+        slow = slow.next;
+        fast = fast.next.next;
+        <span class="keyword">if</span> (slow == fast) <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+    <span class="keyword">return</span> <span class="keyword">false</span>;
+}</pre></div>
+                <p class="solution-explanation">
+                    <strong>Why it works:</strong> Think of two runners on a circular track. The faster runner will
+                    always catch up to the slower one. In each iteration, the gap between them decreases by one node.
+                    Eventually they must meet if a cycle exists. If there is no cycle, the fast pointer safely reaches
+                    null and we return false.
+                </p>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) - in the worst case, fast traverses the cycle at most twice<br>
+                    <strong>Space Complexity:</strong> O(1) - only two pointer variables used
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q13 ==================== -->
+        <div class="coding-question" id="q13">
+            <span class="q-number">Q13</span>
+            <span class="q-difficulty medium">Medium</span>
+            <h3 class="q-title">Find the Nth Node from the End</h3>
+            <p class="q-description">
+                Write a method that returns the Nth node from the end of a singly linked list in a
+                <strong>single pass</strong>. For example, if n = 2, return the 2nd node from the end.
+            </p>
+            <div class="method-signature">
+                <span class="type">Node</span> <span class="keyword">nthFromEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> n)
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">Example: Find the 2nd node from the end (n = 2)</span>
+                <span class="head-label">head</span>
+                <span class="arrow">&#8595;</span>
+                <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node red"><span class="node-data">40</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">50</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+                <br><br>
+                <span style="color: #e74c3c; font-weight: bold;">&#9650; 2nd from end (Answer: 40)</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution('sol13')">Show Solution</button>
+            <div class="solution-content" id="sol13">
+                <h4>Solution: Two-Pointer Gap Technique</h4>
+                <p class="solution-explanation">
+                    Use two pointers with a gap of <strong>n</strong> nodes between them. First, move the <strong>fast</strong>
+                    pointer n steps ahead. Then move both pointers one step at a time. When fast reaches null,
+                    slow will be at the nth node from the end. The key insight is that the gap between the two
+                    pointers is always exactly n nodes.
+                </p>
+                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">nthFromEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> n) {
+    <span class="type">Node</span> fast = head;
+    <span class="type">Node</span> slow = head;
+
+    <span class="comment">// Move fast pointer n steps ahead</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) {
+        <span class="keyword">if</span> (fast == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>; <span class="comment">// n is larger than list size</span>
+        fast = fast.next;
+    }
+
+    <span class="comment">// Move both pointers until fast reaches the end</span>
+    <span class="keyword">while</span> (fast != <span class="keyword">null</span>) {
+        slow = slow.next;
+        fast = fast.next;
+    }
+
+    <span class="keyword">return</span> slow;
+}</pre></div>
+                <p class="solution-explanation">
+                    <strong>Trace for n = 2 on [10, 20, 30, 40, 50]:</strong><br>
+                    After moving fast 2 steps: fast = 30, slow = 10<br>
+                    Step 1: fast = 40, slow = 20<br>
+                    Step 2: fast = 50, slow = 30<br>
+                    Step 3: fast = null, slow = 40<br>
+                    Result: slow points to 40, which is the 2nd node from the end.
+                </p>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) - single pass through the list<br>
+                    <strong>Space Complexity:</strong> O(1) - only two pointer variables used
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q14 ==================== -->
+        <div class="coding-question" id="q14">
+            <span class="q-number">Q14</span>
+            <span class="q-difficulty medium">Medium</span>
+            <h3 class="q-title">Remove Duplicates from Sorted List</h3>
+            <p class="q-description">
+                Write a method that removes all duplicate values from a <strong>sorted</strong> singly linked list,
+                so that each element appears only once. The list should remain sorted after removal.
+            </p>
+            <div class="method-signature">
+                <span class="type">Node</span> <span class="keyword">removeDuplicates</span>(<span class="type">Node</span> head)
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">Before: Sorted list with duplicates</span>
+                <span class="head-label">head</span>
+                <span class="arrow">&#8595;</span>
+                <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node red"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node red"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">After: Duplicates removed</span>
+                <span class="head-label">head</span>
+                <span class="arrow">&#8595;</span>
+                <span class="node green"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution('sol14')">Show Solution</button>
+            <div class="solution-content" id="sol14">
+                <h4>Solution: Skip Duplicate Nodes</h4>
+                <p class="solution-explanation">
+                    Since the list is sorted, all duplicates are adjacent. Traverse the list and for each node,
+                    compare its value with the next node's value. If they are equal, skip the next node by updating
+                    the current node's next pointer. Otherwise, move to the next node.
+                </p>
+                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">removeDuplicates</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span> &amp;&amp; current.next != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (current.data == current.next.data) {
+            <span class="comment">// Skip the duplicate node</span>
+            current.next = current.next.next;
+        } <span class="keyword">else</span> {
+            <span class="comment">// Move to next distinct node</span>
+            current = current.next;
+        }
+    }
+    <span class="keyword">return</span> head;
+}</pre></div>
+                <p class="solution-explanation">
+                    <strong>Key insight:</strong> When we find a duplicate, we do NOT advance the current pointer.
+                    This is because there may be more than two consecutive duplicates (e.g., 1 &rarr; 1 &rarr; 1).
+                    We only advance when current.data differs from current.next.data.
+                </p>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) - single pass through the list<br>
+                    <strong>Space Complexity:</strong> O(1) - in-place modification, no extra space
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q15 ==================== -->
+        <div class="coding-question" id="q15">
+            <span class="q-number">Q15</span>
+            <span class="q-difficulty medium">Medium</span>
+            <h3 class="q-title">Merge Two Sorted Lists</h3>
+            <p class="q-description">
+                Write a method that merges two sorted singly linked lists into a single sorted linked list.
+                The merged list should be made by splicing together the nodes of the two input lists.
+            </p>
+            <div class="method-signature">
+                <span class="type">Node</span> <span class="keyword">mergeSorted</span>(<span class="type">Node</span> l1, <span class="type">Node</span> l2)
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">List 1 (sorted):</span>
+                <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">5</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">List 2 (sorted):</span>
+                <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">6</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">Merged result (sorted):</span>
+                <span class="node green"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">5</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">6</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution('sol15')">Show Solution</button>
+            <div class="solution-content" id="sol15">
+                <h4>Solution: Dummy Node Technique</h4>
+                <p class="solution-explanation">
+                    Create a <strong>dummy node</strong> to simplify edge cases (avoids special handling for the head).
+                    Use a tail pointer to build the merged list. Compare the heads of both lists, attach the smaller
+                    one to tail, and advance that list's pointer. Continue until one list is exhausted, then attach
+                    the remaining list.
+                </p>
+                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">mergeSorted</span>(<span class="type">Node</span> l1, <span class="type">Node</span> l2) {
+    <span class="comment">// Dummy node acts as a placeholder for the result head</span>
+    <span class="type">Node</span> dummy = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">0</span>);
+    <span class="type">Node</span> tail = dummy;
+
+    <span class="keyword">while</span> (l1 != <span class="keyword">null</span> &amp;&amp; l2 != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (l1.data &lt;= l2.data) {
+            tail.next = l1;
+            l1 = l1.next;
+        } <span class="keyword">else</span> {
+            tail.next = l2;
+            l2 = l2.next;
+        }
+        tail = tail.next;
+    }
+
+    <span class="comment">// Attach the remaining nodes</span>
+    tail.next = (l1 != <span class="keyword">null</span>) ? l1 : l2;
+
+    <span class="keyword">return</span> dummy.next;
+}</pre></div>
+                <p class="solution-explanation">
+                    <strong>Why use a dummy node?</strong> Without it, you need extra logic to determine which node
+                    becomes the head of the merged list. The dummy node provides a consistent starting point.
+                    We return dummy.next to skip the placeholder and get the actual merged list head.
+                </p>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n + m) - where n and m are the lengths of the two lists<br>
+                    <strong>Space Complexity:</strong> O(1) - we reuse existing nodes, no new nodes created
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q16 ==================== -->
+        <div class="coding-question" id="q16">
+            <span class="q-number">Q16</span>
+            <span class="q-difficulty medium">Medium</span>
+            <h3 class="q-title">Check if a Linked List is a Palindrome</h3>
+            <p class="q-description">
+                Write a method that checks whether a singly linked list reads the same forward and backward
+                (i.e., it is a <strong>palindrome</strong>). Solve it in O(n) time and O(1) space.
+            </p>
+            <div class="method-signature">
+                <span class="keyword">boolean</span> <span class="keyword">isPalindrome</span>(<span class="type">Node</span> head)
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">Example: Palindrome list (reads same forwards and backwards)</span>
+                <span class="head-label">head</span>
+                <span class="arrow">&#8595;</span>
+                <span class="node green"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+                <br><br>
+                <span style="color: #27ae60; font-weight: bold;">Palindrome: 1 &rarr; 2 &rarr; 3 &rarr; 2 &rarr; 1</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution('sol16')">Show Solution</button>
+            <div class="solution-content" id="sol16">
+                <h4>Solution: Find Middle, Reverse Second Half, Compare</h4>
+                <p class="solution-explanation">
+                    This solution combines three linked list techniques:<br>
+                    <strong>1.</strong> Find the middle node using slow/fast pointers.<br>
+                    <strong>2.</strong> Reverse the second half of the list in-place.<br>
+                    <strong>3.</strong> Compare the first half with the reversed second half node by node.
+                </p>
+                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="keyword">isPalindrome</span>(<span class="type">Node</span> head) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;
+
+    <span class="comment">// Step 1: Find the middle</span>
+    <span class="type">Node</span> slow = head, fast = head;
+    <span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    <span class="comment">// Step 2: Reverse the second half</span>
+    <span class="type">Node</span> prev = <span class="keyword">null</span>;
+    <span class="type">Node</span> curr = slow;
+    <span class="keyword">while</span> (curr != <span class="keyword">null</span>) {
+        <span class="type">Node</span> next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    }
+
+    <span class="comment">// Step 3: Compare both halves</span>
+    <span class="type">Node</span> left = head;
+    <span class="type">Node</span> right = prev; <span class="comment">// prev is now head of reversed second half</span>
+    <span class="keyword">while</span> (right != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (left.data != right.data) <span class="keyword">return</span> <span class="keyword">false</span>;
+        left = left.next;
+        right = right.next;
+    }
+
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}</pre></div>
+                <p class="solution-explanation">
+                    <strong>For the list [1, 2, 3, 2, 1]:</strong><br>
+                    Middle = node 3. Reversed second half = [1, 2, 3].<br>
+                    Compare: 1==1, 2==2, 3==3 &mdash; all match, so it is a palindrome.<br>
+                    Note: This modifies the original list. In production code, you may want to restore
+                    the list by reversing the second half again after comparison.
+                </p>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) - three passes (find middle, reverse, compare)<br>
+                    <strong>Space Complexity:</strong> O(1) - reversal is done in-place
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q17 ==================== -->
+        <div class="coding-question" id="q17">
+            <span class="q-number">Q17</span>
+            <span class="q-difficulty hard">Hard</span>
+            <h3 class="q-title">Swap Nodes in Pairs</h3>
+            <p class="q-description">
+                Write a method that swaps every two adjacent nodes in a singly linked list and returns the
+                new head. You must swap the <strong>actual nodes</strong>, not just their values.
+            </p>
+            <div class="method-signature">
+                <span class="type">Node</span> <span class="keyword">swapPairs</span>(<span class="type">Node</span> head)
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">Before: Original list</span>
+                <span class="head-label">head</span>
+                <span class="arrow">&#8595;</span>
+                <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <div class="ll-visual">
+                <span class="ll-visual-label">After: Nodes swapped in pairs</span>
+                <span class="head-label">head</span>
+                <span class="arrow">&#8595;</span>
+                <span class="node green"><span class="node-data">2</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node green"><span class="node-data">4</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution('sol17')">Show Solution</button>
+            <div class="solution-content" id="sol17">
+                <h4>Solution: Iterative Pair Swapping with Dummy Node</h4>
+                <p class="solution-explanation">
+                    Use a <strong>dummy node</strong> before the head to simplify pointer manipulation.
+                    For each pair of nodes (first and second), rearrange the pointers so that
+                    prev &rarr; second &rarr; first &rarr; rest. Then advance prev to the first node
+                    (which is now after second) and continue with the next pair.
+                </p>
+                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">swapPairs</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> dummy = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">0</span>);
+    dummy.next = head;
+    <span class="type">Node</span> prev = dummy;
+
+    <span class="keyword">while</span> (prev.next != <span class="keyword">null</span> &amp;&amp; prev.next.next != <span class="keyword">null</span>) {
+        <span class="type">Node</span> first = prev.next;
+        <span class="type">Node</span> second = prev.next.next;
+
+        <span class="comment">// Perform the swap</span>
+        first.next = second.next;
+        second.next = first;
+        prev.next = second;
+
+        <span class="comment">// Move prev to the next pair</span>
+        prev = first;
+    }
+
+    <span class="keyword">return</span> dummy.next;
+}</pre></div>
+                <p class="solution-explanation">
+                    <strong>Pointer rearrangement for each pair:</strong><br>
+                    Given: prev &rarr; first &rarr; second &rarr; rest<br>
+                    Step 1: first.next = rest (first now points past second)<br>
+                    Step 2: second.next = first (second now points to first)<br>
+                    Step 3: prev.next = second (prev now points to second)<br>
+                    Result: prev &rarr; second &rarr; first &rarr; rest
+                </p>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) - we visit each node exactly once<br>
+                    <strong>Space Complexity:</strong> O(1) - only pointer variables, no extra data structures
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Q19 ==================== -->
+        <div class="coding-question" id="q19">
+            <span class="q-number">Q19</span>
+            <span class="q-difficulty hard">Hard</span>
+            <h3 class="q-title">Convert Singly Linked List to Doubly Linked List</h3>
+            <p class="q-description">
+                Assuming you have a <strong>Singly Linked List</strong> with a pointer <code>head</code>,
+                write a method that converts it into a <strong>Doubly Linked List</strong> with a pointer <code>dHead</code>.
+                Each node in the new list should have both <strong>next</strong> and <strong>prev</strong> pointers.
+                Use a separate <code>DNode</code> class with data, next, and prev fields.
+            </p>
+            <div class="method-signature">
+                <span class="type">DNode</span> <span class="keyword">convertToDoubly</span>(<span class="type">Node</span> head)
+            </div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Assuming you have this SLL with pointer <code>head</code>:</div>
+                <span class="head-label">head</span>
+                <span class="node"><span class="node-data">A</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">B</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="node"><span class="node-data">C</span><span class="node-next">next</span></span>
+                <span class="arrow">&#8594;</span>
+                <span class="null-box">null</span>
+            </div>
+
+            <div class="ll-visual">
+                <div class="visual-desc">Convert it to this DLL with pointer <code>dHead</code>:</div>
+                <div style="text-align: center; overflow-x: auto; padding: 10px 0;">
+                    <svg width="680" height="220" viewBox="0 0 680 220" style="max-width: 100%;">
+                        <defs>
+                            <linearGradient id="gradNext19" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#4caf50"/>
+                                <stop offset="100%" style="stop-color:#2e7d32"/>
+                            </linearGradient>
+                            <linearGradient id="gradData19" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea"/>
+                                <stop offset="100%" style="stop-color:#764ba2"/>
+                            </linearGradient>
+                            <linearGradient id="gradPrev19" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f44336"/>
+                                <stop offset="100%" style="stop-color:#c62828"/>
+                            </linearGradient>
+                            <marker id="ah-green19" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#4caf50"/></marker>
+                            <marker id="ah-red19" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#f44336"/></marker>
+                            <marker id="ah-orange19" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#ff9800"/></marker>
+                        </defs>
+
+                        <!-- NULL at start -->
+                        <g transform="translate(40, 110)">
+                            <line x1="0" y1="-15" x2="0" y2="15" stroke="#999" stroke-width="4"/>
+                            <line x1="-8" y1="-10" x2="-8" y2="10" stroke="#999" stroke-width="3"/>
+                            <line x1="-14" y1="-5" x2="-14" y2="5" stroke="#999" stroke-width="2"/>
+                            <text x="0" y="30" text-anchor="middle" fill="#888" font-size="11" font-style="italic">null</text>
+                        </g>
+
+                        <!-- Prev arrow from Node A to NULL -->
+                        <line x1="120" y1="120" x2="55" y2="120" stroke="#f44336" stroke-width="2" marker-end="url(#ah-red19)"/>
+
+                        <!-- Node A -->
+                        <g transform="translate(120, 30)">
+                            <rect x="0" y="0" width="80" height="30" fill="url(#gradNext19)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="40" y="20" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+                            <rect x="0" y="30" width="80" height="45" fill="url(#gradData19)" stroke="#667eea" stroke-width="2"/>
+                            <text x="40" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="20">A</text>
+                            <rect x="0" y="75" width="80" height="30" fill="url(#gradPrev19)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="40" y="95" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                        </g>
+
+                        <!-- Bidirectional arrows A <-> B -->
+                        <line x1="200" y1="47" x2="270" y2="47" stroke="#4caf50" stroke-width="3" marker-end="url(#ah-green19)"/>
+                        <line x1="270" y1="128" x2="200" y2="128" stroke="#f44336" stroke-width="3" marker-end="url(#ah-red19)"/>
+                        <text x="235" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
+                        <text x="235" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+
+                        <!-- Node B -->
+                        <g transform="translate(280, 30)">
+                            <rect x="0" y="0" width="80" height="30" fill="url(#gradNext19)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="40" y="20" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+                            <rect x="0" y="30" width="80" height="45" fill="url(#gradData19)" stroke="#667eea" stroke-width="2"/>
+                            <text x="40" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="20">B</text>
+                            <rect x="0" y="75" width="80" height="30" fill="url(#gradPrev19)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="40" y="95" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                        </g>
+
+                        <!-- Bidirectional arrows B <-> C -->
+                        <line x1="360" y1="47" x2="430" y2="47" stroke="#4caf50" stroke-width="3" marker-end="url(#ah-green19)"/>
+                        <line x1="430" y1="128" x2="360" y2="128" stroke="#f44336" stroke-width="3" marker-end="url(#ah-red19)"/>
+                        <text x="395" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
+                        <text x="395" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+
+                        <!-- Node C -->
+                        <g transform="translate(440, 30)">
+                            <rect x="0" y="0" width="80" height="30" fill="url(#gradNext19)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                            <text x="40" y="20" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+                            <rect x="0" y="30" width="80" height="45" fill="url(#gradData19)" stroke="#667eea" stroke-width="2"/>
+                            <text x="40" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="20">C</text>
+                            <rect x="0" y="75" width="80" height="30" fill="url(#gradPrev19)" stroke="#f44336" stroke-width="2" rx="3"/>
+                            <text x="40" y="95" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                        </g>
+
+                        <!-- Arrow from C next to NULL -->
+                        <line x1="520" y1="47" x2="590" y2="47" stroke="#4caf50" stroke-width="2" marker-end="url(#ah-green19)"/>
+
+                        <!-- NULL at end -->
+                        <g transform="translate(610, 47)">
+                            <line x1="0" y1="-15" x2="0" y2="15" stroke="#999" stroke-width="4"/>
+                            <line x1="6" y1="-10" x2="6" y2="10" stroke="#999" stroke-width="3"/>
+                            <line x1="12" y1="-5" x2="12" y2="5" stroke="#999" stroke-width="2"/>
+                            <text x="6" y="30" text-anchor="middle" fill="#888" font-size="11" font-style="italic">null</text>
+                        </g>
+
+                        <!-- dHead label -->
+                        <rect x="125" y="170" width="70" height="25" fill="#4caf50" rx="5"/>
+                        <text x="160" y="187" text-anchor="middle" fill="white" font-weight="bold" font-size="11">dHead</text>
+                        <line x1="160" y1="170" x2="160" y2="145" stroke="#4caf50" stroke-width="2" marker-end="url(#ah-green19)"/>
+
+                        <!-- Legend -->
+                        <rect x="200" y="185" width="12" height="12" fill="#4caf50" rx="2"/>
+                        <text x="217" y="195" fill="#333" font-size="10">Next</text>
+                        <rect x="260" y="185" width="12" height="12" fill="#667eea" rx="2"/>
+                        <text x="277" y="195" fill="#333" font-size="10">Data</text>
+                        <rect x="320" y="185" width="12" height="12" fill="#f44336" rx="2"/>
+                        <text x="337" y="195" fill="#333" font-size="10">Prev</text>
+                    </svg>
+                </div>
+            </div>
+
+            <button class="solution-toggle" onclick="toggleSolution('sol19')">Show Solution</button>
+            <div class="solution-content" id="sol19">
+                <h4>Solution: Create New DNodes with Both Pointers</h4>
+                <p class="solution-explanation">
+                    Traverse the singly linked list. For each node, create a new <code>DNode</code> with the same data.
+                    Set the new node's <strong>prev</strong> pointer to the previously created DNode, and set the
+                    previous DNode's <strong>next</strong> pointer to the new node. Keep track of the head of
+                    the doubly linked list to return it.
+                </p>
+                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="comment">// Doubly linked list node class</span>
+<span class="keyword">class</span> <span class="type">DNode</span> {
+    <span class="keyword">int</span> data;
+    <span class="type">DNode</span> next;
+    <span class="type">DNode</span> prev;
+
+    <span class="type">DNode</span>(<span class="keyword">int</span> data) {
+        <span class="keyword">this</span>.data = data;
+        <span class="keyword">this</span>.next = <span class="keyword">null</span>;
+        <span class="keyword">this</span>.prev = <span class="keyword">null</span>;
+    }
+}
+
+<span class="keyword">public</span> <span class="type">DNode</span> <span class="keyword">convertToDoubly</span>(<span class="type">Node</span> head) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;
+
+    <span class="comment">// Create the head of the doubly linked list</span>
+    <span class="type">DNode</span> dHead = <span class="keyword">new</span> <span class="type">DNode</span>(head.data);
+    <span class="type">DNode</span> dCurrent = dHead;
+    <span class="type">Node</span> current = head.next;
+
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="comment">// Create new DNode</span>
+        <span class="type">DNode</span> newNode = <span class="keyword">new</span> <span class="type">DNode</span>(current.data);
+
+        <span class="comment">// Set forward and backward pointers</span>
+        dCurrent.next = newNode;
+        newNode.prev = dCurrent;
+
+        <span class="comment">// Advance both pointers</span>
+        dCurrent = newNode;
+        current = current.next;
+    }
+
+    <span class="keyword">return</span> dHead;
+}</pre></div>
+                <p class="solution-explanation">
+                    <strong>Step-by-step for [A, B, C]:</strong><br>
+                    1. Create DNode(A), set as dHead. dCurrent = DNode(A).<br>
+                    2. Create DNode(B). Set DNode(A).next = DNode(B), DNode(B).prev = DNode(A).<br>
+                    3. Create DNode(C). Set DNode(B).next = DNode(C), DNode(C).prev = DNode(B).<br>
+                    Result: null &larr; A &harr; B &harr; C &rarr; null
+                </p>
+                <div class="complexity-info">
+                    <strong>Time Complexity:</strong> O(n) - single traversal of the singly linked list<br>
+                    <strong>Space Complexity:</strong> O(n) - creating n new DNode objects
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end .content -->
+
+    <footer>
+        <p>CPCS 204 - Data Structures | Linked List Coding Questions 11-17 &amp; 19</p>
+        <p style="margin-top: 10px;">
+            <a href="linkedlist-coding-q1-10.html">&larr; Questions 1-10</a>
+            &nbsp; | &nbsp;
+            <a href="linkedlist-questions.html">MCQ Questions</a>
+            &nbsp; | &nbsp;
+            <a href="linkedlist-tutorial.html">Tutorial</a>
+        </p>
+    </footer>
+</div>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">&#8679;</button>
+
+<script>
+    // Toggle solution visibility
+    function toggleSolution(id) {
+        var el = document.getElementById(id);
+        var btn = el.previousElementSibling;
+        if (el.classList.contains('visible')) {
+            el.classList.remove('visible');
+            btn.textContent = 'Show Solution';
+        } else {
+            el.classList.add('visible');
+            btn.textContent = 'Hide Solution';
+        }
+    }
+
+    // Back to top button visibility
+    window.addEventListener('scroll', function() {
+        var btn = document.getElementById('backToTop');
+        if (window.scrollY > 300) {
+            btn.style.display = 'block';
+        } else {
+            btn.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
