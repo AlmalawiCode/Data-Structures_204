@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursion Application: Folder Explorer - CPCS 204</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header img {
+            width: 8cm;
+            height: 4cm;
+            object-fit: contain;
+        }
+
+        header .header-text {
+            text-align: left;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 12px;
+        }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .teacher-says {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .teacher-says::before {
+            content: "Professor: ";
+            font-weight: bold;
+            color: #7b1fa2;
+        }
+
+        .student-says {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .student-says::before {
+            content: "Student: ";
+            font-weight: bold;
+            color: #1565c0;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            margin: 20px 0;
+        }
+
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .code-header:hover {
+            background: #5568d3;
+        }
+
+        .code-toggle {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .code-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre;
+            max-height: 600px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+        }
+
+        .code-block.collapsed {
+            max-height: 0;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+
+        .code-block .comment { color: #6272a4; }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .class-name { color: #50fa7b; }
+        .code-block .method { color: #8be9fd; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .number { color: #bd93f9; }
+
+        /* Folder Tree Visual */
+        .folder-tree {
+            background: #1e1e2e;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #45475a;
+        }
+
+        .ft-row {
+            display: flex;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        .ft-indent {
+            display: inline-block;
+            width: 30px;
+            flex-shrink: 0;
+        }
+
+        .ft-branch {
+            display: inline-block;
+            width: 24px;
+            flex-shrink: 0;
+            color: #585b70;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .ft-icon {
+            margin-right: 8px;
+            font-size: 1.15em;
+        }
+
+        .ft-name {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-size: 0.95em;
+        }
+
+        .ft-name.is-folder {
+            color: #f9e2af;
+            font-weight: bold;
+        }
+
+        .ft-name.is-file {
+            color: #89b4fa;
+        }
+
+        .ft-level-tag {
+            margin-left: auto;
+            background: rgba(255,255,255,0.08);
+            color: #888;
+            font-size: 0.75em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-family: 'Segoe UI', sans-serif;
+            white-space: nowrap;
+        }
+
+        /* Animated Folder Tree */
+        .folder-visual {
+            margin: 20px 0;
+            padding: 25px;
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+        }
+
+        .tree-node {
+            display: flex;
+            align-items: center;
+            padding: 6px 8px;
+            margin: 2px 0;
+            border-radius: 6px;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .tree-node:hover {
+            background: #e8ecff;
+        }
+
+        .tree-node.highlighted {
+            background: #fff3cd;
+            border-left: 3px solid #ffc107;
+        }
+
+        .tree-node.visited {
+            background: #e8f5e9;
+            border-left: 3px solid #4caf50;
+        }
+
+        .tree-node.active {
+            background: #e3f2fd;
+            border-left: 3px solid #2196f3;
+            animation: pulseNode 0.6s ease;
+        }
+
+        @keyframes pulseNode {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .tree-icon {
+            margin-right: 8px;
+            font-size: 1.2em;
+            width: 24px;
+            text-align: center;
+        }
+
+        .tree-indent {
+            display: inline-block;
+            width: 28px;
+            flex-shrink: 0;
+        }
+
+        .tree-name {
+            font-weight: 500;
+        }
+
+        .tree-name.folder-name {
+            color: #764ba2;
+            font-weight: bold;
+        }
+
+        .tree-name.file-name {
+            color: #555;
+        }
+
+        /* Version Badge */
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Demo Area */
+        .demo-area {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .demo-area h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .demo-layout {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .demo-tree-panel {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .demo-output-panel {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        /* Output Console */
+        .output-console {
+            background: #1a1a2e;
+            color: #0f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            margin: 15px 0;
+            min-height: 50px;
+            border: 2px solid #333;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .output-console .output-header {
+            color: #888;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333;
+        }
+
+        .output-line {
+            margin: 3px 0;
+            animation: typeLine 0.3s ease;
+        }
+
+        .output-line.folder-out {
+            color: #f9e2af;
+        }
+
+        .output-line.file-out {
+            color: #89b4fa;
+        }
+
+        .output-line.depth-marker {
+            color: #666;
+        }
+
+        @keyframes typeLine {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Narration Box */
+        .narration {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 18px 24px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.05em;
+            color: #444;
+            min-height: 60px;
+            line-height: 1.7;
+            word-spacing: 0.05em;
+        }
+
+        /* Animation Controls */
+        .animation-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: #1a1a2e;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+        }
+
+        /* Step Indicator */
+        .step-indicator {
+            text-align: center;
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Call Stack for recursive demo */
+        .call-stack-panel {
+            flex: 0 0 220px;
+        }
+
+        .call-stack-box-label {
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .call-stack-box {
+            width: 210px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: #f9f9f9;
+            gap: 3px;
+        }
+
+        .call-stack-box-empty {
+            color: #aaa;
+            font-style: italic;
+            font-size: 0.85em;
+            padding: 20px 0;
+        }
+
+        .stack-frame {
+            width: 190px;
+            padding: 8px 6px;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.8em;
+            color: white;
+            flex-shrink: 0;
+            white-space: nowrap;
+            animation: pushFrame 0.4s ease;
+        }
+
+        .stack-frame.main-frame {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stack-frame.explore-frame {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .stack-frame.depth-0 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .stack-frame.depth-1 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .stack-frame.depth-2 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .stack-frame.depth-3 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+
+        @keyframes pushFrame {
+            from { opacity: 0; transform: translateY(-20px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes popFrame {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(-20px) scale(0.8); }
+        }
+
+        /* Footer */
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        /* Back Home Button */
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            header h1 { font-size: 1.8em; }
+            h2 { font-size: 1.5em; }
+            .demo-layout { flex-direction: column; }
+            .call-stack-panel { flex: 1; }
+            .call-stack-box { width: 100%; }
+            .stack-frame { width: 100%; }
+        }
+
+        /* Scroll animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section {
+            animation: fadeInUp 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-home-btn">Home</a>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="../fcit.png" alt="FCIT Logo">
+                <div class="header-text">
+                    <h1>Recursion Application</h1>
+                    <p>CPCS 204 - Data Structures I</p>
+                    <p>Exploring Folders &mdash; Why Recursion is Powerful</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- ===================== SECTION 1: Introduction ===================== -->
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+
+                <div class="teacher-says">
+                    My students, I promised you in the previous tutorial that I would show you a real example where recursion truly shines. Today, I will show you how recursion can be used to solve a problem in an elegant way. After this, you will understand why we sometimes prefer recursion over loops.
+                </div>
+
+                <p>Imagine you have a folder on your computer. Inside this folder, there are files and <strong>subfolders</strong>. Inside those subfolders, there are more files and more subfolders, and so on. We want to write a Java program that <strong>prints every file and folder</strong> inside a given root folder.</p>
+
+                <div class="highlight-box">
+                    <strong>The Challenge:</strong> The depth of folders is <strong>unknown</strong> and <strong>arbitrary</strong>. A folder might contain 0 subfolders or 10 subfolders, each with their own subfolders. How deep does it go? We don't know!
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 2: The Folder Structure ===================== -->
+            <section id="folder-structure">
+                <h2>2. The Folder Structure</h2>
+
+                <div class="teacher-says">
+                    Let me show you a folder structure as an example. This is a project folder called <strong>MyProject</strong>. Look at how folders are nested inside each other.
+                </div>
+
+                <div class="folder-tree">
+                    <!-- Level 0 -->
+                    <div class="ft-row">
+                        <span class="ft-icon">📁</span>
+                        <span class="ft-name is-folder">MyProject/</span>
+                        <span class="ft-level-tag">Level 0</span>
+                    </div>
+                    <!-- Level 1 -->
+                    <div class="ft-row">
+                        <span class="ft-indent"></span>
+                        <span class="ft-branch">├</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">README.txt</span>
+                        <span class="ft-level-tag">Level 1</span>
+                    </div>
+                    <div class="ft-row">
+                        <span class="ft-indent"></span>
+                        <span class="ft-branch">├</span>
+                        <span class="ft-icon">📁</span>
+                        <span class="ft-name is-folder">src/</span>
+                        <span class="ft-level-tag">Level 1</span>
+                    </div>
+                    <!-- Level 2 inside src -->
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">├</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">Main.java</span>
+                        <span class="ft-level-tag">Level 2</span>
+                    </div>
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">├</span>
+                        <span class="ft-icon">📁</span>
+                        <span class="ft-name is-folder">utils/</span>
+                        <span class="ft-level-tag">Level 2</span>
+                    </div>
+                    <!-- Level 3 inside utils -->
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">├</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">Helper.java</span>
+                        <span class="ft-level-tag">Level 3</span>
+                    </div>
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">└</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">Config.java</span>
+                        <span class="ft-level-tag">Level 3</span>
+                    </div>
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">└</span>
+                        <span class="ft-icon">📁</span>
+                        <span class="ft-name is-folder">models/</span>
+                        <span class="ft-level-tag">Level 2</span>
+                    </div>
+                    <!-- Level 3 inside models -->
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">└</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">Student.java</span>
+                        <span class="ft-level-tag">Level 3</span>
+                    </div>
+                    <div class="ft-row">
+                        <span class="ft-indent"></span>
+                        <span class="ft-branch">├</span>
+                        <span class="ft-icon">📁</span>
+                        <span class="ft-name is-folder">docs/</span>
+                        <span class="ft-level-tag">Level 1</span>
+                    </div>
+                    <!-- Level 2 inside docs -->
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">├</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">guide.pdf</span>
+                        <span class="ft-level-tag">Level 2</span>
+                    </div>
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">└</span>
+                        <span class="ft-icon">📁</span>
+                        <span class="ft-name is-folder">images/</span>
+                        <span class="ft-level-tag">Level 2</span>
+                    </div>
+                    <!-- Level 3 inside images -->
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">├</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">logo.png</span>
+                        <span class="ft-level-tag">Level 3</span>
+                    </div>
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">└</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">banner.png</span>
+                        <span class="ft-level-tag">Level 3</span>
+                    </div>
+                    <div class="ft-row">
+                        <span class="ft-indent"></span>
+                        <span class="ft-branch">└</span>
+                        <span class="ft-icon">📁</span>
+                        <span class="ft-name is-folder">data/</span>
+                        <span class="ft-level-tag">Level 1</span>
+                    </div>
+                    <!-- Level 2 inside data -->
+                    <div class="ft-row">
+                        <span class="ft-indent"></span><span class="ft-indent"></span>
+                        <span class="ft-branch">└</span>
+                        <span class="ft-icon">📄</span>
+                        <span class="ft-name is-file">records.csv</span>
+                        <span class="ft-level-tag">Level 2</span>
+                    </div>
+                </div>
+
+                <div class="important">
+                    <strong>Notice the depth:</strong>
+                    <ul>
+                        <li><strong>Level 0:</strong> MyProject (the root)</li>
+                        <li><strong>Level 1:</strong> README.txt, src/, docs/, data/</li>
+                        <li><strong>Level 2:</strong> Main.java, utils/, models/, guide.pdf, images/, records.csv</li>
+                        <li><strong>Level 3:</strong> Helper.java, Config.java, Student.java, logo.png, banner.png</li>
+                    </ul>
+                    The depth is <strong>not fixed</strong>! Some branches go 1 level deep, others go 3 levels deep.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 3: Version 1 ===================== -->
+            <section id="version1">
+                <h2>3. Version 1: Print the Root Level Only</h2>
+
+                <div class="teacher-says">
+                    Let us start simple. I will write a Java program that opens the root folder and prints only the <strong>first level</strong> &mdash; the items directly inside MyProject.
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        <span class="version-badge">V1</span> Java - Print Root Level Only
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">import</span> java.io.File;
+
+<span class="keyword">public class</span> <span class="class-name">FolderExplorer</span> {
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        File root = <span class="keyword">new</span> File(<span class="string">"MyProject"</span>);
+        File[] items = root.<span class="method">listFiles</span>();
+
+        <span class="keyword">for</span> (File item : items) {
+            System.out.println(item.<span class="method">getName</span>());
+        }
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>Output of Version 1</h3>
+                    <div class="output-console">
+                        <div class="output-header">--- Console ---</div>
+                        <div class="output-line">README.txt</div>
+                        <div class="output-line">src</div>
+                        <div class="output-line">docs</div>
+                        <div class="output-line">data</div>
+                    </div>
+                </div>
+
+                <div class="student-says">
+                    OK, this prints the first level, but what about the files <em>inside</em> src, docs, and data?
+                </div>
+
+                <div class="teacher-says">
+                    Exactly! This only prints what is directly inside MyProject. It does not go deeper. Let us improve it.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 4: Version 2 ===================== -->
+            <section id="version2">
+                <h2>4. Version 2: Extract a Method</h2>
+
+                <div class="teacher-says">
+                    Let us be smarter. Instead of writing the logic directly in <code>main()</code>, I will create a separate method called <code>printContents()</code>. We pass a folder to this method, and it prints everything inside that folder.
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        <span class="version-badge">V2</span> Java - Using a Method
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">import</span> java.io.File;
+
+<span class="keyword">public class</span> <span class="class-name">FolderExplorer</span> {
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        File root = <span class="keyword">new</span> File(<span class="string">"MyProject"</span>);
+        <span class="method">printContents</span>(root);   <span class="comment">// Pass the root folder</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">printContents</span>(File folder) {
+        File[] items = folder.<span class="method">listFiles</span>();
+
+        <span class="keyword">for</span> (File item : items) {
+            System.out.println(item.<span class="method">getName</span>());
+        }
+    }
+}</div>
+                </div>
+
+                <div class="definition">
+                    <strong>Good!</strong> Now we have a method that takes any folder and prints its contents. The output is the same as Version 1, but the code is better organized. The method is <strong>reusable</strong> &mdash; we can call it with any folder.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 5: Version 3 ===================== -->
+            <section id="version3">
+                <h2>5. Version 3: Multiple Copies for Each Level</h2>
+
+                <div class="teacher-says">
+                    Now, what if I want to go <strong>deeper</strong>? One idea: I call <code>printContents()</code> for the root, and then I call it again for each subfolder. Let me try to do this manually.
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        <span class="version-badge">V3</span> Java - Manually Calling for Each Level
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">import</span> java.io.File;
+
+<span class="keyword">public class</span> <span class="class-name">FolderExplorer</span> {
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        File root = <span class="keyword">new</span> File(<span class="string">"MyProject"</span>);
+        <span class="method">printContents</span>(root);              <span class="comment">// Level 0: prints README, src, docs, data</span>
+
+        <span class="comment">// Now manually handle level 1:</span>
+        <span class="method">printContents</span>(<span class="keyword">new</span> File(<span class="string">"MyProject/src"</span>));   <span class="comment">// Level 1</span>
+        <span class="method">printContents</span>(<span class="keyword">new</span> File(<span class="string">"MyProject/docs"</span>));  <span class="comment">// Level 1</span>
+        <span class="method">printContents</span>(<span class="keyword">new</span> File(<span class="string">"MyProject/data"</span>));  <span class="comment">// Level 1</span>
+
+        <span class="comment">// Now manually handle level 2:</span>
+        <span class="method">printContents</span>(<span class="keyword">new</span> File(<span class="string">"MyProject/src/utils"</span>));   <span class="comment">// Level 2</span>
+        <span class="method">printContents</span>(<span class="keyword">new</span> File(<span class="string">"MyProject/src/models"</span>));  <span class="comment">// Level 2</span>
+        <span class="method">printContents</span>(<span class="keyword">new</span> File(<span class="string">"MyProject/docs/images"</span>)); <span class="comment">// Level 2</span>
+
+        <span class="comment">// What about level 3? Level 4? Level 5?...</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">printContents</span>(File folder) {
+        File[] items = folder.<span class="method">listFiles</span>();
+        <span class="keyword">for</span> (File item : items) {
+            System.out.println(item.<span class="method">getName</span>());
+        }
+    }
+}</div>
+                </div>
+
+                <div class="warning">
+                    <strong>The Problem:</strong>
+                    <ul>
+                        <li>We had to <strong>manually type every subfolder path</strong>.</li>
+                        <li>We must <strong>know the structure in advance</strong> &mdash; but what if we don't?</li>
+                        <li>What about <strong>Level 3, Level 4, Level 5...</strong>? We have to keep writing more and more calls!</li>
+                        <li>If the folder structure <strong>changes</strong>, our code breaks.</li>
+                    </ul>
+                </div>
+
+                <div class="student-says">
+                    This is not practical at all! Can we use a loop instead, Professor?
+                </div>
+
+                <div class="teacher-says">
+                    Good thinking! But here is the challenge: how do you write a loop when you <strong>don't know how deep the folders go</strong>? Each folder might have subfolders, and those subfolders might have more subfolders. The depth is <strong>arbitrary</strong>. A regular loop cannot easily handle this because you don't know how many levels to iterate.
+                </div>
+
+                <div class="important">
+                    <strong>The core challenge:</strong> The folder structure has an <strong>arbitrary, unknown depth</strong>. A for loop works when you know how many times to repeat. But here, we don't know!
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 6: Version 4 - The Recursive Solution ===================== -->
+            <section id="version4">
+                <h2>6. Version 4: The Recursive Solution</h2>
+
+                <div class="teacher-says">
+                    Now, my students, watch carefully. What if I modify the <code>printContents()</code> method so that when it finds a <strong>subfolder</strong>, it <strong>calls itself</strong> with that subfolder? The method does not need to know how deep the structure goes. It simply says: "If this item is a folder, let me explore it by calling myself again."
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        <span class="version-badge">V4</span> Java - The Recursive Solution
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">import</span> java.io.File;
+
+<span class="keyword">public class</span> <span class="class-name">FolderExplorer</span> {
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        File root = <span class="keyword">new</span> File(<span class="string">"MyProject"</span>);
+        <span class="method">explore</span>(root);
+    }
+
+    <span class="keyword">public static void</span> <span class="method">explore</span>(File folder) {
+        System.out.println(<span class="string">"[Folder] "</span> + folder.<span class="method">getName</span>());
+
+        File[] items = folder.<span class="method">listFiles</span>();
+
+        <span class="keyword">for</span> (File item : items) {
+            <span class="keyword">if</span> (item.<span class="method">isDirectory</span>()) {
+                <span class="method">explore</span>(item);               <span class="comment">// RECURSION! Call itself for subfolders</span>
+            } <span class="keyword">else</span> {
+                System.out.println(<span class="string">"  [File] "</span> + item.<span class="method">getName</span>());
+            }
+        }
+    }
+}</div>
+                </div>
+
+                <div class="definition">
+                    <strong>That's it!</strong> Just a few lines of code, and the method can explore <strong>any folder structure of any depth</strong>. Let us break it down:
+                    <ol>
+                        <li>The method receives a <strong>folder</strong>.</li>
+                        <li>It prints the folder name.</li>
+                        <li>It loops through each item inside the folder.</li>
+                        <li>If the item is a <strong>file</strong> &rarr; print it.</li>
+                        <li>If the item is a <strong>folder</strong> &rarr; <strong>call itself</strong> with that folder (recursion!).</li>
+                    </ol>
+                </div>
+
+                <h3>Let's See It in Action!</h3>
+
+                <div class="teacher-says">
+                    Now let me show you step by step how this recursive method explores our entire MyProject folder. Watch the call stack and the output carefully!
+                </div>
+
+                <div class="demo-area">
+                    <h3>Animation: Recursive Folder Explorer</h3>
+                    <div class="demo-layout">
+                        <div class="demo-tree-panel">
+                            <h4>Folder Structure</h4>
+                            <div class="folder-visual" id="anim-tree">
+                                <div class="tree-node" id="node-root"><span class="tree-icon">📁</span><span class="tree-name folder-name">MyProject</span></div>
+                                <div class="tree-node" id="node-readme"><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">README.txt</span></div>
+                                <div class="tree-node" id="node-src"><span class="tree-indent"></span><span class="tree-icon">📁</span><span class="tree-name folder-name">src</span></div>
+                                <div class="tree-node" id="node-main-java"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">Main.java</span></div>
+                                <div class="tree-node" id="node-utils"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📁</span><span class="tree-name folder-name">utils</span></div>
+                                <div class="tree-node" id="node-helper"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">Helper.java</span></div>
+                                <div class="tree-node" id="node-config"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">Config.java</span></div>
+                                <div class="tree-node" id="node-models"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📁</span><span class="tree-name folder-name">models</span></div>
+                                <div class="tree-node" id="node-student"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">Student.java</span></div>
+                                <div class="tree-node" id="node-docs"><span class="tree-indent"></span><span class="tree-icon">📁</span><span class="tree-name folder-name">docs</span></div>
+                                <div class="tree-node" id="node-guide"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">guide.pdf</span></div>
+                                <div class="tree-node" id="node-images"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📁</span><span class="tree-name folder-name">images</span></div>
+                                <div class="tree-node" id="node-logo"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">logo.png</span></div>
+                                <div class="tree-node" id="node-banner"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">banner.png</span></div>
+                                <div class="tree-node" id="node-data"><span class="tree-indent"></span><span class="tree-icon">📁</span><span class="tree-name folder-name">data</span></div>
+                                <div class="tree-node" id="node-records"><span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">records.csv</span></div>
+                            </div>
+                        </div>
+                        <div class="call-stack-panel">
+                            <div class="call-stack-box-label">STACK</div>
+                            <div class="call-stack-box" id="explore-stack">
+                                <div class="call-stack-box-empty">( empty )</div>
+                            </div>
+                        </div>
+                        <div class="demo-output-panel">
+                            <h4>Output</h4>
+                            <div class="output-console" id="explore-output">
+                                <div class="output-header">--- Console ---</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="narration" id="explore-narration">Press "Run" to start, then click "Next" to step through the recursive folder exploration.</div>
+                    <div class="step-indicator" id="explore-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="explore-run-btn" onclick="startExploreAnimation()">Run</button>
+                        <button class="btn btn-success" id="explore-next-btn" onclick="nextExploreStep()" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetExploreAnimation()">Reset</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Notice:</strong> The method explored the <strong>entire folder tree</strong> automatically! It did not need to know the structure in advance. When it found a subfolder, it simply called itself. When it ran out of items, it returned &mdash; just like a <strong>base case</strong> in recursion.
+                </div>
+
+                <div class="important">
+                    <strong>Where is the base case?</strong> The base case is <strong>implicit</strong>: when a folder contains only files (no subfolders), the method processes all files and returns naturally without making any recursive calls. The recursion stops on its own!
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 7: Why Recursion Wins Here ===================== -->
+            <section id="why-recursion">
+                <h2>7. Why Recursion Wins Here</h2>
+
+                <div class="teacher-says">
+                    My students, now you can see why recursion is so powerful for this kind of problem. Let me summarize why.
+                </div>
+
+                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-left-color: #764ba2;">
+                    <h3 style="margin-top:0;">Comparing the Approaches</h3>
+                    <table style="width:100%; border-collapse:collapse; margin-top:15px;">
+                        <thead>
+                            <tr style="background:linear-gradient(135deg,#667eea,#764ba2); color:white;">
+                                <th style="padding:12px; text-align:center;">Approach</th>
+                                <th style="padding:12px; text-align:center;">Can handle unknown depth?</th>
+                                <th style="padding:12px; text-align:center;">Lines of code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#fff;">
+                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V1:</strong> Root only</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#f44336;">No</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">~5 lines</td>
+                            </tr>
+                            <tr style="background:#f8f9ff;">
+                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V2:</strong> Method (one level)</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#f44336;">No</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">~8 lines</td>
+                            </tr>
+                            <tr style="background:#fff;">
+                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V3:</strong> Manual calls</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#ff9800;">Only if you know the structure</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">Grows with depth!</td>
+                            </tr>
+                            <tr style="background:#e8f5e9;">
+                                <td style="padding:10px;"><strong>V4:</strong> Recursive</td>
+                                <td style="padding:10px; text-align:center; color:#4caf50; font-weight:bold;">Yes! Any depth!</td>
+                                <td style="padding:10px; text-align:center; font-weight:bold;">~10 lines</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="definition">
+                    <strong>Key Insight:</strong> Recursion is a natural fit when the problem has a <strong>self-similar structure</strong> &mdash; when the problem at each level looks the same as the problem at the next level. A folder contains files and subfolders. A subfolder also contains files and subfolders. The structure <strong>repeats itself</strong>. This is exactly what recursion does: it repeats the <strong>same method</strong> on a <strong>smaller version</strong> of the problem.
+                </div>
+
+                <div class="teacher-says">
+                    Remember: this could be solved with a loop using something called a "stack data structure" manually. But as programmers, the recursive solution is much easier for us to think about, write, and understand. The computer handles the call stack for us automatically!
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 8: Summary ===================== -->
+            <section id="summary">
+                <h2>8. Summary</h2>
+
+                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-left-color: #764ba2;">
+                    <h3 style="margin-top: 0;">What We Learned Today</h3>
+                    <ol>
+                        <li><strong>Version 1:</strong> A simple program can only print the first level of a folder.</li>
+                        <li><strong>Version 2:</strong> Extracting a method makes the code reusable, but it still only handles one level.</li>
+                        <li><strong>Version 3:</strong> Manually calling the method for each level is impractical when the depth is unknown.</li>
+                        <li><strong>Version 4 (Recursive):</strong> A method that calls itself when it encounters a subfolder can explore <strong>any depth automatically</strong>.</li>
+                        <li>Recursion is a natural fit for problems with <strong>self-similar structure</strong> (trees, folders, nested data).</li>
+                        <li>The <strong>base case</strong> can be implicit &mdash; when no more recursive calls are made, the recursion stops naturally.</li>
+                    </ol>
+                </div>
+
+                <div class="teacher-says">
+                    Excellent work, my students! Now you can see the true power of recursion. It is not just a theoretical concept &mdash; it is a practical tool that makes complex problems simple and elegant. In future tutorials, we will see more examples like factorial, Fibonacci, and tree traversals!
+                </div>
+            </section>
+
+        </div>
+
+        <div style="text-align: center; padding: 25px 40px; color: #6b7280; font-size: 0.9rem; border-top: 1px solid #e5e7eb; line-height: 1.8;">
+            <div style="font-weight: bold; color: #1f2937; font-size: 1rem;">King Abdulaziz University</div>
+            <div>Faculty of Computing and Information Technology (FCIT)</div>
+            <div style="margin-top: 8px;">Prepared by Dr. Abdulmohsen Almalawi</div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== Code Toggle ====================
+        function toggleCode(header) {
+            const codeBlock = header.nextElementSibling;
+            const toggle = header.querySelector('.code-toggle');
+            codeBlock.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+
+        // ==================== Helper Functions ====================
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function setNarration(text) {
+            document.getElementById('explore-narration').innerHTML = text;
+        }
+
+        function setStep(text) {
+            document.getElementById('explore-step').textContent = text;
+        }
+
+        function addOutput(text, cssClass) {
+            const output = document.getElementById('explore-output');
+            const line = document.createElement('div');
+            line.className = 'output-line' + (cssClass ? ' ' + cssClass : '');
+            line.textContent = text;
+            output.appendChild(line);
+        }
+
+        function pushStack(text, frameClass) {
+            const stack = document.getElementById('explore-stack');
+            const empty = stack.querySelector('.call-stack-box-empty');
+            if (empty) empty.remove();
+            const frame = document.createElement('div');
+            frame.className = 'stack-frame ' + frameClass;
+            frame.textContent = text;
+            stack.insertBefore(frame, stack.firstChild);
+        }
+
+        function popStack() {
+            const stack = document.getElementById('explore-stack');
+            const frames = stack.querySelectorAll('.stack-frame');
+            if (frames.length > 0) {
+                const top = frames[0];
+                top.style.animation = 'popFrame 0.4s ease forwards';
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        top.remove();
+                        if (stack.querySelectorAll('.stack-frame').length === 0) {
+                            stack.innerHTML = '<div class="call-stack-box-empty">( empty )</div>';
+                        }
+                        resolve();
+                    }, 400);
+                });
+            }
+            return Promise.resolve();
+        }
+
+        function clearAllNodeStates() {
+            document.querySelectorAll('.tree-node').forEach(n => {
+                n.classList.remove('active', 'highlighted', 'visited');
+            });
+        }
+
+        function setNodeState(nodeId, state) {
+            const node = document.getElementById(nodeId);
+            if (node) {
+                node.classList.remove('active', 'highlighted', 'visited');
+                if (state) node.classList.add(state);
+            }
+        }
+
+        // ==================== Explore Animation ====================
+        let exploreCurrentStep = 0;
+
+        // Define all animation steps
+        // Each step: { node, action, stackAction, stackText, stackClass, outputText, outputClass, narration }
+        const exploreSteps = [
+            // main calls explore(MyProject)
+            {
+                node: 'node-root', nodeState: 'active',
+                stackAction: 'push', stackText: 'main()', stackClass: 'main-frame',
+                narration: '<strong>main()</strong> starts and calls <strong>explore(MyProject)</strong>.'
+            },
+            {
+                node: 'node-root', nodeState: 'active',
+                stackAction: 'push', stackText: 'explore(MyProject)', stackClass: 'depth-0',
+                outputText: '[Folder] MyProject', outputClass: 'folder-out',
+                narration: '<strong>explore(MyProject)</strong> prints "[Folder] MyProject" and starts looping through its items.'
+            },
+            // README.txt (file)
+            {
+                node: 'node-readme', nodeState: 'active',
+                prevNode: 'node-root', prevState: 'highlighted',
+                outputText: '  [File] README.txt', outputClass: 'file-out',
+                narration: 'Found <strong>README.txt</strong> &mdash; it is a file, so just print it.'
+            },
+            // src/ (folder) -> recursive call
+            {
+                node: 'node-src', nodeState: 'active',
+                prevNode: 'node-readme', prevState: 'visited',
+                stackAction: 'push', stackText: 'explore(src)', stackClass: 'depth-1',
+                outputText: '[Folder] src', outputClass: 'folder-out',
+                narration: 'Found <strong>src</strong> &mdash; it is a folder! Call <strong>explore(src)</strong> recursively. New frame pushed!'
+            },
+            // Main.java
+            {
+                node: 'node-main-java', nodeState: 'active',
+                prevNode: 'node-src', prevState: 'highlighted',
+                outputText: '  [File] Main.java', outputClass: 'file-out',
+                narration: 'Inside <strong>src/</strong>: found <strong>Main.java</strong> &mdash; it is a file, print it.'
+            },
+            // utils/ -> recursive call
+            {
+                node: 'node-utils', nodeState: 'active',
+                prevNode: 'node-main-java', prevState: 'visited',
+                stackAction: 'push', stackText: 'explore(utils)', stackClass: 'depth-2',
+                outputText: '[Folder] utils', outputClass: 'folder-out',
+                narration: 'Found <strong>utils</strong> &mdash; it is a folder! Call <strong>explore(utils)</strong> recursively. Going deeper!'
+            },
+            // Helper.java
+            {
+                node: 'node-helper', nodeState: 'active',
+                prevNode: 'node-utils', prevState: 'highlighted',
+                outputText: '  [File] Helper.java', outputClass: 'file-out',
+                narration: 'Inside <strong>utils/</strong>: found <strong>Helper.java</strong> &mdash; it is a file, print it.'
+            },
+            // Config.java
+            {
+                node: 'node-config', nodeState: 'active',
+                prevNode: 'node-helper', prevState: 'visited',
+                outputText: '  [File] Config.java', outputClass: 'file-out',
+                narration: 'Found <strong>Config.java</strong> &mdash; it is a file, print it.'
+            },
+            // utils done -> pop
+            {
+                node: 'node-config', nodeState: 'visited',
+                prevNode: 'node-utils', prevState: 'visited',
+                stackAction: 'pop',
+                narration: '<strong>explore(utils)</strong> is done (no more items). Pop it off the stack. Return to <strong>explore(src)</strong>.'
+            },
+            // models/ -> recursive call
+            {
+                node: 'node-models', nodeState: 'active',
+                stackAction: 'push', stackText: 'explore(models)', stackClass: 'depth-2',
+                outputText: '[Folder] models', outputClass: 'folder-out',
+                narration: 'Back in <strong>src/</strong>: found <strong>models</strong> &mdash; it is a folder! Call <strong>explore(models)</strong> recursively.'
+            },
+            // Student.java
+            {
+                node: 'node-student', nodeState: 'active',
+                prevNode: 'node-models', prevState: 'highlighted',
+                outputText: '  [File] Student.java', outputClass: 'file-out',
+                narration: 'Inside <strong>models/</strong>: found <strong>Student.java</strong> &mdash; it is a file, print it.'
+            },
+            // models done -> pop
+            {
+                node: 'node-student', nodeState: 'visited',
+                prevNode: 'node-models', prevState: 'visited',
+                stackAction: 'pop',
+                narration: '<strong>explore(models)</strong> is done. Pop it off the stack. Return to <strong>explore(src)</strong>.'
+            },
+            // src done -> pop
+            {
+                node: 'node-src', nodeState: 'visited',
+                stackAction: 'pop',
+                narration: '<strong>explore(src)</strong> is done (all items processed). Pop it off. Return to <strong>explore(MyProject)</strong>.'
+            },
+            // docs/ -> recursive call
+            {
+                node: 'node-docs', nodeState: 'active',
+                stackAction: 'push', stackText: 'explore(docs)', stackClass: 'depth-1',
+                outputText: '[Folder] docs', outputClass: 'folder-out',
+                narration: 'Back in <strong>MyProject/</strong>: found <strong>docs</strong> &mdash; it is a folder! Call <strong>explore(docs)</strong> recursively.'
+            },
+            // guide.pdf
+            {
+                node: 'node-guide', nodeState: 'active',
+                prevNode: 'node-docs', prevState: 'highlighted',
+                outputText: '  [File] guide.pdf', outputClass: 'file-out',
+                narration: 'Inside <strong>docs/</strong>: found <strong>guide.pdf</strong> &mdash; it is a file, print it.'
+            },
+            // images/ -> recursive call
+            {
+                node: 'node-images', nodeState: 'active',
+                prevNode: 'node-guide', prevState: 'visited',
+                stackAction: 'push', stackText: 'explore(images)', stackClass: 'depth-2',
+                outputText: '[Folder] images', outputClass: 'folder-out',
+                narration: 'Found <strong>images</strong> &mdash; it is a folder! Call <strong>explore(images)</strong> recursively. Going deeper!'
+            },
+            // logo.png
+            {
+                node: 'node-logo', nodeState: 'active',
+                prevNode: 'node-images', prevState: 'highlighted',
+                outputText: '  [File] logo.png', outputClass: 'file-out',
+                narration: 'Inside <strong>images/</strong>: found <strong>logo.png</strong> &mdash; it is a file, print it.'
+            },
+            // banner.png
+            {
+                node: 'node-banner', nodeState: 'active',
+                prevNode: 'node-logo', prevState: 'visited',
+                outputText: '  [File] banner.png', outputClass: 'file-out',
+                narration: 'Found <strong>banner.png</strong> &mdash; it is a file, print it.'
+            },
+            // images done -> pop
+            {
+                node: 'node-banner', nodeState: 'visited',
+                prevNode: 'node-images', prevState: 'visited',
+                stackAction: 'pop',
+                narration: '<strong>explore(images)</strong> is done. Pop it off the stack. Return to <strong>explore(docs)</strong>.'
+            },
+            // docs done -> pop
+            {
+                node: 'node-docs', nodeState: 'visited',
+                stackAction: 'pop',
+                narration: '<strong>explore(docs)</strong> is done. Pop it off. Return to <strong>explore(MyProject)</strong>.'
+            },
+            // data/ -> recursive call
+            {
+                node: 'node-data', nodeState: 'active',
+                stackAction: 'push', stackText: 'explore(data)', stackClass: 'depth-1',
+                outputText: '[Folder] data', outputClass: 'folder-out',
+                narration: 'Back in <strong>MyProject/</strong>: found <strong>data</strong> &mdash; it is a folder! Call <strong>explore(data)</strong> recursively.'
+            },
+            // records.csv
+            {
+                node: 'node-records', nodeState: 'active',
+                prevNode: 'node-data', prevState: 'highlighted',
+                outputText: '  [File] records.csv', outputClass: 'file-out',
+                narration: 'Inside <strong>data/</strong>: found <strong>records.csv</strong> &mdash; it is a file, print it.'
+            },
+            // data done -> pop
+            {
+                node: 'node-records', nodeState: 'visited',
+                prevNode: 'node-data', prevState: 'visited',
+                stackAction: 'pop',
+                narration: '<strong>explore(data)</strong> is done. Pop it off. Return to <strong>explore(MyProject)</strong>.'
+            },
+            // MyProject done -> pop
+            {
+                node: 'node-root', nodeState: 'visited',
+                stackAction: 'pop',
+                narration: '<strong>explore(MyProject)</strong> is done &mdash; all items explored! Pop it off.'
+            },
+            // main done -> pop
+            {
+                stackAction: 'pop',
+                narration: '<strong>main()</strong> finishes. Program ends. <strong>Every file and folder was printed!</strong>'
+            }
+        ];
+
+        function startExploreAnimation() {
+            resetExploreAnimation();
+            document.getElementById('explore-run-btn').style.display = 'none';
+            document.getElementById('explore-next-btn').style.display = '';
+            setNarration('Ready! Click <strong>Next</strong> to step through the recursive folder exploration.');
+            setStep('Step 0 of ' + exploreSteps.length);
+        }
+
+        async function nextExploreStep() {
+            const btn = document.getElementById('explore-next-btn');
+            btn.disabled = true;
+            exploreCurrentStep++;
+
+            if (exploreCurrentStep > exploreSteps.length) {
+                setNarration('Exploration complete! The recursive method explored the <strong>entire folder tree</strong> with just one simple method that calls itself.');
+                setStep('Complete!');
+                btn.textContent = 'Done';
+                btn.disabled = true;
+                return;
+            }
+
+            const step = exploreSteps[exploreCurrentStep - 1];
+
+            // Update previous node state
+            if (step.prevNode) {
+                setNodeState(step.prevNode, step.prevState);
+            }
+
+            // Update current node
+            if (step.node) {
+                setNodeState(step.node, step.nodeState);
+            }
+
+            // Stack action
+            if (step.stackAction === 'push') {
+                pushStack(step.stackText, step.stackClass);
+            } else if (step.stackAction === 'pop') {
+                await popStack();
+            }
+
+            // Output
+            if (step.outputText) {
+                addOutput(step.outputText, step.outputClass);
+            }
+
+            // Narration
+            setNarration(step.narration);
+            setStep('Step ' + exploreCurrentStep + ' of ' + exploreSteps.length);
+
+            await delay(200);
+            btn.disabled = false;
+        }
+
+        function resetExploreAnimation() {
+            exploreCurrentStep = 0;
+            // Reset tree nodes
+            clearAllNodeStates();
+            // Reset stack
+            document.getElementById('explore-stack').innerHTML = '<div class="call-stack-box-empty">( empty )</div>';
+            // Reset output
+            document.getElementById('explore-output').innerHTML = '<div class="output-header">--- Console ---</div>';
+            // Reset buttons
+            document.getElementById('explore-run-btn').style.display = '';
+            const nextBtn = document.getElementById('explore-next-btn');
+            nextBtn.style.display = 'none';
+            nextBtn.textContent = 'Next';
+            nextBtn.disabled = false;
+            // Reset narration
+            setNarration('Press "Run" to start, then click "Next" to step through the recursive folder exploration.');
+            setStep('');
+        }
+    </script>
+
+</body>
+</html>
