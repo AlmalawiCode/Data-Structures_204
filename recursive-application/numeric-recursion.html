@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numeric Recursion - CPCS 204</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header img { width: 8cm; height: 4cm; object-fit: contain; }
+        header .header-text { text-align: left; }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.2em; opacity: 0.9; }
+
+        .content { padding: 40px; }
+        section { margin-bottom: 50px; animation: fadeInUp 0.5s ease; }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 { color: #764ba2; font-size: 1.5em; margin: 25px 0 15px 0; }
+        h4 { color: #555; font-size: 1.2em; margin: 20px 0 10px 0; }
+        p { margin-bottom: 12px; }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .teacher-says {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .teacher-says::before { content: "Professor: "; font-weight: bold; color: #7b1fa2; }
+
+        .student-says {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .student-says::before { content: "Student: "; font-weight: bold; color: #1565c0; }
+
+        ul, ol { margin-left: 30px; margin-top: 10px; margin-bottom: 10px; }
+        li { margin: 8px 0; }
+
+        /* Code Blocks */
+        .code-container { margin: 20px 0; }
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.15em;
+            transition: background 0.3s;
+        }
+        .code-header:hover { background: #5568d3; }
+        .code-toggle { font-size: 1.2em; transition: transform 0.3s; }
+        .code-toggle.collapsed { transform: rotate(-90deg); }
+
+        .code-block {
+            background: #000000;
+            color: #f8f8f2;
+            padding: 25px 30px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.25em;
+            line-height: 1.8;
+            white-space: pre;
+            max-height: 800px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        .code-block.collapsed { max-height: 0; padding: 0 20px; overflow: hidden; }
+        .code-block .comment { color: #7a8bbf; }
+        .code-block .keyword { color: #ff79c6; font-weight: bold; }
+        .code-block .class-name { color: #50fa7b; font-weight: bold; }
+        .code-block .method { color: #8be9fd; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .number { color: #bd93f9; }
+
+        /* Stack Visualization */
+        .stack-box {
+            width: 300px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: #f9f9f9;
+            position: relative;
+            margin-top: 10px;
+            gap: 4px;
+        }
+
+        .stack-box-label {
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .stack-box-empty {
+            color: #aaa;
+            font-style: italic;
+            font-size: 0.85em;
+            padding: 30px 0;
+        }
+
+        .stack-frame {
+            width: 270px;
+            padding: 10px 8px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85em;
+            animation: pushFrame 0.4s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .stack-frame.main-frame,
+        .stack-frame.depth-1,
+        .stack-frame.depth-2,
+        .stack-frame.depth-3,
+        .stack-frame.depth-4,
+        .stack-frame.depth-5,
+        .stack-frame.depth-6,
+        .stack-frame.base-frame {
+            background: white;
+            border: 2px solid #333;
+            color: #333;
+        }
+
+        .frame-name {
+            font-size: 0.95em;
+            margin-bottom: 2px;
+        }
+        .frame-expr {
+            font-size: 0.8em;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #333;
+        }
+        .frame-expr .resolved {
+            background: #fde68a;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        @keyframes frameUpdate {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+            40% { box-shadow: 0 0 8px 4px rgba(102, 126, 234, 0.4); }
+            100% { box-shadow: none; }
+        }
+
+        @keyframes pushFrame {
+            from { opacity: 0; transform: translateY(-30px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes popFrame {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(-30px) scale(0.8); }
+        }
+
+        /* Animation Controls */
+        .animation-controls { text-align: center; margin: 20px 0; }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+            font-weight: 600;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #1a1a2e; }
+        .btn-warning { background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%); }
+
+        /* Demo Area */
+        .demo-area {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+        .demo-area h3 { text-align: center; margin-bottom: 20px; }
+
+        .demo-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .demo-stack-panel { flex: 0 0 320px; }
+        .demo-return-panel { flex: 0 0 280px; }
+
+        /* Return Values Panel */
+        .return-panel {
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 12px;
+            min-height: 60px;
+            background: #fffbeb;
+            margin-top: 10px;
+        }
+
+        .return-panel-label {
+            text-align: center;
+            font-weight: bold;
+            color: #b45309;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .return-entry {
+            padding: 6px 10px;
+            margin: 4px 0;
+            background: #fef3c7;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #92400e;
+            animation: typeLine 0.3s ease;
+        }
+
+        .return-entry.final {
+            background: #d1fae5;
+            color: #065f46;
+            font-weight: bold;
+            border: 2px solid #10b981;
+        }
+
+        @keyframes typeLine {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Narration Box */
+        .narration {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 18px 24px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.05em;
+            color: #444;
+            min-height: 60px;
+            line-height: 1.7;
+            word-spacing: 0.05em;
+        }
+
+        .code-trace {
+            background: #000000;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 25px 30px;
+            margin: 15px 0;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.1em;
+            line-height: 1.8;
+            white-space: pre;
+            overflow-x: auto;
+            display: none;
+            color: #e0e0e0;
+        }
+
+        .step-indicator {
+            text-align: center;
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .comparison-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .comparison-table th { padding: 15px 20px; text-align: center; font-size: 1.1em; }
+        .comparison-table td { padding: 12px 20px; border-bottom: 1px solid #e0e0e0; text-align: center; }
+        .comparison-table tbody tr:nth-child(even) { background: #f8f9ff; }
+        .comparison-table tbody tr:hover { background: #e8ecff; }
+
+        /* Fibonacci Call Tree */
+        .call-tree-container {
+            background: #f9f9f9;
+            border: 2px solid #9c27b0;
+            border-radius: 12px;
+            padding: 25px 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .tree-visual {
+            display: flex;
+            justify-content: center;
+        }
+        .tree-visual ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 20px 0 0 0;
+            position: relative;
+        }
+        .tree-visual > ul { padding-top: 0; }
+        .tree-visual > ul::before { display: none; }
+        .tree-visual > ul > li::before,
+        .tree-visual > ul > li::after { display: none; }
+
+        /* Vertical line from parent node down to children's horizontal bar */
+        .tree-visual ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid #aaa;
+            width: 0;
+            height: 20px;
+        }
+
+        .tree-visual li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            list-style: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+        }
+        .tree-visual > ul > li { padding-top: 0; }
+
+        /* Horizontal bar segments connecting siblings */
+        .tree-visual li::before,
+        .tree-visual li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 20px;
+        }
+        .tree-visual li::before {
+            right: 50%;
+            border-top: 2px solid #aaa;
+        }
+        .tree-visual li::after {
+            left: 50%;
+            border-top: 2px solid #aaa;
+            border-left: 2px solid #aaa;
+        }
+        .tree-visual li:first-child::before { border-top: none; }
+        .tree-visual li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree-visual li:last-child::after { border-top: none; border-left: 2px solid #aaa; }
+        .tree-visual li:last-child::before { border-right: 2px solid #aaa; border-radius: 0 5px 0 0; }
+        .tree-visual li:only-child::before,
+        .tree-visual li:only-child::after { display: none; }
+        .tree-visual li:only-child { padding-top: 0; }
+
+        .tree-node-box {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 0.85em;
+            white-space: nowrap;
+            background: white;
+        }
+        .tree-node-box.node-call {
+            border: 2px solid #7c3aed;
+            color: #7c3aed;
+        }
+        .tree-node-box.node-base {
+            border: 2px solid #16a34a;
+            color: #16a34a;
+            background: #f0fdf4;
+        }
+        .tree-node-box.node-dup {
+            border: 2px solid #ef4444;
+            color: #ef4444;
+            background: #fef2f2;
+        }
+        .tree-dup-label {
+            display: block;
+            font-size: 0.7em;
+            color: #ef4444;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        /* Animated Tree States */
+        .tree-node-box.node-highlight {
+            box-shadow: 0 0 0 3px #f59e0b, 0 0 15px rgba(245, 158, 11, 0.4);
+            transform: scale(1.08);
+            transition: all 0.3s ease;
+        }
+        .tree-node-box.node-computed {
+            border: 2px solid #2563eb;
+            color: #2563eb;
+            background: #eff6ff;
+        }
+        .node-val {
+            font-weight: bold;
+        }
+
+        /* Back Home Button */
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            header h1 { font-size: 1.8em; }
+            h2 { font-size: 1.5em; }
+            .demo-layout { flex-direction: column; align-items: center; }
+            .demo-stack-panel, .demo-return-panel { flex: 1; width: 100%; max-width: 340px; }
+            .stack-box { width: 100%; }
+            .stack-frame { width: calc(100% - 30px); font-size: 0.8em; padding: 6px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-home-btn">Home</a>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="../fcit.png" alt="FCIT Logo">
+                <div class="header-text">
+                    <h1>Numeric Recursion</h1>
+                    <p>CPCS 204 - Data Structures I</p>
+                    <p>Mathematical Problems with Recursion</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- ===================== SECTION 1: Introduction ===================== -->
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+
+                <div class="teacher-says">
+                    Welcome back, my students! In the previous tutorials, we learned what recursion is and how it works in memory. We also saw how recursion can elegantly explore folder structures. Now, it is time to see recursion applied to <strong>mathematical problems</strong>.
+                </div>
+
+                <div class="student-says">
+                    Like factorial and Fibonacci, Professor?
+                </div>
+
+                <div class="teacher-says">
+                    Exactly! Today we will work through <strong>seven</strong> numeric recursion problems. For each one, I will show you the Java code, and then we will <strong>visualize the call stack</strong> step by step &mdash; watching frames push on and pop off, and seeing the <strong>return values</strong> accumulate as the stack unwinds.
+                </div>
+
+                <div class="highlight-box">
+                    <strong>What we will cover today:</strong>
+                    <ol>
+                        <li><strong>Factorial</strong> &mdash; n!</li>
+                        <li><strong>Sum of N Integers</strong> &mdash; 1 + 2 + ... + n</li>
+                        <li><strong>Power</strong> &mdash; base<sup>exp</sup></li>
+                        <li><strong>Fast Exponentiation</strong> &mdash; O(log n) power</li>
+                        <li><strong>Recursive Multiplication</strong> &mdash; a &times; b using addition</li>
+                        <li><strong>Fibonacci</strong> &mdash; branching recursion</li>
+                        <li><strong>Sum of Digits</strong> &mdash; digit extraction</li>
+                    </ol>
+                </div>
+
+                <div class="important">
+                    <strong>Remember the two parts of every recursive method:</strong>
+                    <ul>
+                        <li><strong>Base Case</strong> &mdash; the condition that stops recursion</li>
+                        <li><strong>Recursive Case</strong> &mdash; the method calling itself with a smaller problem</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 2: Factorial ===================== -->
+            <section id="factorial">
+                <h2>2. Factorial(5)</h2>
+
+                <div class="teacher-says">
+                    Let us start with the classic: <strong>factorial</strong>. The factorial of n (written n!) is the product of all positive integers from 1 to n. For example, 5! = 5 &times; 4 &times; 3 &times; 2 &times; 1 = 120.
+                </div>
+
+                <div class="definition">
+                    <strong>Recursive Definition:</strong><br>
+                    fact(0) = 1 &nbsp;&nbsp;&nbsp;&nbsp; <em>(base case)</em><br>
+                    fact(n) = n &times; fact(n &minus; 1) &nbsp;&nbsp;&nbsp;&nbsp; <em>(recursive case, for n &gt; 0)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - Recursive Factorial
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">public class</span> <span class="class-name">Factorial</span> {
+
+    <span class="keyword">public static int</span> <span class="method">factorial</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;           <span class="comment">// Base case</span>
+        <span class="keyword">return</span> n * <span class="method">factorial</span>(n - <span class="number">1</span>);     <span class="comment">// Recursive case</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">factorial</span>(<span class="number">5</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"5! = "</span> + result);  <span class="comment">// Output: 5! = 120</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>Interactive Visualization: factorial(5)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">CALL STACK</div>
+                            <div class="stack-box" id="fact-stack">
+                                <div class="stack-box-empty">( empty )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">RETURN VALUES</div>
+                            <div class="return-panel" id="fact-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="fact-code-trace"></div>
+                    <div class="step-indicator" id="fact-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="fact-run-btn" onclick="startDemo('fact')">Run</button>
+                        <button class="btn btn-success" id="fact-next-btn" onclick="nextStep('fact')" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetDemo('fact')">Reset</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Key Insight:</strong> Each call waits for the one below it to return. The multiplication only happens during the <strong>unwinding phase</strong> when frames are popped off the stack and return values flow back up.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 3: Sum of N Integers ===================== -->
+            <section id="sum">
+                <h2>3. Sum of N Integers &mdash; sum(5)</h2>
+
+                <div class="teacher-says">
+                    Now let us compute the sum 1 + 2 + 3 + 4 + 5 using recursion. This is very similar to factorial, but with <strong>addition</strong> instead of multiplication.
+                </div>
+
+                <div class="definition">
+                    <strong>Recursive Definition:</strong><br>
+                    sum(0) = 0 &nbsp;&nbsp;&nbsp;&nbsp; <em>(base case)</em><br>
+                    sum(n) = n + sum(n &minus; 1) &nbsp;&nbsp;&nbsp;&nbsp; <em>(recursive case, for n &gt; 0)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - Recursive Sum
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">public class</span> <span class="class-name">SumOfN</span> {
+
+    <span class="keyword">public static int</span> <span class="method">sum</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;           <span class="comment">// Base case</span>
+        <span class="keyword">return</span> n + <span class="method">sum</span>(n - <span class="number">1</span>);          <span class="comment">// Recursive case</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">sum</span>(<span class="number">5</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"Sum = "</span> + result);  <span class="comment">// Output: Sum = 15</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>Interactive Visualization: sum(5)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">CALL STACK</div>
+                            <div class="stack-box" id="sum-stack">
+                                <div class="stack-box-empty">( empty )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">RETURN VALUES</div>
+                            <div class="return-panel" id="sum-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="sum-code-trace"></div>
+                    <div class="step-indicator" id="sum-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="sum-run-btn" onclick="startDemo('sum')">Run</button>
+                        <button class="btn btn-success" id="sum-next-btn" onclick="nextStep('sum')" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetDemo('sum')">Reset</button>
+                    </div>
+                </div>
+
+                <div class="important">
+                    <strong>Watch the return values carefully!</strong> Each frame adds its own <code>n</code> to the result from below. The values accumulate: 0 &rarr; 1 &rarr; 3 &rarr; 6 &rarr; 10 &rarr; 15.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 4: Power ===================== -->
+            <section id="power">
+                <h2>4. Power(2, 4)</h2>
+
+                <div class="teacher-says">
+                    Now let us compute 2<sup>4</sup> = 16 recursively. The idea is simple: base<sup>exp</sup> = base &times; base<sup>exp&minus;1</sup>, and base<sup>0</sup> = 1.
+                </div>
+
+                <div class="definition">
+                    <strong>Recursive Definition:</strong><br>
+                    pow(base, 0) = 1 &nbsp;&nbsp;&nbsp;&nbsp; <em>(base case)</em><br>
+                    pow(base, exp) = base &times; pow(base, exp &minus; 1) &nbsp;&nbsp;&nbsp;&nbsp; <em>(recursive case)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - Recursive Power
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">public class</span> <span class="class-name">Power</span> {
+
+    <span class="keyword">public static int</span> <span class="method">power</span>(<span class="keyword">int</span> base, <span class="keyword">int</span> exp) {
+        <span class="keyword">if</span> (exp == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;              <span class="comment">// Base case</span>
+        <span class="keyword">return</span> base * <span class="method">power</span>(base, exp - <span class="number">1</span>);  <span class="comment">// Recursive case</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">power</span>(<span class="number">2</span>, <span class="number">4</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"2^4 = "</span> + result);  <span class="comment">// Output: 2^4 = 16</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>Interactive Visualization: power(2, 4)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">CALL STACK</div>
+                            <div class="stack-box" id="pow-stack">
+                                <div class="stack-box-empty">( empty )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">RETURN VALUES</div>
+                            <div class="return-panel" id="pow-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="pow-code-trace"></div>
+                    <div class="step-indicator" id="pow-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="pow-run-btn" onclick="startDemo('pow')">Run</button>
+                        <button class="btn btn-success" id="pow-next-btn" onclick="nextStep('pow')" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetDemo('pow')">Reset</button>
+                    </div>
+                </div>
+
+                <div class="student-says">
+                    Professor, this takes 4 calls for 2<sup>4</sup>. What about 2<sup>1000</sup>? That would be 1000 calls!
+                </div>
+
+                <div class="teacher-says">
+                    Excellent observation! This is O(n) in the exponent. But there is a much faster way...
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 5: Fast Exponentiation ===================== -->
+            <section id="fast-power">
+                <h2>5. Fast Exponentiation(2, 10)</h2>
+
+                <div class="teacher-says">
+                    Instead of multiplying one at a time, we can <strong>halve the exponent</strong> when it is even! If we want 2<sup>10</sup>, we compute 2<sup>5</sup> once and then square it: (2<sup>5</sup>)<sup>2</sup>. This reduces the number of recursive calls from O(n) to <strong>O(log n)</strong>!
+                </div>
+
+                <div class="definition">
+                    <strong>Fast Power Algorithm:</strong><br>
+                    fastPow(base, 0) = 1 &nbsp;&nbsp;&nbsp;&nbsp; <em>(base case)</em><br>
+                    If exp is <strong>even</strong>: half = fastPow(base, exp/2), return half &times; half<br>
+                    If exp is <strong>odd</strong>: return base &times; fastPow(base, exp &minus; 1)
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - Fast Exponentiation
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">public class</span> <span class="class-name">FastPower</span> {
+
+    <span class="keyword">public static int</span> <span class="method">fastPow</span>(<span class="keyword">int</span> base, <span class="keyword">int</span> exp) {
+        <span class="keyword">if</span> (exp == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;                  <span class="comment">// Base case</span>
+        <span class="keyword">if</span> (exp % <span class="number">2</span> == <span class="number">0</span>) {                        <span class="comment">// Even exponent</span>
+            <span class="keyword">int</span> half = <span class="method">fastPow</span>(base, exp / <span class="number">2</span>);
+            <span class="keyword">return</span> half * half;                    <span class="comment">// Square the half</span>
+        } <span class="keyword">else</span> {                                    <span class="comment">// Odd exponent</span>
+            <span class="keyword">return</span> base * <span class="method">fastPow</span>(base, exp - <span class="number">1</span>);  <span class="comment">// Reduce to even</span>
+        }
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">fastPow</span>(<span class="number">2</span>, <span class="number">10</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"2^10 = "</span> + result);  <span class="comment">// Output: 2^10 = 1024</span>
+    }
+}</div>
+                </div>
+
+                <h3>Why is this faster?</h3>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Exponent (n)</th>
+                            <th>Regular Power Calls</th>
+                            <th>Fast Power Calls</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>4</td><td>4</td><td>3</td></tr>
+                        <tr><td>8</td><td>8</td><td>4</td></tr>
+                        <tr><td>10</td><td>10</td><td><strong>6</strong></td></tr>
+                        <tr><td>16</td><td>16</td><td>5</td></tr>
+                        <tr><td>32</td><td>32</td><td>6</td></tr>
+                        <tr><td>1024</td><td>1024</td><td><strong>11</strong></td></tr>
+                    </tbody>
+                </table>
+
+                <div class="demo-area">
+                    <h3>Interactive Visualization: fastPow(2, 10)</h3>
+                    <p style="text-align:center; color:#666; margin-bottom:15px;">Only <strong>6 recursive calls</strong> instead of 10!</p>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">CALL STACK</div>
+                            <div class="stack-box" id="fpow-stack">
+                                <div class="stack-box-empty">( empty )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">RETURN VALUES</div>
+                            <div class="return-panel" id="fpow-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="fpow-code-trace"></div>
+                    <div class="step-indicator" id="fpow-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="fpow-run-btn" onclick="startDemo('fpow')">Run</button>
+                        <button class="btn btn-success" id="fpow-next-btn" onclick="nextStep('fpow')" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetDemo('fpow')">Reset</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Key Insight:</strong> By halving the exponent each time it is even, we reduce the depth from O(n) to O(log n). For 2<sup>1024</sup>, regular power needs 1024 calls but fast power needs only <strong>11</strong>!
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 6: Recursive Multiplication ===================== -->
+            <section id="multiplication">
+                <h2>6. Recursive Multiplication(4, 3)</h2>
+
+                <div class="teacher-says">
+                    What if I tell you: compute 4 &times; 3 without using the multiplication operator? You can only use <strong>addition</strong>! The idea: 4 &times; 3 = 4 + 4 + 4, which is adding 4 to itself 3 times.
+                </div>
+
+                <div class="definition">
+                    <strong>Recursive Definition:</strong><br>
+                    mult(a, 0) = 0 &nbsp;&nbsp;&nbsp;&nbsp; <em>(base case: anything times zero is zero)</em><br>
+                    mult(a, b) = a + mult(a, b &minus; 1) &nbsp;&nbsp;&nbsp;&nbsp; <em>(recursive case)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - Recursive Multiplication
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">public class</span> <span class="class-name">RecursiveMultiply</span> {
+
+    <span class="keyword">public static int</span> <span class="method">multiply</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
+        <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;              <span class="comment">// Base case</span>
+        <span class="keyword">return</span> a + <span class="method">multiply</span>(a, b - <span class="number">1</span>);    <span class="comment">// Recursive case</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">multiply</span>(<span class="number">4</span>, <span class="number">3</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"4 x 3 = "</span> + result);  <span class="comment">// Output: 4 x 3 = 12</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>Interactive Visualization: multiply(4, 3)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">CALL STACK</div>
+                            <div class="stack-box" id="mult-stack">
+                                <div class="stack-box-empty">( empty )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">RETURN VALUES</div>
+                            <div class="return-panel" id="mult-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="mult-code-trace"></div>
+                    <div class="step-indicator" id="mult-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="mult-run-btn" onclick="startDemo('mult')">Run</button>
+                        <button class="btn btn-success" id="mult-next-btn" onclick="nextStep('mult')" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetDemo('mult')">Reset</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Pattern:</strong> Notice how each pop adds 4 to the previous result: 0 &rarr; 4 &rarr; 8 &rarr; 12. We are building the product through repeated addition!
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 7: Fibonacci ===================== -->
+            <section id="fibonacci">
+                <h2>7. Fibonacci(5)</h2>
+
+                <div class="teacher-says">
+                    Now we come to a very special problem: <strong>Fibonacci numbers</strong>. The Fibonacci sequence is a list of numbers where each number is the <strong>sum of the two numbers before it</strong>. Unlike all our previous examples, Fibonacci makes <strong>two</strong> recursive calls! This creates a <strong>branching tree</strong> of calls.
+                </div>
+
+                <div class="definition">
+                    <strong>Fibonacci Sequence:</strong> 1, 1, 2, 3, 5, 8, 13, 21, ...<br>
+                    Each number is the sum of the two before it.<br><br>
+                    Fib(1) = 1, &nbsp; Fib(2) = 1 &nbsp;&nbsp;&nbsp;&nbsp; <em>(two base cases!)</em><br>
+                    Fib(n) = Fib(n &minus; 1) + Fib(n &minus; 2) &nbsp;&nbsp;&nbsp;&nbsp; <em>(for n &ge; 3)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - Recursive Fibonacci
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">public class</span> <span class="class-name">Fibonacci</span> {
+
+    <span class="keyword">public static int</span> <span class="method">fib</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) <span class="keyword">return</span> <span class="number">1</span>;              <span class="comment">// Base cases: fib(1)=1, fib(2)=1</span>
+        <span class="keyword">return</span> <span class="method">fib</span>(n - <span class="number">1</span>) + <span class="method">fib</span>(n - <span class="number">2</span>);   <span class="comment">// Two recursive calls!</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">fib</span>(<span class="number">5</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"fib(5) = "</span> + result);  <span class="comment">// Output: fib(5) = 5</span>
+    }
+}</div>
+                </div>
+
+                <div class="teacher-says">
+                    Let us first understand how Fibonacci works by drawing a <strong>call tree</strong>. To find Fib(5), we need Fib(4) and Fib(3). But to find Fib(4), we need Fib(3) and Fib(2). We keep breaking down until we reach the base cases!
+                </div>
+
+                <h3>Interactive Call Tree: How values sum up</h3>
+
+                <div class="demo-area">
+                    <p style="text-align:center; color:#666; margin-bottom:15px;">Click through to see how Fibonacci values propagate from base cases up to Fib(5).</p>
+
+                    <div class="call-tree-container" id="fib-tree-box">
+                        <h4 style="text-align: center; color: #7b1fa2; margin-bottom: 10px;">Call Tree for Fib(5)</h4>
+                        <div class="tree-visual">
+                            <ul>
+                                <li>
+                                    <span class="tree-node-box node-call" id="ft-5">Fib(5)</span>
+                                    <ul>
+                                        <li>
+                                            <span class="tree-node-box node-call" id="ft-4">Fib(4)</span>
+                                            <ul>
+                                                <li>
+                                                    <span class="tree-node-box node-call" id="ft-3b">Fib(3)</span>
+                                                    <ul>
+                                                        <li><span class="tree-node-box node-call" id="ft-2c">Fib(2)</span></li>
+                                                        <li><span class="tree-node-box node-call" id="ft-1b">Fib(1)</span></li>
+                                                    </ul>
+                                                </li>
+                                                <li><span class="tree-node-box node-call" id="ft-2a">Fib(2)</span></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <span class="tree-node-box node-call" id="ft-3a">Fib(3)</span>
+                                            <ul>
+                                                <li><span class="tree-node-box node-call" id="ft-2b">Fib(2)</span></li>
+                                                <li><span class="tree-node-box node-call" id="ft-1a">Fib(1)</span></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="narration" id="fib-tree-narration" style="margin-top: 15px;">
+                        Press "Start" to see how we break down Fib(5) and compute the answer step by step.
+                    </div>
+                    <div class="step-indicator" id="fib-tree-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="fib-tree-run-btn" onclick="startFibTree()">Start</button>
+                        <button class="btn btn-success" id="fib-tree-next-btn" onclick="nextFibTreeStep()" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetFibTree()">Reset</button>
+                    </div>
+                </div>
+
+                <div class="teacher-says">
+                    Wonderful! Now you can see how the values flow up from the base cases to give us <strong>Fib(5) = 5</strong>. But how does the computer actually execute this? It uses the <strong>call stack</strong>! Let us watch the stack in action.
+                </div>
+
+                <div class="warning">
+                    <strong>Notice:</strong> Fib(3) is computed <strong>twice</strong>, and Fib(2) is computed <strong>three times</strong>. For Fib(5) alone, we make <strong>9 function calls</strong>! This redundancy grows exponentially &mdash; Fib(40) makes over <strong>300 million</strong> calls!
+                </div>
+
+                <div class="demo-area">
+                    <h3>Interactive Visualization: Fib(5) &mdash; DFS Traversal</h3>
+                    <p style="text-align:center; color:#666; margin-bottom:15px;">Watch the stack grow and shrink as we traverse the call tree depth-first.</p>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">CALL STACK</div>
+                            <div class="stack-box" id="fib-stack">
+                                <div class="stack-box-empty">( empty )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">RETURN VALUES</div>
+                            <div class="return-panel" id="fib-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="fib-code-trace"></div>
+                    <div class="step-indicator" id="fib-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="fib-run-btn" onclick="startDemo('fib')">Run</button>
+                        <button class="btn btn-success" id="fib-next-btn" onclick="nextStep('fib')" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetDemo('fib')">Reset</button>
+                    </div>
+                </div>
+
+                <div class="teacher-says">
+                    My students, I want you to notice something very important from this visualization. Yes, Fib(5) made <strong>9 function calls</strong> in total, and Fib(10) would make <strong>109 calls</strong>, and Fib(40) over <strong>300 million</strong> calls. These are huge numbers! But look carefully at the stack &mdash; did all 9 calls sit in the stack <strong>at the same time</strong>? <strong>No!</strong>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Key Observation: The stack does NOT hold all calls at once!</strong>
+                    <p style="margin-top: 10px;">Watch the visualization again carefully. The stack goes <strong>deep into the left branch first</strong>, and when a call finishes, its frame is <strong>popped off</strong> before the right branch even starts. The maximum number of frames on the stack at any moment for Fib(5) is only <strong>5</strong> (main + the depth of the tree), not 9 (the total calls).</p>
+                    <p>This is exactly like the <strong>folder explorer</strong> from our previous tutorial &mdash; if you have thousands of files in a directory tree, the computer does not load all of them into memory at once. It goes deep into one folder, finishes, comes back, then enters the next folder.</p>
+                    <p>If <strong>all</strong> the calls were stacked at the same time, recursion would be impractical &mdash; the memory would overflow almost immediately! Instead, the stack only holds the <strong>current path from main() down to the active call</strong>. For Fib(n), the maximum stack depth is only <strong>O(n)</strong>, even though the total number of calls is O(2<sup>n</sup>).</p>
+                </div>
+
+                <div class="important">
+                    <strong>Complexity:</strong> Naive recursive Fibonacci is <strong>O(2<sup>n</sup>)</strong> &mdash; exponential! This is because of all the redundant computation. In future courses, you will learn techniques like <strong>memoization</strong> and <strong>dynamic programming</strong> to fix this.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 8: Sum of Digits ===================== -->
+            <section id="digits">
+                <h2>8. Sum of Digits(6573)</h2>
+
+                <div class="teacher-says">
+                    For our final problem, let us compute the sum of digits of a number. For example, the digits of 6573 are 6, 5, 7, and 3, and their sum is 6 + 5 + 7 + 3 = 21.
+                </div>
+
+                <div class="student-says">
+                    How do we extract individual digits recursively?
+                </div>
+
+                <div class="teacher-says">
+                    With two operations: <code>n % 10</code> gives the <strong>last digit</strong>, and <code>n / 10</code> gives the <strong>remaining digits</strong>. We keep extracting until we have a single digit (n &lt; 10).
+                </div>
+
+                <div class="definition">
+                    <strong>Recursive Definition:</strong><br>
+                    sumDigits(n) = n &nbsp;&nbsp;&nbsp;&nbsp; <em>if n &lt; 10 (single digit &mdash; base case)</em><br>
+                    sumDigits(n) = (n % 10) + sumDigits(n / 10) &nbsp;&nbsp;&nbsp;&nbsp; <em>(recursive case)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - Sum of Digits
+                        <span class="code-toggle">&#9660;</span>
+                    </div>
+                    <div class="code-block"><span class="keyword">public class</span> <span class="class-name">SumOfDigits</span> {
+
+    <span class="keyword">public static int</span> <span class="method">sumDigits</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">if</span> (n &lt; <span class="number">10</span>) <span class="keyword">return</span> n;                    <span class="comment">// Base case: single digit</span>
+        <span class="keyword">return</span> (n % <span class="number">10</span>) + <span class="method">sumDigits</span>(n / <span class="number">10</span>);    <span class="comment">// Last digit + rest</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">sumDigits</span>(<span class="number">6573</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"Sum = "</span> + result);  <span class="comment">// Output: Sum = 21</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>Interactive Visualization: sumDigits(6573)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">CALL STACK</div>
+                            <div class="stack-box" id="dig-stack">
+                                <div class="stack-box-empty">( empty )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">RETURN VALUES</div>
+                            <div class="return-panel" id="dig-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="dig-code-trace"></div>
+                    <div class="step-indicator" id="dig-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="dig-run-btn" onclick="startDemo('dig')">Run</button>
+                        <button class="btn btn-success" id="dig-next-btn" onclick="nextStep('dig')" style="display:none;">Next</button>
+                        <button class="btn btn-warning" onclick="resetDemo('dig')">Reset</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Neat!</strong> The recursion peels off digits from right to left (6573 &rarr; 657 &rarr; 65 &rarr; 6), then sums them back up during unwinding (6 &rarr; 11 &rarr; 18 &rarr; 21).
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 9: Summary ===================== -->
+            <section id="summary">
+                <h2>9. Summary</h2>
+
+                <div class="teacher-says">
+                    Excellent work today, my students! Let us review all seven problems side by side.
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Problem</th>
+                            <th>Base Case</th>
+                            <th>Recursive Formula</th>
+                            <th>Complexity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Factorial</strong></td>
+                            <td>fact(0) = 1</td>
+                            <td>n &times; fact(n&minus;1)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sum</strong></td>
+                            <td>sum(0) = 0</td>
+                            <td>n + sum(n&minus;1)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Power</strong></td>
+                            <td>pow(b,0) = 1</td>
+                            <td>b &times; pow(b, n&minus;1)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fast Power</strong></td>
+                            <td>fPow(b,0) = 1</td>
+                            <td>half&sup2; or b &times; fPow</td>
+                            <td><strong>O(log n)</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiply</strong></td>
+                            <td>mult(a,0) = 0</td>
+                            <td>a + mult(a, b&minus;1)</td>
+                            <td>O(b)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fibonacci</strong></td>
+                            <td>Fib(1)=1, Fib(2)=1</td>
+                            <td>fib(n&minus;1) + fib(n&minus;2)</td>
+                            <td><strong>O(2<sup>n</sup>)</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sum of Digits</strong></td>
+                            <td>n &lt; 10 &rarr; n</td>
+                            <td>(n%10) + sumDig(n/10)</td>
+                            <td>O(digits)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-left-color: #764ba2;">
+                    <h3 style="margin-top: 0;">Key Takeaways</h3>
+                    <ol>
+                        <li><strong>Every recursive problem</strong> has a base case and a recursive case.</li>
+                        <li><strong>Linear recursion</strong> (factorial, sum, power, multiply, digits) makes one call per step &mdash; the stack grows linearly.</li>
+                        <li><strong>Branching recursion</strong> (Fibonacci) makes multiple calls &mdash; this can lead to exponential time.</li>
+                        <li><strong>Fast exponentiation</strong> shows how a clever recursive structure can reduce O(n) to O(log n).</li>
+                        <li>The <strong>return values</strong> flow back up during the unwinding phase &mdash; this is where the actual computation happens!</li>
+                    </ol>
+                </div>
+
+                <div class="teacher-says">
+                    In the next tutorial, we will explore <strong>String Recursion</strong> &mdash; reversing strings, counting characters, and more. The same patterns you learned today will apply there too. Keep practicing!
+                </div>
+            </section>
+
+        </div>
+
+        <div style="text-align: center; padding: 25px 40px; color: #6b7280; font-size: 0.9rem; border-top: 1px solid #e5e7eb; line-height: 1.8;">
+            <div style="font-weight: bold; color: #1f2937; font-size: 1rem;">King Abdulaziz University</div>
+            <div>Faculty of Computing and Information Technology (FCIT)</div>
+            <div style="margin-top: 8px;">Prepared by Dr. Abdulmohsen Almalawi</div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== Code Toggle ====================
+        function toggleCode(header) {
+            const codeBlock = header.nextElementSibling;
+            const toggle = header.querySelector('.code-toggle');
+            codeBlock.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+
+        // ==================== Helper Functions ====================
+        function addStackFrame(stackId, html, frameClass) {
+            const stack = document.getElementById(stackId);
+            const empty = stack.querySelector('.stack-box-empty');
+            if (empty) empty.remove();
+            const frame = document.createElement('div');
+            frame.className = 'stack-frame ' + frameClass;
+            frame.innerHTML = html;
+            stack.insertBefore(frame, stack.firstChild);
+            return frame;
+        }
+
+        function removeTopFrame(stackId) {
+            const stack = document.getElementById(stackId);
+            const frames = stack.querySelectorAll('.stack-frame');
+            if (frames.length > 0) {
+                const top = frames[0];
+                top.style.animation = 'popFrame 0.4s ease forwards';
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        top.remove();
+                        if (stack.querySelectorAll('.stack-frame').length === 0) {
+                            stack.innerHTML = '<div class="stack-box-empty">( empty )</div>';
+                        }
+                        resolve();
+                    }, 400);
+                });
+            }
+            return Promise.resolve();
+        }
+
+        function updateTopFrame(stackId, newHtml) {
+            const stack = document.getElementById(stackId);
+            const frames = stack.querySelectorAll('.stack-frame');
+            if (frames.length > 0) {
+                frames[0].innerHTML = newHtml;
+                frames[0].style.animation = 'none';
+                frames[0].offsetHeight;
+                frames[0].style.animation = 'frameUpdate 0.5s ease';
+            }
+        }
+
+        function addReturnEntry(panelId, text, isFinal) {
+            const panel = document.getElementById(panelId);
+            const entry = document.createElement('div');
+            entry.className = 'return-entry' + (isFinal ? ' final' : '');
+            entry.textContent = text;
+            panel.appendChild(entry);
+        }
+
+        function setNarration(id, html) {
+            var el = document.getElementById(id);
+            if (el) el.innerHTML = html;
+        }
+
+        function setStep(id, text) {
+            document.getElementById(id).textContent = text;
+        }
+
+        // ==================== Generic Demo Engine ====================
+        const demos = {};
+
+        function registerDemo(name, steps) {
+            demos[name] = { steps: steps, currentStep: 0 };
+        }
+
+        function startDemo(name) {
+            resetDemo(name);
+            demos[name].currentStep = 0;
+            document.getElementById(name + '-run-btn').style.display = 'none';
+            document.getElementById(name + '-next-btn').style.display = '';
+            var traceEl = document.getElementById(name + '-code-trace');
+            if (traceEl && codeTraces[name] && codeTraces[name][0]) {
+                traceEl.style.display = 'block';
+                traceEl.textContent = codeTraces[name][0];
+            }
+            setNarration(name + '-narration', 'Ready! Click <strong>Next</strong> to step through the execution.');
+            setStep(name + '-step', 'Step 0 of ' + demos[name].steps.length);
+        }
+
+        async function nextStep(name) {
+            const demo = demos[name];
+            const btn = document.getElementById(name + '-next-btn');
+            btn.disabled = true;
+            demo.currentStep++;
+
+            if (demo.currentStep > demo.steps.length) {
+                btn.textContent = 'Done';
+                btn.disabled = true;
+                return;
+            }
+
+            const s = demo.steps[demo.currentStep - 1];
+
+            if (s.action === 'push') {
+                addStackFrame(name + '-stack', s.frameText, s.frameClass);
+            } else if (s.action === 'pop') {
+                await removeTopFrame(name + '-stack');
+                if (s.returnEntry) {
+                    addReturnEntry(name + '-returns', s.returnEntry, s.isFinal || false);
+                }
+                if (s.topFrameUpdate) {
+                    updateTopFrame(name + '-stack', s.topFrameUpdate);
+                }
+            }
+
+            setNarration(name + '-narration', s.narration);
+            var traceEl = document.getElementById(name + '-code-trace');
+            if (traceEl && codeTraces[name] && codeTraces[name][demo.currentStep]) {
+                traceEl.style.display = 'block';
+                traceEl.textContent = codeTraces[name][demo.currentStep];
+            }
+            setStep(name + '-step', 'Step ' + demo.currentStep + ' of ' + demo.steps.length);
+
+            setTimeout(() => { btn.disabled = false; }, 450);
+        }
+
+        function resetDemo(name) {
+            demos[name].currentStep = 0;
+            document.getElementById(name + '-stack').innerHTML = '<div class="stack-box-empty">( empty )</div>';
+            document.getElementById(name + '-returns').innerHTML = '';
+            var traceEl = document.getElementById(name + '-code-trace');
+            if (traceEl) { traceEl.style.display = 'none'; traceEl.textContent = ''; }
+            setNarration(name + '-narration', 'Press "Run" to start, then click "Next" to go step by step.');
+            setStep(name + '-step', '');
+            document.getElementById(name + '-run-btn').style.display = '';
+            const btn = document.getElementById(name + '-next-btn');
+            btn.style.display = 'none';
+            btn.textContent = 'Next';
+            btn.disabled = false;
+        }
+
+        // ==================== Code Trace Data ====================
+        var codeTraces = {
+            fact: [
+                // [0] shown at startDemo: preview of step 1
+                'main() will call factorial(5)\n\n  int result = factorial(5);\n\nClick Next to start the execution.',
+                // [1] after push main: preview of push fact(5)
+                'factorial(5) will be called where n = 5\n\n  if (n == 0) return 1;        // 5 == 0? No\n  return n * factorial(n-1);   // will compute 5 * factorial(4)\n\nClick Next to see factorial(5) enter the stack.',
+                // [2] after push fact(5): preview of push fact(4)
+                'factorial(4) will be called where n = 4\n\n  if (n == 0) return 1;        // 4 == 0? No\n  return n * factorial(n-1);   // will compute 4 * factorial(3)\n\nClick Next to see factorial(4) enter the stack.',
+                // [3] after push fact(4): preview of push fact(3)
+                'factorial(3) will be called where n = 3\n\n  if (n == 0) return 1;        // 3 == 0? No\n  return n * factorial(n-1);   // will compute 3 * factorial(2)\n\nClick Next to see factorial(3) enter the stack.',
+                // [4] after push fact(3): preview of push fact(2)
+                'factorial(2) will be called where n = 2\n\n  if (n == 0) return 1;        // 2 == 0? No\n  return n * factorial(n-1);   // will compute 2 * factorial(1)\n\nClick Next to see factorial(2) enter the stack.',
+                // [5] after push fact(2): preview of push fact(1)
+                'factorial(1) will be called where n = 1\n\n  if (n == 0) return 1;        // 1 == 0? No\n  return n * factorial(n-1);   // will compute 1 * factorial(0)\n\nClick Next to see factorial(1) enter the stack.',
+                // [6] after push fact(1): preview of push fact(0)
+                'factorial(0) will be called where n = 0\n\n  if (n == 0) return 1;        // 0 == 0? YES! BASE CASE!\n                               // Will return 1\n\nClick Next to see factorial(0) enter the stack.',
+                // [7] after push fact(0): preview of pop fact(0)
+                'factorial(0) reached the base case and will return 1.\nfactorial(1) is waiting for this value.\n\n  return 1 * factorial(0);     // 1 * 1 = 1\n\nClick Next to see factorial(0) pop from the stack.',
+                // [8] after pop fact(0): preview of pop fact(1)
+                'factorial(1) computed 1 * 1 = 1 and will return 1.\nfactorial(2) is waiting for this value.\n\n  return 2 * factorial(1);     // 2 * 1 = 2\n\nClick Next to see factorial(1) pop from the stack.',
+                // [9] after pop fact(1): preview of pop fact(2)
+                'factorial(2) computed 2 * 1 = 2 and will return 2.\nfactorial(3) is waiting for this value.\n\n  return 3 * factorial(2);     // 3 * 2 = 6\n\nClick Next to see factorial(2) pop from the stack.',
+                // [10] after pop fact(2): preview of pop fact(3)
+                'factorial(3) computed 3 * 2 = 6 and will return 6.\nfactorial(4) is waiting for this value.\n\n  return 4 * factorial(3);     // 4 * 6 = 24\n\nClick Next to see factorial(3) pop from the stack.',
+                // [11] after pop fact(3): preview of pop fact(4)
+                'factorial(4) computed 4 * 6 = 24 and will return 24.\nfactorial(5) is waiting for this value.\n\n  return 5 * factorial(4);     // 5 * 24 = 120\n\nClick Next to see factorial(4) pop from the stack.',
+                // [12] after pop fact(4): preview of pop fact(5)
+                'factorial(5) computed 5 * 24 = 120 and will return 120 to main().\n\n  int result = factorial(5);   // result = 120\n\nClick Next to see factorial(5) pop from the stack.',
+                // [13] after pop fact(5): preview of pop main
+                'factorial(5) returned 120 to main().\n\nFinal Answer: 5! = 5 \u00d7 4 \u00d7 3 \u00d7 2 \u00d7 1 = 120\n\nClick Next to complete the program.',
+                // [14] after pop main: summary
+                'Program complete!\n\nThe recursion unwound from the base case:\n  factorial(0) = 1\n  factorial(1) = 1 \u00d7 1 = 1\n  factorial(2) = 2 \u00d7 1 = 2\n  factorial(3) = 3 \u00d7 2 = 6\n  factorial(4) = 4 \u00d7 6 = 24\n  factorial(5) = 5 \u00d7 24 = 120'
+            ],
+            sum: [
+                'main() will call sum(5)\n\n  int result = sum(5);\n\nClick Next to start the execution.',
+                'sum(5) will be called where n = 5\n\n  if (n == 0) return 0;        // 5 == 0? No\n  return n + sum(n-1);         // will compute 5 + sum(4)\n\nClick Next to see sum(5) enter the stack.',
+                'sum(4) will be called where n = 4\n\n  if (n == 0) return 0;        // 4 == 0? No\n  return n + sum(n-1);         // will compute 4 + sum(3)\n\nClick Next to see sum(4) enter the stack.',
+                'sum(3) will be called where n = 3\n\n  if (n == 0) return 0;        // 3 == 0? No\n  return n + sum(n-1);         // will compute 3 + sum(2)\n\nClick Next to see sum(3) enter the stack.',
+                'sum(2) will be called where n = 2\n\n  if (n == 0) return 0;        // 2 == 0? No\n  return n + sum(n-1);         // will compute 2 + sum(1)\n\nClick Next to see sum(2) enter the stack.',
+                'sum(1) will be called where n = 1\n\n  if (n == 0) return 0;        // 1 == 0? No\n  return n + sum(n-1);         // will compute 1 + sum(0)\n\nClick Next to see sum(1) enter the stack.',
+                'sum(0) will be called where n = 0\n\n  if (n == 0) return 0;        // 0 == 0? YES! BASE CASE!\n                               // Will return 0\n\nClick Next to see sum(0) enter the stack.',
+                'sum(0) reached the base case and will return 0.\nsum(1) is waiting for this value.\n\n  return 1 + sum(0);           // 1 + 0 = 1\n\nClick Next to see sum(0) pop from the stack.',
+                'sum(1) computed 1 + 0 = 1 and will return 1.\nsum(2) is waiting for this value.\n\n  return 2 + sum(1);           // 2 + 1 = 3\n\nClick Next to see sum(1) pop from the stack.',
+                'sum(2) computed 2 + 1 = 3 and will return 3.\nsum(3) is waiting for this value.\n\n  return 3 + sum(2);           // 3 + 3 = 6\n\nClick Next to see sum(2) pop from the stack.',
+                'sum(3) computed 3 + 3 = 6 and will return 6.\nsum(4) is waiting for this value.\n\n  return 4 + sum(3);           // 4 + 6 = 10\n\nClick Next to see sum(3) pop from the stack.',
+                'sum(4) computed 4 + 6 = 10 and will return 10.\nsum(5) is waiting for this value.\n\n  return 5 + sum(4);           // 5 + 10 = 15\n\nClick Next to see sum(4) pop from the stack.',
+                'sum(5) computed 5 + 10 = 15 and will return 15 to main().\n\n  int result = sum(5);         // result = 15\n\nClick Next to see sum(5) pop from the stack.',
+                'sum(5) returned 15 to main().\n\nFinal Answer: 1 + 2 + 3 + 4 + 5 = 15\n\nClick Next to complete the program.',
+                'Program complete!\n\nThe recursion unwound from the base case:\n  sum(0) = 0\n  sum(1) = 1 + 0 = 1\n  sum(2) = 2 + 1 = 3\n  sum(3) = 3 + 3 = 6\n  sum(4) = 4 + 6 = 10\n  sum(5) = 5 + 10 = 15'
+            ],
+            pow: [
+                'main() will call power(2, 4)\n\n  int result = power(2, 4);\n\nClick Next to start the execution.',
+                'power(2, 4) will be called where base = 2, exp = 4\n\n  if (exp == 0) return 1;            // 4 == 0? No\n  return base * power(base, exp-1);  // will compute 2 * power(2, 3)\n\nClick Next to see power(2, 4) enter the stack.',
+                'power(2, 3) will be called where base = 2, exp = 3\n\n  if (exp == 0) return 1;            // 3 == 0? No\n  return base * power(base, exp-1);  // will compute 2 * power(2, 2)\n\nClick Next to see power(2, 3) enter the stack.',
+                'power(2, 2) will be called where base = 2, exp = 2\n\n  if (exp == 0) return 1;            // 2 == 0? No\n  return base * power(base, exp-1);  // will compute 2 * power(2, 1)\n\nClick Next to see power(2, 2) enter the stack.',
+                'power(2, 1) will be called where base = 2, exp = 1\n\n  if (exp == 0) return 1;            // 1 == 0? No\n  return base * power(base, exp-1);  // will compute 2 * power(2, 0)\n\nClick Next to see power(2, 1) enter the stack.',
+                'power(2, 0) will be called where base = 2, exp = 0\n\n  if (exp == 0) return 1;            // 0 == 0? YES! BASE CASE!\n                                     // Will return 1\n\nClick Next to see power(2, 0) enter the stack.',
+                'power(2, 0) reached the base case and will return 1.\npower(2, 1) is waiting for this value.\n\n  return 2 * power(2, 0);            // 2 * 1 = 2\n\nClick Next to see power(2, 0) pop from the stack.',
+                'power(2, 1) computed 2 * 1 = 2 and will return 2.\npower(2, 2) is waiting for this value.\n\n  return 2 * power(2, 1);            // 2 * 2 = 4\n\nClick Next to see power(2, 1) pop from the stack.',
+                'power(2, 2) computed 2 * 2 = 4 and will return 4.\npower(2, 3) is waiting for this value.\n\n  return 2 * power(2, 2);            // 2 * 4 = 8\n\nClick Next to see power(2, 2) pop from the stack.',
+                'power(2, 3) computed 2 * 4 = 8 and will return 8.\npower(2, 4) is waiting for this value.\n\n  return 2 * power(2, 3);            // 2 * 8 = 16\n\nClick Next to see power(2, 3) pop from the stack.',
+                'power(2, 4) computed 2 * 8 = 16 and will return 16 to main().\n\n  int result = power(2, 4);          // result = 16\n\nClick Next to see power(2, 4) pop from the stack.',
+                'power(2, 4) returned 16 to main().\n\nFinal Answer: 2^4 = 16\n\nClick Next to complete the program.',
+                'Program complete!\n\nThe recursion unwound from the base case:\n  power(2, 0) = 1\n  power(2, 1) = 2 * 1 = 2\n  power(2, 2) = 2 * 2 = 4\n  power(2, 3) = 2 * 4 = 8\n  power(2, 4) = 2 * 8 = 16'
+            ],
+            fpow: [
+                'main() will call fastPow(2, 10)\n\n  int result = fastPow(2, 10);\n\nClick Next to start the execution.',
+                'fastPow(2, 10) will be called where base = 2, exp = 10\n\n  if (exp == 0) return 1;              // 10 == 0? No\n  if (exp % 2 == 0) {                  // 10 is EVEN\n      int half = fastPow(base, exp/2);  // half = fastPow(2, 5)\n      return half * half;\n  }\n\nClick Next to see fastPow(2, 10) enter the stack.',
+                'fastPow(2, 5) will be called where base = 2, exp = 5\n\n  if (exp == 0) return 1;              // 5 == 0? No\n  if (exp % 2 == 0) ...                // 5 is ODD\n  else {\n      return base * fastPow(base, exp-1); // 2 * fastPow(2, 4)\n  }\n\nClick Next to see fastPow(2, 5) enter the stack.',
+                'fastPow(2, 4) will be called where base = 2, exp = 4\n\n  if (exp == 0) return 1;              // 4 == 0? No\n  if (exp % 2 == 0) {                  // 4 is EVEN\n      int half = fastPow(base, exp/2);  // half = fastPow(2, 2)\n      return half * half;\n  }\n\nClick Next to see fastPow(2, 4) enter the stack.',
+                'fastPow(2, 2) will be called where base = 2, exp = 2\n\n  if (exp == 0) return 1;              // 2 == 0? No\n  if (exp % 2 == 0) {                  // 2 is EVEN\n      int half = fastPow(base, exp/2);  // half = fastPow(2, 1)\n      return half * half;\n  }\n\nClick Next to see fastPow(2, 2) enter the stack.',
+                'fastPow(2, 1) will be called where base = 2, exp = 1\n\n  if (exp == 0) return 1;              // 1 == 0? No\n  if (exp % 2 == 0) ...                // 1 is ODD\n  else {\n      return base * fastPow(base, exp-1); // 2 * fastPow(2, 0)\n  }\n\nClick Next to see fastPow(2, 1) enter the stack.',
+                'fastPow(2, 0) will be called where base = 2, exp = 0\n\n  if (exp == 0) return 1;              // 0 == 0? YES! BASE CASE!\n                                       // Will return 1\n\nClick Next to see fastPow(2, 0) enter the stack.',
+                'fastPow(2, 0) reached the base case and will return 1.\nfastPow(2, 1) is waiting for this value.\n\n  return 2 * fastPow(2, 0);            // 2 * 1 = 2\n\nClick Next to see fastPow(2, 0) pop from the stack.',
+                'fastPow(2, 1) computed 2 * 1 = 2 and will return 2.\nfastPow(2, 2) is waiting: half = 2\n\n  return half * half;                  // 2 * 2 = 4\n\nClick Next to see fastPow(2, 1) pop from the stack.',
+                'fastPow(2, 2) computed 2 * 2 = 4 and will return 4.\nfastPow(2, 4) is waiting: half = 4\n\n  return half * half;                  // 4 * 4 = 16\n\nClick Next to see fastPow(2, 2) pop from the stack.',
+                'fastPow(2, 4) computed 4 * 4 = 16 and will return 16.\nfastPow(2, 5) is waiting for this value.\n\n  return 2 * fastPow(2, 4);            // 2 * 16 = 32\n\nClick Next to see fastPow(2, 4) pop from the stack.',
+                'fastPow(2, 5) computed 2 * 16 = 32 and will return 32.\nfastPow(2, 10) is waiting: half = 32\n\n  return half * half;                  // 32 * 32 = 1024\n\nClick Next to see fastPow(2, 5) pop from the stack.',
+                'fastPow(2, 10) computed 32 * 32 = 1024 and will return 1024 to main().\n\n  int result = fastPow(2, 10);         // result = 1024\n\nClick Next to see fastPow(2, 10) pop from the stack.',
+                'fastPow(2, 10) returned 1024 to main().\n\nFinal Answer: 2^10 = 1024 (only 6 recursive calls!)\n\nClick Next to complete the program.',
+                'Program complete!\n\nThe recursion unwound from the base case:\n  fastPow(2, 0) = 1\n  fastPow(2, 1) = 2 * 1 = 2\n  fastPow(2, 2) = 2 * 2 = 4        (half * half)\n  fastPow(2, 4) = 4 * 4 = 16       (half * half)\n  fastPow(2, 5) = 2 * 16 = 32\n  fastPow(2, 10) = 32 * 32 = 1024   (half * half)'
+            ],
+            mult: [
+                'main() will call multiply(4, 3)\n\n  int result = multiply(4, 3);\n\nClick Next to start the execution.',
+                'multiply(4, 3) will be called where a = 4, b = 3\n\n  if (b == 0) return 0;            // 3 == 0? No\n  return a + multiply(a, b-1);     // will compute 4 + multiply(4, 2)\n\nClick Next to see multiply(4, 3) enter the stack.',
+                'multiply(4, 2) will be called where a = 4, b = 2\n\n  if (b == 0) return 0;            // 2 == 0? No\n  return a + multiply(a, b-1);     // will compute 4 + multiply(4, 1)\n\nClick Next to see multiply(4, 2) enter the stack.',
+                'multiply(4, 1) will be called where a = 4, b = 1\n\n  if (b == 0) return 0;            // 1 == 0? No\n  return a + multiply(a, b-1);     // will compute 4 + multiply(4, 0)\n\nClick Next to see multiply(4, 1) enter the stack.',
+                'multiply(4, 0) will be called where a = 4, b = 0\n\n  if (b == 0) return 0;            // 0 == 0? YES! BASE CASE!\n                                   // Will return 0\n\nClick Next to see multiply(4, 0) enter the stack.',
+                'multiply(4, 0) reached the base case and will return 0.\nmultiply(4, 1) is waiting for this value.\n\n  return 4 + multiply(4, 0);       // 4 + 0 = 4\n\nClick Next to see multiply(4, 0) pop from the stack.',
+                'multiply(4, 1) computed 4 + 0 = 4 and will return 4.\nmultiply(4, 2) is waiting for this value.\n\n  return 4 + multiply(4, 1);       // 4 + 4 = 8\n\nClick Next to see multiply(4, 1) pop from the stack.',
+                'multiply(4, 2) computed 4 + 4 = 8 and will return 8.\nmultiply(4, 3) is waiting for this value.\n\n  return 4 + multiply(4, 2);       // 4 + 8 = 12\n\nClick Next to see multiply(4, 2) pop from the stack.',
+                'multiply(4, 3) computed 4 + 8 = 12 and will return 12 to main().\n\n  int result = multiply(4, 3);     // result = 12\n\nClick Next to see multiply(4, 3) pop from the stack.',
+                'multiply(4, 3) returned 12 to main().\n\nFinal Answer: 4 \u00d7 3 = 4 + 4 + 4 = 12\n\nClick Next to complete the program.',
+                'Program complete!\n\nThe recursion unwound from the base case:\n  multiply(4, 0) = 0\n  multiply(4, 1) = 4 + 0 = 4\n  multiply(4, 2) = 4 + 4 = 8\n  multiply(4, 3) = 4 + 8 = 12'
+            ],
+            fib: [
+                'main() will call fib(5)\n\n  int result = fib(5);\n\nClick Next to start the execution.',
+                'fib(5) will be called where n = 5\n\n  if (n <= 2) return 1;            // 5 <= 2? No\n  return fib(n-1) + fib(n-2);      // will compute fib(4) + fib(3)\n                                   // Left branch first: fib(4)\n\nClick Next to see fib(5) enter the stack.',
+                'fib(4) will be called where n = 4\n\n  if (n <= 2) return 1;            // 4 <= 2? No\n  return fib(n-1) + fib(n-2);      // will compute fib(3) + fib(2)\n                                   // Left branch first: fib(3)\n\nClick Next to see fib(4) enter the stack.',
+                'fib(3) will be called where n = 3\n\n  if (n <= 2) return 1;            // 3 <= 2? No\n  return fib(n-1) + fib(n-2);      // will compute fib(2) + fib(1)\n                                   // Left branch first: fib(2)\n\nClick Next to see fib(3) enter the stack.',
+                'fib(2) will be called where n = 2\n\n  if (n <= 2) return 1;            // 2 <= 2? YES! BASE CASE!\n                                   // Will return 1\n\nClick Next to see fib(2) enter the stack.',
+                'fib(2) reached the base case and will return 1.\nfib(3) has received the left value.\nNow fib(3) needs the right branch: fib(1).\n\nClick Next to see fib(2) pop from the stack.',
+                'fib(1) will be called where n = 1\n\n  if (n <= 2) return 1;            // 1 <= 2? YES! BASE CASE!\n                                   // Will return 1\n\nClick Next to see fib(1) enter the stack.',
+                'fib(1) reached the base case and will return 1.\nfib(3) now has both values: fib(2)=1, fib(1)=1\n\n  return fib(2) + fib(1);          // 1 + 1 = 2\n\nClick Next to see fib(1) pop from the stack.',
+                'fib(3) computed 1 + 1 = 2 and will return 2.\nfib(4) has received the left value.\nNow fib(4) needs the right branch: fib(2).\n\nClick Next to see fib(3) pop from the stack.',
+                'fib(2) will be called where n = 2\n\n  if (n <= 2) return 1;            // 2 <= 2? YES! BASE CASE!\n                                   // Will return 1\n\nClick Next to see fib(2) enter the stack.',
+                'fib(2) reached the base case and will return 1.\nfib(4) now has both values: fib(3)=2, fib(2)=1\n\n  return fib(3) + fib(2);          // 2 + 1 = 3\n\nClick Next to see fib(2) pop from the stack.',
+                'fib(4) computed 2 + 1 = 3 and will return 3.\nfib(5) has received the left value.\nNow fib(5) needs the right branch: fib(3).\n\nClick Next to see fib(4) pop from the stack.',
+                'fib(3) will be called AGAIN where n = 3\n(This is redundant! We already computed fib(3) = 2)\n\n  if (n <= 2) return 1;            // 3 <= 2? No\n  return fib(n-1) + fib(n-2);      // fib(2) + fib(1)\n\nClick Next to see fib(3) enter the stack.',
+                'fib(2) will be called where n = 2\n\n  if (n <= 2) return 1;            // 2 <= 2? YES! BASE CASE!\n                                   // Will return 1\n\nClick Next to see fib(2) enter the stack.',
+                'fib(2) reached the base case and will return 1.\nfib(3) needs the right branch: fib(1).\n\nClick Next to see fib(2) pop from the stack.',
+                'fib(1) will be called where n = 1\n\n  if (n <= 2) return 1;            // 1 <= 2? YES! BASE CASE!\n                                   // Will return 1\n\nClick Next to see fib(1) enter the stack.',
+                'fib(1) reached the base case and will return 1.\nfib(3) now has both values: fib(2)=1, fib(1)=1\n\n  return fib(2) + fib(1);          // 1 + 1 = 2\n\nClick Next to see fib(1) pop from the stack.',
+                'fib(3) computed 1 + 1 = 2 (same result as before!).\nfib(5) now has both values: fib(4)=3, fib(3)=2\n\n  return fib(4) + fib(3);          // 3 + 2 = 5\n\nClick Next to see fib(3) pop from the stack.',
+                'fib(5) computed 3 + 2 = 5 and will return 5 to main().\n\n  int result = fib(5);             // result = 5\n\nClick Next to see fib(5) pop from the stack.',
+                'fib(5) returned 5 to main().\n\nFinal Answer: fib(5) = 5\n9 function calls total, many redundant!\n\nClick Next to complete the program.',
+                'Program complete!\n\nThe Fibonacci sequence: 1, 1, 2, 3, 5\n  Fib(1) = 1\n  Fib(2) = 1\n  Fib(3) = Fib(2) + Fib(1) = 1 + 1 = 2\n  Fib(4) = Fib(3) + Fib(2) = 2 + 1 = 3\n  Fib(5) = Fib(4) + Fib(3) = 3 + 2 = 5\n\n9 calls for fib(5) due to redundant computation!'
+            ],
+            dig: [
+                'main() will call sumDigits(6573)\n\n  int result = sumDigits(6573);\n\nClick Next to start the execution.',
+                'sumDigits(6573) will be called where n = 6573\n\n  if (n < 10) return n;              // 6573 < 10? No\n  return (n%10) + sumDigits(n/10);   // last digit: 6573%10 = 3\n                                     // will compute 3 + sumDigits(657)\n\nClick Next to see sumDigits(6573) enter the stack.',
+                'sumDigits(657) will be called where n = 657\n\n  if (n < 10) return n;              // 657 < 10? No\n  return (n%10) + sumDigits(n/10);   // last digit: 657%10 = 7\n                                     // will compute 7 + sumDigits(65)\n\nClick Next to see sumDigits(657) enter the stack.',
+                'sumDigits(65) will be called where n = 65\n\n  if (n < 10) return n;              // 65 < 10? No\n  return (n%10) + sumDigits(n/10);   // last digit: 65%10 = 5\n                                     // will compute 5 + sumDigits(6)\n\nClick Next to see sumDigits(65) enter the stack.',
+                'sumDigits(6) will be called where n = 6\n\n  if (n < 10) return n;              // 6 < 10? YES! BASE CASE!\n                                     // Single digit, will return 6\n\nClick Next to see sumDigits(6) enter the stack.',
+                'sumDigits(6) reached the base case and will return 6.\nsumDigits(65) is waiting for this value.\n\n  return (65%10) + sumDigits(6);     // 5 + 6 = 11\n\nClick Next to see sumDigits(6) pop from the stack.',
+                'sumDigits(65) computed 5 + 6 = 11 and will return 11.\nsumDigits(657) is waiting for this value.\n\n  return (657%10) + sumDigits(65);   // 7 + 11 = 18\n\nClick Next to see sumDigits(65) pop from the stack.',
+                'sumDigits(657) computed 7 + 11 = 18 and will return 18.\nsumDigits(6573) is waiting for this value.\n\n  return (6573%10) + sumDigits(657); // 3 + 18 = 21\n\nClick Next to see sumDigits(657) pop from the stack.',
+                'sumDigits(6573) computed 3 + 18 = 21 and will return 21 to main().\n\n  int result = sumDigits(6573);     // result = 21\n\nClick Next to see sumDigits(6573) pop from the stack.',
+                'sumDigits(6573) returned 21 to main().\n\nFinal Answer: 6 + 5 + 7 + 3 = 21\n\nClick Next to complete the program.',
+                'Program complete!\n\nThe recursion unwound from the base case:\n  sumDigits(6) = 6\n  sumDigits(65) = 5 + 6 = 11\n  sumDigits(657) = 7 + 11 = 18\n  sumDigits(6573) = 3 + 18 = 21'
+            ]
+        };
+
+        // ==================== Demo 1: Factorial(5) ====================
+        registerDemo('fact', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'Program starts. <strong>main()</strong> calls <strong>factorial(5)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">fact(5)</div><div class="frame-expr">5 \u00d7 fact(5-1)</div>', frameClass: 'depth-1',
+              narration: '<strong>fact(5)</strong>: Is 5 == 0? No! Must compute <code>5 \u00d7 fact(5-1)</code>. Calling fact(4)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(4)</div><div class="frame-expr">4 \u00d7 fact(4-1)</div>', frameClass: 'depth-2',
+              narration: '<strong>fact(4)</strong>: Is 4 == 0? No! Must compute <code>4 \u00d7 fact(4-1)</code>. Calling fact(3)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(3)</div><div class="frame-expr">3 \u00d7 fact(3-1)</div>', frameClass: 'depth-3',
+              narration: '<strong>fact(3)</strong>: Is 3 == 0? No! Must compute <code>3 \u00d7 fact(3-1)</code>. Calling fact(2)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(2)</div><div class="frame-expr">2 \u00d7 fact(2-1)</div>', frameClass: 'depth-4',
+              narration: '<strong>fact(2)</strong>: Is 2 == 0? No! Must compute <code>2 \u00d7 fact(2-1)</code>. Calling fact(1)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(1)</div><div class="frame-expr">1 \u00d7 fact(1-1)</div>', frameClass: 'depth-5',
+              narration: '<strong>fact(1)</strong>: Is 1 == 0? No! Must compute <code>1 \u00d7 fact(1-1)</code>. Calling fact(0)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(0)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fact(0)</strong>: Is 0 == 0? <strong>YES! Base case!</strong> Returns 1.' },
+            { action: 'pop', returnEntry: 'fact(0) = 1',
+              topFrameUpdate: '<div class="frame-name">fact(1)</div><div class="frame-expr">1 \u00d7 <span class="resolved">1</span> = 1</div>',
+              narration: '<strong>fact(0)</strong> returns <strong>1</strong>. This value replaces <code>fact(1-1)</code> in fact(1). Now 1 \u00d7 1 = <strong>1</strong>.' },
+            { action: 'pop', returnEntry: 'fact(1) = 1 \u00d7 1 = 1',
+              topFrameUpdate: '<div class="frame-name">fact(2)</div><div class="frame-expr">2 \u00d7 <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>fact(1)</strong> returns <strong>1</strong>. This value replaces <code>fact(2-1)</code> in fact(2). Now 2 \u00d7 1 = <strong>2</strong>.' },
+            { action: 'pop', returnEntry: 'fact(2) = 2 \u00d7 1 = 2',
+              topFrameUpdate: '<div class="frame-name">fact(3)</div><div class="frame-expr">3 \u00d7 <span class="resolved">2</span> = 6</div>',
+              narration: '<strong>fact(2)</strong> returns <strong>2</strong>. This value replaces <code>fact(3-1)</code> in fact(3). Now 3 \u00d7 2 = <strong>6</strong>.' },
+            { action: 'pop', returnEntry: 'fact(3) = 3 \u00d7 2 = 6',
+              topFrameUpdate: '<div class="frame-name">fact(4)</div><div class="frame-expr">4 \u00d7 <span class="resolved">6</span> = 24</div>',
+              narration: '<strong>fact(3)</strong> returns <strong>6</strong>. This value replaces <code>fact(4-1)</code> in fact(4). Now 4 \u00d7 6 = <strong>24</strong>.' },
+            { action: 'pop', returnEntry: 'fact(4) = 4 \u00d7 6 = 24',
+              topFrameUpdate: '<div class="frame-name">fact(5)</div><div class="frame-expr">5 \u00d7 <span class="resolved">24</span> = 120</div>',
+              narration: '<strong>fact(4)</strong> returns <strong>24</strong>. This value replaces <code>fact(5-1)</code> in fact(5). Now 5 \u00d7 24 = <strong>120</strong>.' },
+            { action: 'pop', returnEntry: 'fact(5) = 5 \u00d7 24 = 120', isFinal: true,
+              narration: '<strong>fact(5)</strong> returns <strong>120</strong> to main(). Final answer: <strong>5! = 120</strong>' },
+            { action: 'pop',
+              narration: '<strong>main()</strong> receives 120. Program ends. <strong>5! = 120</strong>' }
+        ]);
+
+        // ==================== Demo 2: Sum(5) ====================
+        registerDemo('sum', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'Program starts. <strong>main()</strong> calls <strong>sum(5)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">sum(5)</div><div class="frame-expr">5 + sum(5-1)</div>', frameClass: 'depth-1',
+              narration: '<strong>sum(5)</strong>: Is 5 == 0? No! Must compute <code>5 + sum(5-1)</code>. Calling sum(4)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(4)</div><div class="frame-expr">4 + sum(4-1)</div>', frameClass: 'depth-2',
+              narration: '<strong>sum(4)</strong>: Is 4 == 0? No! Must compute <code>4 + sum(4-1)</code>. Calling sum(3)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(3)</div><div class="frame-expr">3 + sum(3-1)</div>', frameClass: 'depth-3',
+              narration: '<strong>sum(3)</strong>: Is 3 == 0? No! Must compute <code>3 + sum(3-1)</code>. Calling sum(2)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(2)</div><div class="frame-expr">2 + sum(2-1)</div>', frameClass: 'depth-4',
+              narration: '<strong>sum(2)</strong>: Is 2 == 0? No! Must compute <code>2 + sum(2-1)</code>. Calling sum(1)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(1)</div><div class="frame-expr">1 + sum(1-1)</div>', frameClass: 'depth-5',
+              narration: '<strong>sum(1)</strong>: Is 1 == 0? No! Must compute <code>1 + sum(1-1)</code>. Calling sum(0)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(0)</div><div class="frame-expr">return 0</div>', frameClass: 'base-frame',
+              narration: '<strong>sum(0)</strong>: Is 0 == 0? <strong>YES! Base case!</strong> Returns 0.' },
+            { action: 'pop', returnEntry: 'sum(0) = 0',
+              topFrameUpdate: '<div class="frame-name">sum(1)</div><div class="frame-expr">1 + <span class="resolved">0</span> = 1</div>',
+              narration: '<strong>sum(0)</strong> returns <strong>0</strong>. This value replaces <code>sum(1-1)</code> in sum(1). Now 1 + 0 = <strong>1</strong>.' },
+            { action: 'pop', returnEntry: 'sum(1) = 1 + 0 = 1',
+              topFrameUpdate: '<div class="frame-name">sum(2)</div><div class="frame-expr">2 + <span class="resolved">1</span> = 3</div>',
+              narration: '<strong>sum(1)</strong> returns <strong>1</strong>. This value replaces <code>sum(2-1)</code> in sum(2). Now 2 + 1 = <strong>3</strong>.' },
+            { action: 'pop', returnEntry: 'sum(2) = 2 + 1 = 3',
+              topFrameUpdate: '<div class="frame-name">sum(3)</div><div class="frame-expr">3 + <span class="resolved">3</span> = 6</div>',
+              narration: '<strong>sum(2)</strong> returns <strong>3</strong>. This value replaces <code>sum(3-1)</code> in sum(3). Now 3 + 3 = <strong>6</strong>.' },
+            { action: 'pop', returnEntry: 'sum(3) = 3 + 3 = 6',
+              topFrameUpdate: '<div class="frame-name">sum(4)</div><div class="frame-expr">4 + <span class="resolved">6</span> = 10</div>',
+              narration: '<strong>sum(3)</strong> returns <strong>6</strong>. This value replaces <code>sum(4-1)</code> in sum(4). Now 4 + 6 = <strong>10</strong>.' },
+            { action: 'pop', returnEntry: 'sum(4) = 4 + 6 = 10',
+              topFrameUpdate: '<div class="frame-name">sum(5)</div><div class="frame-expr">5 + <span class="resolved">10</span> = 15</div>',
+              narration: '<strong>sum(4)</strong> returns <strong>10</strong>. This value replaces <code>sum(5-1)</code> in sum(5). Now 5 + 10 = <strong>15</strong>.' },
+            { action: 'pop', returnEntry: 'sum(5) = 5 + 10 = 15', isFinal: true,
+              narration: '<strong>sum(5)</strong> returns <strong>15</strong> to main(). Final answer: <strong>1+2+3+4+5 = 15</strong>' },
+            { action: 'pop',
+              narration: '<strong>main()</strong> receives 15. Program ends. <strong>1+2+3+4+5 = 15</strong>' }
+        ]);
+
+        // ==================== Demo 3: Power(2,4) ====================
+        registerDemo('pow', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'Program starts. <strong>main()</strong> calls <strong>power(2, 4)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,4)</div><div class="frame-expr">2 \u00d7 pow(2, 4-1)</div>', frameClass: 'depth-1',
+              narration: '<strong>pow(2,4)</strong>: Is exp == 0? No! Must compute <code>2 \u00d7 pow(2, 4-1)</code>. Calling pow(2,3)...' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,3)</div><div class="frame-expr">2 \u00d7 pow(2, 3-1)</div>', frameClass: 'depth-2',
+              narration: '<strong>pow(2,3)</strong>: Is exp == 0? No! Must compute <code>2 \u00d7 pow(2, 3-1)</code>. Calling pow(2,2)...' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,2)</div><div class="frame-expr">2 \u00d7 pow(2, 2-1)</div>', frameClass: 'depth-3',
+              narration: '<strong>pow(2,2)</strong>: Is exp == 0? No! Must compute <code>2 \u00d7 pow(2, 2-1)</code>. Calling pow(2,1)...' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,1)</div><div class="frame-expr">2 \u00d7 pow(2, 1-1)</div>', frameClass: 'depth-4',
+              narration: '<strong>pow(2,1)</strong>: Is exp == 0? No! Must compute <code>2 \u00d7 pow(2, 1-1)</code>. Calling pow(2,0)...' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,0)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>pow(2,0)</strong>: Is exp == 0? <strong>YES! Base case!</strong> Returns 1.' },
+            { action: 'pop', returnEntry: 'pow(2,0) = 1',
+              topFrameUpdate: '<div class="frame-name">pow(2,1)</div><div class="frame-expr">2 \u00d7 <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>pow(2,0)</strong> returns <strong>1</strong>. Replaces <code>pow(2, 1-1)</code> in pow(2,1). Now 2 \u00d7 1 = <strong>2</strong>.' },
+            { action: 'pop', returnEntry: 'pow(2,1) = 2 \u00d7 1 = 2',
+              topFrameUpdate: '<div class="frame-name">pow(2,2)</div><div class="frame-expr">2 \u00d7 <span class="resolved">2</span> = 4</div>',
+              narration: '<strong>pow(2,1)</strong> returns <strong>2</strong>. Replaces <code>pow(2, 2-1)</code> in pow(2,2). Now 2 \u00d7 2 = <strong>4</strong>.' },
+            { action: 'pop', returnEntry: 'pow(2,2) = 2 \u00d7 2 = 4',
+              topFrameUpdate: '<div class="frame-name">pow(2,3)</div><div class="frame-expr">2 \u00d7 <span class="resolved">4</span> = 8</div>',
+              narration: '<strong>pow(2,2)</strong> returns <strong>4</strong>. Replaces <code>pow(2, 3-1)</code> in pow(2,3). Now 2 \u00d7 4 = <strong>8</strong>.' },
+            { action: 'pop', returnEntry: 'pow(2,3) = 2 \u00d7 4 = 8',
+              topFrameUpdate: '<div class="frame-name">pow(2,4)</div><div class="frame-expr">2 \u00d7 <span class="resolved">8</span> = 16</div>',
+              narration: '<strong>pow(2,3)</strong> returns <strong>8</strong>. Replaces <code>pow(2, 4-1)</code> in pow(2,4). Now 2 \u00d7 8 = <strong>16</strong>.' },
+            { action: 'pop', returnEntry: 'pow(2,4) = 2 \u00d7 8 = 16', isFinal: true,
+              narration: '<strong>pow(2,4)</strong> returns <strong>16</strong> to main(). Final answer: <strong>2\u2074 = 16</strong>' },
+            { action: 'pop',
+              narration: '<strong>main()</strong> receives 16. Program ends. <strong>2\u2074 = 16</strong>' }
+        ]);
+
+        // ==================== Demo 4: Fast Power(2,10) ====================
+        registerDemo('fpow', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'Program starts. <strong>main()</strong> calls <strong>fastPow(2, 10)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,10)</div><div class="frame-expr">fPow(2,5)\u00b2</div>', frameClass: 'depth-1',
+              narration: '<strong>fPow(2,10)</strong>: 10 is <em>even</em>. Compute half = fPow(2, 5), then return half\u00b2. Calling fPow(2,5)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,5)</div><div class="frame-expr">2 \u00d7 fPow(2,4)</div>', frameClass: 'depth-2',
+              narration: '<strong>fPow(2,5)</strong>: 5 is <em>odd</em>. Compute 2 \u00d7 fPow(2, 4). Calling fPow(2,4)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,4)</div><div class="frame-expr">fPow(2,2)\u00b2</div>', frameClass: 'depth-3',
+              narration: '<strong>fPow(2,4)</strong>: 4 is <em>even</em>. Compute half = fPow(2, 2), then return half\u00b2. Calling fPow(2,2)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,2)</div><div class="frame-expr">fPow(2,1)\u00b2</div>', frameClass: 'depth-4',
+              narration: '<strong>fPow(2,2)</strong>: 2 is <em>even</em>. Compute half = fPow(2, 1), then return half\u00b2. Calling fPow(2,1)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,1)</div><div class="frame-expr">2 \u00d7 fPow(2,0)</div>', frameClass: 'depth-5',
+              narration: '<strong>fPow(2,1)</strong>: 1 is <em>odd</em>. Compute 2 \u00d7 fPow(2, 0). Calling fPow(2,0)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,0)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fPow(2,0)</strong>: exp == 0! <strong>Base case!</strong> Returns 1.' },
+            { action: 'pop', returnEntry: 'fPow(2,0) = 1',
+              topFrameUpdate: '<div class="frame-name">fPow(2,1)</div><div class="frame-expr">2 \u00d7 <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>fPow(2,0)</strong> returns <strong>1</strong>. fPow(2,1) = 2 \u00d7 1 = <strong>2</strong>.' },
+            { action: 'pop', returnEntry: 'fPow(2,1) = 2 \u00d7 1 = 2',
+              topFrameUpdate: '<div class="frame-name">fPow(2,2)</div><div class="frame-expr"><span class="resolved">2</span>\u00b2 = 4</div>',
+              narration: '<strong>fPow(2,1)</strong> returns <strong>2</strong>. fPow(2,2): half=2, half\u00b2 = 2\u00d72 = <strong>4</strong>.' },
+            { action: 'pop', returnEntry: 'fPow(2,2) = 2\u00b2 = 4',
+              topFrameUpdate: '<div class="frame-name">fPow(2,4)</div><div class="frame-expr"><span class="resolved">4</span>\u00b2 = 16</div>',
+              narration: '<strong>fPow(2,2)</strong> returns <strong>4</strong>. fPow(2,4): half=4, half\u00b2 = 4\u00d74 = <strong>16</strong>.' },
+            { action: 'pop', returnEntry: 'fPow(2,4) = 4\u00b2 = 16',
+              topFrameUpdate: '<div class="frame-name">fPow(2,5)</div><div class="frame-expr">2 \u00d7 <span class="resolved">16</span> = 32</div>',
+              narration: '<strong>fPow(2,4)</strong> returns <strong>16</strong>. fPow(2,5) = 2 \u00d7 16 = <strong>32</strong>.' },
+            { action: 'pop', returnEntry: 'fPow(2,5) = 2 \u00d7 16 = 32',
+              topFrameUpdate: '<div class="frame-name">fPow(2,10)</div><div class="frame-expr"><span class="resolved">32</span>\u00b2 = 1024</div>',
+              narration: '<strong>fPow(2,5)</strong> returns <strong>32</strong>. fPow(2,10): half=32, 32\u00b2 = <strong>1024</strong>. Only 6 calls!' },
+            { action: 'pop', returnEntry: 'fPow(2,10) = 32\u00b2 = 1024', isFinal: true,
+              narration: '<strong>fPow(2,10)</strong> returns <strong>1024</strong> to main(). Final answer!' },
+            { action: 'pop',
+              narration: '<strong>main()</strong> receives 1024. <strong>2\u00b9\u2070 = 1024</strong> with just 6 recursive calls!' }
+        ]);
+
+        // ==================== Demo 5: Multiply(4,3) ====================
+        registerDemo('mult', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'Program starts. <strong>main()</strong> calls <strong>multiply(4, 3)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">mult(4,3)</div><div class="frame-expr">4 + mult(4, 3-1)</div>', frameClass: 'depth-1',
+              narration: '<strong>mult(4,3)</strong>: Is b == 0? No! Must compute <code>4 + mult(4, 3-1)</code>. Calling mult(4,2)...' },
+            { action: 'push', frameText: '<div class="frame-name">mult(4,2)</div><div class="frame-expr">4 + mult(4, 2-1)</div>', frameClass: 'depth-2',
+              narration: '<strong>mult(4,2)</strong>: Is b == 0? No! Must compute <code>4 + mult(4, 2-1)</code>. Calling mult(4,1)...' },
+            { action: 'push', frameText: '<div class="frame-name">mult(4,1)</div><div class="frame-expr">4 + mult(4, 1-1)</div>', frameClass: 'depth-3',
+              narration: '<strong>mult(4,1)</strong>: Is b == 0? No! Must compute <code>4 + mult(4, 1-1)</code>. Calling mult(4,0)...' },
+            { action: 'push', frameText: '<div class="frame-name">mult(4,0)</div><div class="frame-expr">return 0</div>', frameClass: 'base-frame',
+              narration: '<strong>mult(4,0)</strong>: Is b == 0? <strong>YES! Base case!</strong> Returns 0.' },
+            { action: 'pop', returnEntry: 'mult(4,0) = 0',
+              topFrameUpdate: '<div class="frame-name">mult(4,1)</div><div class="frame-expr">4 + <span class="resolved">0</span> = 4</div>',
+              narration: '<strong>mult(4,0)</strong> returns <strong>0</strong>. Replaces <code>mult(4, 1-1)</code> in mult(4,1). Now 4 + 0 = <strong>4</strong>.' },
+            { action: 'pop', returnEntry: 'mult(4,1) = 4 + 0 = 4',
+              topFrameUpdate: '<div class="frame-name">mult(4,2)</div><div class="frame-expr">4 + <span class="resolved">4</span> = 8</div>',
+              narration: '<strong>mult(4,1)</strong> returns <strong>4</strong>. Replaces <code>mult(4, 2-1)</code> in mult(4,2). Now 4 + 4 = <strong>8</strong>.' },
+            { action: 'pop', returnEntry: 'mult(4,2) = 4 + 4 = 8',
+              topFrameUpdate: '<div class="frame-name">mult(4,3)</div><div class="frame-expr">4 + <span class="resolved">8</span> = 12</div>',
+              narration: '<strong>mult(4,2)</strong> returns <strong>8</strong>. Replaces <code>mult(4, 3-1)</code> in mult(4,3). Now 4 + 8 = <strong>12</strong>.' },
+            { action: 'pop', returnEntry: 'mult(4,3) = 4 + 8 = 12', isFinal: true,
+              narration: '<strong>mult(4,3)</strong> returns <strong>12</strong> to main(). Final answer: <strong>4 \u00d7 3 = 12</strong>' },
+            { action: 'pop',
+              narration: '<strong>main()</strong> receives 12. Program ends. <strong>4 \u00d7 3 = 12</strong>' }
+        ]);
+
+        // ==================== Demo 6: Fibonacci(5) ====================
+        registerDemo('fib', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'Program starts. <strong>main()</strong> calls <strong>fib(5)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">fib(5)</div><div class="frame-expr">fib(4) + fib(3)</div>', frameClass: 'depth-1',
+              narration: '<strong>fib(5)</strong>: 5 &ge; 3, so compute <code>fib(4) + fib(3)</code>. Calls <strong>fib(4)</strong> first (left branch).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(4)</div><div class="frame-expr">fib(3) + fib(2)</div>', frameClass: 'depth-2',
+              narration: '<strong>fib(4)</strong>: 4 &ge; 3, so compute <code>fib(3) + fib(2)</code>. Calls <strong>fib(3)</strong> first (left branch).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(3)</div><div class="frame-expr">fib(2) + fib(1)</div>', frameClass: 'depth-3',
+              narration: '<strong>fib(3)</strong>: 3 &ge; 3, so compute <code>fib(2) + fib(1)</code>. Calls <strong>fib(2)</strong> first (left branch).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(2)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(2)</strong>: 2 &le; 2. <strong>Base case!</strong> Returns 1.' },
+            { action: 'pop', returnEntry: 'fib(2) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(3)</div><div class="frame-expr"><span class="resolved">1</span> + fib(1)</div>',
+              narration: '<strong>fib(2)</strong> returns <strong>1</strong>. Replaces fib(2) in fib(3). Now fib(3) needs <strong>fib(1)</strong> (right branch).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(1)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(1)</strong>: 1 &le; 2. <strong>Base case!</strong> Returns 1.' },
+            { action: 'pop', returnEntry: 'fib(1) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(3)</div><div class="frame-expr"><span class="resolved">1</span> + <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>fib(1)</strong> returns <strong>1</strong>. Now fib(3) has both values: 1 + 1 = <strong>2</strong>.' },
+            { action: 'pop', returnEntry: 'fib(3) = 1 + 1 = 2',
+              topFrameUpdate: '<div class="frame-name">fib(4)</div><div class="frame-expr"><span class="resolved">2</span> + fib(2)</div>',
+              narration: '<strong>fib(3)</strong> returns <strong>2</strong>. Replaces fib(3) in fib(4). Now fib(4) needs <strong>fib(2)</strong> (right branch).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(2)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(2)</strong>: Base case again! Returns 1.' },
+            { action: 'pop', returnEntry: 'fib(2) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(4)</div><div class="frame-expr"><span class="resolved">2</span> + <span class="resolved">1</span> = 3</div>',
+              narration: '<strong>fib(2)</strong> returns <strong>1</strong>. Now fib(4) has both values: 2 + 1 = <strong>3</strong>.' },
+            { action: 'pop', returnEntry: 'fib(4) = 2 + 1 = 3',
+              topFrameUpdate: '<div class="frame-name">fib(5)</div><div class="frame-expr"><span class="resolved">3</span> + fib(3)</div>',
+              narration: '<strong>fib(4)</strong> returns <strong>3</strong>. Replaces fib(4) in fib(5). Now fib(5) needs <strong>fib(3)</strong> (right branch).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(3)</div><div class="frame-expr">fib(2) + fib(1)</div>', frameClass: 'depth-3',
+              narration: '<strong>fib(3)</strong> called <strong>AGAIN</strong>! We already computed this = 2. This is redundant work!' },
+            { action: 'push', frameText: '<div class="frame-name">fib(2)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(2)</strong>: Base case. Returns 1. (Computed before too!)' },
+            { action: 'pop', returnEntry: 'fib(2) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(3)</div><div class="frame-expr"><span class="resolved">1</span> + fib(1)</div>',
+              narration: '<strong>fib(2)</strong> returns <strong>1</strong>. fib(3) now needs <strong>fib(1)</strong> (right branch).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(1)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(1)</strong>: Base case. Returns 1. (Redundant computation!)' },
+            { action: 'pop', returnEntry: 'fib(1) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(3)</div><div class="frame-expr"><span class="resolved">1</span> + <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>fib(1)</strong> returns <strong>1</strong>. fib(3) = 1 + 1 = <strong>2</strong> (same result as before!).' },
+            { action: 'pop', returnEntry: 'fib(3) = 1 + 1 = 2',
+              topFrameUpdate: '<div class="frame-name">fib(5)</div><div class="frame-expr"><span class="resolved">3</span> + <span class="resolved">2</span> = 5</div>',
+              narration: '<strong>fib(3)</strong> returns <strong>2</strong>. Now fib(5) has both: 3 + 2 = <strong>5</strong>. Final answer!' },
+            { action: 'pop', returnEntry: 'fib(5) = 3 + 2 = 5', isFinal: true,
+              narration: '<strong>fib(5)</strong> returns <strong>5</strong> to main(). Final answer: <strong>fib(5) = 5</strong>' },
+            { action: 'pop',
+              narration: 'Done! <strong>9 function calls</strong> for fib(5). Many were redundant. This is O(2\u207f) complexity!' }
+        ]);
+
+        // ==================== Demo 7: Sum of Digits(6573) ====================
+        registerDemo('dig', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'Program starts. <strong>main()</strong> calls <strong>sumDigits(6573)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">sumDig(6573)</div><div class="frame-expr">3 + sumDig(657)</div>', frameClass: 'depth-1',
+              narration: '<strong>sumDig(6573)</strong>: 6573 \u2265 10. Last digit = 6573%10 = <strong>3</strong>. Compute 3 + sumDig(657).' },
+            { action: 'push', frameText: '<div class="frame-name">sumDig(657)</div><div class="frame-expr">7 + sumDig(65)</div>', frameClass: 'depth-2',
+              narration: '<strong>sumDig(657)</strong>: 657 \u2265 10. Last digit = 657%10 = <strong>7</strong>. Compute 7 + sumDig(65).' },
+            { action: 'push', frameText: '<div class="frame-name">sumDig(65)</div><div class="frame-expr">5 + sumDig(6)</div>', frameClass: 'depth-3',
+              narration: '<strong>sumDig(65)</strong>: 65 \u2265 10. Last digit = 65%10 = <strong>5</strong>. Compute 5 + sumDig(6).' },
+            { action: 'push', frameText: '<div class="frame-name">sumDig(6)</div><div class="frame-expr">return 6</div>', frameClass: 'base-frame',
+              narration: '<strong>sumDig(6)</strong>: 6 < 10. <strong>Base case!</strong> Single digit. Returns 6.' },
+            { action: 'pop', returnEntry: 'sumDig(6) = 6',
+              topFrameUpdate: '<div class="frame-name">sumDig(65)</div><div class="frame-expr">5 + <span class="resolved">6</span> = 11</div>',
+              narration: '<strong>sumDig(6)</strong> returns <strong>6</strong>. Replaces sumDig(6) in sumDig(65). Now 5 + 6 = <strong>11</strong>.' },
+            { action: 'pop', returnEntry: 'sumDig(65) = 5 + 6 = 11',
+              topFrameUpdate: '<div class="frame-name">sumDig(657)</div><div class="frame-expr">7 + <span class="resolved">11</span> = 18</div>',
+              narration: '<strong>sumDig(65)</strong> returns <strong>11</strong>. Replaces sumDig(65) in sumDig(657). Now 7 + 11 = <strong>18</strong>.' },
+            { action: 'pop', returnEntry: 'sumDig(657) = 7 + 11 = 18',
+              topFrameUpdate: '<div class="frame-name">sumDig(6573)</div><div class="frame-expr">3 + <span class="resolved">18</span> = 21</div>',
+              narration: '<strong>sumDig(657)</strong> returns <strong>18</strong>. Replaces sumDig(657) in sumDig(6573). Now 3 + 18 = <strong>21</strong>.' },
+            { action: 'pop', returnEntry: 'sumDig(6573) = 3 + 18 = 21', isFinal: true,
+              narration: '<strong>sumDig(6573)</strong> returns <strong>21</strong> to main(). Final answer: <strong>6+5+7+3 = 21</strong>' },
+            { action: 'pop',
+              narration: '<strong>main()</strong> receives 21. <strong>6 + 5 + 7 + 3 = 21</strong>' }
+        ]);
+
+        // ==================== Fibonacci Tree Animation ====================
+        var fibTreeStep = -1;
+        var fibTreeNodeIds = ['ft-5', 'ft-4', 'ft-3a', 'ft-3b', 'ft-2a', 'ft-2b', 'ft-1a', 'ft-2c', 'ft-1b'];
+
+        var fibTreeSteps = [
+            {
+                narration: 'We want to find <strong>Fib(5)</strong>. Since 5 &ge; 3, we use the formula: <strong>Fib(5) = Fib(4) + Fib(3)</strong>. We need to find both!',
+                highlight: ['ft-5']
+            },
+            {
+                narration: 'To find <strong>Fib(4)</strong>, we need Fib(3) + Fib(2). To find <strong>Fib(3)</strong> on the right, we need Fib(2) + Fib(1). We keep expanding!',
+                highlight: ['ft-4', 'ft-3a']
+            },
+            {
+                narration: 'The left <strong>Fib(3)</strong> (under Fib(4)) also expands to Fib(2) + Fib(1). Now we can see all the <strong>base cases</strong> at the leaves of the tree!',
+                highlight: ['ft-3b']
+            },
+            {
+                narration: 'All the leaves are base cases! <strong>Fib(1) = 1</strong> and <strong>Fib(2) = 1</strong>. These are values we know directly &mdash; no more recursion needed.',
+                highlight: ['ft-2c', 'ft-1b', 'ft-2a', 'ft-2b', 'ft-1a'],
+                values: { 'ft-2c': ' = 1', 'ft-1b': ' = 1', 'ft-2a': ' = 1', 'ft-2b': ' = 1', 'ft-1a': ' = 1' },
+                makeBase: ['ft-2c', 'ft-1b', 'ft-2a', 'ft-2b', 'ft-1a']
+            },
+            {
+                narration: 'Now we calculate upward! Left <strong>Fib(3) = Fib(2) + Fib(1) = 1 + 1 = 2</strong>',
+                highlight: ['ft-3b'],
+                values: { 'ft-3b': ' = 2' },
+                makeComputed: ['ft-3b']
+            },
+            {
+                narration: '<strong>Fib(4) = Fib(3) + Fib(2) = 2 + 1 = 3</strong>',
+                highlight: ['ft-4'],
+                values: { 'ft-4': ' = 3' },
+                makeComputed: ['ft-4']
+            },
+            {
+                narration: 'Right branch: <strong>Fib(3) = Fib(2) + Fib(1) = 1 + 1 = 2</strong>',
+                highlight: ['ft-3a'],
+                values: { 'ft-3a': ' = 2' },
+                makeComputed: ['ft-3a']
+            },
+            {
+                narration: 'Finally! <strong>Fib(5) = Fib(4) + Fib(3) = 3 + 2 = 5</strong>. The answer is <strong>5</strong>!',
+                highlight: ['ft-5'],
+                values: { 'ft-5': ' = 5' },
+                makeComputed: ['ft-5']
+            }
+        ];
+
+        function startFibTree() {
+            resetFibTree();
+            document.getElementById('fib-tree-run-btn').style.display = 'none';
+            document.getElementById('fib-tree-next-btn').style.display = '';
+            nextFibTreeStep();
+        }
+
+        function nextFibTreeStep() {
+            fibTreeStep++;
+            if (fibTreeStep >= fibTreeSteps.length) {
+                document.getElementById('fib-tree-next-btn').textContent = 'Done';
+                document.getElementById('fib-tree-next-btn').disabled = true;
+                return;
+            }
+
+            var step = fibTreeSteps[fibTreeStep];
+
+            // Remove highlight from all nodes
+            fibTreeNodeIds.forEach(function(id) {
+                document.getElementById(id).classList.remove('node-highlight');
+            });
+
+            // Highlight current step's nodes
+            step.highlight.forEach(function(id) {
+                document.getElementById(id).classList.add('node-highlight');
+            });
+
+            // Set base case styling
+            if (step.makeBase) {
+                step.makeBase.forEach(function(id) {
+                    var node = document.getElementById(id);
+                    node.classList.add('node-base');
+                    node.classList.remove('node-call');
+                });
+            }
+
+            // Set computed styling
+            if (step.makeComputed) {
+                step.makeComputed.forEach(function(id) {
+                    var node = document.getElementById(id);
+                    node.classList.add('node-computed');
+                    node.classList.remove('node-call');
+                });
+            }
+
+            // Set values
+            if (step.values) {
+                Object.keys(step.values).forEach(function(id) {
+                    var node = document.getElementById(id);
+                    var valSpan = node.querySelector('.node-val');
+                    if (!valSpan) {
+                        valSpan = document.createElement('span');
+                        valSpan.className = 'node-val';
+                        node.appendChild(valSpan);
+                    }
+                    valSpan.textContent = step.values[id];
+                });
+            }
+
+            // Update narration
+            document.getElementById('fib-tree-narration').innerHTML = step.narration;
+            document.getElementById('fib-tree-step').textContent = 'Step ' + (fibTreeStep + 1) + ' of ' + fibTreeSteps.length;
+
+            // Update button on last step
+            if (fibTreeStep >= fibTreeSteps.length - 1) {
+                document.getElementById('fib-tree-next-btn').textContent = 'Done';
+                document.getElementById('fib-tree-next-btn').disabled = true;
+            }
+        }
+
+        function resetFibTree() {
+            fibTreeStep = -1;
+
+            // Reset all nodes
+            fibTreeNodeIds.forEach(function(id) {
+                var node = document.getElementById(id);
+                node.classList.remove('node-highlight', 'node-base', 'node-computed');
+                node.classList.add('node-call');
+                var valSpan = node.querySelector('.node-val');
+                if (valSpan) valSpan.remove();
+            });
+
+            document.getElementById('fib-tree-narration').innerHTML = 'Press "Start" to see how we break down Fib(5) and compute the answer step by step.';
+            document.getElementById('fib-tree-step').textContent = '';
+            document.getElementById('fib-tree-run-btn').style.display = '';
+            var btn = document.getElementById('fib-tree-next-btn');
+            btn.style.display = 'none';
+            btn.textContent = 'Next';
+            btn.disabled = false;
+        }
+    </script>
+
+</body>
+</html>
