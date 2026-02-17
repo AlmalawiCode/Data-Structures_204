@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 03: Advanced Web Reconnaissance with Burp Suite</title>
+    <style>
+        :root {
+            --primary-color: #2b5797;
+            --secondary-color: #1a365d;
+            --accent-color: #38a169;
+            --warning-color: #d69e2e;
+            --danger-color: #e53e3e;
+            --info-color: #3182ce;
+            --light-bg: #f7fafc;
+            --dark-text: #2d3748;
+            --border-color: #e2e8f0;
+            --kali-blue: #367bf0;
+            --kali-dark: #1f2937;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--kali-dark) 0%, #374151 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90" opacity="0.05">🕵</text></svg>');
+            background-size: 150px;
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .header .chapter-ref {
+            display: inline-block;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Lab Info Box */
+        .lab-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 25px 40px;
+            background: linear-gradient(135deg, var(--kali-blue) 0%, #5b8def 100%);
+            color: white;
+        }
+
+        .lab-info-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+        }
+
+        .lab-info-item strong {
+            display: block;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+
+        .lab-info-item span {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content { padding: 40px; }
+
+        /* Table of Contents */
+        .toc {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin-bottom: 40px;
+            border-left: 5px solid var(--kali-blue);
+        }
+
+        .toc h2 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border: none;
+        }
+
+        .toc ol {
+            columns: 2;
+            column-gap: 30px;
+            padding-left: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+            break-inside: avoid;
+        }
+
+        .toc a {
+            color: var(--kali-blue);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        /* Sections */
+        section { margin-bottom: 40px; }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--kali-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: var(--dark-text);
+            font-size: 1.15em;
+            margin: 20px 0 10px 0;
+        }
+
+        p { margin-bottom: 15px; }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li { margin-bottom: 6px; }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .alert-icon { font-size: 1.5em; flex-shrink: 0; }
+
+        .alert-info {
+            background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+            border-left: 5px solid var(--info-color);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fffff0 0%, #fefcbf 100%);
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            border-left: 5px solid var(--danger-color);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .alert h4 { margin: 0 0 8px 0; color: inherit; }
+        .alert p { margin: 0; }
+        .alert ul { margin-top: 8px; margin-bottom: 0; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--kali-dark) 0%, #374151 100%);
+            color: white;
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:nth-child(even) { background-color: #f8fafc; }
+        tr:hover { background-color: #edf2f7; }
+
+        /* Code blocks */
+        code {
+            background: #1a202c;
+            color: #68d391;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        pre code { background: none; color: #68d391; padding: 0; }
+
+        .command-label {
+            display: block;
+            color: #a0aec0;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        /* Steps */
+        .steps {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 15px;
+            padding-left: 50px;
+            position: relative;
+            min-height: 40px;
+        }
+
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0; top: 0;
+            width: 35px; height: 35px;
+            background: linear-gradient(135deg, var(--kali-blue) 0%, #5b8def 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(54, 123, 240, 0.3);
+        }
+
+        /* Checklist */
+        .checklist { list-style: none; padding: 0; }
+
+        .checklist li {
+            padding: 10px 0 10px 35px;
+            position: relative;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            color: var(--kali-blue);
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card h4 { color: var(--kali-blue); margin-top: 0; }
+
+        /* Expected Output */
+        .expected-output {
+            background: #f7fafc;
+            border: 2px dashed var(--kali-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .expected-output h4 {
+            color: var(--kali-blue);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        /* Deliverable Box */
+        .deliverable {
+            background: linear-gradient(135deg, #faf5ff 0%, #e9d8fd 100%);
+            border-left: 5px solid #805ad5;
+            border-radius: 0 12px 12px 0;
+            padding: 20px 25px;
+            margin: 20px 0;
+        }
+
+        .deliverable h4 { color: #553c9a; margin-top: 0; }
+
+        /* Troubleshooting */
+        .troubleshoot-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .troubleshoot-header {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            padding: 15px 20px;
+            font-weight: 600;
+            color: var(--danger-color);
+        }
+
+        .troubleshoot-solution {
+            padding: 20px;
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--kali-dark) 0%, #374151 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .footer p { margin: 5px 0; opacity: 0.9; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .header { padding: 30px 20px; }
+            .header h1 { font-size: 1.8em; }
+            .content { padding: 25px; }
+            .toc ol { columns: 1; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <h1>Lab 03: Advanced Web Reconnaissance with Burp Suite</h1>
+        <p class="subtitle">CYB236 - Web Application Security</p>
+        <div class="chapter-ref">Covers: Chapter 2 (Reconnaissance) &amp; Chapter 3 (Modern Web Architecture)</div>
+    </header>
+
+    <!-- Lab Info -->
+    <div class="lab-info">
+        <div class="lab-info-item">
+            <strong>Lab Number</strong>
+            <span>03</span>
+        </div>
+        <div class="lab-info-item">
+            <strong>Difficulty</strong>
+            <span>Intermediate</span>
+        </div>
+        <div class="lab-info-item">
+            <strong>Duration</strong>
+            <span>45-50 min</span>
+        </div>
+        <div class="lab-info-item">
+            <strong>Prerequisites</strong>
+            <span>Lab 02</span>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#objectives">Learning Objectives</a></li>
+                <li><a href="#setup">Part 1: Set Up Burp Suite Proxy</a></li>
+                <li><a href="#task1">Task 1: Capture Traffic with Burp Suite</a></li>
+                <li><a href="#task2">Task 2: Map REST API Endpoints</a></li>
+                <li><a href="#task3">Task 3: Discover Hidden APIs from JavaScript</a></li>
+                <li><a href="#task4">Task 4: Decode a JWT Token</a></li>
+                <li><a href="#task5">Task 5: Build Your Recon Map (JSON)</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#submission">Submission &amp; Grading</a></li>
+            </ol>
+        </nav>
+
+        <!-- Introduction -->
+        <section id="introduction">
+            <h2>Introduction</h2>
+
+            <p>In Lab 2, you used your browser and simple terminal commands to perform basic web reconnaissance. In this lab, you will take it further by using <strong>Burp Suite</strong> &mdash; a professional-grade web security testing tool that comes pre-installed on Kali Linux.</p>
+
+            <p>Burp Suite works as a <strong>proxy</strong>: it sits between your browser and the web application, allowing you to see, record, and analyze <strong>every single HTTP request and response</strong>. This gives you much more visibility than the browser's Network tab alone.</p>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#128161;</span>
+                <div>
+                    <h4>What is a Proxy?</h4>
+                    <p>A proxy is a "middleman" between your browser and the web server. Think of it like a mail inspector who opens, reads, and records every letter before passing it along. In our case:</p>
+                    <ul>
+                        <li><strong>Browser</strong> sends a request &rarr; <strong>Burp Suite</strong> intercepts it &rarr; forwards it to <strong>Juice Shop</strong></li>
+                        <li><strong>Juice Shop</strong> sends a response &rarr; <strong>Burp Suite</strong> records it &rarr; forwards it to <strong>Browser</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert alert-danger">
+                <span class="alert-icon">&#9888;&#65039;</span>
+                <div>
+                    <h4>Important Legal Reminder</h4>
+                    <p>Burp Suite is a powerful tool. You must <strong>ONLY</strong> use it against applications you own or have written permission to test. In this lab, Juice Shop runs <strong>locally on your own machine</strong>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Objectives -->
+        <section id="objectives">
+            <h2>Learning Objectives</h2>
+            <p>By the end of this lab, you will be able to:</p>
+            <ul class="checklist">
+                <li>Configure Burp Suite as a proxy for Firefox</li>
+                <li>Capture and analyze HTTP traffic through Burp Suite</li>
+                <li>Build a complete map of REST API endpoints from captured traffic</li>
+                <li>Find hidden API endpoints by reading JavaScript source code</li>
+                <li>Decode and understand JWT (JSON Web Token) authentication tokens</li>
+                <li>Create a structured JSON recon map documenting all findings</li>
+            </ul>
+
+            <h3>Tools Used in This Lab</h3>
+            <table>
+                <tr>
+                    <th>Tool</th>
+                    <th>What We Use It For</th>
+                </tr>
+                <tr>
+                    <td><code>Burp Suite Community Edition</code></td>
+                    <td>Intercept and analyze all HTTP traffic</td>
+                </tr>
+                <tr>
+                    <td><code>Firefox</code> (configured with proxy)</td>
+                    <td>Browse the target application through Burp</td>
+                </tr>
+                <tr>
+                    <td><code>Juice Shop</code> (Docker)</td>
+                    <td>Target application (from Lab 2)</td>
+                </tr>
+                <tr>
+                    <td>Text editor (<code>mousepad</code> or <code>nano</code>)</td>
+                    <td>Write the final recon map in JSON format</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Part 1: Setup Burp Suite Proxy -->
+        <section id="setup">
+            <h2>Part 1: Set Up Burp Suite Proxy</h2>
+
+            <p>Before we can capture traffic, we need to: (1) start Juice Shop, (2) launch Burp Suite, and (3) configure Firefox to send traffic through Burp.</p>
+
+            <h3>Step 1: Start Juice Shop</h3>
+            <p>Open a terminal and make sure Juice Shop is running from Lab 2:</p>
+
+<pre><code><span class="command-label"># Check if Juice Shop is already running</span>
+sudo docker ps
+
+<span class="command-label"># If NOT listed, start it:</span>
+sudo docker start juice-shop
+
+<span class="command-label"># If you get "No such container", create it again:</span>
+sudo docker run -d -p 3000:3000 --name juice-shop bkimminich/juice-shop</code></pre>
+
+            <p>Verify by opening Firefox and going to <code>http://localhost:3000</code>. You should see the Juice Shop homepage.</p>
+
+            <h3>Step 2: Launch Burp Suite</h3>
+
+            <ol class="steps">
+                <li>In Kali, go to <strong>Applications</strong> menu (top-left) &rarr; <strong>Web Application Analysis</strong> &rarr; <strong>burpsuite</strong></li>
+                <li>Burp Suite will start loading (this may take 30-60 seconds)</li>
+                <li>On the welcome screen, select <strong>Temporary Project</strong> and click <strong>Next</strong></li>
+                <li>Select <strong>Use Burp defaults</strong> and click <strong>Start Burp</strong></li>
+            </ol>
+
+            <div class="expected-output">
+                <h4>What You Should See:</h4>
+                <p>The Burp Suite dashboard will open with several tabs at the top: <strong>Dashboard</strong>, <strong>Target</strong>, <strong>Proxy</strong>, <strong>Intruder</strong>, <strong>Repeater</strong>, etc.</p>
+            </div>
+
+            <h3>Step 3: Verify Burp's Proxy Listener</h3>
+
+            <ol class="steps">
+                <li>In Burp Suite, click the <strong>Proxy</strong> tab at the top</li>
+                <li>Click the <strong>Proxy settings</strong> sub-tab (or <strong>Options</strong> in older versions)</li>
+                <li>Under <strong>Proxy Listeners</strong>, you should see an entry: <code>127.0.0.1:8080</code> with a checkbox marked <strong>Running</strong></li>
+            </ol>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#128161;</span>
+                <div>
+                    <h4>What does this mean?</h4>
+                    <p>Burp Suite is now listening on your computer at port <strong>8080</strong>. Any browser configured to use this proxy will send all its traffic through Burp first.</p>
+                </div>
+            </div>
+
+            <h3>Step 4: Configure Firefox to Use Burp's Proxy</h3>
+
+            <ol class="steps">
+                <li>Open <strong>Firefox</strong></li>
+                <li>Click the <strong>hamburger menu</strong> (three lines, top-right) &rarr; <strong>Settings</strong></li>
+                <li>Scroll all the way down to <strong>Network Settings</strong> and click <strong>Settings...</strong></li>
+                <li>Select <strong>Manual proxy configuration</strong></li>
+                <li>Set <strong>HTTP Proxy</strong> to <code>127.0.0.1</code> and <strong>Port</strong> to <code>8080</code></li>
+                <li>Check the box <strong>"Also use this proxy for HTTPS"</strong></li>
+                <li>Click <strong>OK</strong></li>
+            </ol>
+
+            <h3>Step 5: Turn Off Intercept</h3>
+
+            <div class="alert alert-warning">
+                <span class="alert-icon">&#9888;&#65039;</span>
+                <div>
+                    <h4>Important Step!</h4>
+                    <p>By default, Burp Suite <strong>intercepts</strong> (pauses) every request, waiting for you to click "Forward" manually. For this lab, we want traffic to flow freely while Burp records it in the background.</p>
+                </div>
+            </div>
+
+            <ol class="steps">
+                <li>In Burp Suite, click the <strong>Proxy</strong> tab</li>
+                <li>Click the <strong>Intercept</strong> sub-tab</li>
+                <li>If the button says <strong>"Intercept is on"</strong>, click it so it says <strong>"Intercept is off"</strong></li>
+            </ol>
+
+            <h3>Step 6: Test the Connection</h3>
+
+            <ol class="steps">
+                <li>In Firefox, go to <code>http://localhost:3000</code></li>
+                <li>The Juice Shop page should load normally</li>
+                <li>In Burp Suite, click <strong>Proxy</strong> &rarr; <strong>HTTP history</strong></li>
+                <li>You should see requests appearing in the list &mdash; this means Burp is capturing traffic!</li>
+            </ol>
+
+            <div class="alert alert-success">
+                <span class="alert-icon">&#9989;</span>
+                <div>
+                    <h4>Checkpoint</h4>
+                    <p>If you see requests in Burp's HTTP history and Juice Shop loads in Firefox, the proxy is working correctly. You are ready to start the tasks!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Task 1: Capture Traffic -->
+        <section id="task1">
+            <h2>Task 1: Capture Traffic with Burp Suite</h2>
+
+            <p>Now let's generate traffic by browsing Juice Shop, and observe everything Burp captures.</p>
+
+            <h3>1A: Browse the Application</h3>
+
+            <p>In Firefox (with proxy enabled), perform these actions <strong>one at a time</strong>:</p>
+
+            <ol class="steps">
+                <li>Visit the <strong>homepage</strong> &mdash; browse through the product list</li>
+                <li><strong>Click on any product</strong> to view its details</li>
+                <li>Use the <strong>search bar</strong> to search for "banana"</li>
+                <li>Click <strong>Account</strong> &rarr; <strong>Login</strong> &rarr; register a new account (if you haven't already):
+                    <br>Email: <code>student@lab3.com</code>, Password: <code>Lab3Pass!</code>
+                </li>
+                <li><strong>Log in</strong> with the account you just created</li>
+                <li>After logging in, click on <strong>your account name</strong> to view your profile</li>
+            </ol>
+
+            <h3>1B: Review the Captured Traffic</h3>
+
+            <ol class="steps">
+                <li>Switch to <strong>Burp Suite</strong></li>
+                <li>Go to <strong>Proxy</strong> &rarr; <strong>HTTP history</strong></li>
+                <li>You will see a long list of requests. Each row shows:
+                    <ul>
+                        <li><strong>#</strong> &mdash; request number</li>
+                        <li><strong>Host</strong> &mdash; the server address</li>
+                        <li><strong>Method</strong> &mdash; GET, POST, PUT, DELETE</li>
+                        <li><strong>URL</strong> &mdash; the path requested</li>
+                        <li><strong>Status</strong> &mdash; response code (200, 401, etc.)</li>
+                    </ul>
+                </li>
+                <li>Click on any request to see its <strong>full details</strong> in the bottom panel:
+                    <ul>
+                        <li><strong>Request</strong> tab &mdash; what the browser sent (headers + body)</li>
+                        <li><strong>Response</strong> tab &mdash; what the server sent back (headers + body)</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#128161;</span>
+                <div>
+                    <h4>Burp vs. Browser DevTools</h4>
+                    <p>Notice how Burp Suite shows <strong>every single request</strong> &mdash; including background requests, JavaScript files, images, and API calls. The browser's Network tab filters some of these. Burp gives you the complete picture.</p>
+                </div>
+            </div>
+
+            <div class="deliverable">
+                <h4>Deliverable for Task 1:</h4>
+                <p>Take a <strong>screenshot</strong> of Burp Suite's HTTP history showing at least 10 captured requests. Make sure the Method, URL, and Status columns are visible.</p>
+            </div>
+        </section>
+
+        <!-- Task 2: Map REST API Endpoints -->
+        <section id="task2">
+            <h2>Task 2: Map REST API Endpoints from Burp History</h2>
+
+            <p>Now use Burp's HTTP history to build a complete map of the REST API endpoints. This is more thorough than what you did in Lab 2 because Burp captures <strong>everything</strong>, including requests you might miss in the browser.</p>
+
+            <h3>2A: Filter for API Requests</h3>
+
+            <ol class="steps">
+                <li>In Burp's <strong>HTTP history</strong>, click the filter bar at the top</li>
+                <li>Check <strong>"Show only parameterized requests"</strong> to reduce noise</li>
+                <li>Or, simply scroll through and look for URLs containing <code>/api/</code> or <code>/rest/</code></li>
+            </ol>
+
+            <h3>2B: Document Each API Endpoint</h3>
+
+            <p>For every unique API endpoint you find, write down the details. Click on each request to see the full request and response.</p>
+
+            <div class="deliverable">
+                <h4>Deliverable for Task 2:</h4>
+                <p>Fill in this table with <strong>at least 8 unique</strong> API endpoints you found in Burp's history:</p>
+            </div>
+
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Method</th>
+                    <th>URL Path</th>
+                    <th>Status Code</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><em>Example:</em> POST</td>
+                    <td><em>/rest/user/login</em></td>
+                    <td><em>200</em></td>
+                    <td><em>User login</em></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#128161;</span>
+                <div>
+                    <h4>Tip: Sort by URL</h4>
+                    <p>Click the <strong>URL</strong> column header in Burp's HTTP history to sort requests alphabetically. This makes it easier to group similar endpoints together and spot unique API paths.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Task 3: Hidden APIs from JavaScript -->
+        <section id="task3">
+            <h2>Task 3: Discover Hidden API Endpoints from JavaScript</h2>
+
+            <p>Some API endpoints are <strong>not called during normal browsing</strong>. They may be admin-only endpoints or features that are hidden from the user interface. We can find them by reading the application's JavaScript source code.</p>
+
+            <h3>3A: Find the main.js File in Burp</h3>
+
+            <ol class="steps">
+                <li>In Burp's <strong>HTTP history</strong>, look for a request to a file ending in <code>main.js</code> (it may have a hash like <code>main-es2018.js</code> or <code>main.xxxxxxxx.js</code>)</li>
+                <li>Click on it</li>
+                <li>Click the <strong>Response</strong> tab in the bottom panel</li>
+                <li>You will see a large block of JavaScript code &mdash; this is the entire Angular application</li>
+            </ol>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#128161;</span>
+                <div>
+                    <h4>Why look at JavaScript?</h4>
+                    <p>As you learned in Chapter 3, Single-Page Applications (SPAs) download the entire application as JavaScript. This code often contains <strong>hardcoded API endpoint paths</strong> &mdash; including endpoints that are not linked in the UI. Attackers and security testers look for these "hidden" routes.</p>
+                </div>
+            </div>
+
+            <h3>3B: Search for API Paths in the JavaScript</h3>
+
+            <ol class="steps">
+                <li>With the <code>main.js</code> response selected, press <strong>Ctrl + F</strong> to open the search bar in Burp</li>
+                <li>Search for <code>/api/</code> &mdash; note every unique path you find</li>
+                <li>Search for <code>/rest/</code> &mdash; note every unique path you find</li>
+                <li>Search for <code>admin</code> &mdash; look for any admin-related API endpoints</li>
+                <li>Search for <code>/b2b/</code> &mdash; look for business-to-business endpoints</li>
+            </ol>
+
+            <div class="expected-output">
+                <h4>Examples of What You Might Find:</h4>
+                <p>Paths like <code>/api/SecurityQuestions</code>, <code>/rest/admin/application-configuration</code>, <code>/api/Feedbacks</code>, <code>/api/Complaints</code>, <code>/rest/basket/</code>, etc.</p>
+            </div>
+
+            <h3>3C: Test a Hidden Endpoint</h3>
+
+            <p>Let's try accessing one of the hidden endpoints directly. Open a <strong>new terminal</strong> and use <code>curl</code>:</p>
+
+<pre><code><span class="command-label"># Try to access the admin configuration endpoint</span>
+curl http://localhost:3000/rest/admin/application-configuration | python3 -m json.tool
+
+<span class="command-label"># Try to list all security questions</span>
+curl http://localhost:3000/api/SecurityQuestions | python3 -m json.tool</code></pre>
+
+            <div class="alert alert-warning">
+                <span class="alert-icon">&#9888;&#65039;</span>
+                <div>
+                    <h4>Think About This</h4>
+                    <p>If the admin configuration endpoint returns data <strong>without authentication</strong>, that is a serious security issue! Note in your deliverable whether each endpoint requires a login or works anonymously.</p>
+                </div>
+            </div>
+
+            <div class="deliverable">
+                <h4>Deliverable for Task 3:</h4>
+                <p>(1) List at least <strong>5 API endpoints</strong> you found in the JavaScript that were <strong>NOT</strong> in your Task 2 table. (2) For the admin configuration endpoint, paste the JSON response and state whether it required authentication.</p>
+            </div>
+        </section>
+
+        <!-- Task 4: Decode JWT Token -->
+        <section id="task4">
+            <h2>Task 4: Decode a JWT Token</h2>
+
+            <p>As you learned in Chapter 3, modern web applications often use <strong>JWT (JSON Web Tokens)</strong> for authentication. When you logged in to Juice Shop, the server gave you a JWT. Let's find it and decode it.</p>
+
+            <h3>4A: Find the JWT in Burp</h3>
+
+            <ol class="steps">
+                <li>In Burp's <strong>HTTP history</strong>, find the <code>POST /rest/user/login</code> request</li>
+                <li>Click on it and view the <strong>Response</strong> tab</li>
+                <li>In the JSON response body, look for a field called <code>"token"</code></li>
+                <li>The token value is a long string that looks like: <code>eyJhbGci...</code></li>
+                <li><strong>Copy</strong> the entire token value (without the quotes)</li>
+            </ol>
+
+            <div class="alert alert-info">
+                <span class="alert-icon">&#128161;</span>
+                <div>
+                    <h4>What is a JWT?</h4>
+                    <p>A JWT has three parts separated by dots (<code>.</code>):</p>
+                    <ul>
+                        <li><strong>Header</strong> &mdash; algorithm and token type</li>
+                        <li><strong>Payload</strong> &mdash; user data (email, role, etc.)</li>
+                        <li><strong>Signature</strong> &mdash; ensures the token hasn't been tampered with</li>
+                    </ul>
+                    <p>Each part is <strong>Base64-encoded</strong>, which means we can decode it easily!</p>
+                </div>
+            </div>
+
+            <h3>4B: Decode the JWT in the Terminal</h3>
+
+            <p>Open a terminal and decode each part. Replace <code>YOUR_TOKEN</code> with the actual token you copied:</p>
+
+<pre><code><span class="command-label"># Step 1: Save the token to a variable (paste your full token)</span>
+TOKEN="eyJhbGci...your_full_token_here..."
+
+<span class="command-label"># Step 2: Decode the HEADER (first part, before the first dot)</span>
+echo $TOKEN | cut -d'.' -f1 | base64 -d 2>/dev/null; echo
+
+<span class="command-label"># Step 3: Decode the PAYLOAD (second part, between the dots)</span>
+echo $TOKEN | cut -d'.' -f2 | base64 -d 2>/dev/null; echo</code></pre>
+
+            <div class="expected-output">
+                <h4>What the Decoded Payload Looks Like:</h4>
+<pre><code>{
+  "status": "success",
+  "data": {
+    "id": 21,
+    "email": "student@lab3.com",
+    "role": "customer",
+    "iat": 1700000000,
+    "exp": 1700036000
+  }
+}</code></pre>
+            </div>
+
+            <div class="alert alert-warning">
+                <span class="alert-icon">&#9888;&#65039;</span>
+                <div>
+                    <h4>Security Questions to Consider</h4>
+                    <ul>
+                        <li>What <strong>role</strong> is assigned to your user? (customer, admin, etc.)</li>
+                        <li>What does <code>iat</code> and <code>exp</code> mean? (Hint: issued-at and expiration timestamps)</li>
+                        <li>If someone stole this token, could they <strong>impersonate</strong> you?</li>
+                        <li>Remember from Task 4 of Lab 2 &mdash; where is this token stored in the browser?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="deliverable">
+                <h4>Deliverable for Task 4:</h4>
+                <p>(1) Paste the <strong>decoded JWT payload</strong>. (2) What role does your user have? (3) Where is the token stored in the browser? (4) If someone stole this token, what could they do?</p>
+            </div>
+        </section>
+
+        <!-- Task 5: Build Recon Map JSON -->
+        <section id="task5">
+            <h2>Task 5: Build Your Recon Map (JSON File)</h2>
+
+            <p>In Chapter 2, you learned that professional recon results should be <strong>structured and organized</strong>. Now compile all your findings from Lab 2 and Lab 3 into a single JSON file &mdash; your official recon map.</p>
+
+            <h3>5A: Create the Recon Map</h3>
+
+            <p>Open a text editor (<code>mousepad</code>) and create a new file called <code>recon-map.json</code>. Use this template and fill in your findings:</p>
+
+<pre><code>{
+  "target": "OWASP Juice Shop",
+  "target_url": "http://localhost:3000",
+  "date": "YYYY-MM-DD",
+  "tester": "Your Name",
+
+  "technology_stack": {
+    "web_server": "fill in from Lab 2 Task 1",
+    "server_framework": "fill in from Lab 2 Task 1",
+    "client_framework": "fill in from Lab 2 Task 1",
+    "database": "SQLite (from documentation)"
+  },
+
+  "api_endpoints": [
+    {
+      "method": "GET",
+      "path": "/rest/products/search?q=",
+      "auth_required": false,
+      "purpose": "Search products"
+    },
+    {
+      "method": "POST",
+      "path": "/rest/user/login",
+      "auth_required": false,
+      "purpose": "User authentication"
+    }
+  ],
+
+  "hidden_endpoints": [
+    {
+      "method": "GET",
+      "path": "fill in from Task 3",
+      "auth_required": "true or false",
+      "purpose": "fill in"
+    }
+  ],
+
+  "authentication": {
+    "type": "JWT",
+    "token_storage": "fill in (cookie or localStorage?)",
+    "user_role": "fill in from Task 4"
+  },
+
+  "security_observations": [
+    "fill in observation 1",
+    "fill in observation 2",
+    "fill in observation 3"
+  ]
+}</code></pre>
+
+            <h3>5B: Validate Your JSON</h3>
+
+            <p>After saving the file, validate it is proper JSON by running this command in the terminal:</p>
+
+<pre><code><span class="command-label"># Validate your recon-map.json (should print it formatted if valid)</span>
+python3 -m json.tool recon-map.json</code></pre>
+
+            <div class="expected-output">
+                <h4>If Valid:</h4>
+                <p>The command will print your JSON nicely formatted. If there is an error, it will tell you which line has the problem (usually a missing comma or quote).</p>
+            </div>
+
+            <div class="alert alert-success">
+                <span class="alert-icon">&#127891;</span>
+                <div>
+                    <h4>Why JSON?</h4>
+                    <p>As you learned in Chapter 3, JSON is the standard data format for web APIs. By writing your recon notes in JSON, you are practicing a real-world format that can be parsed by other tools and scripts. Professional pentesters often write their findings in structured formats like JSON or YAML.</p>
+                </div>
+            </div>
+
+            <div class="deliverable">
+                <h4>Deliverable for Task 5:</h4>
+                <p>Your completed <code>recon-map.json</code> file with: (1) at least 8 API endpoints in the <code>api_endpoints</code> array, (2) at least 3 hidden endpoints in <code>hidden_endpoints</code>, (3) at least 3 security observations.</p>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section id="troubleshooting">
+            <h2>Troubleshooting</h2>
+
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-header">&#10060; Burp Suite doesn't start / hangs on splash screen</div>
+                <div class="troubleshoot-solution">
+                    <p><strong>Solution:</strong> Burp Suite needs Java. If it doesn't start, try running from terminal: <code>burpsuite</code>. If you get a Java error, install it: <code>sudo apt install -y default-jre</code> then try again.</p>
+                </div>
+            </div>
+
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-header">&#10060; Firefox can't load pages after setting the proxy</div>
+                <div class="troubleshoot-solution">
+                    <p><strong>Solution:</strong> Make sure Burp Suite is running and the listener is on <code>127.0.0.1:8080</code>. Also check that <strong>Intercept is OFF</strong> (Proxy &rarr; Intercept tab). If intercept is on, Burp pauses every request and waits for you to click Forward.</p>
+                </div>
+            </div>
+
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-header">&#10060; Juice Shop doesn't load (connection refused)</div>
+                <div class="troubleshoot-solution">
+                    <p><strong>Solution:</strong> Check if Juice Shop is running: <code>sudo docker ps</code>. If not listed, run <code>sudo docker start juice-shop</code>. Also make sure you are going to <code>http://localhost:3000</code> (not https).</p>
+                </div>
+            </div>
+
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-header">&#10060; Cannot find main.js in Burp history</div>
+                <div class="troubleshoot-solution">
+                    <p><strong>Solution:</strong> Clear the history filter (click the filter bar and uncheck any filters). Then in Firefox, press <strong>Ctrl + Shift + Delete</strong> to clear cache, and reload <code>http://localhost:3000</code>. The main.js file should now appear in Burp's history.</p>
+                </div>
+            </div>
+
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-header">&#10060; JWT decode command shows garbled output</div>
+                <div class="troubleshoot-solution">
+                    <p><strong>Solution:</strong> JWT uses Base64URL encoding (slightly different from standard Base64). Try this alternative command:
+                    <pre><code>echo $TOKEN | cut -d'.' -f2 | tr '_-' '/+' | base64 -d 2>/dev/null; echo</code></pre>
+                    The <code>tr '_-' '/+'</code> converts Base64URL to standard Base64.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Submission & Grading -->
+        <section id="submission">
+            <h2>Submission &amp; Grading</h2>
+
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Points</th>
+                </tr>
+                <tr>
+                    <td><strong>Task 1</strong></td>
+                    <td>Screenshot of Burp HTTP history with at least 10 requests</td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td><strong>Task 2</strong></td>
+                    <td>At least 8 unique API endpoints documented with methods and status codes</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td><strong>Task 3</strong></td>
+                    <td>At least 5 hidden endpoints from JavaScript + admin endpoint analysis</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td><strong>Task 4</strong></td>
+                    <td>Decoded JWT payload + answers to security questions</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td><strong>Task 5</strong></td>
+                    <td>Complete, valid recon-map.json with all required sections</td>
+                    <td>25</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: right; font-weight: bold;">Total</td>
+                    <td><strong>100</strong></td>
+                </tr>
+            </table>
+
+            <h3>Cleanup</h3>
+
+<pre><code><span class="command-label"># Stop Juice Shop</span>
+sudo docker stop juice-shop
+
+<span class="command-label"># Restore Firefox proxy settings to "No proxy" or "Use system proxy settings"</span></code></pre>
+
+            <div class="alert alert-danger">
+                <span class="alert-icon">&#9888;&#65039;</span>
+                <div>
+                    <h4>Don't Forget!</h4>
+                    <p>After finishing this lab, go back to Firefox &rarr; Settings &rarr; Network Settings and change the proxy back to <strong>"No proxy"</strong> or <strong>"Use system proxy settings"</strong>. Otherwise, your browser won't work when Burp Suite is closed!</p>
+                </div>
+            </div>
+        </section>
+
+    </div><!-- end content -->
+
+    <!-- Footer -->
+    <div class="footer">
+        <p><strong>CYB236</strong> &mdash; Web Application Security</p>
+        <p>Lab 03: Advanced Web Reconnaissance with Burp Suite</p>
+    </div>
+
+</div><!-- end container -->
+
+</body>
+</html>

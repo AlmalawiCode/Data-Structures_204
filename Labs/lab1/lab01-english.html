@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 01: Installing Kali Linux on VirtualBox</title>
+    <style>
+        :root {
+            --primary-color: #2b5797;
+            --secondary-color: #1a365d;
+            --accent-color: #38a169;
+            --warning-color: #d69e2e;
+            --danger-color: #e53e3e;
+            --info-color: #3182ce;
+            --light-bg: #f7fafc;
+            --dark-text: #2d3748;
+            --border-color: #e2e8f0;
+            --kali-blue: #367bf0;
+            --kali-dark: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--kali-dark) 0%, #374151 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90" opacity="0.05">🐉</text></svg>');
+            background-size: 150px;
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .kali-logo {
+            width: 120px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+        }
+
+        /* Lab Info Box */
+        .lab-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 25px 40px;
+            background: linear-gradient(135deg, var(--kali-blue) 0%, #5b8def 100%);
+            color: white;
+        }
+
+        .lab-info-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .lab-info-item strong {
+            display: block;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+
+        .lab-info-item span {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content {
+            padding: 40px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin-bottom: 40px;
+            border-left: 5px solid var(--kali-blue);
+        }
+
+        .toc h2 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .toc ol {
+            columns: 2;
+            column-gap: 30px;
+            padding-left: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+            break-inside: avoid;
+        }
+
+        .toc a {
+            color: var(--kali-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--kali-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h4 {
+            color: var(--dark-text);
+            font-size: 1.15em;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .alert-icon {
+            font-size: 1.5em;
+            flex-shrink: 0;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+            border-left: 5px solid var(--info-color);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fffff0 0%, #fefcbf 100%);
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            border-left: 5px solid var(--danger-color);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .alert h4 {
+            margin: 0 0 8px 0;
+            color: inherit;
+        }
+
+        .alert p {
+            margin: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--kali-dark) 0%, #374151 100%);
+            color: white;
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tr:hover {
+            background-color: #edf2f7;
+        }
+
+        /* Code blocks */
+        code {
+            background: #1a202c;
+            color: #68d391;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        pre code {
+            background: none;
+            color: #68d391;
+            padding: 0;
+        }
+
+        /* Steps */
+        .steps {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 15px;
+            padding-left: 50px;
+            position: relative;
+            min-height: 40px;
+        }
+
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--kali-blue) 0%, #5b8def 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(54, 123, 240, 0.3);
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 10px 0 10px 35px;
+            position: relative;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+            color: var(--kali-blue);
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card h4 {
+            color: var(--kali-blue);
+            margin-top: 0;
+        }
+
+        /* OS Tabs */
+        .os-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .os-tab {
+            padding: 12px 25px;
+            background: var(--light-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .os-tab:hover {
+            border-color: var(--kali-blue);
+            background: #ebf8ff;
+        }
+
+        .os-tab.active {
+            background: linear-gradient(135deg, var(--kali-blue) 0%, #5b8def 100%);
+            color: white;
+            border-color: var(--kali-blue);
+        }
+
+        .os-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .os-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Links */
+        a {
+            color: var(--kali-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .button-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--kali-blue) 0%, #5b8def 100%);
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(54, 123, 240, 0.3);
+        }
+
+        .button-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(54, 123, 240, 0.4);
+            text-decoration: none;
+            color: white;
+        }
+
+        /* Credentials Box */
+        .credentials-box {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .credentials-box h4 {
+            color: #68d391;
+            margin-bottom: 15px;
+        }
+
+        .credential-item {
+            display: inline-block;
+            margin: 10px 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        .credential-item strong {
+            color: #a0aec0;
+            display: block;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .credential-item span {
+            font-family: 'Consolas', monospace;
+            font-size: 1.3em;
+            color: #68d391;
+        }
+
+        /* Troubleshooting */
+        .troubleshoot-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .troubleshoot-header {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            padding: 15px 20px;
+            font-weight: 600;
+            color: var(--danger-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .troubleshoot-solution {
+            padding: 20px;
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--kali-dark) 0%, #374151 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+
+        /* Language Switch Button */
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+            color: white;
+            text-decoration: none;
+        }
+
+        .lang-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .toc ol {
+                columns: 1;
+            }
+
+            .os-tabs {
+                flex-direction: column;
+            }
+
+            .os-tab {
+                justify-content: center;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .os-content {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Switch Button -->
+    <div class="lang-switch">
+        <a href="lab01-arabic.html" class="lang-btn">
+            🌍 العربية (Arabic)
+        </a>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <img src="https://www.kali.org/images/kali-dragon-icon.svg" alt="Kali Linux Logo" class="kali-logo" onerror="this.style.display='none'">
+            <h1>🔐 Lab 01: Installing Kali Linux on VirtualBox</h1>
+            <p class="subtitle">CYB236 - Cybersecurity Fundamentals</p>
+        </header>
+
+        <!-- Lab Info -->
+        <div class="lab-info">
+            <div class="lab-info-item">
+                <strong>Lab Number</strong>
+                <span>01</span>
+            </div>
+            <div class="lab-info-item">
+                <strong>Difficulty</strong>
+                <span>Beginner</span>
+            </div>
+            <div class="lab-info-item">
+                <strong>Duration</strong>
+                <span>45-60 min</span>
+            </div>
+            <div class="lab-info-item">
+                <strong>Prerequisites</strong>
+                <span>None</span>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Table of Contents -->
+            <nav class="toc">
+                <h2>📋 Table of Contents</h2>
+                <ol>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#objectives">Learning Objectives</a></li>
+                    <li><a href="#kali">What is Kali Linux?</a></li>
+                    <li><a href="#virtualbox">What is VirtualBox?</a></li>
+                    <li><a href="#requirements">System Requirements</a></li>
+                    <li><a href="#part1">Part 1: Installing VirtualBox</a></li>
+                    <li><a href="#part2">Part 2: Downloading Kali Linux</a></li>
+                    <li><a href="#part3">Part 3: Importing Kali Linux</a></li>
+                    <li><a href="#part4">Part 4: First Boot and Login</a></li>
+                    <li><a href="#verification">Verification Tasks</a></li>
+                    <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    <li><a href="#summary">Summary</a></li>
+                </ol>
+            </nav>
+
+            <!-- Introduction -->
+            <section id="introduction">
+                <h2>📖 Introduction</h2>
+                <p>Welcome to your first cybersecurity lab! In this lab, you will learn how to set up a professional penetration testing environment by installing <strong>Kali Linux</strong> as a <strong>Virtual Machine</strong> on <strong>Oracle VirtualBox</strong>. This is a fundamental skill that every cybersecurity professional must master.</p>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">💡</span>
+                    <div>
+                        <h4>Why Virtual Machines?</h4>
+                        <p>Virtual machines allow you to run multiple operating systems on a single computer safely. This is essential for:</p>
+                        <ul>
+                            <li>Testing security tools without affecting your main system</li>
+                            <li>Creating isolated lab environments</li>
+                            <li>Learning different operating systems</li>
+                            <li>Taking snapshots to restore previous states</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Learning Objectives -->
+            <section id="objectives">
+                <h2>🎯 Learning Objectives</h2>
+                <p>By the end of this lab, you will be able to:</p>
+                <ul class="checklist">
+                    <li>Understand what Kali Linux is and its purpose in cybersecurity</li>
+                    <li>Install Oracle VirtualBox on Windows or macOS</li>
+                    <li>Download the official Kali Linux virtual machine image</li>
+                    <li>Import and configure Kali Linux as a VM in VirtualBox</li>
+                    <li>Successfully boot and log into your Kali Linux virtual machine</li>
+                    <li>Navigate the basic Kali Linux interface</li>
+                </ul>
+            </section>
+
+            <!-- What is Kali Linux -->
+            <section id="kali">
+                <h2>🐉 What is Kali Linux?</h2>
+
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Type</strong></td>
+                        <td>Debian-based Linux Distribution</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Purpose</strong></td>
+                        <td>Penetration Testing & Security Research</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Current Version</strong></td>
+                        <td>Kali Linux 2025.4</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Default Desktop</strong></td>
+                        <td>Xfce</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Official Website</strong></td>
+                        <td><a href="https://www.kali.org" target="_blank">https://www.kali.org</a></td>
+                    </tr>
+                </table>
+
+                <p><strong>Kali Linux</strong> is an open-source, Debian-based Linux distribution specifically designed for:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <h4>🔍 Penetration Testing</h4>
+                        <p>Testing system security by simulating real-world attacks</p>
+                    </div>
+                    <div class="card">
+                        <h4>🔬 Security Research</h4>
+                        <p>Analyzing vulnerabilities and security weaknesses</p>
+                    </div>
+                    <div class="card">
+                        <h4>💻 Computer Forensics</h4>
+                        <p>Digital investigation and evidence collection</p>
+                    </div>
+                    <div class="card">
+                        <h4>🔄 Reverse Engineering</h4>
+                        <p>Analyzing software and malware behavior</p>
+                    </div>
+                </div>
+
+                <h3>Pre-installed Security Tools</h3>
+                <p>Kali Linux comes with <strong>hundreds of pre-installed security tools</strong>, including:</p>
+
+                <table>
+                    <tr>
+                        <th>Tool</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td><code>Nmap</code></td>
+                        <td>Network scanning and discovery</td>
+                    </tr>
+                    <tr>
+                        <td><code>Metasploit Framework</code></td>
+                        <td>Exploitation framework</td>
+                    </tr>
+                    <tr>
+                        <td><code>Burp Suite</code></td>
+                        <td>Web application testing</td>
+                    </tr>
+                    <tr>
+                        <td><code>Wireshark</code></td>
+                        <td>Network protocol analyzer</td>
+                    </tr>
+                    <tr>
+                        <td><code>John the Ripper</code></td>
+                        <td>Password cracking</td>
+                    </tr>
+                    <tr>
+                        <td><code>Hydra</code></td>
+                        <td>Login cracker</td>
+                    </tr>
+                </table>
+
+                <div class="alert alert-danger">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <h4>Important Legal Notice</h4>
+                        <p>These tools should <strong>ONLY</strong> be used for:</p>
+                        <ul>
+                            <li>Educational purposes</li>
+                            <li>Authorized security testing</li>
+                            <li>Your own systems</li>
+                        </ul>
+                        <p><strong>Unauthorized access to computer systems is illegal!</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- What is VirtualBox -->
+            <section id="virtualbox">
+                <h2>📦 What is VirtualBox?</h2>
+                <p><strong>Oracle VirtualBox</strong> is a free, open-source virtualization software that allows you to run Kali Linux as a virtual machine on your computer without modifying your existing operating system.</p>
+
+                <h3>Benefits of Using VirtualBox</h3>
+                <table>
+                    <tr>
+                        <th>Benefit</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>✅ <strong>Free</strong></td>
+                        <td>Completely free and open-source software</td>
+                    </tr>
+                    <tr>
+                        <td>✅ <strong>Cross-platform</strong></td>
+                        <td>Works on Windows, macOS, and Linux</td>
+                    </tr>
+                    <tr>
+                        <td>✅ <strong>Snapshots</strong></td>
+                        <td>Save and restore VM states at any point</td>
+                    </tr>
+                    <tr>
+                        <td>✅ <strong>Isolation</strong></td>
+                        <td>VMs are completely isolated from your host system</td>
+                    </tr>
+                    <tr>
+                        <td>✅ <strong>Easy to Use</strong></td>
+                        <td>User-friendly graphical interface</td>
+                    </tr>
+                </table>
+
+                <div style="text-align: center; margin: 25px 0;">
+                    <a href="https://www.virtualbox.org/" target="_blank" class="button-link">
+                        🌐 Visit VirtualBox Official Website
+                    </a>
+                </div>
+            </section>
+
+            <!-- System Requirements -->
+            <section id="requirements">
+                <h2>💻 System Requirements</h2>
+                <p>Before starting, ensure your computer meets these requirements:</p>
+
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Minimum</th>
+                        <th>Recommended</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Processor</strong></td>
+                        <td>64-bit CPU with virtualization</td>
+                        <td>Intel i5/AMD Ryzen 5 or better</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RAM</strong></td>
+                        <td>8 GB</td>
+                        <td>16 GB or more</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Storage</strong></td>
+                        <td>50 GB free space</td>
+                        <td>100 GB+ SSD</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Operating System</strong></td>
+                        <td>Windows 10/11 or macOS 10.15+</td>
+                        <td>Latest version</td>
+                    </tr>
+                </table>
+
+                <div class="alert alert-warning">
+                    <span class="alert-icon">🔧</span>
+                    <div>
+                        <h4>Important: Enable Virtualization</h4>
+                        <p>Virtualization must be enabled in your computer's BIOS/UEFI settings. To check on Windows:</p>
+                        <ol>
+                            <li>Open <strong>Task Manager</strong> (Ctrl + Shift + Esc)</li>
+                            <li>Go to the <strong>Performance</strong> tab</li>
+                            <li>Click on <strong>CPU</strong></li>
+                            <li>Look for <strong>"Virtualization: Enabled"</strong></li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Part 1: Installing VirtualBox -->
+            <section id="part1">
+                <h2>🛠️ Part 1: Installing VirtualBox</h2>
+
+                <p>First, we need to install VirtualBox on your computer. Select your operating system below:</p>
+
+                <div class="os-tabs">
+                    <div class="os-tab active" onclick="showOS('windows')">
+                        🪟 Windows
+                    </div>
+                    <div class="os-tab" onclick="showOS('mac')">
+                        🍎 macOS
+                    </div>
+                </div>
+
+                <!-- Windows Instructions -->
+                <div id="windows-content" class="os-content active">
+                    <h3>🪟 Windows Installation</h3>
+
+                    <h4>Step 1: Download VirtualBox</h4>
+                    <ol class="steps">
+                        <li>Open your web browser (Chrome, Firefox, Edge)</li>
+                        <li>Go to the official VirtualBox download page:
+                            <br><br>
+                            <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" class="button-link">
+                                ⬇️ VirtualBox Downloads Page
+                            </a>
+                        </li>
+                        <li>Click on <strong>"Windows hosts"</strong> to download the installer</li>
+                        <li>Save the file to your Downloads folder</li>
+                    </ol>
+
+                    <h4>Step 2: Run the Installer</h4>
+                    <ol class="steps">
+                        <li>Open your <strong>Downloads</strong> folder</li>
+                        <li>Find the file named <code>VirtualBox-x.x.x-xxxxxx-Win.exe</code></li>
+                        <li><strong>Double-click</strong> the installer to run it</li>
+                        <li>If prompted by User Account Control (UAC), click <strong>Yes</strong></li>
+                    </ol>
+
+                    <h4>Step 3: Installation Wizard</h4>
+                    <ol class="steps">
+                        <li><strong>Welcome Screen:</strong> Click <strong>Next</strong></li>
+                        <li><strong>Custom Setup:</strong> Keep default settings, click <strong>Next</strong></li>
+                        <li><strong>Network Warning:</strong> A warning will appear about network disconnection - this is normal! Click <strong>Yes</strong></li>
+                        <li><strong>Missing Dependencies:</strong> If prompted, click <strong>Yes</strong> to install Python Core</li>
+                        <li><strong>Ready to Install:</strong> Click <strong>Install</strong></li>
+                        <li><strong>Wait</strong> for the installation to complete</li>
+                        <li>Click <strong>Finish</strong> to close the installer</li>
+                    </ol>
+
+                    <h4>Step 4: Verify Installation</h4>
+                    <ol class="steps">
+                        <li>Click the <strong>Start Menu</strong></li>
+                        <li>Type <code>VirtualBox</code></li>
+                        <li>Click on <strong>Oracle VM VirtualBox</strong></li>
+                        <li>The VirtualBox Manager window should open</li>
+                    </ol>
+
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✅</span>
+                        <div>
+                            <h4>Success!</h4>
+                            <p>VirtualBox is now installed on your Windows computer!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- macOS Instructions -->
+                <div id="mac-content" class="os-content">
+                    <h3>🍎 macOS Installation</h3>
+
+                    <h4>Step 1: Download VirtualBox</h4>
+                    <ol class="steps">
+                        <li>Open your web browser (Safari, Chrome, Firefox)</li>
+                        <li>Go to the official VirtualBox download page:
+                            <br><br>
+                            <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" class="button-link">
+                                ⬇️ VirtualBox Downloads Page
+                            </a>
+                        </li>
+                        <li>Click on <strong>"macOS / Intel hosts"</strong> to download
+                            <br><em>(For M1/M2/M3 Macs, see the note below)</em>
+                        </li>
+                    </ol>
+
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">📝</span>
+                        <div>
+                            <h4>Note for Apple Silicon Users (M1/M2/M3)</h4>
+                            <p>If you have an Apple Silicon Mac, you may need to use alternative virtualization software like <strong>UTM</strong> or <strong>Parallels</strong>. Check the <a href="https://www.kali.org/docs/virtualization/" target="_blank">Kali documentation</a> for ARM support.</p>
+                        </div>
+                    </div>
+
+                    <h4>Step 2: Install VirtualBox</h4>
+                    <ol class="steps">
+                        <li>Open <strong>Finder</strong> and go to your <strong>Downloads</strong> folder</li>
+                        <li>Find the file named <code>VirtualBox-x.x.x-xxxxxx-macOS.dmg</code></li>
+                        <li><strong>Double-click</strong> the <code>.dmg</code> file to mount it</li>
+                        <li><strong>Double-click</strong> on <code>VirtualBox.pkg</code> to start the installer</li>
+                        <li>Click <strong>Continue</strong> on the welcome screen</li>
+                        <li>Click <strong>Install</strong></li>
+                        <li>Enter your <strong>Mac password</strong> when prompted</li>
+                        <li>Click <strong>Install Software</strong></li>
+                    </ol>
+
+                    <h4>Step 3: Allow System Extension (Important!)</h4>
+                    <div class="alert alert-danger">
+                        <span class="alert-icon">⚠️</span>
+                        <div>
+                            <h4>macOS Security Settings</h4>
+                            <p>macOS requires you to allow VirtualBox's system extension:</p>
+                            <ol>
+                                <li>A popup may appear saying the system extension was blocked</li>
+                                <li>Go to <strong>System Preferences</strong> → <strong>Security & Privacy</strong></li>
+                                <li>Click on the <strong>General</strong> tab</li>
+                                <li>Click <strong>Allow</strong> next to the message about Oracle</li>
+                                <li>You may need to <strong>restart your Mac</strong></li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <h4>Step 4: Verify Installation</h4>
+                    <ol class="steps">
+                        <li>Open <strong>Finder</strong></li>
+                        <li>Go to <strong>Applications</strong></li>
+                        <li><strong>Double-click</strong> on <strong>VirtualBox</strong></li>
+                        <li>The VirtualBox Manager window should open</li>
+                    </ol>
+
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✅</span>
+                        <div>
+                            <h4>Success!</h4>
+                            <p>VirtualBox is now installed on your Mac!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Part 2: Downloading Kali Linux -->
+            <section id="part2">
+                <h2>📥 Part 2: Downloading Kali Linux</h2>
+                <p>Now that VirtualBox is installed, let's download the Kali Linux virtual machine image.</p>
+
+                <h3>Step 1: Go to Kali Download Page</h3>
+                <ol class="steps">
+                    <li>Open your web browser</li>
+                    <li>Navigate to the official Kali Linux download page:
+                        <br><br>
+                        <a href="https://www.kali.org/get-kali/#kali-virtual-machines" target="_blank" class="button-link">
+                            🐉 Kali Linux Downloads - Virtual Machines
+                        </a>
+                    </li>
+                </ol>
+
+                <h3>Step 2: Select VirtualBox Image</h3>
+                <ol class="steps">
+                    <li>On the download page, look for the <strong>"Virtual Machines"</strong> section</li>
+                    <li>Find the <strong>VirtualBox</strong> option</li>
+                    <li>Click the <strong>Download</strong> button for the <strong>64-bit</strong> version</li>
+                </ol>
+
+                <table>
+                    <tr>
+                        <th>File Information</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Format</strong></td>
+                        <td><code>.7z</code> (7-Zip compressed archive)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contains</strong></td>
+                        <td>A <code>.vbox</code> file + <code>.vmdk</code> virtual disk</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Size</strong></td>
+                        <td>~3-4 GB (compressed)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Architecture</strong></td>
+                        <td>64-bit (amd64)</td>
+                    </tr>
+                </table>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">⏳</span>
+                    <div>
+                        <h4>Download Time</h4>
+                        <p>The download may take 10-30 minutes depending on your internet speed. Please be patient!</p>
+                    </div>
+                </div>
+
+                <h3>Step 3: Verify Download (Recommended)</h3>
+                <div class="alert alert-warning">
+                    <span class="alert-icon">🔒</span>
+                    <div>
+                        <h4>Security Best Practice</h4>
+                        <p>Always verify downloaded files to ensure they haven't been tampered with. Compare the SHA256 checksum shown on the download page with your file:</p>
+                        <p><strong>Windows (PowerShell):</strong></p>
+                        <pre><code>Get-FileHash .\kali-linux-*-virtualbox-amd64.7z -Algorithm SHA256</code></pre>
+                        <p><strong>macOS (Terminal):</strong></p>
+                        <pre><code>shasum -a 256 ~/Downloads/kali-linux-*-virtualbox-amd64.7z</code></pre>
+                    </div>
+                </div>
+
+                <h3>Step 4: Extract the Archive</h3>
+                <p>The downloaded file is a <code>.7z</code> compressed archive. You need to extract it before importing into VirtualBox.</p>
+                <ol class="steps">
+                    <li>If you don't have 7-Zip installed:
+                        <ul>
+                            <li><strong>Windows:</strong> Download from <a href="https://www.7-zip.org/" target="_blank">7-zip.org</a> and install it</li>
+                            <li><strong>macOS:</strong> Install <a href="https://www.keka.io/" target="_blank">Keka</a> or use: <code>brew install p7zip</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Right-click</strong> the downloaded <code>.7z</code> file</li>
+                    <li>Select <strong>7-Zip</strong> &rarr; <strong>Extract Here</strong> (or <strong>Extract to "kali-linux-..."</strong>)</li>
+                    <li>Wait for extraction to complete &mdash; this will create a folder containing the VM files</li>
+                </ol>
+                <div class="alert alert-info">
+                    <span class="alert-icon">📂</span>
+                    <div>
+                        <h4>After Extraction</h4>
+                        <p>You will find a folder containing a <code>.vbox</code> file and a <code>.vmdk</code> file. The <code>.vbox</code> file is the VirtualBox configuration, and the <code>.vmdk</code> is the virtual hard disk.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Part 3: Adding Kali Linux -->
+            <section id="part3">
+                <h2>📦 Part 3: Adding Kali Linux to VirtualBox</h2>
+                <p>Now we will add the extracted Kali Linux image as a virtual machine in VirtualBox.</p>
+
+                <h3>Step 1: Open VirtualBox</h3>
+                <ol class="steps">
+                    <li>Launch <strong>Oracle VM VirtualBox</strong> from:
+                        <ul>
+                            <li><strong>Windows:</strong> Start Menu → VirtualBox</li>
+                            <li><strong>macOS:</strong> Applications → VirtualBox</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>Step 2: Add the Kali Linux VM</h3>
+                <ol class="steps">
+                    <li>In VirtualBox, go to <strong>Machine</strong> &rarr; <strong>Add</strong>
+                        <br><em>Or use keyboard shortcut: <code>Ctrl + A</code> (Windows) / <code>Cmd + A</code> (macOS)</em>
+                    </li>
+                    <li>Navigate to the <strong>extracted folder</strong> from the previous step</li>
+                    <li>Select the <code>.vbox</code> file (e.g., <code>kali-linux-*-virtualbox-amd64.vbox</code>)</li>
+                    <li>Click <strong>Open</strong></li>
+                </ol>
+
+                <h3>Step 3: Review Virtual Machine Settings</h3>
+                <p>You will see the VM settings. Review and optionally modify them:</p>
+
+                <table>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Default</th>
+                        <th>Recommendation</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Name</strong></td>
+                        <td>Kali Linux</td>
+                        <td>Keep or customize</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CPU</strong></td>
+                        <td>2 cores</td>
+                        <td>Increase to 4 if possible</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RAM</strong></td>
+                        <td>2048 MB</td>
+                        <td>Increase to 4096 MB if possible</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Network</strong></td>
+                        <td>NAT</td>
+                        <td>Keep as NAT</td>
+                    </tr>
+                </table>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">💡</span>
+                    <div>
+                        <h4>Performance Tip</h4>
+                        <p>If your computer has 16 GB or more RAM, allocate <strong>4 GB (4096 MB)</strong> to Kali for better performance.</p>
+                    </div>
+                </div>
+
+                <h3>Step 4: Verify the VM is Added</h3>
+                <ol class="steps">
+                    <li><strong>"Kali Linux"</strong> should now appear in your VirtualBox Manager</li>
+                    <li>The VM is ready &mdash; no import wait time needed since the files are already extracted</li>
+                </ol>
+
+                <div class="alert alert-success">
+                    <span class="alert-icon">✅</span>
+                    <div>
+                        <h4>Success!</h4>
+                        <p>Kali Linux virtual machine has been added successfully!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Part 4: First Boot and Login -->
+            <section id="part4">
+                <h2>🚀 Part 4: First Boot and Login</h2>
+
+                <h3>Step 1: Start the Virtual Machine</h3>
+                <ol class="steps">
+                    <li>In VirtualBox Manager, select <strong>Kali Linux</strong></li>
+                    <li>Click the <strong>Start</strong> button (green arrow) or double-click on Kali Linux</li>
+                </ol>
+
+                <h3>Step 2: Wait for Boot</h3>
+                <ol class="steps">
+                    <li>A new window will open showing the Kali Linux boot process</li>
+                    <li>Wait for the system to fully boot (you'll see the login screen)</li>
+                </ol>
+
+                <h3>Step 3: Log In</h3>
+                <p>Use the <strong>default credentials</strong>:</p>
+
+                <div class="credentials-box">
+                    <h4>🔑 Default Login Credentials</h4>
+                    <div class="credential-item">
+                        <strong>Username</strong>
+                        <span>kali</span>
+                    </div>
+                    <div class="credential-item">
+                        <strong>Password</strong>
+                        <span>kali</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <h4>Security Warning</h4>
+                        <p>The default password <code>kali</code> is well-known. In a production environment, you should <strong>change this password immediately!</strong></p>
+                    </div>
+                </div>
+
+                <h3>Step 4: Explore the Desktop</h3>
+                <p>After logging in, you'll see the Kali Linux desktop with:</p>
+                <ul>
+                    <li><strong>Applications menu</strong> (top-left corner) - Access all security tools</li>
+                    <li><strong>System tray</strong> (top-right corner) - Network, sound, power</li>
+                    <li><strong>File manager</strong> - Browse files</li>
+                    <li><strong>Terminal</strong> - Command line interface</li>
+                </ul>
+
+                <h3>Step 5: Change the Password (Recommended)</h3>
+                <ol class="steps">
+                    <li>Open <strong>Terminal</strong> (click on the terminal icon or right-click desktop → Open Terminal Here)</li>
+                    <li>Type the following command and press <strong>Enter</strong>:
+                        <pre><code>passwd</code></pre>
+                    </li>
+                    <li>Enter the current password: <code>kali</code></li>
+                    <li>Enter your new password (twice)</li>
+                </ol>
+            </section>
+
+            <!-- Verification Tasks -->
+            <section id="verification">
+                <h2>✅ Verification Tasks</h2>
+                <p>Complete these tasks to verify your Kali Linux virtual machine is working correctly:</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <h4>Task 1: Check Network</h4>
+                        <p>Open Terminal and run:</p>
+                        <pre><code>ping -c 4 google.com</code></pre>
+                        <p><strong>Expected:</strong> You should see ping replies with response times.</p>
+                    </div>
+
+                    <div class="card">
+                        <h4>Task 2: Update System</h4>
+                        <p>Open Terminal and run:</p>
+                        <pre><code>sudo apt update</code></pre>
+                        <p><strong>Expected:</strong> System connects to repositories and shows available updates.</p>
+                    </div>
+
+                    <div class="card">
+                        <h4>Task 3: Check Tools</h4>
+                        <p>Verify security tools are installed:</p>
+                        <pre><code>nmap --version</code></pre>
+                        <pre><code>msfconsole --version</code></pre>
+                        <p><strong>Expected:</strong> Version information displays.</p>
+                    </div>
+
+                    <div class="card">
+                        <h4>Task 4: Create Snapshot</h4>
+                        <p>In VirtualBox: <strong>Machine</strong> → <strong>Take Snapshot</strong></p>
+                        <p>Name it <strong>"Clean Install"</strong></p>
+                        <p><strong>Why:</strong> Restore to this state if something breaks.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Troubleshooting -->
+            <section id="troubleshooting">
+                <h2>🔧 Troubleshooting</h2>
+                <p>If you encounter issues, check these common problems and solutions:</p>
+
+                <div class="troubleshoot-item">
+                    <div class="troubleshoot-header">
+                        ❌ "VT-x is not available" Error
+                    </div>
+                    <div class="troubleshoot-solution">
+                        <p><strong>Problem:</strong> Virtualization is disabled in BIOS/UEFI.</p>
+                        <p><strong>Solution:</strong></p>
+                        <ol>
+                            <li>Restart your computer</li>
+                            <li>Enter BIOS/UEFI setup (press F2, F10, F12, or Del during boot)</li>
+                            <li>Find virtualization settings (VT-x, AMD-V, SVM, or Virtualization Technology)</li>
+                            <li>Enable virtualization</li>
+                            <li>Save and exit BIOS</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="troubleshoot-item">
+                    <div class="troubleshoot-header">
+                        ❌ Black Screen After Boot
+                    </div>
+                    <div class="troubleshoot-solution">
+                        <p><strong>Problem:</strong> Display settings issue.</p>
+                        <p><strong>Solution:</strong></p>
+                        <ol>
+                            <li>Power off the VM</li>
+                            <li>Go to <strong>Settings</strong> → <strong>Display</strong></li>
+                            <li>Increase <strong>Video Memory</strong> to 128 MB</li>
+                            <li>Disable <strong>3D Acceleration</strong></li>
+                            <li>Try starting again</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="troubleshoot-item">
+                    <div class="troubleshoot-header">
+                        ❌ Slow Performance
+                    </div>
+                    <div class="troubleshoot-solution">
+                        <p><strong>Problem:</strong> Insufficient resources allocated to VM.</p>
+                        <p><strong>Solution:</strong></p>
+                        <ol>
+                            <li>Power off the VM</li>
+                            <li>Go to <strong>Settings</strong> → <strong>System</strong></li>
+                            <li>Increase <strong>RAM</strong> to 4096 MB</li>
+                            <li>Go to <strong>Settings</strong> → <strong>Processor</strong></li>
+                            <li>Increase <strong>CPU</strong> cores to 2-4</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="troubleshoot-item">
+                    <div class="troubleshoot-header">
+                        ❌ Network Not Working
+                    </div>
+                    <div class="troubleshoot-solution">
+                        <p><strong>Problem:</strong> Network adapter configuration issue.</p>
+                        <p><strong>Solution:</strong></p>
+                        <ol>
+                            <li>Power off the VM</li>
+                            <li>Go to <strong>Settings</strong> → <strong>Network</strong></li>
+                            <li>Ensure <strong>Adapter 1</strong> is enabled</li>
+                            <li>Set "Attached to" as <strong>NAT</strong></li>
+                            <li>Click <strong>OK</strong> and start the VM</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="troubleshoot-item">
+                    <div class="troubleshoot-header">
+                        ❌ Add/Extract Failed
+                    </div>
+                    <div class="troubleshoot-solution">
+                        <p><strong>Problem:</strong> Corrupted download, failed extraction, or insufficient disk space.</p>
+                        <p><strong>Solution:</strong></p>
+                        <ol>
+                            <li>Delete the downloaded <code>.7z</code> file and extracted folder</li>
+                            <li>Re-download from <a href="https://www.kali.org/get-kali/" target="_blank">the official Kali website</a></li>
+                            <li>Verify the SHA256 checksum</li>
+                            <li>Ensure you have at least 50 GB free disk space</li>
+                            <li>Make sure 7-Zip is installed correctly for extraction</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary">
+                <h2>📝 Summary</h2>
+                <p><strong>Congratulations!</strong> You have successfully completed Lab 01. In this lab, you:</p>
+
+                <table>
+                    <tr>
+                        <th>Completed Task</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>Learned about Kali Linux and its purpose</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Installed Oracle VirtualBox</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Downloaded Kali Linux VM image</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Imported Kali Linux as a virtual machine</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Booted and logged into Kali Linux</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Created a snapshot of your clean installation</td>
+                        <td>✅</td>
+                    </tr>
+                </table>
+
+                <h3>📚 Additional Resources</h3>
+                <div class="card-grid">
+                    <div class="card">
+                        <h4>🐉 Kali Linux</h4>
+                        <p><a href="https://www.kali.org/" target="_blank">Official Website</a></p>
+                        <p><a href="https://www.kali.org/docs/" target="_blank">Documentation</a></p>
+                        <p><a href="https://www.kali.org/tools/" target="_blank">Tools List</a></p>
+                    </div>
+                    <div class="card">
+                        <h4>📦 VirtualBox</h4>
+                        <p><a href="https://www.virtualbox.org/" target="_blank">Official Website</a></p>
+                        <p><a href="https://www.virtualbox.org/manual/" target="_blank">User Manual</a></p>
+                    </div>
+                </div>
+
+                <h3>❓ Lab Questions</h3>
+                <p>Answer the following questions in your lab report:</p>
+                <ol>
+                    <li>What is the default username and password for Kali Linux?</li>
+                    <li>Why is it important to use virtual machines for security testing?</li>
+                    <li>What is the purpose of taking a snapshot after a clean installation?</li>
+                    <li>Name three security tools that come pre-installed with Kali Linux.</li>
+                    <li>What does the <code>passwd</code> command do?</li>
+                </ol>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p><strong>End of Lab 01</strong></p>
+            <p>For questions or issues, contact your instructor.</p>
+            <p><strong>CYB236 - Web Application Security</strong></p>
+            <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                King Abdulaziz University &mdash; Faculty of Computing and Information Technology (FCIT)<br>
+                General Intermediate Diploma in Cybersecurity<br>
+                <em>Prepared by Dr. Abdulmohsen Almalawi</em>
+            </p>
+        </footer>
+    </div>
+
+    <!-- JavaScript for OS Tabs -->
+    <script>
+        function showOS(os) {
+            // Hide all content
+            document.querySelectorAll('.os-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active from all tabs
+            document.querySelectorAll('.os-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected content
+            document.getElementById(os + '-content').classList.add('active');
+
+            // Mark tab as active
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
