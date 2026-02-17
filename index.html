@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPCS204 - Data Structures I</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --primary-light: #818cf8;
+            --secondary-color: #764ba2;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --dark-color: #1f2937;
+            --light-color: #f3f4f6;
+            --gray-color: #6b7280;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .header-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .header-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero .course-code {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .hero .description {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.95;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            padding: 20px 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* Part Section */
+        .part-section {
+            margin-bottom: 50px;
+        }
+
+        .part-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .part-number {
+            background: white;
+            color: var(--primary-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .part-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Module Grid */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Module Card */
+        .module-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-card.disabled {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .module-header {
+            padding: 25px;
+            color: white;
+            position: relative;
+        }
+
+        /* Module header colors */
+        .module-header.arrays { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .module-header.linkedlist { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .module-header.recursion { background: linear-gradient(135deg, #a855f7, #9333ea); }
+        .module-header.algorithm { background: linear-gradient(135deg, #ec4899, #db2777); }
+        .module-header.stack { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+        .module-header.queue { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .module-header.tree { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .module-header.sorting { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+        .module-header.heap { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .module-header.graph { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .module-header.hash { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+
+        .module-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .module-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .module-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .module-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .module-body {
+            padding: 20px 25px;
+        }
+
+        .module-topics {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .module-topics li {
+            padding: 5px 0;
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .module-topics li::before {
+            content: "•";
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+
+        .module-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .module-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .module-status.ready {
+            color: var(--success-color);
+        }
+
+        .module-status.coming {
+            color: var(--gray-color);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot.ready {
+            background: var(--success-color);
+        }
+
+        .status-dot.coming {
+            background: var(--gray-color);
+        }
+
+        .module-arrow {
+            color: var(--primary-light);
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer a {
+            color: #c4b5fd;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .header-links {
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-stats {
+                gap: 20px;
+            }
+
+            .stat-box {
+                padding: 15px 20px;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">DS</div>
+            <div>
+                <div class="logo-text">CPCS204</div>
+                <div class="logo-subtitle">King Abdulaziz University</div>
+            </div>
+        </div>
+        <nav class="header-links">
+            <a href="#arrays">Arrays</a>
+            <a href="#linkedlists">Linked Lists</a>
+            <a href="#recursion">Recursion</a>
+            <a href="#stackqueue">Stack & Queue</a>
+            <a href="#trees">Trees</a>
+            <a href="#sorting">Sorting</a>
+            <a href="#graphs">Graphs</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Data Structures - I</h1>
+        <p class="course-code">CPCS204</p>
+        <p class="description">
+            Master fundamental data structures and algorithms. From arrays and linked lists
+            to trees, graphs, and hash tables - build the foundation for efficient programming.
+        </p>
+        <div class="hero-stats">
+            <div class="stat-box">
+                <div class="stat-number">10</div>
+                <div class="stat-label">Topics</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Modules</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Examples</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Part 1: Arrays & Searching -->
+        <section class="part-section" id="arrays">
+            <div class="part-header">
+                <div class="part-number">1</div>
+                <h2 class="part-title">Arrays & Searching</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Arrays & Searching -->
+                <a href="Arrays_Searching/index.html" class="module-card">
+                    <div class="module-header arrays">
+                        <span class="module-number">Module 1</span>
+                        <div class="module-icon">🔍</div>
+                        <div class="module-title">Arrays & Searching</div>
+                        <div class="module-subtitle">Linear & Binary Search</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Array Operations & O(1) vs O(n)</li>
+                            <li>Linear Search Algorithm</li>
+                            <li>Binary Search Algorithm</li>
+                            <li>Understanding O(log n)</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Part 2: Linked Lists -->
+        <section class="part-section" id="linkedlists">
+            <div class="part-header">
+                <div class="part-number">2</div>
+                <h2 class="part-title">Linked Lists</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Linked List Introduction -->
+                <a href="linkedlist/linkedlist-tutorial.html" class="module-card">
+                    <div class="module-header linkedlist">
+                        <span class="module-number">Module 3</span>
+                        <div class="module-icon">🔗</div>
+                        <div class="module-title">Linked List Basics</div>
+                        <div class="module-subtitle">Introduction & Operations</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Why Linked Lists Exist</li>
+                            <li>Node Class & Structure</li>
+                            <li>Traversal & Access</li>
+                            <li>Insertion & Deletion</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Types of Linked Lists -->
+                <a href="linkedlist/linkedlist-types-tutorial.html" class="module-card">
+                    <div class="module-header linkedlist">
+                        <span class="module-number">Module 4</span>
+                        <div class="module-icon">🔄</div>
+                        <div class="module-title">Types of Linked Lists</div>
+                        <div class="module-subtitle">Circular & Doubly Linked</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Circular Linked List</li>
+                            <li>Doubly Linked List</li>
+                            <li>Circular Doubly Linked List</li>
+                            <li>Use Cases & Comparison</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Linked List Questions -->
+                <a href="linkedlist/linkedlist-questions.html" class="module-card">
+                    <div class="module-header linkedlist">
+                        <span class="module-number">Practice</span>
+                        <div class="module-icon">❓</div>
+                        <div class="module-title">Linked List Questions</div>
+                        <div class="module-subtitle">Coding & MCQ Practice</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>18 Coding Questions (Visual)</li>
+                            <li>20 MCQ Questions (Interactive)</li>
+                            <li>Click-to-Reveal Solutions</li>
+                            <li>Score Tracking & Feedback</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Part 3: Recursion -->
+        <section class="part-section" id="recursion">
+            <div class="part-header">
+                <div class="part-number">3</div>
+                <h2 class="part-title">Recursion</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Introduction to Recursion -->
+                <a href="recursive-application/recursion-tutorial.html" class="module-card">
+                    <div class="module-header recursion">
+                        <span class="module-number">Module 5</span>
+                        <div class="module-icon">🔄</div>
+                        <div class="module-title">Introduction to Recursion</div>
+                        <div class="module-subtitle">The Recursive Method</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Call Stack & Memory</li>
+                            <li>From Loops to Recursion</li>
+                            <li>Base Case & Stack Overflow</li>
+                            <li>Iterative vs Recursive</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status available">
+                                <span class="status-dot available"></span>
+                                Available
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Recursion Application -->
+                <a href="recursive-application/recursion-application.html" class="module-card">
+                    <div class="module-header recursion">
+                        <span class="module-number">Module 6</span>
+                        <div class="module-icon">📁</div>
+                        <div class="module-title">Recursion Application</div>
+                        <div class="module-subtitle">Folder Explorer</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Exploring Folders Recursively</li>
+                            <li>From Simple to Recursive</li>
+                            <li>Self-Similar Structures</li>
+                            <li>Why Recursion Wins</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status available">
+                                <span class="status-dot available"></span>
+                                Available
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Numeric Recursion -->
+                <a href="recursive-application/numeric-recursion.html" class="module-card">
+                    <div class="module-header recursion">
+                        <span class="module-number">Module 7</span>
+                        <div class="module-icon">🔢</div>
+                        <div class="module-title">Numeric Recursion</div>
+                        <div class="module-subtitle">Mathematical Problems</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Factorial & Fibonacci</li>
+                            <li>Power & Multiplication</li>
+                            <li>Fast Exponentiation</li>
+                            <li>Sum of Digits</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Recursion Questions -->
+                <a href="questions/recursion-questions.html" class="module-card">
+                    <div class="module-header recursion">
+                        <span class="module-number">Practice</span>
+                        <div class="module-icon">&#10068;</div>
+                        <div class="module-title">Recursion Questions</div>
+                        <div class="module-subtitle">Trace & Practice</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>6 Tracing Questions (Easy to Hard)</li>
+                            <li>Digit Processing & Branching</li>
+                            <li>Click-to-Reveal Solutions</li>
+                            <li>Call Tree Diagrams</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">&rarr;</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- String Recursion -->
+                <div class="module-card disabled">
+                    <div class="module-header recursion">
+                        <span class="module-number">Module 8</span>
+                        <div class="module-icon">📝</div>
+                        <div class="module-title">String Recursion</div>
+                        <div class="module-subtitle">String Manipulation</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Reverse String Recursively</li>
+                            <li>Count & Replace Characters</li>
+                            <li>Recursive Binary Search</li>
+                            <li>Tower of Hanoi</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status coming">
+                                <span class="status-dot coming"></span>
+                                Coming Soon
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Part 4: Algorithm Analysis -->
+        <section class="part-section" id="algorithm">
+            <div class="part-header">
+                <div class="part-number">4</div>
+                <h2 class="part-title">Algorithm Analysis</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Big-O Notation -->
+                <a href="algorithm-analysis.html" class="module-card">
+                    <div class="module-header algorithm">
+                        <span class="module-number">Module 7</span>
+                        <div class="module-icon">📊</div>
+                        <div class="module-title">Big-O Notation</div>
+                        <div class="module-subtitle">Time Complexity Analysis</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Introduction to Analysis</li>
+                            <li>Big-O Approximation</li>
+                            <li>Analyzing Code Segments</li>
+                            <li>Mathematical Definition</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Part 5: Stack & Queue -->
+        <section class="part-section" id="stackqueue">
+            <div class="part-header">
+                <div class="part-number">5</div>
+                <h2 class="part-title">Stack & Queue</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Stack -->
+                <a href="stack-tutorial.html" class="module-card">
+                    <div class="module-header stack">
+                        <span class="module-number">Module 8</span>
+                        <div class="module-icon">📚</div>
+                        <div class="module-title">Stack</div>
+                        <div class="module-subtitle">LIFO Data Structure</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Stack Operations (Push, Pop)</li>
+                            <li>Infix, Postfix & Prefix</li>
+                            <li>Expression Evaluation</li>
+                            <li>Array & Linked Implementation</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Queue -->
+                <div class="module-card disabled">
+                    <div class="module-header queue">
+                        <span class="module-number">Module 9</span>
+                        <div class="module-icon">🚶</div>
+                        <div class="module-title">Queue</div>
+                        <div class="module-subtitle">FIFO Data Structure</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Queue Operations</li>
+                            <li>Circular Array Implementation</li>
+                            <li>Linked List Implementation</li>
+                            <li>Applications of Queue</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status coming">
+                                <span class="status-dot coming"></span>
+                                Coming Soon
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Part 6: Trees -->
+        <section class="part-section" id="trees">
+            <div class="part-header">
+                <div class="part-number">6</div>
+                <h2 class="part-title">Trees</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Binary Tree -->
+                <div class="module-card disabled">
+                    <div class="module-header tree">
+                        <span class="module-number">Module 10</span>
+                        <div class="module-icon">🌳</div>
+                        <div class="module-title">Binary Tree</div>
+                        <div class="module-subtitle">Tree Fundamentals</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Tree Terminology</li>
+                            <li>Height & Node Relations</li>
+                            <li>Types of Trees</li>
+                            <li>Pre, In, Post-Order Traversal</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status coming">
+                                <span class="status-dot coming"></span>
+                                Coming Soon
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Binary Search Tree -->
+                <a href="questions/binary_tree_question.html" class="module-card">
+                    <div class="module-header tree">
+                        <span class="module-number">Module 11</span>
+                        <div class="module-icon">🔎</div>
+                        <div class="module-title">Binary Search Tree</div>
+                        <div class="module-subtitle">BST Operations</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>BST Properties</li>
+                            <li>Search, Insert, Delete</li>
+                            <li>BST Traversals</li>
+                            <li>Practice Questions</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Practice Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Part 7: Sorting -->
+        <section class="part-section" id="sorting">
+            <div class="part-header">
+                <div class="part-number">7</div>
+                <h2 class="part-title">Sorting Algorithms</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Quadratic Sorts -->
+                <div class="module-card disabled">
+                    <div class="module-header sorting">
+                        <span class="module-number">Module 12</span>
+                        <div class="module-icon">📈</div>
+                        <div class="module-title">Quadratic Sorts</div>
+                        <div class="module-subtitle">O(n²) Algorithms</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Selection Sort</li>
+                            <li>Insertion Sort</li>
+                            <li>Bubble Sort</li>
+                            <li>Analysis & Tracing</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status coming">
+                                <span class="status-dot coming"></span>
+                                Coming Soon
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logarithmic Sorts -->
+                <a href="quick-partition-tutorial.html" class="module-card">
+                    <div class="module-header sorting">
+                        <span class="module-number">Module 13</span>
+                        <div class="module-icon">⚡</div>
+                        <div class="module-title">Logarithmic Sorts</div>
+                        <div class="module-subtitle">O(n log n) Algorithms</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Quick Sort Partition</li>
+                            <li>Merge Sort</li>
+                            <li>Analysis & Tracing</li>
+                            <li>Java Implementation</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Quick Sort Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Part 8: Heap -->
+        <section class="part-section" id="heap">
+            <div class="part-header">
+                <div class="part-number">8</div>
+                <h2 class="part-title">Heap</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Heap -->
+                <div class="module-card disabled">
+                    <div class="module-header heap">
+                        <span class="module-number">Module 14</span>
+                        <div class="module-icon">🏔️</div>
+                        <div class="module-title">Heap Data Structure</div>
+                        <div class="module-subtitle">Priority-Based Structure</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Min Heap & Max Heap</li>
+                            <li>Add, Delete, Build Heap</li>
+                            <li>Priority Queues</li>
+                            <li>Heap Sort</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status coming">
+                                <span class="status-dot coming"></span>
+                                Coming Soon
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Part 9: Graphs -->
+        <section class="part-section" id="graphs">
+            <div class="part-header">
+                <div class="part-number">9</div>
+                <h2 class="part-title">Graphs</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Graph Basics -->
+                <a href="questions/graph_traversal_question.html" class="module-card">
+                    <div class="module-header graph">
+                        <span class="module-number">Module 15</span>
+                        <div class="module-icon">🕸️</div>
+                        <div class="module-title">Graph Traversal</div>
+                        <div class="module-subtitle">DFS & BFS</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Graph Terminology</li>
+                            <li>Adjacency Matrix & List</li>
+                            <li>Depth First Search (DFS)</li>
+                            <li>Breadth First Search (BFS)</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Practice Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Graph DFS Practice -->
+                <a href="questions/pharmacy_dfs_question.html" class="module-card">
+                    <div class="module-header graph">
+                        <span class="module-number">Practice</span>
+                        <div class="module-icon">💊</div>
+                        <div class="module-title">Pharmacy Network DFS</div>
+                        <div class="module-subtitle">Weighted Graph Problem</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Weighted Undirected Graph</li>
+                            <li>DFS with Priority</li>
+                            <li>Highest Congestion First</li>
+                            <li>Step-by-Step Solution</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Practice Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Part 10: Hash Tables -->
+        <section class="part-section" id="hash">
+            <div class="part-header">
+                <div class="part-number">10</div>
+                <h2 class="part-title">Hash Tables</h2>
+            </div>
+            <div class="modules-grid">
+                <!-- Hash Tables -->
+                <a href="hashTable/index.html" class="module-card">
+                    <div class="module-header hash">
+                        <span class="module-number">Module 16</span>
+                        <div class="module-icon">#️⃣</div>
+                        <div class="module-title">Hash Tables</div>
+                        <div class="module-subtitle">Hash Functions & Collision</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Hash Functions</li>
+                            <li>Linear & Quadratic Probing</li>
+                            <li>Double Hashing</li>
+                            <li>Separate Chaining</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Double Hashing Practice -->
+                <a href="questions/double_hashing_question.html" class="module-card">
+                    <div class="module-header hash">
+                        <span class="module-number">Practice</span>
+                        <div class="module-icon">🔢</div>
+                        <div class="module-title">Double Hashing Practice</div>
+                        <div class="module-subtitle">Collision Resolution</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>h₁(k) and h₂(k) Functions</li>
+                            <li>Insert Keys Step-by-Step</li>
+                            <li>Collision Handling</li>
+                            <li>Complete Solution</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Practice Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>CPCS204</strong> - Data Structures I</p>
+        <p>Faculty of Computing and Information Technology</p>
+        <p>King Abdulaziz University</p>
+        <p>Prepared by Dr. Almalawi</p>
+    </footer>
+</body>
+</html>
