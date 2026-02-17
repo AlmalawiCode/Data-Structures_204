@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Colors - CPIT285 Computer Graphics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 40px 60px;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 5rem;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .title-slide h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.8rem;
+            margin-top: 50px;
+            opacity: 0.9;
+        }
+
+        /* Section Slides */
+        .section-slide {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-slide h1 {
+            font-size: 4.5rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-slide p {
+            font-size: 2rem;
+            margin-top: 30px;
+            opacity: 0.9;
+        }
+
+        /* Content Slides */
+        .content-slide {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .content-slide h1 {
+            font-size: 3rem;
+            color: #38ef7d;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #38ef7d;
+            padding-bottom: 15px;
+        }
+
+        .content-slide .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .content-slide ul {
+            font-size: 1.8rem;
+            line-height: 2.2;
+            padding-left: 50px;
+        }
+
+        .content-slide li {
+            margin-bottom: 15px;
+        }
+
+        .content-slide p {
+            font-size: 1.8rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: flex;
+            gap: 60px;
+            flex: 1;
+        }
+
+        .two-column .column {
+            flex: 1;
+        }
+
+        /* Color Boxes */
+        .color-box {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            vertical-align: middle;
+            margin-right: 15px;
+            border: 3px solid white;
+        }
+
+        .color-row {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .color-item {
+            text-align: center;
+        }
+
+        .color-item .color-box {
+            width: 80px;
+            height: 80px;
+            margin: 0 0 10px 0;
+        }
+
+        .color-item span {
+            display: block;
+            font-size: 1.2rem;
+        }
+
+        /* Color Wheel */
+        .color-wheel {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: conic-gradient(
+                red, yellow, lime, aqua, blue, magenta, red
+            );
+            margin: 20px auto;
+            border: 5px solid white;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 20px;
+            text-align: left;
+            border: 2px solid #444;
+        }
+
+        th {
+            background: #38ef7d;
+            color: #1a1a2e;
+        }
+
+        td {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: rgba(56, 239, 125, 0.15);
+            border-left: 5px solid #38ef7d;
+            padding: 25px 30px;
+            margin: 20px 0;
+            font-size: 1.6rem;
+        }
+
+        /* Code Style */
+        code {
+            background: #2d2d44;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            color: #38ef7d;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .nav button:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 40px;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            left: 60px;
+            font-size: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Comparison Diagrams */
+        .comparison {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #38ef7d;
+        }
+
+        /* Color Harmony Diagrams */
+        .harmony-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .harmony-card {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .harmony-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #38ef7d;
+        }
+
+        .harmony-colors {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .harmony-colors .color-box {
+            width: 50px;
+            height: 50px;
+            margin: 0;
+        }
+
+        /* Gradient boxes for HSV demo */
+        .gradient-demo {
+            display: flex;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .gradient-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .gradient-item .gradient-bar {
+            height: 60px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        /* Warm/Cool colors */
+        .temperature-section {
+            display: flex;
+            gap: 40px;
+        }
+
+        .temp-card {
+            flex: 1;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .temp-card.warm {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+        }
+
+        .temp-card.cool {
+            background: linear-gradient(135deg, #48dbfb, #0abde3);
+        }
+
+        .temp-card.neutral {
+            background: linear-gradient(135deg, #636e72, #b2bec3);
+        }
+
+        .temp-card h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .temp-card p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #2d2d44;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+
+        .formula-box .result {
+            color: #38ef7d;
+            font-weight: bold;
+        }
+
+        /* List with icons */
+        .icon-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .icon-list li::before {
+            content: ">";
+            color: #38ef7d;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        /* Large centered text */
+        .big-text {
+            font-size: 2.5rem;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        /* Color scheme examples */
+        .scheme-example {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+        }
+
+        .scheme-colors {
+            display: flex;
+            gap: 10px;
+        }
+
+        .scheme-colors .color-box {
+            width: 70px;
+            height: 70px;
+            margin: 0;
+        }
+
+        .scheme-info {
+            flex: 1;
+        }
+
+        .scheme-info h3 {
+            color: #38ef7d;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+
+        .scheme-info p {
+            font-size: 1.3rem;
+            margin: 0;
+        }
+
+        /* RGB Cube representation */
+        .rgb-values {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .rgb-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px 40px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .rgb-item .color-swatch {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .rgb-item code {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title -->
+    <div class="slide title-slide active" id="slide1">
+        <h1>UNDERSTANDING COLORS</h1>
+        <h2>Computer Graphics - CPIT285</h2>
+        <p class="author">Dr. Rayed AlGhamdi</p>
+    </div>
+
+    <!-- Slide 2: Agenda -->
+    <div class="slide content-slide" id="slide2">
+        <h1>Lecture Outline</h1>
+        <div class="content">
+            <ul class="icon-list">
+                <li>Color Models (RGB, CMYK, HSV/HSL)</li>
+                <li>Color Depth and Bit Representation</li>
+                <li>Additive vs Subtractive Color Systems</li>
+                <li>Traditional Color Theory & The Color Wheel</li>
+                <li>Primary, Secondary, and Tertiary Colors</li>
+                <li>Hue, Tint, Tone, and Shade</li>
+                <li>Color Harmony Schemes</li>
+                <li>Color Psychology: Meanings & Feelings</li>
+            </ul>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 3: Section - Color Models -->
+    <div class="slide section-slide" id="slide3">
+        <h1>COLOR MODELS</h1>
+        <p>How does the computer work with colors?</p>
+    </div>
+
+    <!-- Slide 4: Color Depth -->
+    <div class="slide content-slide" id="slide4">
+        <h1>Color Depth</h1>
+        <div class="content">
+            <p><strong>Color depth</strong> depends on the number of bits used to represent each pixel, determined by the encoding system.</p>
+
+            <div class="highlight-box">
+                <strong>Common Standard:</strong> 8 bits per channel for RGB (8 x 3 = 24 bits total)
+            </div>
+
+            <div class="formula-box">
+                24-bit color = 2<sup>24</sup> = <span class="result">16,777,216 colors</span>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Bit Depth</th>
+                    <th>Colors Available</th>
+                    <th>Quality</th>
+                </tr>
+                <tr>
+                    <td>1 bit</td>
+                    <td>2</td>
+                    <td>Black & White</td>
+                </tr>
+                <tr>
+                    <td>8 bits</td>
+                    <td>256</td>
+                    <td>Grayscale / Indexed</td>
+                </tr>
+                <tr>
+                    <td>24 bits</td>
+                    <td>16.7 million</td>
+                    <td>True Color</td>
+                </tr>
+            </table>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 5: RGB Color Model -->
+    <div class="slide content-slide" id="slide5">
+        <h1>RGB Color Model</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p><strong>RGB</strong> = <span style="color:#ff4444">Red</span>, <span style="color:#44ff44">Green</span>, <span style="color:#4444ff">Blue</span></p>
+
+                <ul>
+                    <li>Used for digital displays (monitors, TVs, phones)</li>
+                    <li>Values range: 0-255 or 0.0-1.0</li>
+                    <li><strong>Additive</strong> color system</li>
+                    <li>Starts with black, adds light</li>
+                </ul>
+
+                <div class="highlight-box">
+                    All colors combined = <strong>White</strong><br>
+                    No colors = <strong>Black</strong>
+                </div>
+            </div>
+            <div class="column">
+                <div class="rgb-values">
+                    <div class="rgb-item">
+                        <div class="color-swatch" style="background:#ff0000"></div>
+                        <span>Red</span>
+                        <code>(255, 0, 0)</code>
+                    </div>
+                    <div class="rgb-item">
+                        <div class="color-swatch" style="background:#00ff00"></div>
+                        <span>Green</span>
+                        <code>(0, 255, 0)</code>
+                    </div>
+                    <div class="rgb-item">
+                        <div class="color-swatch" style="background:#0000ff"></div>
+                        <span>Blue</span>
+                        <code>(0, 0, 255)</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 6: RGB Examples -->
+    <div class="slide content-slide" id="slide6">
+        <h1>RGB Color Examples in OpenGL</h1>
+        <div class="content">
+            <p>In OpenGL, colors are specified using values from 0.0 to 1.0:</p>
+
+            <div class="color-row" style="justify-content: space-around; margin-top: 40px;">
+                <div class="color-item">
+                    <div class="color-box" style="background:#ff0000; width:100px; height:100px;"></div>
+                    <span>Red</span>
+                    <code>glColor3f(1.0, 0.0, 0.0)</code>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#00ff00; width:100px; height:100px;"></div>
+                    <span>Green</span>
+                    <code>glColor3f(0.0, 1.0, 0.0)</code>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#0000ff; width:100px; height:100px;"></div>
+                    <span>Blue</span>
+                    <code>glColor3f(0.0, 0.0, 1.0)</code>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#ffff00; width:100px; height:100px;"></div>
+                    <span>Yellow</span>
+                    <code>glColor3f(1.0, 1.0, 0.0)</code>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#000000; width:100px; height:100px;"></div>
+                    <span>Black</span>
+                    <code>glColor3f(0.0, 0.0, 0.0)</code>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 40px;">
+                Alternative: Use <code>glColor3ub()</code> with unsigned byte values (0-255)
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 7: CMYK Color Model -->
+    <div class="slide content-slide" id="slide7">
+        <h1>CMYK Color Model</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p><strong>CMYK</strong> = <span style="color:#00ffff">Cyan</span>, <span style="color:#ff00ff">Magenta</span>, <span style="color:#ffff00">Yellow</span>, Black (K)</p>
+
+                <ul>
+                    <li>Used for <strong>printing</strong></li>
+                    <li><strong>Subtractive</strong> color system</li>
+                    <li>Starts with white paper</li>
+                    <li>Ink absorbs (subtracts) light</li>
+                </ul>
+
+                <div class="highlight-box">
+                    All colors combined = <strong>Black</strong><br>
+                    No ink = <strong>White</strong> (paper)
+                </div>
+            </div>
+            <div class="column">
+                <div class="color-row" style="justify-content: center;">
+                    <div class="color-item">
+                        <div class="color-box" style="background:#00ffff; width:90px; height:90px;"></div>
+                        <span>Cyan</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-box" style="background:#ff00ff; width:90px; height:90px;"></div>
+                        <span>Magenta</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-box" style="background:#ffff00; width:90px; height:90px;"></div>
+                        <span>Yellow</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-box" style="background:#000000; width:90px; height:90px;"></div>
+                        <span>Black (K)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 8: RGB vs CMYK -->
+    <div class="slide content-slide" id="slide8">
+        <h1>RGB vs CMYK: Additive vs Subtractive</h1>
+        <div class="content">
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th style="background:#ff6b6b">RGB (Additive)</th>
+                    <th style="background:#48dbfb">CMYK (Subtractive)</th>
+                </tr>
+                <tr>
+                    <td>Primary Colors</td>
+                    <td>Red, Green, Blue</td>
+                    <td>Cyan, Magenta, Yellow</td>
+                </tr>
+                <tr>
+                    <td>Starts With</td>
+                    <td>Black (no light)</td>
+                    <td>White (paper/light)</td>
+                </tr>
+                <tr>
+                    <td>All Colors Mixed</td>
+                    <td>White</td>
+                    <td>Black</td>
+                </tr>
+                <tr>
+                    <td>Used For</td>
+                    <td>Screens, Monitors, TVs</td>
+                    <td>Printing, Inks</td>
+                </tr>
+                <tr>
+                    <td>How It Works</td>
+                    <td>Adding light sources</td>
+                    <td>Absorbing light (inks)</td>
+                </tr>
+            </table>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 9: HSV/HSL Model -->
+    <div class="slide content-slide" id="slide9">
+        <h1>HSV/HSL Color Model</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p>More intuitive way to select colors, based on RGB:</p>
+
+                <ul style="font-size: 1.6rem;">
+                    <li><strong style="color:#ff6b6b">H</strong>ue (0-360°) - The pure color</li>
+                    <li><strong style="color:#38ef7d">S</strong>aturation (0-100%) - Color intensity</li>
+                    <li><strong style="color:#48dbfb">V</strong>alue/<strong>L</strong>ightness (0-100%) - Brightness</li>
+                </ul>
+
+                <div class="highlight-box" style="font-size: 1.4rem;">
+                    <strong>Hue:</strong> Which pure color it resembles<br>
+                    <strong>Saturation:</strong> How vivid/white the color is<br>
+                    <strong>Value:</strong> How light/dark the color is
+                </div>
+            </div>
+            <div class="column">
+                <div class="gradient-demo" style="flex-direction: column;">
+                    <div class="gradient-item">
+                        <strong>Hue (Color)</strong>
+                        <div class="gradient-bar" style="background: linear-gradient(to right, red, yellow, lime, cyan, blue, magenta, red);"></div>
+                    </div>
+                    <div class="gradient-item">
+                        <strong>Saturation (Red example)</strong>
+                        <div class="gradient-bar" style="background: linear-gradient(to right, #808080, #ff0000);"></div>
+                    </div>
+                    <div class="gradient-item">
+                        <strong>Value/Lightness (Red example)</strong>
+                        <div class="gradient-bar" style="background: linear-gradient(to right, #000000, #ff0000);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 10: Section - Color Wheel -->
+    <div class="slide section-slide" id="slide10">
+        <h1>THE COLOR WHEEL</h1>
+        <p>Traditional Color Theory</p>
+    </div>
+
+    <!-- Slide 11: Primary Colors -->
+    <div class="slide content-slide" id="slide11">
+        <h1>Primary Colors</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p>The <strong>three primary colors</strong> cannot be created by mixing other colors:</p>
+
+                <div class="color-row" style="margin-top: 40px; justify-content: center;">
+                    <div class="color-item">
+                        <div class="color-box" style="background:#ff0000; width:120px; height:120px;"></div>
+                        <span style="font-size: 1.8rem; font-weight: bold;">Red</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-box" style="background:#0000ff; width:120px; height:120px;"></div>
+                        <span style="font-size: 1.8rem; font-weight: bold;">Blue</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-box" style="background:#ffff00; width:120px; height:120px;"></div>
+                        <span style="font-size: 1.8rem; font-weight: bold;">Yellow</span>
+                    </div>
+                </div>
+
+                <div class="highlight-box" style="margin-top: 40px;">
+                    These are the foundation colors from which all other colors are derived (in traditional RYB color theory).
+                </div>
+            </div>
+            <div class="column" style="display: flex; justify-content: center; align-items: center;">
+                <div class="color-wheel"></div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 12: Secondary Colors -->
+    <div class="slide content-slide" id="slide12">
+        <h1>Secondary Colors</h1>
+        <div class="content">
+            <p>Created by mixing <strong>two primary colors</strong> in equal amounts:</p>
+
+            <div style="display: flex; justify-content: space-around; margin-top: 50px;">
+                <div style="text-align: center;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div class="color-box" style="background:#ff0000; width:80px; height:80px;"></div>
+                        <span style="font-size: 2rem;">+</span>
+                        <div class="color-box" style="background:#ffff00; width:80px; height:80px;"></div>
+                        <span style="font-size: 2rem;">=</span>
+                        <div class="color-box" style="background:#ff8000; width:80px; height:80px;"></div>
+                    </div>
+                    <span style="font-size: 1.6rem;">Red + Yellow = <strong>Orange</strong></span>
+                </div>
+                <div style="text-align: center;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div class="color-box" style="background:#ffff00; width:80px; height:80px;"></div>
+                        <span style="font-size: 2rem;">+</span>
+                        <div class="color-box" style="background:#0000ff; width:80px; height:80px;"></div>
+                        <span style="font-size: 2rem;">=</span>
+                        <div class="color-box" style="background:#00ff00; width:80px; height:80px;"></div>
+                    </div>
+                    <span style="font-size: 1.6rem;">Yellow + Blue = <strong>Green</strong></span>
+                </div>
+                <div style="text-align: center;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div class="color-box" style="background:#0000ff; width:80px; height:80px;"></div>
+                        <span style="font-size: 2rem;">+</span>
+                        <div class="color-box" style="background:#ff0000; width:80px; height:80px;"></div>
+                        <span style="font-size: 2rem;">=</span>
+                        <div class="color-box" style="background:#8000ff; width:80px; height:80px;"></div>
+                    </div>
+                    <span style="font-size: 1.6rem;">Blue + Red = <strong>Violet</strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 13: Tertiary Colors -->
+    <div class="slide content-slide" id="slide13">
+        <h1>Tertiary Colors</h1>
+        <div class="content">
+            <p>Created by mixing a <strong>primary color with an adjacent secondary color</strong>:</p>
+
+            <div class="color-row" style="justify-content: space-around; margin-top: 40px;">
+                <div class="color-item">
+                    <div class="color-box" style="background:#ffbf00; width:80px; height:80px;"></div>
+                    <span>Yellow-Orange</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#ff4000; width:80px; height:80px;"></div>
+                    <span>Red-Orange</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#ff0080; width:80px; height:80px;"></div>
+                    <span>Red-Violet</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#8000ff; width:80px; height:80px;"></div>
+                    <span>Blue-Violet</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#0080ff; width:80px; height:80px;"></div>
+                    <span>Blue-Green</span>
+                </div>
+                <div class="color-item">
+                    <div class="color-box" style="background:#80ff00; width:80px; height:80px;"></div>
+                    <span>Yellow-Green</span>
+                </div>
+            </div>
+
+            <div class="formula-box" style="margin-top: 40px;">
+                3 Primary + 3 Secondary + 6 Tertiary = <span class="result">12 Color Wheel</span>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 14: Tint, Tone, Shade -->
+    <div class="slide content-slide" id="slide14">
+        <h1>Hue, Tint, Tone, and Shade</h1>
+        <div class="content">
+            <table>
+                <tr>
+                    <th>Term</th>
+                    <th>Definition</th>
+                    <th>Formula</th>
+                    <th>Example (Red)</th>
+                </tr>
+                <tr>
+                    <td><strong>Hue</strong></td>
+                    <td>The pure color itself</td>
+                    <td>Pure Color</td>
+                    <td><div class="color-box" style="background:#ff0000; width:50px; height:50px; margin:0;"></div></td>
+                </tr>
+                <tr>
+                    <td><strong>Tint</strong></td>
+                    <td>Color + White (lighter)</td>
+                    <td>Hue + White</td>
+                    <td><div class="color-box" style="background:#ff8080; width:50px; height:50px; margin:0;"></div></td>
+                </tr>
+                <tr>
+                    <td><strong>Tone</strong></td>
+                    <td>Color + Gray (muted)</td>
+                    <td>Hue + Gray</td>
+                    <td><div class="color-box" style="background:#a05050; width:50px; height:50px; margin:0;"></div></td>
+                </tr>
+                <tr>
+                    <td><strong>Shade</strong></td>
+                    <td>Color + Black (darker)</td>
+                    <td>Hue + Black</td>
+                    <td><div class="color-box" style="background:#800000; width:50px; height:50px; margin:0;"></div></td>
+                </tr>
+            </table>
+
+            <div style="display: flex; gap: 30px; margin-top: 30px;">
+                <div style="flex:1; text-align: center;">
+                    <div style="height: 60px; background: linear-gradient(to right, #ff0000, #ffffff); border-radius: 10px;"></div>
+                    <span>Tint Scale</span>
+                </div>
+                <div style="flex:1; text-align: center;">
+                    <div style="height: 60px; background: linear-gradient(to right, #ff0000, #808080); border-radius: 10px;"></div>
+                    <span>Tone Scale</span>
+                </div>
+                <div style="flex:1; text-align: center;">
+                    <div style="height: 60px; background: linear-gradient(to right, #ff0000, #000000); border-radius: 10px;"></div>
+                    <span>Shade Scale</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 15: Section - Color Harmony -->
+    <div class="slide section-slide" id="slide15">
+        <h1>COLOR HARMONY</h1>
+        <p>Aesthetically pleasing color combinations</p>
+    </div>
+
+    <!-- Slide 16: What is Color Harmony -->
+    <div class="slide content-slide" id="slide16">
+        <h1>What is Color Harmony?</h1>
+        <div class="content">
+            <div class="big-text">
+                Harmony = A <strong>pleasing arrangement</strong> of colors
+            </div>
+
+            <div class="two-column">
+                <div class="column">
+                    <div class="highlight-box">
+                        <h3 style="color: #38ef7d; margin-bottom: 15px;">Without Harmony:</h3>
+                        <ul style="font-size: 1.4rem; line-height: 1.8;">
+                            <li>Colors appear <strong>chaotic</strong> or <strong>boring</strong></li>
+                            <li>Visual discomfort for viewers</li>
+                            <li>Message gets lost</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="highlight-box">
+                        <h3 style="color: #38ef7d; margin-bottom: 15px;">With Harmony:</h3>
+                        <ul style="font-size: 1.4rem; line-height: 1.8;">
+                            <li>Colors are <strong>pleasing to the eye</strong></li>
+                            <li>Creates visual balance</li>
+                            <li>Enhances communication</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 40px; font-size: 1.6rem;">
+                Color harmony is achieved through <strong>geometric relationships</strong> on the color wheel.
+            </p>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 17: Harmony Schemes Overview -->
+    <div class="slide content-slide" id="slide17">
+        <h1>Color Harmony Schemes</h1>
+        <div class="content">
+            <div class="two-column">
+                <div class="column">
+                    <h3 style="color: #38ef7d; font-size: 2rem; margin-bottom: 20px;">Gradual Harmony</h3>
+                    <ul style="font-size: 1.5rem;">
+                        <li><strong>Monochromatic</strong> - One color, different values</li>
+                        <li><strong>Analogous</strong> - Adjacent colors on wheel</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3 style="color: #ff6b6b; font-size: 2rem; margin-bottom: 20px;">Contrastive Harmony</h3>
+                    <ul style="font-size: 1.5rem;">
+                        <li><strong>Complementary</strong> - Opposite colors</li>
+                        <li><strong>Split Complementary</strong> - One + two adjacent to opposite</li>
+                        <li><strong>Triadic</strong> - Three equally spaced</li>
+                        <li><strong>Tetradic</strong> - Four colors (rectangle/square)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 18: Monochromatic -->
+    <div class="slide content-slide" id="slide18">
+        <h1>Monochromatic Color Scheme</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p><strong>Uses one color</strong> with variations in saturation and value.</p>
+
+                <ul style="font-size: 1.5rem; margin-top: 30px;">
+                    <li>Easiest scheme to create</li>
+                    <li>Always harmonious</li>
+                    <li>Clean, elegant look</li>
+                    <li>Can lack contrast if not careful</li>
+                </ul>
+
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <strong>Tip:</strong> Use different tints, tones, and shades of the same hue to create depth.
+                </div>
+            </div>
+            <div class="column">
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 20px;">Example: Purple Monochromatic</p>
+                    <div class="color-row" style="justify-content: center;">
+                        <div class="color-box" style="background:#e6ccff; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#cc99ff; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#9933ff; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#6600cc; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#330066; width:80px; height:80px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 19: Analogous -->
+    <div class="slide content-slide" id="slide19">
+        <h1>Analogous Color Scheme</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p><strong>Uses colors adjacent</strong> to each other on the color wheel (typically 3-5 colors).</p>
+
+                <ul style="font-size: 1.5rem; margin-top: 30px;">
+                    <li>Found in nature frequently</li>
+                    <li>Harmonious and pleasing</li>
+                    <li>Creates a sense of unity</li>
+                    <li>Low contrast, comfortable viewing</li>
+                </ul>
+
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <strong>Example:</strong> Blue to Green range creates a cool, natural feel.
+                </div>
+            </div>
+            <div class="column">
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 20px;">Example: Blue-Green Analogous</p>
+                    <div class="color-row" style="justify-content: center;">
+                        <div class="color-box" style="background:#0066cc; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#0099cc; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#00cccc; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#00cc99; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#00cc66; width:80px; height:80px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 20: Complementary -->
+    <div class="slide content-slide" id="slide20">
+        <h1>Complementary Color Scheme</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p><strong>Uses colors opposite</strong> each other on the color wheel.</p>
+
+                <ul style="font-size: 1.5rem; margin-top: 30px;">
+                    <li>Maximum contrast and impact</li>
+                    <li>Vibrant and energetic</li>
+                    <li>Great for drawing attention</li>
+                    <li>Can be overwhelming if overused</li>
+                </ul>
+
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <strong>Tip:</strong> Use different shades and tints to soften the contrast.
+                </div>
+            </div>
+            <div class="column">
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 20px;">Example: Blue & Orange</p>
+                    <div class="color-row" style="justify-content: center;">
+                        <div class="color-box" style="background:#ff8844; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#ff6600; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#4488ff; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#0066ff; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#003399; width:80px; height:80px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 21: Split Complementary -->
+    <div class="slide content-slide" id="slide21">
+        <h1>Split Complementary Color Scheme</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p>Uses one color plus the <strong>two colors adjacent to its complement</strong>.</p>
+
+                <ul style="font-size: 1.5rem; margin-top: 30px;">
+                    <li>Strong visual contrast</li>
+                    <li>More nuanced than complementary</li>
+                    <li>Easier to balance</li>
+                    <li>Three-color harmony</li>
+                </ul>
+
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <strong>Example:</strong> Red with Yellow-Green and Blue-Green
+                </div>
+            </div>
+            <div class="column">
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 20px;">Example: Red + Split Complement</p>
+                    <div class="color-row" style="justify-content: center;">
+                        <div class="color-box" style="background:#cc3366; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#ff6699; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#ff6600; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#99cc66; width:80px; height:80px;"></div>
+                        <div class="color-box" style="background:#66cc66; width:80px; height:80px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 22: Triadic -->
+    <div class="slide content-slide" id="slide22">
+        <h1>Triadic Color Scheme</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p>Uses <strong>three colors equally spaced</strong> on the color wheel (120° apart).</p>
+
+                <ul style="font-size: 1.5rem; margin-top: 30px;">
+                    <li>Vibrant and dynamic</li>
+                    <li>High visual contrast</li>
+                    <li>Creates bold, playful designs</li>
+                    <li>Best with one dominant color</li>
+                </ul>
+
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <strong>Tip:</strong> Let one color dominate; use the other two as accents.
+                </div>
+            </div>
+            <div class="column">
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 20px;">Example: Red, Yellow, Blue (Primary Triad)</p>
+                    <div class="color-row" style="justify-content: center;">
+                        <div class="color-box" style="background:#ff3333; width:100px; height:100px;"></div>
+                        <div class="color-box" style="background:#ffcc00; width:100px; height:100px;"></div>
+                        <div class="color-box" style="background:#3366ff; width:100px; height:100px;"></div>
+                    </div>
+                    <p style="margin-top: 20px; font-size: 1.3rem;">Think: Super Mario!</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 23: Tetradic -->
+    <div class="slide content-slide" id="slide23">
+        <h1>Tetradic (Double Complementary) Scheme</h1>
+        <div class="content two-column">
+            <div class="column">
+                <p>Uses <strong>four colors</strong> forming a rectangle or square on the wheel.</p>
+
+                <ul style="font-size: 1.5rem; margin-top: 30px;">
+                    <li>Rich and diverse palette</li>
+                    <li>Two complementary pairs</li>
+                    <li>Requires careful balancing</li>
+                    <li>Popular in logos (Google, Microsoft, eBay)</li>
+                </ul>
+
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <strong>Warning:</strong> Equal usage works for logos but needs one dominant color for larger designs.
+                </div>
+            </div>
+            <div class="column">
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 20px;">Example: Tetradic Palette</p>
+                    <div class="color-row" style="justify-content: center;">
+                        <div class="color-box" style="background:#cc0000; width:90px; height:90px;"></div>
+                        <div class="color-box" style="background:#ffcc00; width:90px; height:90px;"></div>
+                        <div class="color-box" style="background:#00cc00; width:90px; height:90px;"></div>
+                        <div class="color-box" style="background:#0066cc; width:90px; height:90px;"></div>
+                    </div>
+                    <p style="margin-top: 20px; font-size: 1.3rem;">Think: Google, Microsoft, eBay logos!</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 24: Section - Color Psychology -->
+    <div class="slide section-slide" id="slide24">
+        <h1>MEANINGS & FEELINGS OF COLORS</h1>
+        <p>Color Psychology in Design</p>
+    </div>
+
+    <!-- Slide 25: Warm vs Cool Colors -->
+    <div class="slide content-slide" id="slide25">
+        <h1>Warm, Cool, and Neutral Colors</h1>
+        <div class="content">
+            <div class="temperature-section">
+                <div class="temp-card warm">
+                    <h3>Warm Colors</h3>
+                    <p>Red, Orange, Yellow</p>
+                    <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.3);">
+                    <p style="font-size: 1.1rem;">Exciting, energetic, passionate. Can evoke anger or urgency if overused.</p>
+                </div>
+                <div class="temp-card cool">
+                    <h3>Cool Colors</h3>
+                    <p>Blue, Green, Purple</p>
+                    <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.3);">
+                    <p style="font-size: 1.1rem;">Calming, professional, trustworthy. Can feel cold or impersonal alone.</p>
+                </div>
+                <div class="temp-card neutral">
+                    <h3>Neutral Colors</h3>
+                    <p>Black, White, Gray, Brown</p>
+                    <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.3);">
+                    <p style="font-size: 1.1rem;">Balance other colors. Great for backgrounds. Black = shade, White = tint.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 26: Color Meanings -->
+    <div class="slide content-slide" id="slide26">
+        <h1>Color Meanings in Design</h1>
+        <div class="content">
+            <table style="font-size: 1.3rem;">
+                <tr>
+                    <th>Color</th>
+                    <th>Positive Associations</th>
+                    <th>Negative Associations</th>
+                    <th>Common Uses</th>
+                </tr>
+                <tr>
+                    <td><div class="color-box" style="background:#ff0000; width:40px; height:40px; margin:0;"></div> Red</td>
+                    <td>Passion, Energy, Love</td>
+                    <td>Danger, Anger</td>
+                    <td>Sales, Alerts, Food</td>
+                </tr>
+                <tr>
+                    <td><div class="color-box" style="background:#0066ff; width:40px; height:40px; margin:0;"></div> Blue</td>
+                    <td>Trust, Calm, Professional</td>
+                    <td>Sadness, Cold</td>
+                    <td>Corporate, Tech, Medical</td>
+                </tr>
+                <tr>
+                    <td><div class="color-box" style="background:#00cc00; width:40px; height:40px; margin:0;"></div> Green</td>
+                    <td>Nature, Growth, Health</td>
+                    <td>Envy</td>
+                    <td>Eco, Health, Finance</td>
+                </tr>
+                <tr>
+                    <td><div class="color-box" style="background:#ffcc00; width:40px; height:40px; margin:0;"></div> Yellow</td>
+                    <td>Happiness, Optimism</td>
+                    <td>Caution, Anxiety</td>
+                    <td>Attention, Children</td>
+                </tr>
+                <tr>
+                    <td><div class="color-box" style="background:#9933ff; width:40px; height:40px; margin:0;"></div> Purple</td>
+                    <td>Luxury, Creativity, Wisdom</td>
+                    <td>Mystery</td>
+                    <td>Premium, Beauty</td>
+                </tr>
+            </table>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 27: Key Takeaways -->
+    <div class="slide content-slide" id="slide27">
+        <h1>Key Takeaways</h1>
+        <div class="content">
+            <ul class="icon-list" style="font-size: 1.6rem; line-height: 2.4;">
+                <li><strong>RGB</strong> is additive (screens), <strong>CMYK</strong> is subtractive (print)</li>
+                <li><strong>HSV/HSL</strong> provides intuitive color selection (Hue, Saturation, Value)</li>
+                <li>The <strong>Color Wheel</strong> has 12 colors: 3 primary, 3 secondary, 6 tertiary</li>
+                <li><strong>Tint</strong> = color + white, <strong>Shade</strong> = color + black, <strong>Tone</strong> = color + gray</li>
+                <li><strong>Color Harmony</strong> creates visually pleasing combinations</li>
+                <li>Choose colors that match your <strong>intended meaning and feeling</strong></li>
+                <li>Consider <strong>warm/cool/neutral</strong> balance in your designs</li>
+            </ul>
+        </div>
+        <div class="footer">CPIT285 - Understanding Colors</div>
+    </div>
+
+    <!-- Slide 28: Thank You -->
+    <div class="slide title-slide" id="slide28">
+        <h1>THANK YOU</h1>
+        <h2>Questions?</h2>
+        <p class="author">Dr. Rayed AlGhamdi<br>
+        <span style="font-size: 1.2rem;">raalghamdi8@kau.edu.sa</span></p>
+        <p style="margin-top: 50px; font-size: 1.5rem; opacity: 0.8;">
+            Enjoy learning CPIT285!
+        </p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <button onclick="prevSlide()">Previous</button>
+        <button onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 28;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            if (n < 1) n = 1;
+            if (n > totalSlides) n = totalSlides;
+
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            document.getElementById('slide' + n).classList.add('active');
+            currentSlide = n;
+            document.getElementById('currentSlide').textContent = n;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                prevSlide();
+            } else if (e.key === 'Home') {
+                showSlide(1);
+            } else if (e.key === 'End') {
+                showSlide(totalSlides);
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

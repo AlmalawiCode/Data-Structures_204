@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 1: Introduction & History of Software Security - CYB 236</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 40px 60px;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4.5rem;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .title-slide h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.8rem;
+            margin-top: 50px;
+            opacity: 0.9;
+        }
+
+        .title-slide .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Section Slides */
+        .section-slide {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-slide h1 {
+            font-size: 4.5rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-slide p {
+            font-size: 2rem;
+            margin-top: 30px;
+            opacity: 0.9;
+        }
+
+        /* Content Slides */
+        .content-slide {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .content-slide h1 {
+            font-size: 3rem;
+            color: #38ef7d;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #38ef7d;
+            padding-bottom: 15px;
+        }
+
+        .content-slide .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .content-slide ul {
+            font-size: 1.8rem;
+            line-height: 2.2;
+            padding-left: 50px;
+        }
+
+        .content-slide li {
+            margin-bottom: 15px;
+        }
+
+        .content-slide p {
+            font-size: 1.8rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: flex;
+            gap: 60px;
+            flex: 1;
+        }
+
+        .two-column .column {
+            flex: 1;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: rgba(56, 239, 125, 0.15);
+            border-left: 5px solid #38ef7d;
+            padding: 25px 30px;
+            margin: 20px 0;
+            font-size: 1.6rem;
+        }
+
+        .highlight-box.warning {
+            background: rgba(245, 158, 11, 0.15);
+            border-left: 5px solid #f59e0b;
+        }
+
+        .highlight-box.info {
+            background: rgba(59, 130, 246, 0.15);
+            border-left: 5px solid #3b82f6;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 20px;
+            text-align: left;
+            border: 2px solid #444;
+        }
+
+        th {
+            background: #38ef7d;
+            color: #1a1a2e;
+        }
+
+        td {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 20px 0;
+        }
+
+        .cards-grid.three-col {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .cards-grid.four-col {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card h3 {
+            color: #38ef7d;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        /* Quote Block */
+        .quote-block {
+            background: rgba(255,255,255,0.05);
+            border-left: 5px solid #764ba2;
+            padding: 30px 40px;
+            margin: 30px 0;
+            border-radius: 0 15px 15px 0;
+        }
+
+        .quote-block .quote-text {
+            font-size: 1.8rem;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .quote-block .quote-author {
+            margin-top: 15px;
+            font-size: 1.3rem;
+            color: #38ef7d;
+            font-weight: 600;
+        }
+
+        /* Timeline Era Badge */
+        .era-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* List with icons */
+        .icon-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .icon-list li::before {
+            content: ">";
+            color: #38ef7d;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        /* Big centered text */
+        .big-text {
+            font-size: 2.5rem;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        /* Summary cards */
+        .summary-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .summary-card p {
+            font-size: 1.2rem;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        /* Assessment cards */
+        .assessment-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .assessment-card .weight {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #38ef7d;
+        }
+
+        .assessment-card .name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .assessment-card .week {
+            font-size: 1.1rem;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .nav button:hover {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 40px;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            left: 60px;
+            font-size: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Breach card special */
+        .breach-card {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .breach-card h3 {
+            color: #ef4444;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .breach-card p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin: 0;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title -->
+    <div class="slide title-slide active" id="slide1">
+        <div class="badge">Topic 1 - Introduction</div>
+        <h1>INTRODUCTION & HISTORY<br>OF SOFTWARE SECURITY</h1>
+        <h2>CYB 236: Web Application Security</h2>
+        <p class="author">Dr. Almalawi</p>
+        <p style="margin-top: 30px; font-size: 1.2rem; opacity: 0.7;">King Abdulaziz University | Faculty of Computing and Information Technology</p>
+    </div>
+
+    <!-- Slide 2: Agenda -->
+    <div class="slide content-slide" id="slide2">
+        <h1>Lecture Outline</h1>
+        <div class="content">
+            <ul class="icon-list">
+                <li>Course Introduction & Why Web Security Matters</li>
+                <li>The Origins of Hacking & Types of Hackers</li>
+                <li>The Enigma Machine (Circa 1930)</li>
+                <li>Alan Turing & The Bombe (Circa 1940)</li>
+                <li>Telephone Phreaking (1950s-1960s)</li>
+                <li>The Computer Hacking Era (1980s)</li>
+                <li>Rise of the World Wide Web (2000s)</li>
+                <li>Hackers in the Modern Era (2015+)</li>
+                <li>Summary & Key Takeaways</li>
+            </ul>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 3: Learning Objectives -->
+    <div class="slide content-slide" id="slide3">
+        <h1>Learning Objectives</h1>
+        <div class="content">
+            <ul style="font-size: 1.6rem; line-height: 2.2;">
+                <li><strong>Explain</strong> the importance of web application security in modern computing</li>
+                <li><strong>Describe</strong> the evolution of hacking from the 1930s through modern web-based attacks</li>
+                <li><strong>Identify</strong> key historical events that shaped cybersecurity</li>
+                <li><strong>Differentiate</strong> between white hat, black hat, and grey hat hackers</li>
+                <li><strong>Understand</strong> the course structure, learning outcomes, and assessment methods</li>
+            </ul>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 4: Section - Course Introduction -->
+    <div class="slide section-slide" id="slide4">
+        <h1>COURSE INTRODUCTION</h1>
+        <p>Welcome to CYB 236: Web Application Security</p>
+    </div>
+
+    <!-- Slide 5: What is Web Application Security? -->
+    <div class="slide content-slide" id="slide5">
+        <h1>What is Web Application Security?</h1>
+        <div class="content">
+            <p>The practice of protecting websites, web applications, and web services from security threats that exploit vulnerabilities in application code, design, or configuration.</p>
+
+            <div class="highlight-box info">
+                <strong>Why Web Security Matters:</strong><br>
+                Web applications handle sensitive data including personal information, financial records, and health data. The average cost of a data breach in 2024 exceeded <strong>$4.45 million</strong>.
+            </div>
+
+            <div class="cards-grid" style="margin-top: 20px;">
+                <div class="card">
+                    <h3>Web Technologies</h3>
+                    <p>HTTP protocol, REST APIs, AJAX, XML, JSON, and modern web architectures.</p>
+                </div>
+                <div class="card">
+                    <h3>Security Fundamentals</h3>
+                    <p>Injection, XSS, CSRF, XXE, and security misconfiguration.</p>
+                </div>
+                <div class="card">
+                    <h3>Security Principles</h3>
+                    <p>Authentication, authorization, session management, and access control.</p>
+                </div>
+                <div class="card">
+                    <h3>Secure Development</h3>
+                    <p>Threat modeling, secure coding, security testing, and vulnerability management.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 6: Assessment Structure -->
+    <div class="slide content-slide" id="slide6">
+        <h1>Assessment Structure</h1>
+        <div class="content">
+            <div class="cards-grid" style="grid-template-columns: repeat(5, 1fr); margin-top: 30px;">
+                <div class="assessment-card">
+                    <div class="weight">15%</div>
+                    <div class="name">Quiz #1</div>
+                    <div class="week">Week 2</div>
+                </div>
+                <div class="assessment-card">
+                    <div class="weight">25%</div>
+                    <div class="name">Assignment #1</div>
+                    <div class="week">Week 3</div>
+                </div>
+                <div class="assessment-card">
+                    <div class="weight">15%</div>
+                    <div class="name">Quiz #2</div>
+                    <div class="week">Week 5</div>
+                </div>
+                <div class="assessment-card">
+                    <div class="weight">20%</div>
+                    <div class="name">Assignment #2</div>
+                    <div class="week">Week 6</div>
+                </div>
+                <div class="assessment-card">
+                    <div class="weight">25%</div>
+                    <div class="name">Final Exam</div>
+                    <div class="week">Week 11</div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 40px;">
+                <strong>Note:</strong> This topic is lecture-only (75 minutes). Labs begin in Topic 2. The required textbook is Hoffman, A. (2020) <em>Web Application Security</em>, Chapter 1, O'Reilly Media.
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 7: Section - Origins of Hacking -->
+    <div class="slide section-slide" id="slide7">
+        <h1>THE ORIGINS OF HACKING</h1>
+        <p>Understanding the historical roots of security</p>
+    </div>
+
+    <!-- Slide 8: Origins of Hacking -->
+    <div class="slide content-slide" id="slide8">
+        <h1>The Origins of Hacking</h1>
+        <div class="content">
+            <p>In the past two decades, hackers have gained more publicity and notoriety than ever before. But hacking is not a concept tied exclusively to the internet.</p>
+
+            <div class="highlight-box">
+                <strong>Key Insight:</strong> Hackers have been around since the middle of the 20th century - potentially even earlier depending on how you define "hacking."
+            </div>
+
+            <div class="quote-block">
+                <div class="quote-text">To understand how to defend systems, we must first understand how they can be attacked.</div>
+                <div class="quote-author">- Fundamental principle of security education</div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 9: Types of Hackers -->
+    <div class="slide content-slide" id="slide9">
+        <h1>Types of Hackers</h1>
+        <div class="content">
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>White Hat Hackers</h3>
+                    <p>Ethical hackers who find vulnerabilities to improve security. They work with permission and follow responsible disclosure practices.</p>
+                </div>
+                <div class="card">
+                    <h3>Black Hat Hackers</h3>
+                    <p>Malicious actors who exploit vulnerabilities for personal gain, theft, or damage without authorization.</p>
+                </div>
+                <div class="card">
+                    <h3>Grey Hat Hackers</h3>
+                    <p>Operate in the middle - may find vulnerabilities without permission but typically don't have malicious intent.</p>
+                </div>
+                <div class="card">
+                    <h3>Security Researchers</h3>
+                    <p>Professionals who study systems to identify and help fix security weaknesses through systematic analysis.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 10: Section - Historical Timeline -->
+    <div class="slide section-slide" id="slide10">
+        <h1>HISTORICAL TIMELINE</h1>
+        <p>Major events that shaped cybersecurity</p>
+    </div>
+
+    <!-- Slide 11: The Enigma Machine -->
+    <div class="slide content-slide" id="slide11">
+        <h1>The Enigma Machine</h1>
+        <div class="content">
+            <div class="era-badge">Circa 1930</div>
+            <div class="two-column">
+                <div class="column">
+                    <p style="font-size: 1.6rem;">The Enigma machine used electric-powered mechanical rotors to both encrypt and decrypt text-based messages sent over radio waves.</p>
+
+                    <ul style="font-size: 1.4rem; line-height: 2;">
+                        <li><strong>Symmetric Key Encryption:</strong> Identical configurations needed to encrypt/decrypt</li>
+                        <li><strong>Configuration Complexity:</strong> Billions of possible rotor configurations</li>
+                        <li><strong>Military Adoption:</strong> Used by German military from 1928</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <div class="highlight-box">
+                        <strong>Security Lesson:</strong><br><br>
+                        The Enigma represents the first major "security system" that would later be compromised - demonstrating that even the most complex systems can have vulnerabilities.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 12: The First Hackers -->
+    <div class="slide content-slide" id="slide12">
+        <h1>The First "Hackers"</h1>
+        <div class="content">
+            <div class="era-badge">1932 - 1933</div>
+
+            <p>In September 1932, Polish mathematician <strong>Marian Rejewski</strong> was provided a stolen Enigma machine. Along with colleagues <strong>Jerzy Rozycki</strong> and <strong>Henryk Zygalski</strong>, he reverse-engineered the system.</p>
+
+            <div class="two-column" style="margin-top: 20px;">
+                <div class="column">
+                    <ul style="font-size: 1.5rem; line-height: 2;">
+                        <li>Analyzed patterns in encrypted messages</li>
+                        <li>Understood the mechanics of the machine</li>
+                        <li>By 1933, decrypting Enigma traffic daily</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <div class="highlight-box">
+                        <strong>Why They Were "Hackers":</strong><br><br>
+                        Much like hackers today, Marian and his team intercepted and reverse-engineered encryption schemes to get access to valuable data.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 13: Alan Turing & The Bombe -->
+    <div class="slide content-slide" id="slide13">
+        <h1>Alan Turing & The Bombe</h1>
+        <div class="content">
+            <div class="era-badge">Circa 1940</div>
+
+            <p><strong>Alan Turing</strong> - English mathematician, often called the father of computer science. Worked at Bletchley Park (GC&CS) from September 1938.</p>
+
+            <div class="two-column" style="margin-top: 15px;">
+                <div class="column">
+                    <ul style="font-size: 1.4rem; line-height: 2;">
+                        <li>Polish methods became ineffective (more rotors added)</li>
+                        <li>Turing needed a scalable, automated solution</li>
+                        <li>Built <strong>The Bombe</strong> - an electric-powered mechanical device</li>
+                        <li>108 drums rotating at up to 120 RPM</li>
+                        <li>Tested ~20,000 configurations in 20 minutes</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <div class="highlight-box info">
+                        <strong>Known Plaintext Attack (KPA):</strong><br><br>
+                        Turing realized German military sent daily weather reports in a predictable format. This "known plaintext" made cracking the encryption much easier. This technique is still used by modern hackers.
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 15px;">
+                <strong>Impact:</strong> Breaking Enigma is estimated to have shortened WWII by 2-4 years, saving millions of lives. The Bombe was one of the first automated hacking tools ever built.
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 14: Section - Telephone Phreaking -->
+    <div class="slide section-slide" id="slide14">
+        <h1>TELEPHONE PHREAKING</h1>
+        <p>The 1950s-1960s: Hacking the phone system</p>
+    </div>
+
+    <!-- Slide 15: Telephone Phreaking -->
+    <div class="slide content-slide" id="slide15">
+        <h1>Telephone Phreaking</h1>
+        <div class="content">
+            <div class="era-badge">Circa 1950 - 1960</div>
+
+            <p style="font-size: 1.6rem;">In the late 1950s, telecoms like AT&T implemented phones that could be automatically routed based on audio signals. This was called <strong>tone dialing</strong>.</p>
+
+            <p style="font-size: 1.6rem;">Hobbyists discovered that reproducing identical audio frequencies could manipulate the system. They became known as <strong>phreakers</strong>.</p>
+
+            <div class="cards-grid three-col" style="margin-top: 20px;">
+                <div class="card">
+                    <h3>Joe Engressia</h3>
+                    <p>A young boy with perfect pitch who could whistle at 2600 Hz and manipulate phone systems.</p>
+                </div>
+                <div class="card">
+                    <h3>Captain Crunch</h3>
+                    <p>John Draper discovered toy whistles in Cap'n Crunch cereal produced a 2600 Hz tone.</p>
+                </div>
+                <div class="card">
+                    <h3>Blue Boxes</h3>
+                    <p>Hardware devices that generated specific frequencies, allowing anyone to exploit the free calling bug.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 16: Famous Phreakers & The Response -->
+    <div class="slide content-slide" id="slide16">
+        <h1>Phreaking: Legacy & Response</h1>
+        <div class="content">
+            <div class="two-column">
+                <div class="column">
+                    <div class="highlight-box warning">
+                        <strong>Famous Phreakers:</strong><br><br>
+                        <strong>Steve Wozniak and Steve Jobs</strong> (Apple founders) built and sold blue boxes before starting Apple Computer. The hacker mindset of understanding and manipulating systems has driven technological innovation.
+                    </div>
+
+                    <div class="highlight-box" style="margin-top: 20px;">
+                        <strong>The Response - DTMF:</strong><br><br>
+                        In the 1960s, <strong>Dual-Tone Multi-Frequency (DTMF)</strong> signaling was introduced. Each key emitted two specific frequencies simultaneously, making replication much harder. This was the first major security development to combat phreakers.
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="highlight-box info" style="padding: 40px 30px;">
+                        <strong style="font-size: 1.8rem;">Critical Lesson</strong><br><br>
+                        <span style="font-size: 1.8rem;">Technology designed without considering users with malicious intent will eventually be broken into.</span><br><br>
+                        <strong>Always consider the worst-case scenario when designing systems deployed at scale.</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 17: Section - Computer Hacking Era -->
+    <div class="slide section-slide" id="slide17">
+        <h1>THE COMPUTER HACKING ERA</h1>
+        <p>The 1980s: Personal computers and the first viruses</p>
+    </div>
+
+    <!-- Slide 18: Computer Hacking Era -->
+    <div class="slide content-slide" id="slide18">
+        <h1>The Computer Hacking Era</h1>
+        <div class="content">
+            <div class="era-badge">Circa 1980</div>
+
+            <div class="two-column">
+                <div class="column">
+                    <p style="font-size: 1.5rem;"><strong>1976:</strong> Apple released the Apple 1</p>
+                    <p style="font-size: 1.5rem;"><strong>1982:</strong> Commodore 64 released - nearly 500,000 units/month until the early 1990s</p>
+
+                    <div class="highlight-box" style="margin-top: 20px;">
+                        <strong>First Computer Virus (1983):</strong><br><br>
+                        <strong>Fred Cohen</strong> created the very first computer virus. It could copy itself and spread via floppy disk, hidden inside a legitimate program. He later demonstrated that detecting viruses from valid software with algorithms was almost impossible.
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="breach-card" style="padding: 30px;">
+                        <h3 style="font-size: 1.8rem;">The Morris Worm (1988)</h3>
+                        <p style="font-size: 1.4rem; margin-top: 15px;"><strong>Robert Morris</strong> deployed the first virus that infected computers outside a research lab.</p>
+                        <ul style="font-size: 1.3rem; margin-top: 15px; padding-left: 20px; line-height: 2;">
+                            <li>Spread to ~15,000 computers in one day</li>
+                            <li>Estimated damage: <strong>$10,000,000</strong></li>
+                            <li>First convicted hacker in the US</li>
+                            <li>Led to creation of <strong>CERT</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 19: Legislation & Legacy -->
+    <div class="slide content-slide" id="slide19">
+        <h1>1980s: Legislation & Legacy</h1>
+        <div class="content">
+            <div class="highlight-box info">
+                <strong>Computer Fraud and Abuse Act (CFAA) - 1986:</strong><br>
+                The first major US legislation specifically addressing computer crimes, establishing federal crimes related to computer intrusion.
+            </div>
+
+            <div class="big-text" style="margin: 50px 0;">
+                Modern techniques still mirror those from the 1980s
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>Scalability</h3>
+                    <p>Jumping from one user to another - now targeting web browsers instead of operating systems.</p>
+                </div>
+                <div class="card">
+                    <h3>Camouflaging</h3>
+                    <p>Hiding malicious code inside legitimate programs - a technique still at the core of modern attacks.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 20: Section - Rise of the Web -->
+    <div class="slide section-slide" id="slide20">
+        <h1>RISE OF THE WORLD WIDE WEB</h1>
+        <p>The 2000s: From documents to applications</p>
+    </div>
+
+    <!-- Slide 21: Web 2.0 Revolution -->
+    <div class="slide content-slide" id="slide21">
+        <h1>The Web 2.0 Revolution</h1>
+        <div class="content">
+            <div class="era-badge">Circa 2000</div>
+
+            <div class="two-column">
+                <div class="column">
+                    <p style="font-size: 1.5rem;">The early 2000s marked <strong>Web 2.0</strong> - websites began storing user-submitted data and modifying functionality based on user input.</p>
+
+                    <p style="font-size: 1.5rem;">The web transformed from a document-sharing platform to an <strong>application distribution platform</strong>.</p>
+
+                    <div class="highlight-box" style="margin-top: 15px;">
+                        This gave birth to social media, blogs, wikis, and media sharing sites.
+                    </div>
+                </div>
+                <div class="column">
+                    <p style="font-size: 1.5rem; color: #38ef7d; font-weight: 700; margin-bottom: 20px;">New Attack Vectors Emerge:</p>
+                    <ul style="font-size: 1.4rem; line-height: 2;">
+                        <li><strong>SQL Injection</strong> - Late 1990s</li>
+                        <li><strong>Cross-Site Scripting (XSS)</strong> - First documented 2000</li>
+                        <li><strong>Denial of Service (DoS)</strong> - Shut down Yahoo!, Amazon, eBay</li>
+                        <li><strong>Phishing</strong> - Rampant by mid-2000s</li>
+                    </ul>
+
+                    <div class="highlight-box warning" style="margin-top: 15px;">
+                        With servers and networks secured, the <strong>user became the perfect target</strong>.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 22: Early Web Breaches -->
+    <div class="slide content-slide" id="slide22">
+        <h1>Early Web Breaches & OWASP</h1>
+        <div class="content">
+            <div class="cards-grid three-col" style="margin-top: 20px;">
+                <div class="breach-card">
+                    <h3>CardSystems (2005)</h3>
+                    <p>40 million credit cards exposed in one of the first major web-based data breaches.</p>
+                </div>
+                <div class="breach-card">
+                    <h3>TJX Companies (2007)</h3>
+                    <p>94 million customer records stolen through SQL injection vulnerabilities.</p>
+                </div>
+                <div class="card" style="border: 2px solid #38ef7d;">
+                    <h3>OWASP Founded (2001)</h3>
+                    <p>The Open Web Application Security Project began providing free security resources to developers.</p>
+                </div>
+            </div>
+
+            <div class="highlight-box info" style="margin-top: 40px; font-size: 1.6rem;">
+                <strong>Key Shift:</strong> With Web 2.0, hackers no longer needed to target the server or network directly. They could now exploit the <strong>application logic</strong> and <strong>user trust</strong> to gain access to sensitive data.
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 23: Section - Modern Era -->
+    <div class="slide section-slide" id="slide23">
+        <h1>HACKERS IN THE MODERN ERA</h1>
+        <p>2015 and beyond: Complexity breeds vulnerability</p>
+    </div>
+
+    <!-- Slide 24: Modern Threat Landscape -->
+    <div class="slide content-slide" id="slide24">
+        <h1>Modern Threat Landscape</h1>
+        <div class="content">
+            <div class="era-badge">Circa 2015+</div>
+
+            <p style="font-size: 1.5rem;">Today's web applications have hundreds of open source dependencies, integrations with other websites, multiple databases, and are served from multiple servers in multiple locations.</p>
+
+            <div class="cards-grid" style="margin-top: 20px;">
+                <div class="card">
+                    <h3>Advanced Persistent Threats (APTs)</h3>
+                    <p>Long-term, targeted attacks often sponsored by nation-states.</p>
+                </div>
+                <div class="card">
+                    <h3>Ransomware</h3>
+                    <p>Attacks that encrypt data and demand payment (WannaCry, NotPetya).</p>
+                </div>
+                <div class="card">
+                    <h3>Supply Chain Attacks</h3>
+                    <p>Compromising software vendors to attack their customers (SolarWinds 2020).</p>
+                </div>
+                <div class="card">
+                    <h3>Bug Bounty Programs</h3>
+                    <p>Companies paying ethical hackers to find vulnerabilities (Google, Microsoft, Apple).</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 25: Major Modern Breaches -->
+    <div class="slide content-slide" id="slide25">
+        <h1>Major Modern Breaches</h1>
+        <div class="content">
+            <div class="cards-grid">
+                <div class="breach-card">
+                    <h3>Equifax (2017)</h3>
+                    <p>147 million records exposed due to an unpatched Apache Struts vulnerability - a simple fix that wasn't applied.</p>
+                </div>
+                <div class="breach-card">
+                    <h3>Capital One (2019)</h3>
+                    <p>100 million records stolen through a misconfigured AWS firewall - showing the importance of cloud security.</p>
+                </div>
+                <div class="breach-card">
+                    <h3>Log4j (2021)</h3>
+                    <p>Critical vulnerability in a widely-used Java logging library affected millions of systems worldwide.</p>
+                </div>
+                <div class="breach-card">
+                    <h3>SolarWinds (2020)</h3>
+                    <p>Supply chain attack compromised thousands of organizations including US government agencies.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 26: Modern Browser Security -->
+    <div class="slide content-slide" id="slide26">
+        <h1>Modern Browser Security</h1>
+        <div class="content">
+            <p style="font-size: 1.6rem;">Browsers have become significantly more advanced with new security features:</p>
+
+            <div class="cards-grid three-col" style="margin-top: 30px;">
+                <div class="card">
+                    <h3>Same Origin Policy (SOP)</h3>
+                    <p>Robust isolation between websites with different origins.</p>
+                </div>
+                <div class="card">
+                    <h3>Content Security Policy (CSP)</h3>
+                    <p>Allows developers to specify security levels for their applications.</p>
+                </div>
+                <div class="card">
+                    <h3>HTTPS/TLS</h3>
+                    <p>Encryption for data in transit, making man-in-the-middle attacks very difficult.</p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 40px;">
+                <strong>Key Takeaway:</strong> As a result of browser security improvements, the most successful hackers today target <strong>application logic and code vulnerabilities</strong> rather than the browser itself. Modern hackers spend most of their time exploiting bugs in web application code, not trying to break the underlying platform.
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 27: Section - Summary -->
+    <div class="slide section-slide" id="slide27">
+        <h1>SUMMARY & KEY TAKEAWAYS</h1>
+        <p>Essential concepts from this topic</p>
+    </div>
+
+    <!-- Slide 28: Summary Cards -->
+    <div class="slide content-slide" id="slide28">
+        <h1>Key Takeaways</h1>
+        <div class="content">
+            <div class="cards-grid four-col" style="margin-top: 20px;">
+                <div class="summary-card">
+                    <h3>Security Evolves</h3>
+                    <p>From Enigma to cloud computing, security challenges grow with technology</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Cat and Mouse</h3>
+                    <p>Attackers and defenders continuously adapt to each other's methods</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Human Factor</h3>
+                    <p>Many breaches stem from human error, not just technical flaws</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Defense in Depth</h3>
+                    <p>Multiple layers of security are essential for protection</p>
+                </div>
+            </div>
+
+            <div class="quote-block" style="margin-top: 40px;">
+                <div class="quote-text">Each new technology comes with its own unique attack surface and vulnerabilities. One way to become an excellent security professional is to always stay up to date on the latest technologies.</div>
+                <div class="quote-author">- Andrew Hoffman, Web Application Security</div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 29: Key Terms -->
+    <div class="slide content-slide" id="slide29">
+        <h1>Key Terms to Remember</h1>
+        <div class="content">
+            <div class="cards-grid three-col">
+                <div class="card">
+                    <h3>Enigma Machine</h3>
+                    <p>WWII-era encryption device using symmetric key cryptography.</p>
+                </div>
+                <div class="card">
+                    <h3>Known Plaintext Attack</h3>
+                    <p>Cryptographic attack using known input/output pairs to deduce encryption keys.</p>
+                </div>
+                <div class="card">
+                    <h3>Phreaking</h3>
+                    <p>Early form of hacking targeting telephone systems using audio frequency manipulation.</p>
+                </div>
+                <div class="card">
+                    <h3>Morris Worm</h3>
+                    <p>First major Internet worm (1988) that led to CERT and the first hacker conviction.</p>
+                </div>
+                <div class="card">
+                    <h3>Web 2.0</h3>
+                    <p>The shift from static document sharing to interactive, user-driven web applications.</p>
+                </div>
+                <div class="card">
+                    <h3>APT</h3>
+                    <p>Advanced Persistent Threat - sophisticated, long-term targeted attacks, often nation-state sponsored.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 30: Next Topic -->
+    <div class="slide content-slide" id="slide30">
+        <h1>Looking Ahead: Topic 2</h1>
+        <div class="content" style="justify-content: center; align-items: center;">
+            <div class="highlight-box info" style="max-width: 900px; padding: 40px; font-size: 1.6rem; text-align: center;">
+                <strong style="font-size: 2rem;">Next Topic: Web Application Technologies</strong><br><br>
+                We will explore the fundamental technologies that power web applications:<br>
+                <strong>HTTP Protocol, REST APIs, AJAX, XML, JSON</strong>, and modern web architectures.<br><br>
+                Understanding these technologies is essential for identifying and preventing vulnerabilities.<br><br>
+                <span style="color: #38ef7d; font-weight: 700;">Labs will begin in Topic 2.</span>
+            </div>
+        </div>
+        <div class="footer">CYB 236 - Topic 1: Introduction & History of Software Security</div>
+    </div>
+
+    <!-- Slide 31: Thank You -->
+    <div class="slide title-slide" id="slide31">
+        <h1>THANK YOU</h1>
+        <h2>Questions?</h2>
+        <p class="author">Dr. Almalawi<br>
+        <span style="font-size: 1.2rem;">King Abdulaziz University</span></p>
+        <p style="margin-top: 50px; font-size: 1.5rem; opacity: 0.8;">
+            CYB 236: Web Application Security
+        </p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <button onclick="prevSlide()">Previous</button>
+        <button onclick="nextSlide()">Next</button>
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">31</span>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 31;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            if (n < 1) n = 1;
+            if (n > totalSlides) n = totalSlides;
+
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            document.getElementById('slide' + n).classList.add('active');
+            currentSlide = n;
+            document.getElementById('currentSlide').textContent = n;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'Home') {
+                showSlide(1);
+            } else if (e.key === 'End') {
+                showSlide(totalSlides);
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
