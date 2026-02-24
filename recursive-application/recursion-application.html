@@ -167,14 +167,11 @@
         }
 
         /* Code Blocks */
-        .code-container {
-            margin: 20px 0;
-        }
-
+        .code-container { margin: 20px 0; }
         .code-header {
             background: #667eea;
             color: white;
-            padding: 12px 20px;
+            padding: 14px 24px;
             border-radius: 8px 8px 0 0;
             cursor: pointer;
             user-select: none;
@@ -182,46 +179,32 @@
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
+            font-size: 1.15em;
             transition: background 0.3s;
         }
-
-        .code-header:hover {
-            background: #5568d3;
-        }
-
-        .code-toggle {
-            font-size: 1.2em;
-            transition: transform 0.3s;
-        }
-
-        .code-toggle.collapsed {
-            transform: rotate(-90deg);
-        }
+        .code-header:hover { background: #5568d3; }
+        .code-toggle { font-size: 1.2em; transition: transform 0.3s; }
+        .code-toggle.collapsed { transform: rotate(-90deg); }
 
         .code-block {
-            background: #2d2d2d;
+            background: #000000;
             color: #f8f8f2;
-            padding: 20px;
+            padding: 25px 30px;
             border-radius: 0 0 8px 8px;
             overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            line-height: 1.6;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.25em;
+            line-height: 1.8;
             white-space: pre;
-            max-height: 600px;
+            max-height: 800px;
             overflow-y: auto;
             transition: max-height 0.3s ease;
+            letter-spacing: 0.3px;
         }
-
-        .code-block.collapsed {
-            max-height: 0;
-            padding: 0 20px;
-            overflow: hidden;
-        }
-
-        .code-block .comment { color: #6272a4; }
-        .code-block .keyword { color: #ff79c6; }
-        .code-block .class-name { color: #50fa7b; }
+        .code-block.collapsed { max-height: 0; padding: 0 20px; overflow: hidden; }
+        .code-block .comment { color: #7a8bbf; }
+        .code-block .keyword { color: #ff79c6; font-weight: bold; }
+        .code-block .class-name { color: #50fa7b; font-weight: bold; }
         .code-block .method { color: #8be9fd; }
         .code-block .string { color: #f1fa8c; }
         .code-block .number { color: #bd93f9; }
@@ -820,9 +803,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         <span class="version-badge">V1</span> Java - Print Root Level Only
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">import</span> java.io.File;
+                    <div class="code-block collapsed"><span class="keyword">import</span> java.io.File;
 
 <span class="keyword">public class</span> <span class="class-name">FolderExplorer</span> {
 
@@ -868,9 +851,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         <span class="version-badge">V2</span> Java - Using a Method
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">import</span> java.io.File;
+                    <div class="code-block collapsed"><span class="keyword">import</span> java.io.File;
 
 <span class="keyword">public class</span> <span class="class-name">FolderExplorer</span> {
 
@@ -905,9 +888,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         <span class="version-badge">V3</span> Java - Manually Calling for Each Level
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">import</span> java.io.File;
+                    <div class="code-block collapsed"><span class="keyword">import</span> java.io.File;
 
 <span class="keyword">public class</span> <span class="class-name">FolderExplorer</span> {
 
@@ -971,9 +954,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         <span class="version-badge">V4</span> Java - The Recursive Solution
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">import</span> java.io.File;
+                    <div class="code-block collapsed"><span class="keyword">import</span> java.io.File;
 
 <span class="keyword">public class</span> <span class="class-name">FolderExplorer</span> {
 
