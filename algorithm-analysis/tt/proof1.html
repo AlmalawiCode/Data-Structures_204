@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Big O Proof: 5n² + 5n + 5 is O(n²)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&family=STIX+Two+Math&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red:        #dc2626;
+      --red-light:  #fff5f5;
+      --red-mid:    #fee2e2;
+      --green:      #16a34a;
+      --green-light:#f0fdf4;
+      --green-mid:  #dcfce7;
+      --blue:       #2563eb;
+      --blue-light: #eff6ff;
+      --blue-mid:   #dbeafe;
+      --purple:     #7c3aed;
+      --purple-light:#f5f3ff;
+      --purple-mid: #ede9fe;
+      --amber:      #d97706;
+      --amber-light:#fffbeb;
+      --amber-mid:  #fef3c7;
+      --gray-50:  #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 14px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.75;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
+      color: white;
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(99,102,241,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(59,130,246,0.2) 0%, transparent 60%);
+    }
+    .header-inner { position: relative; z-index: 1; }
+    header .topic-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #bfdbfe;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.2rem;
+    }
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+    }
+    header h1 .fn { color: #fbbf24; }
+    header h1 .on { color: #6ee7b7; }
+    header p {
+      color: #93c5fd;
+      font-size: 1rem;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: white;
+      border-bottom: 2px solid var(--gray-200);
+      padding: 0 1.5rem;
+      display: flex; gap: 0; overflow-x: auto;
+    }
+    nav a {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.82rem; font-weight: 600;
+      color: var(--gray-500);
+      text-decoration: none; white-space: nowrap;
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      transition: all 0.15s;
+    }
+    nav a:hover { color: var(--blue); border-color: var(--blue); }
+
+    /* ── MAIN ── */
+    main { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+    /* ── SECTION HEADER ── */
+    .sec-hdr {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin: 3rem 0 1.4rem;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 800;
+      flex-shrink: 0;
+    }
+    .step-num.blue   { background: var(--blue-mid);   color: var(--blue); }
+    .step-num.green  { background: var(--green-mid);  color: var(--green); }
+    .step-num.purple { background: var(--purple-mid); color: var(--purple); }
+    .step-num.amber  { background: var(--amber-mid);  color: var(--amber); }
+    .step-num.red    { background: var(--red-mid);    color: var(--red); }
+    .sec-hdr h2 {
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.2rem;
+    }
+    .card.red-card    { border-left: 5px solid var(--red);    }
+    .card.green-card  { border-left: 5px solid var(--green);  }
+    .card.blue-card   { border-left: 5px solid var(--blue);   }
+    .card.purple-card { border-left: 5px solid var(--purple); }
+    .card.amber-card  { border-left: 5px solid var(--amber);  }
+
+    /* ── DEFINITION BOX ── */
+    .def-box {
+      background: var(--blue-light);
+      border: 2px solid #93c5fd;
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .def-box .def-title {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--blue); margin-bottom: 0.7rem;
+    }
+    .def-box .formula {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.05rem;
+      color: var(--gray-900);
+      background: rgba(37,99,235,0.06);
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    /* ── PROOF STEPS ── */
+    .proof-step {
+      display: flex; gap: 1.2rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .proof-step:last-child { border-bottom: none; }
+    .ps-num {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--gray-500);
+      flex-shrink: 0;
+      padding-top: 0.1rem;
+      min-width: 2rem;
+    }
+    .ps-content { flex: 1; }
+    .ps-content .ps-label {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+    }
+    .ps-content .math {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      margin: 0.3rem 0;
+      color: var(--gray-800);
+    }
+    .ps-content p {
+      font-size: 0.88rem;
+      color: var(--gray-600);
+      margin-top: 0.3rem;
+    }
+
+    .label-red    { color: var(--red); }
+    .label-green  { color: var(--green); }
+    .label-blue   { color: var(--blue); }
+    .label-purple { color: var(--purple); }
+    .label-amber  { color: var(--amber); }
+
+    /* ── INEQUALITY CHAIN ── */
+    .ineq-chain {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      margin: 0.8rem 0;
+    }
+    .ineq-row {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.35rem 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.92rem;
+    }
+    .ineq-row .sym {
+      color: var(--purple); font-weight: 700;
+      min-width: 2rem;
+    }
+    .ineq-row .expr { flex: 1; }
+    .ineq-row .reason {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem; color: var(--gray-500);
+      background: var(--gray-100);
+      border-radius: 5px;
+      padding: 0.2rem 0.55rem;
+      white-space: nowrap;
+    }
+    .ineq-row .expr .hi { color: var(--blue); font-weight: 600; }
+    .ineq-row .expr .result { color: var(--red); font-weight: 700; }
+
+    /* ── ANSWER BOX ── */
+    .answer-box {
+      background: var(--green-light);
+      border: 2px solid #86efac;
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      margin: 0.8rem 0;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .answer-box .a-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .answer-box .a-content {}
+    .answer-box .a-label {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--green); margin-bottom: 0.2rem;
+    }
+    .answer-box .a-val {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.05rem; font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    /* ── VERIFY BOX ── */
+    .verify-box {
+      background: var(--amber-light);
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin: 0.8rem 0;
+    }
+    .verify-box .vb-title {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--amber); margin-bottom: 0.6rem;
+    }
+    .verify-box .vb-calc {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      color: var(--gray-800);
+      line-height: 1.9;
+    }
+    .verify-box .vb-result {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-top: 0.4rem;
+    }
+
+    /* ── CONCLUSION ── */
+    .conclusion {
+      background: linear-gradient(135deg, #052e16 0%, #166534 100%);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.8rem;
+      color: white;
+    }
+    .conclusion .c-label {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: #86efac; margin-bottom: 0.8rem;
+    }
+    .conclusion .c-statement {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      color: #d1fae5;
+      line-height: 1.8;
+    }
+    .conclusion .c-statement .hl-fn { color: #fbbf24; font-weight: 600; }
+    .conclusion .c-statement .hl-c  { color: #6ee7b7; font-weight: 600; }
+
+    /* ── GRAPH SECTION ── */
+    .graph-wrap {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .graph-wrap h3 {
+      font-size: 1rem; font-weight: 700;
+      color: var(--gray-900); margin-bottom: 0.5rem;
+    }
+    .graph-wrap p {
+      font-size: 0.85rem; color: var(--gray-500);
+      margin-bottom: 1.2rem;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--gray-200);
+    }
+    .legend {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.83rem; font-weight: 500;
+    }
+    .legend-dot {
+      width: 28px; height: 4px; border-radius: 2px;
+    }
+    .legend-dot.red   { background: #ef4444; }
+    .legend-dot.green { background: #16a34a; }
+    .legend-dot.n0    { background: #7c3aed; width: 2px; height: 20px; border-radius: 1px; }
+
+    /* ── CONTROLS ── */
+    .controls {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .ctrl-group {
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .ctrl-group label {
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .ctrl-group input[type=range] {
+      width: 160px; cursor: pointer; accent-color: var(--blue);
+    }
+    .ctrl-group .val-display {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem; color: var(--blue); font-weight: 600;
+    }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--gray-200); margin: 0.8rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+    thead th { background: var(--gray-800); color: white; padding: 0.6rem 0.9rem; font-weight: 600; text-align: center; }
+    tbody tr:nth-child(odd) { background: var(--gray-50); }
+    tbody tr:nth-child(even) { background: white; }
+    tbody td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--gray-100); text-align: center; font-family: 'Fira Code', monospace; font-size: 0.84rem; }
+    tbody tr.highlight-row td { background: var(--green-mid); font-weight: 700; color: var(--green); }
+    tbody tr.before-n0 td { background: var(--red-mid); color: #7f1d1d; }
+
+    /* ── TOOLTIPS ── */
+    .info-pill {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: var(--purple-mid); color: var(--purple);
+      font-size: 0.8rem; font-weight: 600;
+      padding: 0.3rem 0.75rem; border-radius: 999px;
+      margin: 0.3rem 0;
+    }
+
+    p.note {
+      font-size: 0.85rem; color: var(--gray-500);
+      font-style: italic; margin: 0.4rem 0;
+    }
+    code {
+      font-family: 'Fira Code', monospace;
+      background: var(--gray-100); color: var(--purple);
+      padding: 0.1rem 0.4rem; border-radius: 4px;
+      font-size: 0.87em;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="topic-badge">Algorithm Analysis · Big O Proof</div>
+    <h1>Prove that <span class="fn">5n² + 5n + 5</span> is <span class="on">O(n²)</span></h1>
+    <p>A complete step-by-step proof: finding C, finding n₀, and visualizing the curves</p>
+  </div>
+</header>
+
+<!-- ══════════ NAV -->
+<nav>
+  <a href="#intuition">📊 Intuition</a>
+  <a href="#definition">📖 Definition</a>
+  <a href="#step1">Step 1: Find C</a>
+  <a href="#step2">Step 2: Find n₀</a>
+  <a href="#graph">📈 Graph</a>
+  <a href="#table">📋 Values Table</a>
+  <a href="#conclusion">✅ Conclusion</a>
+</nav>
+
+<!-- ══════════ MAIN -->
+<main>
+
+  <!-- ═══ INTUITION -->
+  <section id="intuition">
+    <div class="sec-hdr">
+      <div class="step-num blue">💡</div>
+      <h2>What Does "O(n²)" Mean Visually?</h2>
+    </div>
+
+    <div class="card blue-card">
+      <p style="font-size:0.92rem; margin-bottom:0.8rem;">
+        When we say <strong>f(n) is O(g(n))</strong>, we mean we can find a multiple of g(n) that eventually grows <em>faster</em> than f(n) and stays above it forever after some point n₀.
+      </p>
+      <p style="font-size:0.92rem; margin-bottom:0.8rem;">
+        In our case:
+      </p>
+      <ul style="font-size:0.9rem; padding-left:1.3rem; line-height:2;">
+        <li><span style="color:var(--red); font-weight:700;">Red curve</span> = our function <code>f(n) = 5n² + 5n + 5</code></li>
+        <li><span style="color:var(--green); font-weight:700;">Green curve</span> = our bound <code>C · n²</code> — we need to find a C that stays above the red curve</li>
+        <li><span style="color:var(--purple); font-weight:700;">n₀</span> = the point after which the green curve is always ≥ the red curve</li>
+      </ul>
+      <p class="note" style="margin-top:0.8rem;">The two curves may intersect at n₀ — what matters is that for all n ≥ n₀, the green curve dominates.</p>
+    </div>
+  </section>
+
+  <!-- ═══ DEFINITION -->
+  <section id="definition">
+    <div class="sec-hdr">
+      <div class="step-num blue">📖</div>
+      <h2>Formal Definition of Big O</h2>
+    </div>
+
+    <div class="def-box">
+      <div class="def-title">Official Definition</div>
+      <div class="formula">f(n) is O(g(n))  ⟺  ∃ positive constants C and n₀ such that:</div>
+      <div class="formula" style="font-size:1.15rem; color:#1e3a8a;">
+        f(n) ≤ C · g(n) &nbsp;&nbsp; for all n ≥ n₀
+      </div>
+      <div style="margin-top:1rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.8rem;">
+        <div style="background:white; border-radius:8px; padding:0.8rem; text-align:center; border:1px solid #bfdbfe;">
+          <div style="font-family:'Fira Code',monospace; font-size:1.1rem; color:var(--blue); font-weight:700;">C</div>
+          <div style="font-size:0.78rem; color:var(--gray-600); margin-top:0.2rem;">A positive constant multiplier we must find</div>
+        </div>
+        <div style="background:white; border-radius:8px; padding:0.8rem; text-align:center; border:1px solid #bfdbfe;">
+          <div style="font-family:'Fira Code',monospace; font-size:1.1rem; color:var(--purple); font-weight:700;">n₀</div>
+          <div style="font-size:0.78rem; color:var(--gray-600); margin-top:0.2rem;">The starting point from which the bound holds</div>
+        </div>
+        <div style="background:white; border-radius:8px; padding:0.8rem; text-align:center; border:1px solid #bfdbfe;">
+          <div style="font-family:'Fira Code',monospace; font-size:1.1rem; color:var(--red); font-weight:700;">f(n) ≤ C·g(n)</div>
+          <div style="font-size:0.78rem; color:var(--gray-600); margin-top:0.2rem;">The inequality that must be satisfied</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card amber-card">
+      <p style="font-size:0.9rem;">
+        <strong>Our goal:</strong> Show that <code>5n² + 5n + 5  ≤  C · n²</code> for some positive C and for all n ≥ n₀.
+        We need to find the <strong>exact values of C</strong> and <strong>n₀</strong>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ STEP 1: FIND C -->
+  <section id="step1">
+    <div class="sec-hdr">
+      <div class="step-num green">1</div>
+      <h2>Step 1 — Find the Constant C</h2>
+    </div>
+
+    <div class="card green-card">
+      <p style="font-size:0.9rem; margin-bottom:1rem;">
+        <strong>Strategy (the standard method):</strong> Replace every term in f(n) with something <em>larger</em> that uses only n².
+        This gives us a clean upper bound of the form <code>C · n²</code>.
+      </p>
+
+      <div class="ineq-chain">
+        <div class="ineq-row">
+          <span class="sym"></span>
+          <span class="expr">f(n) &nbsp;=&nbsp; <strong>5n²  +  5n  +  5</strong></span>
+          <span class="reason">original function</span>
+        </div>
+        <div class="ineq-row">
+          <span class="sym">≤</span>
+          <span class="expr"><strong>5n²</strong>  +  <span class="hi">5n²</span>  +  <span class="hi">5n²</span></span>
+          <span class="reason">5n ≤ 5n² and 5 ≤ 5n²  for n ≥ 1</span>
+        </div>
+        <div class="ineq-row">
+          <span class="sym">=</span>
+          <span class="expr"><span class="result">(5 + 5 + 5) · n²  =  15n²</span></span>
+          <span class="reason">collect coefficients</span>
+        </div>
+      </div>
+
+      <div style="font-size:0.87rem; color:var(--gray-600); margin: 0.6rem 0 0.4rem; padding-left:0.3rem;">
+        <strong>Why is 5n ≤ 5n²?</strong> Because for any n ≥ 1, we have n ≤ n², so 5n ≤ 5n². ✓<br>
+        <strong>Why is 5 ≤ 5n²?</strong> Because for any n ≥ 1, we have 1 ≤ n², so 5 ≤ 5n². ✓
+      </div>
+
+      <div class="answer-box">
+        <div class="a-icon">🎯</div>
+        <div class="a-content">
+          <div class="a-label">We found C</div>
+          <div class="a-val">C = 15 &nbsp;&nbsp;→&nbsp;&nbsp; 5n² + 5n + 5 ≤ 15n²</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ STEP 2: FIND n₀ -->
+  <section id="step2">
+    <div class="sec-hdr">
+      <div class="step-num purple">2</div>
+      <h2>Step 2 — Find n₀ (Verify the Inequality)</h2>
+    </div>
+
+    <div class="card purple-card">
+      <p style="font-size:0.9rem; margin-bottom:1rem;">
+        <strong>Strategy:</strong> We always start by trying <strong>n = 1</strong>.
+        If the inequality <code>f(1) ≤ C · g(1)</code> is true, then n₀ = 1.
+        If not, try n = 2, 3, … until it holds.
+      </p>
+
+      <div class="ineq-chain" style="background:var(--purple-light); border-color:#c4b5fd;">
+        <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--purple); margin-bottom:0.5rem;">Try n = 1:</div>
+        <div class="ineq-row">
+          <span class="sym">LHS:</span>
+          <span class="expr">5(1²)  +  5(1)  +  5  =  5 + 5 + 5  =  <strong>15</strong></span>
+        </div>
+        <div class="ineq-row">
+          <span class="sym">RHS:</span>
+          <span class="expr">15 · (1²)  =  <strong>15</strong></span>
+        </div>
+        <div class="ineq-row" style="border-top:1px dashed #c4b5fd; padding-top:0.6rem; margin-top:0.3rem;">
+          <span class="sym">=</span>
+          <span class="expr"><strong>15  ≤  15</strong></span>
+          <span class="reason" style="background:#ede9fe; color:var(--purple);">✅ TRUE (equality holds!)</span>
+        </div>
+      </div>
+
+      <div class="verify-box">
+        <div class="vb-title">🔍 Verification at n = 1</div>
+        <div class="vb-calc">
+          f(1) = 5·1² + 5·1 + 5 = 5 + 5 + 5 = 15<br>
+          C·g(1) = 15·1² = 15<br>
+          <br>
+          15 ≤ 15 → <strong style="color:var(--green);">TRUE ✓</strong>
+        </div>
+        <p class="vb-result">The inequality holds at n = 1, so n₀ = 1.</p>
+      </div>
+
+      <div class="answer-box" style="background:var(--purple-light); border-color:#c4b5fd;">
+        <div class="a-icon">📍</div>
+        <div class="a-content">
+          <div class="a-label" style="color:var(--purple);">We found n₀</div>
+          <div class="a-val">n₀ = 1 &nbsp;&nbsp;→&nbsp;&nbsp; The bound holds for all n ≥ 1</div>
+        </div>
+      </div>
+
+      <p class="note" style="margin-top:0.8rem;">
+        💡 Note: At n = 1 the two curves are <em>equal</em> (both = 15). For all n &gt; 1, the bound C·n² = 15n² grows strictly faster than 5n² + 5n + 5, so the inequality holds for all n ≥ 1.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ GRAPH -->
+  <section id="graph">
+    <div class="sec-hdr">
+      <div class="step-num red">📈</div>
+      <h2>Graph — Visualizing the Two Curves</h2>
+    </div>
+
+    <div class="graph-wrap">
+      <h3>f(n) = 5n² + 5n + 5 &nbsp;vs&nbsp; C · n² = 15n²</h3>
+      <p>Drag the slider to change C and watch how the green curve moves. At C = 15 (our proof value), they touch at n₀ = 1 and the green is always above.</p>
+
+      <canvas id="mainCanvas" width="820" height="420"></canvas>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot red"></div> f(n) = 5n² + 5n + 5</div>
+        <div class="legend-item"><div class="legend-dot green"></div> C · n² (upper bound)</div>
+        <div class="legend-item"><div class="legend-dot n0"></div> n₀ = 1 (starting point)</div>
+      </div>
+
+      <div class="controls">
+        <div class="ctrl-group">
+          <label>Constant C</label>
+          <input type="range" id="cSlider" min="5" max="30" step="0.5" value="15" />
+          <span class="val-display">C = <span id="cVal">15</span></span>
+        </div>
+        <div class="ctrl-group">
+          <label>Zoom (n_max)</label>
+          <input type="range" id="nSlider" min="3" max="12" step="1" value="7" />
+          <span class="val-display">n_max = <span id="nVal">7</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second graph: zoomed around n0 -->
+    <div class="graph-wrap">
+      <h3>Zoomed View — Around n₀ = 1</h3>
+      <p>Here we zoom in close to see exactly where and how the green curve overtakes the red curve.</p>
+      <canvas id="zoomCanvas" width="820" height="280"></canvas>
+    </div>
+  </section>
+
+  <!-- ═══ VALUES TABLE -->
+  <section id="table">
+    <div class="sec-hdr">
+      <div class="step-num amber">📋</div>
+      <h2>Values Table — Confirming the Inequality</h2>
+    </div>
+
+    <div class="card amber-card">
+      <p style="font-size:0.88rem; margin-bottom:0.8rem;">
+        The table below shows f(n) and 15n² for each n. The green row is n₀ = 1 — notice how at n = 1 they are equal, and from n = 2 onward 15n² is strictly larger.
+      </p>
+      <div class="table-wrap">
+        <table id="valTable">
+          <thead>
+            <tr>
+              <th>n</th>
+              <th>f(n) = 5n² + 5n + 5</th>
+              <th>C · n² = 15n²</th>
+              <th>f(n) ≤ 15n²?</th>
+              <th>Difference (15n² − f(n))</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONCLUSION -->
+  <section id="conclusion">
+    <div class="sec-hdr">
+      <div class="step-num green">✅</div>
+      <h2>Conclusion — The Formal Proof</h2>
+    </div>
+
+    <div class="conclusion">
+      <div class="c-label">∴ Therefore — By definition of Big O</div>
+      <div class="c-statement">
+        Since &nbsp;<span class="hl-fn">5n² + 5n + 5</span>&nbsp; ≤ &nbsp;<span class="hl-c">15 · n²</span>&nbsp; for all n ≥ <span class="hl-c">1</span>,<br><br>
+        with &nbsp;<span class="hl-c">C = 15</span>&nbsp; and &nbsp;<span class="hl-c">n₀ = 1</span>&nbsp;,<br><br>
+        we conclude that &nbsp;<span class="hl-fn">5n² + 5n + 5</span>&nbsp; is &nbsp;<span class="hl-c">O(n²)</span>.
+      </div>
+    </div>
+
+    <!-- Summary of what we did -->
+    <div class="card" style="margin-top:1.2rem; background:var(--gray-50);">
+      <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.9rem; color:var(--gray-900);">Summary — What we did in 3 steps</h3>
+      <div style="display:flex; flex-direction:column; gap:0.7rem;">
+        <div style="display:flex; gap:0.9rem; align-items:flex-start;">
+          <div style="background:var(--green-mid); color:var(--green); border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex-shrink:0; margin-top:2px;">1</div>
+          <div style="font-size:0.88rem;"><strong>Found C:</strong> Replaced each non-dominant term with <code>something · n²</code> to get an upper bound of <code>15n²</code>. So C = 15.</div>
+        </div>
+        <div style="display:flex; gap:0.9rem; align-items:flex-start;">
+          <div style="background:var(--purple-mid); color:var(--purple); border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex-shrink:0; margin-top:2px;">2</div>
+          <div style="font-size:0.88rem;"><strong>Found n₀:</strong> Plugged in n = 1 and verified the inequality <code>15 ≤ 15</code> is true. So n₀ = 1.</div>
+        </div>
+        <div style="display:flex; gap:0.9rem; align-items:flex-start;">
+          <div style="background:var(--blue-mid); color:var(--blue); border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex-shrink:0; margin-top:2px;">3</div>
+          <div style="font-size:0.88rem;"><strong>Wrote the conclusion:</strong> By definition of Big O, since we found C and n₀, <code>5n² + 5n + 5 = O(n²)</code> is proven. ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tightest Big O note -->
+    <div class="card amber-card" style="margin-top:1rem;">
+      <p style="font-size:0.9rem; margin-bottom:0.3rem;">
+        <strong>🎯 Is O(n²) the tightest bound?</strong> Yes! The dominant term of <code>5n² + 5n + 5</code> is <code>5n²</code>. We drop constants and lower-order terms → <code>O(n²)</code>. That is the tightest possible Big O class.
+      </p>
+      <p style="font-size:0.87rem; color:var(--gray-600);">
+        We could also say <code>5n² + 5n + 5 = O(n³)</code> or <code>O(n¹⁰)</code>, but those are loose bounds. The tightest is <code>O(n²)</code>.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════ JAVASCRIPT: Canvas Drawing & Table -->
+<script>
+  // ── f(n) and bound ──────────────────────────────────
+  function f(n) { return 5*n*n + 5*n + 5; }
+  function bound(n, C) { return C * n * n; }
+
+  // ── BUILD TABLE ─────────────────────────────────────
+  const tbody = document.getElementById('tableBody');
+  for (let n = 0; n <= 8; n++) {
+    const fn  = f(n);
+    const gn  = bound(n, 15);
+    const diff = gn - fn;
+    const ok   = fn <= gn;
+    const tr = document.createElement('tr');
+    if (n === 0) tr.className = 'before-n0';
+    if (n === 1) tr.className = 'highlight-row';
+    tr.innerHTML = `
+      <td>${n}</td>
+      <td>${fn}</td>
+      <td>${gn}</td>
+      <td>${ok ? '✅ Yes' : '❌ No'}</td>
+      <td>${diff >= 0 ? '+' : ''}${diff}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  // ── CANVAS UTILITY ──────────────────────────────────
+  function drawGraph(canvasId, C, nMax, yMax, options = {}) {
+    const canvas = document.getElementById(canvasId);
+    const ctx    = canvas.getContext('2d');
+    const dpr    = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth  || canvas.width;
+    const H = canvas.clientHeight || canvas.height;
+
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
+
+    const pad = { left: 65, right: 25, top: 30, bottom: 55 };
+    const plotW = W - pad.left - pad.right;
+    const plotH = H - pad.top  - pad.bottom;
+
+    const toX = n   => pad.left  + (n    / nMax) * plotW;
+    const toY = val => pad.top   + plotH - (Math.min(val, yMax) / yMax) * plotH;
+
+    // Background
+    ctx.fillStyle = '#fafafa';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid
+    ctx.strokeStyle = '#e5e7eb';
+    ctx.lineWidth   = 1;
+    const ySteps = 5;
+    for (let i = 0; i <= ySteps; i++) {
+      const yv  = (yMax / ySteps) * i;
+      const yPx = toY(yv);
+      ctx.beginPath();
+      ctx.moveTo(pad.left, yPx); ctx.lineTo(pad.left + plotW, yPx);
+      ctx.stroke();
+      ctx.fillStyle = '#9ca3af';
+      ctx.font      = '11px Inter';
+      ctx.textAlign = 'right';
+      ctx.fillText(Math.round(yv), pad.left - 8, yPx + 4);
+    }
+    for (let n = 0; n <= nMax; n++) {
+      const xPx = toX(n);
+      ctx.beginPath();
+      ctx.moveTo(xPx, pad.top); ctx.lineTo(xPx, pad.top + plotH);
+      ctx.stroke();
+      ctx.fillStyle = '#9ca3af';
+      ctx.font      = '11px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText(n, xPx, pad.top + plotH + 18);
+    }
+
+    // Axes
+    ctx.strokeStyle = '#374151';
+    ctx.lineWidth   = 2;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, pad.top); ctx.lineTo(pad.left, pad.top + plotH + 1);
+    ctx.moveTo(pad.left - 1, pad.top + plotH); ctx.lineTo(pad.left + plotW, pad.top + plotH);
+    ctx.stroke();
+
+    // Axis labels
+    ctx.fillStyle = '#374151';
+    ctx.font = 'bold 12px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText('n  (input size)', pad.left + plotW / 2, H - 8);
+    ctx.save();
+    ctx.translate(14, pad.top + plotH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('f(n)', 0, 0);
+    ctx.restore();
+
+    // n₀ vertical line
+    const n0x = toX(1);
+    ctx.strokeStyle = '#7c3aed';
+    ctx.lineWidth   = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(n0x, pad.top); ctx.lineTo(n0x, pad.top + plotH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#7c3aed';
+    ctx.font = 'bold 11px Inter';
+    ctx.textAlign = 'left';
+    ctx.fillText('n₀ = 1', n0x + 4, pad.top + 14);
+
+    // Draw curve helper
+    function plotCurve(fn, color, lineWidth, label, labelOffset) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth   = lineWidth;
+      ctx.beginPath();
+      let first = true;
+      for (let np = 0; np <= nMax; np += 0.04) {
+        const val = fn(np);
+        if (val > yMax * 1.05) { first = true; continue; }
+        const px = toX(np), py = toY(val);
+        if (first) { ctx.moveTo(px, py); first = false; }
+        else        ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+
+    // Green: C·n²
+    plotCurve(n => bound(n, C), '#16a34a', 3);
+    // Red: f(n)
+    plotCurve(n => f(n),        '#dc2626', 3);
+
+    // Intersection / meeting point at n=1
+    const meetX = toX(1), meetY = toY(f(1));
+    ctx.fillStyle    = '#7c3aed';
+    ctx.beginPath();
+    ctx.arc(meetX, meetY, 6, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.fillStyle = '#4c1d95';
+    ctx.font = 'bold 11px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText(`(1, ${f(1)})`, meetX, meetY - 12);
+
+    // Curve labels near right edge
+    const labelN = nMax * 0.82;
+    const fVal   = f(labelN);
+    const bVal   = bound(labelN, C);
+    if (fVal < yMax * 0.95) {
+      const ly = toY(fVal);
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 12px Inter';
+      ctx.textAlign = 'left';
+      ctx.fillText('f(n)', toX(labelN) + 6, ly + 4);
+    }
+    if (bVal < yMax * 0.95) {
+      const ly = toY(bVal);
+      ctx.fillStyle = '#16a34a';
+      ctx.font = 'bold 12px Inter';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${C}n²`, toX(labelN) + 6, ly - 6);
+    }
+
+    // "C·n² ≥ f(n)" region shading
+    ctx.globalAlpha = 0.07;
+    ctx.fillStyle = '#16a34a';
+    ctx.beginPath();
+    ctx.moveTo(toX(1), toY(0));
+    for (let np = 1; np <= nMax; np += 0.08) {
+      ctx.lineTo(toX(np), toY(bound(np, C)));
+    }
+    for (let np = nMax; np >= 1; np -= 0.08) {
+      ctx.lineTo(toX(np), toY(f(np)));
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  // ── DRAW ZOOM CANVAS ───────────────────────────────
+  function drawZoom() {
+    const canvas = document.getElementById('zoomCanvas');
+    const ctx    = canvas.getContext('2d');
+    const dpr    = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth  || canvas.width;
+    const H = canvas.clientHeight || canvas.height;
+
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
+
+    const pad = { left: 65, right: 25, top: 25, bottom: 45 };
+    const plotW = W - pad.left - pad.right;
+    const plotH = H - pad.top  - pad.bottom;
+
+    const nMax = 3, yMax = 160;
+    const toX = n   => pad.left  + (n    / nMax) * plotW;
+    const toY = val => pad.top   + plotH - (Math.min(val, yMax) / yMax) * plotH;
+
+    ctx.fillStyle = '#fafafa';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid
+    ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1;
+    [0, 40, 80, 120, 160].forEach(yv => {
+      ctx.beginPath();
+      ctx.moveTo(pad.left, toY(yv)); ctx.lineTo(pad.left + plotW, toY(yv));
+      ctx.stroke();
+      ctx.fillStyle = '#9ca3af'; ctx.font = '11px Inter'; ctx.textAlign = 'right';
+      ctx.fillText(yv, pad.left - 8, toY(yv) + 4);
+    });
+    [0,1,2,3].forEach(n => {
+      ctx.beginPath();
+      ctx.moveTo(toX(n), pad.top); ctx.lineTo(toX(n), pad.top + plotH);
+      ctx.stroke();
+      ctx.fillStyle = '#9ca3af'; ctx.font = '11px Inter'; ctx.textAlign = 'center';
+      ctx.fillText(n, toX(n), pad.top + plotH + 16);
+    });
+
+    // Axes
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, pad.top); ctx.lineTo(pad.left, pad.top + plotH);
+    ctx.moveTo(pad.left, pad.top + plotH); ctx.lineTo(pad.left + plotW, pad.top + plotH);
+    ctx.stroke();
+
+    // Labels for each n
+    [1, 2, 3].forEach(n => {
+      const fn = f(n), gn = bound(n, 15);
+      const xPx = toX(n);
+      if (fn < yMax) {
+        ctx.fillStyle = '#dc2626'; ctx.font = '11px Fira Code'; ctx.textAlign = 'center';
+        ctx.fillText(fn, xPx - 20, toY(fn) - 6);
+      }
+      if (gn < yMax) {
+        ctx.fillStyle = '#16a34a'; ctx.font = '11px Fira Code'; ctx.textAlign = 'center';
+        ctx.fillText(gn, xPx + 20, toY(gn) + 14);
+      }
+    });
+
+    // n₀ line
+    ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 2; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(toX(1), pad.top); ctx.lineTo(toX(1), pad.top + plotH); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'left';
+    ctx.fillText('n₀ = 1', toX(1) + 4, pad.top + 14);
+
+    // Green: 15n²
+    ctx.strokeStyle = '#16a34a'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let np = 0; np <= nMax; np += 0.03) {
+      const v = bound(np, 15);
+      if (v > yMax) break;
+      const px = toX(np), py = toY(v);
+      np === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Red: f(n)
+    ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let np = 0; np <= nMax; np += 0.03) {
+      const v = f(np);
+      if (v > yMax) break;
+      const px = toX(np), py = toY(v);
+      np === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Meeting dot at n=1
+    ctx.fillStyle = '#7c3aed';
+    ctx.beginPath(); ctx.arc(toX(1), toY(15), 7, 0, 2*Math.PI); ctx.fill();
+    ctx.fillStyle = 'white';
+    ctx.beginPath(); ctx.arc(toX(1), toY(15), 3, 0, 2*Math.PI); ctx.fill();
+
+    // "Equal here" annotation
+    ctx.fillStyle = '#4c1d95'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
+    ctx.fillText('Both = 15', toX(1), toY(15) - 16);
+    ctx.fillText('← Equal at n₀ = 1', toX(1) + 60, toY(15) - 4);
+
+    // Labels
+    ctx.fillStyle = '#374151'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
+    ctx.fillText('n', pad.left + plotW / 2, H - 6);
+
+    ctx.fillStyle = '#16a34a'; ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
+    ctx.fillText('15n²', toX(2.3), toY(bound(2.3,15)) - 10);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillText('5n²+5n+5', toX(1.9), toY(f(1.9)) + 16);
+  }
+
+  // ── INTERACTIVE MAIN GRAPH ─────────────────────────
+  let currentC = 15, currentNMax = 7;
+
+  function redraw() {
+    const yMax = Math.max(
+      bound(currentNMax, currentC),
+      f(currentNMax)
+    ) * 1.15;
+    drawGraph('mainCanvas', currentC, currentNMax, yMax);
+  }
+
+  document.getElementById('cSlider').addEventListener('input', function() {
+    currentC = parseFloat(this.value);
+    document.getElementById('cVal').textContent = currentC;
+    redraw();
+  });
+  document.getElementById('nSlider').addEventListener('input', function() {
+    currentNMax = parseInt(this.value);
+    document.getElementById('nVal').textContent = currentNMax;
+    redraw();
+  });
+
+  // Initial draw
+  window.addEventListener('load', () => {
+    redraw();
+    drawZoom();
+  });
+  window.addEventListener('resize', () => {
+    redraw();
+    drawZoom();
+  });
+</script>
+
+</body>
+</html>

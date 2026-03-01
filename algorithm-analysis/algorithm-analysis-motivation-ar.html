@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Why Algorithm Analysis? - CPCS 204</title>
+    <title>لماذا تحليل الخوارزميات؟ - CPCS 204</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -21,11 +22,17 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.7;
+            font-family: 'Tajawal', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.8;
             color: #1f2937;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
+        }
+
+        code {
+            direction: ltr;
+            unicode-bidi: isolate;
+            display: inline-block;
         }
 
         .container {
@@ -35,6 +42,27 @@
             border-radius: 20px;
             box-shadow: 0 25px 70px rgba(0,0,0,0.35);
             overflow: hidden;
+        }
+
+        /* Language Switch Button */
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 0.95rem;
+        }
+        .lang-switch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         /* ── Header ── */
@@ -52,7 +80,7 @@
             flex-wrap: wrap;
         }
         header img { width: 8cm; height: 4cm; object-fit: contain; }
-        header .header-text { text-align: left; }
+        header .header-text { text-align: right; }
         header h1 { font-size: 2.4em; margin-bottom: 8px; }
         header p { font-size: 1.1em; opacity: 0.92; }
 
@@ -121,7 +149,7 @@
             color: var(--gray);
             font-size: 1.05em;
             margin-bottom: 30px;
-            padding-left: 50px;
+            padding-right: 50px;
         }
         .step-badge {
             background: linear-gradient(135deg, var(--purple), var(--purple-dark));
@@ -146,7 +174,7 @@
         .divider {
             border: none;
             height: 3px;
-            background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+            background: linear-gradient(to left, transparent, #e5e7eb, transparent);
             margin: 55px 0;
         }
 
@@ -206,7 +234,7 @@
             font-size: 0.98em;
             position: relative;
             font-style: italic;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         .speech-bubble::before {
             content: '"';
@@ -214,7 +242,7 @@
             line-height: 0;
             position: relative;
             top: 10px;
-            margin-right: 4px;
+            margin-left: 4px;
             opacity: 0.4;
         }
         .ahmed .speech-bubble {
@@ -291,9 +319,9 @@
         }
         .race-lane:not(:last-child) { border-bottom: 2px dashed #e5e7eb; }
 
-        .lane-solid   { background: linear-gradient(to right, #f0fdf4, #dcfce7); }
-        .lane-mud     { background: linear-gradient(to right, #fef9c3, #fef08a); }
-        .lane-sand    { background: linear-gradient(to right, #fff7ed, #ffedd5); }
+        .lane-solid   { background: linear-gradient(to left, #f0fdf4, #dcfce7); }
+        .lane-mud     { background: linear-gradient(to left, #fef9c3, #fef08a); }
+        .lane-sand    { background: linear-gradient(to left, #fff7ed, #ffedd5); }
 
         .lane-number {
             font-size: 1.3em;
@@ -316,17 +344,18 @@
             border-radius: 20px;
             display: flex;
             align-items: center;
-            padding-left: 10px;
+            padding-right: 10px;
             font-size: 0.8em;
             font-weight: bold;
             color: white;
             transition: width 1s ease;
+            justify-content: flex-end;
         }
-        .bar-solid { background: linear-gradient(to right, #22c55e, #16a34a); width: 90%; }
-        .bar-mud   { background: linear-gradient(to right, #ca8a04, #a16207); width: 40%; }
-        .bar-sand  { background: linear-gradient(to right, #ea580c, #c2410c); width: 60%; }
+        .bar-solid { background: linear-gradient(to left, #22c55e, #16a34a); width: 90%; }
+        .bar-mud   { background: linear-gradient(to left, #ca8a04, #a16207); width: 40%; }
+        .bar-sand  { background: linear-gradient(to left, #ea580c, #c2410c); width: 60%; }
 
-        .lane-label { width: 200px; flex-shrink: 0; }
+        .lane-label { width: 200px; flex-shrink: 0; text-align: right; }
         .lane-label strong { display: block; font-size: 0.95em; color: #374151; }
         .lane-label span { font-size: 0.82em; color: var(--gray); }
         .lane-surface { font-size: 0.85em; font-weight: 600; }
@@ -336,7 +365,7 @@
 
         .race-insight {
             background: #fef3c7;
-            border-left: 5px solid #f59e0b;
+            border-right: 5px solid #f59e0b;
             padding: 18px 22px;
             border-radius: 8px;
             margin-top: 15px;
@@ -358,7 +387,7 @@
         }
         .problem-card .p-icon { font-size: 2.5em; margin-bottom: 12px; }
         .problem-card h4 { font-size: 1.05em; margin-bottom: 8px; }
-        .problem-card p { font-size: 0.88em; line-height: 1.5; }
+        .problem-card p { font-size: 0.88em; line-height: 1.6; }
 
         .prob-comp   { background: #eff6ff; border-color: #3b82f6; }
         .prob-comp h4 { color: #1d4ed8; }
@@ -381,10 +410,10 @@
             padding: 16px 20px;
             background: #f9fafb;
             border-radius: 12px;
-            border-left: 5px solid;
+            border-right: 5px solid;
             transition: transform 0.2s;
         }
-        .req-item:hover { transform: translateX(4px); }
+        .req-item:hover { transform: translateX(-4px); }
         .req-item:nth-child(1) { border-color: #3b82f6; }
         .req-item:nth-child(2) { border-color: #22c55e; }
         .req-item:nth-child(3) { border-color: #a855f7; }
@@ -421,6 +450,8 @@
             font-weight: bold;
             font-size: 1.05em;
             transition: background 0.3s;
+            direction: ltr;
+            text-align: left;
         }
         .code-header:hover { background: #5568d3; }
         .code-toggle { font-size: 1.2em; transition: transform 0.3s; }
@@ -439,6 +470,8 @@
             overflow-y: auto;
             transition: max-height 0.3s ease, padding 0.3s ease;
             letter-spacing: 0.3px;
+            direction: ltr;
+            text-align: left;
         }
         .code-block.collapsed { max-height: 0; padding: 0 28px; overflow: hidden; }
         .code-block .comment  { color: #7a8bbf; }
@@ -467,6 +500,7 @@
             padding: 12px 20px;
             border-radius: 8px;
             flex-shrink: 0;
+            direction: ltr;
         }
         .o1-arrow { font-size: 1.8em; color: var(--gray); flex-shrink: 0; }
         .o1-label {
@@ -514,6 +548,8 @@
             border: 1px solid #333;
             line-height: 1.75;
             white-space: pre;
+            direction: ltr;
+            text-align: left;
         }
         .loop-code .comment  { color: #7a8bbf; }
         .loop-code .keyword  { color: #ff79c6; font-weight: bold; }
@@ -557,7 +593,7 @@
         }
         .beh-icon { font-size: 2em; flex-shrink: 0; }
         .beh-name { font-size: 1.1em; font-weight: bold; margin-bottom: 4px; }
-        .beh-desc { font-size: 0.88em; line-height: 1.5; }
+        .beh-desc { font-size: 0.88em; line-height: 1.6; }
         .beh-example { font-size: 0.82em; margin-top: 6px; font-style: italic; }
 
         .beh-constant   { background: #f0fdf4; border-color: #22c55e; }
@@ -604,7 +640,7 @@
         /* ── Callout boxes ── */
         .info-box {
             background: #f0f4ff;
-            border-left: 5px solid var(--purple);
+            border-right: 5px solid var(--purple);
             padding: 18px 22px;
             border-radius: 8px;
             margin: 20px 0;
@@ -612,14 +648,14 @@
         .info-box p { color: #374151; font-size: 0.97em; }
         .success-box {
             background: #f0fdf4;
-            border-left: 5px solid #22c55e;
+            border-right: 5px solid #22c55e;
             padding: 18px 22px;
             border-radius: 8px;
             margin: 20px 0;
         }
         .warning-box {
             background: #fef3c7;
-            border-left: 5px solid #f59e0b;
+            border-right: 5px solid #f59e0b;
             padding: 18px 22px;
             border-radius: 8px;
             margin: 20px 0;
@@ -629,7 +665,7 @@
         .back-home-btn {
             position: fixed;
             top: 20px;
-            left: 20px;
+            right: 20px;
             background: linear-gradient(135deg, var(--purple), var(--purple-dark));
             color: white;
             padding: 11px 22px;
@@ -644,26 +680,6 @@
         .back-home-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102,126,234,0.6);
-        }
-
-        .lang-switch {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #059669, #065f46);
-            color: white;
-            padding: 11px 22px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(5,150,105,0.4);
-            transition: all 0.3s;
-            z-index: 1000;
-            font-size: 0.9em;
-        }
-        .lang-switch:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(5,150,105,0.6);
         }
 
         /* ── Footer ── */
@@ -718,6 +734,14 @@
         .sim-nav-n3:hover  { background: #f44336; color: white; }
         .sim-nav-exp { color: #9c27b0; border-color: #9c27b0; }
         .sim-nav-exp:hover { background: #9c27b0; color: white; }
+        .sim-nav-sqrt  { color: #00bcd4; border-color: #00bcd4; }
+        .sim-nav-sqrt:hover  { background: #00bcd4; color: white; }
+        .sim-nav-nlogn { color: #8bc34a; border-color: #8bc34a; }
+        .sim-nav-nlogn:hover { background: #8bc34a; color: white; }
+        .sim-nav-fact  { color: #ff5722; border-color: #ff5722; }
+        .sim-nav-fact:hover  { background: #ff5722; color: white; }
+        .sim-nav-nton  { color: #e91e63; border-color: #e91e63; }
+        .sim-nav-nton:hover  { background: #e91e63; color: white; }
 
         .cplx-section {
             margin-top: 35px;
@@ -743,6 +767,7 @@
             color: white;
             white-space: nowrap;
             letter-spacing: 0.5px;
+            direction: ltr;
         }
         .cplx-title {
             font-size: 1.55em;
@@ -753,7 +778,7 @@
             padding: 16px 20px;
             border-radius: 8px;
             margin-bottom: 18px;
-            border-left: 5px solid;
+            border-right: 5px solid;
         }
         .cplx-desc p { margin-bottom: 6px; font-size: 0.97em; color: #374151; }
         .cplx-desc p:last-child { margin-bottom: 0; }
@@ -762,8 +787,9 @@
             padding: 1px 5px;
             border-radius: 3px;
             font-family: 'Courier New', monospace;
+            direction: ltr;
+            display: inline-block;
         }
-
 
         .cplx-viz {
             display: grid;
@@ -861,16 +887,7 @@
         #nton .cplx-title       { color: #880e4f; }
         #nton .cplx-desc        { background: #fce4ec; border-color: #e91e63; }
 
-        .sim-nav-sqrt  { color: #00bcd4; border-color: #00bcd4; }
-        .sim-nav-sqrt:hover  { background: #00bcd4; color: white; }
-        .sim-nav-nlogn { color: #8bc34a; border-color: #8bc34a; }
-        .sim-nav-nlogn:hover { background: #8bc34a; color: white; }
-        .sim-nav-fact  { color: #ff5722; border-color: #ff5722; }
-        .sim-nav-fact:hover  { background: #ff5722; color: white; }
-        .sim-nav-nton  { color: #e91e63; border-color: #e91e63; }
-        .sim-nav-nton:hover  { background: #e91e63; color: white; }
-
-        /* ── Growth Hierarchy panel (end of Section 7) ── */
+        /* ── Growth Hierarchy panel ── */
         .growth-hierarchy-panel {
             margin-top: 50px;
             padding: 28px 30px;
@@ -893,7 +910,7 @@
             background: #4c1d95;
             color: white;
             padding: 10px 14px;
-            text-align: left;
+            text-align: right;
             font-weight: 600;
         }
         .growth-tbl-m td {
@@ -978,12 +995,15 @@
             font-family: 'Courier New', monospace;
             font-size: 0.87em;
             line-height: 1.7;
-            border-right: 2px solid #e5e7eb;
+            border-left: 2px solid #e5e7eb;
+            direction: rtl;
+            text-align: right;
         }
         .poly-term-col {
             padding: 14px 20px;
             display: flex; align-items: center; justify-content: center;
             font-size: 1.2em; font-weight: bold;
+            direction: ltr;
         }
         .poly-r1 .poly-code-col { background: #f0fdf4; }
         .poly-r1 .poly-term-col { background: #dcfce7; color: #15803d; }
@@ -1022,7 +1042,7 @@
         .bigo-info { flex: 1; }
         .bigo-label { font-size: 0.75em; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
         .bigo-final .bigo-label { color: rgba(255,255,255,0.7); }
-        .bigo-expr { font-family: 'Courier New', monospace; font-size: 1.05em; font-weight: bold; color: #1f2937; }
+        .bigo-expr { font-family: 'Courier New', monospace; font-size: 1.05em; font-weight: bold; color: #1f2937; direction: ltr; text-align: left; }
         .bigo-final .bigo-expr { color: white; font-size: 1.1em; }
         .bigo-expr .dropped { text-decoration: line-through; color: #9ca3af; }
         .bigo-expr .dominant { color: var(--purple-dark); }
@@ -1036,6 +1056,7 @@
             background: #0d0d0d; border-radius: 12px;
             padding: 20px 28px; margin: 20px 0;
             border: 1px solid #333;
+            direction: ltr;
         }
         .out-call { font-family: 'Courier New', monospace; font-size: 1.1em; color: #8be9fd; }
         .out-arrow { font-size: 1.8em; color: #555; }
@@ -1055,6 +1076,7 @@
         .verify-steps {
             display: flex; flex-wrap: wrap; align-items: center;
             justify-content: center; gap: 10px;
+            direction: ltr;
         }
         .v-chip {
             background: white; border: 2px solid #86efac; border-radius: 8px;
@@ -1094,7 +1116,7 @@
 
         @media (max-width: 768px) {
             .poly-row { grid-template-columns: 1fr; }
-            .poly-code-col { border-right: none; border-bottom: 1px solid #e5e7eb; }
+            .poly-code-col { border-left: none; border-bottom: 1px solid #e5e7eb; }
             .bigo-step { flex-wrap: wrap; }
             .output-demo { justify-content: center; }
         }
@@ -1161,7 +1183,7 @@
         .def-part:nth-child(3) .dp-sym { color: #f59e0b; }
         .def-part:nth-child(4) .dp-sym { color: #ec4899; }
         .def-part .dp-name { font-weight: bold; font-size: 0.9em; margin-bottom: 6px; color: #1f2937; }
-        .def-part .dp-desc { font-size: 0.83em; color: #6b7280; line-height: 1.4; }
+        .def-part .dp-desc { font-size: 0.83em; color: #6b7280; line-height: 1.5; }
         .def-part .dp-example {
             margin-top: 8px;
             font-size: 0.82em;
@@ -1198,8 +1220,8 @@
             flex-shrink: 0;
             margin-top: 1px;
         }
-        .proof-step-text { font-size: 0.95em; color: #1a3a2a; line-height: 1.5; }
-        .proof-step-text code { background: rgba(34,197,94,0.15); padding: 1px 6px; border-radius: 4px; font-family: monospace; }
+        .proof-step-text { font-size: 0.95em; color: #1a3a2a; line-height: 1.6; }
+        .proof-step-text code { background: rgba(34,197,94,0.15); padding: 1px 6px; border-radius: 4px; font-family: monospace; direction: ltr; display: inline-block; }
         .formal-verify-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.92em; }
         .formal-verify-table th {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -1214,19 +1236,21 @@
         .fv-badge-no  { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #dc2626; color: white; font-size: 0.8em; font-weight: bold; }
         .fv-badge-yes { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #16a34a; color: white; font-size: 0.8em; font-weight: bold; }
         .fv-badge-cross { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #d97706; color: white; font-size: 0.8em; font-weight: bold; }
-        /* ── Proof elements (big-o-proofs style) ── */
+        /* ── Proof elements ── */
         .info {
-            background: #f0f4ff; border-left: 5px solid var(--purple);
-            border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 20px 0;
+            background: #f0f4ff; border-right: 5px solid var(--purple);
+            border-radius: 12px 0 0 12px; padding: 18px 22px; margin: 20px 0;
         }
         .info p  { color: #374151; font-size: 0.97em; margin-bottom: 6px; }
         .info p:last-child { margin-bottom: 0; }
-        .info ul { color: #374151; font-size: 0.96em; padding-left: 18px; margin-top: 6px; }
+        .info ul { color: #374151; font-size: 0.96em; padding-right: 18px; margin-top: 6px; }
         .info li { margin-bottom: 4px; }
         .alg-box {
             background: #1e1e2e; border-radius: 14px;
             padding: 24px 28px; margin: 20px 0;
             font-family: 'Courier New', monospace;
+            direction: ltr;
+            text-align: left;
         }
         .alg-box .alg-title {
             font-family: 'Segoe UI', sans-serif; color: #a5b4fc;
@@ -1265,7 +1289,7 @@
         }
         .verify-body { flex: 1; }
         .verify-body h4 { color: #14532d; font-size: 0.92em; margin-bottom: 6px; }
-        .verify-body p  { color: #166534; font-size: 0.9em; font-family: 'Courier New', monospace; margin-bottom: 4px; }
+        .verify-body p  { color: #166534; font-size: 0.9em; font-family: 'Courier New', monospace; margin-bottom: 4px; direction: ltr; text-align: left; }
         .verify-body p:last-child { margin-bottom: 0; }
         .conclusion-banner {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -1293,8 +1317,8 @@
             --gray-500: #6b7280; --gray-600: #4b5563; --gray-700: #374151;
             --gray-800: #1f2937; --gray-900: #111827;
             --p1-radius: 14px; --p1-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
-            font-size: 1rem; line-height: 1.75; color: #1f2937; margin: 30px 0;
+            font-family: 'Tajawal', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
+            font-size: 1rem; line-height: 1.8; color: #1f2937; margin: 30px 0;
         }
         /* Override inline rem-based font-size attrs from proof1 source */
         .p1 p, .p1 ul, .p1 li, .p1 span, .p1 div { font-size: 1rem !important; }
@@ -1309,36 +1333,36 @@
         .p1 .step-num.red    { background: var(--red-mid);    color: var(--red); }
         .p1 .sec-hdr h2 { font-size: 1.25rem; font-weight: 700; color: var(--gray-900); }
         .p1 .card { background: white; border-radius: var(--p1-radius); box-shadow: var(--p1-shadow); padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; }
-        .p1 .card.red-card    { border-left: 5px solid var(--red); }
-        .p1 .card.green-card  { border-left: 5px solid var(--green); }
-        .p1 .card.blue-card   { border-left: 5px solid var(--blue); }
-        .p1 .card.purple-card { border-left: 5px solid var(--purple); }
-        .p1 .card.amber-card  { border-left: 5px solid var(--amber); }
+        .p1 .card.red-card    { border-right: 5px solid var(--red); }
+        .p1 .card.green-card  { border-right: 5px solid var(--green); }
+        .p1 .card.blue-card   { border-right: 5px solid var(--blue); }
+        .p1 .card.purple-card { border-right: 5px solid var(--purple); }
+        .p1 .card.amber-card  { border-right: 5px solid var(--amber); }
         .p1 .def-box { background: var(--blue-light); border: 2px solid #93c5fd; border-radius: var(--p1-radius); padding: 1.4rem 1.6rem; margin-bottom: 1.2rem; }
         .p1 .def-box .def-title { font-size: 0.85rem !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); margin-bottom: 0.7rem; }
-        .p1 .def-box .formula { font-family: 'Fira Code', 'Courier New', monospace; font-size: 1.05rem !important; color: var(--gray-900); background: rgba(37,99,235,0.06); padding: 0.8rem 1rem; border-radius: 8px; text-align: center; margin: 0.5rem 0; }
-        .p1 .ineq-chain { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px; padding: 1.2rem 1.4rem; margin: 0.8rem 0; }
+        .p1 .def-box .formula { font-family: 'Fira Code', 'Courier New', monospace; font-size: 1.05rem !important; color: var(--gray-900); background: rgba(37,99,235,0.06); padding: 0.8rem 1rem; border-radius: 8px; text-align: center; margin: 0.5rem 0; direction: ltr; }
+        .p1 .ineq-chain { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px; padding: 1.2rem 1.4rem; margin: 0.8rem 0; direction: ltr; text-align: left; }
         .p1 .ineq-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0; font-family: 'Fira Code', 'Courier New', monospace; font-size: 1rem !important; }
         .p1 .ineq-row .sym { color: var(--purple); font-weight: 700; min-width: 2rem; }
         .p1 .ineq-row .expr { flex: 1; }
-        .p1 .ineq-row .reason { font-family: 'Inter', 'Segoe UI', sans-serif; font-size: 0.85rem !important; color: var(--gray-500); background: var(--gray-100); border-radius: 5px; padding: 0.2rem 0.55rem; white-space: nowrap; }
+        .p1 .ineq-row .reason { font-family: 'Tajawal', 'Amiri', sans-serif; font-size: 0.85rem !important; color: var(--gray-500); background: var(--gray-100); border-radius: 5px; padding: 0.2rem 0.55rem; white-space: nowrap; }
         .p1 .ineq-row .expr .hi { color: var(--blue); font-weight: 600; }
         .p1 .ineq-row .expr .result { color: var(--red); font-weight: 700; }
         .p1 .answer-box { background: var(--green-light); border: 2px solid #86efac; border-radius: var(--p1-radius); padding: 1.2rem 1.5rem; margin: 0.8rem 0; display: flex; align-items: center; gap: 1rem; }
         .p1 .answer-box .a-icon { font-size: 1.8rem !important; flex-shrink: 0; }
         .p1 .answer-box .a-label { font-size: 0.85rem !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 0.2rem; }
-        .p1 .answer-box .a-val { font-family: 'Fira Code', 'Courier New', monospace; font-size: 1.05rem !important; font-weight: 600; color: var(--gray-900); }
+        .p1 .answer-box .a-val { font-family: 'Fira Code', 'Courier New', monospace; font-size: 1.05rem !important; font-weight: 600; color: var(--gray-900); direction: ltr; }
         .p1 .verify-box { background: var(--amber-light) !important; border: 1px solid #fcd34d !important; border-radius: 10px !important; padding: 1rem 1.2rem !important; margin: 0.8rem 0 !important; display: block !important; }
         .p1 .verify-box .vb-title { font-size: 0.85rem !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); margin-bottom: 0.6rem; }
-        .p1 .verify-box .vb-calc { font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.96rem !important; color: var(--gray-800); line-height: 1.9; }
+        .p1 .verify-box .vb-calc { font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.96rem !important; color: var(--gray-800); line-height: 1.9; direction: ltr; text-align: left; }
         .p1 .verify-box .vb-result { font-size: 0.96rem !important; font-weight: 700; color: var(--green); margin-top: 0.4rem; }
         .p1 .p1-conclusion { background: linear-gradient(135deg, #052e16 0%, #166534 100%); border-radius: var(--p1-radius); padding: 1.6rem 1.8rem; color: white; }
         .p1 .p1-conclusion .c-label { font-size: 0.85rem !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #86efac; margin-bottom: 0.8rem; }
-        .p1 .p1-conclusion .c-statement { font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.95rem !important; color: #d1fae5; line-height: 1.8; }
+        .p1 .p1-conclusion .c-statement { font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.95rem !important; color: #d1fae5; line-height: 1.8; direction: ltr; text-align: left; }
         .p1 .p1-conclusion .c-statement .hl-fn { color: #fbbf24; font-weight: 600; }
         .p1 .p1-conclusion .c-statement .hl-c  { color: #6ee7b7; font-weight: 600; }
         .p1 .graph-wrap { background: white; border-radius: var(--p1-radius); box-shadow: var(--p1-shadow); padding: 1.6rem; margin-bottom: 1.2rem; }
-        .p1 .graph-wrap h3 { font-size: 1rem !important; font-weight: 700; color: var(--gray-900); margin-bottom: 0.5rem; }
+        .p1 .graph-wrap h3 { font-size: 1rem !important; font-weight: 700; color: var(--gray-900); margin-bottom: 0.5rem; direction: ltr; }
         .p1 .graph-wrap > p { font-size: 0.92rem !important; color: var(--gray-500); margin-bottom: 1.2rem; }
         .p1 canvas { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--gray-200); }
         .p1 .legend { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; }
@@ -1351,7 +1375,7 @@
         .p1 .ctrl-group { display: flex; flex-direction: column; gap: 0.3rem; }
         .p1 .ctrl-group label { font-size: 0.88rem !important; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.06em; }
         .p1 .ctrl-group input[type=range] { width: 160px; cursor: pointer; accent-color: var(--blue); }
-        .p1 .ctrl-group .val-display { font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.92rem !important; color: var(--blue); font-weight: 600; }
+        .p1 .ctrl-group .val-display { font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.92rem !important; color: var(--blue); font-weight: 600; direction: ltr; }
         .p1 .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--gray-200); margin: 0.8rem 0; }
         .p1 table { width: 100%; border-collapse: collapse; font-size: 0.95rem !important; }
         .p1 thead th { background: var(--gray-800); color: white; padding: 0.6rem 0.9rem; font-weight: 600; text-align: center; font-size: 0.95rem !important; }
@@ -1361,24 +1385,23 @@
         .p1 tbody tr.highlight-row td { background: var(--green-mid); font-weight: 700; color: var(--green); }
         .p1 tbody tr.before-n0 td { background: var(--red-mid); color: #7f1d1d; }
         .p1 p.note { font-size: 0.92rem !important; color: var(--gray-500); font-style: italic; margin: 0.4rem 0; }
-        .p1 code { font-family: 'Fira Code', 'Courier New', monospace; background: var(--gray-100); color: var(--purple); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.92em !important; }
+        .p1 code { font-family: 'Fira Code', 'Courier New', monospace; background: var(--gray-100); color: var(--purple); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.92em !important; direction: ltr; display: inline-block; }
     </style>
 </head>
 <body>
 
-<a href="../index.html" class="back-home-btn">&#127968; Home</a>
-<a href="algorithm-analysis-motivation-ar.html" class="lang-switch">العربية 🇸🇦</a>
+<a href="algorithm-analysis-motivation.html" class="lang-switch">English 🇬🇧</a>
 
 <div class="container">
 
     <!-- ══ HEADER ══════════════════════════════════════ -->
     <header>
         <div class="header-content">
-            <img src="../fcit.png" alt="FCIT Logo">
+            <img src="../fcit.png" alt="شعار كلية الحوسبة">
             <div class="header-text">
-                <h1>&#129300; Why Algorithm Analysis?</h1>
-                <p class="course-code">CPCS 204 &mdash; Data Structures I</p>
-                <p>The story that explains <em>why</em> we need a fair way to judge algorithms</p>
+                <h1>&#129300; لماذا تحليل الخوارزميات؟</h1>
+                <p class="course-code">CPCS 204 &mdash; هياكل البيانات I</p>
+                <p>القصة التي تشرح <em>سبب</em> حاجتنا إلى طريقة عادلة للحكم على الخوارزميات</p>
             </div>
         </div>
     </header>
@@ -1416,25 +1439,25 @@
     </style>
 
     <div class="page-link-bar">
-        <a href="../index.html" class="plb-nav-btn home-btn">🏠 Home</a>
+        <a href="algorithm-analysis-interactive-ar.html" class="plb-nav-btn next-btn">&#128221; التطبيق والتمارين &nbsp;&#8592;</a>
         <div class="plb-divider"></div>
         <div class="plb-center">
-            <span class="plb-label">You are reading</span>
-            <span class="plb-title">📚 Theory &amp; Motivation</span>
+            <span class="plb-label">أنت تقرأ</span>
+            <span class="plb-title">&#128218; النظرية والتحفيز</span>
         </div>
         <div class="plb-divider"></div>
-        <a href="algorithm-analysis-interactive.html" class="plb-nav-btn next-btn">📝 Practice &amp; Exercises &nbsp;→</a>
+        <a href="../index.html" class="plb-nav-btn home-btn">&#127968; الرئيسية</a>
     </div>
 
     <!-- ══ NAV ══════════════════════════════════════════ -->
     <nav class="page-nav">
-        <a href="#story">The Challenge</a>
-        <a href="#race">The Race</a>
-        <a href="#problem">Why Unfair?</a>
-        <a href="#needs">What We Need</a>
-        <a href="#o1">O(1) Building Block</a>
-        <a href="#loops">Loops &amp; O(n)</a>
-        <a href="#behaviors">9 Behaviors</a>
+        <a href="#story">التحدي</a>
+        <a href="#race">السباق</a>
+        <a href="#problem">لماذا غير عادل؟</a>
+        <a href="#needs">ما نحتاجه</a>
+        <a href="#o1">اللبنة الأساسية O(1)</a>
+        <a href="#loops">الحلقات و O(n)</a>
+        <a href="#behaviors">السلوكيات التسع</a>
         <a href="#constant"    class="nav-complexity nav-c1"  >O(1)</a>
         <a href="#logarithmic" class="nav-complexity nav-log" >O(log n)</a>
         <a href="#sqrt"        class="nav-complexity nav-sqrt">O(&radic;n)</a>
@@ -1445,8 +1468,8 @@
         <a href="#exponential" class="nav-complexity nav-exp">O(2&#8319;)</a>
         <a href="#factorial"   class="nav-complexity nav-fact">O(n!)</a>
         <a href="#nton"        class="nav-complexity nav-nton">O(n&#8319;)</a>
-        <a href="#method">The Method</a>
-        <a href="#formal">Formal Definition</a>
+        <a href="#method">المنهجية</a>
+        <a href="#formal">التعريف الرسمي</a>
     </nav>
 
     <div class="content">
@@ -1455,42 +1478,42 @@
         <section id="story">
             <h2 class="section-title">
                 <span class="step-badge">1</span>
-                The Challenge — Ahmed vs. Omar
+                التحدي — أحمد مقابل عمر
             </h2>
-            <p class="section-subtitle">Two students. Two algorithms. One question.</p>
+            <p class="section-subtitle">طالبان. خوارزميتان. سؤال واحد.</p>
 
             <div class="story-scene">
-                <p>&#128218; Imagine two computer science students, <strong>Ahmed</strong> and <strong>Omar</strong>, are competing in a class assignment. They each write their own sorting algorithm to sort an array of <strong>1 million numbers</strong>. Both are confident their algorithm is the best.</p>
-                <p>After testing, they come back to class with their results&hellip;</p>
+                <p>&#128218; تخيّل طالبَين في تخصص علوم الحاسوب، <strong>أحمد</strong> و<strong>عمر</strong>، يتنافسان في مهمة صفية. كتب كل منهما خوارزمية ترتيب خاصة به لترتيب مصفوفة من <strong>مليون رقم</strong>. كلاهما واثق أن خوارزميته هي الأفضل.</p>
+                <p>بعد الاختبار، عادا إلى الفصل بنتائجهما…</p>
             </div>
 
             <div class="characters">
                 <div class="character-card ahmed">
                     <div class="character-avatar">&#129489;</div>
-                    <div class="character-name">Ahmed</div>
+                    <div class="character-name">أحمد</div>
                     <div class="speech-bubble">
-                        My sorting algorithm sorted 1 million numbers in just <strong>5 seconds</strong>. I am clearly the winner!
+                        رتّبت خوارزميتي مليون رقم في <strong>5 ثوانٍ</strong> فقط. من الواضح أنني الفائز!
                     </div>
-                    <div class="result-tag">&#9201; 5 seconds</div>
+                    <div class="result-tag">&#9201; 5 ثوانٍ</div>
                 </div>
                 <div class="character-card omar">
                     <div class="character-avatar">&#129489;</div>
-                    <div class="character-name">Omar</div>
+                    <div class="character-name">عمر</div>
                     <div class="speech-bubble">
-                        My algorithm took <strong>14 seconds</strong> for the same task &mdash; but wait, before you judge, let me explain!
+                        استغرقت خوارزميتي <strong>14 ثانية</strong> للمهمة نفسها — لكن انتظر قبل أن تحكم، دعني أشرح!
                     </div>
-                    <div class="result-tag">&#9201; 14 seconds</div>
+                    <div class="result-tag">&#9201; 14 ثانية</div>
                 </div>
             </div>
 
             <div class="big-question">
-                <div class="q-label">&#10067; The Big Question</div>
-                <div class="q-text">Is Ahmed's algorithm truly faster than Omar's?</div>
-                <div class="q-hint">Think carefully &mdash; 5 seconds is less than 14 seconds, so Ahmed wins&hellip; right?</div>
+                <div class="q-label">&#10067; السؤال الكبير</div>
+                <div class="q-text">هل خوارزمية أحمد أسرع فعلًا من خوارزمية عمر؟</div>
+                <div class="q-hint">فكّر جيدًا — 5 ثوانٍ أقل من 14 ثانية، إذن أحمد هو الفائز… أليس كذلك؟</div>
             </div>
 
             <div class="warning-box">
-                <p><strong>&#9888;&#65039; Not so fast!</strong> The answer is <em>not obvious</em>. Before we can judge, we need to ask a few very important questions. The race is not always fair &mdash; and timing alone does not tell the whole story.</p>
+                <p><strong>&#9888;&#65039; ليس الأمر بهذه البساطة!</strong> الإجابة <em>ليست واضحة</em>. قبل أن نحكم، نحتاج إلى طرح بعض الأسئلة المهمة جدًا. السباق ليس دائمًا عادلًا — والوقت وحده لا يحكي القصة كاملة.</p>
             </div>
         </section>
 
@@ -1500,60 +1523,60 @@
         <section id="race">
             <h2 class="section-title">
                 <span class="step-badge">2</span>
-                Imagine a Running Race&hellip;
+                تخيّل سباق جري…
             </h2>
-            <p class="section-subtitle">A simple story to understand unfair comparisons</p>
+            <p class="section-subtitle">قصة بسيطة لفهم المقارنات غير العادلة</p>
 
             <div class="story-scene">
-                <p>Imagine three runners are competing in a race. Each runner covers the same distance, but they are running on <strong>completely different surfaces</strong>:</p>
-                <ul style="margin-left: 24px; margin-top: 8px; margin-bottom: 8px;">
-                    <li>Runner 1 runs on <strong>solid pavement</strong> &mdash; fast and smooth</li>
-                    <li>Runner 2 runs through <strong>deep mud</strong> &mdash; every step is a struggle</li>
-                    <li>Runner 3 runs on <strong>loose sand</strong> &mdash; slow and difficult</li>
+                <p>تخيّل ثلاثة عدّائين يتنافسون في سباق. يقطع كل عدّاء نفس المسافة، لكنهم يجرون على <strong>أسطح مختلفة تمامًا</strong>:</p>
+                <ul style="margin-right: 24px; margin-top: 8px; margin-bottom: 8px;">
+                    <li>العدّاء 1 يجري على <strong>رصيف صلب</strong> — سريع وسلس</li>
+                    <li>العدّاء 2 يجري في <strong>وحل عميق</strong> — كل خطوة معاناة</li>
+                    <li>العدّاء 3 يجري على <strong>رمال متحركة</strong> — بطيء وشاق</li>
                 </ul>
-                <p>Runner 1 finishes in 10 seconds. Runner 2 finishes in 45 seconds. Runner 3 finishes in 28 seconds.</p>
+                <p>أنهى العدّاء 1 السباق في 10 ثوانٍ. أنهاه العدّاء 2 في 45 ثانية. أنهاه العدّاء 3 في 28 ثانية.</p>
             </div>
 
-            <p class="race-title">&#127939; The Race — Who is the Fastest Person?</p>
+            <p class="race-title">&#127939; السباق — من هو الأسرع؟</p>
             <div class="race-track-container">
                 <div class="race-lane lane-solid">
                     <div class="lane-number">1</div>
                     <div class="lane-runner">&#127939;</div>
                     <div class="lane-bar-wrapper">
-                        <div class="lane-bar bar-solid">10 sec</div>
+                        <div class="lane-bar bar-solid">10 ث</div>
                     </div>
                     <div class="lane-label">
-                        <strong>Runner 1 &mdash; Wins!</strong>
-                        <span class="lane-surface surface-solid">&#9989; Solid Pavement</span>
+                        <strong>العدّاء 1 — فائز!</strong>
+                        <span class="lane-surface surface-solid">&#9989; رصيف صلب</span>
                     </div>
                 </div>
                 <div class="race-lane lane-mud">
                     <div class="lane-number">2</div>
                     <div class="lane-runner">&#127939;</div>
                     <div class="lane-bar-wrapper">
-                        <div class="lane-bar bar-mud">45 sec</div>
+                        <div class="lane-bar bar-mud">45 ث</div>
                     </div>
                     <div class="lane-label">
-                        <strong>Runner 2 &mdash; Last Place</strong>
-                        <span class="lane-surface surface-mud">&#128150; Deep Mud</span>
+                        <strong>العدّاء 2 — المركز الأخير</strong>
+                        <span class="lane-surface surface-mud">&#128150; وحل عميق</span>
                     </div>
                 </div>
                 <div class="race-lane lane-sand">
                     <div class="lane-number">3</div>
                     <div class="lane-runner">&#127939;</div>
                     <div class="lane-bar-wrapper">
-                        <div class="lane-bar bar-sand">28 sec</div>
+                        <div class="lane-bar bar-sand">28 ث</div>
                     </div>
                     <div class="lane-label">
-                        <strong>Runner 3 &mdash; 2nd Place</strong>
-                        <span class="lane-surface surface-sand">&#127956; Loose Sand</span>
+                        <strong>العدّاء 3 — المركز الثاني</strong>
+                        <span class="lane-surface surface-sand">&#127956; رمال متحركة</span>
                     </div>
                 </div>
             </div>
 
             <div class="race-insight">
-                <p><strong>&#129300; Think about this:</strong> Runner 1 won &mdash; but is Runner 1 the <em>fastest human being</em> of the three? <strong>We cannot know!</strong> Maybe Runner 2 is actually the most athletic person, but the mud made it impossible. If all three ran on the same solid pavement, the results could be completely different.</p>
-                <p style="margin-top: 8px;"><strong>The comparison is unfair</strong> because the conditions are different. The same problem exists when comparing Ahmed and Omar.</p>
+                <p><strong>&#129300; فكّر في هذا:</strong> فاز العدّاء 1 — لكن هل هو <em>أسرع إنسان</em> بينهم فعلًا؟ <strong>لا يمكننا معرفة ذلك!</strong> ربما العدّاء 2 هو الأكثر رياضةً، لكن الوحل جعل الأمر مستحيلًا. لو جرى الثلاثة على نفس الرصيف الصلب، قد تكون النتائج مختلفة تمامًا.</p>
+                <p style="margin-top: 8px;"><strong>المقارنة غير عادلة</strong> لأن الظروف مختلفة. ونفس الإشكالية موجودة عند مقارنة أحمد وعمر.</p>
             </div>
         </section>
 
@@ -1563,40 +1586,40 @@
         <section id="problem">
             <h2 class="section-title">
                 <span class="step-badge">3</span>
-                Back to Ahmed &amp; Omar — Why Is It Unfair?
+                عودة إلى أحمد وعمر — لماذا المقارنة غير عادلة؟
             </h2>
-            <p class="section-subtitle">Three reasons why raw timing is not a reliable judge</p>
+            <p class="section-subtitle">ثلاثة أسباب تجعل قياس الوقت وحده غير موثوق</p>
 
             <div class="story-scene">
-                <p>Now think about Ahmed and Omar. What if one of these situations is true?</p>
+                <p>فكّر الآن في أحمد وعمر. ماذا لو كان أحد هذه السيناريوهات صحيحًا؟</p>
             </div>
 
             <div class="problems-grid">
                 <div class="problem-card prob-comp">
                     <div class="p-icon">&#128187;</div>
-                    <h4>Different Computers</h4>
-                    <p>Ahmed might be running his algorithm on a <strong>brand new, high-performance workstation</strong>, while Omar is using an old, slow laptop. Ahmed's computer is the "solid pavement" &mdash; of course it is faster!</p>
+                    <h4>أجهزة (حواسيب) مختلفة</h4>
+                    <p>ربما كان أحمد يُشغّل خوارزميته على <strong>محطة عمل عالية الأداء وحديثة</strong>، بينما يستخدم عمر حاسوبًا محمولًا قديمًا وبطيئًا. حاسوب أحمد هو "الرصيف الصلب" — بالطبع سيكون أسرع!</p>
                 </div>
                 <div class="problem-card prob-prog">
                     <div class="p-icon">&#128104;&#8205;&#128187;</div>
-                    <h4>Different Programmers</h4>
-                    <p>Maybe Omar's <strong>algorithm</strong> is actually more efficient, but his Java <strong>implementation</strong> is poorly written. Ahmed is a more experienced coder and wrote clean, optimized code, so his version runs faster.</p>
+                    <h4>مبرمجون مختلفون</h4>
+                    <p>ربما كانت <strong>خوارزمية</strong> عمر أكثر كفاءةً في الواقع، لكن <strong>تنفيذه</strong> بلغة Java كان ضعيفًا. أحمد مبرمج أكثر خبرةً وكتب كودًا أنظف وأكثر تحسينًا، لذا نسخته تعمل أسرع.</p>
                 </div>
                 <div class="problem-card prob-lang">
                     <div class="p-icon">&#128296;</div>
-                    <h4>Different Tools</h4>
-                    <p>Even on the same computer, different programming languages, compilers, or runtime environments can cause <strong>significant time differences</strong> — even for the exact same algorithm logic.</p>
+                    <h4>أدوات مختلفة</h4>
+                    <p>حتى على نفس الحاسوب، يمكن لغات البرمجة المختلفة أو المُصرِّفات أو بيئات التشغيل أن تُسبّب <strong>فروقًا زمنية كبيرة</strong> — حتى لنفس منطق الخوارزمية تمامًا.</p>
                 </div>
             </div>
 
             <div class="big-question">
-                <div class="q-label">&#128161; The Real Problem</div>
-                <div class="q-text">How do we fairly judge which algorithm is better?</div>
-                <div class="q-hint">We need a measurement that is independent of all these external factors</div>
+                <div class="q-label">&#128161; المشكلة الحقيقية</div>
+                <div class="q-text">كيف نحكم بعدالة على أي خوارزمية أفضل؟</div>
+                <div class="q-hint">نحتاج إلى قياس مستقل عن كل هذه العوامل الخارجية</div>
             </div>
 
             <div class="info-box">
-                <p>&#128270; <strong>Solution idea:</strong> Have the same professional programmer implement <em>both</em> algorithms and run them on the same computer. This would be fairer &mdash; but it is still not the best approach. We need something even more fundamental and universally fair.</p>
+                <p>&#128270; <strong>فكرة الحل:</strong> نجعل نفس المبرمج المحترف ينفّذ <em>كلتا</em> الخوارزميتين ويُشغّلهما على نفس الحاسوب. سيكون هذا أعدل — لكنه لا يزال ليس أفضل نهج. نحتاج إلى شيء أكثر جوهريةً وعدالةً شاملة.</p>
             </div>
         </section>
 
@@ -1606,47 +1629,47 @@
         <section id="needs">
             <h2 class="section-title">
                 <span class="step-badge">4</span>
-                What We Need — The Fair Judge
+                ما نحتاجه — الحَكَم العادل
             </h2>
-            <p class="section-subtitle">A measurement that is truly universal and objective</p>
+            <p class="section-subtitle">قياس شامل وموضوعي بحق</p>
 
-            <p style="margin-bottom: 20px;">To fairly measure and compare algorithms, we need a method that is completely <strong>independent</strong> of all external factors:</p>
+            <p style="margin-bottom: 20px;">لقياس الخوارزميات ومقارنتها بعدالة، نحتاج إلى منهجية <strong>مستقلة</strong> تمامًا عن كل العوامل الخارجية:</p>
 
             <div class="requirements-list">
                 <div class="req-item">
                     <div class="req-icon">&#128187;</div>
                     <div class="req-text">
-                        <strong>Independent of the Computer</strong>
-                        <span>Whether you run it on an old laptop or a supercomputer, the judgment should be the same</span>
+                        <strong>مستقلة عن الحاسوب</strong>
+                        <span>سواء شغّلتها على حاسوب قديم أو حاسوب خارق، يجب أن يبقى الحكم واحدًا</span>
                     </div>
                 </div>
                 <div class="req-item">
                     <div class="req-icon">&#128104;&#8205;&#128187;</div>
                     <div class="req-text">
-                        <strong>Independent of the Programmer</strong>
-                        <span>The skill or experience of the person who writes the code should not affect the result</span>
+                        <strong>مستقلة عن المبرمج</strong>
+                        <span>مهارة الشخص أو خبرته في كتابة الكود يجب ألا تؤثر في النتيجة</span>
                     </div>
                 </div>
                 <div class="req-item">
                     <div class="req-icon">&#128296;</div>
                     <div class="req-text">
-                        <strong>Independent of the Programming Language</strong>
-                        <span>Java, Python, C++, or any other language should not change the fundamental measurement</span>
+                        <strong>مستقلة عن لغة البرمجة</strong>
+                        <span>Java أو Python أو C++ أو أي لغة أخرى لا ينبغي أن تغيّر القياس الجوهري</span>
                     </div>
                 </div>
                 <div class="req-item">
                     <div class="req-icon">&#128202;</div>
                     <div class="req-text">
-                        <strong>Based on How the Algorithm Behaves as Input Grows</strong>
-                        <span>What happens when n doubles? When n is 1 million vs 1 billion? This is the true measure of an algorithm</span>
+                        <strong>مبنية على سلوك الخوارزمية مع نمو المدخلات</strong>
+                        <span>ماذا يحدث عندما يتضاعف n؟ عندما يكون n مليونًا مقابل مليار؟ هذا هو المقياس الحقيقي للخوارزمية</span>
                     </div>
                 </div>
             </div>
 
             <div class="solution-reveal">
                 <div class="sol-icon">&#127775;</div>
-                <h3>The Answer: Algorithm Analysis &amp; Big O Notation</h3>
-                <p>We study how many <strong>operations</strong> an algorithm performs as a function of its input size <em>n</em>. This gives us a mathematical, computer-independent, programmer-independent measure of an algorithm's true efficiency.</p>
+                <h3>الإجابة: تحليل الخوارزميات ورمز O الكبير (Big O)</h3>
+                <p>ندرس عدد <strong>العمليات</strong> التي تؤديها الخوارزمية كدالة في حجم المدخلات <em>n</em>. يمنحنا هذا مقياسًا رياضيًا مستقلًا عن الحاسوب والمبرمج، يعكس الكفاءة الحقيقية للخوارزمية.</p>
             </div>
         </section>
 
@@ -1656,58 +1679,58 @@
         <section id="o1">
             <h2 class="section-title">
                 <span class="step-badge">5</span>
-                The Building Block &mdash; What Is O(1)?
+                اللبنة الأساسية — ما هو O(1)؟
             </h2>
-            <p class="section-subtitle">The smallest unit of work in any algorithm</p>
+            <p class="section-subtitle">أصغر وحدة عمل في أي خوارزمية</p>
 
             <div class="story-scene">
-                <p>To count how many operations an algorithm performs, we first need to agree on what counts as <em>one operation</em>. In computer science, we define any simple, single statement as taking <strong>one unit of time</strong> &mdash; we call this <strong>O(1)</strong>, or <em>constant time</em>.</p>
+                <p>لعدّ عدد العمليات التي تؤديها الخوارزمية، يجب أولًا أن نتفق على ما يُعدّ <em>عملية واحدة</em>. في علوم الحاسوب، نعرّف أي جملة برمجية بسيطة مفردة على أنها تستغرق <strong>وحدة زمنية واحدة</strong> — نسمي هذا <strong>O(1)</strong>، أو <em>الزمن الثابت</em>.</p>
             </div>
 
             <div class="info-box">
-                <p><strong>&#128161; Important agreement:</strong> We cannot measure the exact time of a statement (it changes with every computer). So instead, we agree: every single statement, no matter what computer runs it, counts as <strong>1 operation = O(1)</strong>. This is our fair, universal unit.</p>
+                <p><strong>&#128161; اتفاق مهم:</strong> لا يمكننا قياس الزمن الدقيق للجملة البرمجية (يتغير مع كل حاسوب). لذلك نتفق: كل جملة مفردة، بصرف النظر عن الحاسوب الذي يُشغّلها، تُحسب على أنها <strong>1 عملية = O(1)</strong>. هذه وحدتنا العادلة والشاملة.</p>
             </div>
 
-            <p style="margin-bottom: 12px;"><strong>Examples of single statements &mdash; each one is O(1):</strong></p>
+            <p style="margin-bottom: 12px;"><strong>أمثلة على الجمل المفردة — كل منها O(1):</strong></p>
 
             <div class="o1-visual">
                 <div class="o1-statement">i = i + 1;</div>
-                <div class="o1-arrow">&#8594;</div>
+                <div class="o1-arrow">&#8592;</div>
                 <div class="o1-label">
                     <div class="big">O(1)</div>
-                    <div class="small">1 operation</div>
+                    <div class="small">1 عملية</div>
                 </div>
                 <div class="o1-explain">
-                    Even though the CPU translates <code style="background:#eee;padding:2px 5px;border-radius:3px;">i = i + 1</code> into several micro-instructions internally, <em>we</em> agree to count it as one operation. This makes our analysis independent of the hardware.
+                    حتى لو ترجمت المعالجة <code style="background:#eee;padding:2px 5px;border-radius:3px;direction:ltr;display:inline-block;">i = i + 1</code> داخليًا إلى عدة تعليمات دقيقة، <em>نحن</em> نتفق على عدّها عملية واحدة. هذا يجعل تحليلنا مستقلًا عن الأجهزة.
                 </div>
             </div>
 
             <div class="o1-visual">
                 <div class="o1-statement">x = arr[5];</div>
-                <div class="o1-arrow">&#8594;</div>
+                <div class="o1-arrow">&#8592;</div>
                 <div class="o1-label">
                     <div class="big">O(1)</div>
-                    <div class="small">1 operation</div>
+                    <div class="small">1 عملية</div>
                 </div>
                 <div class="o1-explain">
-                    Array access by index is always one operation, whether the array has 10 elements or 10 million. It takes the same constant effort.
+                    الوصول إلى عنصر المصفوفة بالمؤشر يستغرق دائمًا عملية واحدة، سواء كانت المصفوفة تحتوي على 10 عناصر أو 10 ملايين. يستلزم نفس الجهد الثابت.
                 </div>
             </div>
 
             <div class="o1-visual">
                 <div class="o1-statement">sum = a + b;</div>
-                <div class="o1-arrow">&#8594;</div>
+                <div class="o1-arrow">&#8592;</div>
                 <div class="o1-label">
                     <div class="big">O(1)</div>
-                    <div class="small">1 operation</div>
+                    <div class="small">1 عملية</div>
                 </div>
                 <div class="o1-explain">
-                    Arithmetic operations, variable assignments, comparisons &mdash; all are O(1). The result does not depend on any input size <em>n</em>.
+                    العمليات الحسابية وتعيينات المتغيرات والمقارنات — جميعها O(1). النتيجة لا تعتمد على حجم أي مدخل <em>n</em>.
                 </div>
             </div>
 
             <div class="success-box">
-                <p>&#9989; <strong>Key insight:</strong> O(1) does not mean "takes 1 second" or "takes 1 millisecond." It means "takes a <em>constant</em> amount of time &mdash; the same amount regardless of the problem size." This is our universal, fair unit of measurement.</p>
+                <p>&#9989; <strong>الفكرة المحورية:</strong> O(1) لا يعني "يستغرق 1 ثانية" أو "1 مللي ثانية". يعني "يستغرق <em>مقدارًا ثابتًا</em> من الوقت — نفس المقدار بغض النظر عن حجم المسألة". هذه وحدة قياسنا الشاملة والعادلة.</p>
             </div>
         </section>
 
@@ -1717,12 +1740,12 @@
         <section id="loops">
             <h2 class="section-title">
                 <span class="step-badge">6</span>
-                From O(1) to O(n) &mdash; How Loops Work
+                من O(1) إلى O(n) — كيف تعمل الحلقات
             </h2>
-            <p class="section-subtitle">Building up from single operations to algorithms</p>
+            <p class="section-subtitle">البناء التدريجي من العمليات المفردة إلى الخوارزميات</p>
 
             <div class="story-scene">
-                <p>Now that we know O(1) is our building block, let us see what happens when we put that operation inside a loop. This is how we start to count the total work an algorithm does.</p>
+                <p>الآن بعد أن عرفنا أن O(1) هي لبنتنا الأساسية، دعنا نرى ما يحدث عندما نضع تلك العملية داخل حلقة تكرار. هكذا نبدأ بعدّ إجمالي العمل الذي تؤديه الخوارزمية.</p>
             </div>
 
             <div class="loop-steps">
@@ -1730,9 +1753,9 @@
                 <!-- Step 1: single statement -->
                 <div class="loop-step">
                     <div class="loop-code"><span class="keyword">int</span> x = <span class="number">0</span>;
-x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement</span></div>
+x = x + <span class="number">1</span>; <span class="comment">// ← جملة واحدة</span></div>
                     <div class="loop-analysis">
-                        <div class="loop-step-label">Total operations:</div>
+                        <div class="loop-step-label">إجمالي العمليات:</div>
                         <div class="ops">
                             <span class="op-box">O(1)</span>
                         </div>
@@ -1743,10 +1766,10 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <!-- Step 2: fixed loop 10 -->
                 <div class="loop-step">
                     <div class="loop-code"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {
-    x = x + <span class="number">1</span>; <span class="comment">// executes 10 times</span>
+    x = x + <span class="number">1</span>; <span class="comment">// تُنفَّذ 10 مرات</span>
 }</div>
                     <div class="loop-analysis">
-                        <div class="loop-step-label">One O(1) operation repeated 10 times:</div>
+                        <div class="loop-step-label">عملية O(1) واحدة تتكرر 10 مرات:</div>
                         <div class="ops">
                             <span class="op-box">O(1)</span>
                             <span class="op-box">O(1)</span>
@@ -1766,10 +1789,10 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <!-- Step 3: loop n -->
                 <div class="loop-step highlight">
                     <div class="loop-code"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <strong>n</strong>; i++) {
-    x = x + <span class="number">1</span>; <span class="comment">// executes n times</span>
+    x = x + <span class="number">1</span>; <span class="comment">// تُنفَّذ n مرة</span>
 }</div>
                     <div class="loop-analysis">
-                        <div class="loop-step-label">One O(1) operation repeated n times:</div>
+                        <div class="loop-step-label">عملية O(1) واحدة تتكرر n مرة:</div>
                         <div class="ops">
                             <span class="op-box">O(1)</span>
                             <span class="op-box">O(1)</span>
@@ -1784,30 +1807,30 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             </div>
 
             <div class="info-box">
-                <p><strong>&#128161; The pattern:</strong> A loop that runs <em>n</em> times, with O(1) work inside, gives us O(1) + O(1) + &hellip; + O(1) (n times) = <strong>O(n)</strong>. The number of operations grows <em>linearly</em> with the input size. Double the input &rarr; double the work.</p>
+                <p><strong>&#128161; النمط:</strong> حلقة تكرار تعمل <em>n</em> مرة، مع عمل O(1) بداخلها، تعطينا O(1) + O(1) + &hellip; + O(1) (n مرة) = <strong>O(n)</strong>. يزيد عدد العمليات <em>بشكل خطي</em> مع حجم المدخلات. ضاعف المدخلات ← ضاعف العمل.</p>
             </div>
 
-            <p style="margin: 20px 0 12px;"><strong>What about nested loops?</strong></p>
+            <p style="margin: 20px 0 12px;"><strong>ماذا عن الحلقات المتداخلة؟</strong></p>
 
             <div class="loop-steps">
                 <div class="loop-step">
-                    <div class="loop-code"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) {     <span class="comment">// n times</span>
-    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) { <span class="comment">// n times</span>
+                    <div class="loop-code"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) {     <span class="comment">// n مرة</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) { <span class="comment">// n مرة</span>
         x = x + <span class="number">1</span>;               <span class="comment">// O(1)</span>
     }
 }</div>
                     <div class="loop-analysis">
-                        <div class="loop-step-label">Inner loop runs n times for each of the n outer iterations:</div>
+                        <div class="loop-step-label">الحلقة الداخلية تعمل n مرة لكل تكرار من الحلقة الخارجية البالغة n تكرارًا:</div>
                         <div class="ops">
                             <span class="op-box">n &times; n</span>
                         </div>
-                        <div class="loop-result">= n&sup2; operations = <strong style="color:var(--purple-dark);font-size:1.2em;">O(n&sup2;)</strong></div>
+                        <div class="loop-result">= n&sup2; عملية = <strong style="color:var(--purple-dark);font-size:1.2em;">O(n&sup2;)</strong></div>
                     </div>
                 </div>
             </div>
 
             <div class="success-box">
-                <p>&#9989; <strong>The big idea:</strong> We do not need to know the exact running time in seconds. We count the <strong>number of operations</strong> as a mathematical function of the input size <em>n</em>. This count is the same regardless of the computer, the programmer, or the language. <strong>That is our fair judge.</strong></p>
+                <p>&#9989; <strong>الفكرة الكبرى:</strong> لا نحتاج إلى معرفة زمن التشغيل الدقيق بالثواني. نعدّ <strong>عدد العمليات</strong> كدالة رياضية في حجم المدخلات <em>n</em>. هذا العدد ثابت بصرف النظر عن الحاسوب أو المبرمج أو اللغة. <strong>هذا هو حَكَمنا العادل.</strong></p>
             </div>
         </section>
 
@@ -1817,42 +1840,42 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
         <section id="behaviors">
             <h2 class="section-title">
                 <span class="step-badge">7</span>
-                Algorithm Behaviors &mdash; The Nine Complexity Classes
+                سلوكيات الخوارزميات — فئات التعقيد التسع
             </h2>
-            <p class="section-subtitle">How different algorithms grow as input size increases</p>
+            <p class="section-subtitle">كيف تنمو الخوارزميات المختلفة مع زيادة حجم المدخلات</p>
 
             <div class="story-scene">
-                <p>We do not need to know the exact number of operations. What we care about is the <strong>behavior pattern</strong> &mdash; how the operation count <em>grows</em> as input size <em>n</em> gets larger. We call this the <strong>Big O notation</strong>. Every algorithm falls into one of these nine complexity classes. Explore each one below to see a real graph and data table showing exactly how fast each complexity grows.</p>
+                <p>لا نحتاج إلى معرفة العدد الدقيق للعمليات. ما يهمنا هو <strong>نمط السلوك</strong> — كيف <em>ينمو</em> عدد العمليات مع ازدياد حجم المدخلات <em>n</em>. نسمي هذا <strong>رمز O الكبير (Big O)</strong>. كل خوارزمية تقع ضمن إحدى هذه الفئات التسع. استكشف كل فئة أدناه لترى رسمًا بيانيًا حقيقيًا وجدولًا يوضح بالضبط مدى سرعة نمو كل تعقيد.</p>
             </div>
 
             <!-- Jump nav for complexity types -->
             <nav class="sim-section-nav">
-                <a href="#constant"    class="sim-nav-c1"   >O(1) &mdash; Constant</a>
-                <a href="#logarithmic" class="sim-nav-log"  >O(log n) &mdash; Logarithmic</a>
-                <a href="#sqrt"        class="sim-nav-sqrt" >O(&radic;n) &mdash; Square Root</a>
-                <a href="#linear"      class="sim-nav-n"    >O(n) &mdash; Linear</a>
-                <a href="#nlogn"       class="sim-nav-nlogn">O(n&middot;log n) &mdash; Linearithmic</a>
-                <a href="#quadratic"   class="sim-nav-n2"   >O(n&sup2;) &mdash; Quadratic</a>
-                <a href="#cubic"       class="sim-nav-n3"   >O(n&sup3;) &mdash; Cubic</a>
-                <a href="#exponential" class="sim-nav-exp"  >O(2&#8319;) &mdash; Exponential</a>
-                <a href="#factorial"   class="sim-nav-fact" >O(n!) &mdash; Factorial</a>
-                <a href="#nton"        class="sim-nav-nton" >O(n&#8319;) &mdash; n-to-the-n</a>
+                <a href="#constant"    class="sim-nav-c1"   >O(1) — ثابت</a>
+                <a href="#logarithmic" class="sim-nav-log"  >O(log n) — لوغاريتمي</a>
+                <a href="#sqrt"        class="sim-nav-sqrt" >O(&radic;n) — جذر تربيعي</a>
+                <a href="#linear"      class="sim-nav-n"    >O(n) — خطي</a>
+                <a href="#nlogn"       class="sim-nav-nlogn">O(n&middot;log n) — خطي-لوغاريتمي</a>
+                <a href="#quadratic"   class="sim-nav-n2"   >O(n&sup2;) — تربيعي</a>
+                <a href="#cubic"       class="sim-nav-n3"   >O(n&sup3;) — تكعيبي</a>
+                <a href="#exponential" class="sim-nav-exp"  >O(2&#8319;) — أسي</a>
+                <a href="#factorial"   class="sim-nav-fact" >O(n!) — مضروب</a>
+                <a href="#nton"        class="sim-nav-nton" >O(n&#8319;) — n أس n</a>
             </nav>
 
             <!-- ── O(1) Constant ─────────────────────────────── -->
             <div id="constant" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(1)</span>
-                    <span class="cplx-title">Constant Time</span>
+                    <span class="cplx-title">الزمن الثابت (Constant Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> The algorithm always takes the same number of operations, no matter how large the input is. The problem size simply does not affect the running time.</p>
-                    <p><strong>Real example:</strong> Accessing an element by index &mdash; <code>arr[5]</code> is just as fast whether the array has 10 or 10 million elements.</p>
-                    <p><strong>Notice in the graph:</strong> A perfectly flat horizontal line. As n grows from 1 to 100, the operations stay at exactly 1.</p>
+                    <p><strong>ما يعنيه:</strong> تأخذ الخوارزمية دائمًا نفس عدد العمليات، بصرف النظر عن حجم المدخلات. حجم المسألة ببساطة لا يؤثر في زمن التشغيل.</p>
+                    <p><strong>مثال حقيقي:</strong> الوصول إلى عنصر بالمؤشر — <code>arr[5]</code> سريع بنفس الدرجة سواء كانت المصفوفة تحتوي على 10 أو 10 ملايين عنصر.</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> خط أفقي مستقيم تمامًا. مع نمو n من 1 إلى 100، تبقى العمليات عند 1 بالضبط.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(1) Constant Time
+                        Java &mdash; O(1) الزمن الثابت
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(1) — Constant Time: operations do NOT depend on n</span>
@@ -1862,15 +1885,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = 1 &nbsp;&mdash;&nbsp; Operations stay the same regardless of input size</h4>
+                        <h4>f(n) = 1 &nbsp;&mdash;&nbsp; العمليات ثابتة بغض النظر عن حجم المدخلات</h4>
                         <canvas id="chart-constant"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#4caf50;">Input Size (n)</th>
-                                    <th style="background:#4caf50;">Operations f(n) = 1</th>
+                                    <th style="background:#4caf50;">حجم المدخلات (n)</th>
+                                    <th style="background:#4caf50;">العمليات f(n) = 1</th>
                                 </tr>
                             </thead>
                             <tbody id="table-constant"></tbody>
@@ -1883,16 +1906,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="logarithmic" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(log n)</span>
-                    <span class="cplx-title">Logarithmic Time</span>
+                    <span class="cplx-title">الزمن اللوغاريتمي (Logarithmic Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> Each time n doubles, the number of operations increases by only 1. It grows, but extremely slowly.</p>
-                    <p><strong>Real example:</strong> Binary search &mdash; searching a sorted array of 1 million elements takes only about 20 comparisons!</p>
-                    <p><strong>Notice in the graph:</strong> The curve rises steeply at first, then bends and almost flattens. Even for 100 million elements, log&#8322;(n) only reaches about 27 operations.</p>
+                    <p><strong>ما يعنيه:</strong> في كل مرة يتضاعف n، يزيد عدد العمليات بمقدار 1 فقط. ينمو، لكن ببطء شديد.</p>
+                    <p><strong>مثال حقيقي:</strong> البحث الثنائي — البحث في مصفوفة مرتبة من مليون عنصر لا يحتاج سوى نحو 20 مقارنة!</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> المنحنى يرتفع بحدة في البداية ثم ينحني ويكاد يصبح مستقيمًا. حتى لـ 100 مليون عنصر، log&#8322;(n) لا يتجاوز نحو 27 عملية.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(log n) Logarithmic Time
+                        Java &mdash; O(log n) الزمن اللوغاريتمي
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(log n) — Logarithmic: n is halved each iteration</span>
@@ -1904,15 +1927,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = log&#8322;(n) &nbsp;&mdash;&nbsp; Graph: n = 1 to 1,000 &nbsp;|&nbsp; Table: up to 100 million</h4>
+                        <h4>f(n) = log&#8322;(n) &nbsp;&mdash;&nbsp; الرسم: n = 1 إلى 1,000 &nbsp;|&nbsp; الجدول: حتى 100 مليون</h4>
                         <canvas id="chart-log"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#2196f3;">Input Size (n)</th>
-                                    <th style="background:#2196f3;">Operations f(n) = log&#8322;(n)</th>
+                                    <th style="background:#2196f3;">حجم المدخلات (n)</th>
+                                    <th style="background:#2196f3;">العمليات f(n) = log&#8322;(n)</th>
                                 </tr>
                             </thead>
                             <tbody id="table-log"></tbody>
@@ -1925,16 +1948,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="sqrt" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(&radic;n)</span>
-                    <span class="cplx-title">Square Root Time</span>
+                    <span class="cplx-title">زمن الجذر التربيعي (Square Root Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> Operations grow as the square root of input size — much slower than linear. When n quadruples, operations only double.</p>
-                    <p><strong>Real example:</strong> Primality testing — to check if n is prime you only need to test divisors up to &radic;n, not all the way to n.</p>
-                    <p><strong>Notice in the graph:</strong> The curve rises quickly at first then gradually flattens. For n = 10,000, only 100 operations are needed instead of 10,000.</p>
+                    <p><strong>ما يعنيه:</strong> تنمو العمليات بمقدار الجذر التربيعي لحجم المدخلات — أبطأ بكثير من الخطي. عندما يتضاعف n أربع مرات، تتضاعف العمليات مرتين فقط.</p>
+                    <p><strong>مثال حقيقي:</strong> اختبار الأولية — للتحقق من أن n أولي تحتاج فقط اختبار المقسومات حتى &radic;n، وليس حتى n.</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> المنحنى يرتفع بسرعة في البداية ثم يتسطح تدريجيًا. عند n = 10,000، نحتاج 100 عملية فقط بدلًا من 10,000.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(&radic;n) Square Root Time
+                        Java &mdash; O(&radic;n) زمن الجذر التربيعي
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(√n) — Square Root: loop runs only up to √n</span>
@@ -1948,15 +1971,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = &radic;n &nbsp;&mdash;&nbsp; Grows much slower than linear</h4>
+                        <h4>f(n) = &radic;n &nbsp;&mdash;&nbsp; ينمو أبطأ بكثير من الخطي</h4>
                         <canvas id="chart-sqrt"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#00bcd4;">Input Size (n)</th>
-                                    <th style="background:#00bcd4;">Operations f(n) = &radic;n</th>
+                                    <th style="background:#00bcd4;">حجم المدخلات (n)</th>
+                                    <th style="background:#00bcd4;">العمليات f(n) = &radic;n</th>
                                 </tr>
                             </thead>
                             <tbody id="table-sqrt"></tbody>
@@ -1969,16 +1992,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="linear" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(n)</span>
-                    <span class="cplx-title">Linear Time</span>
+                    <span class="cplx-title">الزمن الخطي (Linear Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> Operations grow proportionally with input size. If n doubles, operations double too. A consistent, steady increase.</p>
-                    <p><strong>Real example:</strong> Linear search &mdash; scanning an unsorted list element by element from start to end.</p>
-                    <p><strong>Notice in the graph:</strong> A perfectly straight diagonal line. Every increase in n adds the same fixed number of operations.</p>
+                    <p><strong>ما يعنيه:</strong> تنمو العمليات بشكل متناسب مع حجم المدخلات. إذا تضاعف n، تضاعفت العمليات أيضًا. زيادة منتظمة ومستمرة.</p>
+                    <p><strong>مثال حقيقي:</strong> البحث الخطي — مسح قائمة غير مرتبة عنصرًا بعنصر من البداية إلى النهاية.</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> خط قطري مستقيم تمامًا. كل زيادة في n تضيف نفس العدد الثابت من العمليات.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(n) Linear Time
+                        Java &mdash; O(n) الزمن الخطي
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(n) — Linear: one pass through all n elements</span>
@@ -1991,15 +2014,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = n &nbsp;&mdash;&nbsp; Operations grow in a perfectly straight line</h4>
+                        <h4>f(n) = n &nbsp;&mdash;&nbsp; العمليات تنمو في خط مستقيم تمامًا</h4>
                         <canvas id="chart-linear"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#667eea;">Input Size (n)</th>
-                                    <th style="background:#667eea;">Operations f(n) = n</th>
+                                    <th style="background:#667eea;">حجم المدخلات (n)</th>
+                                    <th style="background:#667eea;">العمليات f(n) = n</th>
                                 </tr>
                             </thead>
                             <tbody id="table-linear"></tbody>
@@ -2012,16 +2035,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="nlogn" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(n&middot;log n)</span>
-                    <span class="cplx-title">Linearithmic Time</span>
+                    <span class="cplx-title">الزمن الخطي-اللوغاريتمي (Linearithmic Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> Operations grow slightly faster than linear but far slower than quadratic. When n doubles, operations slightly more than double.</p>
-                    <p><strong>Real example:</strong> Merge sort, heap sort &mdash; divide into O(log n) levels and do O(n) work at each level, giving O(n&middot;log n) total.</p>
-                    <p><strong>Notice in the graph:</strong> Looks nearly linear at small n, then curves gently upward. This is the best possible speed for comparison-based sorting.</p>
+                    <p><strong>ما يعنيه:</strong> تنمو العمليات بشكل أسرع قليلًا من الخطي لكن أبطأ بكثير من التربيعي. عندما يتضاعف n، تزيد العمليات بأكثر من الضعف بقليل.</p>
+                    <p><strong>مثال حقيقي:</strong> الترتيب بالدمج (Merge Sort)، ترتيب الكومة (Heap Sort) — تقسيم على O(log n) مستوى مع عمل O(n) في كل مستوى، فيكون الإجمالي O(n&middot;log n).</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> يبدو شبه خطي عند القيم الصغيرة لـ n، ثم ينحني بلطف إلى الأعلى. هذه أفضل سرعة ممكنة لخوارزميات الترتيب القائمة على المقارنة.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(n&middot;log n) Linearithmic Time
+                        Java &mdash; O(n&middot;log n) الزمن الخطي-اللوغاريتمي
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(n·log n) — the loop pattern seen in merge sort</span>
@@ -2036,15 +2059,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = n &middot; log&#8322;(n) &nbsp;&mdash;&nbsp; Slightly above linear, the "sweet spot" for sorting</h4>
+                        <h4>f(n) = n &middot; log&#8322;(n) &nbsp;&mdash;&nbsp; أعلى بقليل من الخطي، "النقطة الذهبية" للترتيب</h4>
                         <canvas id="chart-nlogn"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#8bc34a;">Input Size (n)</th>
-                                    <th style="background:#8bc34a;">Operations f(n) = n &middot; log&#8322;(n)</th>
+                                    <th style="background:#8bc34a;">حجم المدخلات (n)</th>
+                                    <th style="background:#8bc34a;">العمليات f(n) = n &middot; log&#8322;(n)</th>
                                 </tr>
                             </thead>
                             <tbody id="table-nlogn"></tbody>
@@ -2057,16 +2080,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="quadratic" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(n&sup2;)</span>
-                    <span class="cplx-title">Quadratic Time</span>
+                    <span class="cplx-title">الزمن التربيعي (Quadratic Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> Operations grow as the square of input size. If n doubles, operations multiply by 4!</p>
-                    <p><strong>Real example:</strong> Bubble sort, selection sort &mdash; two nested loops each running n times, giving n &times; n = n&sup2; operations.</p>
-                    <p><strong>Notice in the graph:</strong> The curve bends sharply upward (a parabola). For n=100, we already have 10,000 operations &mdash; compare that to just 100 for O(n).</p>
+                    <p><strong>ما يعنيه:</strong> تنمو العمليات بمربع حجم المدخلات. إذا تضاعف n، تتضاعف العمليات 4 أضعاف!</p>
+                    <p><strong>مثال حقيقي:</strong> ترتيب الفقاعة (Bubble Sort)، ترتيب الانتقاء (Selection Sort) — حلقتان متداخلتان تعمل كل منهما n مرة، فيكون الإجمالي n &times; n = n&sup2; عملية.</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> المنحنى ينحني بحدة إلى الأعلى (قطع مكافئ). عند n=100، نحصل على 10,000 عملية — قارن ذلك بـ 100 فقط لـ O(n).</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(n&sup2;) Quadratic Time
+                        Java &mdash; O(n&sup2;) الزمن التربيعي
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(n²) — Quadratic: two nested loops</span>
@@ -2080,15 +2103,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = n&sup2; &nbsp;&mdash;&nbsp; Parabola: grows much faster than linear</h4>
+                        <h4>f(n) = n&sup2; &nbsp;&mdash;&nbsp; قطع مكافئ: ينمو أسرع بكثير من الخطي</h4>
                         <canvas id="chart-quadratic"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#ff9800;">Input Size (n)</th>
-                                    <th style="background:#ff9800;">Operations f(n) = n&sup2;</th>
+                                    <th style="background:#ff9800;">حجم المدخلات (n)</th>
+                                    <th style="background:#ff9800;">العمليات f(n) = n&sup2;</th>
                                 </tr>
                             </thead>
                             <tbody id="table-quadratic"></tbody>
@@ -2101,16 +2124,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="cubic" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(n&sup3;)</span>
-                    <span class="cplx-title">Cubic Time</span>
+                    <span class="cplx-title">الزمن التكعيبي (Cubic Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> Operations grow as the cube of input size. Even more explosive than quadratic. If n doubles, operations multiply by 8!</p>
-                    <p><strong>Real example:</strong> Naive matrix multiplication &mdash; three nested loops each running n times.</p>
-                    <p><strong>Notice in the graph:</strong> The curve rises even more steeply than O(n&sup2;). For n=20, we have 8,000 operations. For n=50, we have 125,000 &mdash; notice how fast it explodes.</p>
+                    <p><strong>ما يعنيه:</strong> تنمو العمليات بمكعب حجم المدخلات. أشد انفجارًا من التربيعي. إذا تضاعف n، تتضاعف العمليات 8 أضعاف!</p>
+                    <p><strong>مثال حقيقي:</strong> ضرب المصفوفات بالطريقة الساذجة — ثلاث حلقات متداخلة تعمل كل منها n مرة.</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> المنحنى يرتفع بصورة أحدّ من O(n&sup2;). عند n=20 نحصل على 8,000 عملية. عند n=50 نحصل على 125,000 — لاحظ مدى سرعة الانفجار.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(n&sup3;) Cubic Time
+                        Java &mdash; O(n&sup3;) الزمن التكعيبي
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(n³) — Cubic: three nested loops</span>
@@ -2126,15 +2149,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = n&sup3; &nbsp;&mdash;&nbsp; Steeper than quadratic, grows very fast</h4>
+                        <h4>f(n) = n&sup3; &nbsp;&mdash;&nbsp; أحدّ من التربيعي، ينمو بسرعة كبيرة</h4>
                         <canvas id="chart-cubic"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#f44336;">Input Size (n)</th>
-                                    <th style="background:#f44336;">Operations f(n) = n&sup3;</th>
+                                    <th style="background:#f44336;">حجم المدخلات (n)</th>
+                                    <th style="background:#f44336;">العمليات f(n) = n&sup3;</th>
                                 </tr>
                             </thead>
                             <tbody id="table-cubic"></tbody>
@@ -2147,16 +2170,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="exponential" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(2&#8319;)</span>
-                    <span class="cplx-title">Exponential Time</span>
+                    <span class="cplx-title">الزمن الأسي (Exponential Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> Operations double with every single increase in n. This is the most explosive growth possible. Every +1 to n multiplies the operations by 2.</p>
-                    <p><strong>Real example:</strong> Recursive Fibonacci without memoization, generating all subsets of a set, brute-force password cracking.</p>
-                    <p><strong>Notice in the graph:</strong> The curve appears almost flat, then shoots straight up like a wall. At n=30, we already have over 1 billion operations &mdash; this is why exponential algorithms are impractical for any meaningful input size.</p>
+                    <p><strong>ما يعنيه:</strong> تتضاعف العمليات مع كل زيادة مفردة في n. هذا أشد نمو انفجاري ممكن. كل +1 في n يضرب العمليات في 2.</p>
+                    <p><strong>مثال حقيقي:</strong> فيبوناتشي التعاودي بدون حفظ (Memoization)، توليد جميع المجموعات الجزئية، تكسير كلمات المرور بالقوة الخام.</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> يبدو المنحنى شبه مستقيم، ثم يرتفع فجأة كالجدار. عند n=30 لدينا أكثر من مليار عملية — لهذا الخوارزميات الأسية غير عملية لأي حجم مدخلات معقول.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(2&#8319;) Exponential Time
+                        Java &mdash; O(2&#8319;) الزمن الأسي
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(2ⁿ) — Exponential: two recursive calls each time</span>
@@ -2167,15 +2190,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = 2&#8319; &nbsp;&mdash;&nbsp; Operations double with every +1 to n</h4>
+                        <h4>f(n) = 2&#8319; &nbsp;&mdash;&nbsp; العمليات تتضاعف مع كل +1 في n</h4>
                         <canvas id="chart-exp"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#9c27b0;">Input Size (n)</th>
-                                    <th style="background:#9c27b0;">Operations f(n) = 2&#8319;</th>
+                                    <th style="background:#9c27b0;">حجم المدخلات (n)</th>
+                                    <th style="background:#9c27b0;">العمليات f(n) = 2&#8319;</th>
                                 </tr>
                             </thead>
                             <tbody id="table-exp"></tbody>
@@ -2188,16 +2211,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="factorial" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(n!)</span>
-                    <span class="cplx-title">Factorial Time</span>
+                    <span class="cplx-title">زمن المضروب (Factorial Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> Operations grow as n factorial: n &times; (n&minus;1) &times; &hellip; &times; 1. Growth is catastrophically fast &mdash; at n=20 that is already 2.4 quadrillion operations.</p>
-                    <p><strong>Real example:</strong> Brute-force permutation &mdash; generating every possible ordering of n items (e.g., the Travelling Salesman Problem solved naively).</p>
-                    <p><strong>Notice in the graph:</strong> Even for tiny n (up to 10), the value explodes dramatically. Factorial algorithms are only practical for very small inputs.</p>
+                    <p><strong>ما يعنيه:</strong> تنمو العمليات بمقدار مضروب n: n &times; (n&minus;1) &times; &hellip; &times; 1. النمو كارثي السرعة — عند n=20 لدينا 2.4 كوادريليون عملية.</p>
+                    <p><strong>مثال حقيقي:</strong> التبديل بالقوة الخام — توليد كل ترتيب ممكن لـ n عنصر (مثل مسألة البائع المتجول حلًا ساذجًا).</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> حتى لأصغر قيم n (حتى 10)، تنفجر القيمة بشكل درامي. خوارزميات المضروب عملية فقط لمدخلات صغيرة جدًا.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(n!) Factorial Time
+                        Java &mdash; O(n!) زمن المضروب
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(n!) — Factorial: generating all permutations</span>
@@ -2215,15 +2238,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = n! &nbsp;&mdash;&nbsp; Catastrophic growth, only practical for very small n</h4>
+                        <h4>f(n) = n! &nbsp;&mdash;&nbsp; نمو كارثي، عملي فقط لـ n صغير جدًا</h4>
                         <canvas id="chart-factorial"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#ff5722;">Input Size (n)</th>
-                                    <th style="background:#ff5722;">Operations f(n) = n!</th>
+                                    <th style="background:#ff5722;">حجم المدخلات (n)</th>
+                                    <th style="background:#ff5722;">العمليات f(n) = n!</th>
                                 </tr>
                             </thead>
                             <tbody id="table-factorial"></tbody>
@@ -2236,16 +2259,16 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             <div id="nton" class="cplx-section">
                 <div class="cplx-header">
                     <span class="cplx-badge">O(n<sup>n</sup>)</span>
-                    <span class="cplx-title">n-to-the-n Time</span>
+                    <span class="cplx-title">زمن n أس n (n-to-the-n Time)</span>
                 </div>
                 <div class="cplx-desc">
-                    <p><strong>What it means:</strong> The theoretical worst-case complexity class. Operations equal n multiplied by itself n times. It grows faster than factorial &mdash; n! &lt; n<sup>n</sup> for all n &gt; 1.</p>
-                    <p><strong>Real example:</strong> Exhaustive enumeration where each of n positions can independently take any of n values. Mostly a theoretical upper bound, rarely seen in practice.</p>
-                    <p><strong>Notice in the graph:</strong> Even at n=8, the value exceeds 16 million. This class defines the mathematical ceiling for complexity analysis.</p>
+                    <p><strong>ما يعنيه:</strong> فئة التعقيد الأسوأ نظريًا. العمليات تساوي n مضروبًا بنفسه n مرة. ينمو أسرع من المضروب — n! &lt; n<sup>n</sup> لكل n &gt; 1.</p>
+                    <p><strong>مثال حقيقي:</strong> الاستعداد الشامل حيث كل موقع من n موقع يمكنه بشكل مستقل أن يأخذ أي من n قيمة. في الغالب حد نظري علوي، نادرًا ما يُرى عمليًا.</p>
+                    <p><strong>لاحظ في الرسم البياني:</strong> حتى عند n=8، تتجاوز القيمة 16 مليونًا. هذه الفئة تُعرّف السقف الرياضي لتحليل التعقيد.</p>
                 </div>
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java &mdash; O(n<sup>n</sup>) Concept
+                        Java &mdash; O(n<sup>n</sup>) المفهوم
                         <span class="code-toggle">&#9660;</span>
                     </div>
 <div class="code-block"><span class="comment">// O(nⁿ) — each of n positions can independently take any of n values</span>
@@ -2263,15 +2286,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 </div>
                 <div class="cplx-viz">
                     <div class="cplx-chart-wrap">
-                        <h4>f(n) = n<sup>n</sup> &nbsp;&mdash;&nbsp; Theoretical worst case, grows faster than factorial</h4>
+                        <h4>f(n) = n<sup>n</sup> &nbsp;&mdash;&nbsp; الحد الأسوأ نظريًا، ينمو أسرع من المضروب</h4>
                         <canvas id="chart-nton"></canvas>
                     </div>
                     <div>
                         <table class="cplx-table">
                             <thead>
                                 <tr>
-                                    <th style="background:#e91e63;">Input Size (n)</th>
-                                    <th style="background:#e91e63;">Operations f(n) = n<sup>n</sup></th>
+                                    <th style="background:#e91e63;">حجم المدخلات (n)</th>
+                                    <th style="background:#e91e63;">العمليات f(n) = n<sup>n</sup></th>
                                 </tr>
                             </thead>
                             <tbody id="table-nton"></tbody>
@@ -2282,88 +2305,88 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
 
             <!-- ── Growth Hierarchy Summary ─────────────────────── -->
             <div class="growth-hierarchy-panel">
-                <h3>The Complete Growth Hierarchy</h3>
-                <p style="margin-bottom:8px; color:#374151;">Listed from <strong>fastest-growing</strong> (most expensive / worst) to <strong>slowest-growing</strong> (cheapest / best). In Big O, the highest entry in an expression <em>dominates</em> everything below it.</p>
+                <h3>التسلسل الهرمي الكامل للنمو</h3>
+                <p style="margin-bottom:8px; color:#374151;">مرتبة من <strong>الأسرع نموًا</strong> (الأكثر تكلفةً / الأسوأ) إلى <strong>الأبطأ نموًا</strong> (الأرخص / الأفضل). في رمز O الكبير، الحدّ الأعلى في التعبير <em>يهيمن</em> على ما دونه.</p>
                 <table class="growth-tbl-m">
                     <thead>
                         <tr>
-                            <th>Rank</th>
+                            <th>الترتيب</th>
                             <th>Big O</th>
-                            <th>Name</th>
-                            <th>Visual Scale</th>
-                            <th>Typical Context</th>
+                            <th>الاسم</th>
+                            <th>المقياس البصري</th>
+                            <th>السياق النموذجي</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="color:#be185d;font-weight:bold;">1 &mdash; Worst</td>
+                            <td style="color:#be185d;font-weight:bold;">1 — الأسوأ</td>
                             <td><span class="growth-fn-m">n<sup>n</sup></span></td>
-                            <td>n-to-the-n</td>
+                            <td>n أس n</td>
                             <td><div class="growth-bar-m" style="width:160px;background:linear-gradient(to right,#be185d,#ec4899);"></div></td>
-                            <td>Theoretical upper bound</td>
+                            <td>الحد الأعلى النظري</td>
                         </tr>
                         <tr>
                             <td style="color:#dc2626;font-weight:bold;">2</td>
                             <td><span class="growth-fn-m">n!</span></td>
-                            <td>factorial</td>
+                            <td>مضروب</td>
                             <td><div class="growth-bar-m" style="width:140px;background:linear-gradient(to right,#dc2626,#ef4444);"></div></td>
-                            <td>Brute-force permutations</td>
+                            <td>تبديلات بالقوة الخام</td>
                         </tr>
                         <tr>
                             <td style="color:#c2410c;font-weight:bold;">3</td>
                             <td><span class="growth-fn-m">2<sup>n</sup></span></td>
-                            <td>exponential</td>
+                            <td>أسي</td>
                             <td><div class="growth-bar-m" style="width:120px;background:linear-gradient(to right,#f97316,#fb923c);"></div></td>
-                            <td>Naive Fibonacci, subsets</td>
+                            <td>فيبوناتشي الساذج، المجموعات الجزئية</td>
                         </tr>
                         <tr>
                             <td style="color:#a16207;font-weight:bold;">4</td>
                             <td><span class="growth-fn-m">n<sup>k</sup> &nbsp;<small>(k&ge;2)</small></span></td>
-                            <td>polynomial (n&sup2;, n&sup3;, &hellip;)</td>
+                            <td>كثيرات الحدود (n&sup2;, n&sup3;, &hellip;)</td>
                             <td><div class="growth-bar-m" style="width:96px;background:linear-gradient(to right,#eab308,#facc15);"></div></td>
-                            <td>Nested loops</td>
+                            <td>حلقات متداخلة</td>
                         </tr>
                         <tr>
                             <td style="color:#15803d;font-weight:bold;">5</td>
                             <td><span class="growth-fn-m">n &middot; log n</span></td>
-                            <td>linearithmic</td>
+                            <td>خطي-لوغاريتمي</td>
                             <td><div class="growth-bar-m" style="width:72px;background:linear-gradient(to right,#22c55e,#4ade80);"></div></td>
-                            <td>Merge sort, heap sort</td>
+                            <td>ترتيب الدمج، ترتيب الكومة</td>
                         </tr>
                         <tr>
                             <td style="color:#1d4ed8;font-weight:bold;">6</td>
                             <td><span class="growth-fn-m">n</span></td>
-                            <td>linear</td>
+                            <td>خطي</td>
                             <td><div class="growth-bar-m" style="width:52px;background:linear-gradient(to right,#3b82f6,#60a5fa);"></div></td>
-                            <td>Single loop over n</td>
+                            <td>حلقة واحدة على n</td>
                         </tr>
                         <tr>
                             <td style="color:#0891b2;font-weight:bold;">7</td>
                             <td><span class="growth-fn-m">&radic;n</span></td>
-                            <td>square root</td>
+                            <td>جذر تربيعي</td>
                             <td><div class="growth-bar-m" style="width:36px;background:linear-gradient(to right,#06b6d4,#22d3ee);"></div></td>
-                            <td>Primality check</td>
+                            <td>اختبار الأولية</td>
                         </tr>
                         <tr>
                             <td style="color:#7e22ce;font-weight:bold;">8</td>
                             <td><span class="growth-fn-m">log n</span></td>
-                            <td>logarithmic</td>
+                            <td>لوغاريتمي</td>
                             <td><div class="growth-bar-m" style="width:22px;background:linear-gradient(to right,#a855f7,#c084fc);"></div></td>
-                            <td>Binary search</td>
+                            <td>البحث الثنائي</td>
                         </tr>
                         <tr>
-                            <td style="color:#374151;font-weight:bold;">9 &mdash; Best</td>
+                            <td style="color:#374151;font-weight:bold;">9 — الأفضل</td>
                             <td><span class="growth-fn-m">1</span></td>
-                            <td>constant</td>
+                            <td>ثابت</td>
                             <td><div class="growth-bar-m" style="width:8px;background:#9ca3af;"></div></td>
-                            <td>Array access, hash lookup</td>
+                            <td>الوصول للمصفوفة، البحث في جدول التجزئة</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="warning-box">
-                <p><strong>&#9888;&#65039; Back to Ahmed and Omar:</strong> Instead of asking "who took 5 seconds?", we now ask: <strong>"What is the Big O of each algorithm?"</strong> If Ahmed's algorithm is O(n&sup2;) and Omar's is O(n log n), then <em>Omar's algorithm is better</em> &mdash; regardless of whose computer is faster or who is the better programmer. The mathematical behavior tells the truth.</p>
+                <p><strong>&#9888;&#65039; العودة إلى أحمد وعمر:</strong> بدلًا من السؤال "من استغرق 5 ثوانٍ؟"، نسأل الآن: <strong>"ما هو رمز O الكبير لكل خوارزمية؟"</strong> إذا كانت خوارزمية أحمد O(n&sup2;) وخوارزمية عمر O(n log n)، فإن <em>خوارزمية عمر أفضل</em> — بصرف النظر عن سرعة حاسوب كل منهما أو مهارته البرمجية. السلوك الرياضي يكشف الحقيقة.</p>
             </div>
         </section>
 
@@ -2373,40 +2396,40 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
         <section id="method">
             <h2 class="section-title">
                 <span class="step-badge">8</span>
-                The Method &mdash; How Do We Find Big O?
+                المنهجية — كيف نجد رمز O الكبير؟
             </h2>
-            <p class="section-subtitle">From Java code &rarr; polynomial &rarr; Big O notation, step by step</p>
+            <p class="section-subtitle">من كود Java &rarr; متعدد حدود &rarr; رمز O الكبير، خطوة بخطوة</p>
 
             <!-- Overview flow -->
             <div class="method-flow">
                 <div class="flow-box">
                     <div class="f-icon">&#129489;&#8205;&#128187;</div>
-                    <div class="f-label">Java Code</div>
-                    <div class="f-sub">The algorithm</div>
+                    <div class="f-label">كود Java</div>
+                    <div class="f-sub">الخوارزمية</div>
                 </div>
-                <div class="flow-arrow">&#8594;</div>
+                <div class="flow-arrow">&#8592;</div>
                 <div class="flow-box">
                     <div class="f-icon">&#128202;</div>
-                    <div class="f-label">Polynomial</div>
-                    <div class="f-sub">Count operations</div>
+                    <div class="f-label">كثيرات الحدود</div>
+                    <div class="f-sub">عدّ العمليات</div>
                 </div>
-                <div class="flow-arrow">&#8594;</div>
+                <div class="flow-arrow">&#8592;</div>
                 <div class="flow-box">
                     <div class="f-icon">&#128269;</div>
-                    <div class="f-label">Highest Term</div>
-                    <div class="f-sub">Drop the rest</div>
+                    <div class="f-label">الحد الأعلى</div>
+                    <div class="f-sub">حذف الباقي</div>
                 </div>
-                <div class="flow-arrow">&#8594;</div>
+                <div class="flow-arrow">&#8592;</div>
                 <div class="flow-box">
                     <div class="f-icon">&#127775;</div>
                     <div class="f-label">Big O</div>
-                    <div class="f-sub">Drop coefficient</div>
+                    <div class="f-sub">حذف المعامل</div>
                 </div>
             </div>
 
             <!-- ── Step 1: The code ─────────────────────── -->
             <div class="story-scene">
-                <p>&#128064; Let us work through a <strong>complete, concrete example</strong> from start to finish. Below is a Java method called <code style="background:#eee;padding:2px 6px;border-radius:4px;">counter(n)</code>. It uses three separate loop sections, each performing a different number of operations depending on <em>n</em>. Before analyzing it, let us first <strong>run it and see the output</strong>.</p>
+                <p>&#128064; لنعمل على <strong>مثال كامل وملموس</strong> من البداية إلى النهاية. أدناه دالة Java تُسمى <code style="background:#eee;padding:2px 6px;border-radius:4px;direction:ltr;display:inline-block;">counter(n)</code>. تستخدم ثلاثة أقسام حلقات منفصلة، يؤدي كل منها عددًا مختلفًا من العمليات وفقًا لـ <em>n</em>. قبل تحليلها، دعنا أولًا <strong>نُشغّلها ونرى الناتج</strong>.</p>
             </div>
 
             <div class="code-container">
@@ -2451,61 +2474,61 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             </div>
 
             <!-- ── Output demo ─────────────────────────── -->
-            <p style="margin: 20px 0 8px;"><strong>&#128064; When n = 5, what does <code style="background:#eee;padding:2px 6px;border-radius:4px;">counter(5)</code> print?</strong></p>
+            <p style="margin: 20px 0 8px;"><strong>&#128064; عندما يكون n = 5، ماذا تطبع <code style="background:#eee;padding:2px 6px;border-radius:4px;direction:ltr;display:inline-block;">counter(5)</code>؟</strong></p>
 
             <div class="output-demo">
                 <span class="out-call">counter(5)</span>
                 <span class="out-arrow">&#8594;</span>
                 <span class="out-val">155</span>
-                <span class="out-note">operations counted</span>
+                <span class="out-note">عملية تم إحصاؤها</span>
             </div>
 
             <!-- ── Connect to polynomial ───────────────── -->
             <div class="big-question">
-                <div class="q-label">&#128161; The Key Insight</div>
-                <div class="q-text">Can we predict <strong>155</strong> without running the code?</div>
-                <div class="q-hint">YES &mdash; by expressing the algorithm as a <strong>polynomial function</strong> of n</div>
+                <div class="q-label">&#128161; الفكرة المحورية</div>
+                <div class="q-text">هل يمكننا التنبؤ بـ <strong>155</strong> دون تشغيل الكود؟</div>
+                <div class="q-hint">نعم — بالتعبير عن الخوارزمية كـ <strong>دالة كثيرات الحدود</strong> في n</div>
             </div>
 
             <!-- ── Code → Polynomial breakdown ───────── -->
-            <p style="margin-bottom: 12px;"><strong>Each section of <code style="background:#eee;padding:2px 6px;border-radius:4px;">counter(n)</code> contributes exactly one term to the polynomial:</strong></p>
+            <p style="margin-bottom: 12px;"><strong>يُسهم كل قسم من أقسام الدالة <code style="background:#eee;padding:2px 6px;border-radius:4px;">counter(n)</code> بحدٍّ واحد في معادلة كثيرات الحدود:</strong></p>
 
             <div class="poly-breakdown">
                 <div class="poly-row poly-r1">
                     <div class="poly-code-col">
-                        <strong>Section A</strong> &mdash; 3 nested loops<br>
-                        Outer: a = 1 to <strong>5</strong> (fixed 5 times)<br>
-                        Inner: i = 1 to <strong>n</strong>, j = 1 to <strong>n</strong><br>
-                        &rarr; 5 &times; n &times; n = <strong>5n&sup2;</strong> increments
+                        <strong>القسم A</strong> — 3 حلقات متداخلة<br>
+                        الخارجية: <code>a = 1</code> إلى <strong>5</strong> (5 مرات ثابتة)<br>
+                        الداخليتان: <code>i = 1</code> إلى <strong>n</strong>، <code>j = 1</code> إلى <strong>n</strong><br>
+                        <span dir="ltr">&larr; 5 &times; n &times; n = <strong>5n&sup2;</strong></span> زيادة
                     </div>
                     <div class="poly-term-col">5n&sup2;</div>
                 </div>
                 <div class="poly-row poly-r2">
                     <div class="poly-code-col">
-                        <strong>Section B</strong> &mdash; 2 nested loops<br>
-                        Outer: a = 1 to <strong>5</strong> (fixed 5 times)<br>
-                        Inner: i = 1 to <strong>n</strong><br>
-                        &rarr; 5 &times; n = <strong>5n</strong> increments
+                        <strong>القسم B</strong> — 2 حلقتان متداخلتان<br>
+                        الخارجية: <code>a = 1</code> إلى <strong>5</strong> (5 مرات ثابتة)<br>
+                        الداخلية: <code>i = 1</code> إلى <strong>n</strong><br>
+                        <span dir="ltr">&larr; 5 &times; n = <strong>5n</strong></span> زيادة
                     </div>
                     <div class="poly-term-col">5n</div>
                 </div>
                 <div class="poly-row poly-r4">
                     <div class="poly-code-col">
-                        <strong>Section C</strong> &mdash; 1 loop (constant)<br>
-                        i = 1 to <strong>5</strong> (never depends on n)<br>
-                        &rarr; always exactly <strong>5</strong> increments
+                        <strong>القسم C</strong> — 1 حلقة (ثابتة)<br>
+                        <code>i = 1</code> إلى <strong>5</strong> (لا تعتمد أبدًا على n)<br>
+                        دائمًا <strong>5</strong> زيادات بالضبط تمامًا
                     </div>
                     <div class="poly-term-col">5</div>
                 </div>
                 <div class="poly-row poly-rtotal">
-                    <div class="poly-code-col">Total operations in <code>counter(n)</code> = sum of all three sections</div>
+                    <div class="poly-code-col">إجمالي العمليات = مجموع الأقسام الثلاثة في الدالة <code>counter(n)</code></div>
                     <div class="poly-term-col">f(n) = 5n&sup2; + 5n + 5</div>
                 </div>
             </div>
 
             <!-- ── Verification ────────────────────────── -->
             <div class="verify-box">
-                <div class="verify-title">&#9989; Proof: substitute n = 5 into the polynomial</div>
+                <div class="verify-title">&#9989; إثبات: عوّض n = 5 في كثيرات الحدود</div>
                 <div class="verify-steps">
                     <span class="v-chip">f(5) = 5(5&sup2;) + 5(5) + 5</span>
                     <span class="v-eq">=</span>
@@ -2515,17 +2538,17 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                     <span class="v-eq">=</span>
                     <span class="v-answer">155</span>
                 </div>
-                <div class="verify-match">&#127881; Exactly matches the output! The polynomial <em>is</em> the algorithm.</div>
+                <div class="verify-match">&#127881; يطابق الناتج تمامًا! كثيرات الحدود <em>هو</em> الخوارزمية.</div>
             </div>
 
             <!-- ── Big O reduction ─────────────────────── -->
-            <p style="margin: 25px 0 12px;"><strong>Now, convert the polynomial to Big O notation — 4 steps:</strong></p>
+            <p style="margin: 25px 0 12px;"><strong>الآن، حوّل كثيرات الحدود إلى رمز O الكبير — 4 خطوات:</strong></p>
 
             <div class="bigo-reduce">
                 <div class="bigo-step">
                     <div class="bigo-badge">1</div>
                     <div class="bigo-info">
-                        <div class="bigo-label">Start with the full polynomial</div>
+                        <div class="bigo-label">ابدأ بكثيرات الحدود الكامل</div>
                         <div class="bigo-expr">f(n) = 5n&sup2; + 5n + 5</div>
                     </div>
                     <div class="bigo-result">f(n)</div>
@@ -2533,15 +2556,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <div class="bigo-step">
                     <div class="bigo-badge">2</div>
                     <div class="bigo-info">
-                        <div class="bigo-label">Identify the highest-order term</div>
-                        <div class="bigo-expr"><span class="dominant">5n&sup2;</span> + 5n + 5 &nbsp;&nbsp;&#8592; the <strong>n&sup2;</strong> term grows fastest</div>
+                        <div class="bigo-label">حدّد الحدّ الأعلى درجة</div>
+                        <div class="bigo-expr"><span class="dominant">5n&sup2;</span> + 5n + 5 &nbsp;&nbsp;&#8592; الحدّ <strong>n&sup2;</strong> ينمو بأسرع ما يكون</div>
                     </div>
                     <div class="bigo-result" style="color:#d97706;">5n&sup2;</div>
                 </div>
                 <div class="bigo-step bigo-hl">
                     <div class="bigo-badge">3</div>
                     <div class="bigo-info">
-                        <div class="bigo-label">Drop all lower-order terms (they become negligible)</div>
+                        <div class="bigo-label">احذف جميع الحدود الأدنى درجة (تصبح ضئيلة الأثر)</div>
                         <div class="bigo-expr">5n&sup2; + <span class="dropped">5n + 5</span></div>
                     </div>
                     <div class="bigo-result">5n&sup2;</div>
@@ -2549,7 +2572,7 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <div class="bigo-step bigo-hl">
                     <div class="bigo-badge">4</div>
                     <div class="bigo-info">
-                        <div class="bigo-label">Drop the coefficient (only the shape matters)</div>
+                        <div class="bigo-label">احذف المعامل (الشكل هو ما يهم)</div>
                         <div class="bigo-expr"><span class="dropped">5</span> &times; n&sup2; &nbsp;&rarr;&nbsp; <span class="dominant">n&sup2;</span></div>
                     </div>
                     <div class="bigo-result">n&sup2;</div>
@@ -2557,8 +2580,8 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <div class="bigo-step bigo-final">
                     <div class="bigo-badge">&#10003;</div>
                     <div class="bigo-info">
-                        <div class="bigo-label">Big O result</div>
-                        <div class="bigo-expr"><span class="dominant">counter(n) is&nbsp; O(n&sup2;) &mdash; Quadratic</span></div>
+                        <div class="bigo-label">نتيجة رمز O الكبير</div>
+                        <div class="bigo-expr"><span class="dominant">counter(n) هو&nbsp; O(n&sup2;) — تربيعي</span></div>
                     </div>
                     <div class="bigo-result">O(n&sup2;)</div>
                 </div>
@@ -2566,13 +2589,13 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
 
             <!-- ── Proof bridge ────────────────────────────────────────── -->
             <div style="margin: 36px 0 0; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border-radius: 16px; padding: 1.8rem 2rem;">
-                <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #a5b4fc; margin-bottom: 0.7rem;">&#128204; But wait — a mathematician would ask:</div>
-                <div style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin-bottom: 0.9rem;">How do you <em>know</em> that's valid? &nbsp;Prove it.</div>
+                <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #a5b4fc; margin-bottom: 0.7rem;">&#128204; لكن عالم الرياضيات سيسأل:</div>
+                <div style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin-bottom: 0.9rem;">كيف <em>تعرف</em> أن هذا صحيح؟ &nbsp;أثبت ذلك.</div>
                 <p style="font-size: 0.97rem; color: #c7d2fe; line-height: 1.8; margin-bottom: 0.7rem;">
-                    We just concluded <code style="background:rgba(255,255,255,0.12); color:#fde68a; padding:0.15rem 0.45rem; border-radius:5px;">counter(n) = O(n²)</code> by intuition — keep the biggest term, drop everything else. That is a useful shortcut, but it is <strong style="color:#fbbf24;">not a proof</strong>.
+                    استنتجنا للتو أن <code style="background:rgba(255,255,255,0.12); color:#fde68a; padding:0.15rem 0.45rem; border-radius:5px;">counter(n) = O(n²)</code> بالحدس — احتفظ بالحد الأكبر واحذف الباقي. هذا اختصار مفيد، لكنه <strong style="color:#fbbf24;">ليس إثباتًا</strong>.
                 </p>
                 <p style="font-size: 0.97rem; color: #c7d2fe; line-height: 1.8; margin: 0;">
-                    To make it rigorous, we must find concrete values of <strong style="color:#6ee7b7;">C</strong> and <strong style="color:#f9a8d4;">n₀</strong> and show the inequality holds. That is exactly what we do next.
+                    لجعله صارمًا، يجب إيجاد قيم محددة لـ <strong style="color:#6ee7b7;">C</strong> و<strong style="color:#f9a8d4;">n₀</strong> وإثبات أن المتراجحة صحيحة. هذا بالضبط ما نفعله في الخطوة التالية.
                 </p>
             </div>
 
@@ -2583,19 +2606,19 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <section id="p1-intuition">
                     <div class="sec-hdr">
                         <div class="step-num blue">&#128161;</div>
-                        <h2>What Does "O(n&sup2;)" Mean Visually?</h2>
+                        <h2>ماذا يعني "O(n&sup2;)" بصريًا؟</h2>
                     </div>
                     <div class="card blue-card">
                         <p style="font-size:0.92rem; margin-bottom:0.8rem;">
-                            When we say <strong>f(n) is O(g(n))</strong>, we mean we can find a multiple of g(n) that eventually grows <em>faster</em> than f(n) and stays above it forever after some point n&#8320;.
+                            عندما نقول <strong>f(n) هو O(g(n))</strong>، نعني أنه يمكننا إيجاد مضاعف من g(n) يكبر في النهاية <em>أسرع</em> من f(n) ويبقى فوقه إلى الأبد بعد نقطة معينة n&#8320;.
                         </p>
-                        <p style="font-size:0.92rem; margin-bottom:0.8rem;">In our case:</p>
-                        <ul style="font-size:0.9rem; padding-left:1.3rem; line-height:2;">
-                            <li><span style="color:#dc2626; font-weight:700;">Red curve</span> = our function <code>f(n) = 5n&sup2; + 5n + 5</code></li>
-                            <li><span style="color:#16a34a; font-weight:700;">Green curve</span> = our bound <code>C &middot; n&sup2;</code> &mdash; we need to find a C that stays above the red curve</li>
-                            <li><span style="color:#7c3aed; font-weight:700;">n&#8320;</span> = the point after which the green curve is always &ge; the red curve</li>
+                        <p style="font-size:0.92rem; margin-bottom:0.8rem;">في حالتنا:</p>
+                        <ul style="font-size:0.9rem; padding-right:1.3rem; line-height:2;">
+                            <li><span style="color:#dc2626; font-weight:700;">المنحنى الأحمر</span> = دالتنا <code>f(n) = 5n&sup2; + 5n + 5</code></li>
+                            <li><span style="color:#16a34a; font-weight:700;">المنحنى الأخضر</span> = الحد العلوي <code>C &middot; n&sup2;</code> — نحتاج إيجاد C يبقى فوق المنحنى الأحمر</li>
+                            <li><span style="color:#7c3aed; font-weight:700;">n&#8320;</span> = النقطة التي يكون بعدها المنحنى الأخضر دائمًا &ge; المنحنى الأحمر</li>
                         </ul>
-                        <p class="note" style="margin-top:0.8rem;">The two curves may intersect at n&#8320; &mdash; what matters is that for all n &ge; n&#8320;, the green curve dominates.</p>
+                        <p class="note" style="margin-top:0.8rem;">قد يتقاطع المنحنيان عند n&#8320; — ما يهم هو أنه لكل n &ge; n&#8320;، يهيمن المنحنى الأخضر.</p>
                     </div>
                 </section>
 
@@ -2603,29 +2626,29 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <section id="p1-definition">
                     <div class="sec-hdr">
                         <div class="step-num blue">&#128214;</div>
-                        <h2>Formal Definition of Big O</h2>
+                        <h2 id="formal">التعريف الرسمي لرمز O الكبير (Big O)</h2>
                     </div>
                     <div class="def-box">
-                        <div class="def-title">Official Definition</div>
+                        <div class="def-title">التعريف الرسمي</div>
                         <div class="formula">f(n) is O(g(n)) &nbsp; &#x27FA; &nbsp; &exist; positive constants C and n&#8320; such that:</div>
                         <div class="formula" style="font-size:1.15rem; color:#1e3a8a;">f(n) &le; C &middot; g(n) &nbsp;&nbsp; for all n &ge; n&#8320;</div>
                         <div style="margin-top:1rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.8rem;">
                             <div style="background:white; border-radius:8px; padding:0.8rem; text-align:center; border:1px solid #bfdbfe;">
                                 <div style="font-family:'Fira Code','Courier New',monospace; font-size:1.1rem; color:#2563eb; font-weight:700;">C</div>
-                                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">A positive constant multiplier we must find</div>
+                                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">ثابت موجب مضاعف يجب إيجاده</div>
                             </div>
                             <div style="background:white; border-radius:8px; padding:0.8rem; text-align:center; border:1px solid #bfdbfe;">
                                 <div style="font-family:'Fira Code','Courier New',monospace; font-size:1.1rem; color:#7c3aed; font-weight:700;">n&#8320;</div>
-                                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">The starting point from which the bound holds</div>
+                                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">نقطة البداية التي يسري منها الحد</div>
                             </div>
                             <div style="background:white; border-radius:8px; padding:0.8rem; text-align:center; border:1px solid #bfdbfe;">
                                 <div style="font-family:'Fira Code','Courier New',monospace; font-size:1.1rem; color:#dc2626; font-weight:700;">f(n) &le; C&middot;g(n)</div>
-                                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">The inequality that must be satisfied</div>
+                                <div style="font-size:0.78rem; color:#6b7280; margin-top:0.2rem;">المتراجحة التي يجب إشباعها</div>
                             </div>
                         </div>
                     </div>
                     <div class="card amber-card">
-                        <p style="font-size:0.9rem;"><strong>Our goal:</strong> Show that <code>5n&sup2; + 5n + 5 &le; C &middot; n&sup2;</code> for some positive C and for all n &ge; n&#8320;. We need to find the <strong>exact values of C</strong> and <strong>n&#8320;</strong>.</p>
+                        <p style="font-size:0.9rem;"><strong>هدفنا:</strong> إثبات أن <code>5n&sup2; + 5n + 5 &le; C &middot; n&sup2;</code> لبعض C الموجب ولكل n &ge; n&#8320;. نحتاج إيجاد <strong>القيم الدقيقة لـ C</strong> و<strong>n&#8320;</strong>.</p>
                     </div>
                 </section>
 
@@ -2633,37 +2656,37 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <section id="p1-step1">
                     <div class="sec-hdr">
                         <div class="step-num green">1</div>
-                        <h2>Step 1 &mdash; Find the Constant C</h2>
+                        <h2>الخطوة 1 — إيجاد الثابت C</h2>
                     </div>
                     <div class="card green-card">
                         <p style="font-size:0.9rem; margin-bottom:1rem;">
-                            <strong>Strategy (the standard method):</strong> Replace every term in f(n) with something <em>larger</em> that uses only n&sup2;. This gives us a clean upper bound of the form <code>C &middot; n&sup2;</code>.
+                            <strong>الاستراتيجية (الطريقة القياسية):</strong> استبدل كل حد في f(n) بشيء <em>أكبر</em> يستخدم n&sup2; فقط. يمنحنا هذا حدًّا عليًا نظيفًا من الشكل <code>C &middot; n&sup2;</code>.
                         </p>
                         <div class="ineq-chain">
                             <div class="ineq-row">
                                 <span class="sym"></span>
                                 <span class="expr">f(n) &nbsp;=&nbsp; <strong>5n&sup2; &nbsp;+&nbsp; 5n &nbsp;+&nbsp; 5</strong></span>
-                                <span class="reason">original function</span>
+                                <span class="reason">الدالة الأصلية</span>
                             </div>
                             <div class="ineq-row">
                                 <span class="sym">&le;</span>
                                 <span class="expr"><strong>5n&sup2;</strong> &nbsp;+&nbsp; <span class="hi">5n&sup2;</span> &nbsp;+&nbsp; <span class="hi">5n&sup2;</span></span>
-                                <span class="reason">5n &le; 5n&sup2; and 5 &le; 5n&sup2; &nbsp;for n &ge; 1</span>
+                                <span class="reason">5n &le; 5n&sup2; و 5 &le; 5n&sup2; &nbsp;لكل n &ge; 1</span>
                             </div>
                             <div class="ineq-row">
                                 <span class="sym">=</span>
                                 <span class="expr"><span class="result">(5 + 5 + 5) &middot; n&sup2; &nbsp;=&nbsp; 15n&sup2;</span></span>
-                                <span class="reason">collect coefficients</span>
+                                <span class="reason">جمع المعاملات</span>
                             </div>
                         </div>
-                        <div style="font-size:0.87rem; color:#6b7280; margin:0.6rem 0 0.4rem; padding-left:0.3rem;">
-                            <strong>Why is 5n &le; 5n&sup2;?</strong> Because for any n &ge; 1, we have n &le; n&sup2;, so 5n &le; 5n&sup2;. &nbsp;&#10003;<br>
-                            <strong>Why is 5 &le; 5n&sup2;?</strong> Because for any n &ge; 1, we have 1 &le; n&sup2;, so 5 &le; 5n&sup2;. &nbsp;&#10003;
+                        <div style="font-size:0.87rem; color:#6b7280; margin:0.6rem 0 0.4rem; padding-right:0.3rem;">
+                            <strong>لماذا 5n &le; 5n&sup2;؟</strong> لأنه لكل n &ge; 1، n &le; n&sup2;، إذن 5n &le; 5n&sup2;. &nbsp;&#10003;<br>
+                            <strong>لماذا 5 &le; 5n&sup2;؟</strong> لأنه لكل n &ge; 1، 1 &le; n&sup2;، إذن 5 &le; 5n&sup2;. &nbsp;&#10003;
                         </div>
                         <div class="answer-box">
                             <div class="a-icon">&#127919;</div>
                             <div class="a-content">
-                                <div class="a-label">We found C</div>
+                                <div class="a-label">وجدنا C</div>
                                 <div class="a-val">C = 15 &nbsp;&nbsp;&rarr;&nbsp;&nbsp; 5n&sup2; + 5n + 5 &le; 15n&sup2;</div>
                             </div>
                         </div>
@@ -2674,46 +2697,46 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <section id="p1-step2">
                     <div class="sec-hdr">
                         <div class="step-num purple">2</div>
-                        <h2>Step 2 &mdash; Find n&#8320; (Verify the Inequality)</h2>
+                        <h2>الخطوة 2 — إيجاد n&#8320; (التحقق من المتراجحة)</h2>
                     </div>
                     <div class="card purple-card">
                         <p style="font-size:0.9rem; margin-bottom:1rem;">
-                            <strong>Strategy:</strong> We always start by trying <strong>n = 1</strong>. If the inequality <code>f(1) &le; C &middot; g(1)</code> is true, then n&#8320; = 1. If not, try n = 2, 3, &hellip; until it holds.
+                            <strong>الاستراتيجية:</strong> نبدأ دائمًا بتجربة <strong>n = 1</strong>. إذا كانت المتراجحة <code>f(1) &le; C &middot; g(1)</code> صحيحة، فإن n&#8320; = 1. وإلا، نجرب n = 2, 3, &hellip; حتى تتحقق.
                         </p>
                         <div class="ineq-chain" style="background:#f5f3ff; border-color:#c4b5fd;">
-                            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#7c3aed; margin-bottom:0.5rem;">Try n = 1:</div>
+                            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#7c3aed; margin-bottom:0.5rem;">نجرب n = 1:</div>
                             <div class="ineq-row">
-                                <span class="sym">LHS:</span>
+                                <span class="sym">الطرف الأيسر:</span>
                                 <span class="expr">5(1&sup2;) + 5(1) + 5 &nbsp;=&nbsp; 5 + 5 + 5 &nbsp;=&nbsp; <strong>15</strong></span>
                             </div>
                             <div class="ineq-row">
-                                <span class="sym">RHS:</span>
+                                <span class="sym">الطرف الأيمن:</span>
                                 <span class="expr">15 &middot; (1&sup2;) &nbsp;=&nbsp; <strong>15</strong></span>
                             </div>
                             <div class="ineq-row" style="border-top:1px dashed #c4b5fd; padding-top:0.6rem; margin-top:0.3rem;">
                                 <span class="sym">&rArr;</span>
                                 <span class="expr"><strong>15 &le; 15</strong></span>
-                                <span class="reason" style="background:#ede9fe; color:#7c3aed;">&#10003; TRUE (equality holds!)</span>
+                                <span class="reason" style="background:#ede9fe; color:#7c3aed;">&#10003; صحيح (المساواة قائمة!)</span>
                             </div>
                         </div>
                         <div class="verify-box">
-                            <div class="vb-title">&#128270; Verification at n = 1</div>
+                            <div class="vb-title">&#128270; التحقق عند n = 1</div>
                             <div class="vb-calc">
                                 f(1) = 5&middot;1&sup2; + 5&middot;1 + 5 = 5 + 5 + 5 = 15<br>
                                 C&middot;g(1) = 15&middot;1&sup2; = 15<br><br>
-                                15 &le; 15 &rarr; <strong style="color:#16a34a;">TRUE &#10003;</strong>
+                                15 &le; 15 &rarr; <strong style="color:#16a34a;">صحيح &#10003;</strong>
                             </div>
-                            <p class="vb-result">The inequality holds at n = 1, so n&#8320; = 1.</p>
+                            <p class="vb-result">المتراجحة صحيحة عند n = 1، إذن n&#8320; = 1.</p>
                         </div>
                         <div class="answer-box" style="background:#f5f3ff; border-color:#c4b5fd;">
                             <div class="a-icon">&#128205;</div>
                             <div class="a-content">
-                                <div class="a-label" style="color:#7c3aed;">We found n&#8320;</div>
-                                <div class="a-val">n&#8320; = 1 &nbsp;&nbsp;&rarr;&nbsp;&nbsp; The bound holds for all n &ge; 1</div>
+                                <div class="a-label" style="color:#7c3aed;">وجدنا n&#8320;</div>
+                                <div class="a-val">n&#8320; = 1 &nbsp;&nbsp;&rarr;&nbsp;&nbsp; الحد ساري لكل n &ge; 1</div>
                             </div>
                         </div>
                         <p class="note" style="margin-top:0.8rem;">
-                            &#128161; Note: At n = 1 the two curves are <em>equal</em> (both = 15). For all n &gt; 1, the bound C&middot;n&sup2; = 15n&sup2; grows strictly faster than 5n&sup2; + 5n + 5, so the inequality holds for all n &ge; 1.
+                            &#128161; ملاحظة: عند n = 1 المنحنيان <em>متساويان</em> (كلاهما = 15). لكل n &gt; 1، يكبر الحد C&middot;n&sup2; = 15n&sup2; بصورة أسرع من 5n&sup2; + 5n + 5، فتبقى المتراجحة صحيحة لكل n &ge; 1.
                         </p>
                     </div>
                 </section>
@@ -2722,33 +2745,33 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <section id="p1-graph">
                     <div class="sec-hdr">
                         <div class="step-num red">&#128200;</div>
-                        <h2>Graph &mdash; Visualizing the Two Curves</h2>
+                        <h2>الرسم البياني — تصور المنحنيين</h2>
                     </div>
                     <div class="graph-wrap">
                         <h3>f(n) = 5n&sup2; + 5n + 5 &nbsp;vs&nbsp; C &middot; n&sup2; = 15n&sup2;</h3>
-                        <p>Drag the slider to change C and watch how the green curve moves. At C = 15 (our proof value), they touch at n&#8320; = 1 and the green is always above.</p>
+                        <p>اسحب المنزلق لتغيير C وشاهد كيف يتحرك المنحنى الأخضر. عند C = 15 (قيمة الإثبات)، يتلامسان عند n&#8320; = 1 ويبقى الأخضر دائمًا أعلى.</p>
                         <canvas id="p1-mainCanvas" width="820" height="420"></canvas>
                         <div class="legend">
                             <div class="legend-item"><div class="legend-dot red"></div> f(n) = 5n&sup2; + 5n + 5</div>
-                            <div class="legend-item"><div class="legend-dot green"></div> C &middot; n&sup2; (upper bound)</div>
-                            <div class="legend-item"><div class="legend-dot n0"></div> n&#8320; = 1 (starting point)</div>
+                            <div class="legend-item"><div class="legend-dot green"></div> C &middot; n&sup2; (الحد العلوي)</div>
+                            <div class="legend-item"><div class="legend-dot n0"></div> n&#8320; = 1 (نقطة البداية)</div>
                         </div>
                         <div class="controls">
                             <div class="ctrl-group">
-                                <label>Constant C</label>
+                                <label>الثابت C</label>
                                 <input type="range" id="p1-cSlider" min="5" max="30" step="0.5" value="15" />
                                 <span class="val-display">C = <span id="p1-cVal">15</span></span>
                             </div>
                             <div class="ctrl-group">
-                                <label>Zoom (n_max)</label>
+                                <label>التكبير (n_max)</label>
                                 <input type="range" id="p1-nSlider" min="3" max="12" step="1" value="7" />
                                 <span class="val-display">n_max = <span id="p1-nVal">7</span></span>
                             </div>
                         </div>
                     </div>
                     <div class="graph-wrap">
-                        <h3>Zoomed View &mdash; Around n&#8320; = 1</h3>
-                        <p>Here we zoom in close to see exactly where and how the green curve overtakes the red curve.</p>
+                        <h3>عرض مقرّب — حول n&#8320; = 1</h3>
+                        <p>هنا نقترب لنرى بالضبط أين وكيف يتخطى المنحنى الأخضر المنحنى الأحمر.</p>
                         <canvas id="p1-zoomCanvas" width="820" height="280"></canvas>
                     </div>
                 </section>
@@ -2757,11 +2780,11 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <section id="p1-table">
                     <div class="sec-hdr">
                         <div class="step-num amber">&#128203;</div>
-                        <h2>Values Table &mdash; Confirming the Inequality</h2>
+                        <h2>جدول القيم — تأكيد المتراجحة</h2>
                     </div>
                     <div class="card amber-card">
                         <p style="font-size:0.88rem; margin-bottom:0.8rem;">
-                            The table below shows f(n) and 15n&sup2; for each n. The green row is n&#8320; = 1 &mdash; notice how at n = 1 they are equal, and from n = 2 onward 15n&sup2; is strictly larger.
+                            يوضح الجدول أدناه f(n) و 15n&sup2; لكل قيمة n. الصف الأخضر هو n&#8320; = 1 — لاحظ كيف يكونان متساويين عند n = 1، ومن n = 2 فصاعدًا يكون 15n&sup2; أكبر بصرامة.
                         </p>
                         <div class="table-wrap">
                             <table>
@@ -2770,8 +2793,8 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                                         <th>n</th>
                                         <th>f(n) = 5n&sup2; + 5n + 5</th>
                                         <th>C &middot; n&sup2; = 15n&sup2;</th>
-                                        <th>f(n) &le; 15n&sup2;?</th>
-                                        <th>Difference (15n&sup2; &minus; f(n))</th>
+                                        <th>f(n) &le; 15n&sup2;؟</th>
+                                        <th>الفرق (15n&sup2; &minus; f(n))</th>
                                     </tr>
                                 </thead>
                                 <tbody id="p1-tableBody"></tbody>
@@ -2784,10 +2807,10 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 <section id="p1-conclusion">
                     <div class="sec-hdr">
                         <div class="step-num green">&#10003;</div>
-                        <h2>Conclusion &mdash; The Formal Proof</h2>
+                        <h2>الخلاصة — الإثبات الرسمي</h2>
                     </div>
                     <div class="p1-conclusion">
-                        <div class="c-label">&there4; Therefore &mdash; By definition of Big O</div>
+                        <div class="c-label">&there4; إذن — بتعريف رمز O الكبير</div>
                         <div class="c-statement">
                             Since &nbsp;<span class="hl-fn">5n&sup2; + 5n + 5</span>&nbsp; &le; &nbsp;<span class="hl-c">15 &middot; n&sup2;</span>&nbsp; for all n &ge; <span class="hl-c">1</span>,<br><br>
                             with &nbsp;<span class="hl-c">C = 15</span>&nbsp; and &nbsp;<span class="hl-c">n&#8320; = 1</span>&nbsp;,<br><br>
@@ -2795,28 +2818,28 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                         </div>
                     </div>
                     <div class="card" style="margin-top:1.2rem; background:#f9fafb;">
-                        <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.9rem; color:#111827;">Summary &mdash; What we did in 3 steps</h3>
+                        <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.9rem; color:#111827;">الملخص — ما فعلناه في 3 خطوات</h3>
                         <div style="display:flex; flex-direction:column; gap:0.7rem;">
                             <div style="display:flex; gap:0.9rem; align-items:flex-start;">
                                 <div style="background:#dcfce7; color:#16a34a; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex-shrink:0; margin-top:2px;">1</div>
-                                <div style="font-size:0.88rem;"><strong>Found C:</strong> Replaced each non-dominant term with <code>something &middot; n&sup2;</code> to get an upper bound of <code>15n&sup2;</code>. So C = 15.</div>
+                                <div style="font-size:0.88rem;"><strong>وجدنا C:</strong> استبدلنا كل حد غير مهيمن بـ <code>شيء &middot; n&sup2;</code> للحصول على الحد العلوي <code>15n&sup2;</code>. إذن C = 15.</div>
                             </div>
                             <div style="display:flex; gap:0.9rem; align-items:flex-start;">
                                 <div style="background:#ede9fe; color:#7c3aed; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex-shrink:0; margin-top:2px;">2</div>
-                                <div style="font-size:0.88rem;"><strong>Found n&#8320;:</strong> Plugged in n = 1 and verified the inequality <code>15 &le; 15</code> is true. So n&#8320; = 1.</div>
+                                <div style="font-size:0.88rem;"><strong>وجدنا n&#8320;:</strong> عوّضنا n = 1 وتحققنا من أن المتراجحة <code>15 &le; 15</code> صحيحة. إذن n&#8320; = 1.</div>
                             </div>
                             <div style="display:flex; gap:0.9rem; align-items:flex-start;">
                                 <div style="background:#dbeafe; color:#2563eb; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.8rem; flex-shrink:0; margin-top:2px;">3</div>
-                                <div style="font-size:0.88rem;"><strong>Wrote the conclusion:</strong> By definition of Big O, since we found C and n&#8320;, <code>5n&sup2; + 5n + 5 = O(n&sup2;)</code> is proven. &#10003;</div>
+                                <div style="font-size:0.88rem;"><strong>كتبنا الاستنتاج:</strong> بتعريف رمز O الكبير، بما أننا وجدنا C و n&#8320;، فإن <code>5n&sup2; + 5n + 5 = O(n&sup2;)</code> ثابتة. &#10003;</div>
                             </div>
                         </div>
                     </div>
                     <div class="card amber-card" style="margin-top:1rem;">
                         <p style="font-size:0.9rem; margin-bottom:0.3rem;">
-                            <strong>&#127919; Is O(n&sup2;) the tightest bound?</strong> Yes! The dominant term of <code>5n&sup2; + 5n + 5</code> is <code>5n&sup2;</code>. We drop constants and lower-order terms &rarr; <code>O(n&sup2;)</code>. That is the tightest possible Big O class.
+                            <strong>&#127919; هل O(n&sup2;) أضيق حد ممكن؟</strong> نعم! الحد المهيمن في <code>5n&sup2; + 5n + 5</code> هو <code>5n&sup2;</code>. نحذف الثوابت والحدود الأدنى درجة &rarr; <code>O(n&sup2;)</code>. هذا أضيق فئة Big O ممكنة.
                         </p>
                         <p style="font-size:0.87rem; color:#6b7280;">
-                            We could also say <code>5n&sup2; + 5n + 5 = O(n&sup3;)</code> or <code>O(n&sup2;&sup2;)</code>, but those are loose bounds. The tightest is <code>O(n&sup2;)</code>.
+                            يمكننا أيضًا القول <code>5n&sup2; + 5n + 5 = O(n&sup3;)</code> أو <code>O(n&sup2;&sup2;)</code>، لكنها حدود غير دقيقة. الأدق هو <code>O(n&sup2;)</code>.
                         </p>
                     </div>
                 </section>
@@ -2828,20 +2851,20 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
 
     <!-- ══ FOOTER PAGE NAVIGATION ═══════════════════════ -->
     <div class="page-link-bar" style="border-top: 2px solid rgba(255,255,255,0.1);">
-        <a href="../index.html" class="plb-nav-btn home-btn">🏠 Home</a>
+        <a href="algorithm-analysis-interactive-ar.html" class="plb-nav-btn next-btn">&#128221; انتقل إلى التمارين &nbsp;&#8592;</a>
         <div class="plb-divider"></div>
         <div class="plb-center">
-            <span class="plb-label">Finished reading the theory?</span>
-            <span class="plb-title">Now go practice what you learned</span>
+            <span class="plb-label">أنهيت قراءة النظرية؟</span>
+            <span class="plb-title">طبّق ما تعلمته الآن</span>
         </div>
         <div class="plb-divider"></div>
-        <a href="algorithm-analysis-interactive.html" class="plb-nav-btn next-btn">📝 Go to Exercises &nbsp;→</a>
+        <a href="../index.html" class="plb-nav-btn home-btn">&#127968; الرئيسية</a>
     </div>
 
     <footer>
-        <p><strong>CPCS 204</strong> &mdash; Data Structures I</p>
-        <p>Faculty of Computing and Information Technology &mdash; King Abdulaziz University</p>
-        <p>Prepared by Dr. Almalawi</p>
+        <p><strong>CPCS 204</strong> &mdash; هياكل البيانات I</p>
+        <p>كلية الحوسبة وتقنية المعلومات &mdash; جامعة الملك عبدالعزيز</p>
+        <p>إعداد د. المالوي</p>
     </footer>
 
 </div><!-- end .container -->
@@ -2891,15 +2914,15 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                     tooltip: { callbacks: { label: c => {
                         const x = fmtN(c.parsed.x);
                         const y = yFmt ? yFmt(c.parsed.y) : c.parsed.y.toLocaleString();
-                        return `  n = ${x}   →   ops = ${y}`;
+                        return `  n = ${x}   →   عمليات = ${y}`;
                     }}}
                 },
                 scales: {
                     x: { type: 'linear',
-                         title: { display: true, text: 'Input Size  (n)', font: { size: 13, weight: 'bold' } },
+                         title: { display: true, text: 'حجم المدخلات  (n)', font: { size: 13, weight: 'bold' } },
                          grid: { color: 'rgba(0,0,0,0.05)' },
                          ticks: { maxTicksLimit: 8, callback: v => fmtN(v) } },
-                    y: { title: { display: true, text: 'Number of Operations', font: { size: 13, weight: 'bold' } },
+                    y: { title: { display: true, text: 'عدد العمليات', font: { size: 13, weight: 'bold' } },
                          grid: { color: 'rgba(0,0,0,0.05)' },
                          ticks: { callback: v => yFmt ? yFmt(v) : v.toLocaleString() } }
                 }
@@ -2980,7 +3003,7 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
                 const tr = document.createElement('tr');
                 if (n === 0) tr.className = 'before-n0';
                 if (n === 1) tr.className = 'highlight-row';
-                tr.innerHTML = `<td>${n}</td><td>${fn}</td><td>${gn}</td><td>${fn <= gn ? '&#10003; Yes' : '&#10007; No'}</td><td>${diff >= 0 ? '+' : ''}${diff}</td>`;
+                tr.innerHTML = `<td>${n}</td><td>${fn}</td><td>${gn}</td><td>${fn <= gn ? '&#10003; نعم' : '&#10007; لا'}</td><td>${diff >= 0 ? '+' : ''}${diff}</td>`;
                 p1_tbody.appendChild(tr);
             }
         }
@@ -3002,25 +3025,25 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             for (let i = 0; i <= 5; i++) {
                 const yv = (yMax / 5) * i, yPx = toY(yv);
                 ctx.beginPath(); ctx.moveTo(pad.left, yPx); ctx.lineTo(pad.left + plotW, yPx); ctx.stroke();
-                ctx.fillStyle = '#9ca3af'; ctx.font = '11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'right';
+                ctx.fillStyle = '#9ca3af'; ctx.font = '11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'right';
                 ctx.fillText(Math.round(yv), pad.left - 8, yPx + 4);
             }
             for (let n = 0; n <= nMax; n++) {
                 const xPx = toX(n);
                 ctx.beginPath(); ctx.moveTo(xPx, pad.top); ctx.lineTo(xPx, pad.top + plotH); ctx.stroke();
-                ctx.fillStyle = '#9ca3af'; ctx.font = '11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+                ctx.fillStyle = '#9ca3af'; ctx.font = '11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'center';
                 ctx.fillText(n, xPx, pad.top + plotH + 18);
             }
             ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
             ctx.beginPath(); ctx.moveTo(pad.left, pad.top); ctx.lineTo(pad.left, pad.top + plotH);
             ctx.moveTo(pad.left - 1, pad.top + plotH); ctx.lineTo(pad.left + plotW, pad.top + plotH); ctx.stroke();
-            ctx.fillStyle = '#374151'; ctx.font = 'bold 12px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'center';
-            ctx.fillText('n  (input size)', pad.left + plotW / 2, H - 8);
+            ctx.fillStyle = '#374151'; ctx.font = 'bold 12px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText('n  (حجم المدخلات)', pad.left + plotW / 2, H - 8);
             ctx.save(); ctx.translate(14, pad.top + plotH / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('f(n)', 0, 0); ctx.restore();
             const n0x = toX(1);
             ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
             ctx.beginPath(); ctx.moveTo(n0x, pad.top); ctx.lineTo(n0x, pad.top + plotH); ctx.stroke();
-            ctx.setLineDash([]); ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'left';
+            ctx.setLineDash([]); ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'left';
             ctx.fillText('n\u2080 = 1', n0x + 4, pad.top + 14);
             function plotCurve(fn, color, lw) {
                 ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.beginPath(); let first = true;
@@ -3035,11 +3058,11 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             plotCurve(n => p1_f(n), '#dc2626', 3);
             const meetX = toX(1), meetY = toY(p1_f(1));
             ctx.fillStyle = '#7c3aed'; ctx.beginPath(); ctx.arc(meetX, meetY, 6, 0, 2 * Math.PI); ctx.fill();
-            ctx.fillStyle = '#4c1d95'; ctx.font = 'bold 11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+            ctx.fillStyle = '#4c1d95'; ctx.font = 'bold 11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'center';
             ctx.fillText('(1, ' + p1_f(1) + ')', meetX, meetY - 12);
             const labelN = nMax * 0.82;
-            if (p1_f(labelN) < yMax * 0.95) { ctx.fillStyle = '#dc2626'; ctx.font = 'bold 12px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('f(n)', toX(labelN) + 6, toY(p1_f(labelN)) + 4); }
-            if (p1_bound(labelN, C) < yMax * 0.95) { ctx.fillStyle = '#16a34a'; ctx.font = 'bold 12px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'left'; ctx.fillText(C + 'n\u00B2', toX(labelN) + 6, toY(p1_bound(labelN, C)) - 6); }
+            if (p1_f(labelN) < yMax * 0.95) { ctx.fillStyle = '#dc2626'; ctx.font = 'bold 12px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'left'; ctx.fillText('f(n)', toX(labelN) + 6, toY(p1_f(labelN)) + 4); }
+            if (p1_bound(labelN, C) < yMax * 0.95) { ctx.fillStyle = '#16a34a'; ctx.font = 'bold 12px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'left'; ctx.fillText(C + 'n\u00B2', toX(labelN) + 6, toY(p1_bound(labelN, C)) - 6); }
             ctx.globalAlpha = 0.07; ctx.fillStyle = '#16a34a'; ctx.beginPath(); ctx.moveTo(toX(1), toY(0));
             for (let np = 1; np <= nMax; np += 0.08) ctx.lineTo(toX(np), toY(p1_bound(np, C)));
             for (let np = nMax; np >= 1; np -= 0.08) ctx.lineTo(toX(np), toY(p1_f(np)));
@@ -3062,12 +3085,12 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1;
             [0, 40, 80, 120, 160].forEach(yv => {
                 ctx.beginPath(); ctx.moveTo(pad.left, toY(yv)); ctx.lineTo(pad.left + plotW, toY(yv)); ctx.stroke();
-                ctx.fillStyle = '#9ca3af'; ctx.font = '11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'right';
+                ctx.fillStyle = '#9ca3af'; ctx.font = '11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'right';
                 ctx.fillText(yv, pad.left - 8, toY(yv) + 4);
             });
             [0, 1, 2, 3].forEach(n => {
                 ctx.beginPath(); ctx.moveTo(toX(n), pad.top); ctx.lineTo(toX(n), pad.top + plotH); ctx.stroke();
-                ctx.fillStyle = '#9ca3af'; ctx.font = '11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+                ctx.fillStyle = '#9ca3af'; ctx.font = '11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'center';
                 ctx.fillText(n, toX(n), pad.top + plotH + 16);
             });
             ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
@@ -3080,7 +3103,7 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             });
             ctx.strokeStyle = '#7c3aed'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
             ctx.beginPath(); ctx.moveTo(toX(1), pad.top); ctx.lineTo(toX(1), pad.top + plotH); ctx.stroke();
-            ctx.setLineDash([]); ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'left';
+            ctx.setLineDash([]); ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'left';
             ctx.fillText('n\u2080 = 1', toX(1) + 4, pad.top + 14);
             ctx.strokeStyle = '#16a34a'; ctx.lineWidth = 3; ctx.beginPath();
             for (let np = 0; np <= nMax; np += 0.03) { const v = p1_bound(np, 15); if (v > yMax) break; np === 0 ? ctx.moveTo(toX(np), toY(v)) : ctx.lineTo(toX(np), toY(v)); }
@@ -3090,12 +3113,12 @@ x = x + <span class="number">1</span>; <span class="comment">// ← 1 statement<
             ctx.stroke();
             ctx.fillStyle = '#7c3aed'; ctx.beginPath(); ctx.arc(toX(1), toY(15), 7, 0, 2 * Math.PI); ctx.fill();
             ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(toX(1), toY(15), 3, 0, 2 * Math.PI); ctx.fill();
-            ctx.fillStyle = '#4c1d95'; ctx.font = 'bold 11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'center';
-            ctx.fillText('Both = 15', toX(1), toY(15) - 16);
-            ctx.fillText('\u2190 Equal at n\u2080 = 1', toX(1) + 60, toY(15) - 4);
-            ctx.fillStyle = '#374151'; ctx.font = 'bold 11px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+            ctx.fillStyle = '#4c1d95'; ctx.font = 'bold 11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText('كلاهما = 15', toX(1), toY(15) - 16);
+            ctx.fillText('\u2190 متساويان عند n\u2080 = 1', toX(1) + 60, toY(15) - 4);
+            ctx.fillStyle = '#374151'; ctx.font = 'bold 11px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'center';
             ctx.fillText('n', pad.left + plotW / 2, H - 6);
-            ctx.fillStyle = '#16a34a'; ctx.font = 'bold 12px Inter,Segoe UI,sans-serif'; ctx.textAlign = 'left';
+            ctx.fillStyle = '#16a34a'; ctx.font = 'bold 12px Tajawal,Segoe UI,sans-serif'; ctx.textAlign = 'left';
             ctx.fillText('15n\u00B2', toX(2.3), toY(p1_bound(2.3, 15)) - 10);
             ctx.fillStyle = '#dc2626';
             ctx.fillText('5n\u00B2+5n+5', toX(1.9), toY(p1_f(1.9)) + 16);

@@ -1,16 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Algorithm Analysis – CPCS 204</title>
+  <title>تحليل الخوارزميات – CPCS 204</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* ─── RESET & BASE ─────────────────────────────────────────── */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    code {
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
+      font-family: 'Tajawal', 'Amiri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.8;
       color: #333;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       padding: 20px;
@@ -24,6 +31,27 @@
       border-radius: 15px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       overflow: hidden;
+    }
+
+    /* ─── LANGUAGE SWITCH ──────────────────────────────────────── */
+    .lang-switch {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-size: 0.95rem;
+    }
+    .lang-switch:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     }
 
     /* ─── HEADER ───────────────────────────────────────────────── */
@@ -47,7 +75,7 @@
       justify-content: center; gap: 24px; flex-wrap: wrap;
     }
     header img { width: 8cm; height: 4cm; object-fit: contain; }
-    .header-text { text-align: left; }
+    .header-text { text-align: right; }
     header h1 { font-size: 2.4em; margin-bottom: 8px; letter-spacing: -0.5px; }
     header p  { font-size: 1.1em; opacity: 0.9; }
     .header-badges {
@@ -111,15 +139,15 @@
 
     /* ─── INFO BOXES ───────────────────────────────────────────── */
     .card {
-      background: #f0f4ff; border-left: 5px solid #667eea;
+      background: #f0f4ff; border-right: 5px solid #667eea;
       padding: 20px; margin: 18px 0; border-radius: 6px;
     }
     .definition {
-      background: #e8f5e9; border-left: 5px solid #4caf50;
+      background: #e8f5e9; border-right: 5px solid #4caf50;
       padding: 20px; margin: 18px 0; border-radius: 6px;
     }
     .important {
-      background: #fff8e1; border-left: 5px solid #ffc107;
+      background: #fff8e1; border-right: 5px solid #ffc107;
       padding: 18px; margin: 18px 0; border-radius: 6px;
     }
     .rule-box {
@@ -152,7 +180,7 @@
     th {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white; padding: 13px 16px;
-      text-align: left; font-weight: 700;
+      text-align: right; font-weight: 700;
     }
     td { padding: 11px 16px; border-bottom: 1px solid #eee; font-size: 0.93em; }
     tr:last-child td { border-bottom: none; }
@@ -202,19 +230,21 @@
       white-space: pre;
       transition: max-height 0.35s ease, padding 0.35s ease;
       letter-spacing: 0.3px;
+      direction: ltr;
+      text-align: left;
     }
     .code-block.collapsed { max-height: 0 !important; padding: 0 28px; overflow: hidden; }
 
     /* Dracula-style syntax */
-    .kw  { color: #ff79c6; font-weight: bold; }           /* keywords */
-    .tp  { color: #8be9fd; font-weight: bold; }           /* types: int, void, boolean */
-    .cls { color: #50fa7b; font-weight: bold; }           /* class names */
-    .mth { color: #8be9fd; }                              /* methods */
-    .str { color: #f1fa8c; }                              /* strings */
-    .num { color: #bd93f9; }                              /* numbers */
-    .cmt { color: #6272a4; font-style: italic; }          /* comments */
-    .op  { color: #ff79c6; }                              /* operators */
-    .ann { color: #ffb86c; }                              /* annotation / label */
+    .kw  { color: #ff79c6; font-weight: bold; }
+    .tp  { color: #8be9fd; font-weight: bold; }
+    .cls { color: #50fa7b; font-weight: bold; }
+    .mth { color: #8be9fd; }
+    .str { color: #f1fa8c; }
+    .num { color: #bd93f9; }
+    .cmt { color: #6272a4; font-style: italic; }
+    .op  { color: #ff79c6; }
+    .ann { color: #ffb86c; }
 
     /* ─── EXAMPLE CARD ─────────────────────────────────────────── */
     .ex-card {
@@ -249,7 +279,7 @@
       border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
       font-size: 0.93em;
     }
-    .problem-stmt ul, .problem-stmt ol { padding-left: 22px; margin-top: 6px; }
+    .problem-stmt ul, .problem-stmt ol { padding-right: 22px; padding-left: 0; margin-top: 6px; }
     .problem-stmt li { margin: 5px 0; }
 
     /* ─── SOLUTION TOGGLE ──────────────────────────────────────── */
@@ -263,6 +293,7 @@
       transition: transform 0.2s, box-shadow 0.2s;
       display: inline-flex; align-items: center; gap: 8px;
       margin-top: 4px;
+      font-family: 'Tajawal', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
     }
     .sol-btn:hover {
       transform: translateY(-2px);
@@ -324,11 +355,13 @@
     .math-block {
       font-family: 'Courier New', Consolas, monospace;
       background: #f0fdf4;
-      border-left: 4px solid #4ade80;
-      border-radius: 0 6px 6px 0;
+      border-right: 4px solid #4ade80;
+      border-radius: 6px 0 0 6px;
       padding: 8px 16px;
       margin: 4px 0 2px;
       display: flex; flex-direction: column; gap: 1px;
+      direction: ltr;
+      text-align: left;
     }
     .math-line {
       font-size: 0.93em;
@@ -348,6 +381,7 @@
       background: #dbeafe; color: #1e3a8a;
       padding: 8px 16px; border-radius: 8px;
       display: inline-block; margin-top: 8px;
+      direction: ltr;
     }
     .bigo-result {
       font-family: 'Courier New', monospace;
@@ -357,6 +391,7 @@
       padding: 8px 20px; border-radius: 8px;
       display: inline-block; margin-top: 8px;
       box-shadow: 0 3px 10px rgba(102,126,234,0.35);
+      direction: ltr;
     }
     .answer-result {
       font-size: 1.05em; font-weight: 700;
@@ -392,34 +427,21 @@
 
     /* ─── BACK BTN ─────────────────────────────────────────────── */
     .back-btn {
-      position: fixed; top: 20px; left: 20px; z-index: 200;
+      position: fixed; top: 20px; right: 20px; z-index: 200;
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white; padding: 10px 22px;
       border-radius: 25px; text-decoration: none;
       font-weight: 700; font-size: 0.88em;
       box-shadow: 0 4px 15px rgba(102,126,234,0.4);
       transition: all 0.25s;
+      font-family: 'Tajawal', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
     }
     .back-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(102,126,234,0.6);
     }
 
-    .lang-switch {
-      position: fixed; top: 20px; right: 20px; z-index: 200;
-      background: linear-gradient(135deg, #059669, #065f46);
-      color: white; padding: 10px 22px;
-      border-radius: 25px; text-decoration: none;
-      font-weight: 700; font-size: 0.88em;
-      box-shadow: 0 4px 15px rgba(5,150,105,0.4);
-      transition: all 0.25s;
-    }
-    .lang-switch:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(5,150,105,0.6);
-    }
-
-    ul, ol { margin-left: 24px; }
+    ul, ol { margin-right: 24px; margin-left: 0; }
     li { margin: 6px 0; font-size: 0.93em; }
 
     @media (max-width: 700px) {
@@ -431,8 +453,8 @@
 </head>
 <body>
 
-<a href="index.html" class="back-btn">🏠 Home</a>
-<a href="algorithm-analysis-interactive-ar.html" class="lang-switch">العربية 🇸🇦</a>
+<a href="algorithm-analysis-interactive.html" class="lang-switch">English 🇬🇧</a>
+<a href="index.html" class="back-btn">🏠 الرئيسية</a>
 
 <div class="container">
 
@@ -441,12 +463,12 @@
   <div class="header-content">
     <img src="fcit.png" alt="FCIT Logo" onerror="this.style.display='none'" />
     <div class="header-text">
-      <h1>📊 Algorithm Analysis</h1>
-      <p>CPCS 204 — Data Structures I &nbsp;·&nbsp; Spring 2026</p>
+      <h1>📊 تحليل الخوارزميات</h1>
+      <p>CPCS 204 — هياكل البيانات I &nbsp;·&nbsp; الفصل الربيعي 2026</p>
       <div class="header-badges">
-        <span class="badge">① Big O Notation</span>
-        <span class="badge">② Execution Time</span>
-        <span class="badge">19 + Challenges</span>
+        <span class="badge">① رمز O الكبير (Big O)</span>
+        <span class="badge">② زمن التنفيذ</span>
+        <span class="badge">19 + تحديات</span>
       </div>
     </div>
   </div>
@@ -469,6 +491,7 @@
     padding: 9px 22px; border-radius: 25px;
     text-decoration: none; font-weight: 700; font-size: 0.85em;
     transition: transform 0.2s, filter 0.2s, box-shadow 0.2s; white-space: nowrap;
+    font-family: 'Tajawal', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
   }
   .plb-nav-btn.home-btn {
     background: rgba(255,255,255,0.12);
@@ -483,23 +506,23 @@
 </style>
 
 <div class="page-link-bar">
-  <a href="algorithm-analysis-motivation.html" class="plb-nav-btn prev-btn">← 📚 Theory &amp; Motivation</a>
+  <a href="algorithm-analysis-motivation-ar.html" class="plb-nav-btn prev-btn">← 📚 النظرية والتحفيز</a>
   <div class="plb-divider"></div>
   <div class="plb-center">
-    <span class="plb-label">You are in</span>
-    <span class="plb-title">📝 Practice &amp; Exercises</span>
+    <span class="plb-label">أنت في</span>
+    <span class="plb-title">📝 التطبيق والتمارين</span>
   </div>
   <div class="plb-divider"></div>
-  <a href="index.html" class="plb-nav-btn home-btn">🏠 Home</a>
+  <a href="index.html" class="plb-nav-btn home-btn">🏠 الرئيسية</a>
 </div>
 
 <!-- ══════════════════════════════ STICKY NAV -->
 <nav class="sticky-nav">
-  <a href="#bigo" class="p1">① Big O Notation</a>
-  <a href="#bigo-practice" class="p1">🧪 Big O Practice</a>
-  <a href="#exectime" class="p3">② Execution Time</a>
-  <a href="#exectime-practice" class="p3">🧪 Time Practice</a>
-  <a href="#challenge" class="ch">🔥 Challenges</a>
+  <a href="#bigo" class="p1">① رمز O الكبير</a>
+  <a href="#bigo-practice" class="p1">🧪 تدريب O الكبير</a>
+  <a href="#exectime" class="p3">② زمن التنفيذ</a>
+  <a href="#exectime-practice" class="p3">🧪 تدريب الزمن</a>
+  <a href="#challenge" class="ch">🔥 التحديات</a>
 </nav>
 
 <!-- ══════════════════════════════ CONTENT -->
@@ -507,80 +530,80 @@
 
 <!-- ────────────────── INTRO -->
 <section id="intro">
-  <h2 class="intro">📋 What You Will Learn</h2>
+  <h2 class="intro">📋 ما ستتعلمه</h2>
 
   <div class="rule-box" style="margin-bottom:1.4rem;">
     <div class="rule-item">
       <div class="rule-num" style="background:linear-gradient(135deg,#2563eb,#4f46e5); width:42px; height:42px; font-size:1em;">①</div>
       <div class="rule-text">
-        <strong>Big O Notation</strong>
-        <span>How to read any Java code, count its operations, and express the result as Big O.</span>
+        <strong>رمز O الكبير (Big O Notation)</strong>
+        <span>كيفية قراءة أي كود جافا، وحساب عملياته، والتعبير عن النتيجة بصيغة O الكبير.</span>
       </div>
     </div>
     <div class="rule-item">
       <div class="rule-num" style="background:linear-gradient(135deg,#059669,#10b981); width:42px; height:42px; font-size:1em;">②</div>
       <div class="rule-text">
-        <strong>Execution Time</strong>
-        <span>What execution time means, how to use the formula T(n) = c × g(n), and how to predict run times.</span>
+        <strong>زمن التنفيذ (Execution Time)</strong>
+        <span>ما معنى زمن التنفيذ، وكيفية استخدام المعادلة T(n) = c × g(n)، وكيفية توقع أوقات التشغيل.</span>
       </div>
     </div>
   </div>
 
   <div class="important">
-    <strong>How to use this page:</strong> Each topic starts with clear teaching examples — study them, then try the practice problems on your own. Press <strong>Show Solution</strong> to check your answer.
+    <strong>كيفية استخدام هذه الصفحة:</strong> يحتوي كل قسم على أمثلة تعليمية واضحة — ادرسها أولاً، ثم حاول حل مسائل التدريب بنفسك. اضغط على <strong>أظهر الحل</strong> للتحقق من إجابتك.
   </div>
 
 </section>
 
 <!-- ────────────────── TOPIC 1: BIG O NOTATION -->
 <section id="bigo">
-  <h2 class="p1">① Big O Notation</h2>
+  <h2 class="p1">① رمز O الكبير (Big O Notation)</h2>
 
   <div class="section-intro" style="background:#f0f4ff; border:1px solid #c7d2fe; padding:18px 22px; border-radius:10px; margin-bottom:24px;">
-    <p>Big O notation describes <strong>how fast an algorithm grows</strong> as the input size n increases. To find the Big O for any Java code, follow two steps:</p>
+    <p>يصف رمز O الكبير <strong>مدى نمو الخوارزمية</strong> مع زيادة حجم المدخلات n. لإيجاد رمز O الكبير لأي كود جافا، اتبع خطوتين:</p>
   </div>
 
-  <div class="subsection-title">Step 1 — Java Code → Polynomial</div>
+  <div class="subsection-title">الخطوة 1 — كود جافا ← كثيرات الحدود</div>
 
   <div class="section-intro">
     <div class="rule-box">
       <div class="rule-item">
         <div class="rule-num">1</div>
-        <div class="rule-text"><strong>Simple Statement</strong><span>Each statement = <strong>1</strong> operation</span></div>
+        <div class="rule-text"><strong>جملة بسيطة (Simple Statement)</strong><span>كل جملة = <strong>1</strong> عملية</span></div>
       </div>
       <div class="rule-item">
         <div class="rule-num">2</div>
-        <div class="rule-text"><strong>Loop</strong><span>Multiply iterations × ops inside</span></div>
+        <div class="rule-text"><strong>حلقة تكرار (Loop)</strong><span>اضرب عدد التكرارات × العمليات بداخلها</span></div>
       </div>
       <div class="rule-item">
         <div class="rule-num">3</div>
-        <div class="rule-text"><strong>Nested Loops</strong><span>Multiply all loop iteration counts</span></div>
+        <div class="rule-text"><strong>حلقات متداخلة (Nested Loops)</strong><span>اضرب أعداد تكرارات جميع الحلقات</span></div>
       </div>
       <div class="rule-item">
         <div class="rule-num">4</div>
-        <div class="rule-text"><strong>Sequential Code</strong><span>Add each block's operations</span></div>
+        <div class="rule-text"><strong>كود متسلسل (Sequential Code)</strong><span>اجمع عمليات كل كتلة</span></div>
       </div>
     </div>
   </div>
 
-  <div class="subsection-title">Teaching Examples</div>
+  <div class="subsection-title">أمثلة تعليمية</div>
 
   <!-- ── E1: Single Loop -->
   <div class="ex-card">
     <div class="ex-title p1">
-      <span class="ex-num-badge">Example 1</span> Single Loop
+      <span class="ex-num-badge">مثال 1</span> حلقة واحدة (Single Loop)
     </div>
     <div class="ex-body teach">
       <div class="code-container">
         <div class="code-header" onclick="toggleCode(this)">
-          <span>☕ Java Code</span>
+          <span>☕ كود جافا</span>
           <span class="code-toggle">▼</span>
         </div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     sum = sum + i;  <span class="cmt">// 1 operation</span>
 }</div>
       </div>
-      <div class="sol-step"><div class="sol-step-num">→</div><p><strong>Loop runs:</strong> n times &nbsp;×&nbsp; <strong>1 operation</strong> inside = <strong>n</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">→</div><p><strong>الحلقة تُنفَّذ:</strong> n مرة &nbsp;×&nbsp; <strong>1 عملية</strong> داخلها = <strong>n</strong></p></div>
       <div style="margin-top:10px;"><span class="poly-result">f(n) = n</span></div>
     </div>
   </div>
@@ -588,12 +611,12 @@
   <!-- ── E2: Nested Loops -->
   <div class="ex-card">
     <div class="ex-title p1">
-      <span class="ex-num-badge">Example 2</span> Nested Loops (n × n)
+      <span class="ex-num-badge">مثال 2</span> حلقات متداخلة (n × n)
     </div>
     <div class="ex-body teach">
       <div class="code-container">
         <div class="code-header" onclick="toggleCode(this)">
-          <span>☕ Java Code</span><span class="code-toggle">▼</span>
+          <span>☕ كود جافا</span><span class="code-toggle">▼</span>
         </div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
@@ -601,7 +624,7 @@
     }
 }</div>
       </div>
-      <div class="sol-step"><div class="sol-step-num">→</div><p><strong>Outer loop:</strong> n times &nbsp;×&nbsp; <strong>Inner loop:</strong> n times &nbsp;×&nbsp; 1 op = <strong>n²</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">→</div><p><strong>الحلقة الخارجية:</strong> n مرة &nbsp;×&nbsp; <strong>الحلقة الداخلية:</strong> n مرة &nbsp;×&nbsp; 1 عملية = <strong>n²</strong></p></div>
       <div style="margin-top:10px;"><span class="poly-result">f(n) = n²</span></div>
     </div>
   </div>
@@ -609,12 +632,12 @@
   <!-- ── E3: Sequential Loops -->
   <div class="ex-card">
     <div class="ex-title p1">
-      <span class="ex-num-badge">Example 3</span> Sequential Loops (Add Them)
+      <span class="ex-num-badge">مثال 3</span> حلقات متسلسلة (اجمعها)
     </div>
     <div class="ex-body teach">
       <div class="code-container">
         <div class="code-header" onclick="toggleCode(this)">
-          <span>☕ Java Code</span><span class="code-toggle">▼</span>
+          <span>☕ كود جافا</span><span class="code-toggle">▼</span>
         </div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     sum += i;         <span class="cmt">// 1 operation</span>
@@ -624,9 +647,9 @@
     delta += <span class="num">1</span>;       <span class="cmt">// 1 operation</span>
 }</div>
       </div>
-      <div class="sol-step"><div class="sol-step-num">1</div><p><strong>First loop:</strong> runs n times → n ops</p></div>
-      <div class="sol-step"><div class="sol-step-num">2</div><p><strong>Second loop:</strong> runs n² times → n² ops</p></div>
-      <div class="sol-step"><div class="sol-step-num">+</div><p><strong>Sequential → Add:</strong> T(n) = n + n²</p></div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p><strong>الحلقة الأولى:</strong> تُنفَّذ n مرة → n عملية</p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p><strong>الحلقة الثانية:</strong> تُنفَّذ n² مرة → n² عملية</p></div>
+      <div class="sol-step"><div class="sol-step-num">+</div><p><strong>متسلسلة → اجمع:</strong> T(n) = n + n²</p></div>
       <div style="margin-top:10px;"><span class="poly-result">f(n) = n² + n</span></div>
     </div>
   </div>
@@ -634,20 +657,20 @@
   <!-- ── E4: Logarithmic -->
   <div class="ex-card">
     <div class="ex-title p1">
-      <span class="ex-num-badge">Example 4</span> Logarithmic Loop (Halving)
+      <span class="ex-num-badge">مثال 4</span> حلقة لوغاريتمية (التنصيف)
     </div>
     <div class="ex-body teach">
       <div class="code-container">
         <div class="code-header" onclick="toggleCode(this)">
-          <span>☕ Java Code</span><span class="code-toggle">▼</span>
+          <span>☕ كود جافا</span><span class="code-toggle">▼</span>
         </div>
         <div class="code-block"><span class="kw">while</span> (n &gt; <span class="num">0</span>) {
     <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>(n);
     n = n / <span class="num">2</span>;
 }</div>
       </div>
-      <div class="sol-step"><div class="sol-step-num">1</div><p>After each iteration n is halved: n → n/2 → n/4 → n/8 → … → 1</p></div>
-      <div class="sol-step"><div class="sol-step-num">2</div><p>After k iterations: n / 2ᵏ = 1 → 2ᵏ = n → k = log₂(n)</p></div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p>بعد كل تكرار يتنصف n: n → n/2 → n/4 → n/8 → … → 1</p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p>بعد k تكرار: n / 2ᵏ = 1 → 2ᵏ = n → k = log₂(n)</p></div>
       <div style="margin-top:10px;"><span class="poly-result">f(n) = log₂(n)</span></div>
     </div>
   </div>
@@ -655,12 +678,12 @@
   <!-- ── E5: Triangular (j < i) -->
   <div class="ex-card">
     <div class="ex-title p1">
-      <span class="ex-num-badge">Example 5</span> Triangular Inner Loop (j &lt; i)
+      <span class="ex-num-badge">مثال 5</span> حلقة داخلية مثلثية (j &lt; i)
     </div>
     <div class="ex-body teach">
       <div class="code-container">
         <div class="code-header" onclick="toggleCode(this)">
-          <span>☕ Java Code</span><span class="code-toggle">▼</span>
+          <span>☕ كود جافا</span><span class="code-toggle">▼</span>
         </div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; i; j++) {
@@ -668,100 +691,100 @@
     }
 }</div>
       </div>
-      <div class="sol-step"><div class="sol-step-num">1</div><p>Inner loop runs: 0, 1, 2, 3, …, n−1 times for each i</p></div>
-      <div class="sol-step"><div class="sol-step-num">2</div><p>Total = 0 + 1 + 2 + … + (n−1) = n(n−1)/2</p></div>
-      <div class="sol-step"><div class="sol-step-num">3</div><p>Expand: n(n−1)/2 = (n²−n)/2 = n²/2 − n/2</p></div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة الداخلية تُنفَّذ: 0، 1، 2، 3، …، n−1 مرة لكل قيمة i</p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p>المجموع = 0 + 1 + 2 + … + (n−1) = n(n−1)/2</p></div>
+      <div class="sol-step"><div class="sol-step-num">3</div><p>التوسيع: n(n−1)/2 = (n²−n)/2 = n²/2 − n/2</p></div>
       <div style="margin-top:10px;"><span class="poly-result">f(n) = (1/2)n² − (1/2)n</span></div>
     </div>
   </div>
 
-  <div class="subsection-title" style="margin-top:40px;">Step 2 — Polynomial → Big O</div>
+  <div class="subsection-title" style="margin-top:40px;">الخطوة 2 — كثيرات الحدود ← O الكبير</div>
 
   <div class="section-intro">
     <div class="rule-box">
       <div class="rule-item">
         <div class="rule-num" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">1</div>
-        <div class="rule-text"><strong>Keep highest-order term</strong><span>The term with the largest exponent</span></div>
+        <div class="rule-text"><strong>احتفظ بالحد الأعلى درجة</strong><span>الحد ذو الأس الأكبر</span></div>
       </div>
       <div class="rule-item">
         <div class="rule-num" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">2</div>
-        <div class="rule-text"><strong>Drop all coefficients</strong><span>76,000,000n² → n²</span></div>
+        <div class="rule-text"><strong>احذف جميع المعاملات</strong><span>76,000,000n² → n²</span></div>
       </div>
       <div class="rule-item">
         <div class="rule-num" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">3</div>
-        <div class="rule-text"><strong>Drop lower-order terms</strong><span>n² + n + 5 → n²</span></div>
+        <div class="rule-text"><strong>احذف الحدود الأدنى درجة</strong><span>n² + n + 5 → n²</span></div>
       </div>
       <div class="rule-item">
         <div class="rule-num" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">4</div>
-        <div class="rule-text"><strong>Constant → O(1)</strong><span>f(n) = 42 → O(1)</span></div>
+        <div class="rule-text"><strong>الثابت → O(1)</strong><span>f(n) = 42 → O(1)</span></div>
       </div>
     </div>
     <div class="important" style="margin-top:14px; margin-bottom:0;">
-      <strong>Why?</strong> As n → ∞ the highest-order term dominates completely.
-      e.g. for f(n) = 4n² + 3n + 10: when n = 1,000, the 4n² part = 4,000,000 dwarfs 3n (3,000) and 10.
+      <strong>لماذا؟</strong> عندما يتجه n نحو اللانهاية، يسيطر الحد الأعلى درجة كلياً.
+      مثلاً: لـ f(n) = 4n² + 3n + 10: عند n = 1,000، الجزء 4n² = 4,000,000 يتفوق بشكل كبير على 3n (وهو 3,000) وعلى 10.
     </div>
   </div>
 
-  <div class="subsection-title">Teaching Examples</div>
+  <div class="subsection-title">أمثلة تعليمية</div>
 
   <!-- six quick examples, fully visible (no hide button) -->
   <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; margin-top:4px;">
 
     <div class="ex-card">
-      <div class="ex-title p2"><span class="ex-num-badge">E1</span> Quadratic polynomial</div>
+      <div class="ex-title p2"><span class="ex-num-badge">م1</span> كثيرة حدود تربيعية</div>
       <div class="ex-body teach" style="padding:16px 20px;">
-        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = <strong>4n²</strong> + 3n + 10</p>
-        <div class="sol-step"><div class="sol-step-num">1</div><p>Highest term: <strong>4n²</strong></p></div>
-        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop coefficient 4 → <strong>n²</strong></p></div>
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px; direction:ltr; text-align:left;">f(n) = <strong>4n²</strong> + 3n + 10</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>الحد الأعلى: <strong>4n²</strong></p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>احذف المعامل 4 → <strong>n²</strong></p></div>
         <div><span class="bigo-result">O(n²)</span></div>
       </div>
     </div>
 
     <div class="ex-card">
-      <div class="ex-title p2"><span class="ex-num-badge">E2</span> Large coefficient</div>
+      <div class="ex-title p2"><span class="ex-num-badge">م2</span> معامل كبير</div>
       <div class="ex-body teach" style="padding:16px 20px;">
-        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = <strong>76,756,234n²</strong> + 427,913n + 7</p>
-        <div class="sol-step"><div class="sol-step-num">1</div><p>Highest: 76,756,234n²</p></div>
-        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop coefficient → n²</p></div>
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px; direction:ltr; text-align:left;">f(n) = <strong>76,756,234n²</strong> + 427,913n + 7</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>الحد الأعلى: 76,756,234n²</p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>احذف المعامل → n²</p></div>
         <div><span class="bigo-result">O(n²)</span></div>
       </div>
     </div>
 
     <div class="ex-card">
-      <div class="ex-title p2"><span class="ex-num-badge">E3</span> High-degree polynomial</div>
+      <div class="ex-title p2"><span class="ex-num-badge">م3</span> كثيرة حدود عالية الدرجة</div>
       <div class="ex-body teach" style="padding:16px 20px;">
-        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = 74n⁸ − 62n⁵ − 71,562n³ + 3n² − 5</p>
-        <div class="sol-step"><div class="sol-step-num">1</div><p>Highest: <strong>74n⁸</strong></p></div>
-        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop coeff → n⁸</p></div>
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px; direction:ltr; text-align:left;">f(n) = 74n⁸ − 62n⁵ − 71,562n³ + 3n² − 5</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>الحد الأعلى: <strong>74n⁸</strong></p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>احذف المعامل → n⁸</p></div>
         <div><span class="bigo-result">O(n⁸)</span></div>
       </div>
     </div>
 
     <div class="ex-card">
-      <div class="ex-title p2"><span class="ex-num-badge">E4</span> Expand first</div>
+      <div class="ex-title p2"><span class="ex-num-badge">م4</span> وسّع أولاً</div>
       <div class="ex-body teach" style="padding:16px 20px;">
-        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = 42n⁴(12n⁶ − 73n² + 11)</p>
-        <div class="sol-step"><div class="sol-step-num">1</div><p>42n⁴ × 12n⁶ = <strong>504n¹⁰</strong> (highest)</p></div>
-        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop coeff → n¹⁰</p></div>
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px; direction:ltr; text-align:left;">f(n) = 42n⁴(12n⁶ − 73n² + 11)</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>42n⁴ × 12n⁶ = <strong>504n¹⁰</strong> (الأعلى)</p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>احذف المعامل → n¹⁰</p></div>
         <div><span class="bigo-result">O(n¹⁰)</span></div>
       </div>
     </div>
 
     <div class="ex-card">
-      <div class="ex-title p2"><span class="ex-num-badge">E5</span> n log n</div>
+      <div class="ex-title p2"><span class="ex-num-badge">م5</span> n log n</div>
       <div class="ex-body teach" style="padding:16px 20px;">
-        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = 75n log(n) − 415</p>
-        <div class="sol-step"><div class="sol-step-num">1</div><p>Highest: <strong>75n log n</strong></p></div>
-        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop 75 → n log n</p></div>
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px; direction:ltr; text-align:left;">f(n) = 75n log(n) − 415</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>الحد الأعلى: <strong>75n log n</strong></p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>احذف 75 → n log n</p></div>
         <div><span class="bigo-result">O(n log n)</span></div>
       </div>
     </div>
 
     <div class="ex-card">
-      <div class="ex-title p2"><span class="ex-num-badge">E6</span> Constant</div>
+      <div class="ex-title p2"><span class="ex-num-badge">م6</span> ثابت</div>
       <div class="ex-body teach" style="padding:16px 20px;">
-        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = 5</p>
-        <div class="sol-step"><div class="sol-step-num">1</div><p>No n term at all → constant operations</p></div>
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px; direction:ltr; text-align:left;">f(n) = 5</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>لا يوجد حد n أبداً → عمليات ثابتة</p></div>
         <div><span class="bigo-result">O(1)</span></div>
       </div>
     </div>
@@ -771,32 +794,32 @@
 
 <!-- ────────────────── BIG O PRACTICE -->
 <section id="bigo-practice">
-  <h2 class="p1">🧪 Practice — Big O Notation</h2>
+  <h2 class="p1">🧪 تدريب — رمز O الكبير</h2>
 
-  <div class="subsection-title">Java Code → Polynomial → Big O</div>
+  <div class="subsection-title">جافا ← كثيرات الحدود ← O الكبير</div>
 
   <!-- P1 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 1</span> Simple Counter Loop</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 1</span> حلقة عداد بسيطة</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="tp">int</span> count = <span class="num">0</span>;
 <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     count++;  <span class="cmt">// how many operations?</span>
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p1')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p1')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p1">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>The loop runs from <code>i = 0</code> to <code>i &lt; n</code> — that is exactly <strong>n</strong> iterations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Inside the loop, only 1 operation (<code>count++</code>) executes each iteration.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total operations = n × 1 = <strong>n</strong></p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>No constants to drop — the dominant term is simply <strong>n</strong>.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة تبدأ من <code>i = 0</code> وتستمر حتى <code>i &lt; n</code> — أي ما مجموعه <strong>n</strong> تكراراً بالضبط.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>داخل الحلقة، تُنفَّذ عملية واحدة فقط (<code>count++</code>) في كل تكرار.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>إجمالي العمليات = n × 1 = <strong>n</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>لا توجد ثوابت لحذفها — الحدّ السائد هو <strong>n</strong> مباشرةً.</p></div>
           <span class="poly-result">f(n) = n</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
         </div>
       </div>
@@ -805,28 +828,28 @@
 
   <!-- P2 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 2</span> Nested Loop (j starts at i)</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 2</span> حلقة متداخلة (j تبدأ من i)</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = i; j &lt; n; j++) {
         sum += array[i][j];
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p2')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p2')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p2">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>The outer loop runs i = 0, 1, 2, …, n−1.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>The inner loop starts at <code>j = i</code>, so its count changes with each value of i:<br>&nbsp;&nbsp;i = 0 → inner runs <strong>n</strong> times<br>&nbsp;&nbsp;i = 1 → inner runs <strong>n−1</strong> times<br>&nbsp;&nbsp;i = 2 → inner runs <strong>n−2</strong> times<br>&nbsp;&nbsp;⋮<br>&nbsp;&nbsp;i = n−1 → inner runs <strong>1</strong> time</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total = n + (n−1) + (n−2) + … + 1 = <strong>n(n+1)/2</strong></p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Expand the formula → n²/2 + n/2</p></div>
-          <div class="sol-step"><div class="sol-step-num">5</div><p>Dominant term is n²/2 — drop the constant ½ and the lower-order term n/2.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة الخارجية تُنفَّذ للقيم i = 0، 1، 2، …، n−1.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>الحلقة الداخلية تبدأ من <code>j = i</code>، لذا يتغير عدد تكراراتها مع كل قيمة لـ i:<br>&nbsp;&nbsp;i = 0 → الداخلية تُنفَّذ <strong>n</strong> مرة<br>&nbsp;&nbsp;i = 1 → الداخلية تُنفَّذ <strong>n−1</strong> مرة<br>&nbsp;&nbsp;i = 2 → الداخلية تُنفَّذ <strong>n−2</strong> مرة<br>&nbsp;&nbsp;⋮<br>&nbsp;&nbsp;i = n−1 → الداخلية تُنفَّذ <strong>مرة واحدة</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>المجموع = n + (n−1) + (n−2) + … + 1 = <strong>n(n+1)/2</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>نوسّع الصيغة → n²/2 + n/2</p></div>
+          <div class="sol-step"><div class="sol-step-num">5</div><p>الحدّ السائد هو n²/2 — نحذف المعامل الثابت ½ والحدّ الأصغر n/2.</p></div>
           <span class="poly-result">f(n) = n²/2 + n/2</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
         </div>
       </div>
@@ -835,13 +858,13 @@
 
   <!-- P3 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 3</span> Triple Nested Loop</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 3</span> ثلاث حلقات متداخلة</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
         <span class="kw">for</span> (<span class="tp">int</span> k = <span class="num">0</span>; k &lt; n; k++) {
@@ -850,15 +873,15 @@
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p3')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p3')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p3">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>The outer loop runs from <code>i = 0</code> to <code>i &lt; n</code> → <strong>n</strong> iterations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>For every i, the middle loop runs from <code>j = 0</code> to <code>j &lt; n</code> → <strong>n</strong> more iterations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>For every (i, j) pair, the inner loop runs from <code>k = 0</code> to <code>k &lt; n</code> → <strong>n</strong> more iterations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Total = n × n × n = <strong>n³</strong></p></div>
-          <div class="sol-step"><div class="sol-step-num">5</div><p>No constant coefficient — the dominant term is n³.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة الخارجية تعمل من <code>i = 0</code> حتى <code>i &lt; n</code> → <strong>n</strong> تكرار.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>لكل قيمة من i، الحلقة الوسطى تعمل من <code>j = 0</code> حتى <code>j &lt; n</code> → <strong>n</strong> تكرار إضافي.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>لكل زوج (i، j)، الحلقة الداخلية تعمل من <code>k = 0</code> حتى <code>k &lt; n</code> → <strong>n</strong> تكرار إضافي.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>إجمالي العمليات = n × n × n = <strong>n³</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">5</div><p>لا يوجد معامل ثابت — الحدّ السائد هو n³.</p></div>
           <span class="poly-result">f(n) = n³</span>&nbsp;&nbsp;<span class="bigo-result">O(n³)</span>
         </div>
       </div>
@@ -867,27 +890,27 @@
 
   <!-- P4 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 4</span> Loop Doubles Each Step</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 4</span> حلقة تتضاعف في كل خطوة</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="tp">int</span> i = <span class="num">1</span>;
 <span class="kw">while</span> (i &lt; n) {
     <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>(i);
     i = i * <span class="num">2</span>;
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p4')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p4')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p4">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p><code>i</code> starts at 1 and doubles each iteration: 1, 2, 4, 8, …, 2ᵏ</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>The loop stops when <code>i ≥ n</code>, so we need to find when 2ᵏ ≥ n.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Solving for k: set 2ᵏ = n → apply log₂ to both sides → k = log₂(n).</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Logarithm base only differs by a constant factor — all log bases are equivalent in Big O.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>تبدأ <code>i</code> بالقيمة 1 وتتضاعف في كل تكرار: 1، 2، 4، 8، …، 2ᵏ</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>تتوقف الحلقة عند <code>i ≥ n</code>، أي نحتاج أن يحقق 2ᵏ ≥ n.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>نحلّ للحصول على k: نضع 2ᵏ = n ثم نطبّق log₂ على الطرفين → k = log₂(n).</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>أساس اللوغاريتم يختلف فقط بمعامل ثابت — جميع الأسس متكافئة في O الكبير.</p></div>
           <span class="poly-result">f(n) = log₂(n)</span>&nbsp;&nbsp;<span class="bigo-result">O(log n)</span>
         </div>
       </div>
@@ -896,13 +919,13 @@
 
   <!-- P5 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 5</span> Mixed: Nested + Single Loop</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 5</span> مختلطة: حلقة متداخلة + حلقة واحدة</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
         matrix[i][j] = <span class="num">0</span>;
@@ -912,14 +935,14 @@
     sum += array[k];
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p5')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p5')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p5">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p><strong>Section 1 — nested loop:</strong> outer runs n times, inner runs n times → n × n = <strong>n²</strong> operations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p><strong>Section 2 — single loop:</strong> runs from k=0 to k&lt;n → <strong>n</strong> operations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Both sections run <em>sequentially</em> (one after the other) — we add their costs: n² + n.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Dominant term is n² (grows much faster than n). Drop the lower-order term n.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p><strong>القسم الأول — الحلقة المتداخلة:</strong> الخارجية n تكرار، الداخلية n تكرار → n × n = <strong>n²</strong> عملية.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p><strong>القسم الثاني — الحلقة الواحدة:</strong> تعمل من k=0 حتى k&lt;n → <strong>n</strong> عملية.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>القسمان يعملان <em>بشكل متسلسل</em> (أحدهما بعد الآخر) — نجمع تكاليفهما: n² + n.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>الحدّ السائد هو n² (ينمو أسرع بكثير من n). نحذف الحدّ الأصغر n.</p></div>
           <span class="poly-result">f(n) = n² + n</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
         </div>
       </div>
@@ -928,13 +951,13 @@
 
   <!-- P6 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 6</span> Search with Early Exit</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 6</span> بحث مع خروج مبكر</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="tp">boolean</span> found = <span class="kw">false</span>;
 <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n &amp;&amp; !found; i++) {
     <span class="kw">if</span> (array[i] == target) {
@@ -942,14 +965,14 @@
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p6')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p6')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p6">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>The loop runs from i=0 to i&lt;n, but stops early if the target is found (<code>found = true</code>).</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p><strong>Best case:</strong> target found at index 0 → only 1 operation.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p><strong>Worst case:</strong> target not in the array → loop runs all <strong>n</strong> times.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Big O always measures the <em>worst case</em> — so we use n.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة تعمل من i=0 حتى i&lt;n، لكنها قد تتوقف مبكراً إذا وُجد الهدف (<code>found = true</code>).</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p><strong>أفضل حالة:</strong> الهدف موجود في الفهرس 0 → عملية واحدة فقط.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p><strong>أسوأ حالة:</strong> الهدف غير موجود في المصفوفة → تُنفَّذ الحلقة كاملاً <strong>n</strong> مرة.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>O الكبير يقيس دائماً <em>أسوأ الحالات</em> — لذا نستخدم n.</p></div>
           <span class="poly-result">f(n) = n</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
         </div>
       </div>
@@ -958,13 +981,13 @@
 
   <!-- P7 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 7</span> Triangular Star Pattern</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 7</span> نمط النجوم المثلثي</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">1</span>; j &lt;= i; j++) {
         <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">print</span>(<span class="str">"*"</span>);
@@ -972,14 +995,14 @@
     <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>();
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p7')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p7')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p7">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>The outer loop runs i = 1, 2, …, n.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>The inner loop runs from <code>j = 1</code> to <code>j ≤ i</code>, so its count grows with i:<br>&nbsp;&nbsp;i = 1 → inner runs <strong>1</strong> time<br>&nbsp;&nbsp;i = 2 → inner runs <strong>2</strong> times<br>&nbsp;&nbsp;i = 3 → inner runs <strong>3</strong> times<br>&nbsp;&nbsp;⋮<br>&nbsp;&nbsp;i = n → inner runs <strong>n</strong> times</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total = 1 + 2 + 3 + … + n = <strong>n(n+1)/2</strong></p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Expand → n²/2 + n/2. Dominant term is n²/2 — drop the coefficient ½ and the lower term n/2.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة الخارجية تعمل للقيم i = 1، 2، …، n.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>الحلقة الداخلية تعمل من <code>j = 1</code> حتى <code>j ≤ i</code>، لذا يزداد عدد تكراراتها مع i:<br>&nbsp;&nbsp;i = 1 → الداخلية تُنفَّذ <strong>مرة واحدة</strong><br>&nbsp;&nbsp;i = 2 → الداخلية تُنفَّذ <strong>مرتين</strong><br>&nbsp;&nbsp;i = 3 → الداخلية تُنفَّذ <strong>3 مرات</strong><br>&nbsp;&nbsp;⋮<br>&nbsp;&nbsp;i = n → الداخلية تُنفَّذ <strong>n مرة</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>المجموع = 1 + 2 + 3 + … + n = <strong>n(n+1)/2</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>نوسّع → n²/2 + n/2. الحدّ السائد هو n²/2 — نحذف المعامل ½ والحدّ الأصغر n/2.</p></div>
           <span class="poly-result">f(n) = n²/2 + n/2</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
         </div>
       </div>
@@ -988,28 +1011,28 @@
 
   <!-- P8 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 8</span> Constant Time Operations</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 8</span> عمليات ذات زمن ثابت</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="tp">int</span> first = array[<span class="num">0</span>];
 <span class="tp">int</span> last  = array[n - <span class="num">1</span>];
 <span class="tp">int</span> mid   = array[n / <span class="num">2</span>];
 <span class="tp">int</span> sum   = first + last + mid;</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p8')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p8')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p8">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p><code>array[0]</code> — 1 operation: direct index access, no loop needed.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p><code>array[n−1]</code> — 1 operation: direct index access regardless of n.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p><code>array[n/2]</code> — 1 operation: direct index access regardless of n.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p><code>first + last + mid</code> — 1 operation: a single addition.</p></div>
-          <div class="sol-step"><div class="sol-step-num">5</div><p>Total = 4 operations — <strong>completely independent of n</strong>. No matter how large the array, always exactly 4 ops.</p></div>
-          <div class="sol-step"><div class="sol-step-num">6</div><p>Any fixed constant simplifies to O(1).</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p><code>array[0]</code> — عملية واحدة: وصول مباشر بالفهرس، لا حاجة لحلقة.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p><code>array[n−1]</code> — عملية واحدة: وصول مباشر بالفهرس بغض النظر عن قيمة n.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p><code>array[n/2]</code> — عملية واحدة: وصول مباشر بالفهرس بغض النظر عن قيمة n.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p><code>first + last + mid</code> — عملية واحدة: جمع بسيط.</p></div>
+          <div class="sol-step"><div class="sol-step-num">5</div><p>الإجمالي = 4 عمليات — <strong>مستقل تماماً عن n</strong>. مهما كان حجم المصفوفة، دائماً 4 عمليات بالضبط.</p></div>
+          <div class="sol-step"><div class="sol-step-num">6</div><p>أي ثابت ثابت يُبسَّط إلى O(1).</p></div>
           <span class="poly-result">f(n) = 4</span>&nbsp;&nbsp;<span class="bigo-result">O(1)</span>
         </div>
       </div>
@@ -1018,25 +1041,25 @@
 
   <!-- P9 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 9</span> Decreasing Loop</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 9</span> حلقة تنازلية</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = n; i &gt; <span class="num">0</span>; i--) {
     sum += array[i - <span class="num">1</span>];
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p9')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p9')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p9">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>The loop starts at <code>i = n</code> and decrements: n, n−1, n−2, …, 1.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Counting down from n to 1 is exactly <strong>n</strong> iterations — same as counting up from 0 to n.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total operations = n × 1 = <strong>n</strong>.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Direction (up or down) does not affect Big O — only the iteration count matters.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة تبدأ من <code>i = n</code> وتتناقص: n، n−1، n−2، …، 1.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>العدّ التنازلي من n إلى 1 يعطي بالضبط <strong>n</strong> تكراراً — نفس عدد العدّ التصاعدي.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>إجمالي العمليات = n × 1 = <strong>n</strong>.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>اتجاه العدّ (تصاعدي أو تنازلي) لا يؤثر على O الكبير — المهم هو عدد التكرارات.</p></div>
           <span class="poly-result">f(n) = n</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
         </div>
       </div>
@@ -1045,27 +1068,27 @@
 
   <!-- P10 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 10</span> Step by 2</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 10</span> خطوة بمقدار 2</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i += <span class="num">2</span>) {
     process(array[i]);
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p10')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p10')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p10">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p><code>i</code> increments by 2 each step, visiting: 0, 2, 4, 6, …, n−2.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Number of iterations = n ÷ 2 = <strong>n/2</strong>.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total operations = <strong>n/2</strong>.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>The coefficient ½ is a constant — Big O drops all constant multipliers.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>تزداد <code>i</code> بمقدار 2 في كل خطوة، فتأخذ القيم: 0، 2، 4، 6، …، n−2.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>عدد التكرارات = n ÷ 2 = <strong>n/2</strong>.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>إجمالي العمليات = <strong>n/2</strong>.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>المعامل ½ ثابت — O الكبير يحذف جميع المعاملات الثابتة.</p></div>
           <span class="poly-result">f(n) = n/2</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
-          <p style="color:#6b7280; font-size:0.83em; margin-top:8px;">💡 Halving the loop doesn't change the Big O class — constants always disappear.</p>
+          <p style="color:#6b7280; font-size:0.83em; margin-top:8px;">💡 تقليص الحلقة للنصف لا يغير فئة O الكبير — الثوابت تختفي دائماً.</p>
         </div>
       </div>
     </div>
@@ -1073,27 +1096,27 @@
 
   <!-- P11 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 11</span> Two Different Variables (n, m)</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 11</span> متغيران مختلفان (n، m)</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; m; j++) {
         matrix[i][j] = i + j;
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p11')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p11')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p11">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>Outer loop runs from <code>i = 0</code> to <code>i &lt; n</code> → <strong>n</strong> iterations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Inner loop runs from <code>j = 0</code> to <code>j &lt; m</code> → <strong>m</strong> iterations per outer step.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total = n × m operations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">!</div><p><strong>n and m are independent variables</strong> — we cannot assume they are equal. Never simplify O(n·m) to O(n²) unless it is known that m = n.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة الخارجية تعمل من <code>i = 0</code> حتى <code>i &lt; n</code> → <strong>n</strong> تكرار.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>الحلقة الداخلية تعمل من <code>j = 0</code> حتى <code>j &lt; m</code> → <strong>m</strong> تكرار لكل خطوة خارجية.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>إجمالي العمليات = n × m.</p></div>
+          <div class="sol-step"><div class="sol-step-num">!</div><p><strong>n و m متغيران مستقلان</strong> — لا يمكن افتراض تساويهما. لا تُبسّط O(n·m) إلى O(n²) إلا إذا ثبت أن m = n.</p></div>
           <span class="poly-result">f(n,m) = n × m</span>&nbsp;&nbsp;<span class="bigo-result">O(n·m)</span>
         </div>
       </div>
@@ -1102,27 +1125,27 @@
 
   <!-- P12 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 12</span> Half-Array Nested</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 12</span> حلقات متداخلة على نصف المصفوفة</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n/<span class="num">2</span>; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n/<span class="num">2</span>; j++) {
         sum += matrix[i][j];
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p12')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p12')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p12">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>Outer loop runs from <code>i = 0</code> to <code>i &lt; n/2</code> → <strong>n/2</strong> iterations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Inner loop runs from <code>j = 0</code> to <code>j &lt; n/2</code> → <strong>n/2</strong> iterations per outer step.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total = (n/2) × (n/2) = <strong>n²/4</strong> operations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>The coefficient ¼ is a constant — drop it in Big O.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة الخارجية تعمل من <code>i = 0</code> حتى <code>i &lt; n/2</code> → <strong>n/2</strong> تكرار.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>الحلقة الداخلية تعمل من <code>j = 0</code> حتى <code>j &lt; n/2</code> → <strong>n/2</strong> تكرار لكل خطوة خارجية.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>إجمالي العمليات = (n/2) × (n/2) = <strong>n²/4</strong>.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>المعامل ¼ ثابت — نحذفه في O الكبير.</p></div>
           <span class="poly-result">f(n) = n²/4</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
         </div>
       </div>
@@ -1131,27 +1154,27 @@
 
   <!-- P13 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 13</span> Reverse Triangle</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 13</span> مثلث معكوس</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = n; i &gt; <span class="num">0</span>; i--) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; i; j++) {
         <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">print</span>(<span class="str">"*"</span>);
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p13')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p13')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p13">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>Outer loop runs i = n, n−1, n−2, …, 1 (counting down).</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Inner loop runs from <code>j = 0</code> to <code>j &lt; i</code>, so its count shrinks with i:<br>&nbsp;&nbsp;i = n &nbsp;&nbsp;→ inner runs <strong>n</strong> times<br>&nbsp;&nbsp;i = n−1 → inner runs <strong>n−1</strong> times<br>&nbsp;&nbsp;⋮<br>&nbsp;&nbsp;i = 1 &nbsp;&nbsp;→ inner runs <strong>1</strong> time</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total = n + (n−1) + … + 1 = <strong>n(n+1)/2</strong></p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Expand → n²/2 + n/2. Dominant term is n²/2 — drop the coefficient ½ and the lower term n/2.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة الخارجية تعمل تنازلياً: i = n، n−1، n−2، …، 1.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>الحلقة الداخلية تعمل من <code>j = 0</code> حتى <code>j &lt; i</code>، لذا يتقلص عدد تكراراتها مع i:<br>&nbsp;&nbsp;i = n &nbsp;&nbsp;→ الداخلية تُنفَّذ <strong>n</strong> مرة<br>&nbsp;&nbsp;i = n−1 → الداخلية تُنفَّذ <strong>n−1</strong> مرة<br>&nbsp;&nbsp;⋮<br>&nbsp;&nbsp;i = 1 &nbsp;&nbsp;→ الداخلية تُنفَّذ <strong>مرة واحدة</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>المجموع = n + (n−1) + … + 1 = <strong>n(n+1)/2</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>نوسّع → n²/2 + n/2. الحدّ السائد هو n²/2 — نحذف المعامل ½ والحدّ الأصغر n/2.</p></div>
           <span class="poly-result">f(n) = n²/2 + n/2</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
         </div>
       </div>
@@ -1160,28 +1183,28 @@
 
   <!-- P14 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 14</span> Loop Divides by 3</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 14</span> حلقة تُقسَّم على 3</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="tp">int</span> i = n;
 <span class="kw">while</span> (i &gt; <span class="num">1</span>) {
     <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>(i);
     i = i / <span class="num">3</span>;
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p14')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p14')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p14">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p><code>i</code> starts at n and is divided by 3 each step: n, n/3, n/9, n/27, …</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>After k steps, the value of i becomes n / 3ᵏ.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>The loop stops when i ≤ 1, so we solve: n / 3ᵏ = 1 → 3ᵏ = n.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>Taking log base 3: k = log₃(n).</p></div>
-          <div class="sol-step"><div class="sol-step-num">5</div><p>Logarithm base is just a constant factor — all log bases are equivalent in Big O.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>تبدأ <code>i</code> من n وتُقسَّم على 3 في كل خطوة: n، n/3، n/9، n/27، …</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>بعد k خطوة، تصبح قيمة i هي n / 3ᵏ.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>تتوقف الحلقة عندما i ≤ 1، لذا نحلّ: n / 3ᵏ = 1 → 3ᵏ = n.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>نأخذ لوغاريتم الأساس 3: k = log₃(n).</p></div>
+          <div class="sol-step"><div class="sol-step-num">5</div><p>أساس اللوغاريتم مجرد معامل ثابت — جميع الأسس متكافئة في O الكبير.</p></div>
           <span class="poly-result">f(n) = log₃(n)</span>&nbsp;&nbsp;<span class="bigo-result">O(log n)</span>
         </div>
       </div>
@@ -1190,13 +1213,13 @@
 
   <!-- P15 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 15</span> Three Sequential Loops</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 15</span> ثلاث حلقات متسلسلة</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Analyze the Java code below. Find the polynomial <strong>f(n)</strong> and determine its <strong>Big O notation</strong>.
+        حلّل كود جافا التالي. أوجد كثيرات الحدود <strong>f(n)</strong> وحدّد رمز O الكبير لها.
       </div>
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) { array[i] = i; }
 
 <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
@@ -1207,15 +1230,15 @@
 
 <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) { sum += array[i]; }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p15')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p15')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p15">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p><strong>Loop 1 (single):</strong> runs from i=0 to i&lt;n → <strong>n</strong> operations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p><strong>Loop 2 (nested):</strong> outer runs n times, inner runs n times → n × n = <strong>n²</strong> operations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p><strong>Loop 3 (single):</strong> runs from i=0 to i&lt;n → <strong>n</strong> operations.</p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>All three loops run <em>sequentially</em> — we add their costs: n + n² + n = <strong>n² + 2n</strong>.</p></div>
-          <div class="sol-step"><div class="sol-step-num">5</div><p>Dominant term is n². Drop the lower-order term 2n.</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p><strong>الحلقة 1 (بسيطة):</strong> تعمل من i=0 حتى i&lt;n → <strong>n</strong> عملية.</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p><strong>الحلقة 2 (متداخلة):</strong> الخارجية n تكرار × الداخلية n تكرار = <strong>n²</strong> عملية.</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p><strong>الحلقة 3 (بسيطة):</strong> تعمل من i=0 حتى i&lt;n → <strong>n</strong> عملية.</p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>الحلقات الثلاث تعمل <em>بشكل متسلسل</em> — نجمع تكاليفها: n + n² + n = <strong>n² + 2n</strong>.</p></div>
+          <div class="sol-step"><div class="sol-step-num">5</div><p>الحدّ السائد هو n². نحذف الحدّ الأصغر 2n.</p></div>
           <span class="poly-result">f(n) = n² + 2n</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
         </div>
       </div>
@@ -1223,13 +1246,13 @@
   </div>
 
   <!-- ── Part B: Polynomial → Big O -->
-  <div class="subsection-title">Part B — Polynomial → Big O</div>
+  <div class="subsection-title">الجزء ب — كثيرات الحدود ← O الكبير</div>
 
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 20</span> Convert 5 Polynomials to Big O</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 20</span> حوّل 5 كثيرات حدود إلى O الكبير</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        <p>Convert each polynomial to its tightest Big O:</p>
+        <p>حوّل كل كثيرة حدود إلى أدق رمز O الكبير لها:</p>
         <ol style="margin-top:8px;">
           <li>f(n) = 5n³ + 2n² + 100</li>
           <li>f(n) = 1000n + 500</li>
@@ -1238,15 +1261,15 @@
           <li>f(n) = 15</li>
         </ol>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p20')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p20')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p20">
         <div class="solution-inner">
-          <h4>✅ Solutions</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>5n³ + 2n² + 100 → highest term 5n³, drop coeff → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n³)</span></p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>1000n + 500 → highest term 1000n, drop coeff → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n)</span></p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>n² log n + 3n² → n² log n dominates n² → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n² log n)</span></p></div>
-          <div class="sol-step"><div class="sol-step-num">4</div><p>2ⁿ + n³ → exponential beats polynomial → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(2ⁿ)</span></p></div>
-          <div class="sol-step"><div class="sol-step-num">5</div><p>f(n) = 15 → constant, no n → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(1)</span></p></div>
+          <h4>✅ الحلول</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>5n³ + 2n² + 100 → الحد الأعلى 5n³، احذف المعامل → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n³)</span></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>1000n + 500 → الحد الأعلى 1000n، احذف المعامل → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n)</span></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>n² log n + 3n² → n² log n يسيطر على n² → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n² log n)</span></p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>2ⁿ + n³ → الأسي يتفوق على كثيرات الحدود → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(2ⁿ)</span></p></div>
+          <div class="sol-step"><div class="sol-step-num">5</div><p>f(n) = 15 → ثابت، لا يوجد n → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(1)</span></p></div>
         </div>
       </div>
     </div>
@@ -1256,44 +1279,44 @@
 
 <!-- ────────────────── TOPIC 2: EXECUTION TIME -->
 <section id="exectime">
-  <h2 class="p3">② Execution Time — Predicting Run Times</h2>
+  <h2 class="p3">② زمن التنفيذ — توقع أوقات التشغيل</h2>
 
   <div class="section-intro" style="background:#f0fdf4; border:1px solid #bbf7d0; padding:18px 22px; border-radius:10px; margin-bottom:24px;">
-    <p>Once we know an algorithm's Big O, we can <strong>predict how long it will take</strong> to run for any input size. We use the formula:</p>
-    <h3 style="color:#059669; margin-top:12px;">The Formula</h3>
-    <p>If an algorithm is <strong>O(g(n))</strong>, then its running time is modelled as:</p>
-    <p style="font-family:'Courier New',monospace; font-size:1.15em; background:#d1fae5; padding:10px 16px; border-radius:8px; margin:10px 0;">T(n) = c × g(n)</p>
-    <p>Where <strong>c</strong> is a hardware/implementation constant. Use a <em>known data point</em> (a given n and time) to find c, then use c to predict any other time.</p>
+    <p>بمجرد معرفة رمز O الكبير للخوارزمية، يمكننا <strong>توقع مدة تشغيلها</strong> لأي حجم مدخلات. نستخدم المعادلة:</p>
+    <h3 style="color:#059669; margin-top:12px;">المعادلة</h3>
+    <p>إذا كانت الخوارزمية من النوع <strong>O(g(n))</strong>، فإن زمن تشغيلها يُنمذج كالتالي:</p>
+    <p style="font-family:'Courier New',monospace; font-size:1.15em; background:#d1fae5; padding:10px 16px; border-radius:8px; margin:10px 0; direction:ltr; text-align:left;">T(n) = c × g(n)</p>
+    <p>حيث <strong>c</strong> ثابت يعتمد على العتاد والتنفيذ. استخدم <em>نقطة بيانات معروفة</em> (قيمة n والزمن المعطيان) لإيجاد c، ثم استخدم c للتنبؤ بأي زمن آخر.</p>
     <div class="rule-box" style="margin-top:14px;">
       <div class="rule-item">
         <div class="rule-num" style="background:linear-gradient(135deg,#059669,#10b981)">1</div>
-        <div class="rule-text"><strong>Find c</strong><span>Plug in the given (n, time) pair</span></div>
+        <div class="rule-text"><strong>إيجاد الثابت c</strong><span>عوّض بالزوج المعطى (n، الزمن)</span></div>
       </div>
       <div class="rule-item">
         <div class="rule-num" style="background:linear-gradient(135deg,#059669,#10b981)">2</div>
-        <div class="rule-text"><strong>Use c</strong><span>Plug in the target n to get T(n)</span></div>
+        <div class="rule-text"><strong>استخدام c</strong><span>عوّض بقيمة n المستهدفة للحصول على T(n)</span></div>
       </div>
       <div class="rule-item">
         <div class="rule-num" style="background:linear-gradient(135deg,#059669,#10b981)">3</div>
-        <div class="rule-text"><strong>Find n</strong><span>Plug in the target time and solve for n</span></div>
+        <div class="rule-text"><strong>إيجاد n</strong><span>عوّض بالزمن المستهدف وأوجد n</span></div>
       </div>
     </div>
   </div>
 
-  <div class="subsection-title">Teaching Examples</div>
+  <div class="subsection-title">أمثلة تعليمية</div>
 
   <!-- ── T1 -->
   <div class="ex-card">
-    <div class="ex-title p3"><span class="ex-num-badge">Example 1</span> O(n) — Find time for new n</div>
+    <div class="ex-title p3"><span class="ex-num-badge">مثال 1</span> O(n) — أوجد الزمن لقيمة n جديدة</div>
     <div class="ex-body teach">
       <div class="problem-stmt">
-        Algorithm is <strong>O(n)</strong>. For n = 10, time = 2 ms. <strong>Find time for n = 500.</strong>
+        الخوارزمية من النوع <strong>O(n)</strong>. عند n = 10 الزمن = 2 ملي ثانية. <strong>أوجد الزمن عند n = 500.</strong>
       </div>
 
       <div class="sol-step">
         <div class="sol-step-num">1</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Write the time formula</div>
+          <div class="sol-step-label">اكتب معادلة الزمن</div>
           <div class="math-block">
             <div class="math-line">T(n)  =  c × n</div>
           </div>
@@ -1303,7 +1326,7 @@
       <div class="sol-step">
         <div class="sol-step-num">2</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Substitute the known values &nbsp;(n = 10, T = 2 ms)</div>
+          <div class="sol-step-label">عوّض بالقيم المعروفة &nbsp;(n = 10, T = 2 ms)</div>
           <div class="math-block">
             <div class="math-line">T(10) =  c × 10</div>
             <div class="math-line">    2  =  c × 10</div>
@@ -1314,7 +1337,7 @@
       <div class="sol-step">
         <div class="sol-step-num">3</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Solve for c</div>
+          <div class="sol-step-label">أوجد قيمة c</div>
           <div class="math-block">
             <div class="math-line">c  =  2 ÷ 10</div>
             <div class="math-line ml-result">c  =  <strong>1/5</strong></div>
@@ -1325,7 +1348,7 @@
       <div class="sol-step">
         <div class="sol-step-num">4</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Find time when n = 500</div>
+          <div class="sol-step-label">أوجد الزمن عند n = 500</div>
           <div class="math-block">
             <div class="math-line">T(500) =  c × n</div>
             <div class="math-line">T(500) =  (1/5) × 500</div>
@@ -1334,22 +1357,22 @@
         </div>
       </div>
 
-      <span class="answer-result">✅ Answer: 100 milliseconds</span>
+      <span class="answer-result">✅ الجواب: 100 ملي ثانية</span>
     </div>
   </div>
 
   <!-- ── T2 -->
   <div class="ex-card">
-    <div class="ex-title p3"><span class="ex-num-badge">Example 2</span> O(n²) — Find time for new n</div>
+    <div class="ex-title p3"><span class="ex-num-badge">مثال 2</span> O(n²) — أوجد الزمن لقيمة n جديدة</div>
     <div class="ex-body teach">
       <div class="problem-stmt">
-        Algorithm is <strong>O(n²)</strong>. For n = 4, time = 10 ms. <strong>Find time for n = 16.</strong>
+        الخوارزمية من النوع <strong>O(n²)</strong>. عند n = 4 الزمن = 10 ملي ثانية. <strong>أوجد الزمن عند n = 16.</strong>
       </div>
 
       <div class="sol-step">
         <div class="sol-step-num">1</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Write the time formula</div>
+          <div class="sol-step-label">اكتب معادلة الزمن</div>
           <div class="math-block">
             <div class="math-line">T(n)  =  c × n²</div>
           </div>
@@ -1359,7 +1382,7 @@
       <div class="sol-step">
         <div class="sol-step-num">2</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Substitute the known values &nbsp;(n = 4, T = 10 ms)</div>
+          <div class="sol-step-label">عوّض بالقيم المعروفة &nbsp;(n = 4, T = 10 ms)</div>
           <div class="math-block">
             <div class="math-line">T(4)  =  c × 4²</div>
             <div class="math-line">  10  =  c × 16</div>
@@ -1370,7 +1393,7 @@
       <div class="sol-step">
         <div class="sol-step-num">3</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Solve for c</div>
+          <div class="sol-step-label">أوجد قيمة c</div>
           <div class="math-block">
             <div class="math-line">c  =  10 ÷ 16</div>
             <div class="math-line ml-result">c  =  <strong>5/8</strong></div>
@@ -1381,7 +1404,7 @@
       <div class="sol-step">
         <div class="sol-step-num">4</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Find time when n = 16</div>
+          <div class="sol-step-label">أوجد الزمن عند n = 16</div>
           <div class="math-block">
             <div class="math-line">T(16) =  c × n²</div>
             <div class="math-line">T(16) =  (5/8) × 16²</div>
@@ -1391,22 +1414,22 @@
         </div>
       </div>
 
-      <span class="answer-result">✅ Answer: 160 milliseconds</span>
+      <span class="answer-result">✅ الجواب: 160 ملي ثانية</span>
     </div>
   </div>
 
   <!-- ── T3 -->
   <div class="ex-card">
-    <div class="ex-title p3"><span class="ex-num-badge">Example 3</span> O(log₂ n) — Find time for new n</div>
+    <div class="ex-title p3"><span class="ex-num-badge">مثال 3</span> O(log₂ n) — أوجد الزمن لقيمة n جديدة</div>
     <div class="ex-body teach">
       <div class="problem-stmt">
-        Algorithm is <strong>O(log₂ n)</strong>. For n = 16, time = 28 ms. <strong>Find time for n = 64.</strong>
+        الخوارزمية من النوع <strong>O(log₂ n)</strong>. عند n = 16 الزمن = 28 ملي ثانية. <strong>أوجد الزمن عند n = 64.</strong>
       </div>
 
       <div class="sol-step">
         <div class="sol-step-num">1</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Write the time formula</div>
+          <div class="sol-step-label">اكتب معادلة الزمن</div>
           <div class="math-block">
             <div class="math-line">T(n)  =  c × log₂(n)</div>
           </div>
@@ -1416,7 +1439,7 @@
       <div class="sol-step">
         <div class="sol-step-num">2</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Substitute the known values &nbsp;(n = 16, T = 28 ms)</div>
+          <div class="sol-step-label">عوّض بالقيم المعروفة &nbsp;(n = 16, T = 28 ms)</div>
           <div class="math-block">
             <div class="math-line">T(16)  =  c × log₂(16)</div>
             <div class="math-line">   28  =  c × 4</div>
@@ -1427,7 +1450,7 @@
       <div class="sol-step">
         <div class="sol-step-num">3</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Solve for c</div>
+          <div class="sol-step-label">أوجد قيمة c</div>
           <div class="math-block">
             <div class="math-line">c  =  28 ÷ 4</div>
             <div class="math-line ml-result">c  =  <strong>7</strong></div>
@@ -1438,7 +1461,7 @@
       <div class="sol-step">
         <div class="sol-step-num">4</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Find time when n = 64 &nbsp;(log₂(64) = 6)</div>
+          <div class="sol-step-label">أوجد الزمن عند n = 64 &nbsp;(log₂(64) = 6)</div>
           <div class="math-block">
             <div class="math-line">T(64) =  c × log₂(64)</div>
             <div class="math-line">T(64) =  7 × 6</div>
@@ -1447,22 +1470,22 @@
         </div>
       </div>
 
-      <span class="answer-result">✅ Answer: 42 milliseconds</span>
+      <span class="answer-result">✅ الجواب: 42 ملي ثانية</span>
     </div>
   </div>
 
   <!-- ── T4 -->
   <div class="ex-card">
-    <div class="ex-title p3"><span class="ex-num-badge">Example 4</span> O(n²) — Find input size n</div>
+    <div class="ex-title p3"><span class="ex-num-badge">مثال 4</span> O(n²) — أوجد حجم المدخلات n</div>
     <div class="ex-body teach">
       <div class="problem-stmt">
-        Algorithm is <strong>O(n²)</strong>. For n = 10, time = 30 ms. <strong>Find n when time = 120 ms.</strong>
+        الخوارزمية من النوع <strong>O(n²)</strong>. عند n = 10 الزمن = 30 ملي ثانية. <strong>أوجد n عندما يكون الزمن = 120 ملي ثانية.</strong>
       </div>
 
       <div class="sol-step">
         <div class="sol-step-num">1</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Write the time formula</div>
+          <div class="sol-step-label">اكتب معادلة الزمن</div>
           <div class="math-block">
             <div class="math-line">T(n)  =  c × n²</div>
           </div>
@@ -1472,7 +1495,7 @@
       <div class="sol-step">
         <div class="sol-step-num">2</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Substitute the known values &nbsp;(n = 10, T = 30 ms)</div>
+          <div class="sol-step-label">عوّض بالقيم المعروفة &nbsp;(n = 10, T = 30 ms)</div>
           <div class="math-block">
             <div class="math-line">T(10) =  c × 10²</div>
             <div class="math-line">   30 =  c × 100</div>
@@ -1483,7 +1506,7 @@
       <div class="sol-step">
         <div class="sol-step-num">3</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Solve for c</div>
+          <div class="sol-step-label">أوجد قيمة c</div>
           <div class="math-block">
             <div class="math-line">c  =  30 ÷ 100</div>
             <div class="math-line ml-result">c  =  <strong>3/10</strong></div>
@@ -1494,7 +1517,7 @@
       <div class="sol-step">
         <div class="sol-step-num">4</div>
         <div class="sol-step-content">
-          <div class="sol-step-label">Substitute target time (T = 120 ms) and solve for n</div>
+          <div class="sol-step-label">عوّض بالزمن المطلوب (T = 120 ms) وأوجد n</div>
           <div class="math-block">
             <div class="math-line">120  =  (3/10) × n²</div>
             <div class="math-line">n²   =  120 × (10/3)</div>
@@ -1506,35 +1529,35 @@
         </div>
       </div>
 
-      <span class="answer-result">✅ Answer: n = 20</span>
+      <span class="answer-result">✅ الجواب: n = 20</span>
     </div>
   </div>
 </section>
 
 <!-- ────────────────── EXECUTION TIME PRACTICE -->
 <section id="exectime-practice">
-  <h2 class="p3">🧪 Practice — Execution Time</h2>
+  <h2 class="p3">🧪 تدريب — زمن التنفيذ</h2>
 
   <!-- ── Part C: Time Calculations -->
-  <div class="subsection-title">Part C — Time Complexity Calculations</div>
+  <div class="subsection-title">الجزء ج — حسابات تعقيد الزمن</div>
 
   <!-- P16 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 16</span> O(n) — Find Time</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 16</span> O(n) — أوجد الزمن</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Algorithm is <strong>O(n)</strong>. For n = 50, time = 5 ms.
-        <strong>Find time when n = 200.</strong>
+        الخوارزمية من النوع <strong>O(n)</strong>. عند n = 50 الزمن = 5 ملي ثانية.
+        <strong>أوجد الزمن عند n = 200.</strong>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p16')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p16')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p16">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
+          <h4>✅ الحل</h4>
 
           <div class="sol-step">
             <div class="sol-step-num">1</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Write the time formula</div>
+              <div class="sol-step-label">اكتب معادلة الزمن</div>
               <div class="math-block">
                 <div class="math-line">T(n)  =  c × n</div>
               </div>
@@ -1544,7 +1567,7 @@
           <div class="sol-step">
             <div class="sol-step-num">2</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Substitute the known values &nbsp;(n = 50, T = 5 ms)</div>
+              <div class="sol-step-label">عوّض بالقيم المعروفة &nbsp;(n = 50, T = 5 ms)</div>
               <div class="math-block">
                 <div class="math-line">T(50) =  c × 50</div>
                 <div class="math-line">    5 =  c × 50</div>
@@ -1555,7 +1578,7 @@
           <div class="sol-step">
             <div class="sol-step-num">3</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Solve for c</div>
+              <div class="sol-step-label">أوجد قيمة c</div>
               <div class="math-block">
                 <div class="math-line">c  =  5 ÷ 50</div>
                 <div class="math-line ml-result">c  =  <strong>1/10</strong></div>
@@ -1566,7 +1589,7 @@
           <div class="sol-step">
             <div class="sol-step-num">4</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Find time when n = 200</div>
+              <div class="sol-step-label">أوجد الزمن عند n = 200</div>
               <div class="math-block">
                 <div class="math-line">T(200) =  c × n</div>
                 <div class="math-line">T(200) =  (1/10) × 200</div>
@@ -1575,7 +1598,7 @@
             </div>
           </div>
 
-          <span class="answer-result">✅ Answer: 20 milliseconds</span>
+          <span class="answer-result">✅ الجواب: 20 ملي ثانية</span>
         </div>
       </div>
     </div>
@@ -1583,21 +1606,21 @@
 
   <!-- P17 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 17</span> O(n²) — Find Time</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 17</span> O(n²) — أوجد الزمن</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Algorithm is <strong>O(n²)</strong>. For n = 5, time = 25 ms.
-        <strong>Find time when n = 20.</strong>
+        الخوارزمية من النوع <strong>O(n²)</strong>. عند n = 5 الزمن = 25 ملي ثانية.
+        <strong>أوجد الزمن عند n = 20.</strong>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p17')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p17')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p17">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
+          <h4>✅ الحل</h4>
 
           <div class="sol-step">
             <div class="sol-step-num">1</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Write the time formula</div>
+              <div class="sol-step-label">اكتب معادلة الزمن</div>
               <div class="math-block">
                 <div class="math-line">T(n)  =  c × n²</div>
               </div>
@@ -1607,7 +1630,7 @@
           <div class="sol-step">
             <div class="sol-step-num">2</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Substitute the known values &nbsp;(n = 5, T = 25 ms)</div>
+              <div class="sol-step-label">عوّض بالقيم المعروفة &nbsp;(n = 5, T = 25 ms)</div>
               <div class="math-block">
                 <div class="math-line">T(5)  =  c × 5²</div>
                 <div class="math-line">  25  =  c × 25</div>
@@ -1618,7 +1641,7 @@
           <div class="sol-step">
             <div class="sol-step-num">3</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Solve for c</div>
+              <div class="sol-step-label">أوجد قيمة c</div>
               <div class="math-block">
                 <div class="math-line">c  =  25 ÷ 25</div>
                 <div class="math-line ml-result">c  =  <strong>1</strong></div>
@@ -1629,7 +1652,7 @@
           <div class="sol-step">
             <div class="sol-step-num">4</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Find time when n = 20</div>
+              <div class="sol-step-label">أوجد الزمن عند n = 20</div>
               <div class="math-block">
                 <div class="math-line">T(20) =  c × n²</div>
                 <div class="math-line">T(20) =  1 × 20²</div>
@@ -1639,7 +1662,7 @@
             </div>
           </div>
 
-          <span class="answer-result">✅ Answer: 400 milliseconds</span>
+          <span class="answer-result">✅ الجواب: 400 ملي ثانية</span>
         </div>
       </div>
     </div>
@@ -1647,21 +1670,21 @@
 
   <!-- P18 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 18</span> O(log₂ n) — Find Time</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 18</span> O(log₂ n) — أوجد الزمن</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Algorithm is <strong>O(log₂ n)</strong>. For n = 32, time = 10 ms.
-        <strong>Find time when n = 256.</strong>
+        الخوارزمية من النوع <strong>O(log₂ n)</strong>. عند n = 32 الزمن = 10 ملي ثانية.
+        <strong>أوجد الزمن عند n = 256.</strong>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p18')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p18')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p18">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
+          <h4>✅ الحل</h4>
 
           <div class="sol-step">
             <div class="sol-step-num">1</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Write the time formula</div>
+              <div class="sol-step-label">اكتب معادلة الزمن</div>
               <div class="math-block">
                 <div class="math-line">T(n)  =  c × log₂(n)</div>
               </div>
@@ -1671,7 +1694,7 @@
           <div class="sol-step">
             <div class="sol-step-num">2</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Substitute the known values &nbsp;(n = 32, T = 10 ms)</div>
+              <div class="sol-step-label">عوّض بالقيم المعروفة &nbsp;(n = 32, T = 10 ms)</div>
               <div class="math-block">
                 <div class="math-line">T(32)  =  c × log₂(32)</div>
                 <div class="math-line">   10  =  c × 5</div>
@@ -1682,7 +1705,7 @@
           <div class="sol-step">
             <div class="sol-step-num">3</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Solve for c</div>
+              <div class="sol-step-label">أوجد قيمة c</div>
               <div class="math-block">
                 <div class="math-line">c  =  10 ÷ 5</div>
                 <div class="math-line ml-result">c  =  <strong>2</strong></div>
@@ -1693,7 +1716,7 @@
           <div class="sol-step">
             <div class="sol-step-num">4</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Find time when n = 256 &nbsp;(log₂(256) = 8)</div>
+              <div class="sol-step-label">أوجد الزمن عند n = 256 &nbsp;(log₂(256) = 8)</div>
               <div class="math-block">
                 <div class="math-line">T(256) =  c × log₂(256)</div>
                 <div class="math-line">T(256) =  2 × 8</div>
@@ -1702,7 +1725,7 @@
             </div>
           </div>
 
-          <span class="answer-result">✅ Answer: 16 milliseconds</span>
+          <span class="answer-result">✅ الجواب: 16 ملي ثانية</span>
         </div>
       </div>
     </div>
@@ -1710,21 +1733,21 @@
 
   <!-- P19 -->
   <div class="ex-card">
-    <div class="ex-title pr"><span class="ex-num-badge">Practice 19</span> O(n²) — Find Input Size n</div>
+    <div class="ex-title pr"><span class="ex-num-badge">تدريب 19</span> O(n²) — أوجد حجم المدخلات n</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        Algorithm is <strong>O(n²)</strong>. For n = 20, time = 80 ms.
-        <strong>Find n when time = 320 ms.</strong>
+        الخوارزمية من النوع <strong>O(n²)</strong>. عند n = 20 الزمن = 80 ملي ثانية.
+        <strong>أوجد n عندما يكون الزمن = 320 ملي ثانية.</strong>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('p19')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('p19')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="p19">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
+          <h4>✅ الحل</h4>
 
           <div class="sol-step">
             <div class="sol-step-num">1</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Write the time formula</div>
+              <div class="sol-step-label">اكتب معادلة الزمن</div>
               <div class="math-block">
                 <div class="math-line">T(n)  =  c × n²</div>
               </div>
@@ -1734,7 +1757,7 @@
           <div class="sol-step">
             <div class="sol-step-num">2</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Substitute the known values &nbsp;(n = 20, T = 80 ms)</div>
+              <div class="sol-step-label">عوّض بالقيم المعروفة &nbsp;(n = 20, T = 80 ms)</div>
               <div class="math-block">
                 <div class="math-line">T(20) =  c × 20²</div>
                 <div class="math-line">   80 =  c × 400</div>
@@ -1745,7 +1768,7 @@
           <div class="sol-step">
             <div class="sol-step-num">3</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Solve for c</div>
+              <div class="sol-step-label">أوجد قيمة c</div>
               <div class="math-block">
                 <div class="math-line">c  =  80 ÷ 400</div>
                 <div class="math-line ml-result">c  =  <strong>1/5</strong></div>
@@ -1756,7 +1779,7 @@
           <div class="sol-step">
             <div class="sol-step-num">4</div>
             <div class="sol-step-content">
-              <div class="sol-step-label">Substitute target time (T = 320 ms) and solve for n</div>
+              <div class="sol-step-label">عوّض بالزمن المطلوب (T = 320 ms) وأوجد n</div>
               <div class="math-block">
                 <div class="math-line">320  =  (1/5) × n²</div>
                 <div class="math-line">n²   =  320 × 5</div>
@@ -1767,35 +1790,36 @@
             </div>
           </div>
 
-          <span class="answer-result">✅ Answer: n = 40</span>
+          <span class="answer-result">✅ الجواب: n = 40</span>
         </div>
       </div>
     </div>
   </div>
 </section>
+
 <!-- ────────────────── CHALLENGE PROBLEMS -->
 <section id="challenge">
-  <h2 class="ch">🔥 Challenging Problems</h2>
+  <h2 class="ch">🔥 مسائل التحديات</h2>
 
   <!-- C1 -->
   <div class="ex-card">
-    <div class="ex-title ch"><span class="ex-num-badge">Challenge 1</span> Logarithmic Outer × Linear Inner</div>
+    <div class="ex-title ch"><span class="ex-num-badge">تحدٍّ 1</span> حلقة خارجية لوغاريتمية × حلقة داخلية خطية</div>
     <div class="ex-body">
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i &lt; n; i = i * <span class="num">2</span>) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
         process(i, j);
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('c1')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('c1')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="c1">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>Outer loop: i doubles → runs <strong>log₂(n)</strong> times</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Inner loop: runs <strong>n</strong> times each outer iteration</p></div>
-          <div class="sol-step"><div class="sol-step-num">×</div><p>Total = n × log₂(n)</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الحلقة الخارجية: i تتضاعف → تُنفَّذ <strong>log₂(n)</strong> مرة</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>الحلقة الداخلية: تُنفَّذ <strong>n</strong> مرة لكل تكرار خارجي</p></div>
+          <div class="sol-step"><div class="sol-step-num">×</div><p>المجموع = n × log₂(n)</p></div>
           <span class="poly-result">f(n) = n·log₂(n)</span>&nbsp;&nbsp;<span class="bigo-result">O(n log n)</span>
         </div>
       </div>
@@ -1804,10 +1828,10 @@
 
   <!-- C2 -->
   <div class="ex-card">
-    <div class="ex-title ch"><span class="ex-num-badge">Challenge 2</span> Tricky — j is Never Reset</div>
+    <div class="ex-title ch"><span class="ex-num-badge">تحدٍّ 2</span> مسألة خادعة — j لا تُعاد تهيئته</div>
     <div class="ex-body">
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="tp">int</span> i = <span class="num">0</span>, j = <span class="num">0</span>;
 <span class="kw">while</span> (i &lt; n) {
     <span class="kw">while</span> (j &lt; n &amp;&amp; array[i][j] == <span class="num">1</span>) {
@@ -1816,14 +1840,14 @@
     i++;
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('c2')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('c2')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="c2">
         <div class="solution-inner">
-          <h4>✅ Solution — careful, this looks like O(n²) but isn't!</h4>
-          <div class="sol-step"><div class="sol-step-num">!</div><p><strong>j is NOT reset</strong> when i increments — it keeps its value between outer iterations</p></div>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>i increments n times total</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>j increments at most n times total (never goes backwards)</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Maximum total operations = 2n</p></div>
+          <h4>✅ الحل — انتبه، تبدو O(n²) لكنها ليست كذلك!</h4>
+          <div class="sol-step"><div class="sol-step-num">!</div><p><strong>j لا تُعاد تهيئتها</strong> عند زيادة i — تحتفظ بقيمتها بين تكرارات الحلقة الخارجية</p></div>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>i تزداد n مرة إجمالاً</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>j تزداد على الأكثر n مرة إجمالاً (لا تعود للخلف أبداً)</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>أقصى إجمالي للعمليات = 2n</p></div>
           <span class="poly-result">f(n) = 2n</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
         </div>
       </div>
@@ -1832,10 +1856,10 @@
 
   <!-- C3 -->
   <div class="ex-card">
-    <div class="ex-title ch"><span class="ex-num-badge">Challenge 3</span> Recursive Method</div>
+    <div class="ex-title ch"><span class="ex-num-badge">تحدٍّ 3</span> دالة تعاودية (Recursive)</div>
     <div class="ex-body">
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">void</span> <span class="mth">mystery</span>(<span class="tp">int</span> n) {
     <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span>;
 
@@ -1847,13 +1871,13 @@
     <span class="mth">mystery</span>(n / <span class="num">2</span>);
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('c3')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('c3')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="c3">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>Recurrence: <strong>T(n) = 2T(n/2) + n</strong></p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Each level does n total work, depth of recursion = log₂(n)</p></div>
-          <div class="sol-step"><div class="sol-step-num">3</div><p>Total = n × log₂(n) (this is Merge Sort's pattern!)</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>العلاقة التعاودية: <strong>T(n) = 2T(n/2) + n</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>كل مستوى يُنجز n عملية إجمالاً، وعمق التعاود = log₂(n)</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>المجموع = n × log₂(n) (هذا هو نمط خوارزمية Merge Sort!)</p></div>
           <span class="bigo-result">O(n log n)</span>
         </div>
       </div>
@@ -1862,22 +1886,22 @@
 
   <!-- C4 -->
   <div class="ex-card">
-    <div class="ex-title ch"><span class="ex-num-badge">Challenge 4</span> Square Root Outer Loop</div>
+    <div class="ex-title ch"><span class="ex-num-badge">تحدٍّ 4</span> حلقة خارجية جذرية (Square Root)</div>
     <div class="ex-body">
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i * i &lt;= n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
         process(i, j);
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('c4')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('c4')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="c4">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>Outer: runs while i² ≤ n → i ≤ √n → <strong>√n iterations</strong></p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Inner: n iterations each → Total = √n × n = n^(3/2)</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>الخارجية: تُنفَّذ طالما i² ≤ n → i ≤ √n → <strong>√n تكرار</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>الداخلية: n تكرار في كل مرة → المجموع = √n × n = n^(3/2)</p></div>
           <span class="poly-result">f(n) = n^(3/2)</span>&nbsp;&nbsp;<span class="bigo-result">O(n√n)</span>
         </div>
       </div>
@@ -1886,10 +1910,10 @@
 
   <!-- C5 -->
   <div class="ex-card">
-    <div class="ex-title ch"><span class="ex-num-badge">Challenge 5</span> Triple Triangular</div>
+    <div class="ex-title ch"><span class="ex-num-badge">تحدٍّ 5</span> ثلاثي مثلثي (Triple Triangular)</div>
     <div class="ex-body">
       <div class="code-container">
-        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ كود جافا</span><span class="code-toggle">▼</span></div>
         <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
     <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">1</span>; j &lt;= i; j++) {
         <span class="kw">for</span> (<span class="tp">int</span> k = <span class="num">1</span>; k &lt;= j; k++) {
@@ -1898,12 +1922,12 @@
     }
 }</div>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('c5')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('c5')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="c5">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
-          <div class="sol-step"><div class="sol-step-num">1</div><p>For each i, inner two loops give triangular(i) = i(i+1)/2</p></div>
-          <div class="sol-step"><div class="sol-step-num">2</div><p>Total = Σᵢ₌₁ⁿ i(i+1)/2 = n(n+1)(n+2)/6 ≈ n³/6</p></div>
+          <h4>✅ الحل</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>لكل i، الحلقتان الداخليتان تُعطيان مثلث(i) = i(i+1)/2</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>المجموع = Σᵢ₌₁ⁿ i(i+1)/2 = n(n+1)(n+2)/6 ≈ n³/6</p></div>
           <span class="poly-result">f(n) ≈ n³/6</span>&nbsp;&nbsp;<span class="bigo-result">O(n³)</span>
         </div>
       </div>
@@ -1912,20 +1936,20 @@
 
   <!-- C6 -->
   <div class="ex-card">
-    <div class="ex-title ch"><span class="ex-num-badge">Challenge 6</span> Compare Two Algorithms</div>
+    <div class="ex-title ch"><span class="ex-num-badge">تحدٍّ 6</span> قارن بين خوارزميتين</div>
     <div class="ex-body">
       <div class="problem-stmt">
-        <strong>Algorithm A:</strong> O(n log n) &nbsp;|&nbsp; n = 8 → 24 ms<br/>
-        <strong>Algorithm B:</strong> O(n²) &nbsp;|&nbsp; n = 10 → 50 ms<br/>
-        <strong>Which is faster for n = 100?</strong>
+        <strong>الخوارزمية A:</strong> O(n log n) &nbsp;|&nbsp; n = 8 → 24 ms<br/>
+        <strong>الخوارزمية B:</strong> O(n²) &nbsp;|&nbsp; n = 10 → 50 ms<br/>
+        <strong>أيهما أسرع عند n = 100؟</strong>
       </div>
-      <button class="sol-btn" onclick="toggleSolution('c6')"><span class="btn-icon">👁</span> Show Solution</button>
+      <button class="sol-btn" onclick="toggleSolution('c6')"><span class="btn-icon">👁</span> أظهر الحل</button>
       <div class="solution-panel" id="c6">
         <div class="solution-inner">
-          <h4>✅ Solution</h4>
+          <h4>✅ الحل</h4>
           <div class="sol-step"><div class="sol-step-num">A</div><p>24 = c × 8 × log₂(8) = c × 24 → c = 1<br/>T(100) = 1 × 100 × log₂(100) ≈ 100 × 6.64 = <strong>664 ms</strong></p></div>
           <div class="sol-step"><div class="sol-step-num">B</div><p>50 = c × 100 → c = 0.5<br/>T(100) = 0.5 × 10,000 = <strong>5,000 ms</strong></p></div>
-          <span class="answer-result">🏆 Algorithm A wins! (664 ms vs 5,000 ms)</span>
+          <span class="answer-result">🏆 الخوارزمية A تفوز! (664 ms مقابل 5,000 ms)</span>
         </div>
       </div>
     </div>
@@ -1937,18 +1961,18 @@
 
 <!-- ══════════════════════════════ FOOTER PAGE NAVIGATION -->
 <div class="page-link-bar" style="border-top:2px solid rgba(255,255,255,0.1);">
-  <a href="algorithm-analysis-motivation.html" class="plb-nav-btn prev-btn">← 📚 Back to Theory</a>
+  <a href="algorithm-analysis-motivation-ar.html" class="plb-nav-btn prev-btn">← 📚 العودة إلى النظرية</a>
   <div class="plb-divider"></div>
   <div class="plb-center">
-    <span class="plb-label">Want to review the concepts?</span>
-    <span class="plb-title">Go back to Theory &amp; Motivation</span>
+    <span class="plb-label">هل تريد مراجعة المفاهيم؟</span>
+    <span class="plb-title">ارجع إلى النظرية والتحفيز</span>
   </div>
   <div class="plb-divider"></div>
-  <a href="index.html" class="plb-nav-btn home-btn">🏠 Home</a>
+  <a href="index.html" class="plb-nav-btn home-btn">🏠 الرئيسية</a>
 </div>
 
 <footer>
-  <p>© 2026 CPCS 204 — Data Structures I — Algorithm Analysis</p>
+  <p>© 2026 CPCS 204 — هياكل البيانات I — تحليل الخوارزميات</p>
   <p>Based on material by Dr. Jonathan Cazalas &amp; Dr. Muhammad Umair Ramzan &nbsp;·&nbsp; Enhanced by Dr. Almalawi</p>
 </footer>
 </div><!-- end .container -->
@@ -1964,8 +1988,8 @@
     panel.classList.toggle('open');
     btn.classList.toggle('revealed', !isOpen);
     btn.innerHTML = isOpen
-      ? '<span class="btn-icon">👁</span> Show Solution'
-      : '<span class="btn-icon btn-icon-up">🙈</span> Hide Solution';
+      ? '<span class="btn-icon">👁</span> أظهر الحل'
+      : '<span class="btn-icon btn-icon-up">🙈</span> أخفِ الحل';
   }
 
   // ── Toggle code blocks ─────────────────────────────
