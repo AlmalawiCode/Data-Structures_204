@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algorithm Analysis – CPCS 204</title>
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    /* ─── HEADER ───────────────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      padding: 40px 20px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 60%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 30%, rgba(255,255,255,0.05) 0%, transparent 60%);
+    }
+    .header-content {
+      position: relative; z-index: 1;
+      display: flex; align-items: center;
+      justify-content: center; gap: 24px; flex-wrap: wrap;
+    }
+    header img { width: 8cm; height: 4cm; object-fit: contain; }
+    .header-text { text-align: left; }
+    header h1 { font-size: 2.4em; margin-bottom: 8px; letter-spacing: -0.5px; }
+    header p  { font-size: 1.1em; opacity: 0.9; }
+    .header-badges {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px;
+    }
+    .badge {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 4px 14px; border-radius: 20px;
+      font-size: 0.8em; font-weight: 600; letter-spacing: 0.05em;
+    }
+
+    /* ─── STICKY NAV ───────────────────────────────────────────── */
+    .sticky-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: white;
+      border-bottom: 3px solid #f0f0f0;
+      display: flex; overflow-x: auto; padding: 0 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .sticky-nav a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 14px 16px;
+      font-size: 0.83em; font-weight: 700;
+      text-decoration: none; white-space: nowrap;
+      color: #777;
+      border-bottom: 3px solid transparent; margin-bottom: -3px;
+      transition: all 0.2s;
+    }
+    .sticky-nav a:hover { color: #667eea; border-color: #667eea; }
+    .sticky-nav a.p1  { color: #2563eb; }
+    .sticky-nav a.p2  { color: #7c3aed; }
+    .sticky-nav a.p3  { color: #059669; }
+    .sticky-nav a.ch  { color: #dc2626; }
+
+    /* ─── CONTENT ──────────────────────────────────────────────── */
+    .content { padding: 40px 40px 20px; }
+
+    section { margin-bottom: 55px; animation: fadeInUp 0.4s ease; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── HEADINGS ─────────────────────────────────────────────── */
+    h2 {
+      font-size: 1.9em; margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid;
+    }
+    h2.p1 { color: #2563eb; border-color: #2563eb; }
+    h2.p2 { color: #7c3aed; border-color: #7c3aed; }
+    h2.p3 { color: #059669; border-color: #059669; }
+    h2.ch { color: #dc2626; border-color: #dc2626; }
+    h2.intro { color: #667eea; border-color: #667eea; }
+
+    h3 { color: #764ba2; font-size: 1.35em; margin: 20px 0 12px; }
+    h4 { color: #555; font-size: 1.1em; margin: 14px 0 8px; }
+
+    p { margin-bottom: 10px; }
+
+    /* ─── INFO BOXES ───────────────────────────────────────────── */
+    .card {
+      background: #f0f4ff; border-left: 5px solid #667eea;
+      padding: 20px; margin: 18px 0; border-radius: 6px;
+    }
+    .definition {
+      background: #e8f5e9; border-left: 5px solid #4caf50;
+      padding: 20px; margin: 18px 0; border-radius: 6px;
+    }
+    .important {
+      background: #fff8e1; border-left: 5px solid #ffc107;
+      padding: 18px; margin: 18px 0; border-radius: 6px;
+    }
+    .rule-box {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px; margin: 18px 0;
+    }
+    .rule-item {
+      background: white; border: 2px solid #e0e7ff;
+      border-radius: 10px; padding: 16px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .rule-num {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border-radius: 50%;
+      width: 30px; height: 30px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.9em;
+    }
+    .rule-text { font-size: 0.9em; }
+    .rule-text strong { display: block; color: #333; margin-bottom: 3px; }
+    .rule-text span   { color: #666; }
+
+    /* ─── COMPLEXITY TABLE ─────────────────────────────────────── */
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 18px 0; background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-radius: 8px; overflow: hidden;
+    }
+    th {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; padding: 13px 16px;
+      text-align: left; font-weight: 700;
+    }
+    td { padding: 11px 16px; border-bottom: 1px solid #eee; font-size: 0.93em; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(odd) td { background: #fafbff; }
+    tr:hover td { background: #f0f4ff; transition: background 0.15s; }
+    .complexity-badge {
+      display: inline-block;
+      font-family: 'Courier New', monospace;
+      font-weight: 700; font-size: 0.88em;
+      padding: 3px 10px; border-radius: 5px;
+    }
+    .cb-1    { background: #d1fae5; color: #065f46; }
+    .cb-log  { background: #dbeafe; color: #1e40af; }
+    .cb-n    { background: #e0e7ff; color: #3730a3; }
+    .cb-nlog { background: #fce7f3; color: #9d174d; }
+    .cb-n2   { background: #fff3cd; color: #92400e; }
+    .cb-n3   { background: #fee2e2; color: #7f1d1d; }
+    .cb-2n   { background: #fef3c7; color: #78350f; }
+    .cb-fac  { background: #f3e8ff; color: #4c1d95; }
+
+    /* ─── CODE BLOCK (numeric-recursion style) ─────────────────── */
+    .code-container { margin: 16px 0; }
+
+    .code-header {
+      background: #667eea;
+      color: white;
+      padding: 13px 22px;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer; user-select: none;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 700; font-size: 1.05em;
+      transition: background 0.25s;
+    }
+    .code-header:hover { background: #5568d3; }
+    .code-toggle { font-size: 1.1em; transition: transform 0.3s; }
+    .code-toggle.collapsed { transform: rotate(-90deg); }
+
+    .code-block {
+      background: #000000;
+      color: #f8f8f2;
+      padding: 24px 28px;
+      border-radius: 0 0 8px 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+      font-size: 1.18em;
+      line-height: 1.85;
+      white-space: pre;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      letter-spacing: 0.3px;
+    }
+    .code-block.collapsed { max-height: 0 !important; padding: 0 28px; overflow: hidden; }
+
+    /* Dracula-style syntax */
+    .kw  { color: #ff79c6; font-weight: bold; }           /* keywords */
+    .tp  { color: #8be9fd; font-weight: bold; }           /* types: int, void, boolean */
+    .cls { color: #50fa7b; font-weight: bold; }           /* class names */
+    .mth { color: #8be9fd; }                              /* methods */
+    .str { color: #f1fa8c; }                              /* strings */
+    .num { color: #bd93f9; }                              /* numbers */
+    .cmt { color: #6272a4; font-style: italic; }          /* comments */
+    .op  { color: #ff79c6; }                              /* operators */
+    .ann { color: #ffb86c; }                              /* annotation / label */
+
+    /* ─── EXAMPLE CARD ─────────────────────────────────────────── */
+    .ex-card {
+      border-radius: 12px; overflow: hidden;
+      margin: 22px 0;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    }
+    .ex-title {
+      padding: 13px 22px;
+      color: white; font-weight: 700; font-size: 1.05em;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .ex-title.p1 { background: linear-gradient(90deg, #2563eb, #4f46e5); }
+    .ex-title.p2 { background: linear-gradient(90deg, #7c3aed, #9333ea); }
+    .ex-title.p3 { background: linear-gradient(90deg, #059669, #10b981); }
+    .ex-title.pr { background: linear-gradient(90deg, #667eea, #764ba2); }
+    .ex-title.ch { background: linear-gradient(90deg, #dc2626, #c2410c); }
+
+    .ex-num-badge {
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 2px 10px; border-radius: 20px;
+      font-size: 0.78em; letter-spacing: 0.08em;
+    }
+
+    .ex-body { background: #f9fafb; padding: 22px 24px; }
+    .ex-body.teach { background: white; }
+
+    /* Problem statement */
+    .problem-stmt {
+      background: #f0f4ff; border: 1px solid #c7d2fe;
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
+      font-size: 0.93em;
+    }
+    .problem-stmt ul, .problem-stmt ol { padding-left: 22px; margin-top: 6px; }
+    .problem-stmt li { margin: 5px 0; }
+
+    /* ─── SOLUTION TOGGLE ──────────────────────────────────────── */
+    .sol-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 10px 28px;
+      border: none; border-radius: 25px;
+      font-size: 0.93em; font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 4px;
+    }
+    .sol-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102,126,234,0.45);
+    }
+    .sol-btn:active { transform: translateY(0); }
+    .sol-btn.revealed {
+      background: linear-gradient(135deg, #059669, #10b981);
+    }
+    .sol-btn .btn-icon { font-size: 1.1em; transition: transform 0.3s; }
+    .sol-btn.revealed .btn-icon { transform: rotate(180deg); }
+
+    /* Solution panel */
+    .solution-panel {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.45s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .solution-panel.open {
+      max-height: 1000px;
+      opacity: 1;
+    }
+    .solution-inner {
+      background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+      border: 2px solid #86efac;
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-top: 14px;
+    }
+    .solution-inner h4 {
+      color: #065f46; font-size: 1em; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .sol-step {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 7px 0; border-bottom: 1px solid #d1fae5;
+    }
+    .sol-step:last-child { border-bottom: none; }
+    .sol-step-num {
+      background: #059669; color: white;
+      border-radius: 50%; width: 22px; height: 22px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72em; font-weight: 800; margin-top: 2px;
+    }
+    .sol-step p { margin: 0; font-size: 0.9em; color: #374151; }
+    .sol-step p strong { color: #1f2937; }
+    .sol-step p code {
+      font-family: 'Courier New', monospace;
+      background: #d1fae5; color: #065f46;
+      padding: 1px 6px; border-radius: 4px; font-size: 0.9em;
+    }
+
+    .poly-result {
+      font-family: 'Courier New', monospace;
+      font-size: 1.1em; font-weight: 700;
+      background: #dbeafe; color: #1e3a8a;
+      padding: 8px 16px; border-radius: 8px;
+      display: inline-block; margin-top: 8px;
+    }
+    .bigo-result {
+      font-family: 'Courier New', monospace;
+      font-size: 1.2em; font-weight: 800;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 20px; border-radius: 8px;
+      display: inline-block; margin-top: 8px;
+      box-shadow: 0 3px 10px rgba(102,126,234,0.35);
+    }
+    .answer-result {
+      font-size: 1.05em; font-weight: 700;
+      background: #f0fdf4; border: 2px solid #4ade80;
+      color: #166534; padding: 8px 18px;
+      border-radius: 8px; display: inline-block; margin-top: 8px;
+    }
+
+    /* ─── SECTION DIVIDERS ─────────────────────────────────────── */
+    .section-intro {
+      background: #f8faff; border-radius: 12px;
+      padding: 22px 24px; margin-bottom: 24px;
+      border: 1px solid #e0e7ff;
+    }
+    .subsection-title {
+      font-size: 1.1em; font-weight: 800;
+      color: #4b5563;
+      display: flex; align-items: center; gap: 10px;
+      margin: 32px 0 16px;
+    }
+    .subsection-title::before, .subsection-title::after {
+      content: ''; flex: 1; height: 2px; background: #e5e7eb;
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      background: #1e1b4b;
+      color: #a5b4fc;
+      text-align: center;
+      padding: 24px 20px;
+    }
+    footer p { margin: 5px 0; font-size: 0.9em; }
+
+    /* ─── BACK BTN ─────────────────────────────────────────────── */
+    .back-btn {
+      position: fixed; top: 20px; left: 20px; z-index: 200;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; padding: 10px 22px;
+      border-radius: 25px; text-decoration: none;
+      font-weight: 700; font-size: 0.88em;
+      box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+      transition: all 0.25s;
+    }
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102,126,234,0.6);
+    }
+
+    ul, ol { margin-left: 24px; }
+    li { margin: 6px 0; font-size: 0.93em; }
+
+    @media (max-width: 700px) {
+      .content { padding: 24px 20px; }
+      header h1 { font-size: 1.6em; }
+      .code-block { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn">🏠 Home</a>
+
+<div class="container">
+
+<!-- ══════════════════════════════ HEADER -->
+<header>
+  <div class="header-content">
+    <img src="fcit.png" alt="FCIT Logo" onerror="this.style.display='none'" />
+    <div class="header-text">
+      <h1>📊 Algorithm Analysis</h1>
+      <p>CPCS 204 — Data Structures I &nbsp;·&nbsp; Spring 2026</p>
+      <div class="header-badges">
+        <span class="badge">Java → Polynomial</span>
+        <span class="badge">Polynomial → Big O</span>
+        <span class="badge">Time Complexity</span>
+        <span class="badge">15 + 6 Practice Problems</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════ STICKY NAV -->
+<nav class="sticky-nav">
+  <a href="#intro">📖 Intro</a>
+  <a href="#part1" class="p1">① Java → Polynomial</a>
+  <a href="#part2" class="p2">② Polynomial → Big O</a>
+  <a href="#part3" class="p3">③ Time Complexity</a>
+  <a href="#practice" class="p1">🧪 Practice</a>
+  <a href="#challenge" class="ch">🔥 Challenges</a>
+</nav>
+
+<!-- ══════════════════════════════ CONTENT -->
+<div class="content">
+
+<!-- ────────────────── INTRO -->
+<section id="intro">
+  <h2 class="intro">📖 Introduction to Algorithm Analysis</h2>
+
+  <div class="card">
+    <h3>Why Algorithm Analysis?</h3>
+    <p>Algorithm analysis helps us predict performance <em>before</em> running code. Two algorithms solving the same problem can differ by millions of times in speed for large inputs.</p>
+    <ul>
+      <li><strong>Time Complexity:</strong> How much time an algorithm takes relative to input size n</li>
+      <li><strong>Space Complexity:</strong> How much memory an algorithm uses</li>
+      <li><strong>Scalability:</strong> How well the algorithm holds up as n grows huge</li>
+    </ul>
+  </div>
+
+  <h3>Common Complexity Classes (Slowest → Fastest Growth)</h3>
+  <table>
+    <thead>
+      <tr><th>Big O</th><th>Name</th><th>n = 10</th><th>n = 100</th><th>n = 1000</th><th>Real Example</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="complexity-badge cb-1">O(1)</span></td><td>Constant</td><td>1</td><td>1</td><td>1</td><td>Array access by index</td></tr>
+      <tr><td><span class="complexity-badge cb-log">O(log n)</span></td><td>Logarithmic</td><td>3</td><td>7</td><td>10</td><td>Binary search</td></tr>
+      <tr><td><span class="complexity-badge cb-n">O(n)</span></td><td>Linear</td><td>10</td><td>100</td><td>1,000</td><td>Linear search / single loop</td></tr>
+      <tr><td><span class="complexity-badge cb-nlog">O(n log n)</span></td><td>Linearithmic</td><td>33</td><td>664</td><td>9,966</td><td>Merge sort, heap sort</td></tr>
+      <tr><td><span class="complexity-badge cb-n2">O(n²)</span></td><td>Quadratic</td><td>100</td><td>10,000</td><td>1,000,000</td><td>Nested loops, bubble sort</td></tr>
+      <tr><td><span class="complexity-badge cb-n3">O(n³)</span></td><td>Cubic</td><td>1,000</td><td>1,000,000</td><td>10⁹</td><td>Triple nested loops</td></tr>
+      <tr><td><span class="complexity-badge cb-2n">O(2ⁿ)</span></td><td>Exponential</td><td>1,024</td><td>10³⁰</td><td>10³⁰⁰</td><td>Recursive Fibonacci</td></tr>
+      <tr><td><span class="complexity-badge cb-fac">O(n!)</span></td><td>Factorial</td><td>3.6M</td><td>10¹⁵⁷</td><td>—</td><td>Permutations</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ────────────────── PART 1: Java → Polynomial -->
+<section id="part1">
+  <h2 class="p1">① Step 1 — Converting Java Code to Polynomial</h2>
+
+  <div class="section-intro">
+    <div class="rule-box">
+      <div class="rule-item">
+        <div class="rule-num">1</div>
+        <div class="rule-text"><strong>Simple Statement</strong><span>Each statement = <strong>1</strong> operation</span></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">2</div>
+        <div class="rule-text"><strong>Loop</strong><span>Multiply iterations × ops inside</span></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">3</div>
+        <div class="rule-text"><strong>Nested Loops</strong><span>Multiply all loop iteration counts</span></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">4</div>
+        <div class="rule-text"><strong>Sequential Code</strong><span>Add each block's operations</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection-title">Teaching Examples</div>
+
+  <!-- ── E1: Single Loop -->
+  <div class="ex-card">
+    <div class="ex-title p1">
+      <span class="ex-num-badge">Example 1</span> Single Loop
+    </div>
+    <div class="ex-body teach">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)">
+          <span>☕ Java Code</span>
+          <span class="code-toggle">▼</span>
+        </div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    sum = sum + i;  <span class="cmt">// 1 operation</span>
+}</div>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">→</div><p><strong>Loop runs:</strong> n times &nbsp;×&nbsp; <strong>1 operation</strong> inside = <strong>n</strong></p></div>
+      <div style="margin-top:10px;"><span class="poly-result">f(n) = n</span></div>
+    </div>
+  </div>
+
+  <!-- ── E2: Nested Loops -->
+  <div class="ex-card">
+    <div class="ex-title p1">
+      <span class="ex-num-badge">Example 2</span> Nested Loops (n × n)
+    </div>
+    <div class="ex-body teach">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)">
+          <span>☕ Java Code</span><span class="code-toggle">▼</span>
+        </div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        matrix[i][j] = <span class="num">0</span>;  <span class="cmt">// 1 operation</span>
+    }
+}</div>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">→</div><p><strong>Outer loop:</strong> n times &nbsp;×&nbsp; <strong>Inner loop:</strong> n times &nbsp;×&nbsp; 1 op = <strong>n²</strong></p></div>
+      <div style="margin-top:10px;"><span class="poly-result">f(n) = n²</span></div>
+    </div>
+  </div>
+
+  <!-- ── E3: Sequential Loops -->
+  <div class="ex-card">
+    <div class="ex-title p1">
+      <span class="ex-num-badge">Example 3</span> Sequential Loops (Add Them)
+    </div>
+    <div class="ex-body teach">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)">
+          <span>☕ Java Code</span><span class="code-toggle">▼</span>
+        </div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    sum += i;         <span class="cmt">// 1 operation</span>
+}
+
+<span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n*n; j++) {
+    delta += <span class="num">1</span>;       <span class="cmt">// 1 operation</span>
+}</div>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p><strong>First loop:</strong> runs n times → n ops</p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p><strong>Second loop:</strong> runs n² times → n² ops</p></div>
+      <div class="sol-step"><div class="sol-step-num">+</div><p><strong>Sequential → Add:</strong> T(n) = n + n²</p></div>
+      <div style="margin-top:10px;"><span class="poly-result">f(n) = n² + n</span></div>
+    </div>
+  </div>
+
+  <!-- ── E4: Logarithmic -->
+  <div class="ex-card">
+    <div class="ex-title p1">
+      <span class="ex-num-badge">Example 4</span> Logarithmic Loop (Halving)
+    </div>
+    <div class="ex-body teach">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)">
+          <span>☕ Java Code</span><span class="code-toggle">▼</span>
+        </div>
+        <div class="code-block"><span class="kw">while</span> (n &gt; <span class="num">0</span>) {
+    <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>(n);
+    n = n / <span class="num">2</span>;
+}</div>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p>After each iteration n is halved: n → n/2 → n/4 → n/8 → … → 1</p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p>After k iterations: n / 2ᵏ = 1 → 2ᵏ = n → k = log₂(n)</p></div>
+      <div style="margin-top:10px;"><span class="poly-result">f(n) = log₂(n)</span></div>
+    </div>
+  </div>
+
+  <!-- ── E5: Triangular (j < i) -->
+  <div class="ex-card">
+    <div class="ex-title p1">
+      <span class="ex-num-badge">Example 5</span> Triangular Inner Loop (j &lt; i)
+    </div>
+    <div class="ex-body teach">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)">
+          <span>☕ Java Code</span><span class="code-toggle">▼</span>
+        </div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; i; j++) {
+        sum += i * j;  <span class="cmt">// 1 operation</span>
+    }
+}</div>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p>Inner loop runs: 0, 1, 2, 3, …, n−1 times for each i</p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p>Total = 0 + 1 + 2 + … + (n−1) = n(n−1)/2</p></div>
+      <div class="sol-step"><div class="sol-step-num">3</div><p>Expand: n(n−1)/2 = (n²−n)/2 = n²/2 − n/2</p></div>
+      <div style="margin-top:10px;"><span class="poly-result">f(n) = (1/2)n² − (1/2)n</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── PART 2: Polynomial → Big O -->
+<section id="part2">
+  <h2 class="p2">② Step 2 — Converting Polynomial to Big O</h2>
+
+  <div class="section-intro">
+    <div class="rule-box">
+      <div class="rule-item">
+        <div class="rule-num" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">1</div>
+        <div class="rule-text"><strong>Keep highest-order term</strong><span>The term with the largest exponent</span></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">2</div>
+        <div class="rule-text"><strong>Drop all coefficients</strong><span>76,000,000n² → n²</span></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">3</div>
+        <div class="rule-text"><strong>Drop lower-order terms</strong><span>n² + n + 5 → n²</span></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num" style="background:linear-gradient(135deg,#7c3aed,#9333ea)">4</div>
+        <div class="rule-text"><strong>Constant → O(1)</strong><span>f(n) = 42 → O(1)</span></div>
+      </div>
+    </div>
+    <div class="important" style="margin-top:14px; margin-bottom:0;">
+      <strong>Why?</strong> As n → ∞ the highest-order term dominates completely.
+      e.g. for f(n) = 4n² + 3n + 10: when n = 1,000, the 4n² part = 4,000,000 dwarfs 3n (3,000) and 10.
+    </div>
+  </div>
+
+  <div class="subsection-title">Teaching Examples</div>
+
+  <!-- six quick examples, fully visible (no hide button) -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; margin-top:4px;">
+
+    <div class="ex-card">
+      <div class="ex-title p2"><span class="ex-num-badge">E1</span> Quadratic polynomial</div>
+      <div class="ex-body teach" style="padding:16px 20px;">
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = <strong>4n²</strong> + 3n + 10</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>Highest term: <strong>4n²</strong></p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop coefficient 4 → <strong>n²</strong></p></div>
+        <div><span class="bigo-result">O(n²)</span></div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-title p2"><span class="ex-num-badge">E2</span> Large coefficient</div>
+      <div class="ex-body teach" style="padding:16px 20px;">
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = <strong>76,756,234n²</strong> + 427,913n + 7</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>Highest: 76,756,234n²</p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop coefficient → n²</p></div>
+        <div><span class="bigo-result">O(n²)</span></div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-title p2"><span class="ex-num-badge">E3</span> High-degree polynomial</div>
+      <div class="ex-body teach" style="padding:16px 20px;">
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = 74n⁸ − 62n⁵ − 71,562n³ + 3n² − 5</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>Highest: <strong>74n⁸</strong></p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop coeff → n⁸</p></div>
+        <div><span class="bigo-result">O(n⁸)</span></div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-title p2"><span class="ex-num-badge">E4</span> Expand first</div>
+      <div class="ex-body teach" style="padding:16px 20px;">
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = 42n⁴(12n⁶ − 73n² + 11)</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>42n⁴ × 12n⁶ = <strong>504n¹⁰</strong> (highest)</p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop coeff → n¹⁰</p></div>
+        <div><span class="bigo-result">O(n¹⁰)</span></div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-title p2"><span class="ex-num-badge">E5</span> n log n</div>
+      <div class="ex-body teach" style="padding:16px 20px;">
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = 75n log(n) − 415</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>Highest: <strong>75n log n</strong></p></div>
+        <div class="sol-step"><div class="sol-step-num">2</div><p>Drop 75 → n log n</p></div>
+        <div><span class="bigo-result">O(n log n)</span></div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-title p2"><span class="ex-num-badge">E6</span> Constant</div>
+      <div class="ex-body teach" style="padding:16px 20px;">
+        <p style="font-family:'Courier New',monospace; font-size:1.05em; margin-bottom:10px;">f(n) = 5</p>
+        <div class="sol-step"><div class="sol-step-num">1</div><p>No n term at all → constant operations</p></div>
+        <div><span class="bigo-result">O(1)</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ────────────────── PART 3: Time Calculation -->
+<section id="part3">
+  <h2 class="p3">③ Step 3 — Calculating Execution Time</h2>
+
+  <div class="section-intro">
+    <h3 style="color:#059669; margin-top:0;">The Formula</h3>
+    <p>If an algorithm is <strong>O(g(n))</strong>, then its running time is modelled as:</p>
+    <p style="font-family:'Courier New',monospace; font-size:1.15em; background:#d1fae5; padding:10px 16px; border-radius:8px; margin:10px 0;">T(n) = c × g(n)</p>
+    <p>Where <strong>c</strong> is a hardware/implementation constant. Use a <em>known data point</em> (a given n and time) to find c, then use c to predict any other time.</p>
+    <div class="rule-box" style="margin-top:14px;">
+      <div class="rule-item">
+        <div class="rule-num" style="background:linear-gradient(135deg,#059669,#10b981)">1</div>
+        <div class="rule-text"><strong>Find c</strong><span>Plug in the given (n, time) pair</span></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num" style="background:linear-gradient(135deg,#059669,#10b981)">2</div>
+        <div class="rule-text"><strong>Use c</strong><span>Plug in the target n to get T(n)</span></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num" style="background:linear-gradient(135deg,#059669,#10b981)">3</div>
+        <div class="rule-text"><strong>Find n</strong><span>Plug in the target time and solve for n</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection-title">Teaching Examples</div>
+
+  <!-- ── T1 -->
+  <div class="ex-card">
+    <div class="ex-title p3"><span class="ex-num-badge">Example 1</span> O(n) — Find time for new n</div>
+    <div class="ex-body teach">
+      <div class="problem-stmt">
+        Algorithm is <strong>O(n)</strong>. For n = 10, time = 2 ms. <strong>Find time for n = 500.</strong>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p><strong>T(n) = c × n</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p>Find c: &nbsp; 2 = c × 10 &nbsp;→&nbsp; c = 2/10 = <strong>1/5</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">3</div><p>T(500) = (1/5) × 500 = <strong>100 ms</strong></p></div>
+      <span class="answer-result">✅ Answer: 100 milliseconds</span>
+    </div>
+  </div>
+
+  <!-- ── T2 -->
+  <div class="ex-card">
+    <div class="ex-title p3"><span class="ex-num-badge">Example 2</span> O(n²) — Find time for new n</div>
+    <div class="ex-body teach">
+      <div class="problem-stmt">
+        Algorithm is <strong>O(n²)</strong>. For n = 4, time = 10 ms. <strong>Find time for n = 16.</strong>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p><strong>T(n) = c × n²</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p>10 = c × 4² = c × 16 &nbsp;→&nbsp; c = <strong>10/16 = 5/8</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">3</div><p>T(16) = (5/8) × 16² = (5/8) × 256 = <strong>160 ms</strong></p></div>
+      <span class="answer-result">✅ Answer: 160 milliseconds</span>
+    </div>
+  </div>
+
+  <!-- ── T3 -->
+  <div class="ex-card">
+    <div class="ex-title p3"><span class="ex-num-badge">Example 3</span> O(log₂ n) — Find time for new n</div>
+    <div class="ex-body teach">
+      <div class="problem-stmt">
+        Algorithm is <strong>O(log₂ n)</strong>. For n = 16, time = 28 ms. <strong>Find time for n = 64.</strong>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p><strong>T(n) = c × log₂(n)</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p>28 = c × log₂(16) = c × 4 &nbsp;→&nbsp; c = <strong>7</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">3</div><p>T(64) = 7 × log₂(64) = 7 × 6 = <strong>42 ms</strong></p></div>
+      <span class="answer-result">✅ Answer: 42 milliseconds</span>
+    </div>
+  </div>
+
+  <!-- ── T4 -->
+  <div class="ex-card">
+    <div class="ex-title p3"><span class="ex-num-badge">Example 4</span> O(n²) — Find input size n</div>
+    <div class="ex-body teach">
+      <div class="problem-stmt">
+        Algorithm is <strong>O(n²)</strong>. For n = 10, time = 30 ms. <strong>Find n when time = 120 ms.</strong>
+      </div>
+      <div class="sol-step"><div class="sol-step-num">1</div><p><strong>T(n) = c × n²</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">2</div><p>30 = c × 100 &nbsp;→&nbsp; c = <strong>3/10</strong></p></div>
+      <div class="sol-step"><div class="sol-step-num">3</div><p>120 = (3/10) × n² &nbsp;→&nbsp; n² = 400 &nbsp;→&nbsp; n = <strong>20</strong></p></div>
+      <span class="answer-result">✅ Answer: n = 20</span>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── PRACTICE PROBLEMS -->
+<section id="practice">
+  <h2 class="p1">🧪 Practice Problems</h2>
+
+  <div class="subsection-title">Part A — Java Code → Polynomial → Big O</div>
+
+  <!-- P1 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 1</span> Simple Counter Loop</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="tp">int</span> count = <span class="num">0</span>;
+<span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    count++;  <span class="cmt">// how many operations?</span>
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p1')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p1">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Loop runs <strong>n</strong> times, 1 op each → T(n) = n</p></div>
+          <span class="poly-result">f(n) = n</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 2</span> Nested Loop (j starts at i)</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = i; j &lt; n; j++) {
+        sum += array[i][j];
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p2')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p2">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>i=0: inner runs n times &nbsp;|&nbsp; i=1: n−1 &nbsp;|&nbsp; … &nbsp;|&nbsp; i=n−1: 1</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Total = n + (n−1) + … + 1 = <strong>n(n+1)/2</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>Expand → n²/2 + n/2</p></div>
+          <span class="poly-result">f(n) = n²/2 + n/2</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P3 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 3</span> Triple Nested Loop</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        <span class="kw">for</span> (<span class="tp">int</span> k = <span class="num">0</span>; k &lt; n; k++) {
+            cube[i][j][k] = i + j + k;
+        }
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p3')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p3">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>n × n × n = n³</p></div>
+          <span class="poly-result">f(n) = n³</span>&nbsp;&nbsp;<span class="bigo-result">O(n³)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P4 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 4</span> Loop Doubles Each Step</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="tp">int</span> i = <span class="num">1</span>;
+<span class="kw">while</span> (i &lt; n) {
+    <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>(i);
+    i = i * <span class="num">2</span>;
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p4')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p4">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>i = 1, 2, 4, 8, …, 2ᵏ &nbsp;&nbsp;(doubles each time)</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Stops when 2ᵏ ≥ n → k = log₂(n)</p></div>
+          <span class="poly-result">f(n) = log₂(n)</span>&nbsp;&nbsp;<span class="bigo-result">O(log n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P5 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 5</span> Mixed: Nested + Single Loop</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        matrix[i][j] = <span class="num">0</span>;
+    }
+}
+<span class="kw">for</span> (<span class="tp">int</span> k = <span class="num">0</span>; k &lt; n; k++) {
+    sum += array[k];
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p5')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p5">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Nested loop: n²</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Single loop: n</p></div>
+          <div class="sol-step"><div class="sol-step-num">+</div><p>Sequential → add: n² + n</p></div>
+          <span class="poly-result">f(n) = n² + n</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P6 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 6</span> Search with Early Exit</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="tp">boolean</span> found = <span class="kw">false</span>;
+<span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n &amp;&amp; !found; i++) {
+    <span class="kw">if</span> (array[i] == target) {
+        found = <span class="kw">true</span>;
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p6')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p6">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Loop runs <em>at most</em> n times (worst case: target not found)</p></div>
+          <span class="poly-result">f(n) = n</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P7 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 7</span> Triangular Star Pattern</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">1</span>; j &lt;= i; j++) {
+        <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">print</span>(<span class="str">"*"</span>);
+    }
+    <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>();
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p7')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p7">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>i=1: inner 1 time &nbsp;|&nbsp; i=2: 2 &nbsp;|&nbsp; … &nbsp;|&nbsp; i=n: n</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Total = 1+2+…+n = <strong>n(n+1)/2</strong></p></div>
+          <span class="poly-result">f(n) = n²/2 + n/2</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P8 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 8</span> Constant Time Operations</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="tp">int</span> first = array[<span class="num">0</span>];
+<span class="tp">int</span> last  = array[n - <span class="num">1</span>];
+<span class="tp">int</span> mid   = array[n / <span class="num">2</span>];
+<span class="tp">int</span> sum   = first + last + mid;</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p8')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p8">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>4 simple statements, no loops — independent of n</p></div>
+          <span class="poly-result">f(n) = 4</span>&nbsp;&nbsp;<span class="bigo-result">O(1)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P9 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 9</span> Decreasing Loop</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = n; i &gt; <span class="num">0</span>; i--) {
+    sum += array[i - <span class="num">1</span>];
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p9')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p9">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Counts down: n, n−1, …, 1 → exactly n iterations</p></div>
+          <span class="poly-result">f(n) = n</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P10 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 10</span> Step by 2</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i += <span class="num">2</span>) {
+    process(array[i]);
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p10')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p10">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>i visits: 0, 2, 4, … → n/2 iterations</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>f(n) = n/2 — coefficient dropped in Big O</p></div>
+          <span class="poly-result">f(n) = n/2</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
+          <p style="color:#6b7280; font-size:0.83em; margin-top:8px;">💡 Halving the loop doesn't change the Big O class — constants disappear.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P11 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 11</span> Two Different Variables (n, m)</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; m; j++) {
+        matrix[i][j] = i + j;
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p11')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p11">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Outer: n &nbsp;|&nbsp; Inner: m &nbsp;→&nbsp; Total: n × m</p></div>
+          <div class="sol-step"><div class="sol-step-num">!</div><p>n and m are <strong>independent</strong> — cannot simplify to n²</p></div>
+          <span class="poly-result">f(n,m) = n × m</span>&nbsp;&nbsp;<span class="bigo-result">O(n·m)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P12 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 12</span> Half-Array Nested</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n/<span class="num">2</span>; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n/<span class="num">2</span>; j++) {
+        sum += matrix[i][j];
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p12')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p12">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>(n/2) × (n/2) = n²/4</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>1/4 is a constant coefficient → dropped</p></div>
+          <span class="poly-result">f(n) = n²/4</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P13 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 13</span> Reverse Triangle</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = n; i &gt; <span class="num">0</span>; i--) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; i; j++) {
+        <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">print</span>(<span class="str">"*"</span>);
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p13')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p13">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>i=n: n ops &nbsp;|&nbsp; i=n−1: n−1 &nbsp;|&nbsp; … &nbsp;|&nbsp; i=1: 1</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Total = n + (n−1) + … + 1 = <strong>n(n+1)/2</strong></p></div>
+          <span class="poly-result">f(n) = n²/2 + n/2</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P14 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 14</span> Loop Divides by 3</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="tp">int</span> i = n;
+<span class="kw">while</span> (i &gt; <span class="num">1</span>) {
+    <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>(i);
+    i = i / <span class="num">3</span>;
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p14')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p14">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>i = n, n/3, n/9, … After k steps: n/3ᵏ = 1 → k = log₃(n)</p></div>
+          <span class="poly-result">f(n) = log₃(n)</span>&nbsp;&nbsp;<span class="bigo-result">O(log n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P15 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 15</span> Three Sequential Loops</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) { array[i] = i; }
+
+<span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        matrix[i][j] = i * j;
+    }
+}
+
+<span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) { sum += array[i]; }</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p15')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p15">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Loop 1: n &nbsp;&nbsp;|&nbsp;&nbsp; Loop 2 (nested): n² &nbsp;&nbsp;|&nbsp;&nbsp; Loop 3: n</p></div>
+          <div class="sol-step"><div class="sol-step-num">+</div><p>Sequential → n + n² + n = n² + 2n</p></div>
+          <span class="poly-result">f(n) = n² + 2n</span>&nbsp;&nbsp;<span class="bigo-result">O(n²)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Part B: Polynomial → Big O -->
+  <div class="subsection-title">Part B — Polynomial → Big O</div>
+
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 20</span> Convert 5 Polynomials to Big O</div>
+    <div class="ex-body">
+      <div class="problem-stmt">
+        <p>Convert each polynomial to its tightest Big O:</p>
+        <ol style="margin-top:8px;">
+          <li>f(n) = 5n³ + 2n² + 100</li>
+          <li>f(n) = 1000n + 500</li>
+          <li>f(n) = n² log(n) + 3n²</li>
+          <li>f(n) = 2ⁿ + n³</li>
+          <li>f(n) = 15</li>
+        </ol>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p20')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p20">
+        <div class="solution-inner">
+          <h4>✅ Solutions</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>5n³ + 2n² + 100 → highest term 5n³, drop coeff → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n³)</span></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>1000n + 500 → highest term 1000n, drop coeff → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n)</span></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>n² log n + 3n² → n² log n dominates n² → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(n² log n)</span></p></div>
+          <div class="sol-step"><div class="sol-step-num">4</div><p>2ⁿ + n³ → exponential beats polynomial → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(2ⁿ)</span></p></div>
+          <div class="sol-step"><div class="sol-step-num">5</div><p>f(n) = 15 → constant, no n → &nbsp;<span class="bigo-result" style="font-size:0.9em;">O(1)</span></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Part C: Time Calculations -->
+  <div class="subsection-title">Part C — Time Complexity Calculations</div>
+
+  <!-- P16 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 16</span> O(n) — Find Time</div>
+    <div class="ex-body">
+      <div class="problem-stmt">
+        Algorithm is <strong>O(n)</strong>. For n = 50, time = 5 ms.
+        <strong>Find time when n = 200.</strong>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p16')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p16">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p><strong>T(n) = c × n</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>5 = c × 50 → c = 1/10</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>T(200) = (1/10) × 200 = <strong>20 ms</strong></p></div>
+          <span class="answer-result">✅ Answer: 20 milliseconds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P17 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 17</span> O(n²) — Find Time</div>
+    <div class="ex-body">
+      <div class="problem-stmt">
+        Algorithm is <strong>O(n²)</strong>. For n = 5, time = 25 ms.
+        <strong>Find time when n = 20.</strong>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p17')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p17">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p><strong>T(n) = c × n²</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>25 = c × 25 → c = <strong>1</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>T(20) = 1 × 400 = <strong>400 ms</strong></p></div>
+          <span class="answer-result">✅ Answer: 400 milliseconds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P18 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 18</span> O(log₂ n) — Find Time</div>
+    <div class="ex-body">
+      <div class="problem-stmt">
+        Algorithm is <strong>O(log₂ n)</strong>. For n = 32, time = 10 ms.
+        <strong>Find time when n = 256.</strong>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p18')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p18">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p><strong>T(n) = c × log₂(n)</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>10 = c × log₂(32) = c × 5 → c = <strong>2</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>T(256) = 2 × log₂(256) = 2 × 8 = <strong>16 ms</strong></p></div>
+          <span class="answer-result">✅ Answer: 16 milliseconds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P19 -->
+  <div class="ex-card">
+    <div class="ex-title pr"><span class="ex-num-badge">Practice 19</span> O(n²) — Find Input Size n</div>
+    <div class="ex-body">
+      <div class="problem-stmt">
+        Algorithm is <strong>O(n²)</strong>. For n = 20, time = 80 ms.
+        <strong>Find n when time = 320 ms.</strong>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('p19')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="p19">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p><strong>T(n) = c × n²</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>80 = c × 400 → c = <strong>1/5</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>320 = (1/5) × n² → n² = 1600 → n = <strong>40</strong></p></div>
+          <span class="answer-result">✅ Answer: n = 40</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────── CHALLENGE PROBLEMS -->
+<section id="challenge">
+  <h2 class="ch">🔥 Challenging Problems</h2>
+
+  <!-- C1 -->
+  <div class="ex-card">
+    <div class="ex-title ch"><span class="ex-num-badge">Challenge 1</span> Logarithmic Outer × Linear Inner</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i &lt; n; i = i * <span class="num">2</span>) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        process(i, j);
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('c1')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="c1">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Outer loop: i doubles → runs <strong>log₂(n)</strong> times</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Inner loop: runs <strong>n</strong> times each outer iteration</p></div>
+          <div class="sol-step"><div class="sol-step-num">×</div><p>Total = n × log₂(n)</p></div>
+          <span class="poly-result">f(n) = n·log₂(n)</span>&nbsp;&nbsp;<span class="bigo-result">O(n log n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="ex-card">
+    <div class="ex-title ch"><span class="ex-num-badge">Challenge 2</span> Tricky — j is Never Reset</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="tp">int</span> i = <span class="num">0</span>, j = <span class="num">0</span>;
+<span class="kw">while</span> (i &lt; n) {
+    <span class="kw">while</span> (j &lt; n &amp;&amp; array[i][j] == <span class="num">1</span>) {
+        j++;
+    }
+    i++;
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('c2')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="c2">
+        <div class="solution-inner">
+          <h4>✅ Solution — careful, this looks like O(n²) but isn't!</h4>
+          <div class="sol-step"><div class="sol-step-num">!</div><p><strong>j is NOT reset</strong> when i increments — it keeps its value between outer iterations</p></div>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>i increments n times total</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>j increments at most n times total (never goes backwards)</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>Maximum total operations = 2n</p></div>
+          <span class="poly-result">f(n) = 2n</span>&nbsp;&nbsp;<span class="bigo-result">O(n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C3 -->
+  <div class="ex-card">
+    <div class="ex-title ch"><span class="ex-num-badge">Challenge 3</span> Recursive Method</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">void</span> <span class="mth">mystery</span>(<span class="tp">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span>;
+
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">0</span>; i &lt; n; i++) {
+        <span class="cls">System</span>.<span class="mth">out</span>.<span class="mth">println</span>(i);
+    }
+
+    <span class="mth">mystery</span>(n / <span class="num">2</span>);
+    <span class="mth">mystery</span>(n / <span class="num">2</span>);
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('c3')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="c3">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Recurrence: <strong>T(n) = 2T(n/2) + n</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Each level does n total work, depth of recursion = log₂(n)</p></div>
+          <div class="sol-step"><div class="sol-step-num">3</div><p>Total = n × log₂(n) (this is Merge Sort's pattern!)</p></div>
+          <span class="bigo-result">O(n log n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C4 -->
+  <div class="ex-card">
+    <div class="ex-title ch"><span class="ex-num-badge">Challenge 4</span> Square Root Outer Loop</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i * i &lt;= n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+        process(i, j);
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('c4')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="c4">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>Outer: runs while i² ≤ n → i ≤ √n → <strong>√n iterations</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Inner: n iterations each → Total = √n × n = n^(3/2)</p></div>
+          <span class="poly-result">f(n) = n^(3/2)</span>&nbsp;&nbsp;<span class="bigo-result">O(n√n)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C5 -->
+  <div class="ex-card">
+    <div class="ex-title ch"><span class="ex-num-badge">Challenge 5</span> Triple Triangular</div>
+    <div class="ex-body">
+      <div class="code-container">
+        <div class="code-header" onclick="toggleCode(this)"><span>☕ Java Code</span><span class="code-toggle">▼</span></div>
+        <div class="code-block"><span class="kw">for</span> (<span class="tp">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
+    <span class="kw">for</span> (<span class="tp">int</span> j = <span class="num">1</span>; j &lt;= i; j++) {
+        <span class="kw">for</span> (<span class="tp">int</span> k = <span class="num">1</span>; k &lt;= j; k++) {
+            sum++;
+        }
+    }
+}</div>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('c5')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="c5">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">1</div><p>For each i, inner two loops give triangular(i) = i(i+1)/2</p></div>
+          <div class="sol-step"><div class="sol-step-num">2</div><p>Total = Σᵢ₌₁ⁿ i(i+1)/2 = n(n+1)(n+2)/6 ≈ n³/6</p></div>
+          <span class="poly-result">f(n) ≈ n³/6</span>&nbsp;&nbsp;<span class="bigo-result">O(n³)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C6 -->
+  <div class="ex-card">
+    <div class="ex-title ch"><span class="ex-num-badge">Challenge 6</span> Compare Two Algorithms</div>
+    <div class="ex-body">
+      <div class="problem-stmt">
+        <strong>Algorithm A:</strong> O(n log n) &nbsp;|&nbsp; n = 8 → 24 ms<br/>
+        <strong>Algorithm B:</strong> O(n²) &nbsp;|&nbsp; n = 10 → 50 ms<br/>
+        <strong>Which is faster for n = 100?</strong>
+      </div>
+      <button class="sol-btn" onclick="toggleSolution('c6')"><span class="btn-icon">👁</span> Show Solution</button>
+      <div class="solution-panel" id="c6">
+        <div class="solution-inner">
+          <h4>✅ Solution</h4>
+          <div class="sol-step"><div class="sol-step-num">A</div><p>24 = c × 8 × log₂(8) = c × 24 → c = 1<br/>T(100) = 1 × 100 × log₂(100) ≈ 100 × 6.64 = <strong>664 ms</strong></p></div>
+          <div class="sol-step"><div class="sol-step-num">B</div><p>50 = c × 100 → c = 0.5<br/>T(100) = 0.5 × 10,000 = <strong>5,000 ms</strong></p></div>
+          <span class="answer-result">🏆 Algorithm A wins! (664 ms vs 5,000 ms)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</div><!-- end .content -->
+
+<footer>
+  <p>© 2026 CPCS 204 — Data Structures I — Algorithm Analysis</p>
+  <p>Based on material by Dr. Jonathan Cazalas &amp; Dr. Muhammad Umair Ramzan &nbsp;·&nbsp; Enhanced by Dr. Almalawi</p>
+</footer>
+</div><!-- end .container -->
+
+<!-- ══════════════════════════════ JAVASCRIPT -->
+<script>
+  // ── Toggle solution panels ──────────────────────────
+  function toggleSolution(id) {
+    const panel = document.getElementById(id);
+    const btn   = panel.previousElementSibling;
+    const isOpen = panel.classList.contains('open');
+
+    panel.classList.toggle('open');
+    btn.classList.toggle('revealed', !isOpen);
+    btn.innerHTML = isOpen
+      ? '<span class="btn-icon">👁</span> Show Solution'
+      : '<span class="btn-icon btn-icon-up">🙈</span> Hide Solution';
+  }
+
+  // ── Toggle code blocks ─────────────────────────────
+  function toggleCode(header) {
+    const block  = header.nextElementSibling;
+    const toggle = header.querySelector('.code-toggle');
+    const collapsed = block.classList.toggle('collapsed');
+    toggle.classList.toggle('collapsed', collapsed);
+  }
+</script>
+
+</body>
+</html>

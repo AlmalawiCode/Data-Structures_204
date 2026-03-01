@@ -439,32 +439,32 @@
         }
 
         /* Code Styles */
-        .code-container {
-            margin: 20px 0;
-        }
-
+        .code-container { margin: 20px 0; }
         .code-header {
             background: #667eea;
             color: white;
-            padding: 12px 20px;
+            padding: 14px 24px;
             border-radius: 8px 8px 0 0;
             font-weight: bold;
+            font-size: 1.15em;
         }
 
         pre {
-            background: #2d2d2d;
+            background: #000000;
             color: #f8f8f2;
-            padding: 20px;
+            padding: 25px 30px;
             border-radius: 0 0 8px 8px;
             overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.25em;
             line-height: 1.8;
+            white-space: pre;
+            letter-spacing: 0.3px;
             margin: 0;
         }
 
         code {
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
         }
 
         .inline-code {
@@ -475,29 +475,13 @@
             color: #e83e8c;
         }
 
-        .keyword {
-            color: #ff79c6;
-        }
-
-        .type {
-            color: #8be9fd;
-        }
-
-        .string {
-            color: #f1fa8c;
-        }
-
-        .comment {
-            color: #6272a4;
-        }
-
-        .number {
-            color: #bd93f9;
-        }
-
-        .method {
-            color: #50fa7b;
-        }
+        .keyword { color: #ff79c6; font-weight: bold; }
+        .class-name { color: #50fa7b; font-weight: bold; }
+        .type { color: #50fa7b; font-weight: bold; }
+        .string { color: #f1fa8c; }
+        .comment { color: #7a8bbf; }
+        .number { color: #bd93f9; }
+        .method { color: #8be9fd; }
 
         /* Algorithm Steps */
         .algorithm-steps {

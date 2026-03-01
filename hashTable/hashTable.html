@@ -230,17 +230,17 @@
 
         /* Code blocks */
         .code-block {
-            background: var(--code-bg);
-            color: #e2e8f0;
-            padding: 1.5rem;
-            border-radius: 10px;
+            background: #000000;
+            color: #f8f8f2;
+            padding: 25px 30px;
+            border-radius: 8px;
             overflow-x: auto;
-            margin: 1rem 0;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.95rem;
-            line-height: 1.6;
+            margin: 20px 0;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.25em;
+            line-height: 1.8;
             white-space: pre;
-            tab-size: 4;
+            letter-spacing: 0.3px;
         }
 
         .code-block code {
@@ -248,12 +248,14 @@
             white-space: pre;
         }
 
-        .code-block .keyword { color: #c084fc; }
-        .code-block .type { color: #38bdf8; }
-        .code-block .function { color: #fbbf24; }
-        .code-block .string { color: #4ade80; }
-        .code-block .comment { color: #94a3b8; font-style: italic; }
-        .code-block .number { color: #f472b6; }
+        .code-block .keyword { color: #ff79c6; font-weight: bold; }
+        .code-block .class-name { color: #50fa7b; font-weight: bold; }
+        .code-block .type { color: #50fa7b; font-weight: bold; }
+        .code-block .function { color: #8be9fd; }
+        .code-block .method { color: #8be9fd; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .comment { color: #7a8bbf; }
+        .code-block .number { color: #bd93f9; }
 
         /* Formula boxes */
         .formula-box {
@@ -699,7 +701,7 @@
 
             <p>The simplest data structure Ahmed knows is an <em>array</em>. So he writes:</p>
 
-            <div class="code-block"><span class="type">Student</span>[] students = <span class="keyword">new</span> <span class="type">Student</span>[N];  <span class="comment">// N = maximum number of students</span>
+            <div class="code-block collapsed"><span class="type">Student</span>[] students = <span class="keyword">new</span> <span class="type">Student</span>[N];  <span class="comment">// N = maximum number of students</span>
 <span class="type">int</span> count = <span class="number">0</span>;                          <span class="comment">// how many students are currently stored</span>
 
 <span class="keyword">void</span> <span class="function">insertStudent</span>(<span class="type">Student</span> s) {
@@ -709,7 +711,7 @@
 
             <p>To <em>search</em> for a particular student by ID, Ahmed loops over the array:</p>
 
-            <div class="code-block"><span class="type">Student</span> <span class="function">findStudent</span>(<span class="type">int</span> id) {
+            <div class="code-block collapsed"><span class="type">Student</span> <span class="function">findStudent</span>(<span class="type">int</span> id) {
     <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; count; i++) {
         <span class="keyword">if</span> (students[i].id == id) {
             <span class="keyword">return</span> students[i];
@@ -853,7 +855,7 @@
 
             <h3>Direct Addressing Example</h3>
 
-            <div class="code-block"><span class="type">Student</span>[] table = <span class="keyword">new</span> <span class="type">Student</span>[<span class="number">101</span>];  <span class="comment">// ignore index 0, use 1..100</span>
+            <div class="code-block collapsed"><span class="type">Student</span>[] table = <span class="keyword">new</span> <span class="type">Student</span>[<span class="number">101</span>];  <span class="comment">// ignore index 0, use 1..100</span>
 
 <span class="keyword">void</span> <span class="function">insert</span>(<span class="type">Student</span> s) {
     table[s.id] = s;  <span class="comment">// direct mapping</span>

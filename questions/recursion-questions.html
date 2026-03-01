@@ -177,8 +177,8 @@
             line-height: 1.7;
         }
 
-        /* Code Block - matching numeric-recursion.html style */
-        .code-container { margin: 16px 0; }
+        /* Code Blocks */
+        .code-container { margin: 20px 0; }
         .code-header {
             background: #667eea;
             color: white;
@@ -545,9 +545,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         Java - Sum of Squares of Digits
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">public static int</span> <span class="method">sumSq</span>(<span class="keyword">int</span> n) {
+                    <div class="code-block collapsed"><span class="keyword">public static int</span> <span class="method">sumSq</span>(<span class="keyword">int</span> n) {
     <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
     <span class="keyword">int</span> d = n % <span class="number">10</span>;
     <span class="keyword">return</span> (d * d) + <span class="method">sumSq</span>(n / <span class="number">10</span>);
@@ -612,9 +612,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         Java - Product of Digits
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">public static int</span> <span class="method">prodDigits</span>(<span class="keyword">int</span> n) {
+                    <div class="code-block collapsed"><span class="keyword">public static int</span> <span class="method">prodDigits</span>(<span class="keyword">int</span> n) {
     <span class="keyword">if</span> (n &lt; <span class="number">10</span>) <span class="keyword">return</span> n;
     <span class="keyword">return</span> (n % <span class="number">10</span>) * <span class="method">prodDigits</span>(n / <span class="number">10</span>);
 }</div>
@@ -678,9 +678,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         Java - Keep Only Even Digits
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">public static int</span> <span class="method">keepEven</span>(<span class="keyword">int</span> n) {
+                    <div class="code-block collapsed"><span class="keyword">public static int</span> <span class="method">keepEven</span>(<span class="keyword">int</span> n) {
     <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
     <span class="keyword">int</span> d = n % <span class="number">10</span>;
     <span class="keyword">if</span> (d % <span class="number">2</span> == <span class="number">0</span>)
@@ -762,9 +762,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         Java - Two-Parameter Mystery
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">public static int</span> <span class="method">mystery</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
+                    <div class="code-block collapsed"><span class="keyword">public static int</span> <span class="method">mystery</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
     <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> a;
     <span class="keyword">if</span> (a % <span class="number">2</span> == <span class="number">0</span>)
         <span class="keyword">return</span> <span class="method">mystery</span>(a / <span class="number">2</span>, b - <span class="number">1</span>) + b;
@@ -831,9 +831,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         Java - Branching Recursion
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">public static int</span> <span class="method">branch</span>(<span class="keyword">int</span> n) {
+                    <div class="code-block collapsed"><span class="keyword">public static int</span> <span class="method">branch</span>(<span class="keyword">int</span> n) {
     <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> n;
     <span class="keyword">if</span> (n % <span class="number">2</span> == <span class="number">0</span>)
         <span class="keyword">return</span> <span class="method">branch</span>(n / <span class="number">2</span>) + <span class="method">branch</span>(n - <span class="number">1</span>);
@@ -915,9 +915,9 @@
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
                         Java - Two-Parameter Branching
-                        <span class="code-toggle">&#9660;</span>
+                        <span class="code-toggle collapsed">&#9660;</span>
                     </div>
-                    <div class="code-block"><span class="keyword">public static int</span> <span class="method">solve</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
+                    <div class="code-block collapsed"><span class="keyword">public static int</span> <span class="method">solve</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
     <span class="keyword">if</span> (a &lt;= <span class="number">0</span> || b &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;
     <span class="keyword">if</span> (a &gt;= b)
         <span class="keyword">return</span> a + <span class="method">solve</span>(a - <span class="number">2</span>, b - <span class="number">1</span>);
