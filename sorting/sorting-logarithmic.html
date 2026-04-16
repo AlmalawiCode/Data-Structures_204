@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Sort &amp; Merge Sort – CPCS204</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true, theme:'base', securityLevel:'loose'});</script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+            background:linear-gradient(135deg,#0d9488 0%,#14b8a6 50%,#06b6d4 100%);
+            min-height:100vh; padding:20px; line-height:1.6; color:#334155;
+        }
+        .container{
+            max-width:1100px; margin:0 auto; background:white;
+            border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden;
+        }
+        /* ── Header ── */
+        header{
+            background:linear-gradient(135deg,#0d9488,#14b8a6,#06b6d4);
+            color:white; padding:40px 30px; text-align:center;
+        }
+        header .back-link{
+            display:inline-block; margin-bottom:16px;
+            background:rgba(255,255,255,0.2); color:white;
+            padding:6px 16px; border-radius:20px; text-decoration:none;
+            font-size:0.9em; transition:background 0.3s;
+        }
+        header .back-link:hover{background:rgba(255,255,255,0.35);}
+        header h1{font-size:2.4em; margin-bottom:8px;}
+        header p{font-size:1.1em; opacity:0.9;}
+        .header-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+        .badge{
+            background:rgba(255,255,255,0.2); padding:6px 16px;
+            border-radius:20px; font-size:0.9em; font-weight:600;
+        }
+        /* ── Sticky Nav ── */
+        nav.section-nav{
+            background:#f8fafc; padding:12px 20px;
+            display:flex; gap:8px; flex-wrap:wrap;
+            border-bottom:2px solid #e2e8f0;
+            position:sticky; top:0; z-index:100;
+        }
+        nav.section-nav a{
+            padding:7px 14px; background:white;
+            border:2px solid #14b8a6; color:#0d9488;
+            border-radius:20px; text-decoration:none;
+            font-weight:600; font-size:0.85em; transition:all 0.25s;
+            white-space:nowrap;
+        }
+        nav.section-nav a:hover{background:#14b8a6;color:white;}
+        /* ── Content ── */
+        .content{padding:40px 40px 60px;}
+        section{margin-bottom:70px; scroll-margin-top:70px;}
+        h2{
+            color:#0d9488; font-size:1.8em; margin-bottom:20px;
+            border-bottom:3px solid #14b8a6; padding-bottom:10px;
+        }
+        h3{color:#0f766e; font-size:1.35em; margin:28px 0 14px;}
+        h4{color:#155e75; font-size:1.1em; margin:20px 0 10px;}
+        p{margin-bottom:14px; line-height:1.75;}
+        ul,ol{margin:10px 0 14px 28px;}
+        li{margin:6px 0;}
+        /* ── Callout Boxes ── */
+        .box{padding:18px 22px; margin:20px 0; border-radius:8px; border-left:5px solid;}
+        .box-teal{background:#f0fdfa; border-color:#14b8a6;}
+        .box-yellow{background:#fefce8; border-color:#eab308;}
+        .box-green{background:#f0fdf4; border-color:#22c55e;}
+        .box-purple{background:#faf5ff; border-color:#a855f7;}
+        .box-blue{background:#eff6ff; border-color:#3b82f6;}
+        .box-red{background:#fff1f2; border-color:#f43f5e;}
+        .box-orange{background:#fff7ed; border-color:#f97316;}
+        /* ── Complexity Cards ── */
+        .complexity-cards{
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:16px; margin:20px 0;
+        }
+        .complexity-card{
+            padding:20px; border-radius:12px; text-align:center; border:2px solid;
+        }
+        .complexity-card.quad{background:#fff1f2; border-color:#f43f5e; color:#9f1239;}
+        .complexity-card.log{background:#eff6ff; border-color:#3b82f6; color:#1e3a8a;}
+        .complexity-card .big-o{font-size:1.8em; font-weight:800; margin:8px 0;}
+        .complexity-card .name{font-size:0.9em; opacity:0.8;}
+        /* ── Code block ── */
+        .code-container{margin:20px 0;}
+        .code-header{
+            background:#14b8a6;color:white;padding:12px 20px;
+            border-radius:8px 8px 0 0;cursor:pointer;
+            display:flex;justify-content:space-between;align-items:center;
+            font-weight:700; transition:background 0.2s;
+        }
+        .code-header:hover{background:#0d9488;}
+        .code-toggle{transition:transform 0.3s;}
+        .code-toggle.collapsed{transform:rotate(-90deg);}
+        .code-block{
+            background:#0f172a;color:#e2e8f0;padding:22px 26px;
+            border-radius:0 0 8px 8px;overflow-x:auto;
+            font-family:'Courier New',monospace;font-size:1em;
+            line-height:1.75;white-space:pre;
+            transition:max-height 0.35s ease,padding 0.35s ease;
+        }
+        .code-block.collapsed{max-height:0!important;padding:0 26px;overflow:hidden;}
+        .kw{color:#7dd3fc;}.cm{color:#64748b;}.nm{color:#a5f3fc;}.st{color:#86efac;}
+        /* ── Math box ── */
+        .math-box{
+            background:#faf5ff; border:2px solid #a855f7;
+            border-radius:12px; padding:24px; margin:20px 0; text-align:center;
+        }
+        .math-formula{
+            font-size:1.2em; color:#6d28d9; font-style:italic;
+            margin:8px 0; font-family:'Times New Roman',serif;
+        }
+        .math-step{margin:6px 0; font-size:1em; color:#4c1d95;}
+        .frac{display:inline-block;text-align:center;vertical-align:middle;font-family:'Times New Roman',serif;font-style:italic;line-height:1.1;}
+        .frac .num{display:block;border-bottom:1.5px solid #6d28d9;padding:0 5px 2px;}
+        .frac .den{display:block;padding:2px 5px 0;}
+        /* ── Mermaid ── */
+        .mermaid{display:flex;justify-content:center;margin:20px 0;}
+        .mermaid svg{max-width:100%;height:auto;}
+        /* ── Recursion tree visual ── */
+        .rec-tree{
+            background:#f0fdf4; border:2px solid #22c55e;
+            border-radius:12px; padding:24px; margin:20px 0;
+            font-family:'Courier New',monospace; font-size:0.92em;
+            overflow-x:auto; line-height:2;
+        }
+        .rec-level{display:flex; gap:6px; justify-content:center; margin:4px 0; flex-wrap:wrap;}
+        .rec-node{
+            background:white; border:2px solid #14b8a6; border-radius:8px;
+            padding:4px 10px; color:#0d9488; font-weight:700; font-size:0.88em;
+            white-space:nowrap;
+        }
+        .rec-node.base{background:#bbf7d0; border-color:#22c55e; color:#065f46;}
+        .rec-work{
+            text-align:right; color:#64748b; font-size:0.85em;
+            padding-right:16px; font-style:italic; min-width:90px;
+        }
+        .rec-row{display:flex; align-items:center; margin:2px 0;}
+        /* ── Comparison table ── */
+        .cmp-table{width:100%;border-collapse:collapse;font-size:0.95em;margin:20px 0;}
+        .cmp-table th{
+            background:linear-gradient(135deg,#0d9488,#14b8a6);
+            color:white; padding:12px 16px; text-align:center;
+        }
+        .cmp-table th:first-child{text-align:left; border-radius:8px 0 0 0;}
+        .cmp-table th:last-child{border-radius:0 8px 0 0;}
+        .cmp-table td{padding:11px 16px; border-bottom:1px solid #e2e8f0; text-align:center;}
+        .cmp-table td:first-child{text-align:left; font-weight:700;}
+        .cmp-table tr:nth-child(even){background:#f8fafc;}
+        .cmp-table tr:hover{background:#f0fdfa;}
+        .good{color:#16a34a; font-weight:700;}
+        .bad{color:#dc2626; font-weight:700;}
+        .mid{color:#d97706; font-weight:700;}
+        /* ── Simulation launch box ── */
+        .sim-launch{
+            border:2px solid #14b8a6; border-radius:12px;
+            padding:30px; margin:24px 0; text-align:center;
+            background:linear-gradient(135deg,#f0fdfa,#e0f2fe);
+            box-shadow:0 4px 20px rgba(20,184,166,0.15);
+        }
+        .sim-launch p{margin-bottom:18px; color:#0f766e; font-size:1em;}
+        .sim-btn{
+            display:inline-block;
+            background:linear-gradient(135deg,#0d9488,#14b8a6);
+            color:white; text-decoration:none;
+            padding:14px 36px; border-radius:30px;
+            font-size:1.1em; font-weight:700;
+            box-shadow:0 4px 15px rgba(20,184,166,0.4);
+            transition:transform 0.2s, box-shadow 0.2s;
+            letter-spacing:0.5px;
+        }
+        .sim-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 6px 20px rgba(20,184,166,0.55);
+        }
+        .sim-btn .arrow{font-size:1.2em; margin-right:8px;}
+        /* ── Responsive ── */
+        @media(max-width:640px){
+            .content{padding:20px 16px 40px;}
+            h2{font-size:1.4em;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+    <a href="index.html" class="back-link">← Sorting Hub</a>
+    <h1>Quick Sort &amp; Merge Sort</h1>
+    <p>CPCS204 — Data Structures I</p>
+    <div class="header-badges">
+        <span class="badge">Module 13</span>
+        <span class="badge">Logarithmic Sorting — O(n log n)</span>
+        <span class="badge">Quick Sort · Merge Sort</span>
+    </div>
+</header>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav class="section-nav">
+    <a href="#intro">1 · Why O(n log n)?</a>
+    <a href="#overview">2 · Overview</a>
+    <a href="#quicksort">3 · Quick Sort</a>
+    <a href="#mergesort">4 · Merge Sort</a>
+    <a href="#comparison">5 · Comparison</a>
+</nav>
+
+<div class="content">
+
+<!-- ══════════════ SECTION 1 ══════════════ -->
+<section id="intro">
+    <h2>1 · Why Do We Need O(n log n)?</h2>
+
+    <p>
+        In the previous chapter we studied <strong>quadratic sorting algorithms</strong> —
+        Selection Sort, Insertion Sort, and Bubble Sort. They are simple and educational,
+        but their O(n²) complexity makes them impractical for large datasets.
+    </p>
+
+    <div class="complexity-cards">
+        <div class="complexity-card quad">
+            <div class="big-o">O(n²)</div>
+            <div class="name">Quadratic</div>
+            <p style="font-size:0.85em;margin-top:8px;">n = 1,000,000 → 10<sup>12</sup> operations<br>Too slow for real-world data</p>
+        </div>
+        <div class="complexity-card log">
+            <div class="big-o">O(n log n)</div>
+            <div class="name">Logarithmic</div>
+            <p style="font-size:0.85em;margin-top:8px;">n = 1,000,000 → ~20,000,000 operations<br>50,000× faster than O(n²)!</p>
+        </div>
+    </div>
+
+    <div class="box box-teal">
+        <strong>Key Question:</strong> Can we sort faster than O(n²)? <br>
+        <strong>Answer:</strong> Yes — by using <em>Divide and Conquer</em>.
+        Instead of comparing every element with every other element,
+        we <em>divide</em> the problem in half at each step, solve each half,
+        then <em>combine</em> the results. This reduces the number of levels to log₂(n).
+    </div>
+
+    <h3>The Divide and Conquer Strategy</h3>
+    <ol>
+        <li><strong>Divide</strong> — Split the problem into smaller sub-problems</li>
+        <li><strong>Conquer</strong> — Solve each sub-problem recursively</li>
+        <li><strong>Combine</strong> — Merge the solved sub-problems into a final solution</li>
+    </ol>
+
+    <div class="box box-yellow">
+        <strong>Why log n levels?</strong> If we halve the array at each step, starting from n elements:
+        n → n/2 → n/4 → n/8 → … → 1.
+        The number of times we can halve n before reaching 1 is <strong>log₂(n)</strong>.
+        At n = 1,000,000, that is only about 20 levels.
+    </div>
+</section>
+
+<!-- ══════════════ SECTION 2 ══════════════ -->
+<section id="overview">
+    <h2>2 · Chapter Overview</h2>
+
+    <p>We study two O(n log n) sorting algorithms in this chapter, both based on Divide and Conquer:</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;">
+        <div class="box box-blue" style="margin:0;">
+            <h4 style="margin-top:0;color:#1e40af;">Quick Sort</h4>
+            <ul style="margin:8px 0 0 18px;font-size:0.95em;">
+                <li>Choose a <strong>pivot</strong> element</li>
+                <li>Partition: elements &lt; pivot go left, elements &gt; pivot go right</li>
+                <li>Recursively sort each partition</li>
+                <li>Average O(n log n), Worst O(n²)</li>
+                <li>In-place (no extra array needed)</li>
+            </ul>
+        </div>
+        <div class="box box-green" style="margin:0;">
+            <h4 style="margin-top:0;color:#065f46;">Merge Sort</h4>
+            <ul style="margin:8px 0 0 18px;font-size:0.95em;">
+                <li>Divide array in half</li>
+                <li>Recursively sort each half</li>
+                <li>Merge two sorted halves into one</li>
+                <li><strong>Always</strong> O(n log n) — guaranteed</li>
+                <li>Requires O(n) extra space</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>The Recurrence — Why Both Are O(n log n)</h3>
+    <p>Both algorithms share the same recurrence relation in their average/typical case:</p>
+
+    <div class="math-box">
+        <p class="math-formula">T(n) = 2 · T<span style="font-size:0.9em;">(</span><span class="frac" style="font-size:0.85em;"><span class="num">n</span><span class="den">2</span></span><span style="font-size:0.9em;">)</span> + n</p>
+        <p class="math-step">Solving by substitution (or Master Theorem):</p>
+        <p class="math-formula" style="margin-top:10px;">T(n) = n log₂ n &nbsp;∈&nbsp; O(n log n)</p>
+        <p class="math-step">At each level: O(n) work. Number of levels: log₂(n). Total: O(n log n).</p>
+    </div>
+</section>
+
+<!-- ══════════════ SECTION 3: QUICK SORT ══════════════ -->
+<section id="quicksort">
+    <h2>3 · Quick Sort</h2>
+
+    <div class="box box-blue">
+        <strong>Core Idea:</strong> Choose a <em>pivot</em> element.
+        Rearrange (partition) the array so everything <strong>smaller than the pivot</strong>
+        is on the left and everything <strong>larger</strong> is on the right.
+        The pivot is now in its <em>correct final position</em>.
+        Recursively apply the same process to each half.
+    </div>
+
+    <h3>How It Works</h3>
+    <ol>
+        <li>Choose a pivot element (first element, last, random, or median-of-three).</li>
+        <li><strong>Partition</strong> the array around the pivot:
+            <ul>
+                <li>Pointer <strong>i</strong> scans from the left, looking for elements <em>greater</em> than the pivot.</li>
+                <li>Pointer <strong>j</strong> scans from the right, looking for elements <em>smaller or equal</em> to the pivot.</li>
+                <li>When both stop, swap A[i] and A[j].</li>
+                <li>When i ≥ j, place the pivot at position j — it is now in its final sorted position.</li>
+            </ul>
+        </li>
+        <li>Recursively sort the left sub-array (indices l … j−1) and the right sub-array (j+1 … h).</li>
+        <li>Base case: a sub-array of size 0 or 1 is already sorted — stop.</li>
+    </ol>
+
+    <h3>Algorithm Flowchart</h3>
+    <div class="mermaid">
+flowchart TD
+    A([quickSort&#40;A, l, h&#41;]) --> B{l &lt; h?}
+    B -->|No — base case| Z([Return])
+    B -->|Yes| C[j = partition&#40;A, l, h&#41;]
+    C --> D[quickSort&#40;A, l, j−1&#41;]
+    D --> E[quickSort&#40;A, j+1, h&#41;]
+    E --> Z2([Return])
+
+    C2([partition&#40;A, l, h&#41;]) --> P[pivot = A&#91;l&#93;]
+    P --> IJ[i = l−1 &nbsp; j = h+1]
+    IJ --> Loop{i &lt; j?}
+    Loop -->|Yes| Fi[i++ until A&#91;i&#93; &gt; pivot]
+    Fi --> Fj[j−− until A&#91;j&#93; ≤ pivot]
+    Fj --> Chk{i &lt; j?}
+    Chk -->|Yes| Sw[Swap A&#91;i&#93; ↔ A&#91;j&#93;]
+    Sw --> Loop
+    Chk -->|No| Loop
+    Loop -->|No| Fin[Swap pivot to position j]
+    Fin --> Ret([Return j])
+    </div>
+
+    <h3>Algorithm Analysis</h3>
+    <div class="math-box">
+        <p class="math-step"><strong>Average Case and Best Case — O(n log n):</strong></p>
+        <p class="math-step">Each partition splits the array roughly in half → log₂(n) levels × O(n) work per level</p>
+        <p class="math-formula" style="margin-top:10px;">T(n) = 2 · T<span style="font-size:0.9em;">(</span><span class="frac" style="font-size:0.85em;"><span class="num">n</span><span class="den">2</span></span><span style="font-size:0.9em;">)</span> + n &nbsp;&nbsp;→&nbsp;&nbsp; O(n log n)</p>
+
+        <hr style="margin:16px 0;border-color:#c4b5fd;">
+        <p class="math-step"><strong>Worst Case — O(n²):</strong></p>
+        <p class="math-step">Occurs when the pivot is always the smallest or largest element (sorted or reverse-sorted input).</p>
+        <p class="math-step">Each partition produces one sub-array of size n−1 and one of size 0 → n levels → O(n) work each</p>
+        <p class="math-formula" style="margin-top:10px;">T(n) = T(n−1) + n &nbsp;&nbsp;→&nbsp;&nbsp; O(n²)</p>
+
+        <div class="box box-yellow" style="text-align:left;margin-top:14px;">
+            <strong>Avoiding the worst case:</strong> Choose a random pivot, or use the
+            <em>median-of-three</em> strategy (take the median of first, middle, and last elements).
+            In practice, Quick Sort is often the fastest algorithm due to excellent cache performance.
+        </div>
+    </div>
+
+    <h3>Recursion Tree (Average Case, n = 8)</h3>
+    <div class="rec-tree">
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level"><div class="rec-node">[0 … 7] — n=8</div></div>
+            </div>
+            <div class="rec-work">work: 8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node">[0…3] — n=4</div>
+                    <div class="rec-node">[4…7] — n=4</div>
+                </div>
+            </div>
+            <div class="rec-work">work: 4+4=8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙↘ &nbsp;&nbsp;&nbsp; ↙↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node">[0…1]</div>
+                    <div class="rec-node">[2…3]</div>
+                    <div class="rec-node">[4…5]</div>
+                    <div class="rec-node">[6…7]</div>
+                </div>
+            </div>
+            <div class="rec-work">work: 2×4=8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙↘ ↙↘ ↙↘ ↙↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node base">[0]</div>
+                    <div class="rec-node base">[1]</div>
+                    <div class="rec-node base">[2]</div>
+                    <div class="rec-node base">[3]</div>
+                    <div class="rec-node base">[4]</div>
+                    <div class="rec-node base">[5]</div>
+                    <div class="rec-node base">[6]</div>
+                    <div class="rec-node base">[7]</div>
+                </div>
+            </div>
+            <div class="rec-work">base cases</div>
+        </div>
+        <p style="text-align:center;margin-top:14px;color:#0d9488;font-weight:700;">
+            log₂(8) = 3 levels &nbsp;×&nbsp; 8 operations per level &nbsp;=&nbsp; 24 total &nbsp;→&nbsp; O(n log n)
+        </p>
+    </div>
+
+    <h3>Java Implementation</h3>
+    <div class="code-container">
+        <div class="code-header" onclick="toggleCode('qs-code')">
+            <span>Quick Sort + Partition — Java</span><span class="code-toggle" id="qs-code-toggle">▼</span>
+        </div>
+        <pre class="code-block" id="qs-code"><span class="cm">// Main recursive function</span>
+<span class="kw">public static void</span> quickSort(<span class="kw">int</span>[] A, <span class="kw">int</span> l, <span class="kw">int</span> h) {
+    <span class="kw">if</span> (l < h) {
+        <span class="kw">int</span> j = partition(A, l, h);   <span class="cm">// partition and get pivot position</span>
+        quickSort(A, l, j - <span class="nm">1</span>);        <span class="cm">// sort left of pivot</span>
+        quickSort(A, j + <span class="nm">1</span>, h);        <span class="cm">// sort right of pivot</span>
+    }
+}
+
+<span class="cm">// Hoare partition scheme</span>
+<span class="kw">public static int</span> partition(<span class="kw">int</span>[] A, <span class="kw">int</span> l, <span class="kw">int</span> h) {
+    <span class="kw">int</span> pivot = A[l];            <span class="cm">// choose first element as pivot</span>
+    <span class="kw">int</span> i = l - <span class="nm">1</span>;
+    <span class="kw">int</span> j = h + <span class="nm">1</span>;
+
+    <span class="kw">while</span> (i < j) {
+        <span class="kw">do</span> { i++; } <span class="kw">while</span> (A[i] <= pivot);   <span class="cm">// move i right</span>
+        <span class="kw">do</span> { j--; } <span class="kw">while</span> (A[j] > pivot);    <span class="cm">// move j left</span>
+        <span class="kw">if</span> (i < j) swap(A, i, j);
+    }
+    swap(A, l, j);               <span class="cm">// place pivot at its final position</span>
+    <span class="kw">return</span> j;
+}
+
+<span class="kw">private static void</span> swap(<span class="kw">int</span>[] A, <span class="kw">int</span> i, <span class="kw">int</span> j) {
+    <span class="kw">int</span> t = A[i]; A[i] = A[j]; A[j] = t;
+}</pre>
+    </div>
+
+    <h3>Step-by-Step Simulation</h3>
+    <p>Open the interactive simulation to explore the <strong>partition algorithm</strong> step by step.
+       Enter a custom array, choose a pivot index, and watch the Hoare scheme in action.</p>
+    <div class="sim-launch">
+        <p>Interactive simulation — enter any array, pick a pivot, and step through every swap.</p>
+        <a href="quicksort-simulation.html" target="_blank" class="sim-btn">
+            <span class="arrow">▶</span> Launch Quick Sort Simulation
+        </a>
+    </div>
+</section>
+
+<!-- ══════════════ SECTION 4: MERGE SORT ══════════════ -->
+<section id="mergesort">
+    <h2>4 · Merge Sort</h2>
+
+    <div class="box box-green">
+        <strong>Core Idea:</strong> Divide the array in half, recursively sort each half,
+        then <em>merge</em> the two sorted halves into one sorted array.
+        Unlike Quick Sort, no pivot or partitioning is needed — the "work"
+        happens entirely during the merge step.
+    </div>
+
+    <h3>How It Works</h3>
+    <ol>
+        <li><strong>Divide:</strong> Find the midpoint m = (l + h) / 2. Split into A[l…m] and A[m+1…h].</li>
+        <li><strong>Conquer:</strong> Recursively call mergeSort on each half.</li>
+        <li><strong>Base case:</strong> A sub-array of size 1 (l == h) is already sorted — return immediately.</li>
+        <li><strong>Merge:</strong> Use two pointers i (left half) and j (right half).
+            Compare A[i] and A[j], copy the smaller into a temporary array B, advance that pointer.
+            When one half is exhausted, copy the remainder of the other half.
+            Finally copy B back into A.</li>
+    </ol>
+
+    <h3>Algorithm Flowchart</h3>
+    <div class="mermaid">
+flowchart TD
+    A([mergeSort&#40;A, l, h&#41;]) --> B{l &lt; h?}
+    B -->|No — size 1| Z([Return])
+    B -->|Yes| C[m = &#40;l + h&#41; / 2]
+    C --> D[mergeSort&#40;A, l, m&#41;]
+    D --> E[mergeSort&#40;A, m+1, h&#41;]
+    E --> F[merge&#40;A, l, m, h&#41;]
+    F --> Z2([Return])
+
+    M([merge&#40;A, l, m, h&#41;]) --> Init[i=l &nbsp; j=m+1 &nbsp; k=l]
+    Init --> Wh{i≤m AND j≤h?}
+    Wh -->|Yes| Cmp{A&#91;i&#93; ≤ A&#91;j&#93;?}
+    Cmp -->|Yes| TakeL[B&#91;k++&#93; = A&#91;i++&#93;]
+    Cmp -->|No| TakeR[B&#91;k++&#93; = A&#91;j++&#93;]
+    TakeL --> Wh
+    TakeR --> Wh
+    Wh -->|No| Rem1[Copy remaining left half to B]
+    Rem1 --> Rem2[Copy remaining right half to B]
+    Rem2 --> Copy[Copy B&#91;l…h&#93; back to A&#91;l…h&#93;]
+    Copy --> End([Return])
+    </div>
+
+    <h3>Algorithm Analysis</h3>
+    <div class="math-box">
+        <p class="math-step"><strong>All Cases (Best, Average, Worst) — O(n log n):</strong></p>
+        <p class="math-step">Merge Sort <em>always</em> divides exactly in half and always merges all n elements.</p>
+        <p class="math-step">There is <strong>no worst case</strong> — the behaviour is the same regardless of input order.</p>
+        <p class="math-formula" style="margin-top:12px;">T(n) = 2 · T<span style="font-size:0.9em;">(</span><span class="frac" style="font-size:0.85em;"><span class="num">n</span><span class="den">2</span></span><span style="font-size:0.9em;">)</span> + n &nbsp;&nbsp;→&nbsp;&nbsp; O(n log n)</p>
+
+        <hr style="margin:16px 0;border-color:#c4b5fd;">
+        <p class="math-step"><strong>Space Complexity — O(n):</strong></p>
+        <p class="math-step">The merge step requires a temporary array B of size n.
+        This is the main trade-off compared to Quick Sort (which is in-place).</p>
+
+        <div class="box box-green" style="text-align:left;margin-top:14px;">
+            <strong>Key advantage:</strong> Merge Sort is <em>stable</em> (equal elements keep their original order)
+            and guarantees O(n log n) even on sorted, reverse-sorted, or adversarial input.
+            It is the preferred choice when guaranteed performance and stability are required.
+        </div>
+    </div>
+
+    <h3>Recursion Tree (n = 8)</h3>
+    <div class="rec-tree">
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level"><div class="rec-node">[38,27,43,3,9,82,10,56]</div></div>
+            </div>
+            <div class="rec-work">merge: 8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node">[38,27,43,3]</div>
+                    <div class="rec-node">[9,82,10,56]</div>
+                </div>
+            </div>
+            <div class="rec-work">merge: 4+4=8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙↘ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↙↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node">[38,27]</div>
+                    <div class="rec-node">[43,3]</div>
+                    <div class="rec-node">[9,82]</div>
+                    <div class="rec-node">[10,56]</div>
+                </div>
+            </div>
+            <div class="rec-work">merge: 2×4=8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙↘ ↙↘ ↙↘ ↙↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node base">[38]</div>
+                    <div class="rec-node base">[27]</div>
+                    <div class="rec-node base">[43]</div>
+                    <div class="rec-node base">[3]</div>
+                    <div class="rec-node base">[9]</div>
+                    <div class="rec-node base">[82]</div>
+                    <div class="rec-node base">[10]</div>
+                    <div class="rec-node base">[56]</div>
+                </div>
+            </div>
+            <div class="rec-work">base cases</div>
+        </div>
+        <p style="text-align:center;margin-top:14px;color:#0d9488;font-weight:700;">
+            log₂(8) = 3 levels &nbsp;×&nbsp; 8 merge operations per level &nbsp;=&nbsp; 24 total &nbsp;→&nbsp; O(n log n)
+        </p>
+    </div>
+
+    <h3>Java Implementation</h3>
+    <div class="code-container">
+        <div class="code-header" onclick="toggleCode('ms-code')">
+            <span>Merge Sort — Java</span><span class="code-toggle" id="ms-code-toggle">▼</span>
+        </div>
+        <pre class="code-block" id="ms-code"><span class="cm">// Main recursive function</span>
+<span class="kw">public static void</span> mergeSort(<span class="kw">int</span>[] A, <span class="kw">int</span> l, <span class="kw">int</span> h) {
+    <span class="kw">if</span> (l < h) {
+        <span class="kw">int</span> m = (l + h) / <span class="nm">2</span>;          <span class="cm">// find midpoint</span>
+        mergeSort(A, l, m);            <span class="cm">// sort left half</span>
+        mergeSort(A, m + <span class="nm">1</span>, h);        <span class="cm">// sort right half</span>
+        merge(A, l, m, h);             <span class="cm">// merge sorted halves</span>
+    }
+}
+
+<span class="cm">// Merge two sorted sub-arrays A[l..m] and A[m+1..h]</span>
+<span class="kw">public static void</span> merge(<span class="kw">int</span>[] A, <span class="kw">int</span> l, <span class="kw">int</span> m, <span class="kw">int</span> h) {
+    <span class="kw">int</span> i = l, j = m + <span class="nm">1</span>, k = l;
+    <span class="kw">int</span>[] B = <span class="kw">new int</span>[A.length];      <span class="cm">// temporary array</span>
+
+    <span class="kw">while</span> (i <= m && j <= h) {
+        <span class="kw">if</span> (A[i] <= A[j]) {
+            B[k++] = A[i++];           <span class="cm">// take from left half</span>
+        } <span class="kw">else</span> {
+            B[k++] = A[j++];           <span class="cm">// take from right half</span>
+        }
+    }
+    <span class="kw">while</span> (i <= m)  B[k++] = A[i++];  <span class="cm">// copy remaining left</span>
+    <span class="kw">while</span> (j <= h)  B[k++] = A[j++];  <span class="cm">// copy remaining right</span>
+
+    <span class="kw">for</span> (<span class="kw">int</span> x = l; x <= h; x++) A[x] = B[x]; <span class="cm">// copy back</span>
+}</pre>
+    </div>
+
+    <h3>Step-by-Step Simulation</h3>
+    <p>Open the interactive simulation to watch Merge Sort's full execution as a <strong>binary tree</strong> —
+       the divide phase splits the tree top-down, and the merge phase rebuilds it bottom-up.</p>
+    <div class="sim-launch">
+        <p>Binary tree visualization — watch the array split level by level, then merge back sorted.</p>
+        <a href="mergesort-simulation.html" target="_blank" class="sim-btn">
+            <span class="arrow">▶</span> Launch Merge Sort Simulation
+        </a>
+    </div>
+</section>
+
+<!-- ══════════════ SECTION 5: COMPARISON ══════════════ -->
+<section id="comparison">
+    <h2>5 · Quick Sort vs Merge Sort</h2>
+
+    <div class="box box-teal">
+        Both algorithms are O(n log n) — but they are <em>not</em> identical.
+        Understanding their differences helps you choose the right algorithm for the right situation.
+    </div>
+
+    <table class="cmp-table">
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Quick Sort</th>
+                <th>Merge Sort</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Best Case</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+            </tr>
+            <tr>
+                <td>Average Case</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+            </tr>
+            <tr>
+                <td>Worst Case</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(n log n)</td>
+            </tr>
+            <tr>
+                <td>Space Complexity</td>
+                <td class="good">O(log n) — in-place*</td>
+                <td class="bad">O(n) — extra array</td>
+            </tr>
+            <tr>
+                <td>Stable?</td>
+                <td class="bad">No</td>
+                <td class="good">Yes</td>
+            </tr>
+            <tr>
+                <td>Cache Performance</td>
+                <td class="good">Excellent</td>
+                <td class="mid">Good</td>
+            </tr>
+            <tr>
+                <td>Preferred for</td>
+                <td>General-purpose, in-memory sorting</td>
+                <td>Linked lists, external sorting, stable sort required</td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="font-size:0.85em;color:#64748b;">* O(log n) stack space for recursion</p>
+
+    <h3>The Full Picture — All Sorting Algorithms</h3>
+    <table class="cmp-table">
+        <thead>
+            <tr>
+                <th>Algorithm</th>
+                <th>Best</th>
+                <th>Average</th>
+                <th>Worst</th>
+                <th>Space</th>
+                <th>Adaptive?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Selection Sort</td>
+                <td class="bad">O(n²)</td>
+                <td class="bad">O(n²)</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(1)</td>
+                <td class="bad">No</td>
+            </tr>
+            <tr>
+                <td>Bubble Sort (optimized)</td>
+                <td class="good">O(n)</td>
+                <td class="bad">O(n²)</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(1)</td>
+                <td class="good">Yes</td>
+            </tr>
+            <tr>
+                <td>Insertion Sort</td>
+                <td class="good">O(n)</td>
+                <td class="bad">O(n²)</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(1)</td>
+                <td class="good">Yes</td>
+            </tr>
+            <tr>
+                <td>Quick Sort</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(log n)</td>
+                <td class="bad">No</td>
+            </tr>
+            <tr>
+                <td>Merge Sort</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+                <td class="bad">O(n)</td>
+                <td class="bad">No</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box box-yellow" style="margin-top:24px;">
+        <strong>Practical Guidance:</strong>
+        <ul style="margin-top:8px;">
+            <li>For <strong>general in-memory sorting</strong> → Quick Sort (fastest in practice due to cache locality)</li>
+            <li>For <strong>guaranteed O(n log n)</strong> or <strong>stable sorting</strong> → Merge Sort</li>
+            <li>For <strong>small arrays (n &lt; 20)</strong> or <strong>nearly sorted data</strong> → Insertion Sort</li>
+            <li>Most language libraries (Java's <code>Arrays.sort</code>, Python's <code>sorted</code>) use <strong>hybrid algorithms</strong> that combine Quick Sort / Merge Sort with Insertion Sort for small sub-arrays.</li>
+        </ul>
+    </div>
+</section>
+
+</div><!-- /content -->
+</div><!-- /container -->
+
+<script>
+function toggleCode(id) {
+    const block  = document.getElementById(id);
+    const toggle = document.getElementById(id + '-toggle');
+    if (!block) return;
+    block.classList.toggle('collapsed');
+    toggle.classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>

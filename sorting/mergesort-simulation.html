@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merge Sort – Binary Tree Simulation | CPCS204</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    background:linear-gradient(135deg,#0d9488 0%,#14b8a6 50%,#06b6d4 100%);
+    min-height:100vh; padding:20px; color:#334155;
+}
+.container{
+    max-width:1300px; margin:0 auto; background:white;
+    border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden;
+}
+/* ── Header ── */
+header{
+    background:linear-gradient(135deg,#0d9488,#14b8a6,#06b6d4);
+    color:white; padding:28px 30px; text-align:center;
+}
+header .back-link{
+    display:inline-block; margin-bottom:12px;
+    background:rgba(255,255,255,0.2); color:white;
+    padding:5px 14px; border-radius:20px; text-decoration:none;
+    font-size:0.85em; transition:background 0.3s;
+}
+header .back-link:hover{background:rgba(255,255,255,0.35);}
+header h1{font-size:1.9em; margin-bottom:6px;}
+header p{font-size:0.95em; opacity:0.9;}
+
+/* ── Input bar ── */
+.input-bar{
+    background:#f8fafc; padding:16px 24px;
+    border-bottom:2px solid #e2e8f0;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.input-bar label{font-weight:600; color:#0d9488; font-size:0.95em; white-space:nowrap;}
+.input-bar input{
+    flex:1; min-width:200px; padding:9px 14px;
+    border:2px solid #14b8a6; border-radius:8px;
+    font-size:0.95em; font-family:inherit; outline:none;
+    transition:border-color 0.2s;
+}
+.input-bar input:focus{border-color:#0d9488;}
+.btn{
+    padding:9px 20px; border:none; border-radius:8px; cursor:pointer;
+    font-weight:700; font-size:0.9em; transition:all 0.2s;
+}
+.btn-teal{background:#14b8a6;color:white;}
+.btn-teal:hover{background:#0d9488;}
+.btn-nav{background:#e0f2fe;color:#0369a1; min-width:90px;}
+.btn-nav:hover:not(:disabled){background:#bae6fd;}
+.btn-nav:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* ── Main layout ── */
+.main-layout{display:grid; grid-template-columns:268px 1fr; min-height:640px;}
+
+/* ── Code panel ── */
+.code-panel{
+    background:#0f172a; padding:20px; overflow-y:auto;
+    border-right:2px solid #1e293b;
+}
+.code-panel h3{
+    color:#14b8a6; font-size:0.82em; text-transform:uppercase;
+    letter-spacing:1px; margin-bottom:14px;
+}
+.code-lines{list-style:none; font-family:'Courier New',monospace; font-size:0.78em;}
+.code-lines li{
+    padding:2px 8px; border-radius:4px; color:#94a3b8;
+    line-height:1.65; white-space:pre; transition:background 0.25s, color 0.25s;
+}
+.code-lines li.hl-active{background:#1e3a4a; color:#67e8f9; font-weight:700;}
+.code-lines li.hl-divide{background:#1c2a1c; color:#86efac;}
+.code-lines li.hl-merge {background:#2a1c2a; color:#d8b4fe;}
+
+/* ── Visual panel ── */
+.vis-panel{
+    display:flex; flex-direction:column;
+    background:#f8fafc;
+}
+
+/* Step info bar */
+.step-info{
+    background:white; border-bottom:2px solid #e2e8f0;
+    padding:12px 20px; display:flex; align-items:center; gap:14px;
+}
+.step-counter{
+    background:#14b8a6; color:white;
+    padding:4px 14px; border-radius:20px; font-weight:700; font-size:0.88em;
+    white-space:nowrap;
+}
+.step-desc{flex:1; color:#0f766e; font-size:0.93em; font-weight:600;}
+
+/* Nav bar */
+.nav-bar{
+    background:#f1f5f9; padding:10px 20px;
+    display:flex; align-items:center; gap:10px;
+    border-bottom:2px solid #e2e8f0;
+}
+.progress-bar{
+    flex:1; height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;
+}
+.progress-fill{height:100%; background:linear-gradient(90deg,#14b8a6,#06b6d4); transition:width 0.3s;}
+
+/* Tree area */
+.tree-area{
+    flex:1; overflow:auto; padding:20px 16px 10px;
+    display:flex; justify-content:center;
+}
+#treeSvg{display:block; overflow:visible;}
+
+/* Merge detail panel */
+.merge-detail{
+    border-top:2px solid #e2e8f0; background:white;
+    padding:14px 20px; min-height:90px;
+}
+.merge-detail h4{color:#0d9488; margin-bottom:10px; font-size:0.85em; text-transform:uppercase; letter-spacing:0.5px;}
+.merge-arrays{display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;}
+.array-group{display:flex; flex-direction:column; align-items:center; gap:4px;}
+.array-label{font-size:0.72em; font-weight:700; color:#64748b; text-transform:uppercase;}
+.array-cells{display:flex; gap:3px;}
+.cell{
+    width:34px; height:34px; border-radius:6px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:0.88em;
+    border:2px solid; transition:all 0.2s;
+}
+.c-left  {background:#dbeafe; border-color:#3b82f6; color:#1e3a8a;}
+.c-right {background:#fce7f3; border-color:#ec4899; color:#831843;}
+.c-result{background:#dcfce7; border-color:#22c55e; color:#14532d;}
+.c-empty {background:#f1f5f9; border-color:#cbd5e1; color:#94a3b8;}
+.c-hot   {background:#fef3c7; border-color:#f59e0b; color:#78350f; transform:scale(1.18);}
+.ptr{font-size:0.65em; color:#6b7280; text-align:center; height:14px; width:34px;}
+
+/* Legend */
+.legend{
+    display:flex; gap:10px; flex-wrap:wrap; padding:8px 20px;
+    border-top:1px solid #e2e8f0; background:#f8fafc;
+}
+.legend-item{display:flex; align-items:center; gap:5px; font-size:0.76em; color:#475569;}
+.legend-dot{width:13px; height:13px; border-radius:3px; flex-shrink:0; border:2px solid;}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+    <a href="index.html" class="back-link">← Sorting Hub</a>
+    <h1>Merge Sort — Binary Tree Simulation</h1>
+    <p>Watch the recursive divide &amp; conquer unfold as a binary tree</p>
+</header>
+
+<!-- Input bar -->
+<div class="input-bar">
+    <label>Array:</label>
+    <input type="text" id="arrayInput" value="38, 27, 43, 3, 9, 82, 10" placeholder="e.g. 5, 3, 8, 1, 9, 2">
+    <button class="btn btn-teal" onclick="buildSimulation()">▶ Build</button>
+    <button class="btn btn-teal" onclick="randomArray()">↺ Random</button>
+</div>
+
+<!-- Main layout -->
+<div class="main-layout">
+
+    <!-- Java code panel -->
+    <div class="code-panel">
+        <h3>Java Code</h3>
+        <ul class="code-lines" id="codeLines">
+            <li data-line="1">void mergeSort(</li>
+            <li data-line="2">  int[] a, int l, int r) {</li>
+            <li data-line="3">  if (l &gt;= r) return;</li>
+            <li data-line="4"> </li>
+            <li data-line="5">  int m = (l + r) / 2;</li>
+            <li data-line="6">  mergeSort(a, l, m);</li>
+            <li data-line="7">  mergeSort(a, m+1, r);</li>
+            <li data-line="8">  merge(a, l, m, r);</li>
+            <li data-line="9">}</li>
+            <li data-line="10"> </li>
+            <li data-line="11">void merge(int[] a,</li>
+            <li data-line="12">  int l, int m, int r) {</li>
+            <li data-line="13">  int[] L =</li>
+            <li data-line="14">    copyOfRange(a,l,m+1);</li>
+            <li data-line="15">  int[] R =</li>
+            <li data-line="16">    copyOfRange(a,m+1,r+1);</li>
+            <li data-line="17">  int i=0, j=0, k=l;</li>
+            <li data-line="18"> </li>
+            <li data-line="19">  while(i&lt;L.len &amp;&amp;</li>
+            <li data-line="20">      j&lt;R.len) {</li>
+            <li data-line="21">    if(L[i] &lt;= R[j])</li>
+            <li data-line="22">      a[k++]=L[i++];</li>
+            <li data-line="23">    else</li>
+            <li data-line="24">      a[k++]=R[j++];</li>
+            <li data-line="25">  }</li>
+            <li data-line="26">  while(i&lt;L.len)</li>
+            <li data-line="27">    a[k++]=L[i++];</li>
+            <li data-line="28">  while(j&lt;R.len)</li>
+            <li data-line="29">    a[k++]=R[j++];</li>
+            <li data-line="30">}</li>
+        </ul>
+    </div>
+
+    <!-- Visual panel -->
+    <div class="vis-panel">
+        <div class="step-info">
+            <span class="step-counter" id="stepCounter">Step 0 / 0</span>
+            <span class="step-desc" id="stepDesc">Enter an array and click Build to start.</span>
+        </div>
+        <div class="nav-bar">
+            <button class="btn btn-nav" id="btnPrev" onclick="prevStep()" disabled>◀ Prev</button>
+            <button class="btn btn-nav" id="btnNext" onclick="nextStep()" disabled>Next ▶</button>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+        <div class="tree-area">
+            <svg id="treeSvg" width="700" height="400"></svg>
+        </div>
+        <div class="merge-detail">
+            <h4 id="mergeDetailTitle">Merge Detail</h4>
+            <div class="merge-arrays" id="mergeArrays">
+                <span style="color:#94a3b8;font-size:0.9em;">Merge step details appear here.</span>
+            </div>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9;border-color:#94a3b8;"></div>Pending</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fef3c7;border-color:#f59e0b;"></div>Dividing</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#dbeafe;border-color:#3b82f6;"></div>Merging</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#dcfce7;border-color:#22c55e;"></div>Sorted</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fce7f3;border-color:#ec4899;"></div>Active Node</div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  GLOBALS
+// ═══════════════════════════════════════════
+const SVG_NS = 'http://www.w3.org/2000/svg';
+let nodes   = [];   // tree node objects
+let steps   = [];   // pre-generated steps
+let curStep = -1;
+let origArr = [];
+
+// Node state colours
+const STATE = {
+    pending : { fill:'#f1f5f9', stroke:'#94a3b8', text:'#475569' },
+    dividing: { fill:'#fef3c7', stroke:'#f59e0b', text:'#78350f' },
+    merging : { fill:'#dbeafe', stroke:'#3b82f6', text:'#1e3a8a' },
+    sorted  : { fill:'#dcfce7', stroke:'#22c55e', text:'#14532d' },
+    active  : { fill:'#fce7f3', stroke:'#ec4899', text:'#831843' },
+};
+
+// ═══════════════════════════════════════════
+//  TREE CONSTRUCTION
+// ═══════════════════════════════════════════
+function makeNode(l, r, parentId) {
+    const id = nodes.length;
+    nodes.push({ id, l, r, parentId,
+                 values: origArr.slice(l, r+1),
+                 leftChild: null, rightChild: null,
+                 svgX:0, svgY:0 });
+    return id;
+}
+
+function buildTree(l, r, parentId) {
+    const id = makeNode(l, r, parentId);
+    if (l < r) {
+        const m = (l + r) >> 1;
+        nodes[id].leftChild  = buildTree(l,   m, id);
+        nodes[id].rightChild = buildTree(m+1, r, id);
+    }
+    return id;
+}
+
+// ═══════════════════════════════════════════
+//  LAYOUT  (Reingold-Tilford style, simple)
+// ═══════════════════════════════════════════
+const NODE_H = 46;
+const ROW_GAP = 52;
+let leafCounter = 0;
+
+function layoutLeafFirst(id, depth) {
+    const n = nodes[id];
+    n.svgY = depth * (NODE_H + ROW_GAP) + 20;
+    const nW = Math.max(54, n.values.length * 26 + 14);
+    n.svgW = nW;
+
+    if (n.leftChild === null) {
+        n.svgX = leafCounter * (nW + 18) + nW / 2;
+        leafCounter += 1;
+        return;
+    }
+    layoutLeafFirst(n.leftChild,  depth + 1);
+    layoutLeafFirst(n.rightChild, depth + 1);
+    const lx = nodes[n.leftChild].svgX;
+    const rx = nodes[n.rightChild].svgX;
+    n.svgX = (lx + rx) / 2;
+}
+
+// ═══════════════════════════════════════════
+//  STEP GENERATION
+// ═══════════════════════════════════════════
+function generateSteps() {
+    const work = [...origArr];
+    const nState = {};
+    nodes.forEach(n => nState[n.id] = 'pending');
+
+    const list = [];
+    function snap(desc, line, activeId, md) {
+        // clone values for all nodes from work array
+        const vals = {};
+        nodes.forEach(n => { vals[n.id] = work.slice(n.l, n.r + 1); });
+        list.push({ desc, line, activeId,
+                    nodeStates: {...nState},
+                    nodeVals: vals,
+                    mergeDetail: md || null });
+    }
+
+    function ms(id, l, r) {
+        const node = nodes[id];
+        if (l >= r) {
+            nState[id] = 'sorted';
+            snap(`Base: [${work[l]}] — single element, already sorted`, 3, id, null);
+            return;
+        }
+
+        nState[id] = 'dividing';
+        const m = (l + r) >> 1;
+        snap(`Divide [${work.slice(l,r+1)}] at mid=${m} → [${work.slice(l,m+1)}] | [${work.slice(m+1,r+1)}]`, 5, id, null);
+
+        snap(`Call mergeSort on LEFT [${work.slice(l,m+1)}]`, 6, id, null);
+        ms(node.leftChild,  l,   m);
+
+        snap(`Call mergeSort on RIGHT [${work.slice(m+1,r+1)}]`, 7, id, null);
+        ms(node.rightChild, m+1, r);
+
+        // --- MERGE ---
+        nState[id] = 'merging';
+        const L = work.slice(l, m+1);
+        const R = work.slice(m+1, r+1);
+        snap(`merge([${L}], [${R}]) — compare and interleave`, 8, id, null);
+
+        const Lc = [...L], Rc = [...R];
+        let i=0, j=0, k=l;
+        const res = new Array(r - l + 1).fill(null);
+
+        while (i < Lc.length && j < Rc.length) {
+            const fromL = Lc[i] <= Rc[j];
+            const val   = fromL ? Lc[i] : Rc[j];
+            res[k - l]  = val;
+            snap(
+                fromL
+                    ? `L[${i}]=${Lc[i]} ≤ R[${j}]=${Rc[j]}  →  place ${val} from Left`
+                    : `L[${i}]=${Lc[i]} > R[${j}]=${Rc[j]}  →  place ${val} from Right`,
+                fromL ? 22 : 24, id,
+                { L:Lc, R:Rc, result:[...res], iPtr:i, jPtr:j, kIdx:k-l }
+            );
+            work[k++] = val;
+            if (fromL) i++; else j++;
+        }
+        while (i < Lc.length) {
+            res[k-l] = Lc[i];
+            snap(`Copy remaining Left[${i}]=${Lc[i]}`, 27, id,
+                 { L:Lc, R:Rc, result:[...res], iPtr:i, jPtr:j, kIdx:k-l });
+            work[k++] = Lc[i++];
+        }
+        while (j < Rc.length) {
+            res[k-l] = Rc[j];
+            snap(`Copy remaining Right[${j}]=${Rc[j]}`, 29, id,
+                 { L:Lc, R:Rc, result:[...res], iPtr:i, jPtr:j, kIdx:k-l });
+            work[k++] = Rc[j++];
+        }
+
+        nState[id] = 'sorted';
+        snap(`Merged → [${work.slice(l,r+1)}]`, 8, id,
+             { L:Lc, R:Rc, result:work.slice(l,r+1), iPtr:-1, jPtr:-1, kIdx:-1 });
+    }
+
+    snap('Click Next ▶ to start Merge Sort', 1, null, null);
+    ms(0, 0, origArr.length - 1);
+    snap(`Merge Sort complete!  Sorted: [${work}]`, 9, 0, null);
+    return list;
+}
+
+// ═══════════════════════════════════════════
+//  SVG RENDERING
+// ═══════════════════════════════════════════
+function svgEl(tag, attr, txt) {
+    const e = document.createElementNS(SVG_NS, tag);
+    for (const [k,v] of Object.entries(attr)) e.setAttribute(k, v);
+    if (txt !== undefined) e.textContent = txt;
+    return e;
+}
+
+function renderTree(step) {
+    const svg = document.getElementById('treeSvg');
+    svg.innerHTML = '';
+
+    // bounding box
+    let maxX = 0, maxY = 0;
+    nodes.forEach(n => {
+        maxX = Math.max(maxX, n.svgX + n.svgW/2 + 14);
+        maxY = Math.max(maxY, n.svgY + NODE_H + 14);
+    });
+    svg.setAttribute('width',  Math.max(600, maxX));
+    svg.setAttribute('height', Math.max(280, maxY));
+
+    // edges
+    nodes.forEach(n => {
+        if (n.leftChild === null) return;
+        [n.leftChild, n.rightChild].forEach(cid => {
+            const c = nodes[cid];
+            svg.appendChild(svgEl('line', {
+                x1: n.svgX,    y1: n.svgY + NODE_H,
+                x2: c.svgX,    y2: c.svgY,
+                stroke:'#cbd5e1', 'stroke-width':'1.8',
+            }));
+        });
+    });
+
+    // nodes
+    nodes.forEach(n => {
+        const isActive = step.activeId === n.id;
+        const rawState = step.nodeStates[n.id] || 'pending';
+        const col = STATE[isActive ? 'active' : rawState];
+        const vals = step.nodeVals[n.id] || n.values;
+        const w = n.svgW;
+        const x = n.svgX - w/2;
+        const y = n.svgY;
+
+        // glow for active
+        if (isActive) {
+            svg.appendChild(svgEl('rect', {
+                x: x-3, y: y-3, width: w+6, height: NODE_H+6,
+                rx:'10', fill:'rgba(236,72,153,0.2)',
+            }));
+        }
+
+        svg.appendChild(svgEl('rect', {
+            x, y, width: w, height: NODE_H,
+            rx:'7', fill: col.fill, stroke: col.stroke,
+            'stroke-width': isActive ? '2.5' : '1.8',
+        }));
+
+        // index label [l..r]
+        const label = n.l === n.r ? `[${n.l}]` : `[${n.l}‥${n.r}]`;
+        svg.appendChild(svgEl('text', {
+            x: n.svgX, y: y + 12,
+            'text-anchor':'middle', 'font-size':'9',
+            fill:'#94a3b8', 'font-family':'monospace',
+        }, label));
+
+        // values
+        const cellW = Math.min(24, (w - 8) / Math.max(vals.length, 1));
+        vals.forEach((v, i) => {
+            const cx = x + 4 + (i + 0.5) * cellW;
+            svg.appendChild(svgEl('text', {
+                x: cx, y: y + 33,
+                'text-anchor':'middle', 'font-size':'12',
+                'font-weight':'700', fill: col.text,
+                'font-family':'Arial,sans-serif',
+            }, String(v)));
+        });
+    });
+}
+
+// ═══════════════════════════════════════════
+//  MERGE DETAIL PANEL
+// ═══════════════════════════════════════════
+function renderMergeDetail(step) {
+    const title = document.getElementById('mergeDetailTitle');
+    const box   = document.getElementById('mergeArrays');
+    if (!step.mergeDetail) {
+        title.textContent = 'Merge Detail';
+        box.innerHTML = '<span style="color:#94a3b8;font-size:0.88em;">Merge step details appear here.</span>';
+        return;
+    }
+    const {L, R, result, iPtr, jPtr, kIdx} = step.mergeDetail;
+    title.textContent = `Merging:  Left [${L}]  +  Right [${R}]`;
+
+    const mkCells = (arr, baseClass, ptr, ptrChar) => {
+        let h = '<div class="array-cells">';
+        arr.forEach((v,i) => {
+            const hot = i === ptr ? ' c-hot' : '';
+            h += `<div class="cell ${baseClass}${hot}">${v !== null ? v : ''}</div>`;
+        });
+        h += '</div><div class="array-cells">';
+        arr.forEach((v,i) => {
+            h += `<div class="ptr">${i === ptr && ptr >= 0 ? ptrChar : ''}</div>`;
+        });
+        return h + '</div>';
+    };
+
+    box.innerHTML =
+        `<div class="array-group"><div class="array-label">Left (L)</div>${mkCells(L,'c-left',iPtr,'i')}</div>` +
+        `<div style="align-self:center;font-size:1.3em;color:#14b8a6;padding-top:10px;">+</div>` +
+        `<div class="array-group"><div class="array-label">Right (R)</div>${mkCells(R,'c-right',jPtr,'j')}</div>` +
+        `<div style="align-self:center;font-size:1.3em;color:#14b8a6;padding-top:10px;">→</div>` +
+        `<div class="array-group"><div class="array-label">Result</div>${mkCells(result,'c-result',kIdx,'k')}</div>`;
+}
+
+// ═══════════════════════════════════════════
+//  CODE HIGHLIGHT
+// ═══════════════════════════════════════════
+function highlightCode(line) {
+    document.querySelectorAll('#codeLines li').forEach(li => {
+        li.classList.remove('hl-active','hl-divide','hl-merge');
+    });
+    if (!line) return;
+    const li = document.querySelector(`#codeLines li[data-line="${line}"]`);
+    if (!li) return;
+    const cls = line <= 9 ? 'hl-divide' : 'hl-merge';
+    li.classList.add('hl-active', cls);
+    li.scrollIntoView({block:'nearest', behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════
+//  STEP NAVIGATION
+// ═══════════════════════════════════════════
+function applyStep(idx) {
+    curStep = idx;
+    const step = steps[idx];
+    renderTree(step);
+    renderMergeDetail(step);
+    highlightCode(step.line);
+
+    document.getElementById('stepCounter').textContent = `Step ${idx+1} / ${steps.length}`;
+    document.getElementById('stepDesc').textContent    = step.desc;
+
+    const pct = steps.length > 1 ? (idx / (steps.length-1)) * 100 : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    document.getElementById('btnPrev').disabled = idx === 0;
+    document.getElementById('btnNext').disabled = idx === steps.length - 1;
+}
+
+function prevStep() { if (curStep > 0)              applyStep(curStep - 1); }
+function nextStep() { if (curStep < steps.length-1) applyStep(curStep + 1); }
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  prevStep();
+    if (e.key === 'ArrowRight') nextStep();
+});
+
+// ═══════════════════════════════════════════
+//  BUILD SIMULATION
+// ═══════════════════════════════════════════
+function buildSimulation() {
+    const raw = document.getElementById('arrayInput').value;
+    const parsed = raw.split(/[,\s]+/).map(Number).filter(x => !isNaN(x));
+    if (parsed.length < 2)  { alert('Please enter at least 2 numbers.'); return; }
+    if (parsed.length > 12) { alert('Please use at most 12 numbers for a clear tree.'); return; }
+
+    origArr = parsed;
+    nodes = [];
+    leafCounter = 0;
+    buildTree(0, origArr.length - 1, null);
+
+    // Layout
+    leafCounter = 0;
+    layoutLeafFirst(0, 0);
+
+    // Centre in viewport
+    let minX = Infinity;
+    nodes.forEach(n => { minX = Math.min(minX, n.svgX - n.svgW/2); });
+    const shift = Math.max(0, 20 - minX);
+    nodes.forEach(n => { n.svgX += shift; });
+
+    // Generate and display
+    steps = generateSteps();
+    applyStep(0);
+
+    document.getElementById('btnPrev').disabled = false;
+    document.getElementById('btnNext').disabled = false;
+}
+
+function randomArray() {
+    const n = 5 + Math.floor(Math.random() * 4);
+    const vals = Array.from({length:n}, () => 1 + Math.floor(Math.random()*90));
+    document.getElementById('arrayInput').value = vals.join(', ');
+    buildSimulation();
+}
+
+window.addEventListener('load', buildSimulation);
+</script>
+</body>
+</html>

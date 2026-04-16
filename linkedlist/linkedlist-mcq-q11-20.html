@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List MCQ - Part 2 | CPCS 204</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 30px;
+            background: #f8f9ff;
+            border-bottom: 1px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .score-bar {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .score-item {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .score-item .label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+        }
+
+        .score-item .value {
+            font-size: 1.8em;
+            color: #667eea;
+        }
+
+        .score-item .value.correct-value {
+            color: #27ae60;
+        }
+
+        .score-item .value.wrong-value {
+            color: #e74c3c;
+        }
+
+        .progress-container {
+            background: #e0e0e0;
+            width: 200px;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+
+        .reset-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .question-card {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .question-card:hover {
+            border-color: #764ba2;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .q-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+
+        .difficulty {
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .difficulty.easy {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .difficulty.medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .difficulty.hard {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .question-text {
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 18px;
+        }
+
+        .question-text code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            color: #d63384;
+        }
+
+        .code-container {
+            margin: 20px 0;
+        }
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin: 0;
+        }
+        .keyword { color: #ff79c6; }
+        .type { color: #8be9fd; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .number { color: #bd93f9; }
+
+        .options-list {
+            list-style: none;
+        }
+
+        .mcq-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            cursor: pointer;
+            font-size: 0.98em;
+            line-height: 1.4;
+            transition: all 0.3s;
+            font-family: inherit;
+            color: #333;
+        }
+
+        .mcq-option:hover:not(:disabled) {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .mcq-option.selected-correct {
+            background: #e8f5e9;
+            border-color: #27ae60;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .mcq-option.selected-wrong {
+            background: #ffebee;
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .mcq-option.show-correct {
+            background: #e8f5e9;
+            border-color: #27ae60;
+        }
+
+        .mcq-option:disabled {
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            line-height: 1.5;
+            font-size: 0.95em;
+        }
+
+        .feedback.correct {
+            display: block;
+            background: #e8f5e9;
+            border-left: 5px solid #27ae60;
+        }
+
+        .feedback.wrong {
+            display: block;
+            background: #ffebee;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .feedback strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 30px;
+            background: #f8f9ff;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .question-card {
+                padding: 18px;
+            }
+
+            .score-bar {
+                padding: 15px;
+                gap: 10px;
+            }
+
+            .score-item .value {
+                font-size: 1.4em;
+            }
+
+            .progress-container {
+                width: 150px;
+            }
+
+            pre {
+                font-size: 0.8em;
+                padding: 12px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.3em;
+            }
+
+            .score-bar {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Linked List MCQ - Part 2</h1>
+        <p>CPCS 204 | Questions 11-20</p>
+    </div>
+
+    <div class="nav-links">
+        <a href="linkedlist-mcq-q1-10.html">&larr; MCQ 1-10</a>
+        <a href="linkedlist-questions.html">Back to Coding Questions</a>
+    </div>
+
+    <div class="content">
+        <div class="score-bar" id="scoreBar">
+            <div class="score-item">
+                <div class="label">Score</div>
+                <div class="value correct-value" id="scoreDisplay">0</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Correct</div>
+                <div class="value correct-value" id="correctDisplay">0</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Wrong</div>
+                <div class="value wrong-value" id="wrongDisplay">0</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Answered</div>
+                <div class="value" id="answeredDisplay">0 / 10</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Progress</div>
+                <div class="progress-container">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetAll()">Reset All</button>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question-card" id="q11">
+            <div class="question-header">
+                <span class="q-number">Q11</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">
+                What is the time complexity of deleting a node from the <strong>END</strong> of a singly linked list (without a tail pointer)?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">B) O(n)</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(log n)</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(n&sup2;)</button>
+            </div>
+            <div class="feedback" id="feedback-q11"
+                 data-correct="Without a tail pointer, you must traverse to the second-to-last node to delete the last one, which takes O(n)."
+                 data-wrong="Deleting the last node requires finding the second-to-last node (to set its next to null), which requires traversing the entire list: O(n).">
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-card" id="q12">
+            <div class="question-header">
+                <span class="q-number">Q12</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">
+                What is the output of the following code?
+            </div>
+            <div class="code-container">
+                <div class="code-header">Java Code</div>
+                <pre>Node current = head;  // head -> 1 -> 2 -> 3 -> null
+while (current.next != null) {
+    current = current.next;
+}
+System.out.println(current.data);</pre>
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) 1</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">B) 2</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">C) 3</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) NullPointerException</button>
+            </div>
+            <div class="feedback" id="feedback-q12"
+                 data-correct="The loop stops when current.next is null, meaning current is the last node with data = 3."
+                 data-wrong="The condition current.next != null stops at the last node (not past it). So current ends at the node with data = 3.">
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-card" id="q13">
+            <div class="question-header">
+                <span class="q-number">Q13</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">
+                To reverse a singly linked list iteratively, how many pointers are typically used?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) 1</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">B) 2</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">C) 3 (prev, current, next)</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) 4</button>
+            </div>
+            <div class="feedback" id="feedback-q13"
+                 data-correct="The iterative reversal uses three pointers: prev (initially null), current (starts at head), and nextTemp (saves the next node before re-linking)."
+                 data-wrong="The standard iterative approach needs 3 pointers: prev, current, and a temporary next pointer to avoid losing the reference.">
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-card" id="q14">
+            <div class="question-header">
+                <span class="q-number">Q14</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">
+                Which data structure can be efficiently implemented using a linked list where insertion and deletion happen at the <strong>same end</strong>?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">A) Stack</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">B) Binary Tree</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">C) Hash Table</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) Graph</button>
+            </div>
+            <div class="feedback" id="feedback-q14"
+                 data-correct="A stack uses LIFO (Last-In-First-Out). Using a linked list, push and pop at the head gives O(1) for both operations."
+                 data-wrong="A stack needs insertion and deletion at the same end (top). A linked list head serves perfectly as the stack top with O(1) push/pop.">
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-card" id="q15">
+            <div class="question-header">
+                <span class="q-number">Q15</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+            <div class="question-text">
+                What is the space complexity of a singly linked list with <strong>n</strong> nodes?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">B) O(n)</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(n&sup2;)</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(log n)</button>
+            </div>
+            <div class="feedback" id="feedback-q15"
+                 data-correct="Each of the n nodes takes constant space, so total space is O(n)."
+                 data-wrong="A linked list with n nodes uses O(n) space - each node stores data and a pointer.">
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-card" id="q16">
+            <div class="question-header">
+                <span class="q-number">Q16</span>
+                <span class="difficulty hard">Hard</span>
+            </div>
+            <div class="question-text">
+                What is an advantage of a <strong>doubly linked list (DLL)</strong> over a singly linked list (SLL) for deletion?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) It uses less memory</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">B) You can delete a node in O(1) if you have a pointer to it</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">C) It supports random access</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) It is always faster than arrays</button>
+            </div>
+            <div class="feedback" id="feedback-q16"
+                 data-correct="In a DLL, if you have a pointer to a node, you can access its predecessor via prev, so you can unlink it in O(1). In a SLL, you'd need to traverse to find the predecessor."
+                 data-wrong="With a DLL, having a direct pointer to a node lets you access both neighbors (prev and next), enabling O(1) deletion without traversal.">
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-card" id="q17">
+            <div class="question-header">
+                <span class="q-number">Q17</span>
+                <span class="difficulty hard">Hard</span>
+            </div>
+            <div class="question-text">
+                Given the linked list: <code>10 -> 20 -> 30 -> 40 -> null</code>. After executing <code>head.next.next = head.next.next.next</code>, what is the list?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) 10 -> 20 -> 40 -> 30 -> null</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">B) 10 -> 20 -> 40 -> null</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">C) 10 -> 30 -> 40 -> null</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) 10 -> 20 -> 30 -> null</button>
+            </div>
+            <div class="feedback" id="feedback-q17"
+                 data-correct="head.next is node 20. head.next.next was node 30. Setting it to head.next.next.next (node 40) skips node 30. Result: 10 -> 20 -> 40 -> null."
+                 data-wrong="head.next.next points to the node after 20, which is 30. We reassign it to 30's next (which is 40), effectively skipping node 30.">
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-card" id="q18">
+            <div class="question-header">
+                <span class="q-number">Q18</span>
+                <span class="difficulty hard">Hard</span>
+            </div>
+            <div class="question-text">
+                Why is the <strong>"dummy node"</strong> (sentinel node) technique useful when manipulating linked lists?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) It reduces time complexity</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">B) It uses less memory</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">C) It eliminates special handling of the head node</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) It makes the list sorted</button>
+            </div>
+            <div class="feedback" id="feedback-q18"
+                 data-correct="A dummy node (sentinel) before the real head means you never have to handle the head as a special case for insertions/deletions."
+                 data-wrong="The dummy node simplifies code by ensuring there's always a node before the first real element, eliminating edge cases for head modifications.">
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-card" id="q19">
+            <div class="question-header">
+                <span class="q-number">Q19</span>
+                <span class="difficulty hard">Hard</span>
+            </div>
+            <div class="question-text">
+                What is the time complexity of finding the middle element of a linked list using the <strong>slow/fast pointer</strong> technique?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">B) O(n)</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(n/2) which is different from O(n)</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(log n)</button>
+            </div>
+            <div class="feedback" id="feedback-q19"
+                 data-correct="O(n) - the slow pointer visits n/2 nodes, but O(n/2) = O(n) in Big-O notation."
+                 data-wrong="Even though slow only moves n/2 steps, in Big-O notation constants are dropped: O(n/2) = O(n). The technique is a single pass through the list.">
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-card" id="q20">
+            <div class="question-header">
+                <span class="q-number">Q20</span>
+                <span class="difficulty hard">Hard</span>
+            </div>
+            <div class="question-text">
+                In Java's <code>LinkedList</code> class, which interfaces does it implement?
+            </div>
+            <div class="options-list">
+                <button class="mcq-option" onclick="checkMCQ(this, false)">A) List only</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">B) Queue only</button>
+                <button class="mcq-option" data-correct="true" onclick="checkMCQ(this, true)">C) List, Deque, and Queue</button>
+                <button class="mcq-option" onclick="checkMCQ(this, false)">D) Set and Map</button>
+            </div>
+            <div class="feedback" id="feedback-q20"
+                 data-correct="Java's LinkedList implements List, Deque, and Queue interfaces, making it usable as a list, double-ended queue, or queue."
+                 data-wrong="Java's LinkedList is versatile - it implements List (indexed access), Queue (FIFO), and Deque (double-ended queue) interfaces.">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        CPCS 204 - Data Structures | Linked List MCQ Questions 11-20
+    </div>
+</div>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">&uarr;</button>
+
+<script>
+    let correctCount = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+    const totalQuestions = 10;
+
+    function checkMCQ(button, isCorrect) {
+        const questionCard = button.closest('.question-card');
+
+        // Check if already answered
+        if (questionCard.classList.contains('answered')) {
+            return;
+        }
+
+        // Mark as answered
+        questionCard.classList.add('answered');
+
+        // Get all options in this question
+        const options = questionCard.querySelectorAll('.mcq-option');
+
+        // Get feedback element
+        const feedback = questionCard.querySelector('.feedback');
+
+        if (isCorrect) {
+            // Correct answer
+            button.classList.add('selected-correct');
+            feedback.innerHTML = '<strong>Correct!</strong> ' + feedback.getAttribute('data-correct');
+            feedback.className = 'feedback correct';
+            correctCount++;
+        } else {
+            // Wrong answer
+            button.classList.add('selected-wrong');
+            feedback.innerHTML = '<strong>Incorrect.</strong> ' + feedback.getAttribute('data-wrong');
+            feedback.className = 'feedback wrong';
+            wrongCount++;
+
+            // Highlight the correct answer
+            options.forEach(function(opt) {
+                if (opt.getAttribute('data-correct') === 'true') {
+                    opt.classList.add('show-correct');
+                }
+            });
+        }
+
+        // Disable all options
+        options.forEach(function(opt) {
+            opt.disabled = true;
+        });
+
+        // Update score
+        answeredCount++;
+        updateScoreDisplay();
+    }
+
+    function updateScoreDisplay() {
+        document.getElementById('scoreDisplay').textContent = correctCount + ' / ' + totalQuestions;
+        document.getElementById('correctDisplay').textContent = correctCount;
+        document.getElementById('wrongDisplay').textContent = wrongCount;
+        document.getElementById('answeredDisplay').textContent = answeredCount + ' / ' + totalQuestions;
+
+        // Update progress bar
+        const progressPercent = (answeredCount / totalQuestions) * 100;
+        document.getElementById('progressFill').style.width = progressPercent + '%';
+    }
+
+    function resetAll() {
+        correctCount = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+
+        // Reset all question cards
+        const questionCards = document.querySelectorAll('.question-card');
+        questionCards.forEach(function(card) {
+            card.classList.remove('answered');
+
+            // Reset options
+            const options = card.querySelectorAll('.mcq-option');
+            options.forEach(function(opt) {
+                opt.disabled = false;
+                opt.classList.remove('selected-correct', 'selected-wrong', 'show-correct');
+            });
+
+            // Reset feedback
+            const feedback = card.querySelector('.feedback');
+            feedback.className = 'feedback';
+            feedback.innerHTML = '';
+        });
+
+        updateScoreDisplay();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Back to top button visibility
+    window.addEventListener('scroll', function() {
+        const backToTop = document.getElementById('backToTop');
+        if (window.scrollY > 300) {
+            backToTop.style.display = 'flex';
+        } else {
+            backToTop.style.display = 'none';
+        }
+    });
+
+    // Initialize score display
+    updateScoreDisplay();
+</script>
+
+</body>
+</html>

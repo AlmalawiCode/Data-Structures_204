@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Hash Table Techniques - Rehashing, Bucket Hashing & Separate Chaining</title>
+    <style>
+        :root {
+            --primary-color: #7c3aed;
+            --primary-light: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --secondary-color: #059669;
+            --accent-color: #f59e0b;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+            background: #f1f5f9;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Simulator Section */
+        .simulator {
+            display: none;
+        }
+
+        .simulator.active {
+            display: block;
+        }
+
+        .simulator-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .simulator-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 10px 10px 0;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .explanation-box h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .explanation-box ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .explanation-box li {
+            margin: 0.25rem 0;
+        }
+
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: white;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .control-group small {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Hash Table Visualization */
+        .hash-table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .hash-table-visual {
+            display: flex;
+            gap: 4px;
+            min-width: fit-content;
+            justify-content: center;
+        }
+
+        .table-cell {
+            width: 70px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .cell-index {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .cell-value {
+            background: white;
+            border: 3px solid var(--border-color);
+            border-top: none;
+            padding: 1rem 0.5rem;
+            min-height: 60px;
+            border-radius: 0 0 8px 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cell-value.empty {
+            color: var(--text-muted);
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        .cell-value.filled {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border-color: var(--primary-color);
+            color: var(--primary-dark);
+        }
+
+        .cell-value.checking {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: var(--accent-color);
+            color: #b45309;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .cell-value.collision {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+            animation: shake 0.3s ease-in-out;
+        }
+
+        .cell-value.success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: var(--success-color);
+            color: var(--success-color);
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        .cell-value.overflow {
+            background: linear-gradient(135deg, #fecaca 0%, #f87171 100%);
+            border-color: var(--danger-color);
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Bucket Hashing Specific - 2D Array Table */
+        .bucket-and-overflow-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .bucket-section {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .overflow-section {
+            min-width: 200px;
+            padding: 1rem;
+            border: 3px dashed var(--danger-color);
+            border-radius: 10px;
+            background: #fef2f2;
+        }
+
+        .bucket-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: auto;
+        }
+
+        .bucket-2d-table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        .bucket-2d-table th {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            font-weight: bold;
+            min-width: 70px;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .bucket-2d-table th.corner {
+            background: #1e293b;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .bucket-2d-table th.bucket-index {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .bucket-2d-table td {
+            border: 2px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            text-align: center;
+            min-width: 70px;
+            min-height: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .bucket-2d-table td.bucket-label {
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            border-color: var(--primary-color);
+        }
+
+        .bucket-2d-table td.empty {
+            color: var(--text-muted);
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        .bucket-2d-table td.filled {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            color: var(--primary-dark);
+            border-color: var(--primary-light);
+        }
+
+        .bucket-2d-table td.checking {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: var(--accent-color);
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .bucket-2d-table td.success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: var(--success-color);
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        .bucket-2d-table td.collision {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-color: var(--danger-color);
+        }
+
+
+        .overflow-2d-table {
+            border-collapse: collapse;
+            margin: 0.5rem auto;
+        }
+
+        .overflow-2d-table th {
+            background: var(--danger-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            font-weight: bold;
+            min-width: 60px;
+            border: 2px solid var(--danger-color);
+            font-size: 0.9rem;
+        }
+
+        .overflow-2d-table td {
+            border: 2px solid #fca5a5;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            min-width: 60px;
+            font-weight: bold;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .overflow-2d-table td.empty {
+            color: var(--text-muted);
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        .overflow-2d-table td.filled {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: var(--danger-color);
+        }
+
+        .overflow-2d-table td.success {
+            background: linear-gradient(135deg, #fecaca 0%, #f87171 100%);
+            color: white;
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        /* Separate Chaining Specific */
+        .chain-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .chain-bucket {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chain-index {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .chain-arrow {
+            width: 2px;
+            height: 20px;
+            background: var(--primary-color);
+            position: relative;
+        }
+
+        .chain-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid var(--primary-color);
+        }
+
+        .chain-nodes {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chain-node {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .node-value {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border: 3px solid var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            color: var(--primary-dark);
+            min-width: 50px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .node-value.checking {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: var(--accent-color);
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .node-value.success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: var(--success-color);
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        .node-pointer {
+            width: 30px;
+            height: 2px;
+            background: var(--primary-color);
+            position: relative;
+        }
+
+        .node-pointer::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 8px solid var(--primary-color);
+        }
+
+        .chain-null {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 0.5rem;
+        }
+
+        .node-link {
+            width: 2px;
+            height: 15px;
+            background: var(--primary-color);
+            position: relative;
+        }
+
+        .node-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid var(--primary-color);
+        }
+
+        /* Rehashing Specific */
+        .rehash-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .rehash-table {
+            text-align: center;
+        }
+
+        .rehash-table h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .rehash-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--success-color);
+            padding: 1rem;
+        }
+
+        .load-factor-display {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .load-factor-display .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .load-factor-display.danger {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-color: var(--danger-color);
+        }
+
+        .load-factor-display.danger .value {
+            color: var(--danger-color);
+        }
+
+        /* Step Panel */
+        .step-panel {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-panel h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-content {
+            font-size: 1.1rem;
+        }
+
+        .step-content .calculation {
+            background: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin: 0.75rem 0;
+            font-family: 'Consolas', monospace;
+            border: 1px solid var(--border-color);
+        }
+
+        .step-content .result {
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .result.collision {
+            background: #fee2e2;
+            color: var(--danger-color);
+        }
+
+        .result.success {
+            background: #d1fae5;
+            color: var(--success-color);
+        }
+
+        .result.warning {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        /* Queue Display */
+        .queue-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .queue-panel h4 {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .queue-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .queue-item {
+            background: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .queue-item.current {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .queue-item.done {
+            background: var(--success-color);
+            color: white;
+        }
+
+        /* History Panel */
+        .history-panel {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-panel h4 {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .history-item {
+            color: #e2e8f0;
+            padding: 0.5rem;
+            border-bottom: 1px solid #334155;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item.success {
+            color: #4ade80;
+        }
+
+        .history-item.collision {
+            color: #fca5a5;
+        }
+
+        .history-item.warning {
+            color: #fcd34d;
+        }
+
+        /* Info boxes */
+        .info-box {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .info-box.tip {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .info-box.warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .info-box.danger {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .info-box-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .simulator-card {
+                padding: 1rem;
+            }
+
+            .bucket {
+                min-width: 80px;
+            }
+
+            .rehash-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .rehash-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-link">← Back to Home</a>
+        <h1>Advanced Hash Table Techniques</h1>
+        <p>Rehashing, Bucket Hashing & Separate Chaining with Animations</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('rehash')">Rehashing</button>
+        <button class="tab-btn" onclick="showTab('bucket')">Bucket Hashing</button>
+        <button class="tab-btn" onclick="showTab('chaining')">Separate Chaining</button>
+    </div>
+
+    <main>
+        <!-- Rehashing Simulator -->
+        <div id="rehash-simulator" class="simulator active">
+            <div class="simulator-card">
+                <h2 class="simulator-title">🔄 Rehashing (Restructuring) Simulator</h2>
+
+                <div class="explanation-box">
+                    <h3>What is Rehashing?</h3>
+                    <p>When a hash table becomes too full, performance degrades. <strong>Rehashing</strong> (also called restructuring) creates a new, larger table and re-inserts all elements.</p>
+                    <ul>
+                        <li><strong>Load Factor (α)</strong> = Number of elements / Table size</li>
+                        <li>When α exceeds a threshold (typically 0.7), we rehash</li>
+                        <li>New table size is usually <strong>2 × old size</strong> (next prime)</li>
+                        <li>All elements are re-hashed with the new table size</li>
+                    </ul>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="rehash-table-size">Initial Table Size (m):</label>
+                        <input type="number" id="rehash-table-size" value="7" min="5" max="11">
+                    </div>
+                    <div class="control-group">
+                        <label for="rehash-threshold">Load Factor Threshold:</label>
+                        <input type="number" id="rehash-threshold" value="0.7" min="0.5" max="0.9" step="0.1">
+                    </div>
+                    <div class="control-group">
+                        <label for="rehash-keys">Keys to Insert:</label>
+                        <input type="text" id="rehash-keys" value="10, 22, 31, 4, 15, 28, 17" placeholder="e.g., 10, 22, 31, 4, 15">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="rehashSimulator.initialize()">🔄 Initialize</button>
+                    <button class="btn btn-success" onclick="rehashSimulator.nextStep()" id="rehash-next-btn" disabled>▶️ Next Step</button>
+                    <button class="btn btn-warning" onclick="rehashSimulator.insertNext()" id="rehash-insert-btn" disabled>➕ Insert Next Key</button>
+                    <button class="btn btn-danger" onclick="rehashSimulator.reset()">🗑️ Reset</button>
+                </div>
+
+                <div class="queue-panel">
+                    <h4>Keys to Insert:</h4>
+                    <div class="queue-items" id="rehash-queue-items"></div>
+                </div>
+
+                <div class="load-factor-display" id="rehash-load-factor">
+                    <div>Load Factor (α) = n / m</div>
+                    <div class="value" id="rehash-load-value">0 / 7 = 0.00</div>
+                    <div><small>Threshold: 0.7</small></div>
+                </div>
+
+                <div class="rehash-container" id="rehash-tables">
+                    <div class="rehash-table" id="rehash-old-table-container" style="display: none;">
+                        <h4 id="rehash-old-title">Old Table (m = 7)</h4>
+                        <div class="hash-table-visual" id="rehash-old-table"></div>
+                    </div>
+                    <div class="rehash-arrow" id="rehash-arrow" style="display: none;">➡️</div>
+                    <div class="rehash-table" id="rehash-current-table">
+                        <h4 id="rehash-current-title">Current Table (m = 7)</h4>
+                        <div class="hash-table-visual" id="rehash-table"></div>
+                    </div>
+                </div>
+
+                <div class="step-panel">
+                    <h4>📝 Current Step</h4>
+                    <div class="step-content" id="rehash-step-content">
+                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                    </div>
+                </div>
+
+                <div class="history-panel">
+                    <h4>📜 History Log</h4>
+                    <div id="rehash-history"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bucket Hashing Simulator -->
+        <div id="bucket-simulator" class="simulator">
+            <div class="simulator-card">
+                <h2 class="simulator-title">🪣 Bucket Hashing Simulator</h2>
+
+                <div class="explanation-box">
+                    <h3>What is Bucket Hashing?</h3>
+                    <p>In <strong>Bucket Hashing</strong>, the hash table is divided into <strong>buckets</strong>, each containing multiple slots.</p>
+                    <ul>
+                        <li>Each bucket can hold <strong>B elements</strong> (bucket size)</li>
+                        <li>Hash function determines which bucket to use: <code>bucket = k mod numBuckets</code></li>
+                        <li>Within a bucket, we search linearly for an empty slot (0 → 1 → 2 ...)</li>
+                        <li>If bucket is full, element goes to <strong>overflow area</strong></li>
+                    </ul>
+                </div>
+
+                <div class="info-box danger" style="margin-bottom: 1rem;">
+                    <div class="info-box-title">⚠️ Why Do We Need an Overflow Area?</div>
+                    <p style="margin-bottom: 0.75rem;"><strong>Problem:</strong> What happens when a bucket is completely full but we need to insert another element that hashes to the same bucket?</p>
+                    <p style="margin-bottom: 0.75rem;"><strong>Example:</strong> If bucket 3 has 3 slots and already contains [8, 3, 18], and we want to insert 38:</p>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 0.75rem;">
+                        <li>h(38) = 38 mod 5 = <strong>3</strong> → Bucket 3</li>
+                        <li>But Bucket 3 is <strong>FULL!</strong> (all 3 slots occupied)</li>
+                        <li>We <strong>cannot</strong> put 38 in another bucket (that would break the hash function!)</li>
+                        <li>Solution: Store 38 in a separate <strong>Overflow Area</strong></li>
+                    </ul>
+                    <p><strong>The Overflow Area</strong> is a backup storage for elements when their designated bucket has no space. It's searched <strong>after</strong> checking the main bucket during lookups.</p>
+                </div>
+
+                <div class="info-box tip" style="margin-bottom: 1rem;">
+                    <div class="info-box-title">📦 Data Structure Used</div>
+                    <p style="margin-bottom: 0.75rem;">Bucket Hashing uses a <strong>2D Array (Array of Arrays)</strong>:</p>
+                    <div style="background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; font-family: 'Consolas', monospace; margin: 0.5rem 0;">
+                        <span style="color: #93c5fd;">// Java Declaration</span><br>
+                        <span style="color: #f472b6;">int</span>[][] buckets = <span style="color: #f472b6;">new int</span>[numBuckets][bucketSize];<br>
+                        <span style="color: #f472b6;">int</span>[] overflow = <span style="color: #f472b6;">new int</span>[overflowSize]; <span style="color: #93c5fd;">// For overflow</span><br><br>
+                        <span style="color: #93c5fd;">// 2D Array Representation:</span><br>
+                        <span style="color: #4ade80;">Bucket\Slot</span>   <span style="color: #fde68a;">0</span>    <span style="color: #fde68a;">1</span>    <span style="color: #fde68a;">2</span>    <span style="color: #93c5fd;">← Slot indices (horizontal)</span><br>
+                        <span style="color: #a78bfa;">    0</span>        16   11    —<br>
+                        <span style="color: #a78bfa;">    1</span>         —    —    —<br>
+                        <span style="color: #a78bfa;">    2</span>        32    —    —<br>
+                        <span style="color: #a78bfa;">    3</span>         8    3   18   <span style="color: #fca5a5;">← FULL!</span><br>
+                        <span style="color: #a78bfa;">    4</span>        24    —    —<br>
+                        <span style="color: #93c5fd;">    ↑</span><br>
+                        <span style="color: #93c5fd;">Bucket indices (vertical)</span><br><br>
+                        <span style="color: #fca5a5;">// Overflow 1D Array:</span><br>
+                        <span style="color: #fca5a5;">Index:</span>  <span style="color: #fde68a;">0</span>    <span style="color: #fde68a;">1</span><br>
+                        <span style="color: #fca5a5;">Value:</span> 38   23
+                    </div>
+                    <p style="margin-top: 0.75rem;"><strong>Overflow Area:</strong> A separate <strong>1D Array</strong> that stores elements sequentially when their target bucket is completely full.</p>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Formula</div>
+                    <p><strong>Bucket Index = h(k) = k mod (Number of Buckets)</strong></p>
+                    <p>Within the bucket, insert in the first empty slot (linear search within bucket).</p>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="bucket-num-buckets">Number of Buckets:</label>
+                        <input type="number" id="bucket-num-buckets" value="5" min="3" max="8">
+                    </div>
+                    <div class="control-group">
+                        <label for="bucket-size">Slots per Bucket:</label>
+                        <input type="number" id="bucket-size" value="3" min="2" max="5">
+                    </div>
+                    <div class="control-group">
+                        <label for="bucket-keys">Keys to Insert:</label>
+                        <input type="text" id="bucket-keys" value="16, 8, 24, 32, 3, 18, 11, 23, 38" placeholder="e.g., 16, 8, 24, 32">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="bucketSimulator.initialize()">🔄 Initialize</button>
+                    <button class="btn btn-success" onclick="bucketSimulator.nextStep()" id="bucket-next-btn" disabled>▶️ Next Step</button>
+                    <button class="btn btn-warning" onclick="bucketSimulator.insertNext()" id="bucket-insert-btn" disabled>➕ Insert Next Key</button>
+                    <button class="btn btn-danger" onclick="bucketSimulator.reset()">🗑️ Reset</button>
+                </div>
+
+                <div class="queue-panel">
+                    <h4>Keys to Insert:</h4>
+                    <div class="queue-items" id="bucket-queue-items"></div>
+                </div>
+
+                <div class="bucket-and-overflow-container">
+                    <div class="bucket-section">
+                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem; text-align: center;">📦 Buckets (2D Array)</h4>
+                        <div class="bucket-container" id="bucket-table"></div>
+                    </div>
+
+                    <div class="overflow-section" id="bucket-overflow">
+                        <h4 style="color: var(--danger-color); margin-bottom: 0.5rem; text-align: center;">⚠️ Overflow (1D Array)</h4>
+                        <div id="bucket-overflow-items"></div>
+                    </div>
+                </div>
+
+                <div class="step-panel">
+                    <h4>📝 Current Step</h4>
+                    <div class="step-content" id="bucket-step-content">
+                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                    </div>
+                </div>
+
+                <div class="history-panel">
+                    <h4>📜 History Log</h4>
+                    <div id="bucket-history"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Separate Chaining Simulator -->
+        <div id="chaining-simulator" class="simulator">
+            <div class="simulator-card">
+                <h2 class="simulator-title">🔗 Separate Chaining Simulator</h2>
+
+                <div class="explanation-box">
+                    <h3>What is Separate Chaining?</h3>
+                    <p>In <strong>Separate Chaining</strong>, each table slot contains a <strong>linked list</strong> (chain) of elements.</p>
+                    <ul>
+                        <li>Hash function determines which chain to use</li>
+                        <li>Colliding elements are added to the <strong>same chain</strong></li>
+                        <li>No overflow problem - chains can grow as needed</li>
+                        <li>Search requires traversing the chain at that index</li>
+                    </ul>
+                </div>
+
+                <div class="info-box tip" style="margin-bottom: 1rem;">
+                    <div class="info-box-title">📦 Data Structure Used</div>
+                    <p style="margin-bottom: 0.75rem;">Separate Chaining uses an <strong>Array of Linked Lists</strong>:</p>
+                    <div style="background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; font-family: 'Consolas', monospace; margin: 0.5rem 0;">
+                        <span style="color: #93c5fd;">// Java Declaration</span><br>
+                        <span style="color: #f472b6;">LinkedList</span>&lt;<span style="color: #f472b6;">Integer</span>&gt;[] chains = <span style="color: #f472b6;">new LinkedList</span>[tableSize];<br><br>
+                        <span style="color: #93c5fd;">// Example: table size = 7</span><br>
+                        chains[0] → NULL<br>
+                        chains[1] → [22] → [15] → NULL <span style="color: #4ade80;">← 2 collisions</span><br>
+                        chains[2] → NULL<br>
+                        chains[3] → [10] → [31] → [17] → NULL <span style="color: #4ade80;">← 3 elements</span><br>
+                        chains[4] → [4] → NULL<br>
+                        chains[5] → NULL<br>
+                        chains[6] → [28] → NULL
+                    </div>
+                    <p style="margin-top: 0.75rem;"><strong>Each index</strong> points to a <strong>Linked List</strong> that can grow dynamically as needed!</p>
+                </div>
+
+                <div class="info-box tip">
+                    <div class="info-box-title">✅ Advantages</div>
+                    <ul>
+                        <li>Simple collision handling - just add to chain</li>
+                        <li>Table never becomes "full"</li>
+                        <li>Deletion is easy - just remove from linked list</li>
+                        <li>Performance degrades gracefully with more collisions</li>
+                    </ul>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="chaining-table-size">Table Size (m):</label>
+                        <input type="number" id="chaining-table-size" value="7" min="5" max="11">
+                    </div>
+                    <div class="control-group">
+                        <label for="chaining-keys">Keys to Insert:</label>
+                        <input type="text" id="chaining-keys" value="10, 22, 31, 4, 15, 28, 17, 88, 59" placeholder="e.g., 10, 22, 31, 4, 15">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="chainingSimulator.initialize()">🔄 Initialize</button>
+                    <button class="btn btn-success" onclick="chainingSimulator.nextStep()" id="chaining-next-btn" disabled>▶️ Next Step</button>
+                    <button class="btn btn-warning" onclick="chainingSimulator.insertNext()" id="chaining-insert-btn" disabled>➕ Insert Next Key</button>
+                    <button class="btn btn-danger" onclick="chainingSimulator.reset()">🗑️ Reset</button>
+                </div>
+
+                <div class="queue-panel">
+                    <h4>Keys to Insert:</h4>
+                    <div class="queue-items" id="chaining-queue-items"></div>
+                </div>
+
+                <div class="chain-container" id="chaining-table"></div>
+
+                <div class="step-panel">
+                    <h4>📝 Current Step</h4>
+                    <div class="step-content" id="chaining-step-content">
+                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                    </div>
+                </div>
+
+                <div class="history-panel">
+                    <h4>📜 History Log</h4>
+                    <div id="chaining-history"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.simulator').forEach(sim => sim.classList.remove('active'));
+            document.getElementById(tabName + '-simulator').classList.add('active');
+        }
+
+        // ==================== REHASHING SIMULATOR ====================
+        const rehashSimulator = {
+            tableSize: 7,
+            threshold: 0.7,
+            table: [],
+            keys: [],
+            currentKeyIndex: -1,
+            currentProbeStep: 0,
+            isInserting: false,
+            currentKey: null,
+            elementCount: 0,
+            // Rehashing state
+            isRehashing: false,
+            rehashStep: 0,
+            oldTable: [],
+            oldTableSize: 0,
+            newTable: [],
+            newTableSize: 0,
+            elementsToRehash: [],
+            currentRehashIndex: 0,
+            currentRehashProbe: 0,
+
+            initialize() {
+                this.tableSize = parseInt(document.getElementById('rehash-table-size').value) || 7;
+                this.threshold = parseFloat(document.getElementById('rehash-threshold').value) || 0.7;
+                const keysInput = document.getElementById('rehash-keys').value;
+                this.keys = keysInput.split(',').map(k => parseInt(k.trim())).filter(k => !isNaN(k));
+
+                this.table = new Array(this.tableSize).fill(null);
+                this.currentKeyIndex = -1;
+                this.currentProbeStep = 0;
+                this.isInserting = false;
+                this.currentKey = null;
+                this.elementCount = 0;
+                this.isRehashing = false;
+                this.oldTable = [];
+                this.newTable = [];
+
+                // Hide old table view
+                document.getElementById('rehash-old-table-container').style.display = 'none';
+                document.getElementById('rehash-arrow').style.display = 'none';
+
+                this.renderTable();
+                this.renderQueue();
+                this.updateLoadFactor();
+                this.clearHistory();
+
+                document.getElementById('rehash-next-btn').disabled = true;
+                document.getElementById('rehash-insert-btn').disabled = this.keys.length === 0;
+
+                this.updateStepPanel('Ready! Click "Insert Next Key" to start inserting keys.');
+                this.addHistory('Table initialized with size m = ' + this.tableSize);
+            },
+
+            renderTable() {
+                const container = document.getElementById('rehash-table');
+                container.innerHTML = '';
+
+                for (let i = 0; i < this.tableSize; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'table-cell';
+                    cell.innerHTML = `
+                        <div class="cell-index">${i}</div>
+                        <div class="cell-value ${this.table[i] === null ? 'empty' : 'filled'}" id="rehash-cell-${i}">
+                            ${this.table[i] === null ? '—' : this.table[i]}
+                        </div>
+                    `;
+                    container.appendChild(cell);
+                }
+
+                document.getElementById('rehash-current-title').textContent =
+                    this.isRehashing ? `New Table (m = ${this.newTableSize})` : `Current Table (m = ${this.tableSize})`;
+            },
+
+            renderOldTable() {
+                const container = document.getElementById('rehash-old-table');
+                container.innerHTML = '';
+
+                for (let i = 0; i < this.oldTableSize; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'table-cell';
+                    const val = this.oldTable[i];
+                    const isRehashed = val !== null && !this.elementsToRehash.includes(val);
+                    cell.innerHTML = `
+                        <div class="cell-index">${i}</div>
+                        <div class="cell-value ${val === null ? 'empty' : (isRehashed ? 'success' : 'filled')}" id="rehash-old-cell-${i}">
+                            ${val === null ? '—' : val}
+                        </div>
+                    `;
+                    container.appendChild(cell);
+                }
+
+                document.getElementById('rehash-old-title').textContent = `Old Table (m = ${this.oldTableSize})`;
+            },
+
+            renderQueue() {
+                const container = document.getElementById('rehash-queue-items');
+                container.innerHTML = '';
+
+                this.keys.forEach((key, index) => {
+                    const item = document.createElement('span');
+                    item.className = 'queue-item';
+                    if (index < this.currentKeyIndex) {
+                        item.classList.add('done');
+                    } else if (index === this.currentKeyIndex) {
+                        item.classList.add('current');
+                    }
+                    item.textContent = key;
+                    container.appendChild(item);
+                });
+            },
+
+            updateLoadFactor() {
+                const currentSize = this.isRehashing ? this.newTableSize : this.tableSize;
+                const loadFactor = this.elementCount / currentSize;
+                const display = document.getElementById('rehash-load-factor');
+                document.getElementById('rehash-load-value').textContent =
+                    `${this.elementCount} / ${currentSize} = ${loadFactor.toFixed(2)}`;
+
+                if (loadFactor >= this.threshold && !this.isRehashing) {
+                    display.classList.add('danger');
+                } else {
+                    display.classList.remove('danger');
+                }
+            },
+
+            updateStepPanel(content) {
+                document.getElementById('rehash-step-content').innerHTML = content;
+            },
+
+            addHistory(message, type = '') {
+                const history = document.getElementById('rehash-history');
+                const item = document.createElement('div');
+                item.className = 'history-item ' + type;
+                item.textContent = message;
+                history.insertBefore(item, history.firstChild);
+            },
+
+            clearHistory() {
+                document.getElementById('rehash-history').innerHTML = '';
+            },
+
+            highlightCell(index, className, isOld = false) {
+                const prefix = isOld ? 'rehash-old-cell-' : 'rehash-cell-';
+                const size = isOld ? this.oldTableSize : (this.isRehashing ? this.newTableSize : this.tableSize);
+
+                for (let i = 0; i < size; i++) {
+                    const cell = document.getElementById(prefix + i);
+                    if (cell) {
+                        cell.classList.remove('checking', 'collision', 'success');
+                    }
+                }
+
+                if (index >= 0 && index < size) {
+                    const cell = document.getElementById(prefix + index);
+                    if (cell) cell.classList.add(className);
+                }
+            },
+
+            insertNext() {
+                if (this.isRehashing) {
+                    // Continue rehashing process
+                    return;
+                }
+
+                if (this.currentKeyIndex >= this.keys.length - 1 && !this.isInserting) {
+                    this.updateStepPanel('All keys have been inserted!');
+                    document.getElementById('rehash-insert-btn').disabled = true;
+                    return;
+                }
+
+                if (!this.isInserting) {
+                    this.currentKeyIndex++;
+                    this.currentKey = this.keys[this.currentKeyIndex];
+                    this.currentProbeStep = 0;
+                    this.isInserting = true;
+                    this.renderQueue();
+
+                    document.getElementById('rehash-next-btn').disabled = false;
+                    document.getElementById('rehash-insert-btn').disabled = true;
+
+                    const h = this.currentKey % this.tableSize;
+                    this.updateStepPanel(`
+                        <strong>Inserting key: ${this.currentKey}</strong>
+                        <div class="calculation">
+                            h(${this.currentKey}) = ${this.currentKey} mod ${this.tableSize} = <strong>${h}</strong>
+                        </div>
+                        <p>Click "Next Step" to check index ${h}.</p>
+                    `);
+
+                    this.addHistory(`Starting insertion of key ${this.currentKey}, h(k) = ${h}`);
+                }
+            },
+
+            nextStep() {
+                if (this.isRehashing) {
+                    this.nextRehashStep();
+                    return;
+                }
+
+                if (!this.isInserting) return;
+
+                const key = this.currentKey;
+                const i = this.currentProbeStep;
+                const index = (key % this.tableSize + i) % this.tableSize;
+
+                this.highlightCell(index, 'checking');
+
+                setTimeout(() => {
+                    if (this.table[index] === null) {
+                        this.table[index] = key;
+                        this.elementCount++;
+                        this.highlightCell(index, 'success');
+                        this.renderTable();
+                        this.highlightCell(index, 'success');
+                        this.updateLoadFactor();
+
+                        const loadFactor = this.elementCount / this.tableSize;
+
+                        this.updateStepPanel(`
+                            <strong>Probe ${i}: Index ${index}</strong>
+                            <div class="calculation">
+                                index = (${key % this.tableSize} + ${i}) mod ${this.tableSize} = ${index}
+                            </div>
+                            <span class="result success">✅ Key ${key} inserted at index ${index}!</span>
+                            ${loadFactor >= this.threshold ? `
+                                <div style="margin-top: 1rem;">
+                                    <span class="result warning">⚠️ Load factor (${loadFactor.toFixed(2)}) exceeded threshold (${this.threshold})!</span>
+                                    <p style="margin-top: 0.5rem;"><strong>Rehashing needed!</strong> New size = 2 × ${this.tableSize} = ${this.tableSize * 2} → next prime = ${this.getNextPrime(this.tableSize * 2)}</p>
+                                    <p>Click "Next Step" to start rehashing.</p>
+                                </div>
+                            ` : ''}
+                        `);
+
+                        this.addHistory(`Key ${key} inserted at index ${index}`, 'success');
+
+                        if (loadFactor >= this.threshold) {
+                            // Prepare for rehashing
+                            this.isRehashing = true;
+                            this.rehashStep = 0;
+                            this.oldTable = [...this.table];
+                            this.oldTableSize = this.tableSize;
+                            this.newTableSize = this.getNextPrime(this.tableSize * 2);
+                            this.newTable = new Array(this.newTableSize).fill(null);
+                            this.elementsToRehash = this.oldTable.filter(x => x !== null);
+                            this.currentRehashIndex = 0;
+                            this.currentRehashProbe = 0;
+                            this.addHistory(`Load factor ${loadFactor.toFixed(2)} >= ${this.threshold}. Rehashing: ${this.oldTableSize} → ${this.newTableSize}!`, 'warning');
+                        } else {
+                            this.isInserting = false;
+                            document.getElementById('rehash-next-btn').disabled = true;
+                            document.getElementById('rehash-insert-btn').disabled = this.currentKeyIndex >= this.keys.length - 1;
+                        }
+
+                    } else {
+                        this.highlightCell(index, 'collision');
+
+                        this.updateStepPanel(`
+                            <strong>Probe ${i}: Index ${index}</strong>
+                            <div class="calculation">
+                                index = (${key % this.tableSize} + ${i}) mod ${this.tableSize} = ${index}
+                            </div>
+                            <span class="result collision">❌ COLLISION! Index ${index} contains ${this.table[index]}</span>
+                            <p style="margin-top: 0.5rem;">Click "Next Step" to try next index...</p>
+                        `);
+
+                        this.addHistory(`Probe ${i}: Index ${index} occupied - collision!`, 'collision');
+                        this.currentProbeStep++;
+                    }
+                }, 300);
+            },
+
+            nextRehashStep() {
+                if (this.rehashStep === 0) {
+                    // Step 0: Show both tables
+                    document.getElementById('rehash-old-table-container').style.display = 'block';
+                    document.getElementById('rehash-arrow').style.display = 'flex';
+
+                    // Switch to new table
+                    this.table = this.newTable;
+                    this.tableSize = this.newTableSize;
+                    this.renderTable();
+                    this.renderOldTable();
+
+                    this.updateStepPanel(`
+                        <strong>🔄 REHASHING - Creating new table</strong>
+                        <div class="calculation">
+                            Old size: ${this.oldTableSize}<br>
+                            New size: 2 × ${this.oldTableSize} = ${this.oldTableSize * 2} → next prime = <strong>${this.newTableSize}</strong>
+                        </div>
+                        <p>Elements to rehash: <strong>${this.elementsToRehash.join(', ')}</strong></p>
+                        <p>Click "Next Step" to rehash each element with the new table size.</p>
+                    `);
+
+                    this.rehashStep = 1;
+                    return;
+                }
+
+                // Rehash each element
+                if (this.currentRehashIndex < this.elementsToRehash.length) {
+                    const key = this.elementsToRehash[this.currentRehashIndex];
+                    const probe = this.currentRehashProbe;
+                    const newIndex = (key % this.newTableSize + probe) % this.newTableSize;
+
+                    this.highlightCell(newIndex, 'checking');
+
+                    setTimeout(() => {
+                        if (this.newTable[newIndex] === null) {
+                            // Insert in new table
+                            this.newTable[newIndex] = key;
+                            this.table = this.newTable;
+                            this.highlightCell(newIndex, 'success');
+                            this.renderTable();
+                            this.highlightCell(newIndex, 'success');
+
+                            // Mark as done in old table
+                            this.renderOldTable();
+
+                            this.updateStepPanel(`
+                                <strong>🔄 Rehashing key: ${key}</strong>
+                                <div class="calculation">
+                                    h(${key}) = ${key} mod ${this.newTableSize} = <strong>${key % this.newTableSize}</strong>
+                                    ${probe > 0 ? `<br>Probe ${probe}: (${key % this.newTableSize} + ${probe}) mod ${this.newTableSize} = ${newIndex}` : ''}
+                                </div>
+                                <span class="result success">✅ Key ${key} rehashed to index ${newIndex}!</span>
+                                <p style="margin-top: 0.5rem;">Remaining: ${this.elementsToRehash.slice(this.currentRehashIndex + 1).join(', ') || 'None'}</p>
+                            `);
+
+                            this.addHistory(`Rehashed key ${key} to index ${newIndex} in new table`, 'success');
+
+                            this.currentRehashIndex++;
+                            this.currentRehashProbe = 0;
+
+                            // Check if rehashing is complete
+                            if (this.currentRehashIndex >= this.elementsToRehash.length) {
+                                this.completeRehashing();
+                            }
+                        } else {
+                            // Collision during rehash
+                            this.highlightCell(newIndex, 'collision');
+
+                            this.updateStepPanel(`
+                                <strong>🔄 Rehashing key: ${key}</strong>
+                                <div class="calculation">
+                                    h(${key}) = ${key} mod ${this.newTableSize} = ${key % this.newTableSize}<br>
+                                    Probe ${probe}: (${key % this.newTableSize} + ${probe}) mod ${this.newTableSize} = ${newIndex}
+                                </div>
+                                <span class="result collision">❌ Index ${newIndex} occupied by ${this.newTable[newIndex]}</span>
+                                <p style="margin-top: 0.5rem;">Click "Next Step" to try next position...</p>
+                            `);
+
+                            this.currentRehashProbe++;
+                        }
+                    }, 300);
+                }
+            },
+
+            completeRehashing() {
+                this.isRehashing = false;
+                this.isInserting = false;
+                this.table = this.newTable;
+                this.tableSize = this.newTableSize;
+
+                this.updateLoadFactor();
+
+                this.updateStepPanel(`
+                    <strong>✅ REHASHING COMPLETE!</strong>
+                    <div class="calculation">
+                        Old table size: ${this.oldTableSize}<br>
+                        New table size: <strong>${this.newTableSize}</strong><br>
+                        All ${this.elementsToRehash.length} elements successfully rehashed!
+                    </div>
+                    <span class="result success">Table has been doubled and all elements rehashed!</span>
+                    <p style="margin-top: 0.5rem;">New load factor: ${(this.elementCount / this.newTableSize).toFixed(2)}</p>
+                `);
+
+                this.addHistory(`Rehashing complete! New table size: ${this.newTableSize}`, 'success');
+
+                // Hide old table after a delay
+                setTimeout(() => {
+                    document.getElementById('rehash-old-table-container').style.display = 'none';
+                    document.getElementById('rehash-arrow').style.display = 'none';
+                    document.getElementById('rehash-current-title').textContent = `Current Table (m = ${this.tableSize})`;
+                }, 2000);
+
+                document.getElementById('rehash-next-btn').disabled = true;
+                document.getElementById('rehash-insert-btn').disabled = this.currentKeyIndex >= this.keys.length - 1;
+            },
+
+            getNextPrime(n) {
+                const primes = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71];
+                for (let p of primes) {
+                    if (p >= n) return p;
+                }
+                return n;
+            },
+
+            reset() {
+                this.table = [];
+                this.keys = [];
+                this.currentKeyIndex = -1;
+                this.elementCount = 0;
+                this.isRehashing = false;
+                this.oldTable = [];
+                this.newTable = [];
+
+                document.getElementById('rehash-table').innerHTML = '';
+                document.getElementById('rehash-old-table').innerHTML = '';
+                document.getElementById('rehash-queue-items').innerHTML = '';
+                document.getElementById('rehash-load-value').textContent = '0 / 7 = 0.00';
+                document.getElementById('rehash-load-factor').classList.remove('danger');
+                document.getElementById('rehash-old-table-container').style.display = 'none';
+                document.getElementById('rehash-arrow').style.display = 'none';
+
+                this.clearHistory();
+                document.getElementById('rehash-next-btn').disabled = true;
+                document.getElementById('rehash-insert-btn').disabled = true;
+                this.updateStepPanel('Click "Initialize" to start.');
+            }
+        };
+
+        // ==================== BUCKET HASHING SIMULATOR ====================
+        const bucketSimulator = {
+            numBuckets: 5,
+            bucketSize: 3,
+            buckets: [],
+            overflow: [],
+            keys: [],
+            currentKeyIndex: -1,
+            currentSlotIndex: 0,
+            isInserting: false,
+            currentKey: null,
+            currentBucket: 0,
+            goingToOverflow: false,
+
+            initialize() {
+                this.numBuckets = parseInt(document.getElementById('bucket-num-buckets').value) || 5;
+                this.bucketSize = parseInt(document.getElementById('bucket-size').value) || 3;
+                const keysInput = document.getElementById('bucket-keys').value;
+                this.keys = keysInput.split(',').map(k => parseInt(k.trim())).filter(k => !isNaN(k));
+
+                this.buckets = [];
+                for (let i = 0; i < this.numBuckets; i++) {
+                    this.buckets.push(new Array(this.bucketSize).fill(null));
+                }
+                this.overflow = [];
+
+                this.currentKeyIndex = -1;
+                this.currentSlotIndex = 0;
+                this.isInserting = false;
+                this.currentKey = null;
+                this.goingToOverflow = false;
+
+                this.renderTable();
+                this.renderQueue();
+                this.renderOverflow();
+                this.clearHistory();
+
+                document.getElementById('bucket-next-btn').disabled = true;
+                document.getElementById('bucket-insert-btn').disabled = this.keys.length === 0;
+
+                this.updateStepPanel('Ready! Click "Insert Next Key" to start inserting keys.');
+                this.addHistory(`Initialized ${this.numBuckets} buckets × ${this.bucketSize} slots = ${this.numBuckets * this.bucketSize} total capacity`);
+            },
+
+            renderTable() {
+                const container = document.getElementById('bucket-table');
+                container.innerHTML = '';
+
+                // Create 2D array table
+                let tableHTML = '<table class="bucket-2d-table">';
+
+                // Header row with slot indices (0, 1, 2, ...)
+                tableHTML += '<tr>';
+                tableHTML += '<th class="corner">Bucket \\ Slot</th>';
+                for (let s = 0; s < this.bucketSize; s++) {
+                    tableHTML += `<th>${s}</th>`;
+                }
+                tableHTML += '</tr>';
+
+                // Data rows - each row is a bucket
+                for (let b = 0; b < this.numBuckets; b++) {
+                    tableHTML += '<tr>';
+                    tableHTML += `<td class="bucket-label">${b}</td>`;
+                    for (let s = 0; s < this.bucketSize; s++) {
+                        const val = this.buckets[b][s];
+                        const cellClass = val === null ? 'empty' : 'filled';
+                        tableHTML += `<td class="${cellClass}" id="bucket-${b}-slot-${s}">${val === null ? '—' : val}</td>`;
+                    }
+                    tableHTML += '</tr>';
+                }
+
+                tableHTML += '</table>';
+                container.innerHTML = tableHTML;
+            },
+
+            renderQueue() {
+                const container = document.getElementById('bucket-queue-items');
+                container.innerHTML = '';
+
+                this.keys.forEach((key, index) => {
+                    const item = document.createElement('span');
+                    item.className = 'queue-item';
+                    if (index < this.currentKeyIndex) {
+                        item.classList.add('done');
+                    } else if (index === this.currentKeyIndex) {
+                        item.classList.add('current');
+                    }
+                    item.textContent = key;
+                    container.appendChild(item);
+                });
+            },
+
+            renderOverflow() {
+                const items = document.getElementById('bucket-overflow-items');
+
+                // Always show overflow array with fixed size (e.g., 5 slots)
+                const overflowSize = 5;
+
+                // Create 1D array table with indices
+                let tableHTML = '<table class="overflow-2d-table">';
+
+                // Header row with indices
+                tableHTML += '<tr>';
+                for (let i = 0; i < overflowSize; i++) {
+                    tableHTML += `<th>${i}</th>`;
+                }
+                tableHTML += '</tr>';
+
+                // Value row
+                tableHTML += '<tr>';
+                for (let i = 0; i < overflowSize; i++) {
+                    const val = this.overflow[i];
+                    const cellClass = val !== undefined ? 'filled' : 'empty';
+                    tableHTML += `<td class="${cellClass}" id="overflow-slot-${i}">${val !== undefined ? val : '—'}</td>`;
+                }
+                tableHTML += '</tr>';
+
+                tableHTML += '</table>';
+                items.innerHTML = tableHTML;
+            },
+
+            updateStepPanel(content) {
+                document.getElementById('bucket-step-content').innerHTML = content;
+            },
+
+            addHistory(message, type = '') {
+                const history = document.getElementById('bucket-history');
+                const item = document.createElement('div');
+                item.className = 'history-item ' + type;
+                item.textContent = message;
+                history.insertBefore(item, history.firstChild);
+            },
+
+            clearHistory() {
+                document.getElementById('bucket-history').innerHTML = '';
+            },
+
+            highlightSlot(bucket, slot, className) {
+                // Clear all highlights
+                for (let b = 0; b < this.numBuckets; b++) {
+                    for (let s = 0; s < this.bucketSize; s++) {
+                        const cell = document.getElementById(`bucket-${b}-slot-${s}`);
+                        if (cell) cell.classList.remove('checking', 'success', 'overflow-slot');
+                    }
+                }
+
+                if (bucket >= 0 && slot >= 0) {
+                    const cell = document.getElementById(`bucket-${bucket}-slot-${slot}`);
+                    if (cell) cell.classList.add(className);
+                }
+            },
+
+            insertNext() {
+                if (this.currentKeyIndex >= this.keys.length - 1 && !this.isInserting) {
+                    this.updateStepPanel('All keys have been inserted!');
+                    document.getElementById('bucket-insert-btn').disabled = true;
+                    return;
+                }
+
+                if (!this.isInserting) {
+                    this.currentKeyIndex++;
+                    this.currentKey = this.keys[this.currentKeyIndex];
+                    this.currentSlotIndex = 0;
+                    this.currentBucket = this.currentKey % this.numBuckets;
+                    this.isInserting = true;
+                    this.renderQueue();
+
+                    document.getElementById('bucket-next-btn').disabled = false;
+                    document.getElementById('bucket-insert-btn').disabled = true;
+
+                    this.updateStepPanel(`
+                        <strong>Inserting key: ${this.currentKey}</strong>
+                        <div class="calculation">
+                            Bucket = h(${this.currentKey}) = ${this.currentKey} mod ${this.numBuckets} = <strong>${this.currentBucket}</strong>
+                        </div>
+                        <p>Click "Next Step" to check slot 0 in Bucket ${this.currentBucket}.</p>
+                    `);
+
+                    this.addHistory(`Inserting key ${this.currentKey} → Bucket ${this.currentBucket}`);
+                }
+            },
+
+            nextStep() {
+                if (!this.isInserting) return;
+
+                const key = this.currentKey;
+                const bucket = this.currentBucket;
+                const slot = this.currentSlotIndex;
+
+                // Check if we need to go to overflow (bucket is full)
+                if (slot >= this.bucketSize) {
+                    // Step 1: Show that bucket is full, need to go to overflow
+                    if (!this.goingToOverflow) {
+                        this.goingToOverflow = true;
+
+                        // Highlight all slots in the bucket as full/collision
+                        for (let s = 0; s < this.bucketSize; s++) {
+                            const cell = document.getElementById(`bucket-${bucket}-slot-${s}`);
+                            if (cell) cell.classList.add('collision');
+                        }
+
+                        this.updateStepPanel(`
+                            <strong>🚫 Bucket ${bucket} is COMPLETELY FULL!</strong>
+                            <div class="calculation">
+                                All ${this.bucketSize} slots in Bucket ${bucket} are occupied.<br>
+                                Slots checked: 0, 1, 2 → All FULL!
+                            </div>
+                            <span class="result warning">⚠️ Cannot insert in Bucket ${bucket}!</span>
+                            <p style="margin-top: 0.5rem;">Click "Next Step" to move key ${key} to <strong>Overflow Area</strong>...</p>
+                        `);
+
+                        this.addHistory(`Bucket ${bucket} is FULL - all ${this.bucketSize} slots occupied!`, 'warning');
+                        return;
+                    }
+
+                    // Step 2: Actually insert into overflow
+                    this.overflow.push(key);
+                    this.renderOverflow();
+
+                    // Highlight the new overflow slot
+                    setTimeout(() => {
+                        const overflowCell = document.getElementById(`overflow-slot-${this.overflow.length - 1}`);
+                        if (overflowCell) overflowCell.classList.add('success');
+                    }, 100);
+
+                    // Clear bucket highlights
+                    for (let s = 0; s < this.bucketSize; s++) {
+                        const cell = document.getElementById(`bucket-${bucket}-slot-${s}`);
+                        if (cell) cell.classList.remove('collision');
+                    }
+
+                    this.updateStepPanel(`
+                        <strong>📥 Inserting into Overflow Area</strong>
+                        <div class="calculation">
+                            Key ${key} → Overflow[${this.overflow.length - 1}]
+                        </div>
+                        <span class="result success">✅ Key ${key} stored in Overflow Area at index ${this.overflow.length - 1}!</span>
+                        <p style="margin-top: 0.5rem; color: var(--text-muted);">
+                            <em>Note: During search, we first check Bucket ${bucket}, then search the Overflow Area.</em>
+                        </p>
+                    `);
+
+                    this.addHistory(`Key ${key} → Overflow[${this.overflow.length - 1}] (Bucket ${bucket} was full)`, 'success');
+
+                    this.isInserting = false;
+                    this.goingToOverflow = false;
+                    document.getElementById('bucket-next-btn').disabled = true;
+                    document.getElementById('bucket-insert-btn').disabled = this.currentKeyIndex >= this.keys.length - 1;
+                    return;
+                }
+
+                this.highlightSlot(bucket, slot, 'checking');
+
+                setTimeout(() => {
+                    if (this.buckets[bucket][slot] === null) {
+                        this.buckets[bucket][slot] = key;
+                        this.highlightSlot(bucket, slot, 'success');
+                        this.renderTable();
+                        this.highlightSlot(bucket, slot, 'success');
+
+                        this.updateStepPanel(`
+                            <strong>Checking Bucket ${bucket}, Slot ${slot}</strong>
+                            <div class="calculation">
+                                buckets[${bucket}][${slot}] = empty
+                            </div>
+                            <span class="result success">✅ Slot is empty! Key ${key} inserted at buckets[${bucket}][${slot}]!</span>
+                        `);
+
+                        this.addHistory(`Key ${key} inserted at buckets[${bucket}][${slot}]`, 'success');
+
+                        this.isInserting = false;
+                        document.getElementById('bucket-next-btn').disabled = true;
+                        document.getElementById('bucket-insert-btn').disabled = this.currentKeyIndex >= this.keys.length - 1;
+
+                    } else {
+                        this.highlightSlot(bucket, slot, 'collision');
+
+                        this.updateStepPanel(`
+                            <strong>Checking Bucket ${bucket}, Slot ${slot}</strong>
+                            <div class="calculation">
+                                buckets[${bucket}][${slot}] = ${this.buckets[bucket][slot]} (occupied!)
+                            </div>
+                            <span class="result collision">❌ Slot occupied by ${this.buckets[bucket][slot]}</span>
+                            <p style="margin-top: 0.5rem;">${slot + 1 < this.bucketSize
+                                ? `Click "Next Step" to try slot ${slot + 1}...`
+                                : `Click "Next Step" - No more slots in bucket!`}</p>
+                        `);
+
+                        this.addHistory(`buckets[${bucket}][${slot}] occupied by ${this.buckets[bucket][slot]}`, 'collision');
+                        this.currentSlotIndex++;
+                    }
+                }, 300);
+            },
+
+            reset() {
+                this.buckets = [];
+                this.overflow = [];
+                this.keys = [];
+                this.currentKeyIndex = -1;
+                this.goingToOverflow = false;
+                document.getElementById('bucket-table').innerHTML = '';
+                document.getElementById('bucket-queue-items').innerHTML = '';
+                document.getElementById('bucket-overflow-items').innerHTML = '';
+                this.clearHistory();
+                document.getElementById('bucket-next-btn').disabled = true;
+                document.getElementById('bucket-insert-btn').disabled = true;
+                this.updateStepPanel('Click "Initialize" to start.');
+            }
+        };
+
+        // ==================== SEPARATE CHAINING SIMULATOR ====================
+        const chainingSimulator = {
+            tableSize: 7,
+            chains: [],
+            keys: [],
+            currentKeyIndex: -1,
+            isInserting: false,
+            currentKey: null,
+
+            initialize() {
+                this.tableSize = parseInt(document.getElementById('chaining-table-size').value) || 7;
+                const keysInput = document.getElementById('chaining-keys').value;
+                this.keys = keysInput.split(',').map(k => parseInt(k.trim())).filter(k => !isNaN(k));
+
+                this.chains = [];
+                for (let i = 0; i < this.tableSize; i++) {
+                    this.chains.push([]);
+                }
+
+                this.currentKeyIndex = -1;
+                this.isInserting = false;
+                this.currentKey = null;
+
+                this.renderTable();
+                this.renderQueue();
+                this.clearHistory();
+
+                document.getElementById('chaining-next-btn').disabled = true;
+                document.getElementById('chaining-insert-btn').disabled = this.keys.length === 0;
+
+                this.updateStepPanel('Ready! Click "Insert Next Key" to start inserting keys.');
+                this.addHistory(`Initialized table with ${this.tableSize} chains`);
+            },
+
+            renderTable() {
+                const container = document.getElementById('chaining-table');
+                container.innerHTML = '';
+
+                for (let i = 0; i < this.tableSize; i++) {
+                    const chainBucket = document.createElement('div');
+                    chainBucket.className = 'chain-bucket';
+
+                    let chainHTML = `<div class="chain-index">${i}</div>`;
+
+                    if (this.chains[i].length === 0) {
+                        chainHTML += `
+                            <div class="chain-arrow"></div>
+                            <div class="chain-null">NULL</div>
+                        `;
+                    } else {
+                        chainHTML += `<div class="chain-arrow"></div>`;
+                        chainHTML += `<div class="chain-nodes" id="chain-${i}-nodes">`;
+
+                        this.chains[i].forEach((val, idx) => {
+                            chainHTML += `
+                                <div class="chain-node">
+                                    <div class="node-value" id="chain-${i}-node-${idx}">${val}</div>
+                                </div>
+                            `;
+                            if (idx < this.chains[i].length - 1) {
+                                chainHTML += `<div class="node-link"></div>`;
+                            }
+                        });
+
+                        chainHTML += `
+                            <div class="node-link"></div>
+                            <div class="chain-null">NULL</div>
+                        </div>`;
+                    }
+
+                    chainBucket.innerHTML = chainHTML;
+                    container.appendChild(chainBucket);
+                }
+            },
+
+            renderQueue() {
+                const container = document.getElementById('chaining-queue-items');
+                container.innerHTML = '';
+
+                this.keys.forEach((key, index) => {
+                    const item = document.createElement('span');
+                    item.className = 'queue-item';
+                    if (index < this.currentKeyIndex) {
+                        item.classList.add('done');
+                    } else if (index === this.currentKeyIndex) {
+                        item.classList.add('current');
+                    }
+                    item.textContent = key;
+                    container.appendChild(item);
+                });
+            },
+
+            updateStepPanel(content) {
+                document.getElementById('chaining-step-content').innerHTML = content;
+            },
+
+            addHistory(message, type = '') {
+                const history = document.getElementById('chaining-history');
+                const item = document.createElement('div');
+                item.className = 'history-item ' + type;
+                item.textContent = message;
+                history.insertBefore(item, history.firstChild);
+            },
+
+            clearHistory() {
+                document.getElementById('chaining-history').innerHTML = '';
+            },
+
+            highlightNode(chainIndex, nodeIndex, className) {
+                // Clear all highlights
+                for (let c = 0; c < this.tableSize; c++) {
+                    for (let n = 0; n < this.chains[c].length; n++) {
+                        const node = document.getElementById(`chain-${c}-node-${n}`);
+                        if (node) node.classList.remove('checking', 'success');
+                    }
+                }
+
+                if (chainIndex >= 0 && nodeIndex >= 0) {
+                    const node = document.getElementById(`chain-${chainIndex}-node-${nodeIndex}`);
+                    if (node) node.classList.add(className);
+                }
+            },
+
+            insertNext() {
+                if (this.currentKeyIndex >= this.keys.length - 1 && !this.isInserting) {
+                    this.updateStepPanel('All keys have been inserted!');
+                    document.getElementById('chaining-insert-btn').disabled = true;
+                    return;
+                }
+
+                if (!this.isInserting) {
+                    this.currentKeyIndex++;
+                    this.currentKey = this.keys[this.currentKeyIndex];
+                    this.isInserting = true;
+                    this.renderQueue();
+
+                    const chainIndex = this.currentKey % this.tableSize;
+
+                    document.getElementById('chaining-next-btn').disabled = false;
+                    document.getElementById('chaining-insert-btn').disabled = true;
+
+                    this.updateStepPanel(`
+                        <strong>Inserting key: ${this.currentKey}</strong>
+                        <div class="calculation">
+                            Chain Index = h(${this.currentKey}) = ${this.currentKey} mod ${this.tableSize} = <strong>${chainIndex}</strong>
+                        </div>
+                        <p>Click "Next Step" to add to chain ${chainIndex}.</p>
+                    `);
+
+                    this.addHistory(`Inserting key ${this.currentKey} → Chain ${chainIndex}`);
+                }
+            },
+
+            nextStep() {
+                if (!this.isInserting) return;
+
+                const key = this.currentKey;
+                const chainIndex = key % this.tableSize;
+
+                // Add to chain
+                this.chains[chainIndex].push(key);
+                this.renderTable();
+
+                const nodeIndex = this.chains[chainIndex].length - 1;
+
+                setTimeout(() => {
+                    this.highlightNode(chainIndex, nodeIndex, 'success');
+
+                    const chainLength = this.chains[chainIndex].length;
+
+                    this.updateStepPanel(`
+                        <strong>Adding to Chain ${chainIndex}</strong>
+                        <div class="calculation">
+                            Key ${key} added to chain at index ${chainIndex}
+                        </div>
+                        <span class="result success">✅ Key ${key} inserted! Chain length: ${chainLength}</span>
+                        ${chainLength > 1 ? `<p style="margin-top: 0.5rem; color: var(--accent-color);">📝 Note: This is collision #${chainLength - 1} in this chain!</p>` : ''}
+                    `);
+
+                    this.addHistory(`Key ${key} added to Chain ${chainIndex} (length: ${chainLength})`, 'success');
+
+                    this.isInserting = false;
+                    document.getElementById('chaining-next-btn').disabled = true;
+                    document.getElementById('chaining-insert-btn').disabled = this.currentKeyIndex >= this.keys.length - 1;
+                }, 300);
+            },
+
+            reset() {
+                this.chains = [];
+                this.keys = [];
+                this.currentKeyIndex = -1;
+                document.getElementById('chaining-table').innerHTML = '';
+                document.getElementById('chaining-queue-items').innerHTML = '';
+                this.clearHistory();
+                document.getElementById('chaining-next-btn').disabled = true;
+                document.getElementById('chaining-insert-btn').disabled = true;
+                this.updateStepPanel('Click "Initialize" to start.');
+            }
+        };
+    </script>
+
+    <footer style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #94a3b8; text-align: center; padding: 2rem; margin-top: 2rem;">
+        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">
+            <strong style="color: #e2e8f0;">Prepared by Dr. Almalawi</strong>
+        </p>
+        <p style="font-size: 0.9rem;">CPCS 204 - Data Structures</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorting Practice — Level Up!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<import url='https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap'>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f2f8;
+    min-height: 100vh;
+}
+
+/* ─── HERO BANNER ──────────────────────────────────────────── */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 40%, #f093fb 100%);
+    padding: 48px 24px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    pointer-events: none;
+}
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -40px;
+    width: 350px; height: 350px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    pointer-events: none;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(255,255,255,0.35);
+}
+
+.hero h1 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: #fff;
+    line-height: 1.15;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.18);
+    margin-bottom: 12px;
+}
+
+.hero-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: rgba(255,255,255,0.88);
+    font-weight: 500;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ─── MAIN CONTAINER ───────────────────────────────────────── */
+.container {
+    max-width: 860px;
+    margin: -64px auto 48px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px 36px 48px;
+    box-shadow: 0 20px 60px rgba(102,126,234,0.18), 0 4px 16px rgba(0,0,0,0.06);
+}
+
+/* ─── SECTION TITLES ───────────────────────────────────────── */
+.section-label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9b59b6;
+    margin-bottom: 16px;
+}
+
+/* ─── ALGORITHM BUTTONS ────────────────────────────────────── */
+.algo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+@media (max-width: 600px) {
+    .algo-grid { grid-template-columns: 1fr; }
+    .card { padding: 28px 18px 36px; }
+}
+
+.algo-btn {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 16px 18px;
+    border-radius: 18px;
+    border: 2.5px solid #e8e8f0;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: #555;
+    user-select: none;
+    overflow: hidden;
+}
+
+.algo-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    border-color: #ccc;
+}
+
+.algo-icon {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    transition: transform 0.3s ease;
+}
+
+.algo-btn:hover .algo-icon { transform: scale(1.12) rotate(-5deg); }
+
+/* Selection Sort */
+.algo-btn.active-selection {
+    background: linear-gradient(135deg, #ff6b35, #f9d423);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 16px 40px rgba(255,107,53,0.4);
+    transform: translateY(-4px) scale(1.02);
+}
+.algo-btn.active-selection .algo-icon { background: rgba(255,255,255,0.28); }
+.btn-selection-icon { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+
+/* Insertion Sort */
+.algo-btn.active-insertion {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 16px 40px rgba(102,126,234,0.4);
+    transform: translateY(-4px) scale(1.02);
+}
+.algo-btn.active-insertion .algo-icon { background: rgba(255,255,255,0.28); }
+.btn-insertion-icon { background: linear-gradient(135deg, #d4c5f9, #a18cd1); }
+
+/* Bubble Sort */
+.algo-btn.active-bubble {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 16px 40px rgba(17,153,142,0.4);
+    transform: translateY(-4px) scale(1.02);
+}
+.algo-btn.active-bubble .algo-icon { background: rgba(255,255,255,0.28); }
+.btn-bubble-icon { background: linear-gradient(135deg, #b7f8db, #50a7c2); }
+
+.algo-name { line-height: 1.2; }
+
+/* ─── GENERATE BUTTON ──────────────────────────────────────── */
+.btn-generate {
+    display: block;
+    width: 100%;
+    padding: 17px 32px;
+    border-radius: 100px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 17px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-generate::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+}
+.btn-generate:hover::after { background: rgba(255,255,255,0.12); }
+
+.btn-generate:hover {
+    transform: translateY(-3px) scale(1.02);
+}
+
+.btn-generate:active { transform: scale(0.98); }
+
+.btn-generate:disabled {
+    background: linear-gradient(135deg, #c8c8d0, #a0a0b0) !important;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    opacity: 0.7;
+}
+
+.gen-selection { background: linear-gradient(135deg, #ff6b35, #f9d423); box-shadow: 0 10px 30px rgba(255,107,53,0.35); }
+.gen-insertion { background: linear-gradient(135deg, #667eea, #764ba2); box-shadow: 0 10px 30px rgba(102,126,234,0.35); }
+.gen-bubble    { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 10px 30px rgba(17,153,142,0.35); }
+
+/* ─── INFO BOX ─────────────────────────────────────────────── */
+.info-box {
+    display: none;
+    padding: 16px 20px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    border-left: 5px solid;
+    animation: fadeIn 0.35s ease;
+}
+
+.info-box.show-selection { display: block; border-left-color: #ff6b35; background: #fff5ee; color: #7a3010; }
+.info-box.show-insertion { display: block; border-left-color: #764ba2; background: #f5f0ff; color: #4a1a7a; }
+.info-box.show-bubble    { display: block; border-left-color: #11998e; background: #edfaf7; color: #0a4f47; }
+
+/* ─── ROW BLOCKS ───────────────────────────────────────────── */
+#main-area { display: flex; flex-direction: column; gap: 20px; }
+
+.row-block {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 22px 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    border: 1.5px solid #f0f0f5;
+    transition: box-shadow 0.2s;
+    border-left: 5px solid #ddd;
+}
+
+.row-block.is-source {
+    border-left: 5px solid #f5a623;
+    background: #fffdf5;
+    box-shadow: 0 6px 24px rgba(245,166,35,0.15);
+}
+
+.row-block.is-locked {
+    border-left: 5px solid #27ae60;
+    background: #f6fef9;
+    box-shadow: 0 4px 14px rgba(39,174,96,0.10);
+}
+
+.row-label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 14.5px;
+    color: #333;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.row-hint {
+    font-size: 12.5px;
+    color: #f5a623;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ─── COMPARISON BADGE ─────────────────────────────────────── */
+.comp-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+}
+.comp-badge-selection { background: #fff0e6; color: #e65c00; border: 1.5px solid #ffd5b8; }
+.comp-badge-insertion { background: #f0ebff; color: #6c3483; border: 1.5px solid #d8c5f5; }
+.comp-badge-bubble    { background: #e8faf5; color: #0e6655; border: 1.5px solid #b2e8d8; }
+
+/* ─── TILES ROW ────────────────────────────────────────────── */
+.tiles-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px 0;
+}
+
+.tile {
+    width: 68px; height: 68px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+    border: 2.5px solid var(--src-color, #667eea);
+    background: var(--src-bg, #f0f4ff);
+    color: var(--src-color, #667eea);
+    position: relative;
+}
+
+.tile:hover:not(.locked):not(.tile-used) {
+    transform: translateY(-6px) scale(1.06);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+    z-index: 10;
+}
+
+.tile.dragging {
+    opacity: 0.45;
+    transform: scale(0.94);
+}
+
+.tile.locked {
+    cursor: default;
+    opacity: 0.7;
+}
+
+.tile.tile-used {
+    opacity: 0.3;
+    cursor: default;
+    border-style: dashed;
+}
+
+.tile.tile-green {
+    border-color: #27ae60;
+    background: #eafaf1;
+    color: #1e8449;
+}
+
+.tile.tile-green:hover:not(.locked):not(.tile-used) {
+    box-shadow: 0 12px 28px rgba(39,174,96,0.3);
+}
+
+.tile-in-slot {
+    width: 60px; height: 60px;
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 19px;
+    cursor: grab;
+    user-select: none;
+    background: linear-gradient(135deg, rgba(102,126,234,0.12), rgba(118,75,162,0.12));
+    color: #4a1a7a;
+    border: 2px solid rgba(118,75,162,0.3);
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s;
+}
+
+.tile-in-slot:hover {
+    transform: scale(1.07);
+    box-shadow: 0 6px 18px rgba(118,75,162,0.22);
+}
+
+.tile-in-slot.dragging { opacity: 0.4; }
+
+/* ─── SLOTS ────────────────────────────────────────────────── */
+.slots-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px 0 10px;
+}
+
+.slot {
+    width: 68px; height: 68px;
+    border-radius: 14px;
+    border: 2.5px dashed #c8c8d8;
+    display: flex; align-items: center; justify-content: center;
+    background: #fafafa;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.slot.drag-over {
+    border-color: #764ba2;
+    background: #f5f0ff;
+    box-shadow: 0 0 0 4px rgba(118,75,162,0.18);
+    transform: scale(1.05);
+}
+
+.slot.has-tile {
+    border-color: transparent;
+    background: transparent;
+}
+
+.slot-pos {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: #ccc;
+}
+
+/* Slot states */
+.slot.correct {
+    border: 2.5px solid #27ae60;
+    background: #eafaf1;
+    animation: greenPulse 0.5s ease;
+}
+.slot.wrong {
+    border: 2.5px solid #e74c3c;
+    background: #fef0ef;
+    animation: shake 0.4s ease;
+}
+
+/* ─── SOURCE ZONE DRAG OVER ────────────────────────────────── */
+.source-zone.drag-over {
+    outline: 2.5px dashed #f5a623;
+    background: rgba(245,166,35,0.05);
+    border-radius: 10px;
+}
+
+/* ─── CHECK BUTTON ─────────────────────────────────────────── */
+.check-btn {
+    margin-top: 12px;
+    padding: 12px 32px;
+    border-radius: 100px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 6px 20px rgba(102,126,234,0.35);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.check-btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 10px 28px rgba(102,126,234,0.45);
+}
+.check-btn:active { transform: scale(0.97); }
+
+/* ─── ERROR MESSAGE ────────────────────────────────────────── */
+.error-msg {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: #fff0ef;
+    border: 1.5px solid #f5c6c2;
+    color: #c0392b;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+}
+
+.error-msg::before {
+    content: '⚠ ';
+}
+
+/* ─── COMPLETION BANNER ────────────────────────────────────── */
+#done {
+    display: none;
+    margin-top: 28px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 32px 28px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    text-align: center;
+    box-shadow: 0 16px 48px rgba(118,75,162,0.4);
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.total-comps {
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    color: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.15);
+    padding: 10px 20px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+/* ─── ANIMATIONS ───────────────────────────────────────────── */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes greenPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(39,174,96,0.55); }
+    50%  { box-shadow: 0 0 0 10px rgba(39,174,96,0); }
+    100% { box-shadow: none; }
+}
+
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-5px); }
+    40%     { transform: translateX(5px); }
+    60%     { transform: translateX(-4px); }
+    80%     { transform: translateX(4px); }
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.85) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-8px); }
+}
+
+.floating { animation: float 3s ease-in-out infinite; }
+
+/* ─── DIVIDER ───────────────────────────────────────────────── */
+.section-divider {
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, #e8e0f5, transparent);
+    margin: 28px 0;
+    border: none;
+}
+
+/* ─── DECORATIVE DOTS ───────────────────────────────────────── */
+.dots-decoration {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 8px 0 24px;
+}
+.dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+}
+.dot-1 { background: #667eea; }
+.dot-2 { background: #f093fb; }
+.dot-3 { background: #38ef7d; }
+.dot-4 { background: #f9d423; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO BANNER ══════════════════════════════════════════ -->
+<div class="hero">
+    <a href="index.html" style="display:inline-block;color:white;text-decoration:none;font-size:0.85em;font-weight:600;padding:6px 16px;border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;margin-bottom:14px;">← Sorting Hub</a>
+    <div class="hero-badge">CPCS 204 — Interactive Practice</div>
+    <h1>Sorting Algorithm<br>Challenge</h1>
+    <p class="hero-subtitle">
+        Pick an algorithm, generate a puzzle, and drag the tiles into the correct order — loop by loop!
+    </p>
+</div>
+
+<!-- ═══ MAIN CONTAINER ═══════════════════════════════════════ -->
+<div class="container">
+<div class="card">
+
+    <!-- Step 1: Choose Algorithm -->
+    <div class="section-label">Step 1 — Choose Your Algorithm</div>
+
+    <div class="algo-grid">
+        <button class="algo-btn" id="btn-selection" onclick="selectAlgo('selection')">
+            <div class="algo-icon btn-selection-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e65c00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 3 21 3 21 8"></polyline>
+                    <line x1="4" y1="20" x2="21" y2="3"></line>
+                    <polyline points="21 16 21 21 16 21"></polyline>
+                    <line x1="15" y1="15" x2="21" y2="21"></line>
+                </svg>
+            </div>
+            <span class="algo-name">Selection Sort</span>
+        </button>
+
+        <button class="algo-btn" id="btn-insertion" onclick="selectAlgo('insertion')">
+            <div class="algo-icon btn-insertion-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+            </div>
+            <span class="algo-name">Insertion Sort</span>
+        </button>
+
+        <button class="algo-btn" id="btn-bubble" onclick="selectAlgo('bubble')">
+            <div class="algo-icon btn-bubble-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#11998e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="8 12 12 8 16 12"></polyline>
+                    <line x1="12" y1="16" x2="12" y2="8"></line>
+                </svg>
+            </div>
+            <span class="algo-name">Bubble Sort</span>
+        </button>
+    </div>
+
+    <!-- Step 2: Generate -->
+    <div class="section-label">Step 2 — Generate a New Puzzle</div>
+
+    <div class="info-box" id="info-box">
+        <span id="info-text"></span>
+    </div>
+
+    <button class="btn-generate" id="btn-gen" onclick="generate()" disabled>
+        Generate New Array &nbsp;&#9654;
+    </button>
+
+    <hr class="section-divider">
+
+    <!-- Step 3: Solve -->
+    <div class="section-label">Step 3 — Solve Loop by Loop</div>
+    <div class="dots-decoration">
+        <div class="dot dot-1"></div>
+        <div class="dot dot-2"></div>
+        <div class="dot dot-3"></div>
+        <div class="dot dot-4"></div>
+    </div>
+
+    <div id="main-area"></div>
+
+    <!-- Completion Banner -->
+    <div id="done"></div>
+
+</div><!-- /.card -->
+</div><!-- /.container -->
+
+<script>
+    const ALGOS = {
+        selection: {
+            name: 'Selection Sort',
+            infoText: '<strong>Selection Sort:</strong> each loop scans the unsorted part and moves the <strong>minimum element</strong> to its correct position.',
+            srcColor: '#e65c00', srcBg: '#fff3e0',
+            afterLoop(arr, loop) {
+                const a = [...arr];
+                for (let i = 0; i <= loop; i++) {
+                    let m = i;
+                    for (let j = i + 1; j < a.length; j++) if (a[j] < a[m]) m = j;
+                    [a[i], a[m]] = [a[m], a[i]];
+                }
+                return a;
+            },
+            comparisons(arr, loopIdx) { return arr.length - 1 - loopIdx; }
+        },
+        insertion: {
+            name: 'Insertion Sort',
+            infoText: '<strong>Insertion Sort:</strong> each loop takes the next unsorted element and <strong>inserts it</strong> into its correct position in the sorted portion.',
+            srcColor: '#6c3483', srcBg: '#fdf5ff',
+            afterLoop(arr, loop) {
+                const a = [...arr];
+                for (let i = 1; i <= loop + 1; i++) {
+                    const key = a[i];
+                    let j = i - 1;
+                    while (j >= 0 && a[j] > key) { a[j + 1] = a[j]; j--; }
+                    a[j + 1] = key;
+                }
+                return a;
+            },
+            comparisons(arr, loopIdx) {
+                const a = [...arr];
+                for (let i = 1; i <= loopIdx; i++) {
+                    const key = a[i]; let j = i - 1;
+                    while (j >= 0 && a[j] > key) { a[j + 1] = a[j]; j--; }
+                    a[j + 1] = key;
+                }
+                const key = a[loopIdx + 1];
+                let j = loopIdx, comps = 0;
+                while (j >= 0) { comps++; if (a[j] <= key) break; j--; }
+                return comps;
+            }
+        },
+        bubble: {
+            name: 'Bubble Sort',
+            infoText: '<strong>Bubble Sort:</strong> each loop compares <strong>adjacent pairs</strong> and swaps them if out of order, causing the largest unsorted element to bubble to the end.',
+            srcColor: '#0e6655', srcBg: '#f0faf8',
+            afterLoop(arr, loop) {
+                const a = [...arr];
+                for (let i = 0; i <= loop; i++) {
+                    for (let j = 0; j < a.length - 1 - i; j++) {
+                        if (a[j] > a[j + 1]) [a[j], a[j + 1]] = [a[j + 1], a[j]];
+                    }
+                }
+                return a;
+            },
+            comparisons(arr, loopIdx) { return arr.length - 1 - loopIdx; }
+        }
+    };
+
+    let currentAlgoKey = null;
+    let orig = [], currentLoop = 0;
+    let srcLi = -1, srcVals = [], srcFree = [];
+    let slotVal = {}, slotSrcPos = {};
+    let drag = { from: null, li: null, srcPos: null, slotIdx: null, value: null };
+
+    function selectAlgo(key) {
+        currentAlgoKey = key;
+        ['selection', 'insertion', 'bubble'].forEach(k => {
+            document.getElementById(`btn-${k}`).className = 'algo-btn' + (k === key ? ` active-${k}` : '');
+        });
+        const info = document.getElementById('info-box');
+        info.className = `info-box show-${key}`;
+        document.getElementById('info-text').innerHTML = ALGOS[key].infoText;
+        const genBtn = document.getElementById('btn-gen');
+        genBtn.disabled = false;
+        genBtn.className = `btn-generate gen-${key}`;
+        document.getElementById('main-area').innerHTML = '';
+        document.getElementById('done').style.display = 'none';
+    }
+
+    function randomArray(n) {
+        const s = new Set();
+        while (s.size < n) s.add(Math.floor(Math.random() * 89) + 10);
+        return [...s];
+    }
+
+    function afterLoop(arr, loop) { return ALGOS[currentAlgoKey].afterLoop(arr, loop); }
+    function getSrcColor() { return ALGOS[currentAlgoKey].srcColor; }
+    function getSrcBg()    { return ALGOS[currentAlgoKey].srcBg; }
+
+    function getComparisons(loopIdx) { return ALGOS[currentAlgoKey].comparisons(orig, loopIdx); }
+    function compBadge(loopIdx) {
+        const c = getComparisons(loopIdx);
+        return `<span class="comp-badge comp-badge-${currentAlgoKey}">${c} comparison${c===1?'':'s'}</span>`;
+    }
+    function totalComparisons() {
+        let t = 0;
+        for (let li = 0; li < orig.length - 1; li++) t += getComparisons(li);
+        return t;
+    }
+
+    function generate() {
+        orig = randomArray(8); currentLoop = 0; slotVal = {}; slotSrcPos = {};
+        srcLi = -1; srcVals = [...orig]; srcFree = new Array(8).fill(true);
+        slotVal[0] = new Array(8).fill(null); slotSrcPos[0] = new Array(8).fill(null);
+        document.getElementById('done').style.display = 'none';
+        renderPage();
+    }
+
+    function renderPage() {
+        const area = document.getElementById('main-area');
+        area.innerHTML = '';
+        renderInitialRow(area);
+        for (let li = 0; li < currentLoop; li++) renderDoneRow(area, li);
+        if (currentLoop < orig.length - 1) renderActiveRow(area, currentLoop);
+    }
+
+    function tileStyle() { return `style="--src-color:${getSrcColor()};--src-bg:${getSrcBg()}"` }
+
+    function renderInitialRow(area) {
+        const isSource = srcLi === -1;
+        const div = document.createElement('div');
+        div.id = 'init-row';
+        div.className = 'row-block ' + (isSource ? 'is-source' : 'is-locked');
+        const tiles = isSource
+            ? srcVals.map((v,i) => srcFree[i]
+                ? `<div class="tile tile-src" ${tileStyle()} draggable="true" data-from="src" data-srcpos="${i}" data-value="${v}">${v}</div>`
+                : `<div class="tile tile-src tile-used" ${tileStyle()}>${v}</div>`).join('')
+            : orig.map(v => `<div class="tile tile-src locked" ${tileStyle()}>${v}</div>`).join('');
+        div.innerHTML = `
+            <div class="row-label">Initial Array</div>
+            ${isSource ? '<div class="row-hint">Drag tiles from here into Loop 1 slots below</div>' : ''}
+            <div class="tiles-row source-zone" id="init-tiles">${tiles}</div>`;
+        area.appendChild(div);
+        if (isSource) attachSourceListeners(div.querySelector('#init-tiles'));
+    }
+
+    function renderDoneRow(area, li) {
+        const isSource = srcLi === li;
+        const vals = afterLoop(orig, li);
+        const div = document.createElement('div');
+        div.id = `done-row-${li}`;
+        div.className = 'row-block ' + (isSource ? 'is-source' : 'is-locked');
+        const tiles = isSource
+            ? vals.map((v,i) => srcFree[i]
+                ? `<div class="tile tile-green can-drag" draggable="true" data-from="src" data-srcpos="${i}" data-value="${v}">${v}</div>`
+                : `<div class="tile tile-green tile-used">${v}</div>`).join('')
+            : vals.map(v => `<div class="tile tile-green locked">${v}</div>`).join('');
+        div.innerHTML = `
+            <div class="row-label">After Loop ${li+1} ${compBadge(li)}</div>
+            ${isSource ? `<div class="row-hint">Drag tiles from here into Loop ${li+2} slots below</div>` : ''}
+            <div class="tiles-row source-zone" id="done-tiles-${li}">${tiles}</div>`;
+        area.appendChild(div);
+        if (isSource) attachSourceListeners(div.querySelector(`#done-tiles-${li}`));
+    }
+
+    function renderActiveRow(area, li) {
+        const div = document.createElement('div');
+        div.id = `active-row-${li}`;
+        div.className = 'row-block';
+        const slotsHTML = slotVal[li].map((v,i) => v !== null
+            ? `<div class="slot has-tile" id="slot-${li}-${i}" data-li="${li}" data-idx="${i}"><div class="tile-in-slot" draggable="true" data-from="slot" data-li="${li}" data-slotidx="${i}" data-value="${v}">${v}</div></div>`
+            : `<div class="slot" id="slot-${li}-${i}" data-li="${li}" data-idx="${i}"><span class="slot-pos">${i+1}</span></div>`).join('');
+        div.innerHTML = `
+            <div class="row-label">Loop ${li+1} ${compBadge(li)} — arrange tiles to show the array after this loop</div>
+            <div class="slots-row" id="slots-${li}">${slotsHTML}</div>
+            <button class="check-btn" id="btn-${li}" onclick="checkLoop(${li})">Check Answer</button>
+            <div class="error-msg" id="err-${li}"></div>`;
+        area.appendChild(div);
+        div.querySelectorAll('.slot').forEach(slot => {
+            slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drag-over'); });
+            slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+            slot.addEventListener('drop', onSlotDrop);
+        });
+        div.querySelectorAll('.tile-in-slot').forEach(t => {
+            t.addEventListener('dragstart', onTileDragStart);
+            t.addEventListener('dragend', onDragEnd);
+        });
+    }
+
+    function attachSourceListeners(zoneEl) {
+        if (!zoneEl) return;
+        zoneEl.querySelectorAll('[draggable="true"]').forEach(t => {
+            t.addEventListener('dragstart', onTileDragStart);
+            t.addEventListener('dragend', onDragEnd);
+        });
+        zoneEl.addEventListener('dragover', e => e.preventDefault());
+        zoneEl.addEventListener('dragenter', () => { if (drag.from === 'slot') zoneEl.classList.add('drag-over'); });
+        zoneEl.addEventListener('dragleave', () => zoneEl.classList.remove('drag-over'));
+        zoneEl.addEventListener('drop', onSourceDrop);
+    }
+
+    function onTileDragStart(e) {
+        const t = e.currentTarget;
+        drag.from = t.dataset.from; drag.value = parseInt(t.dataset.value);
+        if (drag.from === 'src') { drag.srcPos = parseInt(t.dataset.srcpos); drag.li = currentLoop; drag.slotIdx = null; }
+        else { drag.li = parseInt(t.dataset.li); drag.slotIdx = parseInt(t.dataset.slotidx); drag.srcPos = slotSrcPos[drag.li][drag.slotIdx]; }
+        t.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function onDragEnd(e) { e.currentTarget.classList.remove('dragging'); }
+
+    function onSlotDrop(e) {
+        e.preventDefault();
+        const slot = e.currentTarget;
+        const toLi = parseInt(slot.dataset.li), toIdx = parseInt(slot.dataset.idx);
+        slot.classList.remove('drag-over');
+        if (toLi !== currentLoop) return;
+        const prevVal = slotVal[toLi][toIdx], prevSrcPos = slotSrcPos[toLi][toIdx];
+        if (drag.from === 'src') {
+            if (prevVal !== null) srcFree[prevSrcPos] = true;
+            srcFree[drag.srcPos] = false;
+        } else {
+            if (drag.slotIdx === toIdx) return;
+            slotVal[toLi][drag.slotIdx] = prevVal;
+            slotSrcPos[toLi][drag.slotIdx] = prevSrcPos;
+        }
+        slotVal[toLi][toIdx] = drag.value; slotSrcPos[toLi][toIdx] = drag.srcPos;
+        clearFeedback(toLi); renderPage();
+    }
+
+    function onSourceDrop(e) {
+        e.preventDefault();
+        if (drag.from !== 'slot' || drag.li !== currentLoop) return;
+        srcFree[drag.srcPos] = true;
+        slotVal[currentLoop][drag.slotIdx] = null; slotSrcPos[currentLoop][drag.slotIdx] = null;
+        clearFeedback(currentLoop); renderPage();
+    }
+
+    function checkLoop(li) {
+        const errEl = document.getElementById(`err-${li}`);
+        if (slotVal[li].some(v => v === null)) { errEl.textContent = 'Fill all 8 positions before checking.'; errEl.style.display = 'block'; return; }
+        const expected = afterLoop(orig, li);
+        let ok = true;
+        for (let i = 0; i < orig.length; i++) {
+            const slot = document.getElementById(`slot-${li}-${i}`);
+            slot.classList.remove('correct', 'wrong');
+            if (slotVal[li][i] === expected[i]) slot.classList.add('correct');
+            else { slot.classList.add('wrong'); ok = false; }
+        }
+        if (!ok) { errEl.textContent = 'Some positions are wrong — rearrange and try again.'; errEl.style.display = 'block'; return; }
+        errEl.style.display = 'none';
+        currentLoop++;
+        if (currentLoop >= orig.length - 1) {
+            renderPage();
+            const total = totalComparisons();
+            const done = document.getElementById('done');
+            done.innerHTML = `All loops completed — well done!<div class="total-comps">Total comparisons for ${ALGOS[currentAlgoKey].name}: <strong>${total}</strong></div>`;
+            done.style.display = 'block';
+            done.scrollIntoView({ behavior: 'smooth' });
+            return;
+        }
+        srcLi = li; srcVals = [...afterLoop(orig, li)]; srcFree = new Array(orig.length).fill(true);
+        slotVal[currentLoop] = new Array(orig.length).fill(null); slotSrcPos[currentLoop] = new Array(orig.length).fill(null);
+        renderPage();
+        document.getElementById(`active-row-${currentLoop}`).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function clearFeedback(li) {
+        const e = document.getElementById(`err-${li}`);
+        if (e) e.style.display = 'none';
+        document.querySelectorAll(`#slots-${li} .slot`).forEach(s => s.classList.remove('correct', 'wrong'));
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById(`btn-${currentLoop}`)?.click(); });
+</script>
+</body>
+</html>

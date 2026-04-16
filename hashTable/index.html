@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Tables - CPCS 204 Data Structures</title>
+    <style>
+        :root {
+            --primary-color: #7c3aed;
+            --primary-light: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --secondary-color: #059669;
+            --accent-color: #f59e0b;
+            --danger-color: #dc2626;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.2rem;
+        }
+
+        .course-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .intro h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .intro p {
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .card:nth-child(1) .card-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .card:nth-child(2) .card-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+        }
+
+        .card:nth-child(3) .card-header {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .card-body {
+            padding: 1.5rem 2rem 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body h4 {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .topics-list {
+            list-style: none;
+            flex: 1;
+        }
+
+        .topics-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+        }
+
+        .topics-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .card-btn {
+            display: block;
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        .card:nth-child(1) .card-btn {
+            background: #3b82f6;
+        }
+
+        .card:nth-child(1) .card-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .card:nth-child(2) .card-btn {
+            background: #8b5cf6;
+        }
+
+        .card:nth-child(2) .card-btn:hover {
+            background: #6d28d9;
+        }
+
+        .card:nth-child(3) .card-btn {
+            background: #059669;
+        }
+
+        .card:nth-child(3) .card-btn:hover {
+            background: #047857;
+        }
+
+        /* Learning Path */
+        .learning-path {
+            margin-top: 4rem;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .learning-path h3 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .path-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .path-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .path-step:nth-child(1) .step-number { background: #3b82f6; }
+        .path-step:nth-child(2) .step-number { background: #8b5cf6; }
+        .path-step:nth-child(3) .step-number { background: #059669; }
+
+        .step-content h4 {
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .path-arrow {
+            font-size: 2rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #94a3b8;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p:first-child {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        footer strong {
+            color: #e2e8f0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .path-steps {
+                flex-direction: column;
+            }
+
+            .path-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../index.html" style="color: white; text-decoration: none; opacity: 0.8; font-size: 0.95rem; display: inline-block; margin-bottom: 1rem;">← Back to CPCS 204 Home</a>
+        <h1>Hash Tables</h1>
+        <p>Complete Interactive Learning Guide</p>
+        <div class="course-badge">CPCS 204 - Data Structures</div>
+    </header>
+
+    <main>
+        <div class="intro">
+            <h2>Welcome to Hash Tables!</h2>
+            <p>Learn how hash tables work through interactive tutorials and animations. Start with the basics, then explore collision resolution techniques and advanced concepts.</p>
+        </div>
+
+        <div class="cards-grid">
+            <!-- Card 1: Tutorial -->
+            <a href="hashTable.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">📖</div>
+                    <h3>Hash Table Tutorial</h3>
+                    <p>Learn the fundamentals with Ahmed & Omar</p>
+                </div>
+                <div class="card-body">
+                    <h4>Topics Covered:</h4>
+                    <ul class="topics-list">
+                        <li>Why we need Hash Tables</li>
+                        <li>Hash Functions (h(k) = k mod m)</li>
+                        <li>Collisions and why they happen</li>
+                        <li>Open Addressing basics</li>
+                        <li>Linear & Quadratic Probing theory</li>
+                        <li>Double Hashing concepts</li>
+                    </ul>
+                    <div class="card-btn">Start Learning →</div>
+                </div>
+            </a>
+
+            <!-- Card 2: Interactive Probing -->
+            <a href="hashTable-interactive.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">🎮</div>
+                    <h3>Probing Simulator</h3>
+                    <p>Interactive step-by-step animations</p>
+                </div>
+                <div class="card-body">
+                    <h4>Practice With:</h4>
+                    <ul class="topics-list">
+                        <li>Linear Probing simulator</li>
+                        <li>Quadratic Probing simulator</li>
+                        <li>Double Hashing simulator</li>
+                        <li>Custom hash functions</li>
+                        <li>Step-by-step collision resolution</li>
+                        <li>Visual probe sequences</li>
+                    </ul>
+                    <div class="card-btn">Try Simulator →</div>
+                </div>
+            </a>
+
+            <!-- Card 3: Advanced Techniques -->
+            <a href="hashTable-advanced.html" class="card">
+                <div class="card-header">
+                    <div class="card-icon">🚀</div>
+                    <h3>Advanced Techniques</h3>
+                    <p>Rehashing, Buckets & Chaining</p>
+                </div>
+                <div class="card-body">
+                    <h4>Explore:</h4>
+                    <ul class="topics-list">
+                        <li>Rehashing (table restructuring)</li>
+                        <li>Load factor and thresholds</li>
+                        <li>Bucket Hashing (2D arrays)</li>
+                        <li>Overflow area handling</li>
+                        <li>Separate Chaining (linked lists)</li>
+                        <li>Comparing collision strategies</li>
+                    </ul>
+                    <div class="card-btn">Explore Advanced →</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Learning Path -->
+        <div class="learning-path">
+            <h3>Recommended Learning Path</h3>
+            <div class="path-steps">
+                <div class="path-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Read the Tutorial</h4>
+                        <p>Understand concepts with Ahmed & Omar's story</p>
+                    </div>
+                </div>
+                <div class="path-arrow">→</div>
+                <div class="path-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Practice Probing</h4>
+                        <p>Use simulators to visualize collision resolution</p>
+                    </div>
+                </div>
+                <div class="path-arrow">→</div>
+                <div class="path-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Master Advanced Topics</h4>
+                        <p>Learn rehashing, buckets & chaining</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p><strong>Prepared by Dr. Almalawi</strong></p>
+        <p>CPCS 204 - Data Structures</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Hash Table Simulator</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #059669;
+            --accent-color: #f59e0b;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            opacity: 0.9;
+        }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+            background: #f1f5f9;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Simulator Section */
+        .simulator {
+            display: none;
+        }
+
+        .simulator.active {
+            display: block;
+        }
+
+        .simulator-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .simulator-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Formula Display */
+        .formula-display {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .formula-display h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .formula {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+        }
+
+        /* Input Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: white;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .control-group small {
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Hash Table Visualization */
+        .hash-table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .hash-table-visual {
+            display: flex;
+            gap: 4px;
+            min-width: fit-content;
+            justify-content: center;
+        }
+
+        .table-cell {
+            width: 60px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .cell-index {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .cell-value {
+            background: white;
+            border: 3px solid var(--border-color);
+            border-top: none;
+            padding: 1rem 0.5rem;
+            min-height: 60px;
+            border-radius: 0 0 8px 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cell-value.empty {
+            color: var(--text-muted);
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        .cell-value.filled {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: var(--primary-color);
+            color: var(--primary-dark);
+        }
+
+        .cell-value.checking {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: var(--accent-color);
+            color: #b45309;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .cell-value.collision {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+            animation: shake 0.3s ease-in-out;
+        }
+
+        .cell-value.success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: var(--success-color);
+            color: var(--success-color);
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        .cell-value.highlight {
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Step Info Panel */
+        .step-panel {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step-panel h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-content {
+            font-size: 1.1rem;
+        }
+
+        .step-content .calculation {
+            background: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin: 0.75rem 0;
+            font-family: 'Consolas', monospace;
+            border: 1px solid var(--border-color);
+        }
+
+        .step-content .result {
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .result.collision {
+            background: #fee2e2;
+            color: var(--danger-color);
+        }
+
+        .result.success {
+            background: #d1fae5;
+            color: var(--success-color);
+        }
+
+        .result.checking {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        /* Queue Display */
+        .queue-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .queue-panel h4 {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .queue-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .queue-item {
+            background: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .queue-item.current {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .queue-item.done {
+            background: var(--success-color);
+            color: white;
+        }
+
+        /* History Log */
+        .history-panel {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-panel h4 {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .history-item {
+            color: #e2e8f0;
+            padding: 0.5rem;
+            border-bottom: 1px solid #334155;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item.success {
+            color: #4ade80;
+        }
+
+        .history-item.collision {
+            color: #fca5a5;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-message.info {
+            background: #dbeafe;
+            color: var(--primary-dark);
+        }
+
+        .status-message.success {
+            background: #d1fae5;
+            color: var(--success-color);
+        }
+
+        .status-message.error {
+            background: #fee2e2;
+            color: var(--danger-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .simulator-card {
+                padding: 1rem;
+            }
+
+            .table-cell {
+                width: 50px;
+            }
+
+            .cell-value {
+                min-height: 50px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-link">← Back to Home</a>
+        <h1>Interactive Hash Table Simulator</h1>
+        <p>Learn probing techniques step-by-step with visual animations</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('linear')">Linear Probing</button>
+        <button class="tab-btn" onclick="showTab('quadratic')">Quadratic Probing</button>
+        <button class="tab-btn" onclick="showTab('double')">Double Hashing</button>
+    </div>
+
+    <main>
+        <!-- Linear Probing Simulator -->
+        <div id="linear-simulator" class="simulator active">
+            <div class="simulator-card">
+                <h2 class="simulator-title">📊 Linear Probing Simulator</h2>
+
+                <div class="formula-display">
+                    <h3>Formula</h3>
+                    <p class="formula">index<sub>i</sub> = (h(k) + i) mod m</p>
+                    <p style="margin-top: 0.5rem; color: var(--text-muted);">where h(k) = k mod m, and i = 0, 1, 2, ...</p>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="linear-table-size">Table Size (m):</label>
+                        <input type="number" id="linear-table-size" value="10" min="5" max="20">
+                    </div>
+                    <div class="control-group">
+                        <label for="linear-keys">Keys to Insert (comma-separated):</label>
+                        <input type="text" id="linear-keys" value="40, 55, 66, 80, 90" placeholder="e.g., 40, 55, 66, 80, 90">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="linearProbing.initialize()">🔄 Initialize</button>
+                    <button class="btn btn-success" onclick="linearProbing.nextStep()" id="linear-next-btn" disabled>▶️ Next Step</button>
+                    <button class="btn btn-warning" onclick="linearProbing.insertNext()" id="linear-insert-btn" disabled>➕ Insert Next Key</button>
+                    <button class="btn btn-danger" onclick="linearProbing.reset()">🗑️ Reset</button>
+                </div>
+
+                <div class="queue-panel" id="linear-queue">
+                    <h4>Keys to Insert:</h4>
+                    <div class="queue-items" id="linear-queue-items"></div>
+                </div>
+
+                <div class="hash-table-container">
+                    <div class="hash-table-visual" id="linear-table"></div>
+                </div>
+
+                <div class="step-panel" id="linear-step-panel">
+                    <h4>📝 Current Step</h4>
+                    <div class="step-content" id="linear-step-content">
+                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                    </div>
+                </div>
+
+                <div class="history-panel">
+                    <h4>📜 History Log</h4>
+                    <div id="linear-history"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quadratic Probing Simulator -->
+        <div id="quadratic-simulator" class="simulator">
+            <div class="simulator-card">
+                <h2 class="simulator-title">📊 Quadratic Probing Simulator</h2>
+
+                <div class="formula-display">
+                    <h3>Formula</h3>
+                    <p class="formula">index<sub>i</sub> = (h(k) + i²) mod m</p>
+                    <p style="margin-top: 0.5rem; color: var(--text-muted);">where h(k) = k mod m, and i = 0, 1, 2, ...</p>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="quadratic-table-size">Table Size (m):</label>
+                        <input type="number" id="quadratic-table-size" value="11" min="5" max="20">
+                    </div>
+                    <div class="control-group">
+                        <label for="quadratic-keys">Keys to Insert (comma-separated):</label>
+                        <input type="text" id="quadratic-keys" value="5, 16, 27, 38" placeholder="e.g., 5, 16, 27, 38">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="quadraticProbing.initialize()">🔄 Initialize</button>
+                    <button class="btn btn-success" onclick="quadraticProbing.nextStep()" id="quadratic-next-btn" disabled>▶️ Next Step</button>
+                    <button class="btn btn-warning" onclick="quadraticProbing.insertNext()" id="quadratic-insert-btn" disabled>➕ Insert Next Key</button>
+                    <button class="btn btn-danger" onclick="quadraticProbing.reset()">🗑️ Reset</button>
+                </div>
+
+                <div class="queue-panel" id="quadratic-queue">
+                    <h4>Keys to Insert:</h4>
+                    <div class="queue-items" id="quadratic-queue-items"></div>
+                </div>
+
+                <div class="hash-table-container">
+                    <div class="hash-table-visual" id="quadratic-table"></div>
+                </div>
+
+                <div class="step-panel" id="quadratic-step-panel">
+                    <h4>📝 Current Step</h4>
+                    <div class="step-content" id="quadratic-step-content">
+                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                    </div>
+                </div>
+
+                <div class="history-panel">
+                    <h4>📜 History Log</h4>
+                    <div id="quadratic-history"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Double Hashing Simulator -->
+        <div id="double-simulator" class="simulator">
+            <div class="simulator-card">
+                <h2 class="simulator-title">📊 Double Hashing Simulator</h2>
+
+                <div class="formula-display">
+                    <h3>Main Formula</h3>
+                    <p class="formula">index<sub>i</sub> = (h₁(k) + i × h₂(k)) mod m</p>
+                    <p style="margin-top: 0.5rem; color: var(--text-muted);">where i = 0, 1, 2, ...</p>
+                </div>
+
+                <!-- Custom Hash Functions Section -->
+                <div class="hash-functions-config">
+                    <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">⚙️ Hash Functions Configuration</h3>
+
+                    <div class="info-note" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid var(--success-color); padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1rem;">
+                        <strong style="color: var(--success-color);">📘 Default Functions (Recommended):</strong>
+                        <p style="margin-top: 0.5rem;">The default functions below are the <strong>standard choice</strong> because:</p>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-color);">
+                            <li><strong>h₁(k) = k mod m</strong> — Distributes keys across the table</li>
+                            <li><strong>h₂(k) = 1 + (k mod (m-1))</strong> — Guarantees h₂ is never 0 and is coprime with m (when m is prime)</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-note" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid var(--accent-color); padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem;">
+                        <strong style="color: #b45309;">⚠️ Important Rules for h₂(k):</strong>
+                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-color);">
+                            <li><strong>h₂(k) must NEVER be 0</strong> — Otherwise we stay stuck at the same index!</li>
+                            <li><strong>h₂(k) should be coprime with m</strong> — To visit all table positions</li>
+                            <li><strong>Using a prime m</strong> makes it easier to satisfy these conditions</li>
+                        </ul>
+                    </div>
+
+                    <div class="controls" style="background: #f8fafc; padding: 1rem; border-radius: 10px; border: 2px dashed var(--border-color);">
+                        <div class="control-group">
+                            <label for="double-h1-type">h₁(k) Function:</label>
+                            <select id="double-h1-type" style="padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem;">
+                                <option value="standard">k mod m (Standard)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="double-h2-type">h₂(k) Function:</label>
+                            <select id="double-h2-type" style="padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem;">
+                                <option value="standard">1 + (k mod (m-1)) (Standard - Recommended)</option>
+                                <option value="prime">Prime - (k mod Prime)</option>
+                                <option value="custom">Custom Formula</option>
+                            </select>
+                        </div>
+                        <div class="control-group" id="double-h2-prime-group" style="display: none;">
+                            <label for="double-h2-prime">Prime number (must be less than m):</label>
+                            <input type="number" id="double-h2-prime" value="7" min="2">
+                            <small id="double-h2-prime-hint" style="color: var(--text-muted);">Current max: 10 (must be &lt; m)</small>
+                        </div>
+                        <div class="control-group" id="double-h2-custom-group" style="display: none;">
+                            <label for="double-h2-custom">Custom h₂ formula:</label>
+                            <input type="text" id="double-h2-custom" value="4 - (k % 2)" placeholder="e.g., 4 - (k % 2)">
+                            <small style="color: var(--text-muted);">Use 'k' for key, 'm' for table size. Example: 4 - (k % 2)</small>
+                            <small style="color: var(--danger-color);">⚠️ Make sure your formula never returns 0!</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls" style="margin-top: 1.5rem;">
+                    <div class="control-group">
+                        <label for="double-table-size">Table Size (m) - should be prime:</label>
+                        <input type="number" id="double-table-size" value="11" min="5" max="20">
+                        <small style="color: var(--text-muted);">Recommended primes: 7, 11, 13, 17, 19</small>
+                    </div>
+                    <div class="control-group">
+                        <label for="double-keys">Keys to Insert (comma-separated):</label>
+                        <input type="text" id="double-keys" value="27, 38, 49, 60" placeholder="e.g., 27, 38, 49, 60">
+                    </div>
+                </div>
+
+                <!-- Current Functions Display -->
+                <div id="double-current-functions" class="formula-display" style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); margin-top: 1rem;">
+                    <h3>Current Hash Functions</h3>
+                    <p class="formula" id="double-h1-display">h₁(k) = k mod m</p>
+                    <p class="formula" id="double-h2-display">h₂(k) = 1 + (k mod (m - 1))</p>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="doubleHashing.initialize()">🔄 Initialize</button>
+                    <button class="btn btn-success" onclick="doubleHashing.nextStep()" id="double-next-btn" disabled>▶️ Next Step</button>
+                    <button class="btn btn-warning" onclick="doubleHashing.insertNext()" id="double-insert-btn" disabled>➕ Insert Next Key</button>
+                    <button class="btn btn-danger" onclick="doubleHashing.reset()">🗑️ Reset</button>
+                </div>
+
+                <div class="queue-panel" id="double-queue">
+                    <h4>Keys to Insert:</h4>
+                    <div class="queue-items" id="double-queue-items"></div>
+                </div>
+
+                <div class="hash-table-container">
+                    <div class="hash-table-visual" id="double-table"></div>
+                </div>
+
+                <div class="step-panel" id="double-step-panel">
+                    <h4>📝 Current Step</h4>
+                    <div class="step-content" id="double-step-content">
+                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                    </div>
+                </div>
+
+                <div class="history-panel">
+                    <h4>📜 History Log</h4>
+                    <div id="double-history"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update simulators
+            document.querySelectorAll('.simulator').forEach(sim => sim.classList.remove('active'));
+            document.getElementById(tabName + '-simulator').classList.add('active');
+        }
+
+        // Base Simulator Class
+        class HashTableSimulator {
+            constructor(prefix) {
+                this.prefix = prefix;
+                this.tableSize = 10;
+                this.table = [];
+                this.keys = [];
+                this.currentKeyIndex = -1;
+                this.currentProbeStep = 0;
+                this.isInserting = false;
+                this.currentKey = null;
+            }
+
+            getElement(id) {
+                return document.getElementById(this.prefix + '-' + id);
+            }
+
+            initialize() {
+                // Get values from inputs
+                this.tableSize = parseInt(this.getElement('table-size').value) || 10;
+                const keysInput = this.getElement('keys').value;
+                this.keys = keysInput.split(',').map(k => parseInt(k.trim())).filter(k => !isNaN(k));
+
+                // Initialize empty table
+                this.table = new Array(this.tableSize).fill(null);
+                this.currentKeyIndex = -1;
+                this.currentProbeStep = 0;
+                this.isInserting = false;
+                this.currentKey = null;
+
+                // Render table
+                this.renderTable();
+                this.renderQueue();
+                this.clearHistory();
+
+                // Update buttons
+                this.getElement('next-btn').disabled = true;
+                this.getElement('insert-btn').disabled = this.keys.length === 0;
+
+                // Update step panel
+                this.updateStepPanel('Ready! Click "Insert Next Key" to start inserting keys.', 'info');
+
+                this.addHistory('Table initialized with size m = ' + this.tableSize);
+            }
+
+            renderTable() {
+                const container = this.getElement('table');
+                container.innerHTML = '';
+
+                for (let i = 0; i < this.tableSize; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'table-cell';
+                    cell.innerHTML = `
+                        <div class="cell-index">${i}</div>
+                        <div class="cell-value ${this.table[i] === null ? 'empty' : 'filled'}" id="${this.prefix}-cell-${i}">
+                            ${this.table[i] === null ? '—' : this.table[i]}
+                        </div>
+                    `;
+                    container.appendChild(cell);
+                }
+            }
+
+            renderQueue() {
+                const container = this.getElement('queue-items');
+                container.innerHTML = '';
+
+                this.keys.forEach((key, index) => {
+                    const item = document.createElement('span');
+                    item.className = 'queue-item';
+                    if (index < this.currentKeyIndex) {
+                        item.classList.add('done');
+                    } else if (index === this.currentKeyIndex) {
+                        item.classList.add('current');
+                    }
+                    item.textContent = key;
+                    container.appendChild(item);
+                });
+            }
+
+            updateStepPanel(content, type = 'info') {
+                this.getElement('step-content').innerHTML = content;
+            }
+
+            addHistory(message, type = '') {
+                const history = this.getElement('history');
+                const item = document.createElement('div');
+                item.className = 'history-item ' + type;
+                item.textContent = message;
+                history.insertBefore(item, history.firstChild);
+            }
+
+            clearHistory() {
+                this.getElement('history').innerHTML = '';
+            }
+
+            highlightCell(index, className) {
+                // Remove all highlights first
+                for (let i = 0; i < this.tableSize; i++) {
+                    const cell = document.getElementById(this.prefix + '-cell-' + i);
+                    cell.classList.remove('checking', 'collision', 'success', 'highlight');
+                }
+
+                // Add new highlight
+                if (index >= 0 && index < this.tableSize) {
+                    const cell = document.getElementById(this.prefix + '-cell-' + index);
+                    cell.classList.add(className);
+                }
+            }
+
+            insertNext() {
+                if (this.currentKeyIndex >= this.keys.length - 1 && !this.isInserting) {
+                    this.updateStepPanel('All keys have been inserted!', 'success');
+                    this.getElement('insert-btn').disabled = true;
+                    return;
+                }
+
+                if (!this.isInserting) {
+                    this.currentKeyIndex++;
+                    this.currentKey = this.keys[this.currentKeyIndex];
+                    this.currentProbeStep = 0;
+                    this.isInserting = true;
+                    this.renderQueue();
+
+                    this.getElement('next-btn').disabled = false;
+                    this.getElement('insert-btn').disabled = true;
+
+                    this.showInitialStep();
+                }
+            }
+
+            // To be overridden by subclasses
+            showInitialStep() {}
+            nextStep() {}
+            calculateIndex(key, i) { return 0; }
+
+            reset() {
+                this.table = [];
+                this.keys = [];
+                this.currentKeyIndex = -1;
+                this.getElement('table').innerHTML = '';
+                this.getElement('queue-items').innerHTML = '';
+                this.clearHistory();
+                this.getElement('next-btn').disabled = true;
+                this.getElement('insert-btn').disabled = true;
+                this.updateStepPanel('Click "Initialize" to start, then "Insert Next Key" to begin inserting.');
+            }
+        }
+
+        // Linear Probing Simulator
+        class LinearProbingSimulator extends HashTableSimulator {
+            constructor() {
+                super('linear');
+            }
+
+            calculateIndex(key, i) {
+                return (key % this.tableSize + i) % this.tableSize;
+            }
+
+            showInitialStep() {
+                const key = this.currentKey;
+                const h = key % this.tableSize;
+
+                this.updateStepPanel(`
+                    <strong>Inserting key: ${key}</strong>
+                    <div class="calculation">
+                        h(${key}) = ${key} mod ${this.tableSize} = <strong>${h}</strong>
+                    </div>
+                    <p>Initial hash value is <strong>${h}</strong>. Click "Next Step" to check index ${h}.</p>
+                `);
+
+                this.addHistory(`Starting insertion of key ${key}, h(${key}) = ${h}`);
+            }
+
+            nextStep() {
+                if (!this.isInserting) return;
+
+                const key = this.currentKey;
+                const i = this.currentProbeStep;
+                const index = this.calculateIndex(key, i);
+
+                // Highlight the cell being checked
+                this.highlightCell(index, 'checking');
+
+                setTimeout(() => {
+                    if (this.table[index] === null) {
+                        // Empty slot found - insert
+                        this.table[index] = key;
+                        this.highlightCell(index, 'success');
+                        this.renderTable();
+                        this.highlightCell(index, 'success');
+
+                        this.updateStepPanel(`
+                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <div class="calculation">
+                                index = (${key % this.tableSize} + ${i}) mod ${this.tableSize} = ${index}
+                            </div>
+                            <span class="result success">✅ Index ${index} is EMPTY! Key ${key} inserted successfully!</span>
+                        `);
+
+                        this.addHistory(`Key ${key} inserted at index ${index} (probe ${i})`, 'success');
+
+                        this.isInserting = false;
+                        this.getElement('next-btn').disabled = true;
+                        this.getElement('insert-btn').disabled = this.currentKeyIndex >= this.keys.length - 1;
+
+                    } else {
+                        // Collision
+                        this.highlightCell(index, 'collision');
+
+                        this.updateStepPanel(`
+                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <div class="calculation">
+                                index = (${key % this.tableSize} + ${i}) mod ${this.tableSize} = ${index}
+                            </div>
+                            <span class="result collision">❌ COLLISION! Index ${index} contains ${this.table[index]}</span>
+                            <p style="margin-top: 0.5rem;">Click "Next Step" to try index ${this.calculateIndex(key, i + 1)}...</p>
+                        `);
+
+                        this.addHistory(`Probe ${i}: Index ${index} occupied by ${this.table[index]} - collision!`, 'collision');
+
+                        this.currentProbeStep++;
+                    }
+                }, 300);
+            }
+        }
+
+        // Quadratic Probing Simulator
+        class QuadraticProbingSimulator extends HashTableSimulator {
+            constructor() {
+                super('quadratic');
+            }
+
+            calculateIndex(key, i) {
+                return (key % this.tableSize + i * i) % this.tableSize;
+            }
+
+            showInitialStep() {
+                const key = this.currentKey;
+                const h = key % this.tableSize;
+
+                this.updateStepPanel(`
+                    <strong>Inserting key: ${key}</strong>
+                    <div class="calculation">
+                        h(${key}) = ${key} mod ${this.tableSize} = <strong>${h}</strong>
+                    </div>
+                    <p>Initial hash value is <strong>${h}</strong>. Click "Next Step" to check index ${h} (i=0, offset=0²=0).</p>
+                `);
+
+                this.addHistory(`Starting insertion of key ${key}, h(${key}) = ${h}`);
+            }
+
+            nextStep() {
+                if (!this.isInserting) return;
+
+                const key = this.currentKey;
+                const i = this.currentProbeStep;
+                const h = key % this.tableSize;
+                const offset = i * i;
+                const index = this.calculateIndex(key, i);
+
+                // Highlight the cell being checked
+                this.highlightCell(index, 'checking');
+
+                setTimeout(() => {
+                    if (this.table[index] === null) {
+                        // Empty slot found - insert
+                        this.table[index] = key;
+                        this.highlightCell(index, 'success');
+                        this.renderTable();
+                        this.highlightCell(index, 'success');
+
+                        this.updateStepPanel(`
+                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <div class="calculation">
+                                index = (h(k) + i²) mod m<br>
+                                index = (${h} + ${i}²) mod ${this.tableSize}<br>
+                                index = (${h} + ${offset}) mod ${this.tableSize} = <strong>${index}</strong>
+                            </div>
+                            <span class="result success">✅ Index ${index} is EMPTY! Key ${key} inserted successfully!</span>
+                        `);
+
+                        this.addHistory(`Key ${key} inserted at index ${index} (probe ${i}, offset ${offset})`, 'success');
+
+                        this.isInserting = false;
+                        this.getElement('next-btn').disabled = true;
+                        this.getElement('insert-btn').disabled = this.currentKeyIndex >= this.keys.length - 1;
+
+                    } else {
+                        // Collision
+                        this.highlightCell(index, 'collision');
+                        const nextI = i + 1;
+                        const nextOffset = nextI * nextI;
+                        const nextIndex = this.calculateIndex(key, nextI);
+
+                        this.updateStepPanel(`
+                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <div class="calculation">
+                                index = (h(k) + i²) mod m<br>
+                                index = (${h} + ${i}²) mod ${this.tableSize}<br>
+                                index = (${h} + ${offset}) mod ${this.tableSize} = <strong>${index}</strong>
+                            </div>
+                            <span class="result collision">❌ COLLISION! Index ${index} contains ${this.table[index]}</span>
+                            <p style="margin-top: 0.5rem;">Click "Next Step" to try i=${nextI} (offset=${nextOffset}), index ${nextIndex}...</p>
+                        `);
+
+                        this.addHistory(`Probe ${i}: Index ${index} (offset ${offset}) occupied - collision!`, 'collision');
+
+                        this.currentProbeStep++;
+                    }
+                }, 300);
+            }
+        }
+
+        // Double Hashing Simulator
+        class DoubleHashingSimulator extends HashTableSimulator {
+            constructor() {
+                super('double');
+                this.h2Type = 'standard';
+                this.h2Prime = 7;
+                this.h2CustomFormula = '4 - (k % 2)';
+                this.h1Description = 'k mod m';
+                this.h2Description = '1 + (k mod (m - 1))';
+
+                // Setup event listeners for hash function selection
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // h2 type change
+                document.getElementById('double-h2-type').addEventListener('change', (e) => {
+                    this.h2Type = e.target.value;
+                    document.getElementById('double-h2-prime-group').style.display =
+                        e.target.value === 'prime' ? 'flex' : 'none';
+                    document.getElementById('double-h2-custom-group').style.display =
+                        e.target.value === 'custom' ? 'flex' : 'none';
+                    this.updateFunctionDisplay();
+                });
+
+                // h2 prime change with validation
+                document.getElementById('double-h2-prime').addEventListener('input', (e) => {
+                    const tableSize = parseInt(document.getElementById('double-table-size').value) || 11;
+                    let primeValue = parseInt(e.target.value) || 2;
+
+                    // Ensure prime is less than m
+                    if (primeValue >= tableSize) {
+                        primeValue = tableSize - 1;
+                        e.target.value = primeValue;
+                    }
+                    if (primeValue < 2) {
+                        primeValue = 2;
+                        e.target.value = primeValue;
+                    }
+
+                    this.h2Prime = primeValue;
+                    this.updateFunctionDisplay();
+                });
+
+                // Table size change - update prime max value hint
+                document.getElementById('double-table-size').addEventListener('input', (e) => {
+                    const tableSize = parseInt(e.target.value) || 11;
+                    const primeInput = document.getElementById('double-h2-prime');
+                    const primeHint = document.getElementById('double-h2-prime-hint');
+
+                    // Update max hint
+                    primeHint.textContent = `Current max: ${tableSize - 1} (must be < m)`;
+
+                    // Adjust prime value if it's now too large
+                    let currentPrime = parseInt(primeInput.value) || 7;
+                    if (currentPrime >= tableSize) {
+                        currentPrime = tableSize - 1;
+                        primeInput.value = currentPrime;
+                        this.h2Prime = currentPrime;
+                        this.updateFunctionDisplay();
+                    }
+                });
+
+                // Custom h2 formula change
+                document.getElementById('double-h2-custom').addEventListener('input', (e) => {
+                    this.h2CustomFormula = e.target.value;
+                    this.updateFunctionDisplay();
+                });
+            }
+
+            updateFunctionDisplay() {
+                // Update h1 display (always standard)
+                document.getElementById('double-h1-display').textContent = 'h₁(k) = k mod m';
+                this.h1Description = 'k mod m';
+
+                // Update h2 display
+                let h2Text = '';
+                if (this.h2Type === 'standard') {
+                    h2Text = 'h₂(k) = 1 + (k mod (m - 1))';
+                    this.h2Description = '1 + (k mod (m - 1))';
+                } else if (this.h2Type === 'prime') {
+                    h2Text = `h₂(k) = ${this.h2Prime} - (k mod ${this.h2Prime})`;
+                    this.h2Description = `${this.h2Prime} - (k mod ${this.h2Prime})`;
+                } else if (this.h2Type === 'custom') {
+                    // Convert JS syntax to math notation for display
+                    let displayFormula = this.h2CustomFormula
+                        .replace(/%/g, ' mod ')
+                        .replace(/\*/g, ' × ');
+                    h2Text = `h₂(k) = ${displayFormula}`;
+                    this.h2Description = displayFormula;
+                }
+                document.getElementById('double-h2-display').textContent = h2Text;
+            }
+
+            h1(key) {
+                return key % this.tableSize;
+            }
+
+            h2(key) {
+                const k = key;
+                const m = this.tableSize;
+
+                let result;
+                if (this.h2Type === 'standard') {
+                    result = 1 + (k % (m - 1));
+                } else if (this.h2Type === 'prime') {
+                    result = this.h2Prime - (k % this.h2Prime);
+                    if (result === 0) result = this.h2Prime; // Ensure never 0
+                } else if (this.h2Type === 'custom') {
+                    try {
+                        result = Math.floor(eval(this.h2CustomFormula));
+                    } catch (e) {
+                        console.error('Error in h2 formula:', e);
+                        result = 1 + (k % (m - 1)); // Fallback to standard
+                    }
+                }
+
+                // Safety check: h2 must never be 0
+                if (result === 0 || result === undefined || isNaN(result)) {
+                    this.addHistory('⚠️ WARNING: h₂ returned 0 or invalid! Using 1 instead.', 'collision');
+                    result = 1;
+                }
+
+                return Math.abs(result); // Ensure positive
+            }
+
+            getH1Calculation(key) {
+                const k = key;
+                const m = this.tableSize;
+                const result = this.h1(key);
+                return `h₁(${k}) = ${k} mod ${m} = <strong>${result}</strong>`;
+            }
+
+            getH2Calculation(key) {
+                const k = key;
+                const m = this.tableSize;
+                const result = this.h2(key);
+
+                if (this.h2Type === 'standard') {
+                    return `h₂(${k}) = 1 + (${k} mod ${m - 1}) = 1 + ${k % (m - 1)} = <strong>${result}</strong>`;
+                } else if (this.h2Type === 'prime') {
+                    const p = this.h2Prime;
+                    return `h₂(${k}) = ${p} - (${k} mod ${p}) = ${p} - ${k % p} = <strong>${result}</strong>`;
+                } else if (this.h2Type === 'custom') {
+                    // Show the formula with substituted values
+                    let formulaWithValues = this.h2CustomFormula
+                        .replace(/k/g, k)
+                        .replace(/m/g, m);
+                    let displayFormula = this.h2CustomFormula
+                        .replace(/%/g, ' mod ')
+                        .replace(/\*/g, ' × ');
+                    return `h₂(${k}) = ${displayFormula} = ${formulaWithValues.replace(/%/g, ' mod ')} = <strong>${result}</strong>`;
+                }
+            }
+
+            calculateIndex(key, i) {
+                return (this.h1(key) + i * this.h2(key)) % this.tableSize;
+            }
+
+            initialize() {
+                // Update function settings from UI
+                this.h2Type = document.getElementById('double-h2-type').value;
+                this.h2CustomFormula = document.getElementById('double-h2-custom').value;
+
+                // Validate and set prime value
+                const tableSize = parseInt(document.getElementById('double-table-size').value) || 11;
+                let primeValue = parseInt(document.getElementById('double-h2-prime').value) || 7;
+
+                // Ensure prime is less than m
+                if (primeValue >= tableSize) {
+                    primeValue = tableSize - 1;
+                    document.getElementById('double-h2-prime').value = primeValue;
+                }
+                this.h2Prime = primeValue;
+
+                this.updateFunctionDisplay();
+
+                // Call parent initialize
+                super.initialize();
+
+                // Add info about current hash functions
+                this.addHistory(`Using h₁(k) = ${this.h1Description}`);
+                this.addHistory(`Using h₂(k) = ${this.h2Description}`);
+            }
+
+            showInitialStep() {
+                const key = this.currentKey;
+                const h1 = this.h1(key);
+                const h2 = this.h2(key);
+
+                this.updateStepPanel(`
+                    <strong>Inserting key: ${key}</strong>
+                    <div class="calculation">
+                        ${this.getH1Calculation(key)}<br>
+                        ${this.getH2Calculation(key)}
+                    </div>
+                    <p>Hash values: h₁ = <strong>${h1}</strong>, h₂ = <strong>${h2}</strong> (step size)</p>
+                    <p>Click "Next Step" to check index ${h1} (i=0).</p>
+                `);
+
+                this.addHistory(`Starting insertion of key ${key}, h₁=${h1}, h₂=${h2} (step size)`);
+            }
+
+            nextStep() {
+                if (!this.isInserting) return;
+
+                const key = this.currentKey;
+                const i = this.currentProbeStep;
+                const h1 = this.h1(key);
+                const h2 = this.h2(key);
+                const index = this.calculateIndex(key, i);
+
+                // Highlight the cell being checked
+                this.highlightCell(index, 'checking');
+
+                setTimeout(() => {
+                    if (this.table[index] === null) {
+                        // Empty slot found - insert
+                        this.table[index] = key;
+                        this.highlightCell(index, 'success');
+                        this.renderTable();
+                        this.highlightCell(index, 'success');
+
+                        this.updateStepPanel(`
+                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <div class="calculation">
+                                index = (h₁(k) + i × h₂(k)) mod m<br>
+                                index = (${h1} + ${i} × ${h2}) mod ${this.tableSize}<br>
+                                index = (${h1 + i * h2}) mod ${this.tableSize} = <strong>${index}</strong>
+                            </div>
+                            <span class="result success">✅ Index ${index} is EMPTY! Key ${key} inserted successfully!</span>
+                        `);
+
+                        this.addHistory(`Key ${key} inserted at index ${index} (probe ${i})`, 'success');
+
+                        this.isInserting = false;
+                        this.getElement('next-btn').disabled = true;
+                        this.getElement('insert-btn').disabled = this.currentKeyIndex >= this.keys.length - 1;
+
+                    } else {
+                        // Collision
+                        this.highlightCell(index, 'collision');
+                        const nextI = i + 1;
+                        const nextIndex = this.calculateIndex(key, nextI);
+
+                        this.updateStepPanel(`
+                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <div class="calculation">
+                                index = (h₁(k) + i × h₂(k)) mod m<br>
+                                index = (${h1} + ${i} × ${h2}) mod ${this.tableSize}<br>
+                                index = (${h1 + i * h2}) mod ${this.tableSize} = <strong>${index}</strong>
+                            </div>
+                            <span class="result collision">❌ COLLISION! Index ${index} contains ${this.table[index]}</span>
+                            <p style="margin-top: 0.5rem;">Click "Next Step" to try i=${nextI}, stepping by h₂=${h2} to index ${nextIndex}...</p>
+                        `);
+
+                        this.addHistory(`Probe ${i}: Index ${index} occupied by ${this.table[index]} - collision!`, 'collision');
+
+                        this.currentProbeStep++;
+                    }
+                }, 300);
+            }
+        }
+
+        // Initialize simulators
+        const linearProbing = new LinearProbingSimulator();
+        const quadraticProbing = new QuadraticProbingSimulator();
+        const doubleHashing = new DoubleHashingSimulator();
+    </script>
+
+    <footer style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #94a3b8; text-align: center; padding: 2rem; margin-top: 2rem;">
+        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">
+            <strong style="color: #e2e8f0;">Prepared by Dr. Almalawi</strong>
+        </p>
+        <p style="font-size: 0.9rem;">CPCS 204 - Data Structures</p>
+    </footer>
+</body>
+</html>

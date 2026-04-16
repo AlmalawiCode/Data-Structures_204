@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Recursion - CPCS 204</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .header-content img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px;
+        }
+
+        .header-text h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .header-text p {
+            font-size: 1em;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        section {
+            padding: 40px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        section:last-of-type { border-bottom: none; }
+
+        h2 {
+            font-size: 1.7em;
+            color: #4a3f8f;
+            margin-bottom: 24px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            font-size: 1.25em;
+            color: #5a4b9e;
+            margin: 20px 0 12px;
+        }
+
+        p { line-height: 1.7; color: #333; margin-bottom: 12px; }
+
+        .teacher-says, .student-says {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 14px 0;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        .teacher-says {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+        }
+
+        .teacher-says::before {
+            content: "Professor: ";
+            font-weight: bold;
+            color: #7b1fa2;
+        }
+
+        .student-says {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+        }
+
+        .student-says::before {
+            content: "Student: ";
+            font-weight: bold;
+            color: #1565c0;
+        }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 16px 0;
+            line-height: 1.7;
+        }
+
+        .highlight-box strong:first-child {
+            display: block;
+            color: #4a3f8f;
+            font-size: 1.05em;
+            margin-bottom: 8px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.9;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 16px 0;
+            line-height: 1.7;
+        }
+
+        .important strong:first-child {
+            display: block;
+            color: #856404;
+            font-size: 1.05em;
+            margin-bottom: 6px;
+        }
+
+        /* Code Blocks */
+        .code-container { margin: 20px 0; }
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.15em;
+            transition: background 0.3s;
+        }
+        .code-header:hover { background: #5568d3; }
+        .code-toggle { font-size: 1.2em; transition: transform 0.3s; }
+        .code-toggle.collapsed { transform: rotate(-90deg); }
+
+        .code-block {
+            background: #000000;
+            color: #f8f8f2;
+            padding: 25px 30px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.25em;
+            line-height: 1.8;
+            white-space: pre;
+            max-height: 800px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        .code-block.collapsed { max-height: 0; padding: 0 20px; overflow: hidden; }
+        .code-block .comment { color: #7a8bbf; }
+        .code-block .keyword { color: #ff79c6; font-weight: bold; }
+        .code-block .class-name { color: #50fa7b; font-weight: bold; }
+        .code-block .method { color: #8be9fd; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .number { color: #bd93f9; }
+
+        /* Demo area */
+        .demo-area {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            border: 2px solid #e0e7ff;
+        }
+
+        .demo-area h3 {
+            color: #4a3f8f;
+            margin-bottom: 16px;
+            font-size: 1.1em;
+        }
+
+        .demo-panels {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .stack-box {
+            width: 300px;
+            min-height: 220px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            padding: 12px;
+            flex-shrink: 0;
+        }
+
+        .stack-label {
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+            padding: 6px 0;
+            border-bottom: 2px solid #e0e7ff;
+            margin-bottom: 10px;
+        }
+
+        .stack-frames {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-height: 100px;
+        }
+
+        .stack-frame {
+            padding: 10px 14px;
+            border-radius: 7px;
+            font-size: 0.88em;
+            font-family: 'Courier New', monospace;
+            animation: pushFrame 0.3s ease;
+            line-height: 1.5;
+        }
+
+        .stack-frame.popping { animation: popFrame 0.3s ease forwards; }
+
+        .main-frame { background: #e8eaf6; border: 2px solid #5c6bc0; color: #283593; font-weight: bold; }
+        .depth-1 { background: #fce4ec; border: 2px solid #e91e63; color: #880e4f; }
+        .depth-2 { background: #e8f5e9; border: 2px solid #4caf50; color: #1b5e20; }
+        .depth-3 { background: #fff3e0; border: 2px solid #ff9800; color: #e65100; }
+        .depth-4 { background: #e1f5fe; border: 2px solid #03a9f4; color: #01579b; }
+        .depth-5 { background: #f3e5f5; border: 2px solid #9c27b0; color: #4a148c; }
+        .depth-6 { background: #fbe9e7; border: 2px solid #ff5722; color: #bf360c; }
+        .base-frame { background: #d1fae5; border: 2px solid #10b981; color: #064e3b; font-weight: bold; }
+
+        .frame-name { font-weight: bold; font-size: 0.95em; }
+        .frame-expr { font-size: 0.82em; color: inherit; opacity: 0.85; margin-top: 3px; }
+        .resolved { background: #fef08a; color: #713f12; padding: 1px 5px; border-radius: 3px; font-weight: bold; }
+
+        /* Return panel */
+        .return-panel {
+            flex: 1;
+            min-width: 220px;
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            background: #fffbeb;
+            padding: 12px;
+        }
+
+        .return-label {
+            text-align: center;
+            font-weight: bold;
+            color: #92400e;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+            padding: 6px 0;
+            border-bottom: 2px solid #fde68a;
+            margin-bottom: 10px;
+        }
+
+        .return-entries { display: flex; flex-direction: column; gap: 6px; min-height: 60px; }
+
+        .return-entry {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            animation: typeLine 0.3s ease;
+        }
+
+        .return-entry.final {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            color: #065f46;
+            font-weight: bold;
+        }
+
+        /* Narration */
+        .narration {
+            background: white;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-top: 14px;
+            text-align: center;
+            line-height: 1.7;
+            min-height: 60px;
+            box-shadow: 0 2px 10px rgba(102,126,234,0.15);
+            position: relative;
+            font-size: 0.95em;
+        }
+
+        .narration::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            z-index: -1;
+        }
+
+        .step-counter {
+            font-size: 0.82em;
+            color: #9ca3af;
+            text-align: right;
+            margin-top: 6px;
+            font-family: monospace;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 4px;
+        }
+
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .btn-success:hover { box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
+        .btn-warning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .btn-warning:hover { box-shadow: 0 6px 20px rgba(245,158,11,0.4); }
+
+        .demo-buttons { margin-bottom: 14px; }
+
+        /* Back home button */
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-decoration: none;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .back-home-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.5); }
+
+        /* Summary table */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .summary-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .summary-table th { padding: 14px 18px; text-align: center; font-size: 0.95em; }
+        .summary-table td { padding: 11px 18px; border-bottom: 1px solid #e0e0e0; text-align: center; }
+        .summary-table tbody tr:nth-child(even) { background: #f8f9ff; }
+        .summary-table tbody tr:hover { background: #e8ecff; }
+
+        /* Comparison table */
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .comparison-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .comparison-table th { padding: 15px 20px; text-align: center; font-size: 1.1em; }
+        .comparison-table td { padding: 12px 20px; border-bottom: 1px solid #e0e0e0; text-align: center; }
+        .comparison-table tbody tr:nth-child(even) { background: #f8f9ff; }
+        .comparison-table tbody tr:hover { background: #e8ecff; }
+
+        /* Binary Search Array */
+        .bs-array-wrapper { display: flex; flex-direction: column; align-items: center; margin: 20px 0; }
+        .bs-array { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+        .bs-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .bs-value { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border: 2px solid #ddd; border-radius: 8px; font-weight: bold; font-size: 1.1em; background: white; transition: all 0.4s ease; }
+        .bs-index { font-size: 0.75em; color: #888; font-family: monospace; }
+        .bs-ptr { font-size: 0.7em; color: #667eea; font-weight: bold; min-height: 16px; }
+        .bs-value.bs-active { border-color: #667eea; background: #e8ecff; }
+        .bs-value.bs-low { border-color: #10b981; background: #d1fae5; }
+        .bs-value.bs-high { border-color: #f59e0b; background: #fef3c7; }
+        .bs-value.bs-mid { border-color: #3b82f6; background: #dbeafe; box-shadow: 0 0 8px rgba(59,130,246,0.4); }
+        .bs-value.bs-low.bs-mid { border-color: #3b82f6; background: linear-gradient(135deg, #d1fae5, #dbeafe); }
+        .bs-value.bs-high.bs-mid { border-color: #3b82f6; background: linear-gradient(135deg, #fef3c7, #dbeafe); }
+        .bs-value.bs-low.bs-high { background: linear-gradient(135deg, #d1fae5, #fef3c7); }
+        .bs-value.bs-eliminated { border-color: #e5e7eb; background: #f3f4f6; color: #9ca3af; text-decoration: line-through; }
+        .bs-value.bs-found { border-color: #10b981 !important; background: #6ee7b7 !important; box-shadow: 0 0 12px rgba(16,185,129,0.6); animation: pulse 0.5s ease; }
+        @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+
+        .bs-legend { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 10px 0; font-size: 0.85em; }
+        .bs-leg-item { display: flex; align-items: center; gap: 6px; }
+        .bs-leg-dot { width: 18px; height: 18px; border-radius: 4px; border: 2px solid #ccc; }
+
+        .bs-log-table { width: 100%; border-collapse: collapse; margin: 16px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .bs-log-table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .bs-log-table th { padding: 10px 15px; text-align: center; font-size: 0.95em; }
+        .bs-log-table td { padding: 9px 15px; border-bottom: 1px solid #e0e0e0; text-align: center; }
+        .bs-log-table tbody tr:nth-child(even) { background: #f8f9ff; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pushFrame {
+            from { opacity: 0; transform: translateX(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        @keyframes popFrame {
+            from { opacity: 1; transform: translateX(0) scale(1); }
+            to { opacity: 0; transform: translateX(20px) scale(0.9); }
+        }
+
+        @keyframes frameUpdate {
+            0% { background-color: #fef08a; }
+            100% { background-color: inherit; }
+        }
+
+        @keyframes typeLine {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+        }
+
+        ol, ul {
+            padding-left: 24px;
+            line-height: 1.9;
+            color: #333;
+        }
+
+        li { margin-bottom: 4px; }
+
+        code {
+            background: #f0f4ff;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #4a3f8f;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            section { padding: 24px 16px; }
+            .demo-panels { flex-direction: column; }
+            .stack-box { width: 100%; }
+            .header-text h1 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="../index.html" class="back-home-btn">&#8592; Home</a>
+
+<div class="container">
+
+    <header>
+        <div class="header-content">
+            <img src="../fcit.png" alt="FCIT Logo">
+            <div class="header-text">
+                <h1>String Recursion</h1>
+                <p>CPCS 204 - Data Structures I</p>
+                <p>Recursive Algorithms on Strings &amp; Binary Search</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== SECTION 1: Introduction ===== -->
+    <section>
+        <h2>1. Introduction to String Recursion</h2>
+
+        <div class="teacher-says">
+            Welcome back! We have seen how recursion works with numbers. Now we will apply the same ideas to strings. A string is a sequence of characters, and recursion on strings follows a beautiful pattern: we solve the problem for the first character, then recursively handle the rest of the string.
+        </div>
+
+        <div class="student-says">
+            So instead of making the number smaller each time, we make the string shorter?
+        </div>
+
+        <div class="teacher-says">
+            Exactly! Every string recursive method has:<br>
+            &bull; <strong>Base case</strong>: empty string <code>""</code> &rarr; return immediately (or return 0 / "")<br>
+            &bull; <strong>Recursive case</strong>: process <code>s.charAt(0)</code>, then call method with <code>s.substring(1)</code>
+        </div>
+
+        <div class="highlight-box">
+            <strong>What we will cover today:</strong>
+            <ol>
+                <li><strong>printChars</strong> &mdash; print each character left-to-right</li>
+                <li><strong>printReverse</strong> &mdash; print characters in reverse order</li>
+                <li><strong>countChar</strong> &mdash; count occurrences of a character</li>
+                <li><strong>replaceChar</strong> &mdash; replace one character with another</li>
+                <li><strong>removeChar</strong> &mdash; remove all occurrences of a character</li>
+                <li><strong>Binary Search</strong> &mdash; iterative and recursive approaches</li>
+            </ol>
+        </div>
+
+        <div class="important">
+            <strong>Key Insight</strong>
+            The key insight for string recursion: <code>s.charAt(0)</code> gives the first character, and <code>s.substring(1)</code> gives everything after it. Each recursive call works on a <strong>shorter</strong> string &mdash; this is what guarantees we reach the base case!
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 2: printChars ===== -->
+    <section>
+        <h2>2. printChars("JAVA")</h2>
+
+        <div class="teacher-says">
+            Our first challenge: print every character of a string, one by one, using recursion. No loops allowed! The idea is simple &mdash; print the first character, then recursively print the rest.
+        </div>
+
+        <div class="student-says">
+            So if I have "JAVA", I print 'J', then call the method on "AVA"?
+        </div>
+
+        <div class="teacher-says">
+            Perfect! And "AVA" prints 'A' and calls on "VA", and so on until we reach the empty string. That is our base case!
+        </div>
+
+        <div class="definition">
+            printChars("") &rarr; do nothing &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
+            printChars(s)&nbsp; &rarr; print s.charAt(0), then printChars(s.substring(1)) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(recursive case)</span>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header" onclick="toggleCode(this)">
+                <span>Java &mdash; Recursive Print Characters</span>
+                <span class="code-toggle collapsed">&#9660;</span>
+            </div>
+            <div class="code-block collapsed">
+<span class="keyword">public class</span> <span class="class-name">StringRecursion</span> {
+
+    <span class="keyword">public static void</span> <span class="method">printChars</span>(<span class="class-name">String</span> s) {
+        <span class="keyword">if</span> (s.isEmpty()) <span class="keyword">return</span>;              <span class="comment">// Base case: empty string</span>
+        <span class="class-name">System</span>.out.print(s.charAt(<span class="number">0</span>) + <span class="string">" "</span>); <span class="comment">// Print first character</span>
+        <span class="method">printChars</span>(s.substring(<span class="number">1</span>));           <span class="comment">// Recurse on the rest</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="method">printChars</span>(<span class="string">"JAVA"</span>);
+        <span class="comment">// Output: J A V A</span>
+    }
+}
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h3>Interactive Demo &mdash; printChars("JAVA")</h3>
+            <div class="demo-buttons">
+                <button class="btn btn-success" id="pch-run-btn" onclick="startDemo('pch')">&#9654; Run</button>
+                <button class="btn" id="pch-next-btn" onclick="nextStep('pch')" style="display:none;">Next &rarr;</button>
+                <button class="btn btn-warning" onclick="resetDemo('pch')">&#8635; Reset</button>
+            </div>
+            <div class="demo-panels">
+                <div class="stack-box">
+                    <div class="stack-label">CALL STACK</div>
+                    <div class="stack-frames" id="pch-stack"></div>
+                </div>
+                <div class="return-panel">
+                    <div class="return-label">OUTPUT</div>
+                    <div class="return-entries" id="pch-returns"></div>
+                </div>
+            </div>
+            <div class="narration" id="pch-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+            <div class="step-counter" id="pch-step"></div>
+            <div id="pch-code-trace" style="display:none; font-family:monospace; font-size:0.85em; background:#f0f4ff; padding:8px 14px; border-radius:6px; margin-top:8px;"></div>
+        </div>
+
+        <div class="highlight-box">
+            Notice that all printing happens on the <strong>way down</strong> (push phase) &mdash; as each frame is added, it prints its character immediately, BEFORE making the recursive call. The unwinding phase (pop) just closes the frames &mdash; no more printing happens then.
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 3: printReverse ===== -->
+    <section>
+        <h2>3. printReverse("JAVA")</h2>
+
+        <div class="teacher-says">
+            Now the magic trick &mdash; what if we want to print characters in REVERSE order? We simply make the recursive call FIRST, and then print. This small change in order completely reverses the output!
+        </div>
+
+        <div class="student-says">
+            So we go all the way down to the base case first, then print on the way back up?
+        </div>
+
+        <div class="teacher-says">
+            Exactly! The recursive calls push everything onto the call stack. Only when we reach the base case do we start returning, and each frame prints its character as it pops off. This is called printing on the "unwinding" phase.
+        </div>
+
+        <div class="definition">
+            printReverse("") &rarr; do nothing &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
+            printReverse(s)&nbsp; &rarr; printReverse(s.substring(1)), then print s.charAt(0) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(recursive case)</span><br>
+            <br>
+            <span style="color:#e65100;">Note the crucial difference: the recursive call comes BEFORE the print!</span>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header" onclick="toggleCode(this)">
+                <span>Java &mdash; Recursive Print Reverse</span>
+                <span class="code-toggle collapsed">&#9660;</span>
+            </div>
+            <div class="code-block collapsed">
+<span class="keyword">public class</span> <span class="class-name">StringRecursion</span> {
+
+    <span class="keyword">public static void</span> <span class="method">printReverse</span>(<span class="class-name">String</span> s) {
+        <span class="keyword">if</span> (s.isEmpty()) <span class="keyword">return</span>;               <span class="comment">// Base case: empty string</span>
+        <span class="method">printReverse</span>(s.substring(<span class="number">1</span>));          <span class="comment">// Recurse FIRST</span>
+        <span class="class-name">System</span>.out.print(s.charAt(<span class="number">0</span>) + <span class="string">" "</span>);  <span class="comment">// Then print (on unwind!)</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="method">printReverse</span>(<span class="string">"JAVA"</span>);
+        <span class="comment">// Output: A V A J</span>
+    }
+}
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h3>Interactive Demo &mdash; printReverse("JAVA")</h3>
+            <div class="demo-buttons">
+                <button class="btn btn-success" id="prv-run-btn" onclick="startDemo('prv')">&#9654; Run</button>
+                <button class="btn" id="prv-next-btn" onclick="nextStep('prv')" style="display:none;">Next &rarr;</button>
+                <button class="btn btn-warning" onclick="resetDemo('prv')">&#8635; Reset</button>
+            </div>
+            <div class="demo-panels">
+                <div class="stack-box">
+                    <div class="stack-label">CALL STACK</div>
+                    <div class="stack-frames" id="prv-stack"></div>
+                </div>
+                <div class="return-panel">
+                    <div class="return-label">OUTPUT</div>
+                    <div class="return-entries" id="prv-returns"></div>
+                </div>
+            </div>
+            <div class="narration" id="prv-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+            <div class="step-counter" id="prv-step"></div>
+            <div id="prv-code-trace" style="display:none; font-family:monospace; font-size:0.85em; background:#f0f4ff; padding:8px 14px; border-radius:6px; margin-top:8px;"></div>
+        </div>
+
+        <div class="important">
+            <strong>Power of Recursion</strong>
+            This is the power of recursion! By placing the print statement AFTER the recursive call, the characters print in reverse order. The call stack acts like a buffer &mdash; it holds all the characters and releases them in LIFO (last-in, first-out) order.
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 4: countChar ===== -->
+    <section>
+        <h2>4. countChar("BALL", 'L')</h2>
+
+        <div class="teacher-says">
+            Now a method that RETURNS a value. We want to count how many times a character appears in a string. For "BALL" with character 'L', the answer is 2.
+        </div>
+
+        <div class="student-says">
+            Do we check each character as we go, and add 1 if it matches?
+        </div>
+
+        <div class="teacher-says">
+            Exactly! If the first character matches, we contribute 1. Then add the count from the rest of the string. If it does not match, we contribute 0. The base case returns 0 for the empty string.
+        </div>
+
+        <div class="definition">
+            countChar("", ch) = 0 &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
+            countChar(s, ch)&nbsp; = (s.charAt(0)==ch ? 1 : 0) + countChar(s.substring(1), ch) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(recursive case)</span>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header" onclick="toggleCode(this)">
+                <span>Java &mdash; Count Occurrences</span>
+                <span class="code-toggle collapsed">&#9660;</span>
+            </div>
+            <div class="code-block collapsed">
+<span class="keyword">public class</span> <span class="class-name">StringRecursion</span> {
+
+    <span class="keyword">public static int</span> <span class="method">countChar</span>(<span class="class-name">String</span> s, <span class="keyword">char</span> ch) {
+        <span class="keyword">if</span> (s.isEmpty()) <span class="keyword">return</span> <span class="number">0</span>;                      <span class="comment">// Base case</span>
+        <span class="keyword">int</span> match = (s.charAt(<span class="number">0</span>) == ch) ? <span class="number">1</span> : <span class="number">0</span>;       <span class="comment">// 1 if match, else 0</span>
+        <span class="keyword">return</span> match + <span class="method">countChar</span>(s.substring(<span class="number">1</span>), ch);   <span class="comment">// Add to rest</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> count = <span class="method">countChar</span>(<span class="string">"BALL"</span>, <span class="string">'L'</span>);
+        <span class="class-name">System</span>.out.println(<span class="string">"Count = "</span> + count);  <span class="comment">// Output: Count = 2</span>
+    }
+}
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h3>Interactive Demo &mdash; countChar("BALL", 'L')</h3>
+            <div class="demo-buttons">
+                <button class="btn btn-success" id="cch-run-btn" onclick="startDemo('cch')">&#9654; Run</button>
+                <button class="btn" id="cch-next-btn" onclick="nextStep('cch')" style="display:none;">Next &rarr;</button>
+                <button class="btn btn-warning" onclick="resetDemo('cch')">&#8635; Reset</button>
+            </div>
+            <div class="demo-panels">
+                <div class="stack-box">
+                    <div class="stack-label">CALL STACK</div>
+                    <div class="stack-frames" id="cch-stack"></div>
+                </div>
+                <div class="return-panel">
+                    <div class="return-label">RETURN VALUES</div>
+                    <div class="return-entries" id="cch-returns"></div>
+                </div>
+            </div>
+            <div class="narration" id="cch-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+            <div class="step-counter" id="cch-step"></div>
+            <div id="cch-code-trace" style="display:none; font-family:monospace; font-size:0.85em; background:#f0f4ff; padding:8px 14px; border-radius:6px; margin-top:8px;"></div>
+        </div>
+
+        <div class="highlight-box">
+            Key insight: return values accumulate on the way <strong>UP</strong> (unwinding phase). Each frame adds 0 or 1 to the count received from below. The base case seeds the accumulation with 0.
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 5: replaceChar ===== -->
+    <section>
+        <h2>5. replaceChar("HELLO", 'L', 'R')</h2>
+
+        <div class="teacher-says">
+            Now we build a new string. We want to replace every 'L' in "HELLO" with 'R', giving "HERRO". We build the result character by character as the recursion unwinds.
+        </div>
+
+        <div class="student-says">
+            So if the character matches, we use the new character; otherwise we keep the original?
+        </div>
+
+        <div class="teacher-says">
+            Exactly! And we concatenate each character with the result of the recursive call on the rest of the string. The base case returns an empty string &mdash; the starting point for building.
+        </div>
+
+        <div class="definition">
+            replaceChar("", old, new) = "" &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
+            replaceChar(s, old, new)&nbsp; = (s.charAt(0)==old ? new : s.charAt(0)) + replaceChar(s.substring(1), old, new)
+        </div>
+
+        <div class="code-container">
+            <div class="code-header" onclick="toggleCode(this)">
+                <span>Java &mdash; Replace Character</span>
+                <span class="code-toggle collapsed">&#9660;</span>
+            </div>
+            <div class="code-block collapsed">
+<span class="keyword">public class</span> <span class="class-name">StringRecursion</span> {
+
+    <span class="keyword">public static</span> <span class="class-name">String</span> <span class="method">replaceChar</span>(<span class="class-name">String</span> s, <span class="keyword">char</span> oldCh, <span class="keyword">char</span> newCh) {
+        <span class="keyword">if</span> (s.isEmpty()) <span class="keyword">return</span> <span class="string">""</span>;                      <span class="comment">// Base case</span>
+        <span class="keyword">char</span> first = (s.charAt(<span class="number">0</span>) == oldCh) ? newCh : s.charAt(<span class="number">0</span>);
+        <span class="keyword">return</span> first + <span class="method">replaceChar</span>(s.substring(<span class="number">1</span>), oldCh, newCh);
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="class-name">String</span> result = <span class="method">replaceChar</span>(<span class="string">"HELLO"</span>, <span class="string">'L'</span>, <span class="string">'R'</span>);
+        <span class="class-name">System</span>.out.println(result);  <span class="comment">// Output: HERRO</span>
+    }
+}
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h3>Interactive Demo &mdash; replaceChar("HELLO", 'L', 'R')</h3>
+            <div class="demo-buttons">
+                <button class="btn btn-success" id="rpl-run-btn" onclick="startDemo('rpl')">&#9654; Run</button>
+                <button class="btn" id="rpl-next-btn" onclick="nextStep('rpl')" style="display:none;">Next &rarr;</button>
+                <button class="btn btn-warning" onclick="resetDemo('rpl')">&#8635; Reset</button>
+            </div>
+            <div class="demo-panels">
+                <div class="stack-box">
+                    <div class="stack-label">CALL STACK</div>
+                    <div class="stack-frames" id="rpl-stack"></div>
+                </div>
+                <div class="return-panel">
+                    <div class="return-label">RETURN VALUES</div>
+                    <div class="return-entries" id="rpl-returns"></div>
+                </div>
+            </div>
+            <div class="narration" id="rpl-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+            <div class="step-counter" id="rpl-step"></div>
+            <div id="rpl-code-trace" style="display:none; font-family:monospace; font-size:0.85em; background:#f0f4ff; padding:8px 14px; border-radius:6px; margin-top:8px;"></div>
+        </div>
+
+        <div class="highlight-box">
+            String return values build up on the UNWINDING phase. Each frame prepends its (possibly replaced) character to the string received from the recursive call below.
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 6: removeChar ===== -->
+    <section>
+        <h2>6. removeChar("HELLO", 'L')</h2>
+
+        <div class="teacher-says">
+            Similar to replace, but now we completely remove every occurrence of a character. For "HELLO" removing 'L', we get "HEO". When the character matches, we contribute nothing &mdash; an empty string.
+        </div>
+
+        <div class="student-says">
+            So instead of replacing with a new character, we just skip it?
+        </div>
+
+        <div class="teacher-says">
+            Yes! We contribute <code>""</code> (empty string) for matches, and <code>"" + s.charAt(0)</code> (the character itself) for non-matches.
+        </div>
+
+        <div class="definition">
+            removeChar("", ch) = "" &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
+            removeChar(s, ch)&nbsp; = (s.charAt(0)==ch ? "" : ""+s.charAt(0)) + removeChar(s.substring(1), ch)
+        </div>
+
+        <div class="code-container">
+            <div class="code-header" onclick="toggleCode(this)">
+                <span>Java &mdash; Remove Character</span>
+                <span class="code-toggle collapsed">&#9660;</span>
+            </div>
+            <div class="code-block collapsed">
+<span class="keyword">public class</span> <span class="class-name">StringRecursion</span> {
+
+    <span class="keyword">public static</span> <span class="class-name">String</span> <span class="method">removeChar</span>(<span class="class-name">String</span> s, <span class="keyword">char</span> ch) {
+        <span class="keyword">if</span> (s.isEmpty()) <span class="keyword">return</span> <span class="string">""</span>;                         <span class="comment">// Base case</span>
+        <span class="class-name">String</span> keep = (s.charAt(<span class="number">0</span>) == ch) ? <span class="string">""</span> : <span class="string">""</span> + s.charAt(<span class="number">0</span>);
+        <span class="keyword">return</span> keep + <span class="method">removeChar</span>(s.substring(<span class="number">1</span>), ch);
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="class-name">String</span> result = <span class="method">removeChar</span>(<span class="string">"HELLO"</span>, <span class="string">'L'</span>);
+        <span class="class-name">System</span>.out.println(result);  <span class="comment">// Output: HEO</span>
+    }
+}
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h3>Interactive Demo &mdash; removeChar("HELLO", 'L')</h3>
+            <div class="demo-buttons">
+                <button class="btn btn-success" id="rmc-run-btn" onclick="startDemo('rmc')">&#9654; Run</button>
+                <button class="btn" id="rmc-next-btn" onclick="nextStep('rmc')" style="display:none;">Next &rarr;</button>
+                <button class="btn btn-warning" onclick="resetDemo('rmc')">&#8635; Reset</button>
+            </div>
+            <div class="demo-panels">
+                <div class="stack-box">
+                    <div class="stack-label">CALL STACK</div>
+                    <div class="stack-frames" id="rmc-stack"></div>
+                </div>
+                <div class="return-panel">
+                    <div class="return-label">RETURN VALUES</div>
+                    <div class="return-entries" id="rmc-returns"></div>
+                </div>
+            </div>
+            <div class="narration" id="rmc-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+            <div class="step-counter" id="rmc-step"></div>
+            <div id="rmc-code-trace" style="display:none; font-family:monospace; font-size:0.85em; background:#f0f4ff; padding:8px 14px; border-radius:6px; margin-top:8px;"></div>
+        </div>
+
+        <div class="important">
+            <strong>Character Removal</strong>
+            When a character is REMOVED, it contributes an empty string <code>""</code>. This means the string gets SHORTER than the original &mdash; only non-matching characters are included in the result.
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 7: Binary Search ===== -->
+    <section>
+        <h2>7. Binary Search</h2>
+
+        <div class="teacher-says">
+            Binary search is one of the most important algorithms in computer science. It searches a SORTED array by repeatedly halving the search space. We can implement it both iteratively (with a loop) and recursively.
+        </div>
+
+        <div class="student-says">
+            Why only sorted arrays?
+        </div>
+
+        <div class="teacher-says">
+            Because we compare the middle element to the target. If the target is smaller, we know it must be in the LEFT half. If larger, it is in the RIGHT half. This only works if the array is sorted! Each comparison eliminates HALF the remaining elements &mdash; that is why binary search is O(log n).
+        </div>
+
+        <div class="definition">
+            Binary Search on sorted array arr[], searching for target:<br>
+            &nbsp;&nbsp;- Maintain pointers: low = 0, high = arr.length - 1<br>
+            &nbsp;&nbsp;- Compute mid = (low + high) / 2<br>
+            &nbsp;&nbsp;- If arr[mid] == target: FOUND! Return mid<br>
+            &nbsp;&nbsp;- If arr[mid] &lt; target: search RIGHT half &rarr; low = mid + 1<br>
+            &nbsp;&nbsp;- If arr[mid] &gt; target: search LEFT half &rarr; high = mid - 1<br>
+            &nbsp;&nbsp;- If low &gt; high: NOT FOUND &rarr; return -1
+        </div>
+
+        <!-- 7.1 Iterative -->
+        <h3>7.1 Iterative Binary Search</h3>
+
+        <div class="teacher-says">
+            Let us first see the iterative version with a while loop. We will search for 16 in the array [2, 5, 8, 12, 16, 23, 38].
+        </div>
+
+        <div class="code-container">
+            <div class="code-header" onclick="toggleCode(this)">
+                <span>Java &mdash; Iterative Binary Search</span>
+                <span class="code-toggle collapsed">&#9660;</span>
+            </div>
+            <div class="code-block collapsed">
+<span class="keyword">public class</span> <span class="class-name">BinarySearch</span> {
+
+    <span class="keyword">public static int</span> <span class="method">binarySearchIter</span>(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> target) {
+        <span class="keyword">int</span> low = <span class="number">0</span>, high = arr.length - <span class="number">1</span>;
+
+        <span class="keyword">while</span> (low &lt;= high) {
+            <span class="keyword">int</span> mid = (low + high) / <span class="number">2</span>;
+
+            <span class="keyword">if</span> (arr[mid] == target) <span class="keyword">return</span> mid;         <span class="comment">// Found!</span>
+            <span class="keyword">else if</span> (arr[mid] &lt; target) low = mid + <span class="number">1</span>;  <span class="comment">// Search right</span>
+            <span class="keyword">else</span> high = mid - <span class="number">1</span>;                          <span class="comment">// Search left</span>
+        }
+        <span class="keyword">return</span> -<span class="number">1</span>;  <span class="comment">// Not found</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span>[] arr = {<span class="number">2</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">12</span>, <span class="number">16</span>, <span class="number">23</span>, <span class="number">38</span>};
+        <span class="keyword">int</span> idx = <span class="method">binarySearchIter</span>(arr, <span class="number">16</span>);
+        <span class="class-name">System</span>.out.println(<span class="string">"Found at index: "</span> + idx);  <span class="comment">// Output: 4</span>
+    }
+}
+            </div>
+        </div>
+
+        <!-- Iterative Demo -->
+        <div class="demo-area">
+            <h3>Interactive Demo &mdash; Iterative Binary Search: target = 16</h3>
+            <div class="demo-buttons">
+                <button class="btn btn-success" id="bs-iter-run" onclick="bsIterStart()">&#9654; Run</button>
+                <button class="btn" id="bs-iter-next" onclick="bsIterNext()" style="display:none;">Next &rarr;</button>
+                <button class="btn btn-warning" id="bs-iter-reset" onclick="bsIterReset()">&#8635; Reset</button>
+            </div>
+
+            <div class="bs-array-wrapper">
+                <div class="bs-array" id="bs-iter-arr"></div>
+            </div>
+
+            <div class="bs-legend">
+                <div class="bs-leg-item">
+                    <div class="bs-leg-dot" style="background:#d1fae5; border-color:#10b981;"></div>
+                    <span>low</span>
+                </div>
+                <div class="bs-leg-item">
+                    <div class="bs-leg-dot" style="background:#dbeafe; border-color:#3b82f6;"></div>
+                    <span>mid</span>
+                </div>
+                <div class="bs-leg-item">
+                    <div class="bs-leg-dot" style="background:#fef3c7; border-color:#f59e0b;"></div>
+                    <span>high</span>
+                </div>
+                <div class="bs-leg-item">
+                    <div class="bs-leg-dot" style="background:#f3f4f6; border-color:#e5e7eb;"></div>
+                    <span>eliminated</span>
+                </div>
+                <div class="bs-leg-item">
+                    <div class="bs-leg-dot" style="background:#6ee7b7; border-color:#10b981;"></div>
+                    <span>found</span>
+                </div>
+            </div>
+
+            <div class="narration" id="bs-iter-narr">Press "Run" to start the iterative binary search visualization.</div>
+
+            <table class="bs-log-table" style="margin-top:16px;">
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>low</th>
+                        <th>high</th>
+                        <th>mid</th>
+                        <th>arr[mid]</th>
+                        <th>Comparison</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="bs-iter-log"></tbody>
+            </table>
+        </div>
+
+        <!-- 7.2 Recursive -->
+        <h3>7.2 Recursive Binary Search</h3>
+
+        <div class="teacher-says">
+            Now the recursive version. We pass the low and high indices as parameters and recursively narrow down the search range. Notice: the RECURSIVE CASE is when we make one of two recursive calls, and the BASE CASES are when we find the target (return mid) or when the range is empty (return -1).
+        </div>
+
+        <div class="student-says">
+            So each recursive call works on a smaller subarray?
+        </div>
+
+        <div class="teacher-says">
+            Exactly &mdash; half the size each time! This is why binary search is O(log n). After each call, either we found the answer or we have eliminated half the elements.
+        </div>
+
+        <div class="code-container">
+            <div class="code-header" onclick="toggleCode(this)">
+                <span>Java &mdash; Recursive Binary Search</span>
+                <span class="code-toggle collapsed">&#9660;</span>
+            </div>
+            <div class="code-block collapsed">
+<span class="keyword">public class</span> <span class="class-name">BinarySearch</span> {
+
+    <span class="keyword">public static int</span> <span class="method">binarySearchRec</span>(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> low, <span class="keyword">int</span> high, <span class="keyword">int</span> target) {
+        <span class="keyword">if</span> (low &gt; high) <span class="keyword">return</span> -<span class="number">1</span>;              <span class="comment">// Base case: not found</span>
+
+        <span class="keyword">int</span> mid = (low + high) / <span class="number">2</span>;
+
+        <span class="keyword">if</span> (arr[mid] == target) <span class="keyword">return</span> mid;     <span class="comment">// Base case: found!</span>
+        <span class="keyword">else if</span> (arr[mid] &lt; target)
+            <span class="keyword">return</span> <span class="method">binarySearchRec</span>(arr, mid + <span class="number">1</span>, high, target);  <span class="comment">// Search right</span>
+        <span class="keyword">else</span>
+            <span class="keyword">return</span> <span class="method">binarySearchRec</span>(arr, low, mid - <span class="number">1</span>, target);   <span class="comment">// Search left</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span>[] arr = {<span class="number">2</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">12</span>, <span class="number">16</span>, <span class="number">23</span>, <span class="number">38</span>};
+        <span class="keyword">int</span> idx = <span class="method">binarySearchRec</span>(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>, <span class="number">16</span>);
+        <span class="class-name">System</span>.out.println(<span class="string">"Found at index: "</span> + idx);  <span class="comment">// Output: 4</span>
+    }
+}
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h3>Interactive Demo &mdash; binarySearchRec(arr, 0, 6, 16)</h3>
+            <div class="demo-buttons">
+                <button class="btn btn-success" id="bsr-run-btn" onclick="startDemo('bsr')">&#9654; Run</button>
+                <button class="btn" id="bsr-next-btn" onclick="nextStep('bsr')" style="display:none;">Next &rarr;</button>
+                <button class="btn btn-warning" onclick="resetDemo('bsr')">&#8635; Reset</button>
+            </div>
+            <div class="demo-panels">
+                <div class="stack-box">
+                    <div class="stack-label">CALL STACK</div>
+                    <div class="stack-frames" id="bsr-stack"></div>
+                </div>
+                <div class="return-panel">
+                    <div class="return-label">RETURN VALUES</div>
+                    <div class="return-entries" id="bsr-returns"></div>
+                </div>
+            </div>
+            <div class="narration" id="bsr-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+            <div class="step-counter" id="bsr-step"></div>
+            <div id="bsr-code-trace" style="display:none; font-family:monospace; font-size:0.85em; background:#f0f4ff; padding:8px 14px; border-radius:6px; margin-top:8px;"></div>
+        </div>
+
+        <!-- Comparison Table -->
+        <h3>Iterative vs Recursive Comparison</h3>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Iterative</th>
+                    <th>Recursive</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Approach</strong></td>
+                    <td>while loop</td>
+                    <td>calls itself</td>
+                </tr>
+                <tr>
+                    <td><strong>Space</strong></td>
+                    <td>O(1) extra</td>
+                    <td>O(log n) stack</td>
+                </tr>
+                <tr>
+                    <td><strong>Time</strong></td>
+                    <td>O(log n)</td>
+                    <td>O(log n)</td>
+                </tr>
+                <tr>
+                    <td><strong>Readability</strong></td>
+                    <td>Step-by-step clear</td>
+                    <td>Elegantly concise</td>
+                </tr>
+                <tr>
+                    <td><strong>Base case</strong></td>
+                    <td>loop condition <code>low&gt;high</code></td>
+                    <td>explicit <code>if(low&gt;high)</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="important">
+            <strong>Performance Note</strong>
+            Both approaches are O(log n) time. The iterative version uses O(1) extra space, while the recursive version uses O(log n) stack space for the call frames. For binary search specifically, iterative is usually preferred in production code.
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== SECTION 8: Summary ===== -->
+    <section>
+        <h2>8. Summary</h2>
+
+        <div class="teacher-says">
+            Excellent work today! You have mastered five fundamental string recursion methods and binary search &mdash; both iterative and recursive. Let us reflect on the key patterns.
+        </div>
+
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Base Case</th>
+                    <th>Return Type</th>
+                    <th>Print / Compute Phase</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>printChars</strong></td>
+                    <td>empty string</td>
+                    <td>void</td>
+                    <td>PUSH (going down)</td>
+                </tr>
+                <tr>
+                    <td><strong>printReverse</strong></td>
+                    <td>empty string</td>
+                    <td>void</td>
+                    <td>POP (going up)</td>
+                </tr>
+                <tr>
+                    <td><strong>countChar</strong></td>
+                    <td>empty &rarr; 0</td>
+                    <td>int</td>
+                    <td>POP (accumulates)</td>
+                </tr>
+                <tr>
+                    <td><strong>replaceChar</strong></td>
+                    <td>empty &rarr; ""</td>
+                    <td>String</td>
+                    <td>POP (builds string)</td>
+                </tr>
+                <tr>
+                    <td><strong>removeChar</strong></td>
+                    <td>empty &rarr; ""</td>
+                    <td>String</td>
+                    <td>POP (builds string)</td>
+                </tr>
+                <tr>
+                    <td><strong>binarySearch</strong></td>
+                    <td>found / empty range</td>
+                    <td>int</td>
+                    <td>POP (returns index)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="highlight-box">
+            <strong>Key Takeaways:</strong>
+            <ol>
+                <li><strong>Void methods</strong> (printChars, printReverse) differ only in WHERE the action happens relative to the recursive call.</li>
+                <li><strong>Returning methods</strong> (countChar, replaceChar, removeChar) build their result during the UNWINDING phase.</li>
+                <li><strong><code>s.charAt(0)</code> + <code>s.substring(1)</code></strong> is the string equivalent of <code>n</code> + <code>n-1</code> in numeric recursion.</li>
+                <li><strong>Binary search</strong> applies recursion to SEARCH &mdash; each call halves the problem size, giving O(log n) efficiency.</li>
+                <li><strong>The call stack</strong> is your mental model &mdash; watch frames push on and pop off, and understand WHEN computation happens.</li>
+            </ol>
+        </div>
+
+        <div class="teacher-says">
+            In the next tutorial, we will explore sorting algorithms &mdash; both iterative and recursive approaches like Merge Sort and Quick Sort. The recursive thinking you have built here will make those topics much easier!
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding: 25px 40px; color: #6b7280; font-size: 0.9rem; border-top: 1px solid #e5e7eb; line-height: 1.8;">
+        <div style="font-weight: bold; color: #1f2937; font-size: 1rem;">King Abdulaziz University</div>
+        <div>Faculty of Computing and Information Technology (FCIT)</div>
+        <div style="margin-top: 8px;">Prepared by Dr. Abdulmohsen Almalawi</div>
+    </div>
+
+</div><!-- end .container -->
+
+<script>
+// ============================================================
+// CODE TOGGLE
+// ============================================================
+function toggleCode(header) {
+    const codeBlock = header.nextElementSibling;
+    const toggle = header.querySelector('.code-toggle');
+    codeBlock.classList.toggle('collapsed');
+    toggle.classList.toggle('collapsed');
+}
+
+// ============================================================
+// DEMO ENGINE HELPERS
+// ============================================================
+function addStackFrame(stackId, html, frameClass) {
+    const stack = document.getElementById(stackId);
+    const frame = document.createElement('div');
+    frame.className = 'stack-frame ' + frameClass;
+    frame.innerHTML = html;
+    stack.insertBefore(frame, stack.firstChild);
+}
+
+function removeTopFrame(stackId) {
+    return new Promise(resolve => {
+        const stack = document.getElementById(stackId);
+        const top = stack.firstChild;
+        if (top) {
+            top.classList.add('popping');
+            setTimeout(() => {
+                if (top.parentNode === stack) stack.removeChild(top);
+                resolve();
+            }, 300);
+        } else {
+            resolve();
+        }
+    });
+}
+
+function updateTopFrame(stackId, newHtml) {
+    const stack = document.getElementById(stackId);
+    const top = stack.firstChild;
+    if (top) {
+        top.innerHTML = newHtml;
+        top.style.animation = 'frameUpdate 0.5s ease';
+        setTimeout(() => { top.style.animation = ''; }, 500);
+    }
+}
+
+function addReturnEntry(panelId, text, isFinal) {
+    const panel = document.getElementById(panelId);
+    const entry = document.createElement('div');
+    entry.className = 'return-entry' + (isFinal ? ' final' : '');
+    entry.textContent = text;
+    panel.appendChild(entry);
+    panel.scrollTop = panel.scrollHeight;
+}
+
+function setNarration(id, html) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+}
+
+function setStep(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+}
+
+// ============================================================
+// DEMO REGISTRY
+// ============================================================
+const demos = {};
+const codeTraces = {};
+
+function registerDemo(name, steps) {
+    demos[name] = { steps: steps, currentStep: 0, running: false };
+}
+
+function startDemo(name) {
+    const demo = demos[name];
+    demo.currentStep = 0;
+    demo.running = true;
+
+    const runBtn = document.getElementById(name + '-run-btn');
+    const nextBtn = document.getElementById(name + '-next-btn');
+    runBtn.style.display = 'none';
+    nextBtn.style.display = '';
+    nextBtn.textContent = 'Next \u2192';
+    nextBtn.disabled = false;
+
+    document.getElementById(name + '-stack').innerHTML = '';
+    document.getElementById(name + '-returns').innerHTML = '';
+    setNarration(name + '-narration', 'Ready! Click <strong>Next</strong> to step through the execution.');
+    setStep(name + '-step', 'Step 0 of ' + demo.steps.length);
+}
+
+async function nextStep(name) {
+    const demo = demos[name];
+    const btn = document.getElementById(name + '-next-btn');
+    btn.disabled = true;
+    demo.currentStep++;
+    if (demo.currentStep > demo.steps.length) {
+        btn.textContent = 'Done';
+        btn.disabled = true;
+        return;
+    }
+    const s = demo.steps[demo.currentStep - 1];
+    if (s.action === 'push') {
+        addStackFrame(name + '-stack', s.frameText, s.frameClass);
+        if (s.returnEntry) {
+            addReturnEntry(name + '-returns', s.returnEntry, s.isFinal || false);
+        }
+    } else if (s.action === 'pop') {
+        await removeTopFrame(name + '-stack');
+        if (s.returnEntry) {
+            addReturnEntry(name + '-returns', s.returnEntry, s.isFinal || false);
+        }
+        if (s.topFrameUpdate) {
+            updateTopFrame(name + '-stack', s.topFrameUpdate);
+        }
+    }
+    setNarration(name + '-narration', s.narration);
+    var traceEl = document.getElementById(name + '-code-trace');
+    if (traceEl && codeTraces[name] && codeTraces[name][demo.currentStep]) {
+        traceEl.style.display = 'block';
+        traceEl.textContent = codeTraces[name][demo.currentStep];
+    }
+    setStep(name + '-step', 'Step ' + demo.currentStep + ' of ' + demo.steps.length);
+    if (demo.currentStep >= demo.steps.length) {
+        setTimeout(() => {
+            btn.textContent = 'Done';
+            btn.disabled = true;
+        }, 450);
+    } else {
+        setTimeout(() => { btn.disabled = false; }, 450);
+    }
+}
+
+function resetDemo(name) {
+    const demo = demos[name];
+    demo.currentStep = 0;
+    demo.running = false;
+
+    const runBtn = document.getElementById(name + '-run-btn');
+    const nextBtn = document.getElementById(name + '-next-btn');
+    runBtn.style.display = '';
+    nextBtn.style.display = 'none';
+    nextBtn.textContent = 'Next \u2192';
+    nextBtn.disabled = false;
+
+    document.getElementById(name + '-stack').innerHTML = '';
+    document.getElementById(name + '-returns').innerHTML = '';
+    setNarration(name + '-narration', 'Press \u201cRun\u201d to start, then click \u201cNext\u201d to go step by step.');
+    setStep(name + '-step', '');
+
+    var traceEl = document.getElementById(name + '-code-trace');
+    if (traceEl) { traceEl.style.display = 'none'; traceEl.textContent = ''; }
+}
+
+// ============================================================
+// DEMO DATA
+// ============================================================
+
+// --- pch: printChars("JAVA") ---
+registerDemo('pch', [
+    { action:'push', frameText:'main()', frameClass:'main-frame',
+      narration:'Program starts. <strong>main()</strong> calls <strong>printChars("JAVA")</strong>.' },
+    { action:'push', frameText:'<div class="frame-name">printChars("JAVA")</div><div class="frame-expr">print \'J\' &rarr; call("AVA")</div>', frameClass:'depth-1',
+      returnEntry:"print \u2192 'J'",
+      narration:'<strong>printChars("JAVA")</strong>: Not empty! Print first char <strong>\'J\'</strong>, then call printChars("AVA").' },
+    { action:'push', frameText:'<div class="frame-name">printChars("AVA")</div><div class="frame-expr">print \'A\' &rarr; call("VA")</div>', frameClass:'depth-2',
+      returnEntry:"print \u2192 'A'",
+      narration:'<strong>printChars("AVA")</strong>: Not empty! Print first char <strong>\'A\'</strong>, then call printChars("VA").' },
+    { action:'push', frameText:'<div class="frame-name">printChars("VA")</div><div class="frame-expr">print \'V\' &rarr; call("A")</div>', frameClass:'depth-3',
+      returnEntry:"print \u2192 'V'",
+      narration:'<strong>printChars("VA")</strong>: Not empty! Print first char <strong>\'V\'</strong>, then call printChars("A").' },
+    { action:'push', frameText:'<div class="frame-name">printChars("A")</div><div class="frame-expr">print \'A\' &rarr; call("")</div>', frameClass:'depth-4',
+      returnEntry:"print \u2192 'A'",
+      narration:'<strong>printChars("A")</strong>: Not empty! Print first char <strong>\'A\'</strong>, then call printChars("").' },
+    { action:'push', frameText:'<div class="frame-name">printChars("")</div><div class="frame-expr">return (empty!)</div>', frameClass:'base-frame',
+      narration:'<strong>printChars("")</strong>: String is empty! <strong>BASE CASE!</strong> Returns immediately. Recursion stops here.' },
+    { action:'pop',
+      narration:'<strong>printChars("")</strong> returns. printChars("A") has finished its recursive call &mdash; it is now done.' },
+    { action:'pop',
+      narration:'<strong>printChars("A")</strong> fully done. Returns to printChars("VA").' },
+    { action:'pop',
+      narration:'<strong>printChars("VA")</strong> fully done. Returns to printChars("AVA").' },
+    { action:'pop',
+      narration:'<strong>printChars("AVA")</strong> fully done. Returns to printChars("JAVA").' },
+    { action:'pop', returnEntry:'\u2713 Output: J  A  V  A', isFinal:true,
+      narration:'<strong>printChars("JAVA")</strong> fully done. Returns to main(). All characters printed left-to-right: <strong>J &rarr; A &rarr; V &rarr; A</strong>' },
+    { action:'pop',
+      narration:'<strong>main()</strong> exits. Output: JAVA printed character by character from left to right.' }
+]);
+
+// --- prv: printReverse("JAVA") ---
+registerDemo('prv', [
+    { action:'push', frameText:'main()', frameClass:'main-frame',
+      narration:'Program starts. <strong>main()</strong> calls <strong>printReverse("JAVA")</strong>.' },
+    { action:'push', frameText:'<div class="frame-name">printReverse("JAVA")</div><div class="frame-expr">call("AVA") &rarr; then print \'J\'</div>', frameClass:'depth-1',
+      narration:'<strong>printReverse("JAVA")</strong>: Not empty! First calls printReverse("AVA") recursively. \'J\' will print LATER, on return.' },
+    { action:'push', frameText:'<div class="frame-name">printReverse("AVA")</div><div class="frame-expr">call("VA") &rarr; then print \'A\'</div>', frameClass:'depth-2',
+      narration:'<strong>printReverse("AVA")</strong>: Not empty! First calls printReverse("VA"). \'A\' waits until return.' },
+    { action:'push', frameText:'<div class="frame-name">printReverse("VA")</div><div class="frame-expr">call("A") &rarr; then print \'V\'</div>', frameClass:'depth-3',
+      narration:'<strong>printReverse("VA")</strong>: Not empty! First calls printReverse("A"). \'V\' waits until return.' },
+    { action:'push', frameText:'<div class="frame-name">printReverse("A")</div><div class="frame-expr">call("") &rarr; then print \'A\'</div>', frameClass:'depth-4',
+      narration:'<strong>printReverse("A")</strong>: Not empty! First calls printReverse(""). \'A\' waits until return.' },
+    { action:'push', frameText:'<div class="frame-name">printReverse("")</div><div class="frame-expr">return (empty!)</div>', frameClass:'base-frame',
+      narration:'<strong>printReverse("")</strong>: Empty string! <strong>BASE CASE!</strong> Returns immediately. Now the stack starts unwinding!' },
+    { action:'pop', returnEntry:"print \u2192 'A'",
+      topFrameUpdate:'<div class="frame-name">printReverse("A")</div><div class="frame-expr">call done &rarr; printing \'A\'</div>',
+      narration:'<strong>printReverse("")</strong> returns. Now <strong>printReverse("A")</strong> resumes and prints its char: <strong>\'A\'</strong>.' },
+    { action:'pop', returnEntry:"print \u2192 'V'",
+      topFrameUpdate:'<div class="frame-name">printReverse("VA")</div><div class="frame-expr">call done &rarr; printing \'V\'</div>',
+      narration:'<strong>printReverse("A")</strong> done. <strong>printReverse("VA")</strong> resumes and prints: <strong>\'V\'</strong>.' },
+    { action:'pop', returnEntry:"print \u2192 'A'",
+      topFrameUpdate:'<div class="frame-name">printReverse("AVA")</div><div class="frame-expr">call done &rarr; printing \'A\'</div>',
+      narration:'<strong>printReverse("VA")</strong> done. <strong>printReverse("AVA")</strong> resumes and prints: <strong>\'A\'</strong>.' },
+    { action:'pop', returnEntry:"print \u2192 'J'",
+      topFrameUpdate:'<div class="frame-name">printReverse("JAVA")</div><div class="frame-expr">call done &rarr; printing \'J\'</div>',
+      narration:'<strong>printReverse("AVA")</strong> done. <strong>printReverse("JAVA")</strong> resumes and prints: <strong>\'J\'</strong>.' },
+    { action:'pop', returnEntry:'\u2713 Output: A  V  A  J', isFinal:true,
+      narration:'<strong>printReverse("JAVA")</strong> done. Returns to main(). Characters printed in <em>reverse</em>: <strong>A &rarr; V &rarr; A &rarr; J</strong>' },
+    { action:'pop',
+      narration:'<strong>main()</strong> exits. Reverse of "JAVA" is: AVAJ. Note how the call stack acted as a buffer, reversing the order!' }
+]);
+
+// --- cch: countChar("BALL", 'L') ---
+registerDemo('cch', [
+    { action:'push', frameText:'main()', frameClass:'main-frame',
+      narration:'Program starts. <strong>main()</strong> calls <strong>countChar("BALL", \'L\')</strong>.' },
+    { action:'push', frameText:'<div class="frame-name">cch("BALL",\'L\')</div><div class="frame-expr">\'B\'&ne;\'L\': 0 + cch("ALL",\'L\')</div>', frameClass:'depth-1',
+      narration:'<strong>countChar("BALL")</strong>: First char \'B\' &ne; \'L\'. Contributes <strong>0</strong>. Calls countChar("ALL",\'L\').' },
+    { action:'push', frameText:'<div class="frame-name">cch("ALL",\'L\')</div><div class="frame-expr">\'A\'&ne;\'L\': 0 + cch("LL",\'L\')</div>', frameClass:'depth-2',
+      narration:'<strong>countChar("ALL")</strong>: First char \'A\' &ne; \'L\'. Contributes <strong>0</strong>. Calls countChar("LL",\'L\').' },
+    { action:'push', frameText:'<div class="frame-name">cch("LL",\'L\')</div><div class="frame-expr">\'L\'==\'L\': 1 + cch("L",\'L\')</div>', frameClass:'depth-3',
+      narration:'<strong>countChar("LL")</strong>: First char \'L\' == \'L\'! Match! Contributes <strong>1</strong>. Calls countChar("L",\'L\').' },
+    { action:'push', frameText:'<div class="frame-name">cch("L",\'L\')</div><div class="frame-expr">\'L\'==\'L\': 1 + cch("",\'L\')</div>', frameClass:'depth-4',
+      narration:'<strong>countChar("L")</strong>: First char \'L\' == \'L\'! Match! Contributes <strong>1</strong>. Calls countChar("",\'L\').' },
+    { action:'push', frameText:'<div class="frame-name">cch("",\'L\')</div><div class="frame-expr">return 0 (empty!)</div>', frameClass:'base-frame',
+      narration:'<strong>countChar("")</strong>: Empty string! <strong>BASE CASE!</strong> Returns <strong>0</strong>. No characters left to check.' },
+    { action:'pop', returnEntry:'countChar("") = 0',
+      topFrameUpdate:'<div class="frame-name">cch("L",\'L\')</div><div class="frame-expr">1 + <span class="resolved">0</span> = 1</div>',
+      narration:'<strong>countChar("")</strong> returns 0. <strong>countChar("L")</strong>: 1 + 0 = <strong>1</strong>.' },
+    { action:'pop', returnEntry:'countChar("L") = 1 + 0 = 1',
+      topFrameUpdate:'<div class="frame-name">cch("LL",\'L\')</div><div class="frame-expr">1 + <span class="resolved">1</span> = 2</div>',
+      narration:'<strong>countChar("L")</strong> returns 1. <strong>countChar("LL")</strong>: 1 + 1 = <strong>2</strong>.' },
+    { action:'pop', returnEntry:'countChar("LL") = 1 + 1 = 2',
+      topFrameUpdate:'<div class="frame-name">cch("ALL",\'L\')</div><div class="frame-expr">0 + <span class="resolved">2</span> = 2</div>',
+      narration:'<strong>countChar("LL")</strong> returns 2. <strong>countChar("ALL")</strong>: 0 + 2 = <strong>2</strong>.' },
+    { action:'pop', returnEntry:'countChar("ALL") = 0 + 2 = 2',
+      topFrameUpdate:'<div class="frame-name">cch("BALL",\'L\')</div><div class="frame-expr">0 + <span class="resolved">2</span> = 2</div>',
+      narration:'<strong>countChar("ALL")</strong> returns 2. <strong>countChar("BALL")</strong>: 0 + 2 = <strong>2</strong>.' },
+    { action:'pop', returnEntry:'countChar("BALL") = 2  \u2713', isFinal:true,
+      narration:'<strong>countChar("BALL")</strong> returns <strong>2</strong> to main(). "BALL" contains \'L\' exactly <strong>2</strong> times!' },
+    { action:'pop',
+      narration:'<strong>main()</strong> exits. Answer: <strong>2</strong> occurrences of \'L\' in "BALL".' }
+]);
+
+// --- rpl: replaceChar("HELLO", 'L', 'R') ---
+registerDemo('rpl', [
+    { action:'push', frameText:'main()', frameClass:'main-frame',
+      narration:'Program starts. <strong>main()</strong> calls <strong>replaceChar("HELLO", \'L\', \'R\')</strong>.' },
+    { action:'push', frameText:'<div class="frame-name">rpl("HELLO",\'L\',\'R\')</div><div class="frame-expr">\'H\'&ne;\'L\': "H" + rpl("ELLO")</div>', frameClass:'depth-1',
+      narration:'<strong>replaceChar("HELLO")</strong>: \'H\' &ne; \'L\'. Keep \'H\'. Calls replaceChar("ELLO")...' },
+    { action:'push', frameText:'<div class="frame-name">rpl("ELLO",\'L\',\'R\')</div><div class="frame-expr">\'E\'&ne;\'L\': "E" + rpl("LLO")</div>', frameClass:'depth-2',
+      narration:'<strong>replaceChar("ELLO")</strong>: \'E\' &ne; \'L\'. Keep \'E\'. Calls replaceChar("LLO")...' },
+    { action:'push', frameText:'<div class="frame-name">rpl("LLO",\'L\',\'R\')</div><div class="frame-expr">\'L\'==\'L\': "R" + rpl("LO")</div>', frameClass:'depth-3',
+      narration:'<strong>replaceChar("LLO")</strong>: \'L\' == \'L\'! Replace with \'R\'. Calls replaceChar("LO")...' },
+    { action:'push', frameText:'<div class="frame-name">rpl("LO",\'L\',\'R\')</div><div class="frame-expr">\'L\'==\'L\': "R" + rpl("O")</div>', frameClass:'depth-4',
+      narration:'<strong>replaceChar("LO")</strong>: \'L\' == \'L\'! Replace with \'R\'. Calls replaceChar("O")...' },
+    { action:'push', frameText:'<div class="frame-name">rpl("O",\'L\',\'R\')</div><div class="frame-expr">\'O\'&ne;\'L\': "O" + rpl("")</div>', frameClass:'depth-5',
+      narration:'<strong>replaceChar("O")</strong>: \'O\' &ne; \'L\'. Keep \'O\'. Calls replaceChar("")...' },
+    { action:'push', frameText:'<div class="frame-name">rpl("",\'L\',\'R\')</div><div class="frame-expr">return "" (empty!)</div>', frameClass:'base-frame',
+      narration:'<strong>replaceChar("")</strong>: Empty string! <strong>BASE CASE!</strong> Returns <strong>""</strong>.' },
+    { action:'pop', returnEntry:'replaceChar("") = ""',
+      topFrameUpdate:'<div class="frame-name">rpl("O",\'L\',\'R\')</div><div class="frame-expr">"O" + <span class="resolved">""</span> = "O"</div>',
+      narration:'<strong>replaceChar("")</strong> returns "". <strong>replaceChar("O")</strong>: "O" + "" = <strong>"O"</strong>.' },
+    { action:'pop', returnEntry:'replaceChar("O") = "O"',
+      topFrameUpdate:'<div class="frame-name">rpl("LO",\'L\',\'R\')</div><div class="frame-expr">"R" + <span class="resolved">"O"</span> = "RO"</div>',
+      narration:'<strong>replaceChar("O")</strong> returns "O". <strong>replaceChar("LO")</strong>: "R" + "O" = <strong>"RO"</strong>.' },
+    { action:'pop', returnEntry:'replaceChar("LO") = "RO"',
+      topFrameUpdate:'<div class="frame-name">rpl("LLO",\'L\',\'R\')</div><div class="frame-expr">"R" + <span class="resolved">"RO"</span> = "RRO"</div>',
+      narration:'<strong>replaceChar("LO")</strong> returns "RO". <strong>replaceChar("LLO")</strong>: "R" + "RO" = <strong>"RRO"</strong>.' },
+    { action:'pop', returnEntry:'replaceChar("LLO") = "RRO"',
+      topFrameUpdate:'<div class="frame-name">rpl("ELLO",\'L\',\'R\')</div><div class="frame-expr">"E" + <span class="resolved">"RRO"</span> = "ERRO"</div>',
+      narration:'<strong>replaceChar("LLO")</strong> returns "RRO". <strong>replaceChar("ELLO")</strong>: "E" + "RRO" = <strong>"ERRO"</strong>.' },
+    { action:'pop', returnEntry:'replaceChar("ELLO") = "ERRO"',
+      topFrameUpdate:'<div class="frame-name">rpl("HELLO",\'L\',\'R\')</div><div class="frame-expr">"H" + <span class="resolved">"ERRO"</span> = "HERRO"</div>',
+      narration:'<strong>replaceChar("ELLO")</strong> returns "ERRO". <strong>replaceChar("HELLO")</strong>: "H" + "ERRO" = <strong>"HERRO"</strong>.' },
+    { action:'pop', returnEntry:'replaceChar("HELLO") = "HERRO"  \u2713', isFinal:true,
+      narration:'<strong>replaceChar("HELLO")</strong> returns <strong>"HERRO"</strong> to main(). Every \'L\' replaced with \'R\'!' },
+    { action:'pop',
+      narration:'<strong>main()</strong> exits. Result: "HELLO" with \'L\'&rarr;\'R\' = <strong>"HERRO"</strong>' }
+]);
+
+// --- rmc: removeChar("HELLO", 'L') ---
+registerDemo('rmc', [
+    { action:'push', frameText:'main()', frameClass:'main-frame',
+      narration:'Program starts. <strong>main()</strong> calls <strong>removeChar("HELLO", \'L\')</strong>.' },
+    { action:'push', frameText:'<div class="frame-name">rmc("HELLO",\'L\')</div><div class="frame-expr">\'H\'&ne;\'L\': "H" + rmc("ELLO")</div>', frameClass:'depth-1',
+      narration:'<strong>removeChar("HELLO")</strong>: \'H\' &ne; \'L\'. Keep \'H\'. Calls removeChar("ELLO")...' },
+    { action:'push', frameText:'<div class="frame-name">rmc("ELLO",\'L\')</div><div class="frame-expr">\'E\'&ne;\'L\': "E" + rmc("LLO")</div>', frameClass:'depth-2',
+      narration:'<strong>removeChar("ELLO")</strong>: \'E\' &ne; \'L\'. Keep \'E\'. Calls removeChar("LLO")...' },
+    { action:'push', frameText:'<div class="frame-name">rmc("LLO",\'L\')</div><div class="frame-expr">\'L\'==\'L\': "" + rmc("LO")</div>', frameClass:'depth-3',
+      narration:'<strong>removeChar("LLO")</strong>: \'L\' == \'L\'! REMOVE it (contribute ""). Calls removeChar("LO")...' },
+    { action:'push', frameText:'<div class="frame-name">rmc("LO",\'L\')</div><div class="frame-expr">\'L\'==\'L\': "" + rmc("O")</div>', frameClass:'depth-4',
+      narration:'<strong>removeChar("LO")</strong>: \'L\' == \'L\'! REMOVE it (contribute ""). Calls removeChar("O")...' },
+    { action:'push', frameText:'<div class="frame-name">rmc("O",\'L\')</div><div class="frame-expr">\'O\'&ne;\'L\': "O" + rmc("")</div>', frameClass:'depth-5',
+      narration:'<strong>removeChar("O")</strong>: \'O\' &ne; \'L\'. Keep \'O\'. Calls removeChar("")...' },
+    { action:'push', frameText:'<div class="frame-name">rmc("",\'L\')</div><div class="frame-expr">return "" (empty!)</div>', frameClass:'base-frame',
+      narration:'<strong>removeChar("")</strong>: Empty string! <strong>BASE CASE!</strong> Returns <strong>""</strong>.' },
+    { action:'pop', returnEntry:'removeChar("") = ""',
+      topFrameUpdate:'<div class="frame-name">rmc("O",\'L\')</div><div class="frame-expr">"O" + <span class="resolved">""</span> = "O"</div>',
+      narration:'<strong>removeChar("")</strong> returns "". <strong>removeChar("O")</strong>: "O" + "" = <strong>"O"</strong>.' },
+    { action:'pop', returnEntry:'removeChar("O") = "O"',
+      topFrameUpdate:'<div class="frame-name">rmc("LO",\'L\')</div><div class="frame-expr">"" + <span class="resolved">"O"</span> = "O"</div>',
+      narration:'<strong>removeChar("O")</strong> returns "O". <strong>removeChar("LO")</strong>: "" + "O" = <strong>"O"</strong>. (\'L\' is gone!)' },
+    { action:'pop', returnEntry:'removeChar("LO") = "O"',
+      topFrameUpdate:'<div class="frame-name">rmc("LLO",\'L\')</div><div class="frame-expr">"" + <span class="resolved">"O"</span> = "O"</div>',
+      narration:'<strong>removeChar("LO")</strong> returns "O". <strong>removeChar("LLO")</strong>: "" + "O" = <strong>"O"</strong>. (Another \'L\' gone!)' },
+    { action:'pop', returnEntry:'removeChar("LLO") = "O"',
+      topFrameUpdate:'<div class="frame-name">rmc("ELLO",\'L\')</div><div class="frame-expr">"E" + <span class="resolved">"O"</span> = "EO"</div>',
+      narration:'<strong>removeChar("LLO")</strong> returns "O". <strong>removeChar("ELLO")</strong>: "E" + "O" = <strong>"EO"</strong>.' },
+    { action:'pop', returnEntry:'removeChar("ELLO") = "EO"',
+      topFrameUpdate:'<div class="frame-name">rmc("HELLO",\'L\')</div><div class="frame-expr">"H" + <span class="resolved">"EO"</span> = "HEO"</div>',
+      narration:'<strong>removeChar("ELLO")</strong> returns "EO". <strong>removeChar("HELLO")</strong>: "H" + "EO" = <strong>"HEO"</strong>.' },
+    { action:'pop', returnEntry:'removeChar("HELLO") = "HEO"  \u2713', isFinal:true,
+      narration:'<strong>removeChar("HELLO")</strong> returns <strong>"HEO"</strong> to main(). Both \'L\' characters removed!' },
+    { action:'pop',
+      narration:'<strong>main()</strong> exits. Result: "HELLO" with all \'L\' removed = <strong>"HEO"</strong>' }
+]);
+
+// --- bsr: binarySearchRec(arr, 0, 6, 16) ---
+registerDemo('bsr', [
+    { action:'push', frameText:'main()', frameClass:'main-frame',
+      narration:'Program starts. <strong>main()</strong> calls <strong>binarySearchRec(arr, 0, 6, 16)</strong>. Array: [2,5,8,12,16,23,38]' },
+    { action:'push', frameText:'<div class="frame-name">bsR(0, 6, 16)</div><div class="frame-expr">mid=3, arr[3]=12 &lt; 16 &rarr; right</div>', frameClass:'depth-1',
+      narration:'<strong>bsR(0,6,16)</strong>: low=0, high=6, mid=3. arr[3]=<strong>12</strong>. Since 12 &lt; 16, target is in <em>RIGHT half</em>. Call bsR(<strong>4</strong>,6,16).' },
+    { action:'push', frameText:'<div class="frame-name">bsR(4, 6, 16)</div><div class="frame-expr">mid=5, arr[5]=23 &gt; 16 &rarr; left</div>', frameClass:'depth-2',
+      narration:'<strong>bsR(4,6,16)</strong>: low=4, high=6, mid=5. arr[5]=<strong>23</strong>. Since 23 &gt; 16, target is in <em>LEFT half</em>. Call bsR(4,<strong>4</strong>,16).' },
+    { action:'push', frameText:'<div class="frame-name">bsR(4, 4, 16)</div><div class="frame-expr">mid=4, arr[4]=16 &rarr; FOUND!</div>', frameClass:'base-frame',
+      narration:'<strong>bsR(4,4,16)</strong>: low=4, high=4, mid=4. arr[4]=<strong>16</strong>. 16 == 16! <strong>BASE CASE! FOUND!</strong> Returns index <strong>4</strong>.' },
+    { action:'pop', returnEntry:'bsR(4,4,16) = 4',
+      topFrameUpdate:'<div class="frame-name">bsR(4, 6, 16)</div><div class="frame-expr">return <span class="resolved">4</span></div>',
+      narration:'<strong>bsR(4,4,16)</strong> returns <strong>4</strong>. bsR(4,6,16) passes this value back up.' },
+    { action:'pop', returnEntry:'bsR(4,6,16) = 4',
+      topFrameUpdate:'<div class="frame-name">bsR(0, 6, 16)</div><div class="frame-expr">return <span class="resolved">4</span></div>',
+      narration:'<strong>bsR(4,6,16)</strong> returns <strong>4</strong>. bsR(0,6,16) passes this value back to main().' },
+    { action:'pop', returnEntry:'bsR(0,6,16) = 4  \u2713', isFinal:true,
+      narration:'<strong>bsR(0,6,16)</strong> returns <strong>4</strong> to main(). Target 16 found at index 4! Only 3 recursive calls for 7 elements.' },
+    { action:'pop',
+      narration:'<strong>main()</strong> exits. Binary search found 16 at index 4 with just <strong>3 comparisons</strong> (log\u2082 7 \u2248 3). This is O(log n)!' }
+]);
+
+// ============================================================
+// ITERATIVE BINARY SEARCH VISUALIZATION
+// ============================================================
+const bsArr = [2, 5, 8, 12, 16, 23, 38];
+const bsTarget = 16;
+
+const bsIterStates = [
+    { low:-1, high:-1, mid:-1, eliminated:[], found:-1,
+      narration:'Array: [2, 5, 8, 12, 16, 23, 38] &mdash; Target: <strong>16</strong>. Press Next to begin.' },
+    { low:0, high:6, mid:3, eliminated:[], found:-1,
+      narration:'<strong>Iteration 1:</strong> low=0, high=6. mid = (0+6)/2 = <strong>3</strong>. arr[3] = <strong>12</strong>. Since 12 &lt; 16, target must be in the <em>right half</em>. Set low = 3+1 = <strong>4</strong>.',
+      logRow:{step:1, low:0, high:6, mid:3, val:12, cmp:'12 &lt; 16', action:'low = 4'} },
+    { low:4, high:6, mid:5, eliminated:[0,1,2,3], found:-1,
+      narration:'<strong>Iteration 2:</strong> low=4, high=6. mid = (4+6)/2 = <strong>5</strong>. arr[5] = <strong>23</strong>. Since 23 &gt; 16, target must be in the <em>left half</em>. Set high = 5-1 = <strong>4</strong>.',
+      logRow:{step:2, low:4, high:6, mid:5, val:23, cmp:'23 &gt; 16', action:'high = 4'} },
+    { low:4, high:4, mid:4, eliminated:[0,1,2,3,5,6], found:-1,
+      narration:'<strong>Iteration 3:</strong> low=4, high=4. mid = (4+4)/2 = <strong>4</strong>. arr[4] = <strong>16</strong>. 16 == 16! <strong>TARGET FOUND!</strong> Return index 4.',
+      logRow:{step:3, low:4, high:4, mid:4, val:16, cmp:'16 == 16', action:'FOUND at index 4! \u2713', isFound:true} },
+    { low:-1, high:-1, mid:-1, eliminated:[0,1,2,3,5,6], found:4,
+      narration:'<strong>Search complete!</strong> Target <strong>16</strong> found at index <strong>4</strong>. Total: only <strong>3 iterations</strong> to search 7 elements! This is O(log n).' }
+];
+
+let bsIterStep = 0;
+
+function bsIterStart() {
+    bsIterStep = 0;
+    document.getElementById('bs-iter-run').style.display = 'none';
+    document.getElementById('bs-iter-next').style.display = '';
+    document.getElementById('bs-iter-next').disabled = false;
+    document.getElementById('bs-iter-next').textContent = 'Next \u2192';
+    document.getElementById('bs-iter-log').innerHTML = '';
+    bsIterRenderArray(bsIterStates[0]);
+    setNarration('bs-iter-narr', bsIterStates[0].narration);
+}
+
+function bsIterNext() {
+    bsIterStep++;
+    if (bsIterStep >= bsIterStates.length) {
+        document.getElementById('bs-iter-next').textContent = 'Done';
+        document.getElementById('bs-iter-next').disabled = true;
+        return;
+    }
+    const state = bsIterStates[bsIterStep];
+    bsIterRenderArray(state);
+    setNarration('bs-iter-narr', state.narration);
+    if (state.logRow) bsIterAddLogRow(state.logRow);
+    if (bsIterStep === bsIterStates.length - 1) {
+        document.getElementById('bs-iter-next').textContent = 'Done';
+        document.getElementById('bs-iter-next').disabled = true;
+    }
+}
+
+function bsIterReset() {
+    bsIterStep = 0;
+    document.getElementById('bs-iter-run').style.display = '';
+    document.getElementById('bs-iter-next').style.display = 'none';
+    document.getElementById('bs-iter-next').textContent = 'Next \u2192';
+    document.getElementById('bs-iter-next').disabled = false;
+    document.getElementById('bs-iter-log').innerHTML = '';
+    setNarration('bs-iter-narr', 'Press "Run" to start the iterative binary search visualization.');
+    bsIterRenderArray({ low:-1, high:-1, mid:-1, eliminated:[], found:-1 });
+}
+
+function bsIterRenderArray(state) {
+    const container = document.getElementById('bs-iter-arr');
+    container.innerHTML = '';
+    bsArr.forEach(function(val, i) {
+        const cell = document.createElement('div');
+        cell.className = 'bs-cell';
+
+        const valDiv = document.createElement('div');
+        valDiv.className = 'bs-value';
+        if (state.found === i) {
+            valDiv.classList.add('bs-found');
+        } else if (state.eliminated && state.eliminated.includes(i)) {
+            valDiv.classList.add('bs-eliminated');
+        } else {
+            if (state.low === i) valDiv.classList.add('bs-low');
+            if (state.high === i) valDiv.classList.add('bs-high');
+            if (state.mid === i) valDiv.classList.add('bs-mid');
+        }
+        valDiv.textContent = val;
+
+        const idxDiv = document.createElement('div');
+        idxDiv.className = 'bs-index';
+        idxDiv.textContent = '[' + i + ']';
+
+        const ptrs = [];
+        if (state.found === i) {
+            ptrs.push('FOUND!');
+        } else if (!state.eliminated || !state.eliminated.includes(i)) {
+            if (state.low === i) ptrs.push('low');
+            if (state.mid === i) ptrs.push('mid');
+            if (state.high === i) ptrs.push('high');
+        }
+        const ptrDiv = document.createElement('div');
+        ptrDiv.className = 'bs-ptr';
+        ptrDiv.textContent = ptrs.join('/');
+
+        cell.appendChild(valDiv);
+        cell.appendChild(idxDiv);
+        cell.appendChild(ptrDiv);
+        container.appendChild(cell);
+    });
+}
+
+function bsIterAddLogRow(row) {
+    const tbody = document.getElementById('bs-iter-log');
+    const tr = document.createElement('tr');
+    if (row.isFound) {
+        tr.style.background = '#d1fae5';
+        tr.style.fontWeight = 'bold';
+        tr.style.color = '#065f46';
+    }
+    tr.innerHTML =
+        '<td>' + row.step + '</td>' +
+        '<td>' + row.low + '</td>' +
+        '<td>' + row.high + '</td>' +
+        '<td>' + row.mid + '</td>' +
+        '<td>' + row.val + '</td>' +
+        '<td>' + row.cmp + '</td>' +
+        '<td>' + row.action + '</td>';
+    tbody.appendChild(tr);
+    tr.style.animation = 'typeLine 0.3s ease';
+}
+
+// Initialize BS array on load
+window.addEventListener('DOMContentLoaded', function() {
+    bsIterRenderArray({ low:-1, high:-1, mid:-1, eliminated:[], found:-1 });
+});
+</script>
+
+</body>
+</html>

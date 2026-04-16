@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Binary Search Tree Question - CPCS204</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        .question-box {
+            background: #ecf0f1;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .keys-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            font-size: 18pt;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .part {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .part-header {
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .marks {
+            float: right;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        .answer-box {
+            border: 2px dashed #bdc3c7;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 60px;
+            background: white;
+        }
+        .tree-area {
+            border: 2px dashed #bdc3c7;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 250px;
+            background: white;
+            text-align: center;
+        }
+        .code-box {
+            border: 2px dashed #bdc3c7;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 200px;
+            background: #f8f8f8;
+            font-family: 'Courier New', monospace;
+        }
+        .true-false {
+            display: flex;
+            gap: 30px;
+            margin: 15px 0;
+        }
+        .tf-option {
+            border: 2px solid #bdc3c7;
+            padding: 10px 30px;
+            border-radius: 5px;
+            background: white;
+        }
+        .note {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.95em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #3498db;
+            color: #7f8c8d;
+        }
+        .total-marks {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 8px 15px;
+            text-align: center;
+        }
+        th {
+            background: #3498db;
+            color: white;
+        }
+        /* Solution styles */
+        .solution-page {
+            page-break-before: always;
+            margin-top: 50px;
+        }
+        .solution-box {
+            background: #d5f4e6;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .tree-svg {
+            display: block;
+            margin: 20px auto;
+        }
+        code {
+            background: #2c3e50;
+            color: #2ecc71;
+            padding: 15px;
+            display: block;
+            border-radius: 5px;
+            font-size: 11pt;
+            white-space: pre;
+        }
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; }
+            .solution-page { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p><a href="../index.html" style="color: #3498db; text-decoration: none;">&larr; Back to CPCS 204 Home</a></p>
+
+        <h1>Binary Search Tree (BST) - Comprehensive Question</h1>
+
+        <div class="total-marks">Total Marks: 15</div>
+
+        <div class="question-box">
+            <strong>Question:</strong> You are given the following keys to insert into an initially empty <strong>Binary Search Tree (BST)</strong>. Insert them in the given order from left to right.
+        </div>
+
+        <div class="keys-box">
+            Keys: 50, 25, 75, 10, 30, 60, 90, 5, 15, 28, 55, 85
+        </div>
+
+        <div class="note">
+            <strong>Insertion Rule:</strong> For each key k, if k &lt; current node, go left; if k &gt; current node, go right.
+        </div>
+
+        <!-- Part A -->
+        <div class="part">
+            <span class="part-header">Part A</span>
+            <span class="marks">3 Marks</span>
+            <p><strong>Construct the Binary Search Tree</strong> by inserting the keys in the given order. Draw the final tree.</p>
+            <div class="tree-area">
+                <!-- Student draws tree here -->
+            </div>
+        </div>
+
+        <!-- Part B -->
+        <div class="part">
+            <span class="part-header">Part B</span>
+            <span class="marks">3 Marks</span>
+            <p><strong>Write the Post-Order traversal</strong> of the tree you constructed.</p>
+            <div class="note">Post-Order: Left subtree &rarr; Right subtree &rarr; Root</div>
+            <div class="answer-box">
+                Post-Order: ________________________________________________________
+            </div>
+        </div>
+
+        <!-- Part C -->
+        <div class="part">
+            <span class="part-header">Part C</span>
+            <span class="marks">3 Marks</span>
+            <p><strong>True or False:</strong> Answer the following questions about the tree.</p>
+
+            <table style="width: 100%;">
+                <tr>
+                    <th style="width: 70%;">Statement</th>
+                    <th style="width: 15%;">True</th>
+                    <th style="width: 15%;">False</th>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">1. This BST is a <strong>Complete Binary Tree</strong></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">2. This BST is a <strong>Full Binary Tree</strong></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">3. The height of this BST is <strong>4</strong></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Part D -->
+        <div class="part">
+            <span class="part-header">Part D</span>
+            <span class="marks">3 Marks</span>
+            <p><strong>Delete node 25</strong> from the tree. Draw the resulting tree after deletion.</p>
+            <div class="tree-area" style="min-height: 200px;">
+                <!-- Student draws tree after deletion here -->
+            </div>
+        </div>
+
+        <!-- Part E -->
+        <div class="part">
+            <span class="part-header">Part E</span>
+            <span class="marks">3 Marks</span>
+            <p><strong>Write a recursive method</strong> that counts the number of nodes containing <strong>even numbers</strong> in a BST.</p>
+            <div class="note">Method signature: <code style="display: inline; padding: 3px 8px;">int countEven(Node root)</code></div>
+            <div class="code-box">
+public int countEven(Node root) {
+
+
+
+
+
+
+
+
+
+}
+            </div>
+        </div>
+
+        <div class="footer">
+            <strong>Prepared by Dr. Almalawi</strong> | CPCS 204 - Data Structures
+        </div>
+
+        <!-- ==================== SOLUTION PAGE ==================== -->
+        <div class="solution-page">
+            <h1>Solution</h1>
+
+            <!-- Solution Part A -->
+            <h2>Part A: BST Construction (3 Marks)</h2>
+            <div class="solution-box">
+                <p><strong>Insertion Order:</strong> 50, 25, 75, 10, 30, 60, 90, 5, 15, 28, 55, 85</p>
+
+                <svg class="tree-svg" width="600" height="320" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Level 0: Root -->
+                    <circle cx="300" cy="40" r="22" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="300" y="47" text-anchor="middle" fill="white" font-size="16" font-weight="bold">50</text>
+
+                    <!-- Level 1 -->
+                    <line x1="280" y1="55" x2="180" y2="95" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="320" y1="55" x2="420" y2="95" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="170" cy="110" r="22" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="170" y="117" text-anchor="middle" fill="white" font-size="16" font-weight="bold">25</text>
+
+                    <circle cx="430" cy="110" r="22" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="430" y="117" text-anchor="middle" fill="white" font-size="16" font-weight="bold">75</text>
+
+                    <!-- Level 2 -->
+                    <line x1="152" y1="128" x2="95" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="188" y1="128" x2="245" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="412" y1="128" x2="355" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="448" y1="128" x2="505" y2="165" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="85" cy="180" r="22" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="85" y="187" text-anchor="middle" fill="white" font-size="16" font-weight="bold">10</text>
+
+                    <circle cx="255" cy="180" r="22" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="255" y="187" text-anchor="middle" fill="white" font-size="16" font-weight="bold">30</text>
+
+                    <circle cx="345" cy="180" r="22" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="345" y="187" text-anchor="middle" fill="white" font-size="16" font-weight="bold">60</text>
+
+                    <circle cx="515" cy="180" r="22" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="515" y="187" text-anchor="middle" fill="white" font-size="16" font-weight="bold">90</text>
+
+                    <!-- Level 3 -->
+                    <line x1="68" y1="198" x2="45" y2="235" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="102" y1="198" x2="125" y2="235" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="238" y1="198" x2="215" y2="235" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="328" y1="198" x2="305" y2="235" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="498" y1="198" x2="475" y2="235" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="40" cy="250" r="22" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="40" y="257" text-anchor="middle" fill="white" font-size="16" font-weight="bold">5</text>
+
+                    <circle cx="130" cy="250" r="22" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="130" y="257" text-anchor="middle" fill="white" font-size="16" font-weight="bold">15</text>
+
+                    <circle cx="210" cy="250" r="22" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="210" y="257" text-anchor="middle" fill="white" font-size="16" font-weight="bold">28</text>
+
+                    <circle cx="300" cy="250" r="22" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="300" y="257" text-anchor="middle" fill="white" font-size="16" font-weight="bold">55</text>
+
+                    <circle cx="470" cy="250" r="22" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="470" y="257" text-anchor="middle" fill="white" font-size="16" font-weight="bold">85</text>
+
+                    <!-- Legend -->
+                    <rect x="20" y="290" width="15" height="15" fill="#3498db"/>
+                    <text x="40" y="302" font-size="11">Even numbers (50, 10, 30, 60, 90, 28)</text>
+                    <rect x="280" y="290" width="15" height="15" fill="#27ae60"/>
+                    <text x="300" y="302" font-size="11">Odd numbers (25, 75, 5, 15, 55, 85)</text>
+                </svg>
+
+                <p><strong>Tree Properties:</strong></p>
+                <ul>
+                    <li>Total nodes: 12</li>
+                    <li>Height: 3 (counting edges) or 4 (counting levels)</li>
+                    <li>Even numbers: 50, 10, 30, 60, 90, 28 (6 nodes)</li>
+                    <li>Odd numbers: 25, 75, 5, 15, 55, 85 (6 nodes)</li>
+                </ul>
+            </div>
+
+            <!-- Solution Part B -->
+            <h2>Part B: Post-Order Traversal (3 Marks)</h2>
+            <div class="solution-box">
+                <p><strong>Post-Order (Left → Right → Root):</strong></p>
+                <p style="font-size: 14pt; font-weight: bold; text-align: center; padding: 15px; background: #fff; border: 2px solid #27ae60; border-radius: 5px;">
+                    5, 15, 10, 28, 30, 25, 55, 60, 85, 90, 75, 50
+                </p>
+
+                <p><strong>Step-by-step:</strong></p>
+                <ol>
+                    <li>Process left subtree of 50 → left subtree of 25 → left subtree of 10: <strong>5</strong></li>
+                    <li>Right subtree of 10: <strong>15</strong></li>
+                    <li>Root 10: <strong>10</strong></li>
+                    <li>Right subtree of 25 → left subtree of 30: <strong>28</strong></li>
+                    <li>Root 30: <strong>30</strong></li>
+                    <li>Root 25: <strong>25</strong></li>
+                    <li>Right subtree of 50 → left subtree of 75 → left subtree of 60: <strong>55</strong></li>
+                    <li>Root 60: <strong>60</strong></li>
+                    <li>Right subtree of 75 → left subtree of 90: <strong>85</strong></li>
+                    <li>Root 90: <strong>90</strong></li>
+                    <li>Root 75: <strong>75</strong></li>
+                    <li>Root 50: <strong>50</strong></li>
+                </ol>
+            </div>
+
+            <!-- Solution Part C -->
+            <h2>Part C: True or False (3 Marks)</h2>
+            <div class="solution-box">
+                <table style="width: 100%;">
+                    <tr>
+                        <th style="width: 60%;">Statement</th>
+                        <th style="width: 15%;">Answer</th>
+                        <th style="width: 25%;">Explanation</th>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">1. This BST is a Complete Binary Tree</td>
+                        <td><strong style="color: #e74c3c;">FALSE</strong></td>
+                        <td>Level 3 is not filled left-to-right (node 30 has no right child)</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">2. This BST is a Full Binary Tree</td>
+                        <td><strong style="color: #e74c3c;">FALSE</strong></td>
+                        <td>Nodes 30, 60, 90 have only one child each</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">3. The height of this BST is 4</td>
+                        <td><strong style="color: #27ae60;">TRUE</strong></td>
+                        <td>4 levels (0→1→2→3) or height = 3 if counting edges</td>
+                    </tr>
+                </table>
+
+                <div class="note" style="margin-top: 15px;">
+                    <strong>Definitions:</strong><br>
+                    • <strong>Complete Binary Tree:</strong> All levels completely filled except possibly the last, which is filled from left to right.<br>
+                    • <strong>Full Binary Tree:</strong> Every node has either 0 or 2 children (no node has exactly 1 child).
+                </div>
+            </div>
+
+            <!-- Solution Part D -->
+            <h2>Part D: Delete Node 25 (3 Marks)</h2>
+            <div class="solution-box">
+                <p style="background: #fff3cd; padding: 10px; border-radius: 5px; border: 1px solid #ffc107;"><strong>Note:</strong> Both methods are correct. Students may use either one.</p>
+
+                <!-- Method 1: In-order Successor -->
+                <h3 style="color: #2980b9; margin-top: 20px;">Method 1: In-order Successor</h3>
+                <p><strong>Steps:</strong></p>
+                <ol>
+                    <li>Node 25 has two children (10 and 30)</li>
+                    <li>Find in-order successor: smallest value in <strong>right subtree</strong> = <strong>28</strong></li>
+                    <li>Replace 25 with 28</li>
+                    <li>Delete original node 28</li>
+                </ol>
+
+                <svg class="tree-svg" width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Title -->
+                    <text x="300" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#2980b9">Using In-order Successor (28)</text>
+
+                    <!-- Level 0: Root -->
+                    <circle cx="300" cy="50" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="300" y="57" text-anchor="middle" fill="white" font-size="14" font-weight="bold">50</text>
+
+                    <!-- Level 1 -->
+                    <line x1="282" y1="65" x2="185" y2="100" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="318" y1="65" x2="415" y2="100" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="170" cy="115" r="20" fill="#e74c3c" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="170" y="122" text-anchor="middle" fill="white" font-size="14" font-weight="bold">28</text>
+
+                    <circle cx="430" cy="115" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="430" y="122" text-anchor="middle" fill="white" font-size="14" font-weight="bold">75</text>
+
+                    <!-- Level 2 -->
+                    <line x1="153" y1="132" x2="100" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="187" y1="132" x2="240" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="413" y1="132" x2="360" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="447" y1="132" x2="500" y2="165" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="85" cy="180" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="85" y="187" text-anchor="middle" fill="white" font-size="14" font-weight="bold">10</text>
+
+                    <circle cx="255" cy="180" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="255" y="187" text-anchor="middle" fill="white" font-size="14" font-weight="bold">30</text>
+
+                    <circle cx="345" cy="180" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="345" y="187" text-anchor="middle" fill="white" font-size="14" font-weight="bold">60</text>
+
+                    <circle cx="515" cy="180" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="515" y="187" text-anchor="middle" fill="white" font-size="14" font-weight="bold">90</text>
+
+                    <!-- Level 3 -->
+                    <line x1="70" y1="197" x2="50" y2="225" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="100" y1="197" x2="120" y2="225" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="330" y1="197" x2="310" y2="225" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="500" y1="197" x2="480" y2="225" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="45" cy="240" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="45" y="247" text-anchor="middle" fill="white" font-size="14" font-weight="bold">5</text>
+
+                    <circle cx="125" cy="240" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="125" y="247" text-anchor="middle" fill="white" font-size="14" font-weight="bold">15</text>
+
+                    <circle cx="305" cy="240" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="305" y="247" text-anchor="middle" fill="white" font-size="14" font-weight="bold">55</text>
+
+                    <circle cx="475" cy="240" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="475" y="247" text-anchor="middle" fill="white" font-size="14" font-weight="bold">85</text>
+
+                    <!-- Note -->
+                    <text x="300" y="280" text-anchor="middle" font-size="11" fill="#e74c3c">Node 30 now has no left child (28 moved up)</text>
+                </svg>
+
+                <!-- Method 2: In-order Predecessor -->
+                <h3 style="color: #27ae60; margin-top: 30px;">Method 2: In-order Predecessor</h3>
+                <p><strong>Steps:</strong></p>
+                <ol>
+                    <li>Node 25 has two children (10 and 30)</li>
+                    <li>Find in-order predecessor: largest value in <strong>left subtree</strong> = <strong>15</strong></li>
+                    <li>Replace 25 with 15</li>
+                    <li>Delete original node 15</li>
+                </ol>
+
+                <svg class="tree-svg" width="600" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Title -->
+                    <text x="300" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#27ae60">Using In-order Predecessor (15)</text>
+
+                    <!-- Level 0: Root -->
+                    <circle cx="300" cy="50" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="300" y="57" text-anchor="middle" fill="white" font-size="14" font-weight="bold">50</text>
+
+                    <!-- Level 1 -->
+                    <line x1="282" y1="65" x2="185" y2="100" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="318" y1="65" x2="415" y2="100" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="170" cy="115" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="170" y="122" text-anchor="middle" fill="white" font-size="14" font-weight="bold">15</text>
+
+                    <circle cx="430" cy="115" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="430" y="122" text-anchor="middle" fill="white" font-size="14" font-weight="bold">75</text>
+
+                    <!-- Level 2 -->
+                    <line x1="153" y1="132" x2="100" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="187" y1="132" x2="240" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="413" y1="132" x2="360" y2="165" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="447" y1="132" x2="500" y2="165" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="85" cy="180" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="85" y="187" text-anchor="middle" fill="white" font-size="14" font-weight="bold">10</text>
+
+                    <circle cx="255" cy="180" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="255" y="187" text-anchor="middle" fill="white" font-size="14" font-weight="bold">30</text>
+
+                    <circle cx="345" cy="180" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="345" y="187" text-anchor="middle" fill="white" font-size="14" font-weight="bold">60</text>
+
+                    <circle cx="515" cy="180" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="515" y="187" text-anchor="middle" fill="white" font-size="14" font-weight="bold">90</text>
+
+                    <!-- Level 3 -->
+                    <line x1="70" y1="197" x2="50" y2="225" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="240" y1="197" x2="220" y2="225" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="330" y1="197" x2="310" y2="225" stroke="#2c3e50" stroke-width="2"/>
+                    <line x1="500" y1="197" x2="480" y2="225" stroke="#2c3e50" stroke-width="2"/>
+
+                    <circle cx="45" cy="240" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="45" y="247" text-anchor="middle" fill="white" font-size="14" font-weight="bold">5</text>
+
+                    <circle cx="215" cy="240" r="20" fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="215" y="247" text-anchor="middle" fill="white" font-size="14" font-weight="bold">28</text>
+
+                    <circle cx="305" cy="240" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="305" y="247" text-anchor="middle" fill="white" font-size="14" font-weight="bold">55</text>
+
+                    <circle cx="475" cy="240" r="20" fill="#27ae60" stroke="#2c3e50" stroke-width="2"/>
+                    <text x="475" y="247" text-anchor="middle" fill="white" font-size="14" font-weight="bold">85</text>
+
+                    <!-- Note -->
+                    <text x="300" y="280" text-anchor="middle" font-size="11" fill="#27ae60">Node 10 now has no right child (15 moved up)</text>
+                </svg>
+            </div>
+
+            <!-- Solution Part E -->
+            <h2>Part E: Count Even Nodes (3 Marks)</h2>
+            <div class="solution-box">
+                <p><strong>Recursive Solution:</strong></p>
+                <code>public int countEven(Node root) {
+    // Base case: empty tree
+    if (root == null) {
+        return 0;
+    }
+
+    // Check if current node is even
+    int count = 0;
+    if (root.data % 2 == 0) {
+        count = 1;
+    }
+
+    // Recursively count in left and right subtrees
+    return count + countEven(root.left) + countEven(root.right);
+}</code>
+
+                <p style="margin-top: 15px;"><strong>Alternative (Compact Version):</strong></p>
+                <code>public int countEven(Node root) {
+    if (root == null) return 0;
+
+    int isEven = (root.data % 2 == 0) ? 1 : 0;
+    return isEven + countEven(root.left) + countEven(root.right);
+}</code>
+
+                <p style="margin-top: 15px;"><strong>For this tree:</strong> countEven returns <strong>6</strong> (nodes: 50, 10, 30, 60, 90, 28)</p>
+            </div>
+
+            <div class="footer">
+                <strong>Prepared by Dr. Almalawi</strong> | CPCS 204 - Data Structures
+            </div>
+        </div>
+    </div>
+</body>
+</html>

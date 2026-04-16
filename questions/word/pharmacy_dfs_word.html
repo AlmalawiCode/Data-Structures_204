@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Pharmacy DFS - Word</title>
+</head>
+<body style="font-family: Times New Roman; font-size: 12pt; margin: 40px;">
+
+<h2 style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">Pharmacy Network - DFS Traversal</h2>
+
+<p><strong>Question:</strong> A city has <strong>10 pharmacies</strong> (A, B, C, D, E, F, G, H, I, J) connected by roads. Each road has a <strong>congestion level</strong> (weight). Ali starts at <strong>Pharmacy A</strong> and wants to visit all pharmacies using <strong>DFS</strong>.</p>
+
+<table border="1" cellpadding="10" cellspacing="0" style="margin: 15px 0;">
+    <tr>
+        <td><strong>Rule:</strong></td>
+        <td>Visit the pharmacy connected by the road with the <strong>HIGHEST congestion level first</strong>.</td>
+    </tr>
+</table>
+
+<p><strong>Graph:</strong></p>
+
+<div style="text-align: center; margin: 20px 0; border: 1px solid black; padding: 10px;">
+    <svg width="650" height="450" xmlns="http://www.w3.org/2000/svg">
+        <!-- Edges with weights -->
+        <!-- A-B (15) -->
+        <line x1="90" y1="70" x2="230" y2="45" stroke="#000" stroke-width="2"/>
+        <rect x="150" y="38" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="163" y="52" text-anchor="middle" font-size="11" font-weight="bold">15</text>
+
+        <!-- A-C (8) -->
+        <line x1="90" y1="90" x2="90" y2="180" stroke="#000" stroke-width="2"/>
+        <rect x="77" y="125" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="90" y="139" text-anchor="middle" font-size="11" font-weight="bold">8</text>
+
+        <!-- A-D (12) -->
+        <line x1="110" y1="80" x2="200" y2="125" stroke="#000" stroke-width="2"/>
+        <rect x="142" y="88" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="155" y="102" text-anchor="middle" font-size="11" font-weight="bold">12</text>
+
+        <!-- B-D (6) -->
+        <line x1="230" y1="60" x2="220" y2="115" stroke="#000" stroke-width="2"/>
+        <rect x="212" y="78" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="225" y="92" text-anchor="middle" font-size="11" font-weight="bold">6</text>
+
+        <!-- B-E (18) -->
+        <line x1="255" y1="45" x2="370" y2="45" stroke="#000" stroke-width="2"/>
+        <rect x="300" y="27" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="313" y="41" text-anchor="middle" font-size="11" font-weight="bold">18</text>
+
+        <!-- B-F (3) -->
+        <line x1="248" y1="60" x2="320" y2="125" stroke="#000" stroke-width="2"/>
+        <rect x="272" y="80" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="285" y="94" text-anchor="middle" font-size="11" font-weight="bold">3</text>
+
+        <!-- C-D (11) -->
+        <line x1="110" y1="195" x2="200" y2="145" stroke="#000" stroke-width="2"/>
+        <rect x="142" y="158" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="155" y="172" text-anchor="middle" font-size="11" font-weight="bold">11</text>
+
+        <!-- C-G (14) -->
+        <line x1="90" y1="215" x2="90" y2="300" stroke="#000" stroke-width="2"/>
+        <rect x="77" y="248" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="90" y="262" text-anchor="middle" font-size="11" font-weight="bold">14</text>
+
+        <!-- D-F (9) -->
+        <line x1="240" y1="135" x2="320" y2="135" stroke="#000" stroke-width="2"/>
+        <rect x="267" y="120" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="280" y="134" text-anchor="middle" font-size="11" font-weight="bold">9</text>
+
+        <!-- D-H (5) -->
+        <line x1="220" y1="155" x2="220" y2="250" stroke="#000" stroke-width="2"/>
+        <rect x="207" y="193" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="220" y="207" text-anchor="middle" font-size="11" font-weight="bold">5</text>
+
+        <!-- E-F (16) -->
+        <line x1="370" y1="60" x2="345" y2="115" stroke="#000" stroke-width="2"/>
+        <rect x="345" y="78" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="358" y="92" text-anchor="middle" font-size="11" font-weight="bold">16</text>
+
+        <!-- E-J (19) -->
+        <line x1="395" y1="52" x2="505" y2="105" stroke="#000" stroke-width="2"/>
+        <rect x="438" y="65" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="451" y="79" text-anchor="middle" font-size="11" font-weight="bold">19</text>
+
+        <!-- F-I (13) -->
+        <line x1="350" y1="150" x2="410" y2="250" stroke="#000" stroke-width="2"/>
+        <rect x="368" y="190" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="381" y="204" text-anchor="middle" font-size="11" font-weight="bold">13</text>
+
+        <!-- G-H (17) -->
+        <line x1="110" y1="320" x2="200" y2="275" stroke="#000" stroke-width="2"/>
+        <rect x="142" y="285" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="155" y="299" text-anchor="middle" font-size="11" font-weight="bold">17</text>
+
+        <!-- H-I (10) -->
+        <line x1="240" y1="268" x2="395" y2="268" stroke="#000" stroke-width="2"/>
+        <rect x="305" y="253" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="318" y="267" text-anchor="middle" font-size="11" font-weight="bold">10</text>
+
+        <!-- I-J (7) -->
+        <line x1="430" y1="250" x2="515" y2="140" stroke="#000" stroke-width="2"/>
+        <rect x="460" y="183" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="473" y="197" text-anchor="middle" font-size="11" font-weight="bold">7</text>
+
+        <!-- J-F (4) -->
+        <line x1="505" y1="115" x2="365" y2="135" stroke="#000" stroke-width="2"/>
+        <rect x="422" y="110" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="435" y="124" text-anchor="middle" font-size="11" font-weight="bold">4</text>
+
+        <!-- G-I (2) -->
+        <line x1="110" y1="330" x2="400" y2="285" stroke="#000" stroke-width="2"/>
+        <rect x="242" y="298" width="26" height="18" fill="#fff" stroke="#000"/>
+        <text x="255" y="312" text-anchor="middle" font-size="11" font-weight="bold">2</text>
+
+        <!-- Nodes -->
+        <circle cx="90" cy="70" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="90" y="77" text-anchor="middle" font-size="18" font-weight="bold">A</text>
+
+        <circle cx="240" cy="45" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="240" y="52" text-anchor="middle" font-size="18" font-weight="bold">B</text>
+
+        <circle cx="90" cy="200" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="90" y="207" text-anchor="middle" font-size="18" font-weight="bold">C</text>
+
+        <circle cx="220" cy="135" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="220" y="142" text-anchor="middle" font-size="18" font-weight="bold">D</text>
+
+        <circle cx="385" cy="45" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="385" y="52" text-anchor="middle" font-size="18" font-weight="bold">E</text>
+
+        <circle cx="340" cy="135" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="340" y="142" text-anchor="middle" font-size="18" font-weight="bold">F</text>
+
+        <circle cx="90" cy="325" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="90" y="332" text-anchor="middle" font-size="18" font-weight="bold">G</text>
+
+        <circle cx="220" cy="268" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="220" y="275" text-anchor="middle" font-size="18" font-weight="bold">H</text>
+
+        <circle cx="420" cy="268" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="420" y="275" text-anchor="middle" font-size="18" font-weight="bold">I</text>
+
+        <circle cx="525" cy="118" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="525" y="125" text-anchor="middle" font-size="18" font-weight="bold">J</text>
+
+        <!-- Start label -->
+        <text x="90" y="30" text-anchor="middle" font-size="12" font-weight="bold">(Start)</text>
+    </svg>
+</div>
+
+<p><strong>Adjacency List:</strong></p>
+
+<table border="1" cellpadding="8" cellspacing="0" style="font-size: 11pt;">
+    <tr style="background-color: #e0e0e0;">
+        <td><strong>Node</strong></td>
+        <td><strong>Neighbors (Weight)</strong></td>
+    </tr>
+    <tr><td>A</td><td>B(15), D(12), C(8)</td></tr>
+    <tr><td>B</td><td>E(18), A(15), D(6), F(3)</td></tr>
+    <tr><td>C</td><td>G(14), D(11), A(8)</td></tr>
+    <tr><td>D</td><td>A(12), C(11), F(9), B(6), H(5)</td></tr>
+    <tr><td>E</td><td>J(19), B(18), F(16)</td></tr>
+    <tr><td>F</td><td>E(16), I(13), D(9), J(4), B(3)</td></tr>
+    <tr><td>G</td><td>H(17), C(14), I(2)</td></tr>
+    <tr><td>H</td><td>G(17), I(10), D(5)</td></tr>
+    <tr><td>I</td><td>F(13), H(10), J(7), G(2)</td></tr>
+    <tr><td>J</td><td>E(19), I(7), F(4)</td></tr>
+</table>
+
+<p><strong>Answer:</strong></p>
+<p style="font-size: 14pt; border: 1px dashed black; padding: 15px;">
+    A → ____ → ____ → ____ → ____ → ____ → ____ → ____ → ____ → ____
+</p>
+
+<br>
+<p style="text-align: center; font-size: 10pt; border-top: 1px solid black; padding-top: 10px;"><strong>Prepared by Dr. Almalawi</strong> | CPCS 204 - Data Structures</p>
+
+<br><br><br>
+
+<h2 style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">Solution</h2>
+
+<table border="1" cellpadding="8" cellspacing="0" style="font-size: 11pt;">
+    <tr style="background-color: #e0e0e0;">
+        <td><strong>Step</strong></td>
+        <td><strong>At</strong></td>
+        <td><strong>Unvisited Neighbors</strong></td>
+        <td><strong>Choose</strong></td>
+    </tr>
+    <tr><td>1</td><td>A</td><td>B(15), D(12), C(8)</td><td>B</td></tr>
+    <tr><td>2</td><td>B</td><td>E(18), D(6), F(3)</td><td>E</td></tr>
+    <tr><td>3</td><td>E</td><td>J(19), F(16)</td><td>J</td></tr>
+    <tr><td>4</td><td>J</td><td>I(7), F(4)</td><td>I</td></tr>
+    <tr><td>5</td><td>I</td><td>F(13), H(10), G(2)</td><td>F</td></tr>
+    <tr><td>6</td><td>F</td><td>D(9)</td><td>D</td></tr>
+    <tr><td>7</td><td>D</td><td>C(11), H(5)</td><td>C</td></tr>
+    <tr><td>8</td><td>C</td><td>G(14)</td><td>G</td></tr>
+    <tr><td>9</td><td>G</td><td>H(17)</td><td>H</td></tr>
+    <tr><td>10</td><td>H</td><td>-</td><td>Done</td></tr>
+</table>
+
+<p><strong>Final Answer:</strong></p>
+<p style="font-size: 14pt; border: 2px solid black; padding: 15px; text-align: center; font-weight: bold;">
+    A → B → E → J → I → F → D → C → G → H
+</p>
+
+<br>
+<p style="text-align: center; font-size: 10pt; border-top: 1px solid black; padding-top: 10px;"><strong>Prepared by Dr. Almalawi</strong> | CPCS 204 - Data Structures</p>
+
+</body>
+</html>

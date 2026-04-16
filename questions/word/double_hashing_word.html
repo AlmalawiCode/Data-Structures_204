@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Double Hashing - Word</title>
+</head>
+<body style="font-family: Times New Roman; font-size: 12pt; margin: 40px;">
+
+<h2 style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">Double Hashing</h2>
+
+<p><strong>Question:</strong> You have the following keys that need to be stored for fast retrieval. Use <strong>Double Hashing</strong> to insert them into a hash table.</p>
+
+<table border="1" cellpadding="10" cellspacing="0" style="margin: 20px 0;">
+    <tr>
+        <td><strong>Given:</strong></td>
+        <td>
+            Table Size m = 11<br>
+            h₁(k) = k mod 11<br>
+            h₂(k) = 7 - (k mod 7)
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Keys to Insert:</strong></td>
+        <td>23, 45, 67, 12, 34, 56, 78, 89</td>
+    </tr>
+</table>
+
+<p><strong>Hash Table:</strong></p>
+
+<table border="1" cellpadding="10" cellspacing="0" style="text-align: center;">
+    <tr style="background-color: #e0e0e0;">
+        <td><strong>Index</strong></td>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><strong>Value</strong></td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+</table>
+
+<p><strong>Work Area:</strong></p>
+
+<table border="1" cellpadding="0" cellspacing="0" style="width: 100%; height: 250px;">
+    <tr><td>&nbsp;</td></tr>
+</table>
+
+<br><br>
+<p style="text-align: center; font-size: 10pt; border-top: 1px solid black; padding-top: 10px;"><strong>Prepared by Dr. Almalawi</strong> | CPCS 204 - Data Structures</p>
+
+<br><br><br>
+
+<h2 style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">Solution</h2>
+
+<table border="1" cellpadding="8" cellspacing="0" style="font-size: 11pt;">
+    <tr style="background-color: #e0e0e0;">
+        <td><strong>Key</strong></td>
+        <td><strong>h₁(k)</strong></td>
+        <td><strong>h₂(k)</strong></td>
+        <td><strong>Probes</strong></td>
+        <td><strong>Index</strong></td>
+    </tr>
+    <tr>
+        <td>23</td>
+        <td>23 mod 11 = 1</td>
+        <td>7 - (23 mod 7) = 5</td>
+        <td>i=0: 1 ✓</td>
+        <td><strong>1</strong></td>
+    </tr>
+    <tr>
+        <td>45</td>
+        <td>45 mod 11 = 1</td>
+        <td>7 - (45 mod 7) = 4</td>
+        <td>i=0: 1 ✗, i=1: 5 ✓</td>
+        <td><strong>5</strong></td>
+    </tr>
+    <tr>
+        <td>67</td>
+        <td>67 mod 11 = 1</td>
+        <td>7 - (67 mod 7) = 3</td>
+        <td>i=0: 1 ✗, i=1: 4 ✓</td>
+        <td><strong>4</strong></td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>12 mod 11 = 1</td>
+        <td>7 - (12 mod 7) = 2</td>
+        <td>i=0: 1 ✗, i=1: 3 ✓</td>
+        <td><strong>3</strong></td>
+    </tr>
+    <tr>
+        <td>34</td>
+        <td>34 mod 11 = 1</td>
+        <td>7 - (34 mod 7) = 1</td>
+        <td>i=0: 1 ✗, i=1: 2 ✓</td>
+        <td><strong>2</strong></td>
+    </tr>
+    <tr>
+        <td>56</td>
+        <td>56 mod 11 = 1</td>
+        <td>7 - (56 mod 7) = 7</td>
+        <td>i=0: 1 ✗, i=1: 8 ✓</td>
+        <td><strong>8</strong></td>
+    </tr>
+    <tr>
+        <td>78</td>
+        <td>78 mod 11 = 1</td>
+        <td>7 - (78 mod 7) = 6</td>
+        <td>i=0: 1 ✗, i=1: 7 ✓</td>
+        <td><strong>7</strong></td>
+    </tr>
+    <tr>
+        <td>89</td>
+        <td>89 mod 11 = 1</td>
+        <td>7 - (89 mod 7) = 2</td>
+        <td>i=0: 1 ✗, i=1: 3 ✗, i=2: 5 ✗, i=3: 7 ✗, i=4: 9 ✓</td>
+        <td><strong>9</strong></td>
+    </tr>
+</table>
+
+<p><strong>Final Hash Table:</strong></p>
+
+<table border="1" cellpadding="10" cellspacing="0" style="text-align: center;">
+    <tr style="background-color: #e0e0e0;">
+        <td><strong>Index</strong></td>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><strong>Value</strong></td>
+        <td>-</td>
+        <td><strong>23</strong></td>
+        <td><strong>34</strong></td>
+        <td><strong>12</strong></td>
+        <td><strong>67</strong></td>
+        <td><strong>45</strong></td>
+        <td>-</td>
+        <td><strong>78</strong></td>
+        <td><strong>56</strong></td>
+        <td><strong>89</strong></td>
+        <td>-</td>
+    </tr>
+</table>
+
+<br>
+<p style="text-align: center; font-size: 10pt; border-top: 1px solid black; padding-top: 10px;"><strong>Prepared by Dr. Almalawi</strong> | CPCS 204 - Data Structures</p>
+
+</body>
+</html>

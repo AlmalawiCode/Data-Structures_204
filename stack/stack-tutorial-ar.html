@@ -1,0 +1,3274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>هياكل البيانات - المكدس - دليل شامل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Amiri', 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.8;
+            direction: rtl;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        code {
+            direction: ltr;
+            unicode-bidi: isolate;
+            display: inline-block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        /* Language Switch Button */
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 0.95rem;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .lang-switch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header img {
+            width: 8cm;
+            height: 4cm;
+            object-fit: contain;
+        }
+
+        header .header-text {
+            text-align: right;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-right: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-right: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-right: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        ul, ol {
+            margin-right: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Code Blocks */
+        .code-container { margin: 20px 0; }
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.15em;
+            transition: background 0.3s;
+            direction: ltr;
+            text-align: left;
+        }
+        .code-header:hover { background: #5568d3; }
+        .code-toggle { font-size: 1.2em; transition: transform 0.3s; }
+        .code-toggle.collapsed { transform: rotate(-90deg); }
+
+        .code-block {
+            background: #000000;
+            color: #f8f8f2;
+            padding: 25px 30px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.25em;
+            line-height: 1.8;
+            white-space: pre;
+            max-height: 800px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+            letter-spacing: 0.3px;
+            direction: ltr;
+            text-align: left;
+        }
+        .code-block.collapsed { max-height: 0; padding: 0 20px; overflow: hidden; }
+        .code-block .comment { color: #7a8bbf; }
+
+        /* Algorithm Steps Styling */
+        .algorithm-steps {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .algorithm-steps h4 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .algorithm-steps ol {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .algorithm-steps ol > li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-right: 60px;
+            padding-left: 15px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 60px 15px 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .algorithm-steps ol > li::before {
+            content: counter(step-counter);
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: white;
+            color: #667eea;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .algorithm-steps ul {
+            margin-top: 10px;
+            padding-right: 20px;
+        }
+
+        .algorithm-steps ul li {
+            margin: 8px 0;
+            padding-right: 25px;
+            position: relative;
+        }
+
+        .algorithm-steps ul li::before {
+            content: "←";
+            position: absolute;
+            right: 0;
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .algorithm-steps ul ul li::before {
+            content: "•";
+            color: #90caf9;
+        }
+
+        .algorithm-steps code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #ffd700;
+            font-weight: bold;
+            direction: ltr;
+        }
+
+        .algorithm-steps strong {
+            color: #ffd700;
+        }
+
+        .step-example {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border-right: 4px solid #ffd700;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.95em;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .code-block .keyword { color: #ff79c6; font-weight: bold; }
+        .code-block .class-name { color: #50fa7b; font-weight: bold; }
+        .code-block .method { color: #8be9fd; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .number { color: #bd93f9; }
+
+        /* Stack Visualization */
+        .stack-visualization {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            min-height: 300px;
+            justify-content: flex-start;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+
+        .stack-item {
+            width: 200px;
+            padding: 15px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+            animation: pushItem 0.5s ease;
+        }
+
+        @keyframes pushItem {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stack-label {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Calculator Styles */
+        .calculator {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .calculator h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            background: white;
+            border: 2px solid #4caf50;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+
+        .result-box h4 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .steps-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .step {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f0f4ff;
+            border-right: 3px solid #667eea;
+            border-radius: 3px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .stack-state {
+            display: inline-block;
+            background: #764ba2;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin: 5px 0 5px 5px;
+            font-family: monospace;
+            direction: ltr;
+        }
+
+        .error {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: right;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .example-card {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .example-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .example-card p {
+            color: #555;
+        }
+
+        /* Interactive Demo */
+        .interactive-demo {
+            background: #f9f9f9;
+            border: 2px solid #764ba2;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .demo-stack {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            min-height: 350px;
+            border: 3px dashed #764ba2;
+            border-radius: 10px;
+            padding: 20px;
+            background: white;
+            position: relative;
+        }
+
+        .demo-stack-item {
+            width: 250px;
+            padding: 20px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            animation: pushAnimation 0.5s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes pushAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .demo-stack-item.popping {
+            animation: popAnimation 0.5s ease;
+        }
+
+        @keyframes popAnimation {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.8);
+            }
+        }
+
+        .top-pointer {
+            position: absolute;
+            right: -80px;
+            top: 20px;
+            color: #764ba2;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .top-pointer::before {
+            content: "← القمة";
+        }
+
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* ADT Diagram Styling */
+        .adt-diagram {
+            background: #f9f9f9;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .adt-operations {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .adt-operations h4 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .operations-box {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .operation {
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            direction: ltr;
+        }
+
+        .adt-arrow {
+            font-size: 3em;
+            color: #667eea;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .adt-implementations {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .implementation-box {
+            background: white;
+            border: 3px solid #4caf50;
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+        }
+
+        .implementation-box h4 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .implementation-box p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .implementation-box code {
+            background: #2d2d2d;
+            color: #f1fa8c;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: block;
+            margin-top: 10px;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .adt-or {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #764ba2;
+            padding: 10px;
+        }
+
+        /* Animated Visualization Styles */
+        .animation-container {
+            background: #f9f9f9;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+
+        .animation-area {
+            display: grid;
+            grid-template-columns: 1fr 250px 1fr;
+            gap: 30px;
+            align-items: start;
+            min-height: 500px;
+            margin: 30px 0;
+        }
+
+        /* Waiting symbol in top-right corner of stack (RTL) */
+        .waiting-symbol {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.6);
+            border: 3px solid white;
+            z-index: 10;
+            animation: pulse 1.5s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 12px rgba(255, 152, 0, 0.6);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 6px 16px rgba(255, 152, 0, 0.8);
+            }
+        }
+
+        .waiting-label {
+            position: absolute;
+            top: -35px;
+            right: 40px;
+            background: #ffc107;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .input-area, .output-area {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .input-area h4, .output-area h4 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .animation-stack {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            min-height: 400px;
+            border: 3px dashed #764ba2;
+            border-radius: 10px;
+            padding: 20px;
+            background: white;
+            position: relative;
+        }
+
+        .animation-stack h4 {
+            position: absolute;
+            top: -30px;
+            background: #f9f9f9;
+            padding: 5px 15px;
+            color: #764ba2;
+            font-weight: bold;
+        }
+
+        .token {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1565c0;
+            cursor: default;
+            direction: ltr;
+        }
+
+        .token.number {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .token.operator {
+            background: #fff3e0;
+            border-color: #ff9800;
+            color: #e65100;
+        }
+
+        .stack-token {
+            width: 180px;
+            padding: 15px;
+            margin: 5px 0;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            direction: ltr;
+        }
+
+        .output-token {
+            display: inline-block;
+            padding: 12px 18px;
+            margin: 5px;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            direction: ltr;
+        }
+
+        /* Flying animation for tokens */
+        @keyframes flyToStack {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(200px, -50px) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(400px, 0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes flyToOutput {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(200px, 50px) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(400px, 0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes popFromStack {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-30px) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pushToStack {
+            0% {
+                transform: translateY(50px) scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .flying {
+            animation: flyToStack 1s ease;
+        }
+
+        .flying-out {
+            animation: flyToOutput 1s ease;
+        }
+
+        .animation-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .animation-controls input {
+            width: 60%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 10px;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .status-message {
+            background: #e3f2fd;
+            border-right: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+            min-height: 50px;
+        }
+
+        .eval-animation-area {
+            display: grid;
+            grid-template-columns: 300px 250px 300px;
+            gap: 30px;
+            align-items: start;
+            min-height: 500px;
+            margin: 30px 0;
+        }
+
+        .computation-area {
+            background: white;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .computation-area h4 {
+            color: #4caf50;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .computation-display {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 30px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            direction: ltr;
+        }
+
+        @keyframes highlight {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 8px 15px rgba(255, 152, 0, 0.5);
+            }
+        }
+
+        .highlight-token {
+            animation: highlight 1s ease;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .animation-area {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .eval-animation-area {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .animation-stack {
+                order: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="stack-tutorial.html" class="lang-switch">🌐 English</a>
+    <a href="index.html" class="back-home-btn">🏠 الرئيسية</a>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <img src="fcit.png" alt="FCIT Logo">
+                <div class="header-text">
+                    <h1>📚 هياكل البيانات - المكدس</h1>
+                    <p class="course-code">CPCS 204 - هياكل البيانات I</p>
+                    <p>دليل شامل مع أمثلة تفاعلية</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- القسم 1: مقدمة -->
+            <section id="introduction">
+                <h2>1. ما هو المكدس؟</h2>
+
+                <div class="definition">
+                    <strong>التعريف:</strong> المكدس (Stack) هو هيكل بيانات يخزن المعلومات في شكل مجموعة خطية حيث تُضاف العناصر وتُزال من طرف واحد فقط يُسمى <strong>القمة (top)</strong>. ويتبع مبدأ <strong>LIFO (الأخير دخولاً، الأول خروجاً)</strong>.
+                </div>
+
+                <h3>أمثلة من الحياة اليومية</h3>
+                <div class="examples-grid">
+                    <div class="example-card">
+                        <h4>🍽️ كومة الأطباق</h4>
+                        <p>تُضاف الأطباق من الأعلى وتُزال من الأعلى. آخر طبق يُوضع هو أول طبق يُزال.</p>
+                    </div>
+                    <div class="example-card">
+                        <h4>📚 كومة الكتب</h4>
+                        <p>تُكدَّس الكتب عمودياً. تأخذ الكتاب العلوي أولاً.</p>
+                    </div>
+                    <div class="example-card">
+                        <h4>↩️ سجل المتصفح</h4>
+                        <p>يأخذك زر الرجوع إلى آخر صفحة زرتها (LIFO).</p>
+                    </div>
+                    <div class="example-card">
+                        <h4>↶ عملية التراجع (Undo)</h4>
+                        <p>آخر إجراء تم تنفيذه هو أول إجراء يُتراجع عنه.</p>
+                    </div>
+                </div>
+
+                <h3>الخصائص الرئيسية للمكدس</h3>
+                <ul>
+                    <li><strong>هيكل بيانات خطي:</strong> العناصر مرتبة بصورة متتالية</li>
+                    <li><strong>متجانس:</strong> جميع العناصر من نوع البيانات نفسه</li>
+                    <li><strong>وصول من طرف واحد:</strong> يمكن الوصول إلى العناصر من القمة فقط</li>
+                    <li><strong>سياسة LIFO:</strong> الأخير دخولاً، الأول خروجاً - العنصر المضاف مؤخراً يُزال أولاً</li>
+                </ul>
+            </section>
+
+            <!-- القسم 2: المكدس كنوع مجرد للبيانات -->
+            <section id="adt">
+                <h2>2. المكدس كنوع مجرد للبيانات (ADT)</h2>
+
+                <div class="important">
+                    <h3>لماذا يُعدّ المكدس نوعاً مجرداً للبيانات؟</h3>
+                    <p>يُعدّ المكدس <strong>نوعاً مجرداً للبيانات (ADT)</strong> لأنه يُعرّف سلوك هيكل البيانات من خلال عملياته، دون تحديد كيفية تطبيق هذه العمليات داخلياً.</p>
+                </div>
+
+                <div class="adt-diagram">
+                    <div class="adt-operations">
+                        <h4>📋 عمليات المكدس (الواجهة المجردة)</h4>
+                        <div class="operations-box">
+                            <span class="operation">push()</span>
+                            <span class="operation">pop()</span>
+                            <span class="operation">top()</span>
+                            <span class="operation">isEmpty()</span>
+                            <span class="operation">isFull()</span>
+                        </div>
+                    </div>
+                    <div class="adt-arrow">↓</div>
+                    <div class="adt-implementations">
+                        <div class="implementation-box">
+                            <h4>🔢 التطبيق باستخدام المصفوفة</h4>
+                            <p>باستخدام ذاكرة متجاورة</p>
+                            <code>stack[top++] = element</code>
+                        </div>
+                        <div class="adt-or">أو</div>
+                        <div class="implementation-box">
+                            <h4>🔗 التطبيق باستخدام القائمة المرتبطة</h4>
+                            <p>باستخدام العقد والمؤشرات</p>
+                            <code>newNode.next = top</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>البنية المنطقية مقابل البنية المادية</h3>
+                <div class="highlight-box">
+                    <h4>هيكل البيانات المنطقي</h4>
+                    <p>المكدس هو <strong>هيكل بيانات منطقي</strong> - يصف كيفية تنظيم البيانات والوصول إليها (سلوك LIFO)، لكن لا يحدد كيفية تخزينها في الذاكرة.</p>
+
+                    <h4>التطبيق المادي</h4>
+                    <p>لاستخدام المكدس فعلياً، يجب بناؤه فوق <strong>هيكل بيانات مادي</strong>:</p>
+                    <ul>
+                        <li><strong>التطبيق باستخدام المصفوفة</strong> - يستخدم ذاكرة متجاورة</li>
+                        <li><strong>التطبيق باستخدام القائمة المرتبطة</strong> - يستخدم تخصيصاً ديناميكياً للذاكرة</li>
+                    </ul>
+                </div>
+
+                <h3>العمليات المجردة</h3>
+                <p>تبقى عمليات المكدس ثابتة بغض النظر عن التطبيق الأساسي:</p>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>العملية</th>
+                            <th>الوصف</th>
+                            <th>التطبيق بالمصفوفة</th>
+                            <th>التطبيق بالقائمة المرتبطة</th>
+                        </tr>
+                        <tr>
+                            <td><strong>push()</strong></td>
+                            <td>إضافة عنصر إلى القمة</td>
+                            <td><code>arr[++top] = element</code></td>
+                            <td>إضافة عقدة في البداية</td>
+                        </tr>
+                        <tr>
+                            <td><strong>pop()</strong></td>
+                            <td>إزالة عنصر القمة</td>
+                            <td><code>return arr[top--]</code></td>
+                            <td>إزالة عقدة من البداية</td>
+                        </tr>
+                        <tr>
+                            <td><strong>top()/peek()</strong></td>
+                            <td>عرض عنصر القمة</td>
+                            <td><code>return arr[top]</code></td>
+                            <td><code>return head.data</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>isEmpty()</strong></td>
+                            <td>التحقق من الفراغ</td>
+                            <td><code>return top == -1</code></td>
+                            <td><code>return head == null</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>isFull()</strong></td>
+                            <td>التحقق من الامتلاء</td>
+                            <td><code>return top == size-1</code></td>
+                            <td>لا ينطبق (ديناميكي)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="important">
+                    <strong>نقطة أساسية:</strong> يمكنك تغيير التطبيق المادي (مصفوفة ↔ قائمة مرتبطة)، لكن العمليات المجردة وسلوكها يبقيان ثابتَين. هذا هو جوهر التجريد!
+                </div>
+            </section>
+
+            <!-- القسم 3: عمليات المكدس -->
+            <section id="operations">
+                <h2>3. عمليات المكدس</h2>
+
+                <h3>3.1 push(element) - الإضافة</h3>
+                <div class="highlight-box">
+                    <p><strong>الغرض:</strong> إضافة عنصر إلى قمة المكدس</p>
+                    <p><strong>الخطوات:</strong></p>
+                    <ol>
+                        <li>التحقق من امتلاء المكدس (لتطبيق المصفوفة)</li>
+                        <li>زيادة مؤشر القمة</li>
+                        <li>إدراج العنصر في موضع القمة</li>
+                    </ol>
+                    <p><strong>التعقيد الزمني:</strong> O(1)</p>
+                </div>
+
+                <h3>3.2 pop() - الإزالة</h3>
+                <div class="highlight-box">
+                    <p><strong>الغرض:</strong> إزالة وإرجاع عنصر القمة من المكدس</p>
+                    <p><strong>الخطوات:</strong></p>
+                    <ol>
+                        <li>التحقق من فراغ المكدس</li>
+                        <li>استرداد العنصر من موضع القمة</li>
+                        <li>تقليل مؤشر القمة</li>
+                        <li>إرجاع العنصر المسترد</li>
+                    </ol>
+                    <p><strong>التعقيد الزمني:</strong> O(1)</p>
+                </div>
+
+                <h3>3.3 top() / peek() - المعاينة</h3>
+                <div class="highlight-box">
+                    <p><strong>الغرض:</strong> إرجاع عنصر القمة دون إزالته</p>
+                    <p><strong>الخطوات:</strong></p>
+                    <ol>
+                        <li>التحقق من فراغ المكدس</li>
+                        <li>إرجاع العنصر في موضع القمة</li>
+                    </ol>
+                    <p><strong>التعقيد الزمني:</strong> O(1)</p>
+                </div>
+
+                <h3>3.4 isEmpty() - فارغة؟</h3>
+                <div class="highlight-box">
+                    <p><strong>الغرض:</strong> التحقق مما إذا كان المكدس فارغاً</p>
+                    <p><strong>يُرجع:</strong> true إذا لم يكن في المكدس عناصر، false في غير ذلك</p>
+                    <p><strong>التعقيد الزمني:</strong> O(1)</p>
+                </div>
+
+                <h3>3.5 isFull() - ممتلئة؟</h3>
+                <div class="highlight-box">
+                    <p><strong>الغرض:</strong> التحقق مما إذا كان المكدس ممتلئاً (أساساً لتطبيق المصفوفة)</p>
+                    <p><strong>يُرجع:</strong> true إذا لم يستطع المكدس قبول مزيد من العناصر، false في غير ذلك</p>
+                    <p><strong>ملاحظة:</strong> لا ينطبق على تطبيق القائمة المرتبطة (حجم ديناميكي)</p>
+                    <p><strong>التعقيد الزمني:</strong> O(1)</p>
+                </div>
+            </section>
+
+            <!-- العرض التفاعلي -->
+            <section id="demo">
+                <h2>4. العرض التفاعلي للمكدس</h2>
+
+                <div class="interactive-demo">
+                    <h3>جرّب عمليات المكدس بنفسك!</h3>
+                    <p>أدخل قيمة وانقر على "إضافة" لإضافتها إلى المكدس، أو انقر على "إزالة" لحذف عنصر القمة.</p>
+
+                    <div class="demo-controls">
+                        <input type="text" id="pushValue" placeholder="أدخل قيمة" style="direction: rtl; text-align: right; font-family: 'Tajawal', sans-serif;" />
+                        <button class="btn" onclick="demoPush()">إضافة (Push)</button>
+                        <button class="btn" onclick="demoPop()">إزالة (Pop)</button>
+                        <button class="btn" onclick="demoPeek()">معاينة (Peek)</button>
+                        <button class="btn" onclick="demoClear()">مسح المكدس</button>
+                    </div>
+
+                    <div id="demoMessage" style="text-align: center; margin: 10px 0; font-weight: bold; color: #667eea;"></div>
+
+                    <div class="demo-stack" id="demoStack">
+                        <div class="stack-label">↑ المكدس (LIFO) ↑</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- القسم 4: التطبيق -->
+            <section id="implementation">
+                <h2>5. تطبيق المكدس بلغة Java</h2>
+
+                <h3>5.1 التطبيق باستخدام المصفوفة (حجم ثابت)</h3>
+                <p>باستخدام <strong>مصفوفة ذات حجم ثابت</strong> مع سعة قصوى تُحدَّد عند التهيئة. بعد امتلاء المصفوفة، لا يمكن إضافة مزيد من العناصر إلا بعد حذف عناصر.</p>
+
+                <div class="important">
+                    <strong>مهم:</strong> للمصفوفات في Java <strong>حجم ثابت</strong>. لا يمكن زيادة حجم المصفوفة بعد إنشائها. يجب تحديد الحجم عند التهيئة ويبقى ثابتاً طوال عمر المصفوفة.
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        <span>📄 StackUsingArray.java (Fixed Size)</span>
+                        <span class="code-toggle collapsed">▼</span>
+                    </div>
+                    <div class="code-block collapsed">
+<span class="keyword">public class</span> <span class="class-name">StackUsingArray</span>&lt;T&gt; {
+    <span class="keyword">private</span> T[] stack;
+    <span class="keyword">private int</span> top;
+    <span class="keyword">private int</span> maxSize;
+
+    <span class="comment">// Constructor - Array size MUST be specified and is FIXED</span>
+    @SuppressWarnings(<span class="string">"unchecked"</span>)
+    <span class="keyword">public</span> <span class="method">StackUsingArray</span>(<span class="keyword">int</span> size) {
+        maxSize = size;
+        stack = (T[]) <span class="keyword">new</span> Object[maxSize];  <span class="comment">// Fixed size array</span>
+        top = -1;  <span class="comment">// Stack is initially empty</span>
+    }
+
+    <span class="comment">// Push operation - O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">push</span>(T element) {
+        <span class="keyword">if</span> (isFull()) {
+            System.out.println(<span class="string">"Stack Overflow! Cannot push "</span> + element);
+            <span class="keyword">return false</span>;
+        }
+        stack[++top] = element;  <span class="comment">// Increment top, then add element</span>
+        <span class="keyword">return true</span>;
+    }
+
+    <span class="comment">// Pop operation - O(1)</span>
+    <span class="keyword">public</span> T <span class="method">pop</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack Underflow! Stack is empty"</span>);
+            <span class="keyword">return null</span>;
+        }
+        T element = stack[top];
+        stack[top--] = <span class="keyword">null</span>;  <span class="comment">// Remove reference, then decrement top</span>
+        <span class="keyword">return</span> element;
+    }
+
+    <span class="comment">// Peek/Top operation - O(1)</span>
+    <span class="keyword">public</span> T <span class="method">top</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack is empty"</span>);
+            <span class="keyword">return null</span>;
+        }
+        <span class="keyword">return</span> stack[top];
+    }
+
+    <span class="comment">// Check if stack is empty - O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() {
+        <span class="keyword">return</span> top == -1;
+    }
+
+    <span class="comment">// Check if stack is full - O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">isFull</span>() {
+        <span class="keyword">return</span> top == maxSize - 1;
+    }
+
+    <span class="comment">// Get current size - O(1)</span>
+    <span class="keyword">public int</span> <span class="method">size</span>() {
+        <span class="keyword">return</span> top + 1;
+    }
+
+    <span class="comment">// Display stack contents</span>
+    <span class="keyword">public void</span> <span class="method">display</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack is empty"</span>);
+            <span class="keyword">return</span>;
+        }
+        System.out.println(<span class="string">"Stack (top to bottom): "</span>);
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = top; i >= 0; i--) {
+            System.out.println(<span class="string">"  "</span> + stack[i]);
+        }
+    }
+}
+
+<span class="comment">// Example Usage</span>
+<span class="keyword">public class</span> <span class="class-name">Main</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        StackUsingArray&lt;Integer&gt; stack = <span class="keyword">new</span> StackUsingArray&lt;&gt;(5);  <span class="comment">// Fixed size of 5</span>
+
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+        stack.display();
+
+        System.out.println(<span class="string">"Top element: "</span> + stack.top());
+        System.out.println(<span class="string">"Popped: "</span> + stack.pop());
+        stack.display();
+
+        <span class="comment">// Try to exceed capacity</span>
+        stack.push(40);
+        stack.push(50);
+        stack.push(60);  <span class="comment">// This will cause Stack Overflow!</span>
+    }
+}
+                    </div>
+                </div>
+
+                <h3>5.2 التطبيق باستخدام القائمة المرتبطة</h3>
+                <p>استخدام القائمة المرتبطة يوفر حجماً ديناميكياً حقيقياً دون قيود على السعة.</p>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        <span>📄 StackUsingLinkedList.java</span>
+                        <span class="code-toggle collapsed">▼</span>
+                    </div>
+                    <div class="code-block collapsed">
+<span class="comment">// Node class for Linked List</span>
+<span class="keyword">class</span> <span class="class-name">Node</span>&lt;T&gt; {
+    T data;
+    Node&lt;T&gt; next;
+
+    <span class="keyword">public</span> <span class="method">Node</span>(T data) {
+        <span class="keyword">this</span>.data = data;
+        <span class="keyword">this</span>.next = <span class="keyword">null</span>;
+    }
+}
+
+<span class="keyword">public class</span> <span class="class-name">StackUsingLinkedList</span>&lt;T&gt; {
+    <span class="keyword">private</span> Node&lt;T&gt; top;
+    <span class="keyword">private int</span> size;
+
+    <span class="comment">// Constructor</span>
+    <span class="keyword">public</span> <span class="method">StackUsingLinkedList</span>() {
+        top = <span class="keyword">null</span>;
+        size = 0;
+    }
+
+    <span class="comment">// Push operation - O(1)</span>
+    <span class="keyword">public void</span> <span class="method">push</span>(T element) {
+        Node&lt;T&gt; newNode = <span class="keyword">new</span> Node&lt;&gt;(element);
+        newNode.next = top;
+        top = newNode;
+        size++;
+    }
+
+    <span class="comment">// Pop operation - O(1)</span>
+    <span class="keyword">public</span> T <span class="method">pop</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack Underflow! Stack is empty"</span>);
+            <span class="keyword">return null</span>;
+        }
+        T data = top.data;
+        top = top.next;
+        size--;
+        <span class="keyword">return</span> data;
+    }
+
+    <span class="comment">// Peek/Top operation - O(1)</span>
+    <span class="keyword">public</span> T <span class="method">top</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack is empty"</span>);
+            <span class="keyword">return null</span>;
+        }
+        <span class="keyword">return</span> top.data;
+    }
+
+    <span class="comment">// Check if stack is empty - O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() {
+        <span class="keyword">return</span> top == <span class="keyword">null</span>;
+    }
+
+    <span class="comment">// Note: isFull() is not needed for linked list implementation</span>
+    <span class="comment">// as it grows dynamically</span>
+
+    <span class="comment">// Get current size - O(1)</span>
+    <span class="keyword">public int</span> <span class="method">size</span>() {
+        <span class="keyword">return</span> size;
+    }
+
+    <span class="comment">// Display stack contents</span>
+    <span class="keyword">public void</span> <span class="method">display</span>() {
+        <span class="keyword">if</span> (isEmpty()) {
+            System.out.println(<span class="string">"Stack is empty"</span>);
+            <span class="keyword">return</span>;
+        }
+        System.out.println(<span class="string">"Stack (top to bottom): "</span>);
+        Node&lt;T&gt; current = top;
+        <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+            System.out.println(<span class="string">"  "</span> + current.data);
+            current = current.next;
+        }
+    }
+}
+
+<span class="comment">// Example Usage</span>
+<span class="keyword">public class</span> <span class="class-name">Main</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        StackUsingLinkedList&lt;String&gt; stack = <span class="keyword">new</span> StackUsingLinkedList&lt;&gt;();
+
+        stack.push(<span class="string">"Java"</span>);
+        stack.push(<span class="string">"Python"</span>);
+        stack.push(<span class="string">"C++"</span>);
+        stack.display();
+
+        System.out.println(<span class="string">"Top element: "</span> + stack.top());
+        System.out.println(<span class="string">"Popped: "</span> + stack.pop());
+        stack.display();
+    }
+}
+                    </div>
+                </div>
+
+                <h3>مقارنة: تطبيق المصفوفة مقابل القائمة المرتبطة</h3>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>الجانب</th>
+                            <th>يعتمد على المصفوفة</th>
+                            <th>يعتمد على القائمة المرتبطة</th>
+                        </tr>
+                        <tr>
+                            <td><strong>الذاكرة</strong></td>
+                            <td>حجم ثابت، ذاكرة متجاورة</td>
+                            <td>حجم ديناميكي، غير متجاور</td>
+                        </tr>
+                        <tr>
+                            <td><strong>حد الحجم</strong></td>
+                            <td>له سعة قصوى</td>
+                            <td>لا حد ثابت (حتى ينفد الذاكرة)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>عبء الذاكرة</strong></td>
+                            <td>أقل (عناصر فقط)</td>
+                            <td>أعلى (عناصر + مؤشرات)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>أداء التخزين المؤقت</strong></td>
+                            <td>أفضل (متجاور)</td>
+                            <td>أسوأ (متفرق)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>عملية isFull()</strong></td>
+                            <td>ضرورية وذات معنى</td>
+                            <td>لا تنطبق</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- القسم 5: التطبيقات -->
+            <section id="applications">
+                <h2>6. تطبيقات المكدس</h2>
+
+                <div class="important">
+                    <p><strong>مهم:</strong> المكدسات هياكل بيانات أساسية ذات تطبيقات لا تُعدّ في علوم الحاسب. التطبيقات شبه لا محدودة وتعتمد على مجال المشكلة. سنركز على أحد أهم التطبيقات: <strong>تقييم التعابير الحسابية</strong>.</p>
+                </div>
+
+                <h3>تطبيقات المكدس الشائعة</h3>
+                <ul>
+                    <li><strong>تقييم التعابير وتحويلها</strong> (الترميز الداخلي Infix، اللاحق Postfix، السابق Prefix)</li>
+                    <li><strong>إدارة استدعاءات الدوال</strong> (مكدس الاستدعاء Call Stack في البرمجة)</li>
+                    <li><strong>عمليات التراجع/الإعادة (Undo/Redo)</strong> (محررات النصوص، برامج الرسومات)</li>
+                    <li><strong>سجل المتصفح</strong> (أزرار الرجوع والتقدم)</li>
+                    <li><strong>تحليل الصياغة (Syntax Parsing)</strong> (التحقق من الأقواس المتوازنة)</li>
+                    <li><strong>خوارزميات التراجع (Backtracking)</strong> (حل المتاهات، ألعاب الشطرنج)</li>
+                    <li><strong>إدارة الذاكرة</strong> (تخصيص ذاكرة المكدس)</li>
+                    <li><strong>اجتياز الشجرة والرسم البياني</strong> (DFS - البحث العميق أولاً)</li>
+                </ul>
+
+                <h3>تطبيق محوري: تقييم التعابير الحسابية</h3>
+
+                <div class="highlight-box">
+                    <h4>المشكلة</h4>
+                    <p>كيف يحل الحاسب التعابير الرياضية مثل <code>3 + 5 * 2 - 8 / 4</code>؟</p>
+                    <p>نحن كبشر نفهم أولوية العمليات ويمكننا تقييم التعابير المكتوبة بـ<strong>الترميز الداخلي (Infix)</strong> (العمليات بين المعاملات). لكن الحاسب يعالج التعليمات بشكل تسلسلي من اليسار إلى اليمين، وهو يحتاج إلى طريقة منهجية لتقييم التعابير مع احترام أولوية العمليات.</p>
+                </div>
+
+                <h3>6.1 أنواع التعابير الحسابية</h3>
+
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>الترميز</th>
+                            <th>الصيغة</th>
+                            <th>مثال</th>
+                        </tr>
+                        <tr>
+                            <td><strong>الترميز الداخلي (Infix)</strong></td>
+                            <td>معامل عملية معامل</td>
+                            <td><code>A + B</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>الترميز اللاحق (Postfix)</strong></td>
+                            <td>معامل معامل عملية</td>
+                            <td><code>A B +</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>الترميز السابق (Prefix)</strong></td>
+                            <td>عملية معامل معامل</td>
+                            <td><code>+ A B</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h4>مقارنة بالأمثلة</h4>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Infix (للإنسان)</th>
+                            <th>Postfix (للحاسب)</th>
+                        </tr>
+                        <tr>
+                            <td><code>3 + 5</code></td>
+                            <td><code>3 5 +</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>(3 + 5) * 2</code></td>
+                            <td><code>3 5 + 2 *</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>3 + 5 * 2</code></td>
+                            <td><code>3 5 2 * +</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>((3 + 5) * 2 - 8) / 4</code></td>
+                            <td><code>3 5 + 2 * 8 - 4 /</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>6.2 لماذا الترميز اللاحق (Postfix)؟</h3>
+                <div class="definition">
+                    <p><strong>الترميز اللاحق (المعروف أيضاً بالترميز البولندي العكسي - RPN)</strong> يُفضّله الحاسب لأنه:</p>
+                    <ul>
+                        <li>لا حاجة إلى أقواس</li>
+                        <li>لا حاجة إلى تذكر أولوية العمليات</li>
+                        <li>يمكن تقييمه بمسح واحد من اليسار إلى اليمين</li>
+                        <li>سهل التطبيق باستخدام المكدس</li>
+                        <li>أكثر كفاءة للحسابات</li>
+                    </ul>
+                </div>
+
+                <h3>6.3 أولوية العمليات والترابط</h3>
+                <p>قبل تحويل التعابير، نحتاج إلى فهم أولوية العمليات:</p>
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>العملية</th>
+                            <th>الأولوية</th>
+                            <th>الترابط</th>
+                        </tr>
+                        <tr>
+                            <td><code>^</code></td>
+                            <td>3 (الأعلى)</td>
+                            <td>من اليمين إلى اليسار</td>
+                        </tr>
+                        <tr>
+                            <td><code>*, /, %</code></td>
+                            <td>2</td>
+                            <td>من اليسار إلى اليمين</td>
+                        </tr>
+                        <tr>
+                            <td><code>+, -</code></td>
+                            <td>1 (الأدنى)</td>
+                            <td>من اليسار إلى اليمين</td>
+                        </tr>
+                        <tr>
+                            <td><code>( )</code></td>
+                            <td>تتجاوز الأولوية</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>6.4 خوارزمية: تحويل Infix إلى Postfix</h3>
+                <div class="algorithm-steps">
+                    <h4>📋 الخطوات:</h4>
+                    <ol>
+                        <li>أنشئ مكدساً فارغاً للعمليات</li>
+                        <li>أنشئ سلسلة نصية فارغة للمخرجات</li>
+                        <li>امسح التعبير الداخلي من اليسار إلى اليمين:
+                            <ul>
+                                <li><strong>إذا كان معاملاً (A-Z, 0-9):</strong> أضفه مباشرة إلى المخرجات</li>
+                                <li><strong>إذا كان '(':</strong> ادفعه إلى المكدس</li>
+                                <li><strong>إذا كان ')':</strong> أخرج العمليات من المكدس إلى المخرجات حتى يُعثر على '(' (تجاهل القوسين)</li>
+                                <li><strong>إذا كان عملية:</strong>
+                                    <ul>
+                                        <li><strong>بينما</strong> المكدس غير فارغ وقمة المكدس ليست '(' وقمة المكدس لها أولوية أعلى أو مساوية للعملية الممسوحة:
+                                            <ul>
+                                                <li>أخرج قمة المكدس إلى المخرجات</li>
+                                                <li>أعد التحقق من الشرط (كرر)</li>
+                                            </ul>
+                                        </li>
+                                        <li>ادفع العملية الحالية إلى المكدس</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>أخرج العمليات المتبقية من المكدس إلى المخرجات</li>
+                    </ol>
+                </div>
+
+                <h3>6.5 خوارزمية: تقييم تعبير Postfix</h3>
+                <div class="algorithm-steps">
+                    <h4>📋 الخطوات:</h4>
+                    <ol>
+                        <li>أنشئ مكدساً فارغاً للمعاملات</li>
+                        <li>امسح تعبير Postfix من اليسار إلى اليمين:
+                            <ul>
+                                <li><strong>إذا كان معاملاً:</strong> ادفعه إلى المكدس</li>
+                                <li><strong>إذا كان عملية:</strong>
+                                    <ul>
+                                        <li>أخرج واحفظ في <code>var1</code> (كان في القمة)</li>
+                                        <li>أخرج واحفظ في <code>var2</code> (كان أسفل var1)</li>
+                                        <li>طبّق العملية كـ: <code>result = var2 operator var1</code></li>
+                                        <li><div class="step-example">
+                                            <strong>مثال:</strong> لـ "5 3 -"<br>
+                                            المكدس يحتوي [5, 3] حيث 3 في القمة<br>
+                                            أخرج var1 = 3 (القمة)<br>
+                                            أخرج var2 = 5 (كان أسفلها)<br>
+                                            احسب: 5 - 3 = 2
+                                        </div></li>
+                                        <li>ادفع النتيجة إلى المكدس</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>القيمة النهائية في المكدس هي النتيجة</li>
+                    </ol>
+                </div>
+
+                <h3>مثال يدوي: التحويل والتقييم</h3>
+                <div class="definition">
+                    <h4>مثال: تحويل وتقييم <code>3 + 5 * 2</code></h4>
+
+                    <p><strong>الخطوة 1: تحويل Infix إلى Postfix</strong></p>
+                    <table style="width: 100%; margin: 10px 0;">
+                        <tr>
+                            <th>الرمز</th>
+                            <th>الإجراء</th>
+                            <th>المكدس</th>
+                            <th>المخرجات</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>معامل → مخرجات</td>
+                            <td>[ ]</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>+</td>
+                            <td>عملية → مكدس</td>
+                            <td>[ + ]</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>معامل → مخرجات</td>
+                            <td>[ + ]</td>
+                            <td>3 5</td>
+                        </tr>
+                        <tr>
+                            <td>*</td>
+                            <td>أولوية أعلى → مكدس</td>
+                            <td>[ +, * ]</td>
+                            <td>3 5</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>معامل → مخرجات</td>
+                            <td>[ +, * ]</td>
+                            <td>3 5 2</td>
+                        </tr>
+                        <tr>
+                            <td>النهاية</td>
+                            <td>أخرج جميع العمليات</td>
+                            <td>[ ]</td>
+                            <td>3 5 2 * +</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>نتيجة Postfix: <code>3 5 2 * +</code></strong></p>
+
+                    <p><strong>الخطوة 2: تقييم تعبير Postfix</strong></p>
+                    <table style="width: 100%; margin: 10px 0;">
+                        <tr>
+                            <th>الرمز</th>
+                            <th>الإجراء</th>
+                            <th>المكدس</th>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>ادفع معاملاً</td>
+                            <td>[ 3 ]</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>ادفع معاملاً</td>
+                            <td>[ 3, 5 ]</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>ادفع معاملاً</td>
+                            <td>[ 3, 5, 2 ]</td>
+                        </tr>
+                        <tr>
+                            <td>*</td>
+                            <td>أخرج 2 و 5، احسب 5*2=10، ادفع</td>
+                            <td>[ 3, 10 ]</td>
+                        </tr>
+                        <tr>
+                            <td>+</td>
+                            <td>أخرج 10 و 3، احسب 3+10=13، ادفع</td>
+                            <td>[ 13 ]</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>النتيجة النهائية: 13</strong></p>
+                </div>
+            </section>
+
+            <!-- الرسوم المتحركة -->
+            <section id="animations">
+                <h2>7. الرسوم المتحركة</h2>
+
+                <!-- رسوم متحركة لتحويل Infix إلى Postfix -->
+                <div class="animation-container">
+                    <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">🎬 رسوم متحركة: تحويل Infix إلى Postfix</h3>
+                    <p style="text-align: center; margin-bottom: 20px;">شاهد كيف تنتقل الرموز من المدخلات ← المكدس ← المخرجات أثناء التحويل!</p>
+
+                    <div class="animation-controls">
+                        <input type="text" id="animInfixInput" placeholder="أدخل تعبيراً داخلياً (مثال: 3+5*2 أو (3+5)*2)" />
+                        <br>
+                        <button class="btn" onclick="startInfixAnimation()">🔄 تحميل التعبير</button>
+                        <button class="btn" onclick="prevInfixStep()" id="infixPrevBtn" disabled>◀ السابق</button>
+                        <button class="btn" onclick="nextInfixStep()" id="infixNextBtn" disabled>التالي ▶</button>
+                        <button class="btn" onclick="resetInfixAnimation()">↻ إعادة تعيين</button>
+                    </div>
+
+                    <div class="status-message" id="animStatus">أدخل تعبيراً داخلياً وانقر "تحميل التعبير"</div>
+                    <div class="status-message" id="animNextAction" style="background: #fff3cd; border-color: #ffc107; display: none;">
+                        <strong>➡️ ما سيحدث بعد ذلك:</strong> <span id="nextActionText"></span>
+                    </div>
+
+                    <div class="animation-area">
+                        <div class="input-area">
+                            <h4>📥 المدخلات</h4>
+                            <div id="animInputTokens"></div>
+                        </div>
+
+                        <div class="animation-stack" id="animStack">
+                            <h4>المكدس</h4>
+                        </div>
+
+                        <div class="output-area">
+                            <h4>📤 المخرجات (Postfix)</h4>
+                            <div id="animOutputTokens"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- رسوم متحركة لتقييم Postfix -->
+                <div class="animation-container">
+                    <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">🎬 رسوم متحركة: تقييم تعبير Postfix</h3>
+                    <p style="text-align: center; margin-bottom: 20px;">شاهد كيف تُدفع المعاملات وتُزال أثناء التقييم!</p>
+
+                    <div class="animation-controls">
+                        <input type="text" id="animPostfixInput" placeholder="أدخل تعبير Postfix (مثال: 3 5 2 * +)" />
+                        <br>
+                        <button class="btn" onclick="startEvalAnimation()">🔄 تحميل التعبير</button>
+                        <button class="btn" onclick="prevEvalStep()" id="evalPrevBtn" disabled>◀ السابق</button>
+                        <button class="btn" onclick="nextEvalStep()" id="evalNextBtn" disabled>التالي ▶</button>
+                        <button class="btn" onclick="resetEvalAnimation()">↻ إعادة تعيين</button>
+                    </div>
+
+                    <div class="status-message" id="evalAnimStatus">أدخل تعبير Postfix وانقر "تحميل التعبير"</div>
+                    <div class="status-message" id="evalNextAction" style="background: #fff3cd; border-color: #ffc107; display: none;">
+                        <strong>➡️ ما سيحدث بعد ذلك:</strong> <span id="evalNextActionText"></span>
+                    </div>
+
+                    <div class="eval-animation-area">
+                        <div class="input-area">
+                            <h4>📥 المدخلات (Postfix)</h4>
+                            <div id="evalInputTokens"></div>
+                        </div>
+
+                        <div class="animation-stack" id="evalStack">
+                            <h4>المكدس</h4>
+                        </div>
+
+                        <div class="computation-area">
+                            <h4>🧮 الحساب</h4>
+                            <div class="computation-display" id="computationDisplay">
+                                جاهز
+                            </div>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                                    <strong>النتيجة النهائية:</strong>
+                                    <div id="finalResult" style="font-size: 2em; color: #4caf50; margin-top: 10px;">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- الحاسبات التفاعلية -->
+            <section id="calculators">
+                <h2>8. الحاسبات التفاعلية</h2>
+
+                <!-- الحاسبة 1: تحويل Infix إلى Postfix -->
+                <div class="calculator">
+                    <h3>🔄 الحاسبة 1: محوّل Infix إلى Postfix</h3>
+                    <p>أدخل تعبيراً داخلياً (مثال: <code>3+5*2</code> أو <code>(3+5)*2-8/4</code>)</p>
+                    <p><small>العمليات المدعومة: +، -، *، /، ^، ( )</small></p>
+
+                    <div class="input-group">
+                        <label for="infixInput">التعبير الداخلي (Infix):</label>
+                        <input type="text" id="infixInput" placeholder="مثال: (3+5)*2-8/4" />
+                    </div>
+
+                    <button class="btn" onclick="convertToPostfix()">تحويل إلى Postfix</button>
+
+                    <div id="postfixResult" style="display: none;">
+                        <div class="result-box">
+                            <h4>تعبير Postfix:</h4>
+                            <div class="result-value" id="postfixOutput"></div>
+                        </div>
+
+                        <div class="steps-box">
+                            <h4>خطوات التحويل:</h4>
+                            <div id="conversionSteps"></div>
+                        </div>
+                    </div>
+
+                    <div id="conversionError" style="display: none;"></div>
+                </div>
+
+                <!-- الحاسبة 2: تقييم تعبير Postfix -->
+                <div class="calculator">
+                    <h3>🧮 الحاسبة 2: مقيّم تعبير Postfix</h3>
+                    <p>أدخل تعبير Postfix (مثال: <code>3 5 2 * +</code> أو <code>3 5 + 2 * 8 - 4 /</code>)</p>
+                    <p><small>استخدم مسافات بين الأرقام والعمليات</small></p>
+
+                    <div class="input-group">
+                        <label for="postfixInput">تعبير Postfix:</label>
+                        <input type="text" id="postfixInput" placeholder="مثال: 3 5 + 2 * 8 - 4 /" />
+                    </div>
+
+                    <button class="btn" onclick="evaluatePostfix()">تقييم</button>
+
+                    <div id="evalResult" style="display: none;">
+                        <div class="result-box">
+                            <h4>النتيجة:</h4>
+                            <div class="result-value" id="evalOutput"></div>
+                        </div>
+
+                        <div class="steps-box">
+                            <h4>خطوات التقييم:</h4>
+                            <div id="evalSteps"></div>
+                        </div>
+                    </div>
+
+                    <div id="evalError" style="display: none;"></div>
+                </div>
+
+                <!-- الحاسبة المشتركة -->
+                <div class="calculator" style="background: #fff3cd; border-color: #ffc107;">
+                    <h3>🎯 الحاسبة الشاملة: Infix ← Postfix ← النتيجة</h3>
+                    <p>أدخل تعبيراً داخلياً لرؤية التحويل والتقييم دفعةً واحدة!</p>
+
+                    <div class="input-group">
+                        <label for="combinedInput">التعبير الداخلي (Infix):</label>
+                        <input type="text" id="combinedInput" placeholder="مثال: (3+5)*2-8/4" />
+                    </div>
+
+                    <button class="btn" onclick="combinedCalculation()">تحويل وتقييم</button>
+
+                    <div id="combinedResult" style="display: none;">
+                        <div class="result-box" style="border-color: #ffc107;">
+                            <h4>التعبير الداخلي الأصلي:</h4>
+                            <div class="result-value" id="combinedInfix" style="color: #666;"></div>
+                        </div>
+
+                        <div class="result-box" style="border-color: #667eea;">
+                            <h4>تعبير Postfix المحوَّل:</h4>
+                            <div class="result-value" id="combinedPostfix" style="color: #667eea;"></div>
+                        </div>
+
+                        <div class="result-box" style="border-color: #4caf50;">
+                            <h4>النتيجة النهائية:</h4>
+                            <div class="result-value" id="combinedFinal" style="color: #4caf50; font-size: 2em;"></div>
+                        </div>
+
+                        <div class="steps-box">
+                            <h4>العملية الكاملة:</h4>
+                            <div id="combinedSteps"></div>
+                        </div>
+                    </div>
+
+                    <div id="combinedError" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- القسم 6: الملخص -->
+            <section id="summary">
+                <h2>9. الملخص</h2>
+
+                <div class="highlight-box">
+                    <h3>النقاط الأساسية</h3>
+                    <ul>
+                        <li><strong>المكدس (Stack)</strong> هو هيكل بيانات LIFO (الأخير دخولاً، الأول خروجاً)</li>
+                        <li>هو <strong>نوع مجرد للبيانات (ADT)</strong> - يُعرّف السلوك لا التطبيق</li>
+                        <li>المكدس <strong>بنية منطقية</strong> يجب تطبيقها باستخدام البنى المادية (مصفوفة أو قائمة مرتبطة)</li>
+                        <li>العمليات الأساسية: <code>push()</code>، <code>pop()</code>، <code>top()</code>، <code>isEmpty()</code>، <code>isFull()</code></li>
+                        <li>جميع العمليات <strong>O(1)</strong> - زمن ثابت</li>
+                        <li>يمكن تطبيقه باستخدام <strong>ArrayList</strong> (مصفوفة ثابتة/ديناميكية) أو <strong>LinkedList</strong></li>
+                        <li>التطبيقات <strong>لا محدودة</strong> وتعتمد على المشكلة</li>
+                        <li>تطبيق مهم: <strong>تقييم التعابير</strong> (تحويل Infix إلى Postfix)</li>
+                        <li>يُفضّل الحاسب <strong>ترميز Postfix</strong> لسهولة تقييمه بالمكدسات</li>
+                    </ul>
+                </div>
+
+                <div class="important">
+                    <h3>لماذا ندرس المكدسات؟</h3>
+                    <p>المكدسات أساسية في علوم الحاسب وتظهر في كل مكان:</p>
+                    <ul>
+                        <li>كل برنامج تُشغّله يستخدم مكدس الاستدعاء للدوال</li>
+                        <li>متصفح الويب الخاص بك يستخدم مكدسات للتنقل للخلف/للأمام</li>
+                        <li>المُترجمات (Compilers) تستخدم مكدسات لتحليل التعابير وتقييمها</li>
+                        <li>وظيفة التراجع/الإعادة في التطبيقات تعتمد على المكدسات</li>
+                        <li>كثير من الخوارزميات (DFS، التراجع) تعتمد على سلوك المكدس</li>
+                    </ul>
+                    <p><strong>إن فهم المكدسات ضروري لتصبح مبرمجاً محترفاً!</strong></p>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 دليل هيكل بيانات المكدس | أُعدّ للأغراض التعليمية</p>
+            <p>دليل تفاعلي مع عروض حية وحاسبات من إعداد د. المعلوي</p>
+        </footer>
+    </div>
+
+    <script>
+        // Code Folding Toggle
+        function toggleCode(header) {
+            const codeBlock = header.nextElementSibling;
+            const toggle = header.querySelector('.code-toggle');
+
+            codeBlock.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+
+        // Interactive Demo Stack
+        let demoStackArray = [];
+        const MAX_DEMO_SIZE = 8;
+
+        function demoPush() {
+            const input = document.getElementById('pushValue');
+            const value = input.value.trim();
+            const message = document.getElementById('demoMessage');
+
+            if (!value) {
+                message.textContent = '⚠️ الرجاء إدخال قيمة!';
+                message.style.color = '#f44336';
+                return;
+            }
+
+            if (demoStackArray.length >= MAX_DEMO_SIZE) {
+                message.textContent = '⚠️ تجاوز سعة المكدس! المكدس ممتلئ.';
+                message.style.color = '#f44336';
+                return;
+            }
+
+            demoStackArray.push(value);
+            message.textContent = `✓ تمت إضافة "${value}" إلى المكدس`;
+            message.style.color = '#4caf50';
+            input.value = '';
+            renderDemoStack();
+        }
+
+        function demoPop() {
+            const message = document.getElementById('demoMessage');
+
+            if (demoStackArray.length === 0) {
+                message.textContent = '⚠️ نقص سعة المكدس! المكدس فارغ.';
+                message.style.color = '#f44336';
+                return;
+            }
+
+            const popped = demoStackArray.pop();
+            message.textContent = `✓ تمت إزالة "${popped}" من المكدس`;
+            message.style.color = '#4caf50';
+            renderDemoStack();
+        }
+
+        function demoPeek() {
+            const message = document.getElementById('demoMessage');
+
+            if (demoStackArray.length === 0) {
+                message.textContent = '⚠️ المكدس فارغ!';
+                message.style.color = '#f44336';
+                return;
+            }
+
+            const top = demoStackArray[demoStackArray.length - 1];
+            message.textContent = `👁️ عنصر القمة هو: "${top}"`;
+            message.style.color = '#667eea';
+        }
+
+        function demoClear() {
+            demoStackArray = [];
+            document.getElementById('demoMessage').textContent = '✓ تم مسح المكدس';
+            document.getElementById('demoMessage').style.color = '#667eea';
+            renderDemoStack();
+        }
+
+        function renderDemoStack() {
+            const stackDiv = document.getElementById('demoStack');
+            stackDiv.innerHTML = '<div class="stack-label">↑ المكدس (LIFO) ↑</div>';
+
+            if (demoStackArray.length > 0) {
+                const topPointer = document.createElement('div');
+                topPointer.className = 'top-pointer';
+                stackDiv.appendChild(topPointer);
+            }
+
+            demoStackArray.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'demo-stack-item';
+                itemDiv.textContent = item;
+                stackDiv.appendChild(itemDiv);
+            });
+        }
+
+        // Allow Enter key for push
+        document.getElementById('pushValue').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') demoPush();
+        });
+
+        // Infix to Postfix Converter
+        function getPrecedence(op) {
+            if (op === '^') return 3;
+            if (op === '*' || op === '/' || op === '%') return 2;
+            if (op === '+' || op === '-') return 1;
+            return 0;
+        }
+
+        function isOperator(ch) {
+            return ['+', '-', '*', '/', '^', '%'].includes(ch);
+        }
+
+        function isOperand(ch) {
+            return /[a-zA-Z0-9]/.test(ch);
+        }
+
+        function convertToPostfix() {
+            const infix = document.getElementById('infixInput').value.trim();
+            const resultDiv = document.getElementById('postfixResult');
+            const errorDiv = document.getElementById('conversionError');
+            const outputDiv = document.getElementById('postfixOutput');
+            const stepsDiv = document.getElementById('conversionSteps');
+
+            errorDiv.style.display = 'none';
+            resultDiv.style.display = 'none';
+
+            if (!infix) {
+                errorDiv.innerHTML = '<div class="error">الرجاء إدخال تعبير داخلي!</div>';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            const stack = [];
+            let postfix = '';
+            let steps = [];
+            let stepNumber = 1;
+
+            try {
+                for (let i = 0; i < infix.length; i++) {
+                    const ch = infix[i];
+
+                    if (ch === ' ') continue;
+
+                    if (isOperand(ch)) {
+                        // Read complete number
+                        let num = ch;
+                        while (i + 1 < infix.length && isOperand(infix[i + 1])) {
+                            num += infix[++i];
+                        }
+                        postfix += num + ' ';
+                        steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> "${num}" معامل → أضفه إلى المخرجات<br>المخرجات: <code>${postfix.trim()}</code> | المكدس: [${stack.join(', ')}]</div>`);
+                    }
+                    else if (ch === '(') {
+                        stack.push(ch);
+                        steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> "(" → ادفعه إلى المكدس<br>المخرجات: <code>${postfix.trim()}</code> | المكدس: [${stack.join(', ')}]</div>`);
+                    }
+                    else if (ch === ')') {
+                        while (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                            postfix += stack.pop() + ' ';
+                        }
+                        if (stack.length === 0) {
+                            throw new Error('أقواس غير متطابقة!');
+                        }
+                        stack.pop(); // Remove '('
+                        steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> ")" → أخرج حتى تجد "("<br>المخرجات: <code>${postfix.trim()}</code> | المكدس: [${stack.join(', ')}]</div>`);
+                    }
+                    else if (isOperator(ch)) {
+                        while (stack.length > 0 &&
+                               getPrecedence(stack[stack.length - 1]) >= getPrecedence(ch) &&
+                               stack[stack.length - 1] !== '(') {
+                            postfix += stack.pop() + ' ';
+                        }
+                        stack.push(ch);
+                        steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> "${ch}" → أخرج أعلى/مساوي الأولوية، ثم ادفع<br>المخرجات: <code>${postfix.trim()}</code> | المكدس: [${stack.join(', ')}]</div>`);
+                    }
+                }
+
+                while (stack.length > 0) {
+                    const op = stack.pop();
+                    if (op === '(' || op === ')') {
+                        throw new Error('أقواس غير متطابقة!');
+                    }
+                    postfix += op + ' ';
+                }
+
+                steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> نهاية التعبير → أخرج جميع العمليات المتبقية<br>المخرجات: <code>${postfix.trim()}</code> | المكدس: [${stack.join(', ')}]</div>`);
+
+                outputDiv.textContent = postfix.trim();
+                stepsDiv.innerHTML = steps.join('');
+                resultDiv.style.display = 'block';
+
+            } catch (error) {
+                errorDiv.innerHTML = `<div class="error">خطأ: ${error.message}</div>`;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Postfix Evaluator
+        function evaluatePostfix() {
+            const postfix = document.getElementById('postfixInput').value.trim();
+            const resultDiv = document.getElementById('evalResult');
+            const errorDiv = document.getElementById('evalError');
+            const outputDiv = document.getElementById('evalOutput');
+            const stepsDiv = document.getElementById('evalSteps');
+
+            errorDiv.style.display = 'none';
+            resultDiv.style.display = 'none';
+
+            if (!postfix) {
+                errorDiv.innerHTML = '<div class="error">الرجاء إدخال تعبير Postfix!</div>';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            const tokens = postfix.split(/\s+/);
+            const stack = [];
+            let steps = [];
+            let stepNumber = 1;
+
+            try {
+                for (let token of tokens) {
+                    if (!token) continue;
+
+                    if (!isNaN(token)) {
+                        // It's a number
+                        stack.push(parseFloat(token));
+                        steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> "${token}" معامل → ادفعه إلى المكدس<br>المكدس: [${stack.join(', ')}]</div>`);
+                    }
+                    else if (isOperator(token)) {
+                        if (stack.length < 2) {
+                            throw new Error('تعبير Postfix غير صالح: معاملات غير كافية!');
+                        }
+
+                        const b = stack.pop();
+                        const a = stack.pop();
+                        let result;
+
+                        switch(token) {
+                            case '+': result = a + b; break;
+                            case '-': result = a - b; break;
+                            case '*': result = a * b; break;
+                            case '/':
+                                if (b === 0) throw new Error('القسمة على صفر!');
+                                result = a / b;
+                                break;
+                            case '^': result = Math.pow(a, b); break;
+                            case '%': result = a % b; break;
+                        }
+
+                        stack.push(result);
+                        steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> "${token}" عملية → أخرج ${b} و ${a}، احسب ${a} ${token} ${b} = ${result}، ادفع النتيجة<br>المكدس: [${stack.join(', ')}]</div>`);
+                    }
+                    else {
+                        throw new Error(`رمز غير صالح: ${token}`);
+                    }
+                }
+
+                if (stack.length !== 1) {
+                    throw new Error('تعبير Postfix غير صالح: معاملات كثيرة جداً!');
+                }
+
+                const finalResult = stack[0];
+                steps.push(`<div class="step" style="background: #e8f5e9; border-color: #4caf50;"><strong>النتيجة النهائية:</strong> ${finalResult}</div>`);
+
+                outputDiv.textContent = finalResult;
+                stepsDiv.innerHTML = steps.join('');
+                resultDiv.style.display = 'block';
+
+            } catch (error) {
+                errorDiv.innerHTML = `<div class="error">خطأ: ${error.message}</div>`;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Combined Calculator
+        function combinedCalculation() {
+            const infix = document.getElementById('combinedInput').value.trim();
+            const resultDiv = document.getElementById('combinedResult');
+            const errorDiv = document.getElementById('combinedError');
+
+            errorDiv.style.display = 'none';
+            resultDiv.style.display = 'none';
+
+            if (!infix) {
+                errorDiv.innerHTML = '<div class="error">الرجاء إدخال تعبير داخلي!</div>';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                // Step 1: Convert to postfix
+                const stack1 = [];
+                let postfix = '';
+                let conversionSteps = [];
+
+                for (let i = 0; i < infix.length; i++) {
+                    const ch = infix[i];
+
+                    if (ch === ' ') continue;
+
+                    if (isOperand(ch)) {
+                        let num = ch;
+                        while (i + 1 < infix.length && isOperand(infix[i + 1])) {
+                            num += infix[++i];
+                        }
+                        postfix += num + ' ';
+                        conversionSteps.push(`<div class="step">معامل "${num}" → أضفه إلى المخرجات</div>`);
+                    }
+                    else if (ch === '(') {
+                        stack1.push(ch);
+                        conversionSteps.push(`<div class="step">"${ch}" → ادفعه إلى المكدس</div>`);
+                    }
+                    else if (ch === ')') {
+                        while (stack1.length > 0 && stack1[stack1.length - 1] !== '(') {
+                            postfix += stack1.pop() + ' ';
+                        }
+                        if (stack1.length === 0) throw new Error('أقواس غير متطابقة!');
+                        stack1.pop();
+                        conversionSteps.push(`<div class="step">"${ch}" → أخرج حتى تجد "("</div>`);
+                    }
+                    else if (isOperator(ch)) {
+                        while (stack1.length > 0 &&
+                               getPrecedence(stack1[stack1.length - 1]) >= getPrecedence(ch) &&
+                               stack1[stack1.length - 1] !== '(') {
+                            postfix += stack1.pop() + ' ';
+                        }
+                        stack1.push(ch);
+                        conversionSteps.push(`<div class="step">عملية "${ch}" → ادفعها إلى المكدس</div>`);
+                    }
+                }
+
+                while (stack1.length > 0) {
+                    const op = stack1.pop();
+                    if (op === '(' || op === ')') throw new Error('أقواس غير متطابقة!');
+                    postfix += op + ' ';
+                }
+
+                postfix = postfix.trim();
+
+                // Step 2: Evaluate postfix
+                const tokens = postfix.split(/\s+/);
+                const stack2 = [];
+                let evalSteps = [];
+
+                for (let token of tokens) {
+                    if (!token) continue;
+
+                    if (!isNaN(token)) {
+                        stack2.push(parseFloat(token));
+                        evalSteps.push(`<div class="step">ادفع معامل ${token} إلى المكدس → [${stack2.join(', ')}]</div>`);
+                    }
+                    else if (isOperator(token)) {
+                        if (stack2.length < 2) throw new Error('تعبير غير صالح!');
+
+                        const b = stack2.pop();
+                        const a = stack2.pop();
+                        let result;
+
+                        switch(token) {
+                            case '+': result = a + b; break;
+                            case '-': result = a - b; break;
+                            case '*': result = a * b; break;
+                            case '/':
+                                if (b === 0) throw new Error('القسمة على صفر!');
+                                result = a / b;
+                                break;
+                            case '^': result = Math.pow(a, b); break;
+                            case '%': result = a % b; break;
+                        }
+
+                        stack2.push(result);
+                        evalSteps.push(`<div class="step">احسب ${a} ${token} ${b} = ${result} → [${stack2.join(', ')}]</div>`);
+                    }
+                }
+
+                if (stack2.length !== 1) throw new Error('تعبير غير صالح!');
+
+                const finalResult = stack2[0];
+
+                // Display results
+                document.getElementById('combinedInfix').textContent = infix;
+                document.getElementById('combinedPostfix').textContent = postfix;
+                document.getElementById('combinedFinal').textContent = finalResult;
+
+                const allSteps = [
+                    '<h4 style="color: #667eea; margin-top: 20px;">المرحلة 1: تحويل Infix إلى Postfix</h4>',
+                    ...conversionSteps,
+                    `<div class="step" style="background: #e3f2fd;">نتيجة Postfix: <strong>${postfix}</strong></div>`,
+                    '<h4 style="color: #667eea; margin-top: 20px;">المرحلة 2: تقييم Postfix</h4>',
+                    ...evalSteps,
+                    `<div class="step" style="background: #e8f5e9; border-color: #4caf50;">الإجابة النهائية: <strong>${finalResult}</strong></div>`
+                ];
+
+                document.getElementById('combinedSteps').innerHTML = allSteps.join('');
+                resultDiv.style.display = 'block';
+
+            } catch (error) {
+                errorDiv.innerHTML = `<div class="error">خطأ: ${error.message}</div>`;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Allow Enter key for calculators
+        document.getElementById('infixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') convertToPostfix();
+        });
+
+        document.getElementById('postfixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') evaluatePostfix();
+        });
+
+        document.getElementById('combinedInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') combinedCalculation();
+        });
+
+        // ========================================
+        // INFIX TO POSTFIX ANIMATION
+        // ========================================
+        let infixAnimationSteps = [];
+        let currentInfixStep = -1;
+
+        function startInfixAnimation() {
+            const infix = document.getElementById('animInfixInput').value.trim();
+            if (!infix) {
+                document.getElementById('animStatus').innerHTML = '⚠️ الرجاء إدخال تعبير داخلي!';
+                document.getElementById('animNextAction').style.display = 'none';
+                return;
+            }
+
+            infixAnimationSteps = generateInfixAnimationSteps(infix);
+
+            if (infixAnimationSteps.length === 0) {
+                document.getElementById('animStatus').innerHTML = '❌ تعبير غير صالح!';
+                document.getElementById('animNextAction').style.display = 'none';
+                return;
+            }
+
+            currentInfixStep = -1;
+            document.getElementById('animStatus').innerHTML = '✅ تم تحميل التعبير! جاهز للتحويل إلى Postfix. انقر "التالي" لبدء المسح من اليسار إلى اليمين.';
+            document.getElementById('infixNextBtn').disabled = false;
+            document.getElementById('infixPrevBtn').disabled = true;
+
+            // Show ALL input tokens initially
+            const inputDiv = document.getElementById('animInputTokens');
+            inputDiv.innerHTML = '';
+            const firstStep = infixAnimationSteps[0];
+            if (firstStep) {
+                // Show all tokens at the beginning
+                const allTokens = [{ value: firstStep.token, type: firstStep.tokenType }, ...firstStep.input];
+                allTokens.forEach(token => {
+                    const tokenEl = document.createElement('span');
+                    tokenEl.className = `token ${token.type}`;
+                    tokenEl.textContent = token.value;
+                    inputDiv.appendChild(tokenEl);
+                });
+            }
+
+            // Clear stack and output
+            document.getElementById('animStack').innerHTML = '<h4>المكدس</h4>';
+            document.getElementById('animOutputTokens').innerHTML = '';
+
+            // Show what happens next
+            showNextInfixAction();
+        }
+
+        function nextInfixStep() {
+            if (currentInfixStep < infixAnimationSteps.length - 1) {
+                currentInfixStep++;
+                executeInfixStep();
+                updateInfixButtons();
+                showNextInfixAction();
+            }
+        }
+
+        function prevInfixStep() {
+            if (currentInfixStep > -1) {
+                currentInfixStep--;
+                if (currentInfixStep >= 0) {
+                    executeInfixStep();
+                } else {
+                    // Reset to initial state
+                    currentInfixStep = -1;
+                    const tokens = document.getElementById('animInfixInput').value.trim().replace(/\s+/g, '').split('');
+                    const inputDiv = document.getElementById('animInputTokens');
+                    inputDiv.innerHTML = '';
+                    tokens.forEach(token => {
+                        const tokenEl = document.createElement('span');
+                        tokenEl.className = isOperator(token) ? 'token operator' : (token === '(' || token === ')' ? 'token' : 'token number');
+                        tokenEl.textContent = token;
+                        inputDiv.appendChild(tokenEl);
+                    });
+                    document.getElementById('animStack').innerHTML = '<h4>المكدس</h4>';
+                    document.getElementById('animOutputTokens').innerHTML = '';
+                    document.getElementById('animStatus').innerHTML = '✅ تم تحميل التعبير! انقر "التالي" لبدء الرسوم المتحركة خطوة بخطوة.';
+                }
+                updateInfixButtons();
+                showNextInfixAction();
+            }
+        }
+
+        function updateInfixButtons() {
+            document.getElementById('infixPrevBtn').disabled = (currentInfixStep <= -1);
+            document.getElementById('infixNextBtn').disabled = (currentInfixStep >= infixAnimationSteps.length - 1);
+        }
+
+        function showNextInfixAction() {
+            // Special case: if we haven't started yet (currentInfixStep === -1),
+            // show what will happen with the FIRST token
+            if (currentInfixStep === -1) {
+                if (infixAnimationSteps.length > 0) {
+                    const firstStep = infixAnimationSteps[0];
+                    const firstToken = firstStep.token;
+                    const firstTokenType = firstStep.tokenType;
+
+                    let firstDesc = '';
+                    if (firstTokenType === 'number') {
+                        firstDesc = `الرمز الأول هو "${firstToken}" وهو <strong>معامل</strong>. <br><strong>القاعدة:</strong> تُمسح المعاملات من اليسار إلى اليمين وتُضاف مباشرة إلى تعبير Postfix.`;
+                    } else if (firstToken === '(') {
+                        firstDesc = `الرمز الأول هو "${firstToken}" وهو <strong>قوس أيسر</strong>. <br><strong>القاعدة:</strong> "(" له أعلى أولوية خارج المكدس، لذا سيُدفع إلى المكدس.`;
+                    } else if (firstTokenType === 'operator') {
+                        firstDesc = `الرمز الأول هو "${firstToken}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> المكدس فارغ، لذا ستُدفع العملية إلى المكدس.`;
+                    }
+
+                    document.getElementById('nextActionText').innerHTML = firstDesc;
+                    document.getElementById('animNextAction').style.display = 'block';
+                }
+            } else {
+                // Normal case: show the nextActionDescription from the CURRENT step
+                if (currentInfixStep < infixAnimationSteps.length) {
+                    const currentStep = infixAnimationSteps[currentInfixStep];
+                    document.getElementById('nextActionText').innerHTML = currentStep.nextActionDescription;
+                    document.getElementById('animNextAction').style.display = 'block';
+                } else {
+                    document.getElementById('animNextAction').style.display = 'none';
+                }
+            }
+        }
+
+        function generateInfixAnimationSteps(infix) {
+            const steps = [];
+            const stack = [];
+            const output = [];
+            const inputTokens = [];
+
+            // Parse input into tokens
+            for (let i = 0; i < infix.length; i++) {
+                const ch = infix[i];
+                if (ch === ' ') continue;
+
+                if (isOperand(ch)) {
+                    let num = ch;
+                    while (i + 1 < infix.length && isOperand(infix[i + 1])) {
+                        num += infix[++i];
+                    }
+                    inputTokens.push({ value: num, type: 'number' });
+                } else if (isOperator(ch) || ch === '(' || ch === ')') {
+                    inputTokens.push({ value: ch, type: ch === '(' || ch === ')' ? 'paren' : 'operator' });
+                }
+            }
+
+            // Generate animation steps with detailed descriptions
+            try {
+                for (let i = 0; i < inputTokens.length; i++) {
+                    const token = inputTokens[i];
+                    const remainingInput = inputTokens.slice(i + 1);
+                    const nextToken = i + 1 < inputTokens.length ? inputTokens[i + 1] : null;
+
+                    // Store current token info for next action descriptions
+                    const currentTokenForNextStep = token;
+
+                    // OPERAND: Add to postfix expression
+                    if (token.type === 'number') {
+                        output.push(token.value);
+
+                        let nextDesc = '';
+                        if (nextToken) {
+                            if (nextToken.type === 'number') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>معامل</strong>. <br><strong>القاعدة:</strong> تُضاف المعاملات مباشرة إلى تعبير Postfix.`;
+                            } else if (nextToken.value === '(') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>قوس أيسر</strong>. <br><strong>القاعدة:</strong> "(" له أعلى أولوية خارج المكدس، لذا سيُدفع إليه. (داخل المكدس له أدنى أولوية)`;
+                            } else if (nextToken.value === ')') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>قوس أيمن</strong>. <br><strong>القاعدة:</strong> أخرج العمليات من المكدس إلى المخرجات حتى تجد "("، ثم تجاهل القوسين.`;
+                            } else if (nextToken.type === 'operator') {
+                                if (stack.length === 0) {
+                                    nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> المكدس <strong>فارغ</strong> → ادفع العملية الواردة إلى المكدس.`;
+                                } else if (stack[stack.length - 1] === '(') {
+                                    nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> قمة المكدس "(" → ادفع العملية الواردة إلى المكدس.`;
+                                } else {
+                                    const topOp = stack[stack.length - 1];
+                                    const topPrec = getPrecedence(topOp);
+                                    const incomingPrec = getPrecedence(nextToken.value);
+                                    if (incomingPrec > topPrec) {
+                                        nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> "${nextToken.value}" له <strong>أولوية أعلى</strong> من "${topOp}" في قمة المكدس → ادفعه إلى المكدس.`;
+                                    } else if (incomingPrec === topPrec) {
+                                        nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> "${nextToken.value}" له <strong>أولوية مساوية</strong> لـ "${topOp}" في قمة المكدس → أخرج "${topOp}" إلى المخرجات، ثم أعد التحقق.`;
+                                    } else {
+                                        nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> "${nextToken.value}" له <strong>أولوية أقل</strong> من "${topOp}" في قمة المكدس → أخرج "${topOp}" إلى المخرجات، ثم أعد التحقق.`;
+                                    }
+                                }
+                            }
+                        } else {
+                            nextDesc = `اكتمل مسح التعبير. <br><strong>القاعدة:</strong> أخرج جميع العمليات المتبقية من المكدس إلى المخرجات.`;
+                        }
+
+                        steps.push({
+                            action: 'output',
+                            token: token.value,
+                            tokenType: 'number',
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            output: [...output],
+                            message: `مسح "${token.value}" وهو <strong>معامل</strong> → أضفه مباشرة إلى تعبير Postfix (وفق القاعدة)`,
+                            nextActionDescription: nextDesc
+                        });
+                    }
+                    // LEFT PARENTHESIS: Push to stack
+                    else if (token.value === '(') {
+                        stack.push(token.value);
+
+                        let nextDesc = '';
+                        if (nextToken) {
+                            if (nextToken.type === 'number') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>معامل</strong>. <br><strong>القاعدة:</strong> أضفه مباشرة إلى تعبير Postfix.`;
+                            } else if (nextToken.value === '(') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>قوس أيسر</strong>. <br><strong>القاعدة:</strong> ادفعه إلى المكدس.`;
+                            } else if (nextToken.type === 'operator') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> قمة المكدس "(", لذا ادفع العملية الواردة.`;
+                            }
+                        }
+
+                        steps.push({
+                            action: 'push',
+                            token: token.value,
+                            tokenType: 'paren',
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            output: [...output],
+                            message: `مسح "${token.value}" وهو <strong>قوس أيسر</strong> → ادفعه إلى المكدس (أعلى أولوية خارجه، أدنى أولوية داخله)`,
+                            nextActionDescription: nextDesc
+                        });
+                    }
+                    // RIGHT PARENTHESIS: Pop until (
+                    else if (token.value === ')') {
+                        // Pop operators until we find (
+                        while (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                            const op = stack.pop();
+                            output.push(op);
+
+                            let popNextDesc = '';
+                            if (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                                popNextDesc = `<strong>القاعدة:</strong> استمر في إخراج العمليات حتى تجد "(". التالي: أخرج "${stack[stack.length - 1]}".`;
+                            } else if (stack.length > 0 && stack[stack.length - 1] === '(') {
+                                popNextDesc = `<strong>القاعدة:</strong> وُجد "("! تجاهل القوسين "(" و")".`;
+                            }
+
+                            steps.push({
+                                action: 'pop_to_output',
+                                token: op,
+                                tokenType: 'operator',
+                                input: [...remainingInput],
+                                stack: [...stack],
+                                output: [...output],
+                                message: `مسح ")" → أخرج "${op}" من المكدس إلى تعبير Postfix (بحثاً عن "(" المطابق)`,
+                                nextActionDescription: popNextDesc
+                            });
+                        }
+
+                        if (stack.length > 0) {
+                            stack.pop(); // Remove '('
+
+                            let nextDesc = '';
+                            if (nextToken) {
+                                if (nextToken.type === 'number') {
+                                    nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>معامل</strong>. <br><strong>القاعدة:</strong> أضفه إلى تعبير Postfix.`;
+                                } else if (nextToken.type === 'operator') {
+                                    if (stack.length === 0) {
+                                        nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> المكدس فارغ → ادفعه إلى المكدس.`;
+                                    } else {
+                                        nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> قارن الأولوية مع قمة المكدس.`;
+                                    }
+                                }
+                            } else {
+                                nextDesc = `اكتمل مسح التعبير. <br><strong>القاعدة:</strong> أخرج جميع العمليات المتبقية إلى المخرجات.`;
+                            }
+
+                            steps.push({
+                                action: 'discard_parens',
+                                token: '(',
+                                tokenType: 'paren',
+                                input: [...remainingInput],
+                                stack: [...stack],
+                                output: [...output],
+                                message: `وُجد "(" في المكدس → تجاهل القوسين "(" و")" (وفق القاعدة)`,
+                                nextActionDescription: nextDesc
+                            });
+                        }
+                    }
+                    // OPERATOR: Compare precedence
+                    else if (isOperator(token.value)) {
+                        // Check if we need to pop (comparison needed)
+                        const needsComparison = stack.length > 0 &&
+                                               stack[stack.length - 1] !== '(' &&
+                                               getPrecedence(stack[stack.length - 1]) >= getPrecedence(token.value);
+
+                        // If comparison/popping is needed, show operator as WAITING
+                        if (needsComparison) {
+                            const topOp = stack[stack.length - 1];
+                            const topPrec = getPrecedence(topOp);
+                            const incomingPrec = getPrecedence(token.value);
+
+                            let waitDesc = '';
+                            if (incomingPrec === topPrec) {
+                                waitDesc = `<strong>القاعدة:</strong> "${token.value}" له أولوية مساوية لـ "${topOp}" → يجب إخراج "${topOp}" أولاً، ثم إعادة التحقق.`;
+                            } else {
+                                waitDesc = `<strong>القاعدة:</strong> "${token.value}" له أولوية أقل من "${topOp}" → يجب إخراج "${topOp}" أولاً، ثم إعادة التحقق.`;
+                            }
+
+                            steps.push({
+                                action: 'wait_for_comparison',
+                                token: token.value,
+                                tokenType: 'operator',
+                                input: [...remainingInput],
+                                stack: [...stack],
+                                output: [...output],
+                                waiting: token.value,
+                                message: `مسح "${token.value}" وهو <strong>عملية</strong> → ستنتظر (لها أولوية أقل/مساوية لقمة المكدس، يجب إخراج المكدس أولاً)`,
+                                nextActionDescription: waitDesc
+                            });
+                        }
+
+                        // Pop operators with higher or equal precedence
+                        while (stack.length > 0 &&
+                               stack[stack.length - 1] !== '(' &&
+                               getPrecedence(stack[stack.length - 1]) >= getPrecedence(token.value)) {
+                            const op = stack.pop();
+                            output.push(op);
+
+                            let popNextDesc = '';
+                            if (stack.length === 0 || stack[stack.length - 1] === '(') {
+                                popNextDesc = `<strong>القاعدة:</strong> المكدس فارغ الآن (أو يحتوي "(") → ادفع "${token.value}" إلى المكدس.`;
+                            } else if (getPrecedence(stack[stack.length - 1]) >= getPrecedence(token.value)) {
+                                popNextDesc = `<strong>القاعدة:</strong> "${stack[stack.length - 1]}" لا يزال له أولوية أعلى/مساوية → استمر في الإخراج.`;
+                            } else {
+                                popNextDesc = `<strong>القاعدة:</strong> "${token.value}" أصبح له أولوية أعلى من "${stack[stack.length - 1]}" → ادفع "${token.value}" إلى المكدس.`;
+                            }
+
+                            const popReason = getPrecedence(op) === getPrecedence(token.value)
+                                ? `<strong>أولوية مساوية</strong>`
+                                : `<strong>أولوية أعلى</strong>`;
+
+                            steps.push({
+                                action: 'pop_to_output',
+                                token: op,
+                                tokenType: 'operator',
+                                input: [...remainingInput],
+                                stack: [...stack],
+                                output: [...output],
+                                waiting: token.value,
+                                message: `"${token.value}" لا تزال تنتظر → "${op}" لها ${popReason}، أخرج "${op}" إلى المخرجات وتحقق مرة أخرى`,
+                                nextActionDescription: popNextDesc
+                            });
+                        }
+
+                        stack.push(token.value);
+
+                        let nextDesc = '';
+                        if (nextToken) {
+                            if (nextToken.type === 'number') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>معامل</strong>. <br><strong>القاعدة:</strong> أضفه مباشرة إلى تعبير Postfix.`;
+                            } else if (nextToken.value === '(') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>قوس أيسر</strong>. <br><strong>القاعدة:</strong> ادفعه إلى المكدس.`;
+                            } else if (nextToken.value === ')') {
+                                nextDesc = `الرمز التالي هو "${nextToken.value}" وهو <strong>قوس أيمن</strong>. <br><strong>القاعدة:</strong> أخرج حتى تجد "(".`;
+                            }
+                        } else {
+                            nextDesc = `اكتمل مسح التعبير. <br><strong>القاعدة:</strong> أخرج جميع العمليات المتبقية من المكدس إلى المخرجات.`;
+                        }
+
+                        let pushReason = '';
+                        if (stack.length === 1) {
+                            pushReason = `<strong>القاعدة:</strong> المكدس <strong>فارغ</strong> → ادفع "${token.value}" إلى المكدس`;
+                        } else if (stack.length === 2 && stack[0] === '(') {
+                            pushReason = `<strong>القاعدة:</strong> المكدس يحتوي "(" فقط → ادفع "${token.value}" إلى المكدس`;
+                        } else {
+                            pushReason = `<strong>القاعدة:</strong> "${token.value}" له <strong>أولوية أعلى</strong> من العمليات الأدنى في المكدس → ادفعه إلى المكدس`;
+                        }
+
+                        steps.push({
+                            action: needsComparison ? 'push_from_waiting' : 'push',
+                            token: token.value,
+                            tokenType: 'operator',
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            output: [...output],
+                            waiting: null,
+                            message: needsComparison
+                                ? `${pushReason} → ادفع "${token.value}" إلى المكدس (اكتملت المقارنة)`
+                                : `مسح "${token.value}" وهو <strong>عملية</strong> → ${pushReason}`,
+                            nextActionDescription: nextDesc
+                        });
+                    }
+                }
+
+                // Pop remaining operators
+                while (stack.length > 0) {
+                    const op = stack.pop();
+                    output.push(op);
+
+                    let nextDesc = stack.length > 0
+                        ? `<strong>القاعدة:</strong> استمر في إخراج العمليات المتبقية. التالي: سيُخرج "${stack[stack.length - 1]}".`
+                        : `أُخرجت جميع العمليات. اكتمل التحويل!`;
+
+                    steps.push({
+                        action: 'pop_to_output',
+                        token: op,
+                        tokenType: 'operator',
+                        input: [],
+                        stack: [...stack],
+                        output: [...output],
+                        message: `<strong>القاعدة:</strong> اكتمل مسح التعبير → أخرج "${op}" من المكدس وأضفه إلى تعبير Postfix`,
+                        nextActionDescription: nextDesc
+                    });
+                }
+
+                steps.push({
+                    action: 'done',
+                    input: [],
+                    stack: [],
+                    output: [...output],
+                    message: `✅ اكتمل التحويل! تعبير Postfix: <strong>${output.join(' ')}</strong>`,
+                    nextActionDescription: 'انتهت الرسوم المتحركة. طُبّقت جميع القواعد بنجاح!'
+                });
+
+            } catch (error) {
+                return [];
+            }
+
+            return steps;
+        }
+
+        function executeInfixStep() {
+            if (currentInfixStep < 0 || currentInfixStep >= infixAnimationSteps.length) {
+                return;
+            }
+
+            const step = infixAnimationSteps[currentInfixStep];
+
+            // Update status message
+            document.getElementById('animStatus').innerHTML = `<strong>الخطوة ${currentInfixStep + 1}:</strong> ${step.message}`;
+
+            // Update input area
+            const inputDiv = document.getElementById('animInputTokens');
+            inputDiv.innerHTML = '';
+            step.input.forEach(token => {
+                const tokenEl = document.createElement('span');
+                tokenEl.className = `token ${token.type}`;
+                tokenEl.textContent = token.value;
+                inputDiv.appendChild(tokenEl);
+            });
+
+            // Update stack
+            const stackDiv = document.getElementById('animStack');
+            stackDiv.innerHTML = '<h4>المكدس</h4>';
+
+            // Add waiting symbol if present
+            if (step.waiting) {
+                const waitingSymbol = document.createElement('div');
+                waitingSymbol.className = 'waiting-symbol';
+                waitingSymbol.textContent = step.waiting;
+                stackDiv.appendChild(waitingSymbol);
+
+                const waitingLabel = document.createElement('div');
+                waitingLabel.className = 'waiting-label';
+                waitingLabel.textContent = 'تنتظر';
+                stackDiv.appendChild(waitingLabel);
+            }
+
+            step.stack.forEach(item => {
+                const stackItem = document.createElement('div');
+                stackItem.className = 'stack-token';
+                stackItem.textContent = item;
+                stackItem.style.animation = 'pushToStack 0.5s ease';
+                stackDiv.appendChild(stackItem);
+            });
+
+            // Update output
+            const outputDiv = document.getElementById('animOutputTokens');
+            outputDiv.innerHTML = '';
+            step.output.forEach(item => {
+                const outputToken = document.createElement('span');
+                outputToken.className = 'output-token';
+                outputToken.textContent = item;
+                outputToken.style.animation = 'fadeIn 0.5s ease';
+                outputDiv.appendChild(outputToken);
+            });
+        }
+
+        function resetInfixAnimation() {
+            currentInfixStep = -1;
+            infixAnimationSteps = [];
+            document.getElementById('animInputTokens').innerHTML = '';
+            document.getElementById('animStack').innerHTML = '<h4>المكدس</h4>';
+            document.getElementById('animOutputTokens').innerHTML = '';
+            document.getElementById('animStatus').innerHTML = 'أدخل تعبيراً داخلياً وانقر "تحميل التعبير"';
+            document.getElementById('animNextAction').style.display = 'none';
+            document.getElementById('infixNextBtn').disabled = true;
+            document.getElementById('infixPrevBtn').disabled = true;
+            document.getElementById('animInfixInput').value = '';
+        }
+
+        // ========================================
+        // POSTFIX EVALUATION ANIMATION
+        // ========================================
+        let evalAnimationSteps = [];
+        let currentEvalStep = -1;
+
+        function startEvalAnimation() {
+            const postfix = document.getElementById('animPostfixInput').value.trim();
+            if (!postfix) {
+                document.getElementById('evalAnimStatus').innerHTML = '⚠️ الرجاء إدخال تعبير Postfix!';
+                document.getElementById('evalNextAction').style.display = 'none';
+                return;
+            }
+
+            evalAnimationSteps = generateEvalAnimationSteps(postfix);
+
+            if (evalAnimationSteps.length === 0) {
+                document.getElementById('evalAnimStatus').innerHTML = '❌ تعبير غير صالح!';
+                document.getElementById('evalNextAction').style.display = 'none';
+                return;
+            }
+
+            currentEvalStep = -1;
+            document.getElementById('evalAnimStatus').innerHTML = '✅ تم تحميل التعبير! انقر "التالي" لبدء الرسوم المتحركة خطوة بخطوة.';
+            document.getElementById('evalNextBtn').disabled = false;
+            document.getElementById('evalPrevBtn').disabled = true;
+
+            // Display all input tokens
+            const tokens = postfix.split(/\s+/).filter(t => t);
+            const inputDiv = document.getElementById('evalInputTokens');
+            inputDiv.innerHTML = '';
+            tokens.forEach(token => {
+                const tokenEl = document.createElement('span');
+                tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
+                tokenEl.textContent = token;
+                inputDiv.appendChild(tokenEl);
+            });
+
+            // Clear other displays
+            document.getElementById('evalStack').innerHTML = '<h4>المكدس</h4>';
+            document.getElementById('computationDisplay').innerHTML = 'جاهز';
+            document.getElementById('finalResult').textContent = '-';
+
+            // Show what happens next
+            showNextEvalAction();
+        }
+
+        function nextEvalStep() {
+            if (currentEvalStep < evalAnimationSteps.length - 1) {
+                currentEvalStep++;
+                executeEvalStep();
+                updateEvalButtons();
+                showNextEvalAction();
+            }
+        }
+
+        function prevEvalStep() {
+            if (currentEvalStep > -1) {
+                currentEvalStep--;
+                if (currentEvalStep >= 0) {
+                    executeEvalStep();
+                } else {
+                    // Reset to initial state
+                    currentEvalStep = -1;
+                    const postfix = document.getElementById('animPostfixInput').value.trim();
+                    const tokens = postfix.split(/\s+/).filter(t => t);
+                    const inputDiv = document.getElementById('evalInputTokens');
+                    inputDiv.innerHTML = '';
+                    tokens.forEach(token => {
+                        const tokenEl = document.createElement('span');
+                        tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
+                        tokenEl.textContent = token;
+                        inputDiv.appendChild(tokenEl);
+                    });
+                    document.getElementById('evalStack').innerHTML = '<h4>المكدس</h4>';
+                    document.getElementById('computationDisplay').innerHTML = 'جاهز';
+                    document.getElementById('finalResult').textContent = '-';
+                    document.getElementById('evalAnimStatus').innerHTML = '✅ تم تحميل التعبير! انقر "التالي" لبدء الرسوم المتحركة خطوة بخطوة.';
+                }
+                updateEvalButtons();
+                showNextEvalAction();
+            }
+        }
+
+        function updateEvalButtons() {
+            document.getElementById('evalPrevBtn').disabled = (currentEvalStep <= -1);
+            document.getElementById('evalNextBtn').disabled = (currentEvalStep >= evalAnimationSteps.length - 1);
+        }
+
+        function showNextEvalAction() {
+            // Special case: if we haven't started yet (currentEvalStep === -1),
+            // show what will happen with the FIRST token
+            if (currentEvalStep === -1) {
+                if (evalAnimationSteps.length > 0) {
+                    const firstStep = evalAnimationSteps[0];
+                    const firstToken = firstStep.token;
+
+                    let firstDesc = '';
+                    if (!isNaN(firstToken)) {
+                        firstDesc = `الرمز الأول هو "${firstToken}" وهو <strong>معامل</strong>. <br><strong>القاعدة:</strong> تُدفع المعاملات مباشرة إلى المكدس.`;
+                    } else if (isOperator(firstToken)) {
+                        firstDesc = `الرمز الأول هو "${firstToken}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> العمليات تُخرج معاملَين، تحسب، وتدفع النتيجة.`;
+                    }
+
+                    document.getElementById('evalNextActionText').innerHTML = firstDesc;
+                    document.getElementById('evalNextAction').style.display = 'block';
+                }
+            } else {
+                // Normal case: show the nextActionDescription from the CURRENT step
+                if (currentEvalStep < evalAnimationSteps.length) {
+                    const currentStep = evalAnimationSteps[currentEvalStep];
+                    document.getElementById('evalNextActionText').innerHTML = currentStep.nextActionDescription;
+                    document.getElementById('evalNextAction').style.display = 'block';
+                } else {
+                    document.getElementById('evalNextAction').style.display = 'none';
+                }
+            }
+        }
+
+        function generateEvalAnimationSteps(postfix) {
+            const steps = [];
+            const tokens = postfix.split(/\s+/).filter(t => t);
+            const stack = [];
+
+            try {
+                for (let i = 0; i < tokens.length; i++) {
+                    const token = tokens[i];
+                    const remainingInput = tokens.slice(i + 1);
+                    const nextToken = i + 1 < tokens.length ? tokens[i + 1] : null;
+
+                    // OPERAND: Push to stack
+                    if (!isNaN(token)) {
+                        stack.push(parseFloat(token));
+
+                        let nextDesc = '';
+                        if (nextToken) {
+                            if (!isNaN(nextToken)) {
+                                nextDesc = `سيُمسح المعامل "${nextToken}" ويُدفع إلى المكدس.`;
+                            } else if (isOperator(nextToken)) {
+                                nextDesc = `ستُخرج العملية "${nextToken}" أعلى معاملَين (${stack[stack.length - 1]} و ${stack[stack.length - 2]}) وتُجري عملية ${nextToken}.`;
+                            }
+                        } else {
+                            nextDesc = `اكتمل مسح التعبير. النتيجة النهائية في قمة المكدس.`;
+                        }
+
+                        steps.push({
+                            action: 'push',
+                            token: token,
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            computation: '',
+                            message: `مسح معامل "${token}" → ادفعه إلى المكدس`,
+                            nextActionDescription: nextDesc
+                        });
+                    }
+                    // OPERATOR: Pop, compute, push result
+                    else if (isOperator(token)) {
+                        if (stack.length < 2) {
+                            throw new Error('تعبير غير صالح');
+                        }
+
+                        const b = stack.pop();
+                        const a = stack.pop();
+                        let result;
+
+                        switch(token) {
+                            case '+': result = a + b; break;
+                            case '-': result = a - b; break;
+                            case '*': result = a * b; break;
+                            case '/':
+                                if (b === 0) throw new Error('القسمة على صفر');
+                                result = a / b;
+                                break;
+                            case '^': result = Math.pow(a, b); break;
+                            case '%': result = a % b; break;
+                        }
+
+                        let computeNextDesc = `ستُدفع النتيجة المحسوبة ${result} مرة أخرى إلى المكدس.`;
+
+                        steps.push({
+                            action: 'compute',
+                            token: token,
+                            input: [...remainingInput],
+                            stack: [a, b],
+                            computation: `${a} ${token} ${b} = ${result}`,
+                            message: `وُجدت عملية "${token}" → أخرج أعلى معاملَين: ${b} (القمة) و ${a}، ثم احسب ${a} ${token} ${b} = ${result}`,
+                            nextActionDescription: computeNextDesc
+                        });
+
+                        stack.push(result);
+
+                        let pushNextDesc = '';
+                        if (nextToken) {
+                            if (!isNaN(nextToken)) {
+                                pushNextDesc = `سيُدفع المعامل التالي "${nextToken}" إلى المكدس.`;
+                            } else if (isOperator(nextToken)) {
+                                if (stack.length >= 2) {
+                                    pushNextDesc = `ستُخرج العملية "${nextToken}" القيم ${stack[stack.length - 1]} و ${stack[stack.length - 2]} لإجراء الحساب.`;
+                                } else {
+                                    pushNextDesc = `ستُعالج العملية "${nextToken}" بعد ذلك.`;
+                                }
+                            }
+                        } else {
+                            pushNextDesc = `اكتمل مسح التعبير. قمة المكدس ${result} هي النتيجة النهائية.`;
+                        }
+
+                        steps.push({
+                            action: 'push_result',
+                            token: result,
+                            input: [...remainingInput],
+                            stack: [...stack],
+                            computation: `النتيجة: ${result}`,
+                            message: `ادفع النتيجة المحسوبة ${result} إلى المكدس`,
+                            nextActionDescription: pushNextDesc
+                        });
+                    }
+                }
+
+                if (stack.length === 1) {
+                    steps.push({
+                        action: 'done',
+                        input: [],
+                        stack: [...stack],
+                        computation: '',
+                        finalResult: stack[0],
+                        message: `✅ اكتمل التقييم! النتيجة النهائية: ${stack[0]}`,
+                        nextActionDescription: 'انتهت الرسوم المتحركة.'
+                    });
+                }
+
+            } catch (error) {
+                return [];
+            }
+
+            return steps;
+        }
+
+        function executeEvalStep() {
+            if (currentEvalStep < 0 || currentEvalStep >= evalAnimationSteps.length) {
+                return;
+            }
+
+            const step = evalAnimationSteps[currentEvalStep];
+
+            // Update status message
+            document.getElementById('evalAnimStatus').innerHTML = `<strong>الخطوة ${currentEvalStep + 1}:</strong> ${step.message}`;
+
+            // Update input area
+            const inputDiv = document.getElementById('evalInputTokens');
+            inputDiv.innerHTML = '';
+            step.input.forEach(token => {
+                const tokenEl = document.createElement('span');
+                tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
+                tokenEl.textContent = token;
+                inputDiv.appendChild(tokenEl);
+            });
+
+            // Update stack
+            const stackDiv = document.getElementById('evalStack');
+            stackDiv.innerHTML = '<h4>المكدس</h4>';
+            step.stack.forEach(item => {
+                const stackItem = document.createElement('div');
+                stackItem.className = 'stack-token';
+                stackItem.textContent = item;
+                stackItem.style.animation = 'pushToStack 0.5s ease';
+                stackDiv.appendChild(stackItem);
+            });
+
+            // Update computation display
+            const compDisplay = document.getElementById('computationDisplay');
+            if (step.computation) {
+                compDisplay.innerHTML = step.computation;
+                compDisplay.style.animation = 'highlight 1s ease';
+            } else {
+                compDisplay.innerHTML = 'جاهز';
+                compDisplay.style.animation = 'none';
+            }
+
+            // Update final result if done
+            if (step.action === 'done') {
+                document.getElementById('finalResult').textContent = step.finalResult;
+                document.getElementById('finalResult').style.animation = 'highlight 1s ease';
+            }
+        }
+
+        function resetEvalAnimation() {
+            currentEvalStep = -1;
+            evalAnimationSteps = [];
+            document.getElementById('evalInputTokens').innerHTML = '';
+            document.getElementById('evalStack').innerHTML = '<h4>المكدس</h4>';
+            document.getElementById('computationDisplay').innerHTML = 'جاهز';
+            document.getElementById('finalResult').textContent = '-';
+            document.getElementById('evalAnimStatus').innerHTML = 'أدخل تعبير Postfix وانقر "تحميل التعبير"';
+            document.getElementById('evalNextAction').style.display = 'none';
+            document.getElementById('evalNextBtn').disabled = true;
+            document.getElementById('evalPrevBtn').disabled = true;
+            document.getElementById('animPostfixInput').value = '';
+        }
+
+        // Allow Enter key for animation inputs
+        document.getElementById('animInfixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') startInfixAnimation();
+        });
+
+        document.getElementById('animPostfixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') startEvalAnimation();
+        });
+    </script>
+</body>
+</html>

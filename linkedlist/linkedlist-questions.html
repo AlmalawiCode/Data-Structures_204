@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List Questions - CPCS 204</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.2em; opacity: 0.9; }
+
+        .content { padding: 40px; }
+
+        /* Score tracker */
+        .score-bar {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .score-item {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .score-item .label { color: #666; font-size: 0.9em; }
+        .score-item .value { font-size: 1.8em; color: #667eea; }
+        .score-item .value.correct { color: #27ae60; }
+        .score-item .value.wrong { color: #e74c3c; }
+
+        /* Section headers */
+        .section-header {
+            color: #667eea;
+            font-size: 2em;
+            margin: 40px 0 20px 0;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section-desc {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+        }
+
+        /* Coding question styles */
+        .coding-question {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .coding-question:hover { border-color: #667eea; }
+
+        .q-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .q-difficulty {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .q-difficulty.easy { background: #e8f5e9; color: #2e7d32; }
+        .q-difficulty.medium { background: #fff3e0; color: #e65100; }
+        .q-difficulty.hard { background: #ffebee; color: #c62828; }
+
+        .q-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+
+        .q-description {
+            color: #555;
+            margin: 10px 0 15px;
+        }
+
+        /* Visual linked list diagrams */
+        .ll-visual {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .node {
+            display: inline-block;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+
+        .node-data {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .node-next {
+            background: #f0f4ff;
+            padding: 8px 12px;
+            display: inline-block;
+            color: #667eea;
+            font-size: 0.85em;
+        }
+
+        .arrow {
+            display: inline-block;
+            color: #667eea;
+            font-size: 1.5em;
+            vertical-align: middle;
+            margin: 0 3px;
+        }
+
+        .null-box {
+            display: inline-block;
+            color: #999;
+            font-style: italic;
+            font-weight: bold;
+            font-size: 0.95em;
+            vertical-align: middle;
+            padding: 8px 5px;
+        }
+
+        .visual-desc {
+            display: block;
+            color: #555;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .head-label, .tail-label {
+            display: inline-block;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: bold;
+            font-size: 0.85em;
+            color: #856404;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .head-label::after, .tail-label::after {
+            content: ' →';
+            color: #667eea;
+        }
+
+        .tail-label {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        /* Code block */
+        .code-container {
+            margin: 20px 0;
+        }
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .keyword { color: #ff79c6; }
+        .type { color: #8be9fd; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .number { color: #bd93f9; }
+        .method { color: #50fa7b; }
+
+        /* Solution reveal */
+        .solution-toggle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            background: #e8f5e9;
+            border-left: 5px solid #27ae60;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            animation: slideDown 0.3s ease;
+        }
+
+        .solution-content.visible { display: block; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .solution-content h4 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        .solution-explanation {
+            color: #555;
+            margin: 10px 0;
+        }
+
+        /* MCQ styles */
+        .mcq-question {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: border-color 0.3s;
+        }
+
+        .mcq-question:hover { border-color: #764ba2; }
+
+        .mcq-options { margin: 15px 0; }
+
+        .mcq-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .mcq-option:hover { border-color: #667eea; background: #f0f4ff; }
+
+        .mcq-option.selected-correct {
+            background: #e8f5e9;
+            border-color: #27ae60;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .mcq-option.selected-wrong {
+            background: #ffebee;
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .mcq-option.show-correct {
+            background: #e8f5e9;
+            border-color: #27ae60;
+        }
+
+        .mcq-option:disabled { cursor: not-allowed; }
+
+        .mcq-feedback {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .mcq-feedback.correct {
+            display: block;
+            background: #e8f5e9;
+            border-left: 5px solid #27ae60;
+        }
+
+        .mcq-feedback.wrong {
+            display: block;
+            background: #ffebee;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .mcq-feedback strong { display: block; margin-bottom: 5px; }
+
+        /* Progress bar */
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 10px;
+            width: 200px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        /* Back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Tab navigation */
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .content { padding: 20px; }
+            .score-bar { flex-direction: column; }
+            .ll-visual { font-size: 0.8em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Linked List Question Bank</h1>
+        <p>CPCS 204 - Data Structures | 18 Coding + 20 MCQ Questions</p>
+    </header>
+
+    <div class="content">
+
+        <!-- Score Tracker -->
+        <div class="score-bar">
+            <div class="score-item">
+                <div class="label">MCQ Score</div>
+                <div class="value"><span id="mcq-correct" class="correct">0</span> / <span id="mcq-total">20</span></div>
+            </div>
+            <div class="score-item">
+                <div class="label">Answered</div>
+                <div class="value" id="mcq-answered">0</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Progress</div>
+                <div class="progress-container">
+                    <div class="progress-fill" id="progress-bar"></div>
+                </div>
+            </div>
+            <div class="score-item">
+                <button class="tab-btn" onclick="resetAll()">Reset All</button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="showTab('coding')">Coding Questions (20)</button>
+            <button class="tab-btn" onclick="showTab('mcq')">MCQ Questions (20)</button>
+        </div>
+
+        <!-- ===================== CODING QUESTIONS ===================== -->
+        <div id="coding-tab" class="tab-content active">
+            <h2 class="section-header">Coding Questions</h2>
+            <p class="section-desc">Each question includes a visual diagram. Click "Show Solution" to reveal the answer with explanation.</p>
+
+            <!-- Q1 -->
+            <div class="coding-question">
+                <span class="q-number">Q1</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">Traverse and Print a Singly Linked List</div>
+                <div class="q-description">Write a method <code>void printList(Node head)</code> that prints all elements of a singly linked list separated by <code> -> </code>.</div>
+                <div class="ll-visual">
+                    <span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="q-description">Expected Output: <code>10 -> 20 -> 30 -> null</code></div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public void</span> <span class="type">printList</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        System.out.print(current.data + <span class="string">" -> "</span>);
+        current = current.next;
+    }
+    System.out.println(<span class="string">"null"</span>);
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> We use a <code>current</code> pointer starting at <code>head</code>. We traverse by moving <code>current = current.next</code> until we reach <code>null</code>. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="coding-question">
+                <span class="q-number">Q2</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">Count Nodes in a Linked List</div>
+                <div class="q-description">Write a method <code>int countNodes(Node head)</code> that returns the total number of nodes.</div>
+                <div class="ll-visual">
+                    <span class="head-label">head</span>
+                    <span class="node"><span class="node-data">5</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">12</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">7</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="q-description">Expected Output: <code>4</code></div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public int</span> <span class="type">countNodes</span>(<span class="type">Node</span> head) {
+    <span class="keyword">int</span> count = <span class="number">0</span>;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        count++;
+        current = current.next;
+    }
+    <span class="keyword">return</span> count;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Initialize a counter to 0. Traverse the list, incrementing the counter at each node. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="coding-question">
+                <span class="q-number">Q3</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">Insert at the Beginning</div>
+                <div class="q-description">Write a method <code>Node insertAtHead(Node head, int data)</code> that inserts a new node at the beginning of the list.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After inserting 10:</div><span class="head-label">head</span>
+                    <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtHead</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
+    <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+    newNode.next = head;
+    head = newNode;
+    <span class="keyword">return</span> head;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Create a new node, point its <code>next</code> to the current head, then update head to the new node. Time: O(1), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="coding-question">
+                <span class="q-number">Q4</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">Insert at the End</div>
+                <div class="q-description">Write a method <code>Node insertAtEnd(Node head, int data)</code> that inserts a new node at the end of the list.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After inserting 30:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
+    <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return</span> newNode;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current.next != <span class="keyword">null</span>) {
+        current = current.next;
+    }
+    current.next = newNode;
+    <span class="keyword">return</span> head;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Traverse to the last node (where <code>next == null</code>), then set its <code>next</code> to the new node. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="coding-question">
+                <span class="q-number">Q5</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">Search for a Value</div>
+                <div class="q-description">Write a method <code>boolean search(Node head, int target)</code> that returns <code>true</code> if the target value exists in the list.</div>
+                <div class="ll-visual">
+                    <span class="head-label">head</span>
+                    <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">8</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">15</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">23</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="q-description">Search for <code>15</code> &rarr; returns <code>true</code></div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public boolean</span> <span class="type">search</span>(<span class="type">Node</span> head, <span class="keyword">int</span> target) {
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (current.data == target) <span class="keyword">return true</span>;
+        current = current.next;
+    }
+    <span class="keyword">return false</span>;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Linear search through each node comparing <code>data</code> with <code>target</code>. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="coding-question">
+                <span class="q-number">Q6</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">Delete the First Node</div>
+                <div class="q-description">Write a method <code>Node deleteFirst(Node head)</code> that removes the first node and returns the new head.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">10</span><span class="node-next">del</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteFirst</span>(<span class="type">Node</span> head) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
+    <span class="keyword">return</span> head.next;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Simply return <code>head.next</code>. The old head node becomes eligible for garbage collection. Time: O(1), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="coding-question">
+                <span class="q-number">Q7</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Delete the Last Node</div>
+                <div class="q-description">Write a method <code>Node deleteLast(Node head)</code> that removes the last node from the list.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">30</span><span class="node-next">del</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteLast</span>(<span class="type">Node</span> head) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>) <span class="keyword">return null</span>;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current.next.next != <span class="keyword">null</span>) {
+        current = current.next;
+    }
+    current.next = <span class="keyword">null</span>;
+    <span class="keyword">return</span> head;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Traverse until <code>current.next.next == null</code> (second-to-last node), then set <code>current.next = null</code>. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="coding-question">
+                <span class="q-number">Q8</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Delete a Node by Value</div>
+                <div class="q-description">Write a method <code>Node deleteByValue(Node head, int value)</code> that deletes the first occurrence of the given value.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before (delete 20):</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">20</span><span class="node-next">del</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteByValue</span>(<span class="type">Node</span> head, <span class="keyword">int</span> value) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
+    <span class="keyword">if</span> (head.data == value) <span class="keyword">return</span> head.next;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current.next != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (current.next.data == value) {
+            current.next = current.next.next;
+            <span class="keyword">return</span> head;
+        }
+        current = current.next;
+    }
+    <span class="keyword">return</span> head;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Check if head has the value first. Then traverse looking at <code>current.next.data</code>. When found, skip over it by setting <code>current.next = current.next.next</code>. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="coding-question">
+                <span class="q-number">Q9</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Insert at a Given Position</div>
+                <div class="q-description">Write a method <code>Node insertAtPosition(Node head, int data, int position)</code> that inserts a node at the given position (0-indexed).</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After inserting 25 at position 2:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">25</span><span class="node-next">new</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtPosition</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data, <span class="keyword">int</span> pos) {
+    <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
+    <span class="keyword">if</span> (pos == <span class="number">0</span>) {
+        newNode.next = head;
+        <span class="keyword">return</span> newNode;
+    }
+    <span class="type">Node</span> current = head;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < pos - <span class="number">1</span> && current != <span class="keyword">null</span>; i++) {
+        current = current.next;
+    }
+    <span class="keyword">if</span> (current == <span class="keyword">null</span>) <span class="keyword">return</span> head;
+    newNode.next = current.next;
+    current.next = newNode;
+    <span class="keyword">return</span> head;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Navigate to position-1, then insert by adjusting pointers. Handle the special case of inserting at position 0 (new head). Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="coding-question">
+                <span class="q-number">Q10</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Reverse a Linked List</div>
+                <div class="q-description">Write a method <code>Node reverse(Node head)</code> that reverses the list in-place.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">reverse</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> prev = <span class="keyword">null</span>;
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="type">Node</span> nextTemp = current.next;
+        current.next = prev;
+        prev = current;
+        current = nextTemp;
+    }
+    <span class="keyword">return</span> prev;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Use three pointers: <code>prev</code>, <code>current</code>, and <code>nextTemp</code>. At each step, reverse the link direction. When done, <code>prev</code> is the new head. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q11 -->
+            <div class="coding-question">
+                <span class="q-number">Q11</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Find the Middle Node</div>
+                <div class="q-description">Write a method <code>Node findMiddle(Node head)</code> that returns the middle node using the slow/fast pointer technique.</div>
+                <div class="ll-visual">
+                    <span class="head-label">head</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">3</span><span class="node-next">mid</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">5</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">findMiddle</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> slow = head;
+    <span class="type">Node</span> fast = head;
+    <span class="keyword">while</span> (fast != <span class="keyword">null</span> && fast.next != <span class="keyword">null</span>) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    <span class="keyword">return</span> slow;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> <code>slow</code> moves one step, <code>fast</code> moves two steps. When <code>fast</code> reaches the end, <code>slow</code> is at the middle. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q12 -->
+            <div class="coding-question">
+                <span class="q-number">Q12</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Detect a Cycle (Floyd's Algorithm)</div>
+                <div class="q-description">Write a method <code>boolean hasCycle(Node head)</code> that detects if the linked list has a cycle.</div>
+                <div class="ll-visual">
+                    <span class="head-label">head</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                    <span class="arrow" style="color: #e74c3c;">&#8630; back to 3</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public boolean</span> <span class="type">hasCycle</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> slow = head;
+    <span class="type">Node</span> fast = head;
+    <span class="keyword">while</span> (fast != <span class="keyword">null</span> && fast.next != <span class="keyword">null</span>) {
+        slow = slow.next;
+        fast = fast.next.next;
+        <span class="keyword">if</span> (slow == fast) <span class="keyword">return true</span>;
+    }
+    <span class="keyword">return false</span>;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Floyd's cycle detection: slow pointer moves 1 step, fast moves 2 steps. If they meet, there's a cycle. If fast reaches null, no cycle. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q13 -->
+            <div class="coding-question">
+                <span class="q-number">Q13</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Find the Nth Node from the End</div>
+                <div class="q-description">Write a method <code>Node nthFromEnd(Node head, int n)</code> that returns the nth node from the end.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Find 2nd from end:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">40</span><span class="node-next">ans</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">50</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">nthFromEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> n) {
+    <span class="type">Node</span> fast = head;
+    <span class="type">Node</span> slow = head;
+    <span class="comment">// Move fast n steps ahead</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {
+        <span class="keyword">if</span> (fast == <span class="keyword">null</span>) <span class="keyword">return null</span>;
+        fast = fast.next;
+    }
+    <span class="comment">// Move both until fast reaches end</span>
+    <span class="keyword">while</span> (fast != <span class="keyword">null</span>) {
+        slow = slow.next;
+        fast = fast.next;
+    }
+    <span class="keyword">return</span> slow;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Move the fast pointer n steps ahead first. Then move both pointers one step at a time. When fast reaches the end, slow is at the nth node from the end. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q14 -->
+            <div class="coding-question">
+                <span class="q-number">Q14</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Remove Duplicates from Sorted List</div>
+                <div class="q-description">Write a method <code>Node removeDuplicates(Node head)</code> that removes duplicate values from a sorted linked list.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">removeDuplicates</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> current = head;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span> && current.next != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (current.data == current.next.data) {
+            current.next = current.next.next;
+        } <span class="keyword">else</span> {
+            current = current.next;
+        }
+    }
+    <span class="keyword">return</span> head;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Since the list is sorted, duplicates are adjacent. If current and next have the same value, skip the next node. Otherwise, advance. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q15 -->
+            <div class="coding-question">
+                <span class="q-number">Q15</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Merge Two Sorted Lists</div>
+                <div class="q-description">Write a method <code>Node mergeSorted(Node l1, Node l2)</code> that merges two sorted linked lists into one sorted list.</div>
+                <div class="ll-visual">
+                    <span class="head-label">L1</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">5</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <span class="head-label">L2</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">6</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <span class="head-label">Merged</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">5</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">6</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">mergeSorted</span>(<span class="type">Node</span> l1, <span class="type">Node</span> l2) {
+    <span class="type">Node</span> dummy = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">0</span>);
+    <span class="type">Node</span> tail = dummy;
+    <span class="keyword">while</span> (l1 != <span class="keyword">null</span> && l2 != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (l1.data <= l2.data) {
+            tail.next = l1;
+            l1 = l1.next;
+        } <span class="keyword">else</span> {
+            tail.next = l2;
+            l2 = l2.next;
+        }
+        tail = tail.next;
+    }
+    tail.next = (l1 != <span class="keyword">null</span>) ? l1 : l2;
+    <span class="keyword">return</span> dummy.next;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Use a dummy node to simplify edge cases. Compare heads of both lists, attach the smaller one, and advance. Attach remaining nodes at the end. Time: O(n+m), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q16 -->
+            <div class="coding-question">
+                <span class="q-number">Q16</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Check if a Linked List is a Palindrome</div>
+                <div class="q-description">Write a method <code>boolean isPalindrome(Node head)</code> that checks if the list reads the same forwards and backwards.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Palindrome:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public boolean</span> <span class="type">isPalindrome</span>(<span class="type">Node</span> head) {
+    <span class="comment">// Step 1: Find the middle</span>
+    <span class="type">Node</span> slow = head, fast = head;
+    <span class="keyword">while</span> (fast != <span class="keyword">null</span> && fast.next != <span class="keyword">null</span>) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    <span class="comment">// Step 2: Reverse second half</span>
+    <span class="type">Node</span> prev = <span class="keyword">null</span>;
+    <span class="keyword">while</span> (slow != <span class="keyword">null</span>) {
+        <span class="type">Node</span> next = slow.next;
+        slow.next = prev;
+        prev = slow;
+        slow = next;
+    }
+    <span class="comment">// Step 3: Compare both halves</span>
+    <span class="type">Node</span> left = head, right = prev;
+    <span class="keyword">while</span> (right != <span class="keyword">null</span>) {
+        <span class="keyword">if</span> (left.data != right.data) <span class="keyword">return false</span>;
+        left = left.next;
+        right = right.next;
+    }
+    <span class="keyword">return true</span>;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Find the middle, reverse the second half, then compare both halves element by element. Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q17 -->
+            <div class="coding-question">
+                <span class="q-number">Q17</span><span class="q-difficulty hard">Hard</span>
+                <div class="q-title">Swap Nodes in Pairs</div>
+                <div class="q-description">Write a method <code>Node swapPairs(Node head)</code> that swaps every two adjacent nodes.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">2</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">4</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">swapPairs</span>(<span class="type">Node</span> head) {
+    <span class="type">Node</span> dummy = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">0</span>);
+    dummy.next = head;
+    <span class="type">Node</span> prev = dummy;
+    <span class="keyword">while</span> (prev.next != <span class="keyword">null</span> && prev.next.next != <span class="keyword">null</span>) {
+        <span class="type">Node</span> first = prev.next;
+        <span class="type">Node</span> second = prev.next.next;
+        first.next = second.next;
+        second.next = first;
+        prev.next = second;
+        prev = first;
+    }
+    <span class="keyword">return</span> dummy.next;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Use a dummy node. For each pair, rearrange pointers: prev -> second -> first -> rest. Then advance prev to first (which is now the second in the pair). Time: O(n), Space: O(1).</div>
+                </div>
+            </div>
+
+            <!-- Q19 -->
+            <div class="coding-question">
+                <span class="q-number">Q19</span><span class="q-difficulty hard">Hard</span>
+                <div class="q-title">Convert Singly Linked List to Doubly Linked List</div>
+                <div class="q-description">Assuming you have a <strong>Singly Linked List</strong> with a pointer <code>head</code>, write a method that converts it into a <strong>Doubly Linked List</strong> with a pointer <code>dHead</code>. Each node in the new list should have both <code>next</code> and <code>prev</code> pointers.</div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Assuming you have this SLL with pointer <code>head</code>:</div>
+                    <span class="head-label">head</span>
+                    <span class="node"><span class="node-data">A</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">B</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="node"><span class="node-data">C</span><span class="node-next">next</span></span>
+                    <span class="arrow">&#8594;</span>
+                    <span class="null-box">null</span>
+                </div>
+                <div class="ll-visual">
+                    <div class="visual-desc">Convert it to this DLL with pointer <code>dHead</code>:</div>
+                    <div style="text-align: center; overflow-x: auto; padding: 10px 0;">
+                        <svg width="680" height="220" viewBox="0 0 680 220" style="max-width: 100%;">
+                            <defs>
+                                <linearGradient id="gradNextQ" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4caf50"/>
+                                    <stop offset="100%" style="stop-color:#2e7d32"/>
+                                </linearGradient>
+                                <linearGradient id="gradDataQ" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#667eea"/>
+                                    <stop offset="100%" style="stop-color:#764ba2"/>
+                                </linearGradient>
+                                <linearGradient id="gradPrevQ" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#f44336"/>
+                                    <stop offset="100%" style="stop-color:#c62828"/>
+                                </linearGradient>
+                                <marker id="ah-greenQ" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#4caf50"/></marker>
+                                <marker id="ah-redQ" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#f44336"/></marker>
+                            </defs>
+
+                            <!-- NULL at start -->
+                            <g transform="translate(40, 110)">
+                                <line x1="0" y1="-15" x2="0" y2="15" stroke="#999" stroke-width="4"/>
+                                <line x1="-8" y1="-10" x2="-8" y2="10" stroke="#999" stroke-width="3"/>
+                                <line x1="-14" y1="-5" x2="-14" y2="5" stroke="#999" stroke-width="2"/>
+                                <text x="0" y="30" text-anchor="middle" fill="#888" font-size="11" font-style="italic">null</text>
+                            </g>
+
+                            <!-- Prev arrow from Node A to NULL -->
+                            <line x1="120" y1="120" x2="55" y2="120" stroke="#f44336" stroke-width="2" marker-end="url(#ah-redQ)"/>
+
+                            <!-- Node A -->
+                            <g transform="translate(120, 30)">
+                                <rect x="0" y="0" width="80" height="30" fill="url(#gradNextQ)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                                <text x="40" y="20" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+                                <rect x="0" y="30" width="80" height="45" fill="url(#gradDataQ)" stroke="#667eea" stroke-width="2"/>
+                                <text x="40" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="20">A</text>
+                                <rect x="0" y="75" width="80" height="30" fill="url(#gradPrevQ)" stroke="#f44336" stroke-width="2" rx="3"/>
+                                <text x="40" y="95" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                            </g>
+
+                            <!-- Bidirectional arrows A <-> B -->
+                            <line x1="200" y1="47" x2="270" y2="47" stroke="#4caf50" stroke-width="3" marker-end="url(#ah-greenQ)"/>
+                            <line x1="270" y1="128" x2="200" y2="128" stroke="#f44336" stroke-width="3" marker-end="url(#ah-redQ)"/>
+                            <text x="235" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
+                            <text x="235" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+
+                            <!-- Node B -->
+                            <g transform="translate(280, 30)">
+                                <rect x="0" y="0" width="80" height="30" fill="url(#gradNextQ)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                                <text x="40" y="20" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+                                <rect x="0" y="30" width="80" height="45" fill="url(#gradDataQ)" stroke="#667eea" stroke-width="2"/>
+                                <text x="40" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="20">B</text>
+                                <rect x="0" y="75" width="80" height="30" fill="url(#gradPrevQ)" stroke="#f44336" stroke-width="2" rx="3"/>
+                                <text x="40" y="95" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                            </g>
+
+                            <!-- Bidirectional arrows B <-> C -->
+                            <line x1="360" y1="47" x2="430" y2="47" stroke="#4caf50" stroke-width="3" marker-end="url(#ah-greenQ)"/>
+                            <line x1="430" y1="128" x2="360" y2="128" stroke="#f44336" stroke-width="3" marker-end="url(#ah-redQ)"/>
+                            <text x="395" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
+                            <text x="395" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+
+                            <!-- Node C -->
+                            <g transform="translate(440, 30)">
+                                <rect x="0" y="0" width="80" height="30" fill="url(#gradNextQ)" stroke="#4caf50" stroke-width="2" rx="3"/>
+                                <text x="40" y="20" text-anchor="middle" fill="white" font-weight="bold" font-size="11">next</text>
+                                <rect x="0" y="30" width="80" height="45" fill="url(#gradDataQ)" stroke="#667eea" stroke-width="2"/>
+                                <text x="40" y="60" text-anchor="middle" fill="white" font-weight="bold" font-size="20">C</text>
+                                <rect x="0" y="75" width="80" height="30" fill="url(#gradPrevQ)" stroke="#f44336" stroke-width="2" rx="3"/>
+                                <text x="40" y="95" text-anchor="middle" fill="white" font-weight="bold" font-size="11">prev</text>
+                            </g>
+
+                            <!-- Arrow from C next to NULL -->
+                            <line x1="520" y1="47" x2="590" y2="47" stroke="#4caf50" stroke-width="2" marker-end="url(#ah-greenQ)"/>
+
+                            <!-- NULL at end -->
+                            <g transform="translate(610, 47)">
+                                <line x1="0" y1="-15" x2="0" y2="15" stroke="#999" stroke-width="4"/>
+                                <line x1="6" y1="-10" x2="6" y2="10" stroke="#999" stroke-width="3"/>
+                                <line x1="12" y1="-5" x2="12" y2="5" stroke="#999" stroke-width="2"/>
+                                <text x="6" y="30" text-anchor="middle" fill="#888" font-size="11" font-style="italic">null</text>
+                            </g>
+
+                            <!-- dHead label -->
+                            <rect x="125" y="170" width="70" height="25" fill="#4caf50" rx="5"/>
+                            <text x="160" y="187" text-anchor="middle" fill="white" font-weight="bold" font-size="11">dHead</text>
+                            <line x1="160" y1="170" x2="160" y2="145" stroke="#4caf50" stroke-width="2" marker-end="url(#ah-greenQ)"/>
+
+                            <!-- Legend -->
+                            <rect x="200" y="185" width="12" height="12" fill="#4caf50" rx="2"/>
+                            <text x="217" y="195" fill="#333" font-size="10">Next</text>
+                            <rect x="260" y="185" width="12" height="12" fill="#667eea" rx="2"/>
+                            <text x="277" y="195" fill="#333" font-size="10">Data</text>
+                            <rect x="320" y="185" width="12" height="12" fill="#f44336" rx="2"/>
+                            <text x="337" y="195" fill="#333" font-size="10">Prev</text>
+                        </svg>
+                    </div>
+                </div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="solution-content">
+                    <h4>Solution:</h4>
+                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">DNode</span> <span class="type">convertToDoubly</span>(<span class="type">Node</span> head) {
+    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
+    <span class="type">DNode</span> dHead = <span class="keyword">new</span> <span class="type">DNode</span>(head.data);
+    <span class="type">DNode</span> dCurrent = dHead;
+    <span class="type">Node</span> current = head.next;
+    <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
+        <span class="type">DNode</span> newNode = <span class="keyword">new</span> <span class="type">DNode</span>(current.data);
+        dCurrent.next = newNode;
+        newNode.prev = dCurrent;
+        dCurrent = newNode;
+        current = current.next;
+    }
+    <span class="keyword">return</span> dHead;
+}</pre></div>
+                    <div class="solution-explanation"><strong>Explanation:</strong> Create a new doubly linked node for each singly linked node. Set both <code>next</code> and <code>prev</code> pointers as you traverse. Time: O(n), Space: O(n).</div>
+                </div>
+            </div>
+
+        </div><!-- end coding tab -->
+
+        <!-- ===================== MCQ QUESTIONS ===================== -->
+        <div id="mcq-tab" class="tab-content">
+            <h2 class="section-header">Multiple Choice Questions</h2>
+            <p class="section-desc">Select the best answer. You'll get immediate feedback with explanations.</p>
+
+            <!-- MCQ 1 -->
+            <div class="mcq-question" id="mcq-1">
+                <span class="q-number">MCQ 1</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">What is the time complexity of inserting a node at the beginning of a singly linked list?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">A) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(n log n)</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-1"></div>
+            </div>
+
+            <!-- MCQ 2 -->
+            <div class="mcq-question" id="mcq-2">
+                <span class="q-number">MCQ 2</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">What does a node in a singly linked list contain?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) Only data</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) Data and a reference to the next node</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) Data, next, and previous references</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) An index and data</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-2"></div>
+            </div>
+
+            <!-- MCQ 3 -->
+            <div class="mcq-question" id="mcq-3">
+                <span class="q-number">MCQ 3</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">What is the value of <code>head.next.next.data</code> in the list: 5 -> 10 -> 15 -> 20 -> null?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) 5</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) 10</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) 15</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) 20</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-3"></div>
+            </div>
+
+            <!-- MCQ 4 -->
+            <div class="mcq-question" id="mcq-4">
+                <span class="q-number">MCQ 4</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">Which of the following is NOT an advantage of linked lists over arrays?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) Dynamic size</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) Easy insertion/deletion</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) Random access of elements</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) No memory waste from pre-allocation</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-4"></div>
+            </div>
+
+            <!-- MCQ 5 -->
+            <div class="mcq-question" id="mcq-5">
+                <span class="q-number">MCQ 5</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">What happens when you set <code>head = head.next</code>?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) The last node is removed</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) The first node is effectively removed</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) A new node is added</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) The list is reversed</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-5"></div>
+            </div>
+
+            <!-- MCQ 6 -->
+            <div class="mcq-question" id="mcq-6">
+                <span class="q-number">MCQ 6</span><span class="q-difficulty easy">Easy</span>
+                <div class="q-title">In a singly linked list, which pointer does the last node's <code>next</code> field point to?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">A) null</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) head</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) itself</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) the previous node</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-6"></div>
+            </div>
+
+            <!-- MCQ 7 -->
+            <div class="mcq-question" id="mcq-7">
+                <span class="q-number">MCQ 7</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">What is the time complexity of searching for an element in a singly linked list?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(n^2)</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-7"></div>
+            </div>
+
+            <!-- MCQ 8 -->
+            <div class="mcq-question" id="mcq-8">
+                <span class="q-number">MCQ 8</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">What differentiates a doubly linked list from a singly linked list?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) It has two data fields</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) Each node has both a next and a prev pointer</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) It can only store integers</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) It always forms a cycle</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-8"></div>
+            </div>
+
+            <!-- MCQ 9 -->
+            <div class="mcq-question" id="mcq-9">
+                <span class="q-number">MCQ 9</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">In a circular linked list, the last node's <code>next</code> pointer points to:</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) null</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) the head node</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) itself</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) the second node</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-9"></div>
+            </div>
+
+            <!-- MCQ 10 -->
+            <div class="mcq-question" id="mcq-10">
+                <span class="q-number">MCQ 10</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Floyd's cycle detection algorithm uses which technique?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) Binary search</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) Hash table</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) Two pointers (slow and fast)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) Recursion</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-10"></div>
+            </div>
+
+            <!-- MCQ 11 -->
+            <div class="mcq-question" id="mcq-11">
+                <span class="q-number">MCQ 11</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">What is the time complexity of deleting a node from the END of a singly linked list (without a tail pointer)?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(n^2)</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-11"></div>
+            </div>
+
+            <!-- MCQ 12 -->
+            <div class="mcq-question" id="mcq-12">
+                <span class="q-number">MCQ 12</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">What is the output of the following code?<br>
+                <code>Node current = head; // head -> 1 -> 2 -> 3 -> null</code><br>
+                <code>while(current.next != null) { current = current.next; }</code><br>
+                <code>System.out.println(current.data);</code></div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) 1</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) 2</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) 3</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) NullPointerException</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-12"></div>
+            </div>
+
+            <!-- MCQ 13 -->
+            <div class="mcq-question" id="mcq-13">
+                <span class="q-number">MCQ 13</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">To reverse a singly linked list, how many pointers are typically used?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) 1</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) 2</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) 3 (prev, current, next)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) 4</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-13"></div>
+            </div>
+
+            <!-- MCQ 14 -->
+            <div class="mcq-question" id="mcq-14">
+                <span class="q-number">MCQ 14</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">Which data structure can be efficiently implemented using a linked list where insertion and deletion happen at the same end?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">A) Stack</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) Binary Tree</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) Hash Table</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) Graph</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-14"></div>
+            </div>
+
+            <!-- MCQ 15 -->
+            <div class="mcq-question" id="mcq-15">
+                <span class="q-number">MCQ 15</span><span class="q-difficulty medium">Medium</span>
+                <div class="q-title">What is the space complexity of a singly linked list with n nodes?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(n^2)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(log n)</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-15"></div>
+            </div>
+
+            <!-- MCQ 16 -->
+            <div class="mcq-question" id="mcq-16">
+                <span class="q-number">MCQ 16</span><span class="q-difficulty hard">Hard</span>
+                <div class="q-title">What is the advantage of a doubly linked list over a singly linked list for deletion?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) It uses less memory</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) You can delete a node in O(1) if you have a pointer to it</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) It supports random access</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) It is always faster than arrays</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-16"></div>
+            </div>
+
+            <!-- MCQ 17 -->
+            <div class="mcq-question" id="mcq-17">
+                <span class="q-number">MCQ 17</span><span class="q-difficulty hard">Hard</span>
+                <div class="q-title">Given a linked list: 10 -> 20 -> 30 -> 40 -> null. After executing <code>head.next.next = head.next.next.next</code>, what is the list?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) 10 -> 20 -> 40 -> 30 -> null</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) 10 -> 20 -> 40 -> null</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) 10 -> 30 -> 40 -> null</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) 10 -> 20 -> 30 -> null</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-17"></div>
+            </div>
+
+            <!-- MCQ 18 -->
+            <div class="mcq-question" id="mcq-18">
+                <span class="q-number">MCQ 18</span><span class="q-difficulty hard">Hard</span>
+                <div class="q-title">Why is the "dummy node" technique useful when manipulating linked lists?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) It reduces time complexity</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) It uses less memory</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) It eliminates special handling of the head node</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) It makes the list sorted</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-18"></div>
+            </div>
+
+            <!-- MCQ 19 -->
+            <div class="mcq-question" id="mcq-19">
+                <span class="q-number">MCQ 19</span><span class="q-difficulty hard">Hard</span>
+                <div class="q-title">What is the time complexity of finding the middle element using the slow/fast pointer technique?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(n/2) which is different from O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(log n)</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-19"></div>
+            </div>
+
+            <!-- MCQ 20 -->
+            <div class="mcq-question" id="mcq-20">
+                <span class="q-number">MCQ 20</span><span class="q-difficulty hard">Hard</span>
+                <div class="q-title">In Java's <code>LinkedList</code> class, which interfaces does it implement?</div>
+                <div class="mcq-options">
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) List only</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) Queue only</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) List, Deque, and Queue</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) Set and Map</button>
+                </div>
+                <div class="mcq-feedback" id="fb-mcq-20"></div>
+            </div>
+
+        </div><!-- end mcq tab -->
+
+    </div><!-- end content -->
+</div><!-- end container -->
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+
+<script>
+    // ============ MCQ explanations ============
+    const mcqExplanations = {
+        1: { correct: "Inserting at the head is O(1) because you only update the head pointer - no traversal needed.", wrong: "Inserting at the beginning requires no traversal. We just create a new node, point it to the current head, and update head. This is O(1)." },
+        2: { correct: "A singly linked list node contains data and a reference (pointer) to the next node.", wrong: "A singly linked list node has exactly two parts: the data and a reference to the next node. A doubly linked list node also has a prev pointer." },
+        3: { correct: "head.data = 5, head.next.data = 10, head.next.next.data = 15. We follow two next pointers from head.", wrong: "Start from head (5), follow next to get 10, follow next again to get 15. head.next.next.data = 15." },
+        4: { correct: "Linked lists do NOT support random access. To access element at index i, you must traverse from the head. Arrays support O(1) random access.", wrong: "Random access (accessing by index in O(1)) is NOT possible with linked lists. You must traverse from the head, making it O(n)." },
+        5: { correct: "Setting head = head.next makes head point to the second node, effectively removing the first node from the list.", wrong: "head = head.next moves the head pointer forward, so the old first node is no longer accessible through head, effectively removing it." },
+        6: { correct: "In a singly linked list (non-circular), the last node's next pointer is null, indicating the end of the list.", wrong: "The last node's next field is null in a standard singly linked list. This is how we know we've reached the end during traversal." },
+        7: { correct: "Searching requires traversing the list node by node. In the worst case, the element is at the end or not present, giving O(n).", wrong: "Since linked lists don't support random access, we must check each node sequentially. Worst case is O(n)." },
+        8: { correct: "A doubly linked list has both next and prev pointers, allowing traversal in both directions.", wrong: "The key difference is that each node in a DLL has both a next pointer and a prev pointer, enabling bidirectional traversal." },
+        9: { correct: "In a circular linked list, the last node's next points back to the head, forming a circle.", wrong: "A circular linked list forms a cycle where the last node points back to the head node, not to null." },
+        10: { correct: "Floyd's algorithm uses two pointers: slow (moves 1 step) and fast (moves 2 steps). If they meet, there's a cycle.", wrong: "Floyd's Tortoise and Hare algorithm uses two pointers moving at different speeds to detect cycles." },
+        11: { correct: "Without a tail pointer, you must traverse to the second-to-last node to delete the last one, which takes O(n).", wrong: "Deleting the last node requires finding the second-to-last node (to set its next to null), which requires traversing the entire list: O(n)." },
+        12: { correct: "The loop stops when current.next is null, meaning current is the last node with data = 3.", wrong: "The condition current.next != null stops at the last node (not past it). So current ends at the node with data = 3." },
+        13: { correct: "The iterative reversal uses three pointers: prev (initially null), current (starts at head), and nextTemp (saves the next node before re-linking).", wrong: "The standard iterative approach needs 3 pointers: prev, current, and a temporary next pointer to avoid losing the reference." },
+        14: { correct: "A stack uses LIFO (Last-In-First-Out). Using a linked list, push and pop at the head gives O(1) for both operations.", wrong: "A stack needs insertion and deletion at the same end (top). A linked list head serves perfectly as the stack top with O(1) push/pop." },
+        15: { correct: "Each of the n nodes takes constant space, so total space is O(n).", wrong: "A linked list with n nodes uses O(n) space - each node stores data and a pointer." },
+        16: { correct: "In a DLL, if you have a pointer to a node, you can access its predecessor via prev, so you can unlink it in O(1). In a SLL, you'd need to traverse to find the predecessor.", wrong: "With a DLL, having a direct pointer to a node lets you access both neighbors (prev and next), enabling O(1) deletion without traversal." },
+        17: { correct: "head.next is node 20. head.next.next was node 30. Setting it to head.next.next.next (node 40) skips node 30. Result: 10 -> 20 -> 40 -> null.", wrong: "head.next.next points to the node after 20, which is 30. We reassign it to 30's next (which is 40), effectively skipping node 30." },
+        18: { correct: "A dummy node (sentinel) before the real head means you never have to handle the head as a special case for insertions/deletions.", wrong: "The dummy node simplifies code by ensuring there's always a node before the first real element, eliminating edge cases for head modifications." },
+        19: { correct: "O(n) - the slow pointer visits n/2 nodes, but O(n/2) = O(n) in Big-O notation.", wrong: "Even though slow only moves n/2 steps, in Big-O notation constants are dropped: O(n/2) = O(n). The technique is a single pass through the list." },
+        20: { correct: "Java's LinkedList implements List, Deque, and Queue interfaces, making it usable as a list, double-ended queue, or queue.", wrong: "Java's LinkedList is versatile - it implements List (indexed access), Queue (FIFO), and Deque (double-ended queue) interfaces." }
+    };
+
+    // ============ Score tracking ============
+    let mcqCorrectCount = 0;
+    let mcqAnsweredCount = 0;
+
+    function checkMCQ(button, isCorrect) {
+        const questionDiv = button.closest('.mcq-question');
+        if (questionDiv.dataset.answered) return;
+        questionDiv.dataset.answered = 'true';
+
+        const questionNum = questionDiv.id.split('-')[1];
+        const feedbackDiv = document.getElementById('fb-' + questionDiv.id);
+        const options = questionDiv.querySelectorAll('.mcq-option');
+
+        mcqAnsweredCount++;
+
+        options.forEach(opt => {
+            opt.disabled = true;
+            opt.style.cursor = 'not-allowed';
+        });
+
+        if (isCorrect) {
+            mcqCorrectCount++;
+            button.classList.add('selected-correct');
+            feedbackDiv.className = 'mcq-feedback correct';
+            feedbackDiv.innerHTML = '<strong>Correct!</strong>' + mcqExplanations[questionNum].correct;
+        } else {
+            button.classList.add('selected-wrong');
+            feedbackDiv.className = 'mcq-feedback wrong';
+            feedbackDiv.innerHTML = '<strong>Incorrect.</strong>' + mcqExplanations[questionNum].wrong;
+            // Highlight the correct answer
+            options.forEach(opt => {
+                if (opt.getAttribute('onclick').includes('true')) {
+                    opt.classList.add('show-correct');
+                }
+            });
+        }
+
+        document.getElementById('mcq-correct').textContent = mcqCorrectCount;
+        document.getElementById('mcq-answered').textContent = mcqAnsweredCount;
+        document.getElementById('progress-bar').style.width = (mcqAnsweredCount / 20 * 100) + '%';
+    }
+
+    // ============ Solution toggle ============
+    function toggleSolution(btn) {
+        const content = btn.nextElementSibling;
+        if (content.classList.contains('visible')) {
+            content.classList.remove('visible');
+            btn.textContent = 'Show Solution';
+        } else {
+            content.classList.add('visible');
+            btn.textContent = 'Hide Solution';
+        }
+    }
+
+    // ============ Tab switching ============
+    function showTab(tab) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tab + '-tab').classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    // ============ Reset ============
+    function resetAll() {
+        mcqCorrectCount = 0;
+        mcqAnsweredCount = 0;
+        document.getElementById('mcq-correct').textContent = '0';
+        document.getElementById('mcq-answered').textContent = '0';
+        document.getElementById('progress-bar').style.width = '0%';
+
+        document.querySelectorAll('.mcq-question').forEach(q => {
+            delete q.dataset.answered;
+            q.querySelectorAll('.mcq-option').forEach(opt => {
+                opt.disabled = false;
+                opt.style.cursor = 'pointer';
+                opt.classList.remove('selected-correct', 'selected-wrong', 'show-correct');
+            });
+            q.querySelector('.mcq-feedback').className = 'mcq-feedback';
+            q.querySelector('.mcq-feedback').innerHTML = '';
+        });
+
+        document.querySelectorAll('.solution-content').forEach(s => {
+            s.classList.remove('visible');
+        });
+        document.querySelectorAll('.solution-toggle').forEach(b => {
+            b.textContent = 'Show Solution';
+        });
+    }
+
+    // ============ Back to top ============
+    window.addEventListener('scroll', function() {
+        const btn = document.getElementById('backToTop');
+        btn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+</script>
+
+</body>
+</html>
