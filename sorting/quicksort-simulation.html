@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Sort Partition — CPCS204</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #0d9488;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #14b8a6;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #0f766e;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        /* Animation Container */
+        .animation-container {
+            background: #f9f9f9;
+            border: 3px solid #14b8a6;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+
+        /* Input Controls */
+        .input-controls {
+            background: white;
+            border: 2px solid #14b8a6;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            font-size: 1.05em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #14b8a6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background: #14b8a6;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background: #0d9488;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(20, 184, 166, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+
+        /* Split View: Code + Animation */
+        .split-view {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 25px;
+            margin: 30px 0;
+            min-height: 600px;
+        }
+
+        @media (max-width: 1200px) {
+            .split-view {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Code Panel */
+        .code-panel {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 14px;
+            overflow-y: auto;
+            max-height: 880px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-panel h4 {
+            color: #0d9488;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .code-line {
+            color: #1e293b;
+            font-family: 'Courier New', monospace;
+            font-size: 0.84em;
+            line-height: 1.85;
+            padding: 4px 12px;
+            margin: 2px 0;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .code-line.highlight {
+            background: #fde68a;
+            color: #78350f;
+            font-weight: bold;
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(253, 230, 138, 0.5);
+        }
+
+        /* ── Loop colour zones — text colour only, no background ── */
+        .zone-outer {
+            color: #b45309;
+            border-left: 3px solid #f59e0b;
+            padding-left: 9px !important;
+        }
+        .zone-i {
+            color: #1d4ed8;
+            border-left: 3px solid #60a5fa;
+            padding-left: 9px !important;
+        }
+        .zone-j {
+            color: #15803d;
+            border-left: 3px solid #22c55e;
+            padding-left: 9px !important;
+        }
+        /* highlight overrides zone text colour */
+        .code-line.highlight.zone-outer,
+        .code-line.highlight.zone-i,
+        .code-line.highlight.zone-j {
+            background: #fde68a;
+            color: #78350f;
+        }
+
+        /* ── Zone legend ── */
+        .zone-legend {
+            display: flex; gap: 6px; flex-wrap: wrap;
+            margin-bottom: 12px; padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .zl-chip {
+            font-size: 0.72em; font-weight: 700;
+            padding: 3px 9px; border-radius: 4px;
+            border-left: 3px solid; white-space: nowrap;
+        }
+        .zl-outer { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+        .zl-i     { background: #dbeafe; border-color: #60a5fa; color: #1e3a8a; }
+        .zl-j     { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+
+        .code-line .keyword {
+            color: #ff79c6;
+        }
+
+        .code-line .type {
+            color: #8be9fd;
+        }
+
+        .code-line .method {
+            color: #50fa7b;
+        }
+
+        .code-line .var {
+            color: #f1fa8c;
+        }
+
+        .code-line .comment {
+            color: #6272a4;
+        }
+
+        /* Animation Panel */
+        .animation-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            border: 2px solid #14b8a6;
+        }
+
+        /* Array Visualization */
+        .array-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 30px 0;
+            padding: 20px;
+            min-height: 180px;
+        }
+
+        .array-element {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .array-box {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            font-weight: bold;
+            border: 3px solid #333;
+            border-radius: 8px;
+            background: #e3f2fd;
+            color: #1565c0;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-box.pivot {
+            background: linear-gradient(135deg, #fbbf24 0%, #fde68a 100%);
+            border-color: #f59e0b;
+            color: #78350f;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.5);
+            transform: scale(1.1);
+        }
+
+        .array-box.left-partition {
+            background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+            border-color: #22c55e;
+            color: #14532d;
+        }
+
+        .array-box.right-partition {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            border-color: #ef4444;
+            color: #7f1d1d;
+        }
+
+        .array-box.swapping {
+            animation: swap-pulse 0.6s ease;
+        }
+
+        @keyframes swap-pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2) rotate(5deg);
+                box-shadow: 0 8px 20px rgba(20, 184, 166, 0.6);
+            }
+        }
+
+        .array-index {
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* Pointer Indicators */
+        .pointer {
+            position: absolute;
+            top: -35px;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .pointer.pointer-i {
+            background: #14b8a6;
+        }
+
+        .pointer.pointer-j {
+            background: #ef4444;
+        }
+
+        .pointer.pointer-pivot {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            top: -60px;
+        }
+
+        /* Variables Display */
+        .variables-display {
+            background: #f0fdfa;
+            border: 2px solid #14b8a6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .variables-display h4 {
+            color: #0d9488;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .variable-item {
+            display: inline-block;
+            background: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 2px solid #14b8a6;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05em;
+            font-weight: 600;
+        }
+
+        .variable-item .var-name {
+            color: #0d9488;
+        }
+
+        .variable-item .var-value {
+            color: #e91e63;
+            margin-left: 8px;
+        }
+
+        /* Step Description */
+        .step-description {
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.15em;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+        }
+
+        /* Control Buttons */
+        .animation-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        /* Legend */
+        .legend {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .legend h4 {
+            color: #0d9488;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            border: 2px solid #333;
+        }
+
+        .legend-box.pivot {
+            background: linear-gradient(135deg, #fbbf24 0%, #fde68a 100%);
+            border-color: #f59e0b;
+        }
+
+        .legend-box.left {
+            background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+            border-color: #22c55e;
+        }
+
+        .legend-box.right {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            border-color: #ef4444;
+        }
+
+        .legend-box.normal {
+            background: #e3f2fd;
+            border-color: #333;
+        }
+
+        /* Algorithm Steps */
+        .algorithm-steps {
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
+            margin: 25px 0;
+        }
+
+        .algorithm-steps h4 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.3em;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .algorithm-steps ol {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .algorithm-steps ol > li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 15px 15px 60px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .algorithm-steps ol > li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            background: white;
+            color: #0d9488;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .algorithm-steps code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        /* Speed Control */
+        .speed-control {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .speed-control label {
+            font-weight: 600;
+            margin-right: 10px;
+            color: #555;
+        }
+
+        .speed-control select {
+            padding: 8px 15px;
+            border: 2px solid #14b8a6;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header style="background:linear-gradient(135deg,#0d9488,#14b8a6,#06b6d4);color:white;padding:20px 30px;text-align:center;position:relative;">
+            <a href="index.html" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);color:white;text-decoration:none;font-size:0.85em;font-weight:600;padding:6px 14px;border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;">← Sorting Hub</a>
+            <h1 style="font-size:1.6em;margin:0;">Quick Sort — Partition Simulation</h1>
+            <p style="margin:4px 0 0;opacity:0.9;font-size:0.95em;">CPCS204 — Data Structures I</p>
+        </header>
+
+        <div class="content">
+            <!-- Introduction -->
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+                <div class="definition">
+                    <strong>Partition Algorithm:</strong> The partition method is the core operation of Quick Sort. It rearranges an array such that all elements less than or equal to the pivot are placed to its left, and all elements greater than the pivot are placed to its right. The pivot element ends up in its final sorted position.
+                </div>
+
+                <div class="important">
+                    <strong>Key Concept:</strong> This implementation uses two pointers (i and j) that move towards each other, swapping elements when they find values that are on the wrong side of the pivot.
+                </div>
+            </section>
+
+            <!-- Algorithm Steps -->
+            <section id="algorithm">
+                <h2>2. Algorithm Steps</h2>
+                <div class="algorithm-steps">
+                    <h4>Partition Algorithm Process</h4>
+                    <ol>
+                        <li><strong>Select pivot:</strong> User chooses which element to use as the pivot</li>
+                        <li><strong>Set pivot value:</strong> <code>pivot = A[p]</code> where <code>p</code> is the selected pivot index</li>
+                        <li><strong>Initialize pointers:</strong> <code>i = l - 1</code> and <code>j = h + 1</code> (start outside bounds)</li>
+                        <li><strong>Do-while for i:</strong> Increment <code>i</code> first, then check if <code>A[i] &lt;= pivot</code>. Continue until we find <code>A[i] &gt; pivot</code></li>
+                        <li><strong>Do-while for j:</strong> Decrement <code>j</code> first, then check if <code>A[j] &gt; pivot</code>. Continue until we find <code>A[j] &lt;= pivot</code></li>
+                        <li><strong>Swap if needed:</strong> If <code>i &lt; j</code>, swap <code>A[i]</code> and <code>A[j]</code></li>
+                        <li><strong>Repeat:</strong> Steps 4-6 until <code>i &gt;= j</code></li>
+                        <li><strong>Final swap:</strong> Swap pivot <code>A[p]</code> with <code>A[j]</code> to place pivot in correct position</li>
+                        <li><strong>Return:</strong> <code>j</code> as the partition index</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Interactive Animation -->
+            <section id="visualization">
+                <h2>3. Interactive Visualization</h2>
+
+                <div class="animation-container">
+                    <h3 style="text-align: center; color: #0d9488; margin-bottom: 20px;">Partition Animation</h3>
+
+                    <!-- Input Controls -->
+                    <div class="input-controls">
+                        <h4 style="color: #0d9488; margin-bottom: 15px;">Array Input</h4>
+
+                        <div class="input-group">
+                            <label>Enter Array Values (comma-separated):</label>
+                            <input type="text" id="arrayInput" placeholder="e.g., 5, 3, 6, 9, 2, 4, 7, 8" value="5, 3, 6, 9, 2, 4, 7, 8">
+                        </div>
+
+                        <div class="button-group">
+                            <button class="btn" onclick="loadCustomArray()">Load Custom Array</button>
+                            <button class="btn btn-secondary" onclick="generateRandomArray()">Generate Random Array</button>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                            <div class="input-group">
+                                <label>Array Size (for random):</label>
+                                <input type="number" id="arraySize" min="5" max="15" value="8">
+                            </div>
+                            <div class="input-group">
+                                <label>Max Value (for random):</label>
+                                <input type="number" id="maxValue" min="10" max="100" value="20">
+                            </div>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 20px;">
+                            <label>Select Pivot Index (which element to use as pivot):</label>
+                            <input type="number" id="pivotIndex" min="0" value="0">
+                            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                                The selected element will remain in its original position during partitioning.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!-- Split View: Code + Animation -->
+                    <div class="split-view">
+                        <!-- Code Panel -->
+                        <div class="code-panel">
+                            <h4>Java Code</h4>
+                            <div class="zone-legend">
+                                <span class="zl-chip zl-outer">Outer while loop</span>
+                                <span class="zl-chip zl-i">i do-while →</span>
+                                <span class="zl-chip zl-j">j do-while ←</span>
+                            </div>
+                            <div id="codeDisplay"></div>
+                        </div>
+
+                        <!-- Animation Panel -->
+                        <div class="animation-panel">
+                            <!-- Variables Display -->
+                            <div class="variables-display">
+                                <h4>Current Variables</h4>
+                                <div id="variablesDisplay">
+                                    <div class="variable-item">
+                                        <span class="var-name">pivot:</span>
+                                        <span class="var-value" id="pivotValue">-</span>
+                                    </div>
+                                    <div class="variable-item">
+                                        <span class="var-name">i:</span>
+                                        <span class="var-value" id="iValue">-</span>
+                                    </div>
+                                    <div class="variable-item">
+                                        <span class="var-name">j:</span>
+                                        <span class="var-value" id="jValue">-</span>
+                                    </div>
+                                    <div class="variable-item">
+                                        <span class="var-name">l:</span>
+                                        <span class="var-value" id="lValue">-</span>
+                                    </div>
+                                    <div class="variable-item">
+                                        <span class="var-name">h:</span>
+                                        <span class="var-value" id="hValue">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step Description -->
+                            <div class="step-description" id="stepDescription">
+                                Click "Next Step" to begin
+                            </div>
+
+                            <!-- Array Visualization -->
+                            <div class="array-container" id="arrayContainer"></div>
+
+                            <!-- Animation Controls -->
+                            <div class="animation-controls">
+                                <button class="btn btn-secondary" id="stepBtn" onclick="nextStep()">Next Step</button>
+                                <button class="btn btn-warning" onclick="resetAnimation()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // ─── Java Code Lines ────────────────────────────────────────────────────────
+        // Each object holds one line of the Java partition algorithm.
+        // 'line' is the text shown in the code panel; 'num' is the line index used
+        // to highlight the correct line during animation.
+        const javaCode = [
+            // ── Section header ───────────────────────────────────────────────────────────
+            { line: '// ═══════════════════════════════════════════════', num: 0 },
+            { line: '//  Hoare Partition Scheme', num: 1 },
+            { line: '// ═══════════════════════════════════════════════', num: 2 },
+            { line: 'public static int partition(int[] A, int l, int h, int p) {', num: 3 },
+
+            // ── Pivot and pointers ───────────────────────────────────────────────────────
+            { line: '', num: 4 },
+            { line: '    int pivot = A[p];  // save pivot VALUE from chosen index', num: 5 },
+            { line: '    int i = l - 1;    // i starts ONE STEP BEFORE left boundary', num: 6 },
+            { line: '    int j = h + 1;    // j starts ONE STEP AFTER  right boundary', num: 7 },
+            { line: '', num: 8 },
+
+            // ── Outer while loop ─────────────────────────────────────────────────────────
+            { line: '    while (i < j) {   // repeat until i and j cross', num: 9,  zone: 'outer' },
+            { line: '', num: 10, zone: 'outer' },
+
+            // ── Move i right ─────────────────────────────────────────────────────────────
+            { line: '        // MOVE i to the RIGHT  →', num: 11, zone: 'i' },
+            { line: '        do {', num: 12, zone: 'i' },
+            { line: '            i++;  // advance i one step to the right', num: 13, zone: 'i' },
+            { line: '        } while (A[i] <= pivot);', num: 14, zone: 'i' },
+            { line: '        //   keep going while A[i] <= pivot', num: 15, zone: 'i' },
+            { line: '        //   stop   when  A[i]  > pivot', num: 16, zone: 'i' },
+            { line: '', num: 17 },
+
+            // ── Move j left ──────────────────────────────────────────────────────────────
+            { line: '        // MOVE j to the LEFT   ←', num: 18, zone: 'j' },
+            { line: '        do {', num: 19, zone: 'j' },
+            { line: '            j--;  // advance j one step to the left', num: 20, zone: 'j' },
+            { line: '        } while (A[j] > pivot);', num: 21, zone: 'j' },
+            { line: '        //   keep going while A[j]  > pivot', num: 22, zone: 'j' },
+            { line: '        //   stop   when  A[j] <= pivot', num: 23, zone: 'j' },
+            { line: '', num: 24 },
+
+            // ── Conditional swap ─────────────────────────────────────────────────────────
+            { line: '        // SWAP — only if i has NOT yet crossed j', num: 25, zone: 'outer' },
+            { line: '        if (i < j) {', num: 26, zone: 'outer' },
+            { line: '            swap(A, i, j);  // exchange misplaced A[i] and A[j]', num: 27, zone: 'outer' },
+            { line: '        }', num: 28, zone: 'outer' },
+            { line: '        // if i >= j: pointers crossed, loop will exit', num: 29, zone: 'outer' },
+            { line: '', num: 30, zone: 'outer' },
+
+            // ── End while ────────────────────────────────────────────────────────────────
+            { line: '    }  // end while', num: 31, zone: 'outer' },
+            { line: '', num: 32 },
+
+            // ── Place pivot and return ────────────────────────────────────────────────────
+            { line: '    swap(A, p, j);  // place pivot at its final sorted position j', num: 33 },
+            { line: '    return j;       // return pivot final index to quickSort', num: 34 },
+            { line: '}', num: 35 },
+            { line: '', num: 36 },
+
+            // ── Swap helper ──────────────────────────────────────────────────────────────
+            { line: '// ═══════════════════════════════════════════════', num: 37 },
+            { line: '//  Swap Helper', num: 38 },
+            { line: '// ═══════════════════════════════════════════════', num: 39 },
+            { line: 'private static void swap(int[] A, int i, int j) {', num: 40 },
+            { line: '    int temp = A[i]; // Step 1: save A[i] in temp variable', num: 41 },
+            { line: '    A[i]     = A[j]; // Step 2: overwrite A[i] with A[j]', num: 42 },
+            { line: '    A[j]     = temp; // Step 3: put saved value into A[j]', num: 43 },
+            { line: '}', num: 44 },
+        ];
+
+        // ─── Animation State Variables ───────────────────────────────────────────────
+        let array = [];          // current working copy of the array (changes as we simulate)
+        let originalArray = [];  // the array exactly as entered/generated (never modified; used for reset)
+        let l = 0;               // low boundary of the partition range (always 0 in this single-partition demo)
+        let h = 0;               // high boundary of the partition range (last real element index)
+        let pivot = 0;           // the pivot VALUE stored during simulation
+        let i = 0;               // current position of the left pointer
+        let j = 0;               // current position of the right pointer
+        let steps = [];          // pre-computed list of all animation steps (generated once per run)
+        let currentStep = 0;     // index into steps[] pointing to the next step to display
+
+        // ─── initCodeDisplay ─────────────────────────────────────────────────────────
+        // Builds the code panel by creating one <div> per entry in javaCode[].
+        // Each div gets an id like "code-line-7" so highlightCodeLine() can find it quickly.
+        function initCodeDisplay() {
+            const codeDisplay = document.getElementById('codeDisplay'); // get the code panel container
+            codeDisplay.innerHTML = '';                                   // clear any previous content
+
+            javaCode.forEach(line => {
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'code-line';
+                if (line.zone) lineDiv.classList.add('zone-' + line.zone); // apply colour zone
+                lineDiv.id = `code-line-${line.num}`;
+                lineDiv.textContent = line.line;
+                codeDisplay.appendChild(lineDiv);
+            });
+        }
+
+        // ─── highlightCodeLine ────────────────────────────────────────────────────────
+        // Removes the highlight class from all lines, then adds it to the given line number.
+        // lineNum = -1 means "clear all highlights" (used on reset).
+        function highlightCodeLine(lineNum) {
+            document.querySelectorAll('.code-line').forEach(line => {
+                line.classList.remove('highlight'); // clear previous highlight
+            });
+            if (lineNum >= 0) {                                              // only highlight if a valid line number was passed
+                const line = document.getElementById(`code-line-${lineNum}`); // find the target div
+                if (line) {
+                    line.classList.add('highlight');                          // apply the yellow highlight style
+                    line.scrollIntoView({ behavior: 'smooth', block: 'center' }); // scroll the code panel so the highlighted line is visible
+                }
+            }
+        }
+
+        // ─── generateRandomArray ─────────────────────────────────────────────────────
+        // Creates a random array of the given size with values in [1, maxVal],
+        // then immediately loads it as the current array.
+        function generateRandomArray() {
+            const size = parseInt(document.getElementById('arraySize').value) || 9;    // read desired size from the input (default 9)
+            const maxVal = parseInt(document.getElementById('maxValue').value) || 20;  // read max element value from the input (default 20)
+            const arr = [];
+            for (let i = 0; i < size; i++) {
+                arr.push(Math.floor(Math.random() * maxVal) + 1); // generate a random integer in [1, maxVal]
+            }
+            arr.push(maxVal + 100); // append a sentinel value much larger than any real element (stops the i-pointer's do-while from going out of bounds)
+
+            document.getElementById('arrayInput').value = arr.slice(0, -1).join(', '); // show the array (without sentinel) in the text input
+            loadCustomArray(); // parse and load the array (which will add the sentinel again inside loadCustomArray)
+        }
+
+        // ─── loadCustomArray ──────────────────────────────────────────────────────────
+        // Reads the comma-separated values from the text input, validates them,
+        // appends a sentinel, saves to originalArray, and resets the animation.
+        function loadCustomArray() {
+            const input = document.getElementById('arrayInput').value;                         // read the raw text from the input field
+            const arr = input.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n)); // split on commas, trim whitespace, parse integers, remove NaN entries
+
+            if (arr.length < 2) {           // need at least 2 elements to partition
+                alert('Please enter at least 2 numbers');
+                return;
+            }
+
+            const maxVal = Math.max(...arr); // find the largest element in the array
+            arr.push(maxVal + 100);          // append a sentinel value (guaranteed larger than all real values) to prevent i-pointer from going past the end
+
+            originalArray = [...arr]; // save this array as the original (used for reset)
+
+            document.getElementById('pivotIndex').max = arr.length - 2; // update the pivot index input's max to exclude the sentinel position
+
+            resetAnimation(); // start fresh with the new array
+        }
+
+        // ─── renderArray ──────────────────────────────────────────────────────────────
+        // Draws the array in the animation panel.
+        // Parameters:
+        //   highlightI  — index where the 'i' pointer label should appear (-1 = hide)
+        //   highlightJ  — index where the 'j' pointer label should appear (-1 = hide)
+        //   pivotIndex  — index of the pivot element so it gets the yellow colour (-1 = none)
+        //   showFinal   — true = colour left/right partitions green/red after partitioning is done
+        function renderArray(highlightI = -1, highlightJ = -1, pivotIndex = -1, showFinal = false) {
+            const container = document.getElementById('arrayContainer'); // get the array display area
+            container.innerHTML = '';                                     // clear previous render
+
+            array.forEach((value, index) => {
+                if (index === array.length - 1) return; // skip the sentinel — it should never be shown to the user
+
+                const element = document.createElement('div'); // wrapper div for one array cell + its label
+                element.className = 'array-element';
+
+                const box = document.createElement('div'); // the coloured square that shows the number
+                box.className = 'array-box';
+                box.textContent = value; // display the numeric value inside the box
+
+                // ── Colour the box based on the current phase ──
+                if (showFinal) {
+                    // After partitioning: colour by position relative to the pivot
+                    if (index === pivotIndex) {
+                        box.classList.add('pivot');           // pivot element stays yellow at its final position
+                    } else if (index < pivotIndex) {
+                        box.classList.add('left-partition');  // elements left of pivot → green (≤ pivot)
+                    } else {
+                        box.classList.add('right-partition'); // elements right of pivot → red (> pivot)
+                    }
+                } else {
+                    // During partitioning: only the pivot element at position l gets the yellow style
+                    if (index === l && index === pivotIndex) {
+                        box.classList.add('pivot');
+                    }
+                }
+
+                // ── Add the 'i' pointer label above this element if needed ──
+                if (index === highlightI && highlightI >= 0) {
+                    const pointerI = document.createElement('div');
+                    pointerI.className = 'pointer pointer-i'; // teal pill
+                    pointerI.textContent = 'i';               // label text
+                    element.appendChild(pointerI);            // place above the box (CSS positions it with top:-35px)
+                }
+
+                // ── Add the 'j' pointer label above this element if needed ──
+                if (index === highlightJ && highlightJ >= 0) {
+                    const pointerJ = document.createElement('div');
+                    pointerJ.className = 'pointer pointer-j'; // red pill
+                    pointerJ.textContent = 'j';
+                    element.appendChild(pointerJ);
+                }
+
+                // ── Add the 'pivot' label above this element if needed ──
+                if (index === pivotIndex && pivotIndex >= 0 && !showFinal) {
+                    const pointerPivot = document.createElement('div');
+                    pointerPivot.className = 'pointer pointer-pivot'; // gold pill, positioned higher (top:-60px)
+                    pointerPivot.textContent = 'pivot';
+                    element.appendChild(pointerPivot);
+                }
+
+                const indexLabel = document.createElement('div'); // the small index number shown below each box
+                indexLabel.className = 'array-index';
+                indexLabel.textContent = index;                   // show the array position (0-based)
+
+                element.appendChild(box);        // add the coloured box to the element wrapper
+                element.appendChild(indexLabel); // add the index label below the box
+                container.appendChild(element);  // add the finished element to the display area
+            });
+        }
+
+        // ─── updateVariables ─────────────────────────────────────────────────────────
+        // Pushes the current values of pivot, i, j, l, h into the "Current Variables"
+        // panel so students can see them update in real time.
+        function updateVariables() {
+            document.getElementById('pivotValue').textContent = pivot; // show current pivot value
+            document.getElementById('iValue').textContent = i;         // show current i pointer
+            document.getElementById('jValue').textContent = j;         // show current j pointer
+            document.getElementById('lValue').textContent = l;         // show low boundary
+            document.getElementById('hValue').textContent = h;         // show high boundary
+        }
+
+        // ─── generateSteps ───────────────────────────────────────────────────────────
+        // Pre-computes every animation step for the partition algorithm and stores
+        // them in the global steps[] array.  Each step is a snapshot object containing:
+        //   array        — a copy of the array at that moment
+        //   i, j         — pointer positions
+        //   pivot        — pivot value
+        //   l, h         — range boundaries
+        //   description  — human-readable explanation shown in the step box
+        //   codeLine     — the javaCode line number to highlight
+        //   pivotIndex   — current position of the pivot element in the array
+        //   showPointers — whether to draw i/j labels on the array
+        //   swapped      — true if this step shows the result of a swap (triggers animation)
+        //   final        — true if this is the last step (pivot placed, partitioning done)
+        function generateSteps() {
+            steps = [];                    // reset the steps array
+            array = [...originalArray];    // work on a fresh copy of the original array
+            l = 0;                         // low boundary is always 0 for this demo
+            h = array.length - 1;          // high boundary is the last index (includes sentinel)
+
+            const selectedPivotIndex = parseInt(document.getElementById('pivotIndex').value) || 0; // read which element the user chose as pivot
+
+            // ── Step 0: Show the initial state before any code runs ──
+            steps.push({
+                array: [...array],
+                i: -1, j: -1,
+                pivot: -1,
+                l: l, h: h,
+                description: `Initial array. Parameter: l=${l}, h=${h}, p=${selectedPivotIndex}`,
+                codeLine: 3,                // method signature line
+                pivotIndex: -1,
+                showPointers: false
+            });
+
+            // ── Step 1: pivot = A[p] ──
+            const selectedValue = array[selectedPivotIndex];
+            pivot = selectedValue;
+
+            steps.push({
+                array: [...array],
+                i: -1, j: -1,
+                pivot: pivot,
+                l: l, h: h,
+                description: `Set pivot = A[${selectedPivotIndex}] = ${pivot}`,
+                codeLine: 5,                // int pivot = A[p]
+                pivotIndex: selectedPivotIndex,
+                showPointers: false
+            });
+
+            // ── Step 2: i = l - 1 ──
+            i = l - 1;
+            steps.push({
+                array: [...array],
+                i: i, j: -1,
+                pivot: pivot,
+                l: l, h: h,
+                description: `Initialize i = ${l} - 1 = ${i}`,
+                codeLine: 6,                // int i = l - 1
+                pivotIndex: selectedPivotIndex,
+                showPointers: false
+            });
+
+            // ── Step 3: j = h + 1 ──
+            j = h + 1;
+            steps.push({
+                array: [...array],
+                i: i, j: j,
+                pivot: pivot,
+                l: l, h: h,
+                description: `Initialize j = ${h} + 1 = ${j} (beyond array bounds, will decrement first in do-while)`,
+                codeLine: 7,                // int j = h + 1
+                pivotIndex: selectedPivotIndex,
+                showPointers: false
+            });
+
+            // ── Main while (i < j) loop ──────────────────────────────────────────────
+            let stepCount = 0;
+            const maxSteps = 1000;                      // safety guard: stop if somehow we loop forever
+            let currentPivotIndex = selectedPivotIndex; // track where the pivot element currently lives (it moves when swapped)
+
+            while (i < j && stepCount < maxSteps) {
+                stepCount++; // count iterations to avoid an infinite loop
+
+                // ── Do-while: move i right until A[i] > pivot ──
+                let iStarted = false; // flag: have we logged the first i++ step yet?
+                do {
+                    i++; // increment i (move right)
+                    if (!iStarted) {
+                        steps.push({
+                            array: [...array],
+                            i: i, j: j,
+                            pivot: pivot, l: l, h: h,
+                            description: `Increment i to ${i}. Check if A[${i}] = ${array[i]} <= pivot (${pivot})`,
+                            codeLine: 13,              // i++ line
+                            pivotIndex: currentPivotIndex,
+                            showPointers: true
+                        });
+                        iStarted = true;
+                    } else {
+                        steps.push({
+                            array: [...array],
+                            i: i, j: j,
+                            pivot: pivot, l: l, h: h,
+                            description: `A[${i}] = ${array[i]} <= ${pivot}, continue incrementing i`,
+                            codeLine: 14,              // } while (A[i] <= pivot) line
+                            pivotIndex: currentPivotIndex,
+                            showPointers: true
+                        });
+                    }
+                } while (array[i] <= pivot);
+
+                // A[i] > pivot: log the stopping point
+                steps.push({
+                    array: [...array],
+                    i: i, j: j,
+                    pivot: pivot, l: l, h: h,
+                    description: `Found A[${i}] = ${array[i]} > pivot (${pivot}). Stop incrementing i.`,
+                    codeLine: 14,              // } while condition
+                    pivotIndex: currentPivotIndex,
+                    showPointers: true
+                });
+
+                // ── Do-while: move j left until A[j] <= pivot ──
+                let jStarted = false; // flag: have we logged the first j-- step yet?
+                do {
+                    j--; // decrement j (move left)
+                    if (!jStarted) {
+                        steps.push({
+                            array: [...array],
+                            i: i, j: j,
+                            pivot: pivot, l: l, h: h,
+                            description: `Decrement j to ${j}. Check if A[${j}] = ${array[j]} > pivot (${pivot})`,
+                            codeLine: 20,              // j-- line
+                            pivotIndex: currentPivotIndex,
+                            showPointers: true
+                        });
+                        jStarted = true;
+                    } else {
+                        steps.push({
+                            array: [...array],
+                            i: i, j: j,
+                            pivot: pivot, l: l, h: h,
+                            description: `A[${j}] = ${array[j]} > ${pivot}, continue decrementing j`,
+                            codeLine: 21,              // } while (A[j] > pivot) line
+                            pivotIndex: currentPivotIndex,
+                            showPointers: true
+                        });
+                    }
+                } while (array[j] > pivot);
+
+                // A[j] <= pivot: log the stopping point
+                steps.push({
+                    array: [...array],
+                    i: i, j: j,
+                    pivot: pivot, l: l, h: h,
+                    description: `Found A[${j}] = ${array[j]} <= pivot (${pivot}). Stop decrementing j.`,
+                    codeLine: 21,              // } while condition
+                    pivotIndex: currentPivotIndex,
+                    showPointers: true
+                });
+
+                // ── Swap if i < j (code line 14) ──
+                if (i < j) {
+                    // Pointers haven't crossed: swap misplaced elements
+                    steps.push({
+                        array: [...array],
+                        i: i, j: j,
+                        pivot: pivot, l: l, h: h,
+                        description: `i (${i}) < j (${j}), so swap A[${i}] = ${array[i]} with A[${j}] = ${array[j]}`,
+                        codeLine: 26,          // if (i < j) { line
+                        pivotIndex: currentPivotIndex,
+                        showPointers: true
+                    });
+
+                    if (i === currentPivotIndex) {
+                        currentPivotIndex = j;
+                    } else if (j === currentPivotIndex) {
+                        currentPivotIndex = i;
+                    }
+
+                    [array[i], array[j]] = [array[j], array[i]];
+
+                    steps.push({
+                        array: [...array],
+                        i: i, j: j,
+                        pivot: pivot, l: l, h: h,
+                        description: `After swap: A[${i}] = ${array[i]}, A[${j}] = ${array[j]}`,
+                        codeLine: 27,          // swap(A, i, j) line
+                        pivotIndex: currentPivotIndex,
+                        swapped: true,
+                        showPointers: true
+                    });
+                } else {
+                    // i >= j: pointers crossed → loop exits
+                    steps.push({
+                        array: [...array],
+                        i: i, j: j,
+                        pivot: pivot, l: l, h: h,
+                        description: `i (${i}) >= j (${j}), exit while loop`,
+                        codeLine: 9,           // while (i < j) line
+                        pivotIndex: currentPivotIndex,
+                        showPointers: true
+                    });
+                }
+            } // end while (i < j)
+
+            // ── Final swap: place the pivot in its correct sorted position ──
+            steps.push({
+                array: [...array],
+                i: i, j: j,
+                pivot: pivot, l: l, h: h,
+                description: `Swap pivot A[${currentPivotIndex}] = ${array[currentPivotIndex]} with A[${j}] = ${array[j]} to place pivot in correct position`,
+                codeLine: 33,          // swap(A, p, j) line
+                pivotIndex: currentPivotIndex,
+                showPointers: true
+            });
+
+            [array[currentPivotIndex], array[j]] = [array[j], array[currentPivotIndex]];
+
+            // ── Last step: show the partitioned result ──
+            steps.push({
+                array: [...array],
+                i: i, j: j,
+                pivot: pivot, l: l, h: h,
+                description: `Partition complete! Pivot ${pivot} is now at index ${j}. Return ${j}.`,
+                codeLine: 34,          // return j line
+                pivotIndex: j,
+                final: true
+            });
+        }
+
+        // ─── nextStep ────────────────────────────────────────────────────────────────
+        // Called by the "Next Step" button.
+        // On the very first call it generates all steps, then advances one step at a time.
+        function nextStep() {
+            if (steps.length === 0) {                  // steps haven't been generated yet
+                if (originalArray.length === 0) {
+                    loadCustomArray();                  // make sure we have an array to work with
+                }
+                generateSteps();                        // pre-compute all steps for this run
+                currentStep = 0;                        // start from the first step
+            }
+
+            if (currentStep >= steps.length) {
+                return;                                 // already on the last step; do nothing
+            }
+
+            showStep(currentStep); // display the current step
+            currentStep++;         // advance the counter so the next button press shows the next step
+
+            if (currentStep >= steps.length) {
+                document.getElementById('stepBtn').disabled = true; // disable button after the last step
+            }
+        }
+
+        // ─── showStep ────────────────────────────────────────────────────────────────
+        // Renders one step: restores the array state, updates the variable panel,
+        // sets the description text, highlights the code line, and redraws the array.
+        function showStep(stepIndex) {
+            const step = steps[stepIndex]; // fetch the pre-computed step object
+
+            // Restore all state variables from the snapshot stored in this step
+            array = [...step.array]; // restore array to the state captured at this step
+            i = step.i;              // restore i pointer
+            j = step.j;              // restore j pointer
+            pivot = step.pivot;      // restore pivot value
+            l = step.l;              // restore low boundary
+            h = step.h;              // restore high boundary
+
+            updateVariables();                                                         // push new variable values to the display panel
+            document.getElementById('stepDescription').textContent = step.description; // update the description box
+            highlightCodeLine(step.codeLine);                                          // highlight the corresponding Java code line
+
+            // Decide whether to show i/j pointer labels:
+            // hide them if showPointers is false, or if the index is out of the visible range
+            const showI = step.showPointers !== false && step.i >= 0 && step.i < array.length - 1; // don't show i on the sentinel
+            const showJ = step.showPointers !== false && step.j >= 0 && step.j < array.length;      // show j even if it equals h+1 briefly
+
+            if (step.final) {
+                renderArray(-1, -1, step.pivotIndex, true);  // final view: hide pointers, colour partitions
+            } else {
+                renderArray(showI ? step.i : -1, showJ ? step.j : -1, step.pivotIndex, false); // normal view
+            }
+
+            if (step.swapped) {
+                // Add the CSS swap-pulse animation to the two boxes that were just swapped
+                const boxes = document.querySelectorAll('.array-box');
+                boxes[step.i]?.classList.add('swapping'); // animate box at position i
+                boxes[step.j]?.classList.add('swapping'); // animate box at position j
+            }
+        }
+
+        // ─── resetAnimation ──────────────────────────────────────────────────────────
+        // Clears all animation state and redraws the array in its original order,
+        // ready for the user to step through again.
+        function resetAnimation() {
+            if (originalArray.length === 0 && document.getElementById('arrayInput').value) {
+                loadCustomArray(); // if there's text in the input but no parsed array yet, parse it first
+                return;
+            }
+
+            currentStep = 0; // go back to the beginning
+            steps = [];      // discard all pre-computed steps so they will be regenerated on next run
+
+            if (originalArray.length > 0) {
+                array = [...originalArray]; // restore the working array to its original state
+                l = 0;                      // reset low boundary
+                h = array.length - 1;       // reset high boundary
+                pivot = array[l];           // reset pivot to the first element (will be overridden on generateSteps)
+                i = l;                      // reset i pointer
+                j = h;                      // reset j pointer
+
+                updateVariables();                                                                   // reflect reset values in the variable panel
+                renderArray(-1, -1, -1, false);                                                      // draw the array without any highlights or colours
+                document.getElementById('stepDescription').textContent = 'Click "Next Step" to begin'; // reset the description text
+                highlightCodeLine(-1);                                                               // remove all code highlights
+            }
+
+            document.getElementById('stepBtn').disabled = false; // re-enable the Next Step button
+        }
+
+        // ─── Initialisation ───────────────────────────────────────────────────────────
+        // Runs once when the page finishes loading:
+        //   1. Build the code panel from javaCode[].
+        //   2. Parse the default array from the text input and display it.
+        window.onload = function() {
+            initCodeDisplay(); // render all Java code lines in the left panel
+            loadCustomArray(); // parse the default array value and prepare the animation
+        };
+    </script>
+</body>
+</html>

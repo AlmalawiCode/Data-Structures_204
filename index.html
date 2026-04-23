@@ -300,8 +300,18 @@
             color: var(--success-color);
         }
 
+        .module-status.available {
+            color: var(--success-color);
+        }
+
         .module-status.coming {
             color: var(--gray-color);
+        }
+
+        .part-number.practice {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            font-size: 1rem;
         }
 
         .status-dot {
@@ -393,6 +403,7 @@
             <a href="#trees">Trees</a>
             <a href="#sorting">Sorting</a>
             <a href="#graphs">Graphs</a>
+            <a href="#practice">Practice</a>
         </nav>
     </header>
 
@@ -430,7 +441,6 @@
                 <h2 class="part-title">Arrays & Searching</h2>
             </div>
             <div class="modules-grid">
-                <!-- Arrays & Searching -->
                 <a href="Arrays_Searching/index.html" class="module-card">
                     <div class="module-header arrays">
                         <span class="module-number">Module 1</span>
@@ -464,10 +474,9 @@
                 <h2 class="part-title">Linked Lists</h2>
             </div>
             <div class="modules-grid">
-                <!-- Linked List Introduction -->
                 <a href="linkedlist/linkedlist-tutorial.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Module 3</span>
+                        <span class="module-number">Module 2</span>
                         <div class="module-icon">🔗</div>
                         <div class="module-title">Linked List Basics</div>
                         <div class="module-subtitle">Introduction & Operations</div>
@@ -489,10 +498,9 @@
                     </div>
                 </a>
 
-                <!-- Types of Linked Lists -->
                 <a href="linkedlist/linkedlist-types-tutorial.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Module 4</span>
+                        <span class="module-number">Module 3</span>
                         <div class="module-icon">🔄</div>
                         <div class="module-title">Types of Linked Lists</div>
                         <div class="module-subtitle">Circular & Doubly Linked</div>
@@ -513,31 +521,6 @@
                         </div>
                     </div>
                 </a>
-
-                <!-- Linked List Questions -->
-                <a href="linkedlist/linkedlist-questions.html" class="module-card">
-                    <div class="module-header linkedlist">
-                        <span class="module-number">Practice</span>
-                        <div class="module-icon">❓</div>
-                        <div class="module-title">Linked List Questions</div>
-                        <div class="module-subtitle">Coding & MCQ Practice</div>
-                    </div>
-                    <div class="module-body">
-                        <ul class="module-topics">
-                            <li>18 Coding Questions (Visual)</li>
-                            <li>20 MCQ Questions (Interactive)</li>
-                            <li>Click-to-Reveal Solutions</li>
-                            <li>Score Tracking & Feedback</li>
-                        </ul>
-                        <div class="module-footer">
-                            <span class="module-status ready">
-                                <span class="status-dot ready"></span>
-                                Ready
-                            </span>
-                            <span class="module-arrow">→</span>
-                        </div>
-                    </div>
-                </a>
             </div>
         </section>
 
@@ -548,10 +531,9 @@
                 <h2 class="part-title">Recursion</h2>
             </div>
             <div class="modules-grid">
-                <!-- Introduction to Recursion -->
                 <a href="recursive-application/recursion-tutorial.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Module 5</span>
+                        <span class="module-number">Module 4</span>
                         <div class="module-icon">🔄</div>
                         <div class="module-title">Introduction to Recursion</div>
                         <div class="module-subtitle">The Recursive Method</div>
@@ -564,19 +546,18 @@
                             <li>Iterative vs Recursive</li>
                         </ul>
                         <div class="module-footer">
-                            <span class="module-status available">
-                                <span class="status-dot available"></span>
-                                Available
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
                             </span>
                             <span class="module-arrow">→</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- Recursion Application -->
                 <a href="recursive-application/recursion-application.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Module 6</span>
+                        <span class="module-number">Module 5</span>
                         <div class="module-icon">📁</div>
                         <div class="module-title">Recursion Application</div>
                         <div class="module-subtitle">Folder Explorer</div>
@@ -589,19 +570,18 @@
                             <li>Why Recursion Wins</li>
                         </ul>
                         <div class="module-footer">
-                            <span class="module-status available">
-                                <span class="status-dot available"></span>
-                                Available
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
                             </span>
                             <span class="module-arrow">→</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- Numeric Recursion -->
                 <a href="recursive-application/numeric-recursion.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Module 7</span>
+                        <span class="module-number">Module 6</span>
                         <div class="module-icon">🔢</div>
                         <div class="module-title">Numeric Recursion</div>
                         <div class="module-subtitle">Mathematical Problems</div>
@@ -623,35 +603,9 @@
                     </div>
                 </a>
 
-                <!-- Recursion Questions -->
-                <a href="questions/recursion-questions.html" class="module-card">
-                    <div class="module-header recursion">
-                        <span class="module-number">Practice</span>
-                        <div class="module-icon">&#10068;</div>
-                        <div class="module-title">Recursion Questions</div>
-                        <div class="module-subtitle">Trace & Practice</div>
-                    </div>
-                    <div class="module-body">
-                        <ul class="module-topics">
-                            <li>6 Tracing Questions (Easy to Hard)</li>
-                            <li>Digit Processing & Branching</li>
-                            <li>Click-to-Reveal Solutions</li>
-                            <li>Call Tree Diagrams</li>
-                        </ul>
-                        <div class="module-footer">
-                            <span class="module-status ready">
-                                <span class="status-dot ready"></span>
-                                Ready
-                            </span>
-                            <span class="module-arrow">&rarr;</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- String Recursion -->
                 <a href="recursive-application/string-recursion.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Module 8</span>
+                        <span class="module-number">Module 7</span>
                         <div class="module-icon">📝</div>
                         <div class="module-title">String Recursion</div>
                         <div class="module-subtitle">String & Binary Search</div>
@@ -682,10 +636,9 @@
                 <h2 class="part-title">Algorithm Analysis</h2>
             </div>
             <div class="modules-grid">
-                <!-- Algorithm Analysis — Theory -->
                 <a href="algorithm-analysis/algorithm-analysis-motivation.html" class="module-card">
                     <div class="module-header algorithm">
-                        <span class="module-number">Module 7</span>
+                        <span class="module-number">Module 8</span>
                         <div class="module-icon">📐</div>
                         <div class="module-title">Algorithm Analysis</div>
                         <div class="module-subtitle">Foundations &amp; Complexity Theory</div>
@@ -707,10 +660,9 @@
                     </div>
                 </a>
 
-                <!-- Algorithm Analysis — Exercises -->
                 <a href="algorithm-analysis/algorithm-analysis-interactive.html" class="module-card">
                     <div class="module-header algorithm">
-                        <span class="module-number">Module 7 — Lab</span>
+                        <span class="module-number">Module 8 — Lab</span>
                         <div class="module-icon">🔬</div>
                         <div class="module-title">Complexity Analysis</div>
                         <div class="module-subtitle">Deriving Big O from Code</div>
@@ -731,7 +683,6 @@
                         </div>
                     </div>
                 </a>
-
             </div>
         </section>
 
@@ -742,10 +693,9 @@
                 <h2 class="part-title">Stack & Queue</h2>
             </div>
             <div class="modules-grid">
-                <!-- Stack -->
                 <a href="stack-tutorial.html" class="module-card">
                     <div class="module-header stack">
-                        <span class="module-number">Module 8</span>
+                        <span class="module-number">Module 9</span>
                         <div class="module-icon">📚</div>
                         <div class="module-title">Stack</div>
                         <div class="module-subtitle">LIFO Data Structure</div>
@@ -767,30 +717,29 @@
                     </div>
                 </a>
 
-                <!-- Queue -->
-                <div class="module-card disabled">
+                <a href="queue/queue-tutorial.html" class="module-card">
                     <div class="module-header queue">
-                        <span class="module-number">Module 9</span>
-                        <div class="module-icon">🚶</div>
+                        <span class="module-number">Module 10</span>
+                        <div class="module-icon">&#128101;</div>
                         <div class="module-title">Queue</div>
                         <div class="module-subtitle">FIFO Data Structure</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Queue Operations</li>
-                            <li>Circular Array Implementation</li>
+                            <li>Queue Operations (Enqueue, Dequeue)</li>
+                            <li>Unrealistic, Shifting & Circular Array</li>
                             <li>Linked List Implementation</li>
-                            <li>Applications of Queue</li>
+                            <li>Interactive Simulations</li>
                         </ul>
                         <div class="module-footer">
-                            <span class="module-status coming">
-                                <span class="status-dot coming"></span>
-                                Coming Soon
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
                             </span>
                             <span class="module-arrow">→</span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
 
@@ -801,50 +750,24 @@
                 <h2 class="part-title">Trees</h2>
             </div>
             <div class="modules-grid">
-                <!-- Binary Tree -->
-                <div class="module-card disabled">
-                    <div class="module-header tree">
-                        <span class="module-number">Module 10</span>
-                        <div class="module-icon">🌳</div>
-                        <div class="module-title">Binary Tree</div>
-                        <div class="module-subtitle">Tree Fundamentals</div>
-                    </div>
-                    <div class="module-body">
-                        <ul class="module-topics">
-                            <li>Tree Terminology</li>
-                            <li>Height & Node Relations</li>
-                            <li>Types of Trees</li>
-                            <li>Pre, In, Post-Order Traversal</li>
-                        </ul>
-                        <div class="module-footer">
-                            <span class="module-status coming">
-                                <span class="status-dot coming"></span>
-                                Coming Soon
-                            </span>
-                            <span class="module-arrow">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Binary Search Tree -->
-                <a href="questions/binary_tree_question.html" class="module-card">
+                <a href="tree/tree-tutorial.html" class="module-card">
                     <div class="module-header tree">
                         <span class="module-number">Module 11</span>
-                        <div class="module-icon">🔎</div>
-                        <div class="module-title">Binary Search Tree</div>
-                        <div class="module-subtitle">BST Operations</div>
+                        <div class="module-icon">🌳</div>
+                        <div class="module-title">Binary Tree</div>
+                        <div class="module-subtitle">Tree Fundamentals &amp; Traversal</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>BST Properties</li>
-                            <li>Search, Insert, Delete</li>
-                            <li>BST Traversals</li>
-                            <li>Practice Questions</li>
+                            <li>Tree Terminology &amp; Family Analogy</li>
+                            <li>Height, Depth &amp; Levels</li>
+                            <li>Full &amp; Complete Binary Trees</li>
+                            <li>Pre, In, Post-Order &amp; BFS Traversal</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Practice Ready
+                                Ready
                             </span>
                             <span class="module-arrow">→</span>
                         </div>
@@ -860,50 +783,24 @@
                 <h2 class="part-title">Sorting Algorithms</h2>
             </div>
             <div class="modules-grid">
-                <!-- Quadratic Sorts -->
-                <div class="module-card disabled">
+                <a href="sorting/index.html" class="module-card">
                     <div class="module-header sorting">
-                        <span class="module-number">Module 12</span>
-                        <div class="module-icon">📈</div>
-                        <div class="module-title">Quadratic Sorts</div>
-                        <div class="module-subtitle">O(n²) Algorithms</div>
+                        <span class="module-number">Modules 12 &amp; 13</span>
+                        <div class="module-icon">📊</div>
+                        <div class="module-title">Sorting Algorithms</div>
+                        <div class="module-subtitle">O(n²) &amp; O(n log n)</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Selection Sort</li>
-                            <li>Insertion Sort</li>
-                            <li>Bubble Sort</li>
-                            <li>Analysis & Tracing</li>
-                        </ul>
-                        <div class="module-footer">
-                            <span class="module-status coming">
-                                <span class="status-dot coming"></span>
-                                Coming Soon
-                            </span>
-                            <span class="module-arrow">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Logarithmic Sorts -->
-                <a href="quick-partition-tutorial.html" class="module-card">
-                    <div class="module-header sorting">
-                        <span class="module-number">Module 13</span>
-                        <div class="module-icon">⚡</div>
-                        <div class="module-title">Logarithmic Sorts</div>
-                        <div class="module-subtitle">O(n log n) Algorithms</div>
-                    </div>
-                    <div class="module-body">
-                        <ul class="module-topics">
-                            <li>Quick Sort Partition</li>
-                            <li>Merge Sort</li>
-                            <li>Analysis & Tracing</li>
-                            <li>Java Implementation</li>
+                            <li>Selection · Insertion · Bubble Sort</li>
+                            <li>Quick Sort &amp; Merge Sort</li>
+                            <li>Interactive Simulations</li>
+                            <li>Drag-and-Drop Practice</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Quick Sort Ready
+                                Ready
                             </span>
                             <span class="module-arrow">→</span>
                         </div>
@@ -919,7 +816,6 @@
                 <h2 class="part-title">Heap</h2>
             </div>
             <div class="modules-grid">
-                <!-- Heap -->
                 <div class="module-card disabled">
                     <div class="module-header heap">
                         <span class="module-number">Module 14</span>
@@ -953,7 +849,6 @@
                 <h2 class="part-title">Graphs</h2>
             </div>
             <div class="modules-grid">
-                <!-- Graph Basics -->
                 <a href="questions/graph_traversal_question.html" class="module-card">
                     <div class="module-header graph">
                         <span class="module-number">Module 15</span>
@@ -971,32 +866,7 @@
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Practice Ready
-                            </span>
-                            <span class="module-arrow">→</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Graph DFS Practice -->
-                <a href="questions/pharmacy_dfs_question.html" class="module-card">
-                    <div class="module-header graph">
-                        <span class="module-number">Practice</span>
-                        <div class="module-icon">💊</div>
-                        <div class="module-title">Pharmacy Network DFS</div>
-                        <div class="module-subtitle">Weighted Graph Problem</div>
-                    </div>
-                    <div class="module-body">
-                        <ul class="module-topics">
-                            <li>Weighted Undirected Graph</li>
-                            <li>DFS with Priority</li>
-                            <li>Highest Congestion First</li>
-                            <li>Step-by-Step Solution</li>
-                        </ul>
-                        <div class="module-footer">
-                            <span class="module-status ready">
-                                <span class="status-dot ready"></span>
-                                Practice Ready
+                                Ready
                             </span>
                             <span class="module-arrow">→</span>
                         </div>
@@ -1012,7 +882,6 @@
                 <h2 class="part-title">Hash Tables</h2>
             </div>
             <div class="modules-grid">
-                <!-- Hash Tables -->
                 <a href="hashTable/index.html" class="module-card">
                     <div class="module-header hash">
                         <span class="module-number">Module 16</span>
@@ -1036,8 +905,88 @@
                         </div>
                     </div>
                 </a>
+            </div>
+        </section>
 
-                <!-- Double Hashing Practice -->
+        <!-- Practice & Questions -->
+        <section class="part-section" id="practice">
+            <div class="part-header">
+                <div class="part-number practice">★</div>
+                <h2 class="part-title">Practice & Questions</h2>
+            </div>
+            <div class="modules-grid">
+                <a href="linkedlist/linkedlist-questions.html" class="module-card">
+                    <div class="module-header linkedlist">
+                        <span class="module-number">Practice</span>
+                        <div class="module-icon">❓</div>
+                        <div class="module-title">Linked List Questions</div>
+                        <div class="module-subtitle">Coding & MCQ Practice</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>18 Coding Questions (Visual)</li>
+                            <li>20 MCQ Questions (Interactive)</li>
+                            <li>Click-to-Reveal Solutions</li>
+                            <li>Score Tracking & Feedback</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="questions/recursion-questions.html" class="module-card">
+                    <div class="module-header recursion">
+                        <span class="module-number">Practice</span>
+                        <div class="module-icon">&#10068;</div>
+                        <div class="module-title">Recursion Questions</div>
+                        <div class="module-subtitle">Trace & Practice</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>6 Tracing Questions (Easy to Hard)</li>
+                            <li>Digit Processing & Branching</li>
+                            <li>Click-to-Reveal Solutions</li>
+                            <li>Call Tree Diagrams</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">&rarr;</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="questions/pharmacy_dfs_question.html" class="module-card">
+                    <div class="module-header graph">
+                        <span class="module-number">Practice</span>
+                        <div class="module-icon">💊</div>
+                        <div class="module-title">Pharmacy Network DFS</div>
+                        <div class="module-subtitle">Weighted Graph Problem</div>
+                    </div>
+                    <div class="module-body">
+                        <ul class="module-topics">
+                            <li>Weighted Undirected Graph</li>
+                            <li>DFS with Priority</li>
+                            <li>Highest Congestion First</li>
+                            <li>Step-by-Step Solution</li>
+                        </ul>
+                        <div class="module-footer">
+                            <span class="module-status ready">
+                                <span class="status-dot ready"></span>
+                                Ready
+                            </span>
+                            <span class="module-arrow">→</span>
+                        </div>
+                    </div>
+                </a>
+
                 <a href="questions/double_hashing_question.html" class="module-card">
                     <div class="module-header hash">
                         <span class="module-number">Practice</span>
@@ -1055,7 +1004,7 @@
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Practice Ready
+                                Ready
                             </span>
                             <span class="module-arrow">→</span>
                         </div>

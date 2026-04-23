@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tree Traversal Simulator - CPCS 204</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #134E5E 0%, #71B280 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #2c3e50;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #0a3d1f 0%, #27ae60 100%);
+    color: white;
+    padding: 28px 36px;
+}
+.back-link {
+    color: rgba(255,255,255,0.72);
+    text-decoration: none;
+    font-size: 0.88em;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+.back-link:hover { color: white; }
+header h1 { font-size: 2.2em; margin-bottom: 6px; }
+header p  { opacity: 0.88; font-size: 1.05em; }
+
+/* ─── Mode Tabs ─── */
+.mode-tabs {
+    display: flex;
+    background: #f0fff4;
+    border-bottom: 3px solid #27ae60;
+}
+.mode-tab {
+    flex: 1;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.05em;
+    border: none;
+    background: none;
+    color: #7f8c8d;
+    transition: all 0.2s;
+    border-bottom: 4px solid transparent;
+    margin-bottom: -3px;
+}
+.mode-tab.active {
+    color: #1e8449;
+    border-bottom-color: #1e8449;
+    background: white;
+}
+.mode-tab:hover:not(.active) { color: #27ae60; background: rgba(39,174,96,0.06); }
+
+/* ─── Content areas ─── */
+.section-content { padding: 28px 32px; }
+
+/* ─── 3-Visits Concept Box ─── */
+.concept-box {
+    background: #1a2635;
+    color: white;
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+}
+.concept-box h3 { color: #2ecc71; font-size: 1.15em; margin-bottom: 14px; letter-spacing: 0.5px; }
+.visits-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.visit-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: center;
+    flex: 1;
+    min-width: 160px;
+    border: 2px solid transparent;
+}
+.visit-card.v1 { border-color: #1e8449; }
+.visit-card.v2 { border-color: #2980b9; }
+.visit-card.v3 { border-color: #8e44ad; }
+.visit-num { font-size: 2em; font-weight: 800; margin-bottom: 4px; }
+.v1 .visit-num { color: #2ecc71; }
+.v2 .visit-num { color: #74b9ff; }
+.v3 .visit-num { color: #dda0dd; }
+.visit-label { font-size: 0.9em; color: #bdc3c7; line-height: 1.5; }
+.visit-order { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 12px; font-weight: 700; font-size: 0.82em; }
+.v1 .visit-order { background: #1e8449; color: white; }
+.v2 .visit-order { background: #2980b9; color: white; }
+.v3 .visit-order { background: #8e44ad; color: white; }
+
+/* ─── Traversal Type Selector ─── */
+.trav-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.trav-btn {
+    padding: 11px 22px;
+    border-radius: 8px;
+    border: 2px solid;
+    background: white;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.92em;
+    transition: all 0.2s;
+}
+.trav-btn.t-pre  { border-color: #1e8449; color: #1e8449; }
+.trav-btn.t-in   { border-color: #2980b9; color: #2980b9; }
+.trav-btn.t-post { border-color: #8e44ad; color: #8e44ad; }
+.trav-btn.t-pre.active  { background: #1e8449; color: white; }
+.trav-btn.t-in.active   { background: #2980b9; color: white; }
+.trav-btn.t-post.active { background: #8e44ad; color: white; }
+.trav-hint { font-size: 0.85em; color: #888; align-self: center; }
+
+/* ─── Main simulator layout ─── */
+.sim-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 20px;
+    align-items: start;
+}
+
+/* ─── SVG panel ─── */
+.svg-panel {
+    background: #f9fffe;
+    border: 2px solid #d5f5e3;
+    border-radius: 12px;
+    padding: 10px;
+    overflow-x: auto;
+    text-align: center;
+}
+
+/* ─── Info panel ─── */
+.info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.step-counter {
+    text-align: center;
+    font-size: 0.88em;
+    font-weight: 700;
+    color: #7f8c8d;
+    letter-spacing: 0.5px;
+}
+.step-desc {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 0.88em;
+    line-height: 1.7;
+    min-height: 120px;
+}
+.step-desc.null-step { border-color: #e67e22; background: #fef5e7; }
+
+/* Visit count badges panel */
+.badges-panel {
+    background: #1a2635;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+.badges-panel h4 { color: #2ecc71; font-size: 0.82em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.badges-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.badge-circle {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.95em;
+    border: 2px solid;
+    transition: all 0.3s;
+}
+.badge-node-label { font-size: 0.72em; color: #95a5a6; font-weight: 700; }
+
+/* ─── Legend ─── */
+.legend-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 0.8em;
+    color: #555;
+    margin: 10px 0;
+    align-items: center;
+}
+.leg { display: flex; align-items: center; gap: 5px; }
+.leg-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid;
+}
+
+/* ─── Controls ─── */
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 2px solid #f0f0f0;
+    margin-top: 16px;
+}
+.btn {
+    padding: 10px 20px; border: none; border-radius: 8px;
+    cursor: pointer; font-size: 0.9em; font-weight: 700;
+    transition: all 0.2s;
+}
+.btn-green  { background: #27ae60; color: white; }
+.btn-green:hover  { background: #1e8449; }
+.btn-blue   { background: #2980b9; color: white; }
+.btn-blue:hover   { background: #1a6fa0; }
+.btn-gray   { background: #95a5a6; color: white; }
+.btn-gray:hover   { background: #7f8c8d; }
+.speed-label { font-size: 0.82em; color: #888; }
+input[type=range] { width: 100px; accent-color: #27ae60; }
+
+/* ─── Results panel ─── */
+.results-panel {
+    margin-top: 20px;
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.result-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    gap: 10px;
+    border-bottom: 1px solid #dee2e6;
+    min-height: 50px;
+}
+.result-row:last-child { border-bottom: none; }
+.result-label {
+    font-size: 0.78em;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 70px;
+    white-space: nowrap;
+}
+.result-label.pre  { color: #1e8449; }
+.result-label.in   { color: #2980b9; }
+.result-label.post { color: #8e44ad; }
+.result-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 0.95em;
+    animation: chip-pop 0.3s ease-out;
+}
+.chip.pre  { background: #d5f5e3; color: #1e8449; border: 2px solid #27ae60; }
+.chip.in   { background: #d6eaf8; color: #1a5276; border: 2px solid #2980b9; }
+.chip.post { background: #e8daef; color: #6c3483; border: 2px solid #8e44ad; }
+@keyframes chip-pop {
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ─── BFS specific ─── */
+.queue-panel {
+    background: #1a2635;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+}
+.queue-panel h4 { color: #f39c12; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.queue-display {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-height: 44px;
+    align-items: center;
+}
+.queue-chip {
+    background: #f39c12;
+    color: #2c3e50;
+    font-weight: 800;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s;
+    animation: chip-pop 0.3s ease-out;
+}
+.queue-chip.dequeue { background: #e74c3c; color: white; opacity: 0.5; }
+.queue-empty { color: #636e72; font-style: italic; font-size: 0.88em; }
+
+.bfs-result-row {
+    background: #1a2635;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.bfs-result-label { color: #f39c12; font-weight: 700; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; min-width: 80px; }
+.bfs-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.bfs-chip {
+    background: #f39c12;
+    color: #1a2635;
+    font-weight: 800;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95em;
+    animation: chip-pop 0.35s ease-out;
+}
+
+/* ─── Node colors ─── */
+.node-unvisited { fill: #95a5a6; }
+.node-active    { fill: #e67e22; }
+.node-visited   { fill: #27ae60; }
+.node-done      { fill: #1e8449; }
+
+/* Null node highlighted */
+.null-active { stroke: #e67e22 !important; stroke-width: 2.5 !important; fill: #fef5e7 !important; }
+
+/* Glow ring CSS animation */
+@keyframes ring-glow {
+    0%, 100% { opacity: 0.9; }
+    50%       { opacity: 0.25; }
+}
+#glow-ring { animation: ring-glow 1.2s ease-in-out infinite; }
+
+/* Info box */
+.info-box {
+    background: #f0fff4;
+    border-left: 5px solid #27ae60;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.9em;
+    line-height: 1.7;
+}
+.warning-box {
+    background: #fef9e7;
+    border-left: 5px solid #f39c12;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 0.9em;
+}
+h3 { color: #1e8449; font-size: 1.25em; margin: 20px 0 10px; }
+h4 { color: #16a085; font-size: 1.05em; margin: 14px 0 8px; }
+
+footer {
+    background: #2c3e50;
+    color: #bdc3c7;
+    text-align: center;
+    padding: 22px;
+    font-size: 0.88em;
+}
+footer strong { color: white; }
+
+@media (max-width: 900px) {
+    .sim-layout { grid-template-columns: 1fr; }
+    .visits-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<header>
+    <a href="tree-tutorial.html" class="back-link">&#8592; Back to Tree Tutorial</a>
+    <h1>&#127795; Tree Traversal Simulator</h1>
+    <p>CPCS 204 &mdash; Step-by-step interactive simulation of all tree traversals</p>
+</header>
+
+<!-- MODE TABS -->
+<div class="mode-tabs">
+    <button class="mode-tab active" id="tab-dfs" onclick="setMode('dfs')">&#128242; Depth-First Search (DFS) &mdash; Pre / In / Post-Order</button>
+    <button class="mode-tab" id="tab-bfs" onclick="setMode('bfs')">&#127760; Breadth-First Search (BFS) &mdash; Level-Order</button>
+</div>
+
+<!-- ════════════════════════════════════════════
+     DFS SECTION
+════════════════════════════════════════════ -->
+<div id="dfs-section" class="section-content">
+
+    <!-- 3 Visits Concept -->
+    <div class="concept-box">
+        <h3>&#128161; The "3 Visits" Secret — How Pre / In / Post-Order Work</h3>
+        <p style="color:#bdc3c7;margin-bottom:16px;font-size:0.9em;">
+            As we walk through the tree (DFS), we pass through each node <strong>3 times</strong>. The difference between Pre, In, and Post-order is only <em>WHEN</em> we choose to read the node:
+        </p>
+        <div class="visits-row">
+            <div class="visit-card v1">
+                <div class="visit-num">1<sup style="font-size:0.5em">st</sup></div>
+                <div class="visit-label">When you <strong>ARRIVE</strong> at the node<br>(before going to children)</div>
+                <span class="visit-order">PRE-ORDER reads here</span>
+            </div>
+            <div class="visit-card v2">
+                <div class="visit-num">2<sup style="font-size:0.5em">nd</sup></div>
+                <div class="visit-label">When you <strong>RETURN from LEFT</strong> subtree<br>(before going right)</div>
+                <span class="visit-order">IN-ORDER reads here</span>
+            </div>
+            <div class="visit-card v3">
+                <div class="visit-num">3<sup style="font-size:0.5em">rd</sup></div>
+                <div class="visit-label">When you <strong>RETURN from RIGHT</strong> subtree<br>(after all children done)</div>
+                <span class="visit-order">POST-ORDER reads here</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Traversal selector -->
+    <div style="margin-bottom:14px;">
+        <strong style="font-size:0.92em;color:#555;">Highlight reading moments for:</strong>
+    </div>
+    <div class="trav-selector">
+        <button class="trav-btn t-pre active" id="btn-pre" onclick="setTrav('pre')">Pre-order (1st visit)</button>
+        <button class="trav-btn t-in"  id="btn-in"  onclick="setTrav('in')">In-order (2nd visit)</button>
+        <button class="trav-btn t-post" id="btn-post" onclick="setTrav('post')">Post-order (3rd visit)</button>
+        <span class="trav-hint">&#128161; Selecting a different traversal resets the simulation</span>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend-row">
+        <div class="leg"><div class="leg-dot" style="background:#95a5a6;border-color:#7f8c8d;"></div> Not reached yet</div>
+        <div class="leg"><div class="leg-dot" style="background:#e67e22;border-color:#ca6f1e;"></div> Current position</div>
+        <div class="leg"><div class="leg-dot" style="background:#3498db;border-color:#2980b9;"></div> Partially visited (1 or 2 visits)</div>
+        <div class="leg"><div class="leg-dot" style="background:#27ae60;border-color:#1e8449;"></div> Fully done (3 visits)</div>
+        <div class="leg" style="font-size:0.8em;">
+            <div style="width:28px;height:18px;border:2px dashed #bdc3c7;border-radius:4px;background:#f8f9fa;display:flex;align-items:center;justify-content:center;font-size:0.75em;color:#95a5a6;">∅</div>&nbsp;null
+        </div>
+        <div class="leg">Visit badge: <span style="background:#1e8449;color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:0.72em;font-weight:700;">1</span> <span style="background:#2980b9;color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:0.72em;font-weight:700;">2</span> <span style="background:#8e44ad;color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:0.72em;font-weight:700;">3</span></div>
+    </div>
+
+    <!-- Main simulator layout -->
+    <div class="sim-layout">
+        <!-- SVG Panel -->
+        <div class="svg-panel">
+            <svg id="dfs-svg" width="700" height="368" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="arr-null" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                        <path d="M0,0 L6,3 L0,6 Z" fill="#bdc3c7"/>
+                    </marker>
+                </defs>
+
+                <!-- Glow ring (behind everything) -->
+                <circle id="glow-ring" cx="350" cy="55" r="40" fill="none" stroke="#f1c40f" stroke-width="5" stroke-dasharray="10 5" opacity="0" pointer-events="none"/>
+
+                <!-- ── EDGES Level 0→1 ── -->
+                <line id="e-AB" x1="326" y1="69" x2="198" y2="142" stroke="#ccc" stroke-width="2.5"/>
+                <line id="e-AC" x1="374" y1="69" x2="502" y2="142" stroke="#ccc" stroke-width="2.5"/>
+
+                <!-- ── EDGES Level 1→2 ── -->
+                <line id="e-BD" x1="158" y1="175" x2="104" y2="237" stroke="#ccc" stroke-width="2.5"/>
+                <line id="e-BE" x1="192" y1="175" x2="247" y2="237" stroke="#ccc" stroke-width="2.5"/>
+                <line id="e-CF" x1="508" y1="175" x2="454" y2="237" stroke="#ccc" stroke-width="2.5"/>
+                <line id="e-CG" x1="542" y1="175" x2="597" y2="237" stroke="#ccc" stroke-width="2.5"/>
+
+                <!-- ── EDGES to NULL nodes ── -->
+                <line x1="77" y1="276" x2="50"  y2="316" stroke="#d5d8dc" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <line x1="99" y1="276" x2="126" y2="316" stroke="#d5d8dc" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <line x1="252" y1="276" x2="225" y2="316" stroke="#d5d8dc" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <line x1="274" y1="276" x2="301" y2="316" stroke="#d5d8dc" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <line x1="427" y1="276" x2="400" y2="316" stroke="#d5d8dc" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <line x1="449" y1="276" x2="476" y2="316" stroke="#d5d8dc" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <line x1="602" y1="276" x2="575" y2="316" stroke="#d5d8dc" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <line x1="624" y1="276" x2="651" y2="316" stroke="#d5d8dc" stroke-width="1.5" stroke-dasharray="4 2"/>
+
+                <!-- ── NULL nodes ── -->
+                <rect id="null-DL" x="39"  y="316" width="22" height="14" rx="3" fill="#f8f9fa" stroke="#bdc3c7" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="50"  y="327" text-anchor="middle" font-size="8" fill="#aaa">null</text>
+
+                <rect id="null-DR" x="115" y="316" width="22" height="14" rx="3" fill="#f8f9fa" stroke="#bdc3c7" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="126" y="327" text-anchor="middle" font-size="8" fill="#aaa">null</text>
+
+                <rect id="null-EL" x="214" y="316" width="22" height="14" rx="3" fill="#f8f9fa" stroke="#bdc3c7" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="225" y="327" text-anchor="middle" font-size="8" fill="#aaa">null</text>
+
+                <rect id="null-ER" x="290" y="316" width="22" height="14" rx="3" fill="#f8f9fa" stroke="#bdc3c7" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="301" y="327" text-anchor="middle" font-size="8" fill="#aaa">null</text>
+
+                <rect id="null-FL" x="389" y="316" width="22" height="14" rx="3" fill="#f8f9fa" stroke="#bdc3c7" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="400" y="327" text-anchor="middle" font-size="8" fill="#aaa">null</text>
+
+                <rect id="null-FR" x="465" y="316" width="22" height="14" rx="3" fill="#f8f9fa" stroke="#bdc3c7" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="476" y="327" text-anchor="middle" font-size="8" fill="#aaa">null</text>
+
+                <rect id="null-GL" x="564" y="316" width="22" height="14" rx="3" fill="#f8f9fa" stroke="#bdc3c7" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="575" y="327" text-anchor="middle" font-size="8" fill="#aaa">null</text>
+
+                <rect id="null-GR" x="640" y="316" width="22" height="14" rx="3" fill="#f8f9fa" stroke="#bdc3c7" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="651" y="327" text-anchor="middle" font-size="8" fill="#aaa">null</text>
+
+                <!-- ── NODES ── -->
+                <!-- A -->
+                <circle id="nd-A" cx="350" cy="55" r="28" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+                <text x="350" y="62" text-anchor="middle" fill="white" font-size="18" font-weight="bold" pointer-events="none">D</text>
+                <!-- A badge -->
+                <circle id="bg-A-c" cx="372" cy="33" r="12" fill="#2c3e50" stroke="white" stroke-width="1.5" opacity="0"/>
+                <text id="bg-A-t" x="372" y="37" text-anchor="middle" fill="white" font-size="11" font-weight="bold" pointer-events="none" opacity="0">0</text>
+
+                <!-- B -->
+                <circle id="nd-B" cx="175" cy="155" r="26" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+                <text x="175" y="162" text-anchor="middle" fill="white" font-size="17" font-weight="bold" pointer-events="none">B</text>
+                <circle id="bg-B-c" cx="195" cy="134" r="11" fill="#2c3e50" stroke="white" stroke-width="1.5" opacity="0"/>
+                <text id="bg-B-t" x="195" y="138" text-anchor="middle" fill="white" font-size="10" font-weight="bold" pointer-events="none" opacity="0">0</text>
+
+                <!-- C -->
+                <circle id="nd-C" cx="525" cy="155" r="26" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+                <text x="525" y="162" text-anchor="middle" fill="white" font-size="17" font-weight="bold" pointer-events="none">F</text>
+                <circle id="bg-C-c" cx="545" cy="134" r="11" fill="#2c3e50" stroke="white" stroke-width="1.5" opacity="0"/>
+                <text id="bg-C-t" x="545" y="138" text-anchor="middle" fill="white" font-size="10" font-weight="bold" pointer-events="none" opacity="0">0</text>
+
+                <!-- D -->
+                <circle id="nd-D" cx="88" cy="255" r="24" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+                <text x="88" y="262" text-anchor="middle" fill="white" font-size="16" font-weight="bold" pointer-events="none">A</text>
+                <circle id="bg-D-c" cx="106" cy="235" r="10" fill="#2c3e50" stroke="white" stroke-width="1.5" opacity="0"/>
+                <text id="bg-D-t" x="106" y="239" text-anchor="middle" fill="white" font-size="9" font-weight="bold" pointer-events="none" opacity="0">0</text>
+
+                <!-- E -->
+                <circle id="nd-E" cx="263" cy="255" r="24" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+                <text x="263" y="262" text-anchor="middle" fill="white" font-size="16" font-weight="bold" pointer-events="none">C</text>
+                <circle id="bg-E-c" cx="281" cy="235" r="10" fill="#2c3e50" stroke="white" stroke-width="1.5" opacity="0"/>
+                <text id="bg-E-t" x="281" y="239" text-anchor="middle" fill="white" font-size="9" font-weight="bold" pointer-events="none" opacity="0">0</text>
+
+                <!-- F -->
+                <circle id="nd-F" cx="438" cy="255" r="24" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+                <text x="438" y="262" text-anchor="middle" fill="white" font-size="16" font-weight="bold" pointer-events="none">E</text>
+                <circle id="bg-F-c" cx="456" cy="235" r="10" fill="#2c3e50" stroke="white" stroke-width="1.5" opacity="0"/>
+                <text id="bg-F-t" x="456" y="239" text-anchor="middle" fill="white" font-size="9" font-weight="bold" pointer-events="none" opacity="0">0</text>
+
+                <!-- G -->
+                <circle id="nd-G" cx="613" cy="255" r="24" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+                <text x="613" y="262" text-anchor="middle" fill="white" font-size="16" font-weight="bold" pointer-events="none">G</text>
+                <circle id="bg-G-c" cx="631" cy="235" r="10" fill="#2c3e50" stroke="white" stroke-width="1.5" opacity="0"/>
+                <text id="bg-G-t" x="631" y="239" text-anchor="middle" fill="white" font-size="9" font-weight="bold" pointer-events="none" opacity="0">0</text>
+
+                <!-- Level labels -->
+                <text x="8" y="60"  font-size="11" fill="#bdc3c7" font-weight="bold">L0</text>
+                <text x="8" y="160" font-size="11" fill="#bdc3c7" font-weight="bold">L1</text>
+                <text x="8" y="260" font-size="11" fill="#bdc3c7" font-weight="bold">L2</text>
+                <text x="8" y="328" font-size="11" fill="#bdc3c7" font-weight="bold">null</text>
+            </svg>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <div class="step-counter" id="dfs-step-counter">Step 0 of 29</div>
+
+            <div class="step-desc" id="dfs-step-desc">
+                <strong>Ready to start!</strong><br><br>
+                Press <strong>Next Step</strong> to walk through the tree one step at a time.<br><br>
+                Viewing: <strong style="color:#1e8449;">Pre-order</strong> &mdash; reads on the 1st visit (arrival).<br><br>
+                The result strip below shows only <em>Pre-order</em> reading moments.
+            </div>
+
+            <!-- Visit badges panel -->
+            <div class="badges-panel">
+                <h4>&#128203; Visit counts</h4>
+                <div class="badges-grid" id="badges-grid">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="btn btn-green"  onclick="dfsStep()">&#9654; Next Step</button>
+        <button class="btn btn-gray"   onclick="dfsReset()">&#8635; Reset</button>
+    </div>
+
+    <!-- Results -->
+    <div class="results-panel">
+        <div class="result-row">
+            <span class="result-label pre" id="trav-result-label">Pre-order</span>
+            <div class="result-chips" id="trav-chips"></div>
+        </div>
+    </div>
+
+    <!-- Explanation boxes -->
+    <h3>&#128218; Why the Orders Are Different</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0;">
+        <div style="border:2px solid #1e8449;border-radius:10px;padding:16px;">
+            <h4 style="color:#1e8449;">Pre-order: D B A C F E G</h4>
+            <p style="font-size:0.85em;line-height:1.7;color:#555;">The root D is read <strong>first</strong>, then we go deep into the left side (B, A, C) before touching the right side (F, E, G). Useful for: <em>copying a tree</em>, prefix expression.</p>
+        </div>
+        <div style="border:2px solid #2980b9;border-radius:10px;padding:16px;">
+            <h4 style="color:#2980b9;">In-order: A B C D E F G</h4>
+            <p style="font-size:0.85em;line-height:1.7;color:#555;">We go all the way left first. A (deepest left) is read first, then back to B, then C, then D (root!), then right side. Useful for: <em>BST gives sorted order</em>.</p>
+        </div>
+        <div style="border:2px solid #8e44ad;border-radius:10px;padding:16px;">
+            <h4 style="color:#8e44ad;">Post-order: A C B E G F D</h4>
+            <p style="font-size:0.85em;line-height:1.7;color:#555;">All children must be finished before reading the parent. D (root) is read <strong>last</strong>. Useful for: <em>deleting a tree</em>, postfix expression.</p>
+        </div>
+    </div>
+
+</div><!-- /dfs-section -->
+
+
+<!-- ════════════════════════════════════════════
+     BFS SECTION
+════════════════════════════════════════════ -->
+<div id="bfs-section" class="section-content" style="display:none;">
+
+    <div class="info-box">
+        <strong>&#127760; Breadth-First Search (Level-Order Traversal)</strong><br>
+        Instead of going deep, BFS visits nodes <strong>level by level</strong>, left to right. It uses a <strong>Queue</strong> data structure: enqueue the root, then repeatedly dequeue a node, visit it, and enqueue its children.
+    </div>
+
+    <div style="background:#1a2635;color:white;border-radius:12px;padding:20px 24px;margin-bottom:20px;">
+        <h3 style="color:#f39c12;margin-top:0;">&#128073; BFS Algorithm (uses a Queue)</h3>
+        <div style="font-family:'Courier New',monospace;font-size:0.88em;line-height:2;color:#ecf0f1;">
+            <span style="color:#74b9ff;">1.</span> Enqueue the <strong style="color:#f39c12;">root</strong><br>
+            <span style="color:#74b9ff;">2.</span> While queue is <strong>not empty</strong>:<br>
+            &nbsp;&nbsp;&nbsp;<span style="color:#74b9ff;">a.</span> <span style="color:#e74c3c;">Dequeue</span> front node → <strong>VISIT it</strong> &#10003;<br>
+            &nbsp;&nbsp;&nbsp;<span style="color:#74b9ff;">b.</span> <span style="color:#2ecc71;">Enqueue</span> its <strong>left child</strong> (if exists)<br>
+            &nbsp;&nbsp;&nbsp;<span style="color:#74b9ff;">c.</span> <span style="color:#2ecc71;">Enqueue</span> its <strong>right child</strong> (if exists)
+        </div>
+    </div>
+
+    <!-- BFS SVG -->
+    <div class="svg-panel" style="margin-bottom:16px;">
+        <svg id="bfs-svg" width="560" height="250" xmlns="http://www.w3.org/2000/svg">
+            <!-- Glow ring for BFS -->
+            <circle id="bfs-glow" cx="280" cy="44" r="36" fill="none" stroke="#f1c40f" stroke-width="5" stroke-dasharray="10 5" opacity="0" pointer-events="none"/>
+
+            <!-- Edges -->
+            <line x1="262" y1="62" x2="158" y2="104" stroke="#ccc" stroke-width="2.5"/>
+            <line x1="298" y1="62" x2="402" y2="104" stroke="#ccc" stroke-width="2.5"/>
+            <line x1="138" y1="144" x2="74"  y2="188" stroke="#ccc" stroke-width="2.5"/>
+            <line x1="174" y1="144" x2="238" y2="188" stroke="#ccc" stroke-width="2.5"/>
+            <line x1="382" y1="144" x2="318" y2="188" stroke="#ccc" stroke-width="2.5"/>
+            <line x1="420" y1="144" x2="486" y2="188" stroke="#ccc" stroke-width="2.5"/>
+
+            <!-- Level labels -->
+            <text x="6" y="50"  font-size="11" fill="#bdc3c7" font-weight="bold">L0</text>
+            <text x="6" y="130" font-size="11" fill="#bdc3c7" font-weight="bold">L1</text>
+            <text x="6" y="216" font-size="11" fill="#bdc3c7" font-weight="bold">L2</text>
+
+            <!-- Nodes -->
+            <circle id="bfs-A" cx="280" cy="44" r="26" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+            <text x="280" y="51" text-anchor="middle" fill="white" font-size="17" font-weight="bold" pointer-events="none">D</text>
+
+            <circle id="bfs-B" cx="148" cy="124" r="24" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+            <text x="148" y="131" text-anchor="middle" fill="white" font-size="16" font-weight="bold" pointer-events="none">B</text>
+
+            <circle id="bfs-C" cx="412" cy="124" r="24" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+            <text x="412" y="131" text-anchor="middle" fill="white" font-size="16" font-weight="bold" pointer-events="none">F</text>
+
+            <circle id="bfs-D" cx="64"  cy="208" r="22" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+            <text x="64"  y="215" text-anchor="middle" fill="white" font-size="15" font-weight="bold" pointer-events="none">A</text>
+
+            <circle id="bfs-E" cx="248" cy="208" r="22" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+            <text x="248" y="215" text-anchor="middle" fill="white" font-size="15" font-weight="bold" pointer-events="none">C</text>
+
+            <circle id="bfs-F" cx="318" cy="208" r="22" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+            <text x="318" y="215" text-anchor="middle" fill="white" font-size="15" font-weight="bold" pointer-events="none">E</text>
+
+            <circle id="bfs-G" cx="496" cy="208" r="22" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2.5"/>
+            <text x="496" y="215" text-anchor="middle" fill="white" font-size="15" font-weight="bold" pointer-events="none">G</text>
+        </svg>
+    </div>
+
+    <!-- Queue visualization -->
+    <div class="queue-panel">
+        <h4>&#128338; Queue State (Front &#8592; &#8592; &#8592; Back)</h4>
+        <div class="queue-display" id="bfs-queue">
+            <span class="queue-empty">Queue is empty — press Play to start</span>
+        </div>
+    </div>
+
+    <!-- Step description -->
+    <div style="background:#f8f9fa;border:2px solid #dee2e6;border-radius:10px;padding:14px 16px;margin:12px 0;min-height:60px;font-size:0.9em;line-height:1.7;" id="bfs-step-desc">
+        Press Play or Step to begin BFS.
+    </div>
+    <div style="text-align:center;font-size:0.85em;color:#888;margin-bottom:8px;" id="bfs-step-counter">Step 0 of 8</div>
+
+    <!-- BFS result -->
+    <div class="bfs-result-row">
+        <span class="bfs-result-label">Level-order:</span>
+        <div class="bfs-chips" id="bfs-chips"></div>
+        <span id="bfs-done" style="display:none;color:#2ecc71;font-weight:700;margin-left:10px;">&#10003; Done!</span>
+    </div>
+
+    <!-- BFS Controls -->
+    <div class="controls">
+        <button class="btn btn-green"  onclick="bfsStep()">&#9654; Next Step</button>
+        <button class="btn btn-gray"   onclick="bfsReset()">&#8635; Reset</button>
+    </div>
+
+    <div class="info-box">
+        <strong>Why is BFS different from DFS?</strong> BFS explores the tree <em>wide</em> before going <em>deep</em>. It uses a <strong>Queue</strong> (FIFO) while DFS uses a <strong>Stack</strong> (implicitly through recursion). BFS guarantees visiting nodes in level order: all of level 0, then all of level 1, etc.
+    </div>
+
+    <h3>&#128202; Comparison Summary</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:0.88em;">
+        <tr style="background:#27ae60;color:white;">
+            <th style="padding:10px 14px;">Traversal</th>
+            <th style="padding:10px 14px;">Rule</th>
+            <th style="padding:10px 14px;">Result</th>
+            <th style="padding:10px 14px;">Data Structure</th>
+        </tr>
+        <tr><td style="padding:9px 14px;border:1px solid #dee2e6;font-weight:700;color:#1e8449;">Pre-order</td><td style="padding:9px 14px;border:1px solid #dee2e6;">Root → Left → Right</td><td style="padding:9px 14px;border:1px solid #dee2e6;font-family:monospace;"><strong>D B A C F E G</strong></td><td style="padding:9px 14px;border:1px solid #dee2e6;">Stack (recursion)</td></tr>
+        <tr style="background:#f8f9fa;"><td style="padding:9px 14px;border:1px solid #dee2e6;font-weight:700;color:#2980b9;">In-order</td><td style="padding:9px 14px;border:1px solid #dee2e6;">Left → Root → Right</td><td style="padding:9px 14px;border:1px solid #dee2e6;font-family:monospace;"><strong>A B C D E F G</strong></td><td style="padding:9px 14px;border:1px solid #dee2e6;">Stack (recursion)</td></tr>
+        <tr><td style="padding:9px 14px;border:1px solid #dee2e6;font-weight:700;color:#8e44ad;">Post-order</td><td style="padding:9px 14px;border:1px solid #dee2e6;">Left → Right → Root</td><td style="padding:9px 14px;border:1px solid #dee2e6;font-family:monospace;"><strong>A C B E G F D</strong></td><td style="padding:9px 14px;border:1px solid #dee2e6;">Stack (recursion)</td></tr>
+        <tr style="background:#f8f9fa;"><td style="padding:9px 14px;border:1px solid #dee2e6;font-weight:700;color:#e67e22;">Level-order</td><td style="padding:9px 14px;border:1px solid #dee2e6;">Level by level</td><td style="padding:9px 14px;border:1px solid #dee2e6;font-family:monospace;"><strong>D B F A C E G</strong></td><td style="padding:9px 14px;border:1px solid #dee2e6;"><strong>Queue</strong></td></tr>
+    </table>
+
+</div><!-- /bfs-section -->
+
+<footer>
+    <strong>Prepared by Dr. Almalawi</strong> &nbsp;|&nbsp; CPCS 204 &mdash; Data Structures I &nbsp;|&nbsp;
+    <a href="tree-tutorial.html" style="color:#a9dfbf;">&#8592; Back to Tree Tutorial</a>
+</footer>
+
+</div><!-- /container -->
+
+<script>
+/* ════════════════════════════════════════
+   DFS SIMULATOR
+════════════════════════════════════════ */
+
+const NODE_POS = {
+    A: {x:350, y:55, r:28},
+    B: {x:175, y:155, r:26},
+    C: {x:525, y:155, r:26},
+    D: {x:88,  y:255, r:24},
+    E: {x:263, y:255, r:24},
+    F: {x:438, y:255, r:24},
+    G: {x:613, y:255, r:24},
+    DL:{x:50,  y:323, r:0, isNull:true},
+    DR:{x:126, y:323, r:0, isNull:true},
+    EL:{x:225, y:323, r:0, isNull:true},
+    ER:{x:301, y:323, r:0, isNull:true},
+    FL:{x:400, y:323, r:0, isNull:true},
+    FR:{x:476, y:323, r:0, isNull:true},
+    GL:{x:575, y:323, r:0, isNull:true},
+    GR:{x:651, y:323, r:0, isNull:true},
+};
+
+const BADGE_COLORS = ['', '#1e8449', '#2980b9', '#8e44ad'];
+const NODE_LABEL = {A:'D', B:'B', C:'F', D:'A', E:'C', F:'E', G:'G'};
+
+/* DFS steps: 29 total */
+const DFS_STEPS = [
+    {f:'A', v:1, isNull:false, reads:{pre:'D',in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8594; Arrive at A</b> &mdash; this is the <strong>1st visit</strong> to A.<br><br>'+
+          '<span style="color:#1e8449;">&#10003; PRE-ORDER reads on the 1st visit &rarr; <strong>READ A</strong></span><br>'+
+          '<span style="color:#888;">IN-ORDER: wait for 2nd visit (after left subtree)</span><br>'+
+          '<span style="color:#888;">POST-ORDER: wait for 3rd visit (after right subtree)</span><br><br>'+
+          '<em>Now go LEFT to B&hellip;</em>'},
+
+    {f:'B', v:1, isNull:false, reads:{pre:'B',in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8594; Arrive at B</b> &mdash; 1st visit to B.<br><br>'+
+          '<span style="color:#1e8449;">&#10003; PRE-ORDER &rarr; <strong>READ B</strong></span><br><br>'+
+          '<em>Go LEFT to D&hellip;</em>'},
+
+    {f:'D', v:1, isNull:false, reads:{pre:'A',in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8594; Arrive at D</b> &mdash; 1st visit to D.<br><br>'+
+          '<span style="color:#1e8449;">&#10003; PRE-ORDER &rarr; <strong>READ D</strong></span><br><br>'+
+          '<em>Try to go LEFT from D&hellip;</em>'},
+
+    {f:'DL', v:0, isNull:true, reads:{pre:null,in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8678; D.left = <strong>null ∅</strong></b><br><br>'+
+          'D has <strong>no left child</strong>! We try to go left but hit null.<br>'+
+          'The recursive call returns immediately.<br><br>'+
+          '<em>&#8629; Return back to D (this counts as completing D\'s left subtree)</em>'},
+
+    {f:'D', v:2, isNull:false, reads:{pre:null,in:'A',post:null},
+     desc:'<b style="color:#e67e22;">&#8617; Return to D</b> &mdash; this is the <strong>2nd visit</strong> (returned from left side).<br><br>'+
+          '<span style="color:#2980b9;">&#10003; IN-ORDER reads on the 2nd visit &rarr; <strong>READ D</strong></span><br><br>'+
+          '<em>Now go RIGHT from D&hellip;</em>'},
+
+    {f:'DR', v:0, isNull:true, reads:{pre:null,in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8680; D.right = <strong>null ∅</strong></b><br><br>'+
+          'D has <strong>no right child</strong>! Hit null again.<br>'+
+          '<em>&#8629; Return to D.</em>'},
+
+    {f:'D', v:3, isNull:false, reads:{pre:null,in:null,post:'A'},
+     desc:'<b style="color:#e67e22;">&#8617; Return to D</b> &mdash; <strong>3rd visit</strong> (returned from right).<br><br>'+
+          '<span style="color:#8e44ad;">&#10003; POST-ORDER reads on the 3rd visit &rarr; <strong>READ D</strong></span><br><br>'+
+          'D is <strong>fully done</strong>! All 3 visits complete.<br><em>Return to parent B.</em>'},
+
+    {f:'B', v:2, isNull:false, reads:{pre:null,in:'B',post:null},
+     desc:'<b style="color:#e67e22;">&#8617; Return to B</b> &mdash; <strong>2nd visit</strong> (D\'s entire subtree finished).<br><br>'+
+          '<span style="color:#2980b9;">&#10003; IN-ORDER &rarr; <strong>READ B</strong></span><br><br>'+
+          '<em>Now go RIGHT to E&hellip;</em>'},
+
+    {f:'E', v:1, isNull:false, reads:{pre:'C',in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8594; Arrive at E</b> &mdash; 1st visit to E.<br><br>'+
+          '<span style="color:#1e8449;">&#10003; PRE-ORDER &rarr; <strong>READ E</strong></span><br><br>'+
+          '<em>Try to go LEFT from E&hellip;</em>'},
+
+    {f:'EL', v:0, isNull:true, reads:{pre:null,in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8678; E.left = <strong>null ∅</strong></b><br><br>'+
+          'No left child. Return to E.'},
+
+    {f:'E', v:2, isNull:false, reads:{pre:null,in:'C',post:null},
+     desc:'<b style="color:#e67e22;">&#8617; Return to E</b> &mdash; <strong>2nd visit</strong>.<br><br>'+
+          '<span style="color:#2980b9;">&#10003; IN-ORDER &rarr; <strong>READ E</strong></span><br><br>'+
+          '<em>Go RIGHT from E&hellip;</em>'},
+
+    {f:'ER', v:0, isNull:true, reads:{pre:null,in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8680; E.right = <strong>null ∅</strong></b><br><br>'+
+          'No right child. Return to E.'},
+
+    {f:'E', v:3, isNull:false, reads:{pre:null,in:null,post:'C'},
+     desc:'<b style="color:#e67e22;">&#8617; Return to E</b> &mdash; <strong>3rd visit</strong>.<br><br>'+
+          '<span style="color:#8e44ad;">&#10003; POST-ORDER &rarr; <strong>READ E</strong></span><br><br>'+
+          'E fully done. <em>Return to B.</em>'},
+
+    {f:'B', v:3, isNull:false, reads:{pre:null,in:null,post:'B'},
+     desc:'<b style="color:#e67e22;">&#8617; Return to B</b> &mdash; <strong>3rd visit</strong> (E\'s subtree done).<br><br>'+
+          '<span style="color:#8e44ad;">&#10003; POST-ORDER &rarr; <strong>READ B</strong></span><br><br>'+
+          'B fully done. <em>Return to root A.</em>'},
+
+    {f:'A', v:2, isNull:false, reads:{pre:null,in:'D',post:null},
+     desc:'<b style="color:#e67e22;">&#8617; Return to A</b> &mdash; <strong>2nd visit</strong> (entire left subtree of A is done).<br><br>'+
+          '<span style="color:#2980b9;">&#10003; IN-ORDER &rarr; <strong>READ A</strong></span><br><br>'+
+          '<em>Now go RIGHT to C&hellip;</em>'},
+
+    {f:'C', v:1, isNull:false, reads:{pre:'F',in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8594; Arrive at C</b> &mdash; 1st visit to C.<br><br>'+
+          '<span style="color:#1e8449;">&#10003; PRE-ORDER &rarr; <strong>READ C</strong></span><br><br>'+
+          '<em>Go LEFT to F&hellip;</em>'},
+
+    {f:'F', v:1, isNull:false, reads:{pre:'E',in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8594; Arrive at F</b> &mdash; 1st visit to F.<br><br>'+
+          '<span style="color:#1e8449;">&#10003; PRE-ORDER &rarr; <strong>READ F</strong></span><br><br>'+
+          '<em>Try to go LEFT from F&hellip;</em>'},
+
+    {f:'FL', v:0, isNull:true, reads:{pre:null,in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8678; F.left = <strong>null ∅</strong></b><br>No left child. Return to F.'},
+
+    {f:'F', v:2, isNull:false, reads:{pre:null,in:'E',post:null},
+     desc:'<b style="color:#e67e22;">&#8617; Return to F</b> &mdash; <strong>2nd visit</strong>.<br><br>'+
+          '<span style="color:#2980b9;">&#10003; IN-ORDER &rarr; <strong>READ F</strong></span>'},
+
+    {f:'FR', v:0, isNull:true, reads:{pre:null,in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8680; F.right = <strong>null ∅</strong></b><br>No right child. Return to F.'},
+
+    {f:'F', v:3, isNull:false, reads:{pre:null,in:null,post:'E'},
+     desc:'<b style="color:#e67e22;">&#8617; Return to F</b> &mdash; <strong>3rd visit</strong>.<br><br>'+
+          '<span style="color:#8e44ad;">&#10003; POST-ORDER &rarr; <strong>READ F</strong></span><br><br>'+
+          'F done. <em>Return to C.</em>'},
+
+    {f:'C', v:2, isNull:false, reads:{pre:null,in:'F',post:null},
+     desc:'<b style="color:#e67e22;">&#8617; Return to C</b> &mdash; <strong>2nd visit</strong> (F done).<br><br>'+
+          '<span style="color:#2980b9;">&#10003; IN-ORDER &rarr; <strong>READ C</strong></span><br><br>'+
+          '<em>Go RIGHT to G&hellip;</em>'},
+
+    {f:'G', v:1, isNull:false, reads:{pre:'G',in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8594; Arrive at G</b> &mdash; 1st visit to G.<br><br>'+
+          '<span style="color:#1e8449;">&#10003; PRE-ORDER &rarr; <strong>READ G</strong></span>'},
+
+    {f:'GL', v:0, isNull:true, reads:{pre:null,in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8678; G.left = <strong>null ∅</strong></b><br>No left child. Return to G.'},
+
+    {f:'G', v:2, isNull:false, reads:{pre:null,in:'G',post:null},
+     desc:'<b style="color:#e67e22;">&#8617; Return to G</b> &mdash; <strong>2nd visit</strong>.<br><br>'+
+          '<span style="color:#2980b9;">&#10003; IN-ORDER &rarr; <strong>READ G</strong></span>'},
+
+    {f:'GR', v:0, isNull:true, reads:{pre:null,in:null,post:null},
+     desc:'<b style="color:#e67e22;">&#8680; G.right = <strong>null ∅</strong></b><br>No right child. Return to G.'},
+
+    {f:'G', v:3, isNull:false, reads:{pre:null,in:null,post:'G'},
+     desc:'<b style="color:#e67e22;">&#8617; Return to G</b> &mdash; <strong>3rd visit</strong>.<br><br>'+
+          '<span style="color:#8e44ad;">&#10003; POST-ORDER &rarr; <strong>READ G</strong></span><br><br>'+
+          'G done. <em>Return to C.</em>'},
+
+    {f:'C', v:3, isNull:false, reads:{pre:null,in:null,post:'F'},
+     desc:'<b style="color:#e67e22;">&#8617; Return to C</b> &mdash; <strong>3rd visit</strong> (G done).<br><br>'+
+          '<span style="color:#8e44ad;">&#10003; POST-ORDER &rarr; <strong>READ C</strong></span><br><br>'+
+          'C done. <em>Return to root A.</em>'},
+
+    {f:'A', v:3, isNull:false, reads:{pre:null,in:null,post:'D'},
+     desc:'<b style="color:#e67e22;">&#8617; Return to A</b> &mdash; <strong>3rd visit</strong> (entire tree done!).<br><br>'+
+          '<span style="color:#8e44ad;">&#10003; POST-ORDER &rarr; <strong>READ A</strong></span><br><br>'+
+          '<strong style="color:#27ae60;">&#127881; Traversal complete!</strong><br><br>'+
+          'Pre-order: &nbsp;<strong>D B A C F E G</strong><br>'+
+          'In-order: &nbsp;&nbsp;<strong>A B C D E F G</strong><br>'+
+          'Post-order: <strong>A C B E G F D</strong>'},
+];
+
+/* DFS state */
+let dfsCurrentStep = -1;
+let dfsTraversal = 'pre';
+let visitCounts = {A:0,B:0,C:0,D:0,E:0,F:0,G:0};
+let lastFocusNode = null;
+
+/* Build badges panel */
+function buildBadges() {
+    const grid = document.getElementById('badges-grid');
+    grid.innerHTML = '';
+    ['A','B','C','D','E','F','G'].forEach(id => {
+        const item = document.createElement('div');
+        item.className = 'badge-item';
+        item.innerHTML =
+            '<div class="badge-circle" id="badge-' + id + '" style="background:#2c3e50;border-color:#555;color:#888;">0</div>'+
+            '<div class="badge-node-label">' + (NODE_LABEL[id]||id) + '</div>';
+        grid.appendChild(item);
+    });
+}
+buildBadges();
+
+function makeStepDesc(step, trav) {
+    const travName  = {pre:'Pre-order', in:'In-order', post:'Post-order'};
+    const travVisit = {pre:1, in:2, post:3};
+    const travColor = {pre:'#1e8449', in:'#2980b9', post:'#8e44ad'};
+    const ordinal   = {1:'1st', 2:'2nd', 3:'3rd'};
+
+    if (step.isNull) {
+        const dir    = step.f.endsWith('L') ? 'left' : 'right';
+        const parent = step.f.slice(0, -1);
+        const parentLabel = NODE_LABEL[parent] || parent;
+        return '<b style="color:#e67e22;">' + parentLabel + '.' + dir +
+               ' = <strong>null &#8709;</strong></b><br><br>' +
+               'No ' + dir + ' child &mdash; null pointer reached. ' +
+               'Return immediately to <strong>' + parentLabel + '</strong>.';
+    }
+
+    const node       = step.f;
+    const v          = step.v;
+    const color      = travColor[trav];
+    const name       = travName[trav];
+    const readVisit  = travVisit[trav];
+    const isReadMoment = step.reads[trav] !== null;
+
+    const displayNode = NODE_LABEL[node] || node;
+    const arrivePhrase = v === 1
+        ? '<b style="color:#e67e22;">&#8594; Arrive at <strong>' + displayNode + '</strong></b> &mdash; <strong>' + ordinal[v] + ' visit</strong>'
+        : '<b style="color:#e67e22;">&#8617; Return to <strong>' + displayNode + '</strong></b> &mdash; <strong>' + ordinal[v] + ' visit</strong>';
+
+    let readHtml;
+    if (isReadMoment) {
+        readHtml = '<span style="color:' + color + ';display:block;margin:10px 0;padding:8px 12px;' +
+                   'border-left:4px solid ' + color + ';border-radius:0 6px 6px 0;background:rgba(0,0,0,0.04);">' +
+                   '&#10003; <strong>' + name + '</strong> reads on the ' + ordinal[readVisit] +
+                   ' visit &rarr; <strong style="font-size:1.1em;">READ ' + displayNode + '</strong>' +
+                   '</span>';
+    } else if (v < readVisit) {
+        readHtml = '<span style="color:#888;display:block;margin:10px 0;">' +
+                   '&#9675; ' + name + ' reads on the <strong>' + ordinal[readVisit] +
+                   ' visit</strong> &mdash; not yet (currently visit ' + v + ')' +
+                   '</span>';
+    } else {
+        readHtml = '<span style="color:#aaa;display:block;margin:10px 0;">' +
+                   '&#10003; ' + name + ' already read <strong>' + displayNode + '</strong>' +
+                   ' on the ' + ordinal[readVisit] + ' visit' +
+                   '</span>';
+    }
+
+    let navHtml = '';
+    if (v === 1) {
+        navHtml = '<em style="color:#555;">&#8594; Next: go to left child&hellip;</em>';
+    } else if (v === 2) {
+        navHtml = '<em style="color:#555;">&#8594; Next: go to right child&hellip;</em>';
+    } else if (v === 3) {
+        if (node === 'A') {
+            const results = {pre:'D B A C F E G', in:'A B C D E F G', post:'A C B E G F D'};
+            navHtml = '<strong style="color:#27ae60;font-size:1.05em;">&#127881; Traversal complete!<br>' +
+                      name + ': ' + results[trav] + '</strong>';
+        } else {
+            navHtml = '<em style="color:#555;">&#8617; Returning to parent&hellip;</em>';
+        }
+    }
+
+    return arrivePhrase + '<br>' + readHtml + navHtml;
+}
+
+function setTrav(t) {
+    dfsTraversal = t;
+    ['pre','in','post'].forEach(x => {
+        document.getElementById('btn-' + x).classList.toggle('active', x === t);
+    });
+    dfsReset();
+}
+
+function dfsReset() {
+    dfsCurrentStep = -1;
+    visitCounts = {A:0,B:0,C:0,D:0,E:0,F:0,G:0};
+    lastFocusNode = null;
+
+    // Update result label to match currently selected traversal
+    const label = document.getElementById('trav-result-label');
+    const travNames    = {pre:'Pre-order', in:'In-order', post:'Post-order'};
+    const travColors   = {pre:'#1e8449', in:'#2980b9', post:'#8e44ad'};
+    const travReadDesc = {
+        pre:  'reads on the <strong>1st visit</strong> (arrival at node)',
+        in:   'reads on the <strong>2nd visit</strong> (return from left subtree)',
+        post: 'reads on the <strong>3rd visit</strong> (return from right subtree)'
+    };
+    if (label) {
+        label.textContent = travNames[dfsTraversal];
+        label.className = 'result-label ' + dfsTraversal;
+    }
+
+    // Reset node colors
+    ['A','B','C','D','E','F','G'].forEach(id => {
+        const el = document.getElementById('nd-' + id);
+        if (el) { el.style.fill = '#95a5a6'; el.style.stroke = '#7f8c8d'; }
+    });
+    // Reset null highlights
+    ['DL','DR','EL','ER','FL','FR','GL','GR'].forEach(id => {
+        const el = document.getElementById('null-' + id);
+        if (el) { el.style.stroke = '#bdc3c7'; el.style.strokeWidth = '1.5'; el.style.fill = '#f8f9fa'; }
+    });
+    // Reset badges
+    ['A','B','C','D','E','F','G'].forEach(id => {
+        const b = document.getElementById('badge-' + id);
+        if (b) { b.textContent = '0'; b.style.background = '#2c3e50'; b.style.borderColor = '#555'; b.style.color = '#888'; }
+    });
+    // Hide glow
+    const gr = document.getElementById('glow-ring');
+    gr.style.opacity = '0';
+    gr.style.animation = 'none';
+
+    // Clear results (single strip for selected traversal)
+    document.getElementById('trav-chips').innerHTML = '';
+
+    document.getElementById('dfs-step-desc').innerHTML =
+        '<strong>Ready to start!</strong><br><br>' +
+        'Press <strong>Next Step</strong> to walk through the tree one step at a time.<br><br>' +
+        'Viewing: <strong style="color:' + travColors[dfsTraversal] + ';">' + travNames[dfsTraversal] + '</strong> &mdash; ' +
+        travReadDesc[dfsTraversal] + '.<br><br>' +
+        'The result strip below shows only <em>' + travNames[dfsTraversal] + '</em> reading moments.';
+    document.getElementById('dfs-step-counter').textContent = 'Step 0 of ' + DFS_STEPS.length;
+}
+
+function dfsDoStep() {
+    if (dfsCurrentStep >= DFS_STEPS.length - 1) return;
+    dfsCurrentStep++;
+    applyDfsStep(DFS_STEPS[dfsCurrentStep]);
+}
+
+function applyDfsStep(step) {
+    const pos = NODE_POS[step.f];
+
+    // ── Glow ring ──
+    const gr = document.getElementById('glow-ring');
+    if (step.isNull) {
+        gr.style.opacity = '0';
+        gr.style.animation = 'none';
+        // Highlight null rect
+        const nullEl = document.getElementById('null-' + step.f);
+        if (nullEl) {
+            nullEl.style.stroke = '#e67e22';
+            nullEl.style.strokeWidth = '2.5';
+            nullEl.style.fill = '#fef5e7';
+            setTimeout(() => {
+                if (nullEl) { nullEl.style.stroke = '#bdc3c7'; nullEl.style.strokeWidth = '1.5'; nullEl.style.fill = '#f8f9fa'; }
+            }, 600);
+        }
+    } else {
+        gr.setAttribute('cx', pos.x);
+        gr.setAttribute('cy', pos.y);
+        gr.setAttribute('r', pos.r + 12);
+        gr.style.opacity = '0.9';
+        gr.style.animation = 'ring-glow 1.2s ease-in-out infinite';
+    }
+
+    // ── Reset previous focus node color ──
+    if (lastFocusNode && lastFocusNode !== step.f && !NODE_POS[lastFocusNode].isNull) {
+        const count = visitCounts[lastFocusNode];
+        const el = document.getElementById('nd-' + lastFocusNode);
+        if (el) {
+            if (count >= 3) {
+                el.style.fill = '#1e8449'; el.style.stroke = '#0a3d1f';
+            } else if (count > 0) {
+                el.style.fill = '#3498db'; el.style.stroke = '#1a6fa0';
+            } else {
+                el.style.fill = '#95a5a6'; el.style.stroke = '#7f8c8d';
+            }
+        }
+    }
+
+    // ── Highlight current node ──
+    if (!step.isNull) {
+        const el = document.getElementById('nd-' + step.f);
+        if (el) { el.style.fill = '#e67e22'; el.style.stroke = '#ca6f1e'; }
+        visitCounts[step.f] = step.v;
+        lastFocusNode = step.f;
+
+        // Update badge
+        const b = document.getElementById('badge-' + step.f);
+        if (b) {
+            b.textContent = step.v;
+            b.style.background = BADGE_COLORS[step.v];
+            b.style.borderColor = 'white';
+            b.style.color = 'white';
+        }
+    } else {
+        lastFocusNode = null;
+    }
+
+    // ── Add chip to result (only for the currently selected traversal) ──
+    if (step.reads[dfsTraversal]) addChip('trav-chips', step.reads[dfsTraversal], dfsTraversal);
+
+    // ── Step description (focused on selected traversal) ──
+    const descEl = document.getElementById('dfs-step-desc');
+    descEl.innerHTML = makeStepDesc(step, dfsTraversal);
+    descEl.className = 'step-desc' + (step.isNull ? ' null-step' : '');
+
+    // ── Counter ──
+    document.getElementById('dfs-step-counter').textContent =
+        'Step ' + (dfsCurrentStep + 1) + ' of ' + DFS_STEPS.length;
+}
+
+function addChip(containerId, letter, type) {
+    const c = document.getElementById(containerId);
+    const span = document.createElement('span');
+    span.className = 'chip ' + type;
+    span.textContent = letter;
+    c.appendChild(span);
+}
+
+function dfsStep() { dfsDoStep(); }
+
+
+/* ════════════════════════════════════════
+   BFS SIMULATOR
+════════════════════════════════════════ */
+
+const BFS_STEPS = [
+    {visit: null, enqueue:['D'], dequeue:null,  queue:['D'],
+     desc:'<b>Start:</b> Enqueue the root <strong>D</strong> into the queue. Queue: [D]'},
+
+    {visit:'A', enqueue:['B','F'], dequeue:'D', queue:['B','F'],
+     desc:'<b>Dequeue D</b> &rarr; <strong style="color:#f39c12;">Visit D &#10003;</strong><br>Enqueue D\'s children: B (left), F (right). Queue: [B, F]'},
+
+    {visit:'B', enqueue:['A','C'], dequeue:'B', queue:['F','A','C'],
+     desc:'<b>Dequeue B</b> &rarr; <strong style="color:#f39c12;">Visit B &#10003;</strong><br>Enqueue B\'s children: A (left), C (right). Queue: [F, A, C]'},
+
+    {visit:'C', enqueue:['E','G'], dequeue:'F', queue:['A','C','E','G'],
+     desc:'<b>Dequeue F</b> &rarr; <strong style="color:#f39c12;">Visit F &#10003;</strong><br>Enqueue F\'s children: E (left), G (right). Queue: [A, C, E, G]'},
+
+    {visit:'D', enqueue:[], dequeue:'A', queue:['C','E','G'],
+     desc:'<b>Dequeue A</b> &rarr; <strong style="color:#f39c12;">Visit A &#10003;</strong><br>A is a leaf &mdash; no children to enqueue. Queue: [C, E, G]'},
+
+    {visit:'E', enqueue:[], dequeue:'C', queue:['E','G'],
+     desc:'<b>Dequeue C</b> &rarr; <strong style="color:#f39c12;">Visit C &#10003;</strong><br>C is a leaf. Queue: [E, G]'},
+
+    {visit:'F', enqueue:[], dequeue:'E', queue:['G'],
+     desc:'<b>Dequeue E</b> &rarr; <strong style="color:#f39c12;">Visit E &#10003;</strong><br>E is a leaf. Queue: [G]'},
+
+    {visit:'G', enqueue:[], dequeue:'G', queue:[],
+     desc:'<b>Dequeue G</b> &rarr; <strong style="color:#f39c12;">Visit G &#10003;</strong><br>G is a leaf. Queue: <strong>EMPTY</strong>! &mdash; &#127881; <strong style="color:#2ecc71;">BFS complete!</strong><br>Level-order result: D &rarr; B &rarr; F &rarr; A &rarr; C &rarr; E &rarr; G'},
+];
+
+const BFS_POS = {
+    A:{x:280,y:44,r:26}, B:{x:148,y:124,r:24}, C:{x:412,y:124,r:24},
+    D:{x:64,y:208,r:22}, E:{x:248,y:208,r:22}, F:{x:318,y:208,r:22}, G:{x:496,y:208,r:22}
+};
+
+let bfsCurrentStep = -1;
+
+function bfsReset() {
+    bfsCurrentStep = -1;
+    ['A','B','C','D','E','F','G'].forEach(id => {
+        const el = document.getElementById('bfs-' + id);
+        if (el) { el.style.fill = '#95a5a6'; el.style.stroke = '#7f8c8d'; }
+    });
+    document.getElementById('bfs-glow').style.opacity = '0';
+    document.getElementById('bfs-glow').style.animation = 'none';
+    document.getElementById('bfs-queue').innerHTML = '<span class="queue-empty">Queue is empty &mdash; press Next Step to start</span>';
+    document.getElementById('bfs-step-desc').textContent = 'Press Next Step to begin BFS.';
+    document.getElementById('bfs-step-counter').textContent = 'Step 0 of ' + BFS_STEPS.length;
+    document.getElementById('bfs-chips').innerHTML = '';
+    document.getElementById('bfs-done').style.display = 'none';
+}
+
+function bfsDoStep() {
+    if (bfsCurrentStep >= BFS_STEPS.length - 1) return;
+    bfsCurrentStep++;
+    const step = BFS_STEPS[bfsCurrentStep];
+
+    // Visit node
+    if (step.visit) {
+        const el = document.getElementById('bfs-' + step.visit);
+        if (el) { el.style.fill = '#f39c12'; el.style.stroke = '#e67e22'; }
+        // After short delay, mark as visited (green)
+        const vid = step.visit;
+        setTimeout(() => {
+            const e2 = document.getElementById('bfs-' + vid);
+            if (e2) { e2.style.fill = '#27ae60'; e2.style.stroke = '#1e8449'; }
+        }, 300);
+
+        // Move glow
+        const pos = BFS_POS[step.visit];
+        const g = document.getElementById('bfs-glow');
+        g.setAttribute('cx', pos.x); g.setAttribute('cy', pos.y); g.setAttribute('r', pos.r + 12);
+        g.style.opacity = '0.9'; g.style.animation = 'ring-glow 1.2s ease-in-out infinite';
+
+        // Add chip
+        const chip = document.createElement('div');
+        chip.className = 'bfs-chip';
+        chip.textContent = NODE_LABEL[step.visit] || step.visit;
+        document.getElementById('bfs-chips').appendChild(chip);
+    }
+
+    // Update queue display
+    const qd = document.getElementById('bfs-queue');
+    qd.innerHTML = '';
+    if (step.queue.length === 0) {
+        qd.innerHTML = '<span class="queue-empty">Empty &#8212; traversal done!</span>';
+    } else {
+        step.queue.forEach(n => {
+            const ch = document.createElement('div');
+            ch.className = 'queue-chip';
+            ch.textContent = n;
+            qd.appendChild(ch);
+        });
+    }
+
+    // Description
+    document.getElementById('bfs-step-desc').innerHTML = step.desc;
+    document.getElementById('bfs-step-counter').textContent =
+        'Step ' + (bfsCurrentStep + 1) + ' of ' + BFS_STEPS.length;
+
+    if (bfsCurrentStep >= BFS_STEPS.length - 1) {
+        document.getElementById('bfs-done').style.display = 'inline';
+        document.getElementById('bfs-glow').style.animation = 'none';
+        document.getElementById('bfs-glow').style.opacity = '0';
+    }
+}
+
+function bfsStep() { bfsDoStep(); }
+
+/* ════════════════════════════════════════
+   MODE SWITCHING
+════════════════════════════════════════ */
+function setMode(mode) {
+    document.getElementById('dfs-section').style.display = mode === 'dfs' ? 'block' : 'none';
+    document.getElementById('bfs-section').style.display = mode === 'bfs' ? 'block' : 'none';
+    document.getElementById('tab-dfs').classList.toggle('active', mode === 'dfs');
+    document.getElementById('tab-bfs').classList.toggle('active', mode === 'bfs');
+    if (mode === 'dfs') dfsReset();
+    else bfsReset();
+}
+</script>
+</body>
+</html>

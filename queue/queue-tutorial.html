@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Data Structure - Complete Tutorial</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header img { width: 8cm; height: 4cm; object-fit: contain; }
+
+        header .header-text { text-align: left; }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        header p { font-size: 1.2em; opacity: 0.9; }
+
+        .content { padding: 40px; }
+        section { margin-bottom: 50px; }
+
+        h2 {
+            color: #11998e;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #11998e;
+            padding-bottom: 10px;
+        }
+
+        h3 { color: #0d7a67; font-size: 1.5em; margin: 25px 0 15px 0; }
+        h4 { color: #555; font-size: 1.2em; margin: 20px 0 10px 0; }
+
+        .highlight-box {
+            background: #e8faf5;
+            border-left: 5px solid #11998e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        ul, ol { margin-left: 30px; margin-top: 10px; margin-bottom: 10px; }
+        li { margin: 8px 0; }
+
+        /* Code Blocks */
+        .code-container { margin: 20px 0; }
+        .code-header {
+            background: #11998e;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.15em;
+            transition: background 0.3s;
+        }
+        .code-header:hover { background: #0d8278; }
+        .code-toggle { font-size: 1.2em; transition: transform 0.3s; }
+        .code-toggle.collapsed { transform: rotate(-90deg); }
+        .code-block {
+            background: #000;
+            color: #f8f8f2;
+            padding: 25px 30px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 1.25em;
+            line-height: 1.8;
+            white-space: pre;
+            max-height: 800px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        .code-block.collapsed { max-height: 0; padding: 0 20px; overflow: hidden; }
+        .code-block .comment { color: #7a8bbf; }
+        .code-block .keyword { color: #ff79c6; font-weight: bold; }
+        .code-block .class-name { color: #50fa7b; font-weight: bold; }
+        .code-block .method { color: #8be9fd; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .number { color: #bd93f9; }
+
+        /* Tables */
+        .table-container { overflow-x: auto; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+
+        /* Examples Grid */
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .example-card {
+            background: #e8faf5;
+            border: 2px solid #11998e;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .example-card h4 { color: #11998e; margin-bottom: 10px; }
+        .example-card p { color: #555; }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(17,153,142,0.4); }
+        .btn:active { transform: translateY(0); }
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #e57373 100%);
+        }
+        .btn-danger:hover { box-shadow: 0 5px 15px rgba(244,67,54,0.4); }
+
+        /* ADT Diagram */
+        .adt-diagram {
+            background: #f9f9f9;
+            border: 3px solid #11998e;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .adt-operations {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .adt-operations h4 { color: white; margin-bottom: 15px; font-size: 1.3em; }
+        .operations-box { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .operation {
+            background: white;
+            color: #11998e;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .adt-arrow { font-size: 3em; color: #11998e; margin: 20px 0; font-weight: bold; }
+        .adt-implementations { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .implementation-box {
+            background: white;
+            border: 3px solid #4caf50;
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+        }
+        .implementation-box h4 { color: #4caf50; margin-bottom: 10px; }
+        .implementation-box p { color: #666; margin-bottom: 10px; }
+        .implementation-box code {
+            background: #2d2d2d;
+            color: #f1fa8c;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: block;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+        }
+        .adt-or { font-size: 1.5em; font-weight: bold; color: #0d7a67; padding: 10px; }
+
+        /* Algorithm Steps */
+        .algorithm-steps {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(17,153,142,0.3);
+            margin: 20px 0;
+        }
+        .algorithm-steps h4 { color: white; margin-top: 0; font-size: 1.3em; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px; margin-bottom: 20px; }
+        .algorithm-steps ol { counter-reset: step-counter; list-style: none; padding-left: 0; }
+        .algorithm-steps ol > li {
+            counter-increment: step-counter;
+            position: relative;
+            padding: 15px 15px 15px 60px;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+        }
+        .algorithm-steps ol > li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            background: white;
+            color: #11998e;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .algorithm-steps code { background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 4px; font-family: 'Courier New', monospace; color: #ffd700; font-weight: bold; }
+        .algorithm-steps strong { color: #ffd700; }
+
+        /* ===================== QUEUE VISUALIZATION ===================== */
+        /* Horizontal queue display */
+        .queue-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .queue-cells-row {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            position: relative;
+        }
+        .queue-cell {
+            width: 70px;
+            height: 70px;
+            border: 3px solid #11998e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            background: white;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+        .queue-cell:not(:last-child) { border-right: none; }
+        .queue-cell.active {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        .queue-cell.front-cell { background: linear-gradient(135deg, #2196f3 0%, #64b5f6 100%); color: white; }
+        .queue-cell.rear-cell { background: linear-gradient(135deg, #ff5722 0%, #ff8a65 100%); color: white; }
+        .queue-cell.both-cell { background: linear-gradient(135deg, #9c27b0 0%, #ce93d8 100%); color: white; }
+        .queue-cell.empty-cell { background: #f5f5f5; color: #bbb; }
+        .queue-cell.index-label { border: none; font-size: 0.85em; color: #888; background: transparent; height: 25px; }
+
+        .pointer-row {
+            display: flex;
+            gap: 0;
+            margin-top: 5px;
+        }
+        .pointer-cell {
+            width: 70px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .front-ptr { color: #2196f3; }
+        .rear-ptr { color: #ff5722; }
+
+        /* Status panel */
+        .queue-status {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .status-badge {
+            background: #e8faf5;
+            border: 2px solid #11998e;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: bold;
+            color: #11998e;
+            font-size: 1em;
+        }
+        .status-badge span { color: #333; }
+
+        /* Message log */
+        .msg-log {
+            background: #1e1e1e;
+            color: #a0e8a0;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            min-height: 44px;
+            margin: 10px 0;
+            border: 2px solid #11998e;
+        }
+
+        /* Interactive Demo Wrapper */
+        .interactive-demo {
+            background: #f9f9f9;
+            border: 2px solid #0d7a67;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .demo-controls input {
+            padding: 10px 16px;
+            font-size: 1em;
+            border: 2px solid #11998e;
+            border-radius: 5px;
+            width: 120px;
+            text-align: center;
+        }
+        .demo-controls input:focus { outline: none; border-color: #0d7a67; }
+
+        /* Circular Queue SVG */
+        .circular-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        /* Back to Home */
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(17,153,142,0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .back-home-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(17,153,142,0.6); }
+
+        /* Animation helpers */
+        @keyframes enqueueAnim {
+            from { opacity: 0; transform: translateX(30px) scale(0.7); }
+            to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes dequeueAnim {
+            from { opacity: 1; transform: translateX(0) scale(1); }
+            to   { opacity: 0; transform: translateX(-40px) scale(0.7); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .enqueue-anim { animation: enqueueAnim 0.5s ease; }
+        .dequeue-anim { animation: dequeueAnim 0.4s ease forwards; }
+
+        /* Comparison cards */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .compare-card {
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .compare-card.unrealistic { background: #ffebee; border: 3px solid #f44336; }
+        .compare-card.realistic   { background: #fff8e1; border: 3px solid #ff9800; }
+        .compare-card.circular    { background: #e8f5e9; border: 3px solid #4caf50; }
+        .compare-card h4 { font-size: 1.3em; margin-bottom: 10px; }
+        .compare-card.unrealistic h4 { color: #c62828; }
+        .compare-card.realistic   h4 { color: #e65100; }
+        .compare-card.circular    h4 { color: #2e7d32; }
+
+        /* Shifting visualization */
+        .shift-step {
+            font-family: 'Courier New', monospace;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin: 6px 0;
+            font-size: 1em;
+            animation: fadeIn 0.4s ease;
+        }
+        .shift-step.highlight { background: #ffe0b2; border-color: #ff9800; font-weight: bold; }
+
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        footer p { margin: 5px 0; }
+
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            header h1 { font-size: 1.8em; }
+            h2 { font-size: 1.5em; }
+            .btn { width: 100%; }
+            .queue-cell { width: 50px; height: 50px; font-size: 0.9em; }
+            .pointer-cell { width: 50px; }
+        }
+    </style>
+</head>
+<body>
+<a href="../index.html" class="back-home-btn">&#127968; Home</a>
+<div class="container">
+    <header>
+        <div class="header-content">
+            <img src="../fcit.png" alt="FCIT Logo">
+            <div class="header-text">
+                <h1>&#128101; Queue Data Structure</h1>
+                <p class="course-code">CPCS 204 - Data Structures I</p>
+                <p>A Complete Tutorial with Interactive Simulations</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <!-- ============================================================ -->
+        <!--  SECTION 1 — INTRODUCTION                                    -->
+        <!-- ============================================================ -->
+        <section id="introduction">
+            <h2>1. What is a Queue?</h2>
+
+            <div class="definition">
+                <strong>Definition:</strong> A <strong>Queue</strong> is a linear data structure that stores elements in a sequential manner where insertion happens at one end called the <strong>REAR</strong> and deletion happens at the other end called the <strong>FRONT</strong>. It follows the <strong>FIFO (First In, First Out)</strong> principle — the first element added is the first one removed.
+            </div>
+
+            <h3>Queue in the Family of Data Structures</h3>
+            <div class="highlight-box">
+                <p>Data structures are divided into two broad categories:</p>
+                <ul>
+                    <li><strong>Physical Data Structures</strong> — structures that actually exist in memory and have a direct hardware representation. Examples: <strong>Arrays</strong> and <strong>Linked Lists</strong>.</li>
+                    <li><strong>Logical Data Structures</strong> — structures that define a <em>logical behavior</em> for organizing and accessing data. They <strong>cannot be built without</strong> a physical data structure underneath them. Examples: <strong>Stack</strong>, <strong>Queue</strong>, <strong>Tree</strong>, and <strong>Graph</strong>.</li>
+                </ul>
+                <br>
+                <p><strong>Queue is a Logical Data Structure</strong> — it describes a concept (FIFO access policy), but to actually store data it must be implemented on top of an <em>Array</em> or a <em>Linked List</em>.</p>
+            </div>
+
+            <h3>Real-World Examples of Queues</h3>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <h4>&#128101; Supermarket Checkout</h4>
+                    <p>Customers line up at the checkout. The first customer to join the line is the first to be served.</p>
+                </div>
+                <div class="example-card">
+                    <h4>&#9992;&#65039; Airport Check-In</h4>
+                    <p>Passengers queue at the check-in counter. First to arrive, first to check in.</p>
+                </div>
+                <div class="example-card">
+                    <h4>&#128200; Print Queue</h4>
+                    <p>Documents sent to a printer are printed in the order they were submitted — first submitted, first printed.</p>
+                </div>
+                <div class="example-card">
+                    <h4>&#128241; Call Center</h4>
+                    <p>Incoming calls are placed in a queue. The first caller is connected to an agent first.</p>
+                </div>
+            </div>
+
+            <h3>Key Characteristics of a Queue</h3>
+            <ul>
+                <li><strong>Linear Data Structure:</strong> Elements are arranged in a sequential order</li>
+                <li><strong>Two-End Access:</strong> Addition at the REAR, removal at the FRONT</li>
+                <li><strong>FIFO Policy:</strong> First In, First Out — the element that waited the longest is served first</li>
+                <li><strong>Two Pointers:</strong> <code>front</code> tracks the first element, <code>rear</code> tracks the last element</li>
+            </ul>
+
+            <h3>Queue vs. Stack — The Key Difference</h3>
+            <div class="important">
+                <p>Both Stack and Queue are <strong>linear, logical data structures</strong>. The critical difference is their <strong>access policy</strong>:</p>
+                <ul>
+                    <li><strong>Stack</strong> → <strong>LIFO</strong> (Last In, First Out) — one end (TOP)</li>
+                    <li><strong>Queue</strong> → <strong>FIFO</strong> (First In, First Out) — two ends (FRONT and REAR)</li>
+                </ul>
+                <p>Think of it this way: a stack is like a pile of plates (you take from the top), while a queue is like a line of people (the first person in line leaves first).</p>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!--  SECTION 2 — ADT                                             -->
+        <!-- ============================================================ -->
+        <section id="adt">
+            <h2>2. Queue as an Abstract Data Type (ADT)</h2>
+
+            <div class="important">
+                <h3>Why is Queue an Abstract Data Type?</h3>
+                <p>A Queue is an <strong>Abstract Data Type (ADT)</strong> because it <em>defines the behavior</em> through a set of operations without specifying <em>how</em> those operations are implemented internally. The user of the queue sees only the interface: <em>enqueue here, dequeue from there</em> — they do not need to know whether an array or a linked list is used underneath.</p>
+            </div>
+
+            <div class="adt-diagram">
+                <div class="adt-operations">
+                    <h4>&#128221; Queue Operations (Abstract Interface)</h4>
+                    <div class="operations-box">
+                        <span class="operation">enqueue()</span>
+                        <span class="operation">dequeue()</span>
+                        <span class="operation">peek()</span>
+                        <span class="operation">isEmpty()</span>
+                        <span class="operation">isFull()</span>
+                        <span class="operation">clear()</span>
+                    </div>
+                </div>
+                <div class="adt-arrow">&#8595;</div>
+                <div class="adt-implementations">
+                    <div class="implementation-box">
+                        <h4>&#128290; Array Implementation</h4>
+                        <p>Fixed-size contiguous memory. Three strategies: unrealistic, realistic (shifting), circular.</p>
+                        <code>rear = (rear + 1) % size</code>
+                    </div>
+                    <div class="adt-or">OR</div>
+                    <div class="implementation-box">
+                        <h4>&#128279; Linked List Implementation</h4>
+                        <p>Dynamic memory allocation. Always fits the data; no wasted space.</p>
+                        <code>tail.next = newNode</code>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Logical vs. Physical — Summary</h3>
+            <div class="highlight-box">
+                <ul>
+                    <li>Queue <strong>cannot exist alone in memory</strong> — it is a logical concept.</li>
+                    <li>It must be <strong>implemented on top of a physical structure</strong> (Array or Linked List).</li>
+                    <li>The <strong>behavior (FIFO)</strong> stays the same no matter which physical structure you choose.</li>
+                    <li>This separation between behavior and implementation is what makes Queue an <strong>ADT</strong>.</li>
+                </ul>
+            </div>
+
+            <h3>Access Policy: FIFO</h3>
+            <div class="definition">
+                <strong>FIFO = First In, First Out</strong><br><br>
+                The element that was inserted <em>first</em> is the one that gets removed <em>first</em>. This is the fundamental rule (access policy) of every queue, regardless of how it is implemented.
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!--  SECTION 3 — OPERATIONS                                      -->
+        <!-- ============================================================ -->
+        <section id="operations">
+            <h2>3. Queue Operations</h2>
+
+            <p>The six fundamental operations of a queue are:</p>
+
+            <h3>3.1 enqueue(element) — Add to Rear</h3>
+            <div class="highlight-box">
+                <p><strong>Purpose:</strong> Adds an element to the <strong>REAR</strong> of the queue</p>
+                <p><strong>Analogous to:</strong> <code>push()</code> in a Stack</p>
+                <p><strong>Time Complexity:</strong> O(1) for unrealistic and circular; O(n) for shifting (realistic)</p>
+            </div>
+            <div class="algorithm-steps">
+                <h4>Algorithm — enqueue(element)</h4>
+                <ol>
+                    <li>Check if the queue is <strong>full</strong>. If full → report overflow error and stop.</li>
+                    <li>Advance the <strong>rear</strong> pointer: <code>rear = rear + 1</code> (or <code>rear = (rear+1) % SIZE</code> for circular)</li>
+                    <li>Store the element at the new rear position: <code>queue[rear] = element</code></li>
+                    <li>If this is the <strong>first element</strong> being added (front was −1), also set <code>front = 0</code></li>
+                </ol>
+            </div>
+
+            <h3>3.2 dequeue() — Remove from Front</h3>
+            <div class="highlight-box">
+                <p><strong>Purpose:</strong> Removes and returns the element at the <strong>FRONT</strong> of the queue</p>
+                <p><strong>Analogous to:</strong> <code>pop()</code> in a Stack</p>
+                <p><strong>Time Complexity:</strong> O(1) for unrealistic and circular; O(n) for shifting</p>
+            </div>
+            <div class="algorithm-steps">
+                <h4>Algorithm — dequeue()</h4>
+                <ol>
+                    <li>Check if the queue is <strong>empty</strong>. If empty → report underflow error and stop.</li>
+                    <li>Save the element at the front: <code>temp = queue[front]</code></li>
+                    <li>Advance the <strong>front</strong> pointer: <code>front = front + 1</code> (or <code>front = (front+1) % SIZE</code> for circular)</li>
+                    <li>If <code>front &gt; rear</code>, the queue is now empty — reset both pointers to −1</li>
+                    <li>Return <code>temp</code></li>
+                </ol>
+            </div>
+
+            <h3>3.3 peek() — Inspect Front</h3>
+            <div class="highlight-box">
+                <p><strong>Purpose:</strong> Returns the element at the front <em>without removing it</em></p>
+                <p><strong>Analogous to:</strong> <code>top()</code> in a Stack</p>
+                <p><strong>Time Complexity:</strong> O(1)</p>
+            </div>
+
+            <h3>3.4 isEmpty()</h3>
+            <div class="highlight-box">
+                <p><strong>Purpose:</strong> Returns <code>true</code> if the queue has no elements</p>
+                <p><strong>Condition:</strong> <code>front == -1</code> (or <code>front &gt; rear</code> in the linear case)</p>
+            </div>
+
+            <h3>3.5 isFull()</h3>
+            <div class="highlight-box">
+                <p><strong>Purpose:</strong> Returns <code>true</code> if the queue cannot hold more elements</p>
+                <p><strong>Condition:</strong> <code>rear == SIZE - 1</code> for unrealistic/realistic; <code>(rear + 1) % SIZE == front</code> for circular</p>
+            </div>
+
+            <h3>3.6 clear()</h3>
+            <div class="highlight-box">
+                <p><strong>Purpose:</strong> Empties the queue by resetting both pointers</p>
+                <p><strong>Action:</strong> <code>front = rear = -1</code></p>
+            </div>
+
+            <!-- Operations Summary Table -->
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Description</th>
+                        <th>Array (Circular)</th>
+                        <th>Linked List</th>
+                    </tr>
+                    <tr>
+                        <td><strong>enqueue(e)</strong></td>
+                        <td>Add <em>e</em> at rear</td>
+                        <td>queue[(rear+1)%N] = e</td>
+                        <td>tail.next = newNode</td>
+                    </tr>
+                    <tr>
+                        <td><strong>dequeue()</strong></td>
+                        <td>Remove & return front</td>
+                        <td>return queue[(front+1)%N]</td>
+                        <td>remove head node</td>
+                    </tr>
+                    <tr>
+                        <td><strong>peek()</strong></td>
+                        <td>View front element</td>
+                        <td>return queue[front]</td>
+                        <td>return head.data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>isEmpty()</strong></td>
+                        <td>Is queue empty?</td>
+                        <td>front == -1</td>
+                        <td>head == null</td>
+                    </tr>
+                    <tr>
+                        <td><strong>isFull()</strong></td>
+                        <td>Is queue full?</td>
+                        <td>(rear+1)%N == front</td>
+                        <td>N/A (dynamic)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>clear()</strong></td>
+                        <td>Empty the queue</td>
+                        <td>front = rear = -1</td>
+                        <td>head = tail = null</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!--  SECTION 4 — ARRAY IMPLEMENTATION                           -->
+        <!-- ============================================================ -->
+        <section id="array-impl">
+            <h2>4. Array-Based Implementation</h2>
+
+            <p>Since a Queue is a logical data structure, it must be implemented using a physical structure. Let us start with an <strong>Array</strong>. We use an array of fixed size (e.g., 5 elements) and maintain two integer pointers:</p>
+            <ul>
+                <li><strong>front</strong> — index of the first (oldest) element; starts at −1</li>
+                <li><strong>rear</strong> — index of the last (newest) element; starts at −1</li>
+            </ul>
+            <p>When both are −1, the queue is <strong>empty</strong>.</p>
+
+            <div class="important">
+                <p>There are <strong>three strategies</strong> for array-based queue implementation. Each has different trade-offs:</p>
+                <ol>
+                    <li><strong>Unrealistic</strong> — simple but wastes space</li>
+                    <li><strong>Realistic (Shifting)</strong> — uses all space but slow</li>
+                    <li><strong>Circular</strong> — best of both worlds using modulo arithmetic &#10003;</li>
+                </ol>
+            </div>
+
+            <!-- ---- 4.1 UNREALISTIC ---- -->
+            <h3>4.1 Strategy 1 — Unrealistic (Simple Linear)</h3>
+
+            <div class="highlight-box">
+                <p>In this strategy, we simply advance <strong>both</strong> pointers as elements are added and removed. We never shift elements back. The pointer only moves forward — it never goes back to the start.</p>
+            </div>
+
+            <h4>How it works</h4>
+            <ul>
+                <li>Initially: <code>front = rear = −1</code></li>
+                <li><strong>enqueue</strong>: increment <code>rear</code>, place element at <code>queue[rear]</code></li>
+                <li><strong>dequeue</strong>: save <code>queue[front]</code>, increment <code>front</code></li>
+                <li><strong>isFull</strong>: <code>rear == SIZE − 1</code></li>
+            </ul>
+
+            <h4>The Problem — Why It Is Called "Unrealistic"</h4>
+            <div class="warning-box">
+                <p>Imagine a queue of size 5. You enqueue 5 elements (indices 0–4). Now the queue is full (<code>rear = 4</code>). You dequeue 3 elements (<code>front = 3</code>). Logically, 3 slots are now free (indices 0, 1, 2). But the condition <code>rear == SIZE − 1</code> is still <code>true</code>, so the queue reports <strong>FULL</strong> even though 3 positions are available!</p>
+                <p>This wasted space can never be reclaimed. The queue will refuse new insertions even though it has free spots. This is why this strategy is called <strong>unrealistic</strong> — it is not practical for real use.</p>
+            </div>
+
+            <!-- Interactive: Unrealistic -->
+            <div class="interactive-demo">
+                <h3 style="text-align:center; color:#c62828;">&#9888;&#65039; Interactive Demo — Unrealistic Queue</h3>
+                <p style="text-align:center; color:#666;">Queue size = 5. Enqueue and dequeue elements, then observe the wasted space problem.</p>
+                <div class="demo-controls">
+                    <input type="number" id="unreal-val" placeholder="Value" min="1" max="99">
+                    <button class="btn" onclick="unrealEnqueue()">Enqueue</button>
+                    <button class="btn btn-danger" onclick="unrealDequeue()">Dequeue</button>
+                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="unrealReset()">Reset</button>
+                </div>
+                <div class="queue-display">
+                    <div class="queue-cells-row" id="unreal-cells"></div>
+                    <div class="pointer-row" id="unreal-ptrs"></div>
+                    <div class="queue-status">
+                        <div class="status-badge">front: <span id="unreal-front">-1</span></div>
+                        <div class="status-badge">rear: <span id="unreal-rear">-1</span></div>
+                        <div class="status-badge">size: <span id="unreal-size">5</span></div>
+                    </div>
+                </div>
+                <div class="msg-log" id="unreal-msg">Queue is empty. Start by enqueueing a value.</div>
+            </div>
+
+            <!-- ---- 4.2 REALISTIC ---- -->
+            <h3>4.2 Strategy 2 — Realistic (Shifting)</h3>
+
+            <div class="highlight-box">
+                <p>A student observes the problem above and suggests: <em>"Why don't we shift all elements toward index 0 after each dequeue?"</em> This is the <strong>shifting strategy</strong>. After removing the front element, every remaining element shifts one position to the left, and <code>front</code> always stays at 0.</p>
+            </div>
+
+            <h4>How Shifting Works</h4>
+            <ul>
+                <li><code>front</code> is always 0</li>
+                <li><strong>dequeue</strong>: remove <code>queue[0]</code>, shift all elements left (<code>queue[i] = queue[i+1]</code>), decrement <code>rear</code></li>
+                <li>No space is ever wasted — all free positions are always at the right end</li>
+            </ul>
+
+            <h4>The Trade-Off — Why Shifting Hurts Performance</h4>
+            <div class="warning-box">
+                <p>Every dequeue operation requires shifting <em>all remaining elements</em> one position to the left. If there are <strong>n</strong> elements in the queue, that is <strong>O(n)</strong> work per dequeue — not O(1). This can be very slow for large queues. The enqueue is still O(1), but dequeue is <strong>O(n)</strong>.</p>
+            </div>
+
+            <!-- Interactive: Realistic (Shifting) -->
+            <div class="interactive-demo">
+                <h3 style="text-align:center; color:#e65100;">&#128260; Interactive Demo — Realistic Queue (Shifting)</h3>
+                <p style="text-align:center; color:#666;">Queue size = 5. Watch how shifting works after each dequeue.</p>
+                <div class="demo-controls">
+                    <input type="number" id="real-val" placeholder="Value" min="1" max="99">
+                    <button class="btn" onclick="realEnqueue()">Enqueue</button>
+                    <button class="btn btn-danger" onclick="realDequeue()">Dequeue</button>
+                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="realReset()">Reset</button>
+                </div>
+                <div class="queue-display">
+                    <div class="queue-cells-row" id="real-cells"></div>
+                    <div class="pointer-row" id="real-ptrs"></div>
+                    <div class="queue-status">
+                        <div class="status-badge">front: <span id="real-front">0</span></div>
+                        <div class="status-badge">rear: <span id="real-rear">-1</span></div>
+                        <div class="status-badge">size: <span id="real-size">5</span></div>
+                    </div>
+                </div>
+                <div id="shift-steps" style="margin-top:10px;"></div>
+                <div class="msg-log" id="real-msg">Queue is empty. Start by enqueueing a value.</div>
+            </div>
+
+            <!-- ---- 4.3 CIRCULAR ---- -->
+            <h3>4.3 Strategy 3 — Circular Queue (Best Solution)</h3>
+
+            <div class="definition">
+                <strong>Circular Queue</strong>: Instead of moving forward in a straight line, the array is treated as a <strong>circle</strong>. When <code>rear</code> reaches the last index, it wraps around to index 0 using the <strong>modulo operator (%)</strong>. This eliminates wasted space <em>and</em> keeps all operations at O(1).
+            </div>
+
+            <h4>The Key Formula — Modulo Arithmetic</h4>
+            <div class="highlight-box">
+                <ul>
+                    <li><strong>Enqueue:</strong> <code>rear = (rear + 1) % SIZE</code></li>
+                    <li><strong>Dequeue:</strong> <code>front = (front + 1) % SIZE</code></li>
+                    <li><strong>isEmpty:</strong> <code>front == -1</code> (or use a count variable)</li>
+                    <li><strong>isFull:</strong> <code>(rear + 1) % SIZE == front</code></li>
+                </ul>
+                <p>The modulo operator makes the index <em>wrap around</em>. If <code>SIZE = 5</code> and <code>rear = 4</code>, then <code>(4 + 1) % 5 = 0</code> — rear jumps back to the start!</p>
+            </div>
+
+            <h4>Important Cases in Circular Queue</h4>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Situation</th>
+                        <th>Condition</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td>Empty queue</td>
+                        <td><code>front == -1</code></td>
+                        <td>No elements; both pointers reset to −1</td>
+                    </tr>
+                    <tr>
+                        <td>Full queue</td>
+                        <td><code>(rear + 1) % SIZE == front</code></td>
+                        <td>One slot is always kept empty as a sentinel to distinguish full from empty</td>
+                    </tr>
+                    <tr>
+                        <td>One element</td>
+                        <td><code>front == rear</code></td>
+                        <td>front and rear point to the same slot</td>
+                    </tr>
+                    <tr>
+                        <td>Wrap-around</td>
+                        <td><code>rear = (rear+1) % SIZE</code></td>
+                        <td>rear wraps from last index back to 0</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Interactive: Circular Queue -->
+            <div class="interactive-demo">
+                <h3 style="text-align:center; color:#2e7d32;">&#9654; Interactive Demo — Circular Queue</h3>
+                <p style="text-align:center; color:#666;">Queue size = 5. Watch the pointers wrap around the circle. Blue = FRONT, Orange = REAR.</p>
+                <div class="demo-controls">
+                    <input type="number" id="circ-val" placeholder="Value" min="1" max="99">
+                    <button class="btn" onclick="circEnqueue()">Enqueue</button>
+                    <button class="btn btn-danger" onclick="circDequeue()">Dequeue</button>
+                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="circReset()">Reset</button>
+                </div>
+
+                <!-- SVG Circular Visualization -->
+                <div class="circular-container">
+                    <svg id="circ-svg" width="360" height="360" viewBox="0 0 360 360">
+                        <!-- Cells drawn by JS -->
+                    </svg>
+                    <div class="queue-status">
+                        <div class="status-badge">front: <span id="circ-front">-1</span></div>
+                        <div class="status-badge">rear: <span id="circ-rear">-1</span></div>
+                        <div class="status-badge">count: <span id="circ-count">0</span></div>
+                    </div>
+                </div>
+                <div class="msg-log" id="circ-msg">Circular queue is empty. Start enqueueing values.</div>
+
+                <!-- Step-by-step formula display -->
+                <div id="circ-formula" style="background:#e8faf5; border:2px solid #11998e; border-radius:8px; padding:15px; margin-top:15px; font-family:'Courier New',monospace; font-size:1.05em; display:none;"></div>
+            </div>
+
+            <!-- Comparison of three strategies -->
+            <h3>Comparison of the Three Strategies</h3>
+            <div class="compare-grid">
+                <div class="compare-card unrealistic">
+                    <h4>&#10060; Unrealistic</h4>
+                    <p><strong>enqueue:</strong> O(1)</p>
+                    <p><strong>dequeue:</strong> O(1)</p>
+                    <p><strong>Problem:</strong> Space is wasted — positions freed by dequeue can never be reused.</p>
+                </div>
+                <div class="compare-card realistic">
+                    <h4>&#9888;&#65039; Realistic (Shifting)</h4>
+                    <p><strong>enqueue:</strong> O(1)</p>
+                    <p><strong>dequeue:</strong> O(n) — shift all elements!</p>
+                    <p><strong>Problem:</strong> No wasted space, but slow dequeue for large queues.</p>
+                </div>
+                <div class="compare-card circular">
+                    <h4>&#10003; Circular (Best)</h4>
+                    <p><strong>enqueue:</strong> O(1)</p>
+                    <p><strong>dequeue:</strong> O(1)</p>
+                    <p><strong>Advantage:</strong> Wraps around with modulo — no wasted space, no shifting needed!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!--  SECTION 5 — JAVA CODE                                      -->
+        <!-- ============================================================ -->
+        <section id="code">
+            <h2>5. Java Implementation</h2>
+
+            <h3>5.1 Circular Queue Using Array</h3>
+            <div class="code-container">
+                <div class="code-header" onclick="toggleCode(this)">
+                    <span>&#9654; CircularQueue.java — Array-based Circular Queue</span>
+                    <span class="code-toggle">&#9660;</span>
+                </div>
+                <div class="code-block"><span class="keyword">public class</span> <span class="class-name">CircularQueue</span> {
+    <span class="keyword">private int</span>[] queue;
+    <span class="keyword">private int</span> front, rear, count, size;
+
+    <span class="comment">// Constructor</span>
+    <span class="keyword">public</span> <span class="method">CircularQueue</span>(<span class="keyword">int</span> size) {
+        <span class="keyword">this</span>.size  = size;
+        queue = <span class="keyword">new int</span>[size];
+        front = rear = -<span class="number">1</span>;
+        count = <span class="number">0</span>;
+    }
+
+    <span class="comment">// isEmpty — O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() {
+        <span class="keyword">return</span> count == <span class="number">0</span>;
+    }
+
+    <span class="comment">// isFull — O(1)</span>
+    <span class="keyword">public boolean</span> <span class="method">isFull</span>() {
+        <span class="keyword">return</span> count == size;
+    }
+
+    <span class="comment">// enqueue — Add to REAR — O(1)</span>
+    <span class="keyword">public void</span> <span class="method">enqueue</span>(<span class="keyword">int</span> value) {
+        <span class="keyword">if</span> (<span class="method">isFull</span>()) {
+            System.out.<span class="method">println</span>(<span class="string">"Queue Overflow! Cannot enqueue "</span> + value);
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">if</span> (<span class="method">isEmpty</span>()) front = <span class="number">0</span>;   <span class="comment">// first element</span>
+        rear = (rear + <span class="number">1</span>) % size;      <span class="comment">// wrap rear</span>
+        queue[rear] = value;
+        count++;
+    }
+
+    <span class="comment">// dequeue — Remove from FRONT — O(1)</span>
+    <span class="keyword">public int</span> <span class="method">dequeue</span>() {
+        <span class="keyword">if</span> (<span class="method">isEmpty</span>()) {
+            System.out.<span class="method">println</span>(<span class="string">"Queue Underflow! Cannot dequeue"</span>);
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        }
+        <span class="keyword">int</span> removed = queue[front];
+        count--;
+        <span class="keyword">if</span> (<span class="method">isEmpty</span>()) {             <span class="comment">// queue is now empty</span>
+            front = rear = -<span class="number">1</span>;
+        } <span class="keyword">else</span> {
+            front = (front + <span class="number">1</span>) % size;  <span class="comment">// wrap front</span>
+        }
+        <span class="keyword">return</span> removed;
+    }
+
+    <span class="comment">// peek — View front element — O(1)</span>
+    <span class="keyword">public int</span> <span class="method">peek</span>() {
+        <span class="keyword">if</span> (<span class="method">isEmpty</span>()) {
+            System.out.<span class="method">println</span>(<span class="string">"Queue is empty!"</span>);
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        }
+        <span class="keyword">return</span> queue[front];
+    }
+
+    <span class="comment">// clear — Reset queue</span>
+    <span class="keyword">public void</span> <span class="method">clear</span>() {
+        front = rear = -<span class="number">1</span>;
+        count = <span class="number">0</span>;
+    }
+
+    <span class="comment">// display contents</span>
+    <span class="keyword">public void</span> <span class="method">display</span>() {
+        <span class="keyword">if</span> (<span class="method">isEmpty</span>()) { System.out.<span class="method">println</span>(<span class="string">"Queue is empty"</span>); <span class="keyword">return</span>; }
+        System.out.<span class="method">print</span>(<span class="string">"Queue [FRONT→REAR]: "</span>);
+        <span class="keyword">int</span> i = front;
+        <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; count; k++) {
+            System.out.<span class="method">print</span>(queue[i] + <span class="string">" "</span>);
+            i = (i + <span class="number">1</span>) % size;
+        }
+        System.out.<span class="method">println</span>();
+    }
+}</div>
+            </div>
+
+            <h3>5.2 Queue Using Linked List</h3>
+            <div class="code-container">
+                <div class="code-header" onclick="toggleCode(this)">
+                    <span>&#9654; LinkedQueue.java — Linked List-based Queue</span>
+                    <span class="code-toggle">&#9660;</span>
+                </div>
+                <div class="code-block"><span class="comment">// Node class</span>
+<span class="keyword">class</span> <span class="class-name">Node</span> {
+    <span class="keyword">int</span> data;
+    <span class="class-name">Node</span> next;
+    <span class="method">Node</span>(<span class="keyword">int</span> data) { <span class="keyword">this</span>.data = data; next = <span class="keyword">null</span>; }
+}
+
+<span class="keyword">public class</span> <span class="class-name">LinkedQueue</span> {
+    <span class="keyword">private</span> <span class="class-name">Node</span> front, rear;
+    <span class="keyword">private int</span> count;
+
+    <span class="keyword">public</span> <span class="method">LinkedQueue</span>() {
+        front = rear = <span class="keyword">null</span>;
+        count = <span class="number">0</span>;
+    }
+
+    <span class="keyword">public boolean</span> <span class="method">isEmpty</span>() { <span class="keyword">return</span> front == <span class="keyword">null</span>; }
+
+    <span class="comment">// enqueue — O(1): always insert at tail</span>
+    <span class="keyword">public void</span> <span class="method">enqueue</span>(<span class="keyword">int</span> value) {
+        <span class="class-name">Node</span> newNode = <span class="keyword">new</span> <span class="class-name">Node</span>(value);
+        <span class="keyword">if</span> (<span class="method">isEmpty</span>()) {
+            front = rear = newNode;
+        } <span class="keyword">else</span> {
+            rear.next = newNode;
+            rear = newNode;
+        }
+        count++;
+    }
+
+    <span class="comment">// dequeue — O(1): always remove from head</span>
+    <span class="keyword">public int</span> <span class="method">dequeue</span>() {
+        <span class="keyword">if</span> (<span class="method">isEmpty</span>()) {
+            System.out.<span class="method">println</span>(<span class="string">"Queue Underflow!"</span>);
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        }
+        <span class="keyword">int</span> removed = front.data;
+        front = front.next;
+        <span class="keyword">if</span> (front == <span class="keyword">null</span>) rear = <span class="keyword">null</span>; <span class="comment">// queue is empty</span>
+        count--;
+        <span class="keyword">return</span> removed;
+    }
+
+    <span class="keyword">public int</span> <span class="method">peek</span>() {
+        <span class="keyword">if</span> (<span class="method">isEmpty</span>()) <span class="keyword">return</span> -<span class="number">1</span>;
+        <span class="keyword">return</span> front.data;
+    }
+}</div>
+            </div>
+
+            <div class="highlight-box">
+                <h4>Why Linked List Implementation is Easy</h4>
+                <p>With a linked list, there is no concept of "full" — the list grows dynamically as needed. There is no wasted space, no wrap-around logic, and no shifting. The trade-off is additional memory overhead per node (the <code>next</code> pointer). For most practical purposes, the <strong>circular array</strong> or <strong>linked list</strong> implementations are both excellent choices.</p>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!--  SECTION 6 — COMPLEXITY SUMMARY                             -->
+        <!-- ============================================================ -->
+        <section id="complexity">
+            <h2>6. Time Complexity Summary</h2>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Unrealistic Array</th>
+                        <th>Shifting Array</th>
+                        <th>Circular Array</th>
+                        <th>Linked List</th>
+                    </tr>
+                    <tr>
+                        <td><strong>enqueue</strong></td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td><strong>O(1)</strong></td>
+                        <td><strong>O(1)</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>dequeue</strong></td>
+                        <td>O(1)</td>
+                        <td><span style="color:#c62828"><strong>O(n)</strong></span></td>
+                        <td><strong>O(1)</strong></td>
+                        <td><strong>O(1)</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>peek</strong></td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>isEmpty / isFull</strong></td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Space wasted?</strong></td>
+                        <td><span style="color:#c62828">Yes</span></td>
+                        <td>No</td>
+                        <td>No</td>
+                        <td>No</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="definition">
+                <strong>Conclusion:</strong> The <strong>Circular Array</strong> and <strong>Linked List</strong> implementations are the preferred choices in practice — both achieve O(1) for all core operations with no wasted space.
+            </div>
+        </section>
+
+    </div><!-- /content -->
+
+    <footer>
+        <p>CPCS 204 — Data Structures I &nbsp;|&nbsp; Queue Tutorial</p>
+        <p>Faculty of Computing and Information Technology — King Abdulaziz University</p>
+    </footer>
+</div><!-- /container -->
+
+<script>
+/* ============================================================
+   UTILITY
+   ============================================================ */
+function toggleCode(header) {
+    const block = header.nextElementSibling;
+    const toggle = header.querySelector('.code-toggle');
+    block.classList.toggle('collapsed');
+    toggle.classList.toggle('collapsed');
+}
+
+/* ============================================================
+   UNREALISTIC QUEUE (size = 5)
+   ============================================================ */
+const USIZE = 5;
+let uQueue = new Array(USIZE).fill(null);
+let uFront = -1, uRear = -1;
+
+function unrealRender() {
+    const cells = document.getElementById('unreal-cells');
+    const ptrs  = document.getElementById('unreal-ptrs');
+    cells.innerHTML = '';
+    ptrs.innerHTML  = '';
+
+    for (let i = 0; i < USIZE; i++) {
+        const c = document.createElement('div');
+        c.className = 'queue-cell';
+        if (uQueue[i] !== null) {
+            if (i === uFront && i === uRear) c.classList.add('both-cell');
+            else if (i === uFront) c.classList.add('front-cell');
+            else if (i === uRear)  c.classList.add('rear-cell');
+            else c.classList.add('active');
+            c.textContent = uQueue[i];
+        } else {
+            c.classList.add('empty-cell');
+            c.textContent = '—';
+        }
+        cells.appendChild(c);
+
+        const p = document.createElement('div');
+        p.className = 'pointer-cell';
+        let label = String(i);
+        if (i === uFront && i === uRear) label += '\n▲F▲R';
+        else if (i === uFront) label = '▲\nF';
+        else if (i === uRear)  label = '▲\nR';
+        p.style.fontSize = '0.75em';
+        p.style.textAlign = 'center';
+        p.style.lineHeight = '1.2';
+        p.innerHTML = (i === uFront && i === uRear)
+            ? `<span style="color:#9c27b0;font-weight:bold">▲F▲R<br>${i}</span>`
+            : (i === uFront)
+                ? `<span class="front-ptr">▲<br>F<br>${i}</span>`
+                : (i === uRear)
+                    ? `<span class="rear-ptr">▲<br>R<br>${i}</span>`
+                    : `<span style="color:#aaa">${i}</span>`;
+        ptrs.appendChild(p);
+    }
+    document.getElementById('unreal-front').textContent = uFront;
+    document.getElementById('unreal-rear').textContent  = uRear;
+}
+
+function unrealEnqueue() {
+    const val = parseInt(document.getElementById('unreal-val').value);
+    if (isNaN(val)) { setMsg('unreal-msg', 'Please enter a numeric value.'); return; }
+    if (uRear === USIZE - 1) {
+        setMsg('unreal-msg',
+            '&#10060; OVERFLOW! rear == ' + uRear + ' == SIZE−1. Queue is FULL.\n' +
+            'Even though indices 0–' + (uFront - 1) + ' are free, we cannot use them!\n' +
+            'This is the unrealistic problem — space is wasted forever.');
+        return;
+    }
+    uRear++;
+    if (uFront === -1) uFront = 0;
+    uQueue[uRear] = val;
+    unrealRender();
+    setMsg('unreal-msg', '✔ Enqueued ' + val + ' at index ' + uRear + '. rear = ' + uRear);
+    document.getElementById('unreal-val').value = '';
+}
+
+function unrealDequeue() {
+    if (uFront === -1 || uFront > uRear) {
+        setMsg('unreal-msg', '&#10060; UNDERFLOW! Queue is empty. front > rear.');
+        return;
+    }
+    const removed = uQueue[uFront];
+    uQueue[uFront] = null;
+    const oldFront = uFront;
+    uFront++;
+    if (uFront > uRear) { uFront = -1; uRear = -1; }
+    unrealRender();
+    setMsg('unreal-msg', '✔ Dequeued ' + removed + ' from index ' + oldFront + '. front = ' + uFront +
+        (uFront > 0 ? '\n⚠ Indices 0–' + (uFront - 1) + ' are now wasted — unreachable!' : ''));
+}
+
+function unrealReset() {
+    uQueue = new Array(USIZE).fill(null);
+    uFront = -1; uRear = -1;
+    unrealRender();
+    setMsg('unreal-msg', 'Queue reset. Both pointers at −1.');
+}
+
+unrealRender();
+
+/* ============================================================
+   REALISTIC / SHIFTING QUEUE (size = 5)
+   ============================================================ */
+const RSIZE = 5;
+let rQueue = [];
+
+function realRender() {
+    const cells = document.getElementById('real-cells');
+    const ptrs  = document.getElementById('real-ptrs');
+    cells.innerHTML = '';
+    ptrs.innerHTML  = '';
+
+    const rear = rQueue.length - 1;
+
+    for (let i = 0; i < RSIZE; i++) {
+        const c = document.createElement('div');
+        c.className = 'queue-cell';
+        if (i < rQueue.length) {
+            if (i === 0 && i === rear) c.classList.add('both-cell');
+            else if (i === 0)    c.classList.add('front-cell');
+            else if (i === rear) c.classList.add('rear-cell');
+            else c.classList.add('active');
+            c.textContent = rQueue[i];
+        } else {
+            c.classList.add('empty-cell');
+            c.textContent = '—';
+        }
+        cells.appendChild(c);
+
+        const p = document.createElement('div');
+        p.style.cssText = 'font-size:0.75em;text-align:center;line-height:1.2;width:70px;';
+        if (i === 0 && i === rear && rQueue.length > 0) {
+            p.innerHTML = `<span style="color:#9c27b0;font-weight:bold">▲F▲R<br>${i}</span>`;
+        } else if (i === 0 && rQueue.length > 0) {
+            p.innerHTML = `<span class="front-ptr">▲<br>F=0<br>${i}</span>`;
+        } else if (i === rear && rQueue.length > 0) {
+            p.innerHTML = `<span class="rear-ptr">▲<br>R<br>${i}</span>`;
+        } else {
+            p.innerHTML = `<span style="color:#aaa">${i}</span>`;
+        }
+        ptrs.appendChild(p);
+    }
+
+    document.getElementById('real-front').textContent = rQueue.length > 0 ? 0 : -1;
+    document.getElementById('real-rear').textContent  = rear;
+}
+
+function realEnqueue() {
+    const val = parseInt(document.getElementById('real-val').value);
+    if (isNaN(val)) { setMsg('real-msg', 'Please enter a numeric value.'); return; }
+    if (rQueue.length >= RSIZE) {
+        setMsg('real-msg', '&#10060; OVERFLOW! Queue is full (rear = ' + (rQueue.length - 1) + ').');
+        return;
+    }
+    rQueue.push(val);
+    realRender();
+    document.getElementById('shift-steps').innerHTML = '';
+    setMsg('real-msg', '✔ Enqueued ' + val + ' at index ' + (rQueue.length - 1));
+    document.getElementById('real-val').value = '';
+}
+
+function realDequeue() {
+    if (rQueue.length === 0) {
+        setMsg('real-msg', '&#10060; UNDERFLOW! Queue is empty.');
+        return;
+    }
+    const removed = rQueue[0];
+    const oldQueue = [...rQueue];
+    rQueue.shift(); // remove index 0
+
+    // Show shifting steps
+    const stepsDiv = document.getElementById('shift-steps');
+    stepsDiv.innerHTML = '<p style="font-weight:bold;color:#e65100;margin-bottom:8px;">Shifting elements after dequeue:</p>';
+    for (let i = 0; i < oldQueue.length; i++) {
+        const s = document.createElement('div');
+        s.className = 'shift-step' + (i === 0 ? ' highlight' : '');
+        if (i === 0) {
+            s.textContent = `Removed queue[0] = ${removed}`;
+        } else {
+            s.textContent = `queue[${i-1}] = queue[${i}]  →  ${oldQueue[i]}`;
+        }
+        stepsDiv.appendChild(s);
+    }
+    if (rQueue.length > 0) {
+        const s = document.createElement('div');
+        s.className = 'shift-step';
+        s.textContent = `rear is now ${rQueue.length - 1}. Shifted ${rQueue.length} element(s) — O(n) cost!`;
+        stepsDiv.appendChild(s);
+    }
+
+    realRender();
+    setMsg('real-msg', '✔ Dequeued ' + removed + '. All elements shifted left. rear = ' + (rQueue.length - 1) + '. Cost: O(' + (oldQueue.length - 1) + ') shifts!');
+}
+
+function realReset() {
+    rQueue = [];
+    realRender();
+    document.getElementById('shift-steps').innerHTML = '';
+    setMsg('real-msg', 'Queue reset.');
+}
+
+realRender();
+
+/* ============================================================
+   CIRCULAR QUEUE (size = 6 cells, max 5 elements)
+   ============================================================ */
+const CSIZE = 5;
+let cQueue = new Array(CSIZE).fill(null);
+let cFront = -1, cRear = -1, cCount = 0;
+
+const CX = 180, CY = 180, CR = 130, CELL_R = 34;
+
+function circDrawCell(svg, angle, idx, value, isFront, isRear) {
+    const rad = (angle - 90) * Math.PI / 180;
+    const cx = CX + CR * Math.cos(rad);
+    const cy = CY + CR * Math.sin(rad);
+
+    // Circle background
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', cx);
+    circle.setAttribute('cy', cy);
+    circle.setAttribute('r', CELL_R);
+
+    let fill = '#f5f5f5';
+    let stroke = '#aaa';
+    if (value !== null) {
+        fill = '#d4f5eb';
+        stroke = '#11998e';
+    }
+    if (isFront && isRear) { fill = '#e1bee7'; stroke = '#9c27b0'; }
+    else if (isFront) { fill = '#bbdefb'; stroke = '#1565c0'; }
+    else if (isRear)  { fill = '#ffe0b2'; stroke = '#e65100'; }
+
+    circle.setAttribute('fill', fill);
+    circle.setAttribute('stroke', stroke);
+    circle.setAttribute('stroke-width', '3');
+    svg.appendChild(circle);
+
+    // Value text
+    const vt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    vt.setAttribute('x', cx);
+    vt.setAttribute('y', cy + 1);
+    vt.setAttribute('text-anchor', 'middle');
+    vt.setAttribute('dominant-baseline', 'middle');
+    vt.setAttribute('font-size', '15');
+    vt.setAttribute('font-weight', 'bold');
+    vt.setAttribute('fill', value !== null ? '#0a5244' : '#bbb');
+    vt.textContent = value !== null ? value : '—';
+    svg.appendChild(vt);
+
+    // Index label
+    const it = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    const labelRad = (angle - 90) * Math.PI / 180;
+    it.setAttribute('x', CX + (CR + CELL_R + 14) * Math.cos(labelRad));
+    it.setAttribute('y', CY + (CR + CELL_R + 14) * Math.sin(labelRad) + 4);
+    it.setAttribute('text-anchor', 'middle');
+    it.setAttribute('font-size', '11');
+    it.setAttribute('fill', '#888');
+    it.textContent = idx;
+    svg.appendChild(it);
+
+    // Pointer labels
+    if (isFront || isRear) {
+        const pt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        const inner = CR - CELL_R - 16;
+        pt.setAttribute('x', CX + inner * Math.cos(labelRad));
+        pt.setAttribute('y', CY + inner * Math.sin(labelRad) + 4);
+        pt.setAttribute('text-anchor', 'middle');
+        pt.setAttribute('font-size', '11');
+        pt.setAttribute('font-weight', 'bold');
+        if (isFront && isRear) { pt.setAttribute('fill', '#9c27b0'); pt.textContent = 'F&R'; }
+        else if (isFront) { pt.setAttribute('fill', '#1565c0'); pt.textContent = 'F'; }
+        else { pt.setAttribute('fill', '#e65100'); pt.textContent = 'R'; }
+        svg.appendChild(pt);
+    }
+}
+
+function circRender() {
+    const svg = document.getElementById('circ-svg');
+    svg.innerHTML = '';
+
+    // Draw title in center
+    const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    title.setAttribute('x', CX); title.setAttribute('y', CY - 12);
+    title.setAttribute('text-anchor', 'middle'); title.setAttribute('font-size', '13');
+    title.setAttribute('fill', '#555'); title.textContent = 'Circular';
+    svg.appendChild(title);
+    const title2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    title2.setAttribute('x', CX); title2.setAttribute('y', CY + 8);
+    title2.setAttribute('text-anchor', 'middle'); title2.setAttribute('font-size', '13');
+    title2.setAttribute('fill', '#555'); title2.textContent = 'Queue';
+    svg.appendChild(title2);
+    const title3 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    title3.setAttribute('x', CX); title3.setAttribute('y', CY + 26);
+    title3.setAttribute('text-anchor', 'middle'); title3.setAttribute('font-size', '12');
+    title3.setAttribute('fill', '#11998e'); title3.setAttribute('font-weight', 'bold');
+    title3.textContent = 'SIZE = ' + CSIZE;
+    svg.appendChild(title3);
+
+    // Draw arrow indicating circular direction
+    const arc = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const r2 = CR - CELL_R - 26;
+    arc.setAttribute('d', `M ${CX} ${CY - r2} A ${r2} ${r2} 0 1 1 ${CX - 1} ${CY - r2}`);
+    arc.setAttribute('fill', 'none');
+    arc.setAttribute('stroke', '#c8e6c9');
+    arc.setAttribute('stroke-width', '2');
+    arc.setAttribute('stroke-dasharray', '4 3');
+    arc.setAttribute('marker-end', 'url(#arrowhead)');
+    svg.appendChild(arc);
+
+    // Define arrowhead marker
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+    marker.setAttribute('id', 'arrowhead');
+    marker.setAttribute('markerWidth', '6'); marker.setAttribute('markerHeight', '6');
+    marker.setAttribute('refX', '3'); marker.setAttribute('refY', '3');
+    marker.setAttribute('orient', 'auto');
+    const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    arrowPath.setAttribute('d', 'M 0 0 L 6 3 L 0 6 Z');
+    arrowPath.setAttribute('fill', '#aaa');
+    marker.appendChild(arrowPath);
+    defs.appendChild(marker);
+    svg.insertBefore(defs, svg.firstChild);
+
+    for (let i = 0; i < CSIZE; i++) {
+        const angle = (360 / CSIZE) * i;
+        const isFront = (i === cFront && cFront !== -1);
+        const isRear  = (i === cRear  && cRear  !== -1);
+        circDrawCell(svg, angle, i, cQueue[i], isFront, isRear);
+    }
+
+    document.getElementById('circ-front').textContent = cFront;
+    document.getElementById('circ-rear').textContent  = cRear;
+    document.getElementById('circ-count').textContent = cCount;
+}
+
+function circEnqueue() {
+    const val = parseInt(document.getElementById('circ-val').value);
+    if (isNaN(val)) { setMsg('circ-msg', 'Please enter a numeric value.'); return; }
+    if (cCount === CSIZE) {
+        setMsg('circ-msg', '&#10060; OVERFLOW! Queue is full — all ' + CSIZE + ' slots are occupied.');
+        return;
+    }
+    const oldRear = cRear;
+    cRear = (cRear + 1) % CSIZE;
+    if (cFront === -1) cFront = 0;
+    cQueue[cRear] = val;
+    cCount++;
+
+    const formula = document.getElementById('circ-formula');
+    formula.style.display = 'block';
+    formula.innerHTML =
+        `<strong>enqueue(${val})</strong><br>` +
+        `new rear = (old rear + 1) % SIZE = (${oldRear} + 1) % ${CSIZE} = <strong style="color:#11998e">${cRear}</strong><br>` +
+        `queue[${cRear}] = ${val}`;
+
+    circRender();
+    setMsg('circ-msg', '✔ Enqueued ' + val + ' → rear moved to index ' + cRear + ' using modulo.');
+    document.getElementById('circ-val').value = '';
+}
+
+function circDequeue() {
+    if (cCount === 0) {
+        setMsg('circ-msg', '&#10060; UNDERFLOW! Queue is empty.');
+        return;
+    }
+    const removed = cQueue[cFront];
+    const oldFront = cFront;
+    cQueue[cFront] = null;
+    cCount--;
+    if (cCount === 0) {
+        cFront = -1; cRear = -1;
+    } else {
+        cFront = (cFront + 1) % CSIZE;
+    }
+
+    const formula = document.getElementById('circ-formula');
+    formula.style.display = 'block';
+    formula.innerHTML =
+        `<strong>dequeue()</strong><br>` +
+        `Removed queue[${oldFront}] = ${removed}<br>` +
+        `new front = (old front + 1) % SIZE = (${oldFront} + 1) % ${CSIZE} = <strong style="color:#1565c0">${cFront}</strong>`;
+
+    circRender();
+    setMsg('circ-msg', '✔ Dequeued ' + removed + ' from index ' + oldFront + ' → front moved to ' + cFront + ' using modulo.');
+}
+
+function circReset() {
+    cQueue = new Array(CSIZE).fill(null);
+    cFront = -1; cRear = -1; cCount = 0;
+    document.getElementById('circ-formula').style.display = 'none';
+    circRender();
+    setMsg('circ-msg', 'Circular queue reset.');
+}
+
+circRender();
+
+/* ============================================================
+   HELPER
+   ============================================================ */
+function setMsg(id, txt) {
+    document.getElementById(id).innerHTML = txt;
+}
+</script>
+</body>
+</html>

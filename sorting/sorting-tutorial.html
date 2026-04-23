@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithms – CPCS204</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true, theme:'base', securityLevel:'loose'});</script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+            background:linear-gradient(135deg,#0d9488 0%,#14b8a6 50%,#06b6d4 100%);
+            min-height:100vh; padding:20px; line-height:1.6; color:#334155;
+        }
+        .container{
+            max-width:1100px; margin:0 auto; background:white;
+            border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden;
+        }
+        /* ── Header ── */
+        header{
+            background:linear-gradient(135deg,#0d9488,#14b8a6,#06b6d4);
+            color:white; padding:40px 30px; text-align:center;
+        }
+        header .back-link{
+            display:inline-block; margin-bottom:16px;
+            background:rgba(255,255,255,0.2); color:white;
+            padding:6px 16px; border-radius:20px; text-decoration:none;
+            font-size:0.9em; transition:background 0.3s;
+        }
+        header .back-link:hover{background:rgba(255,255,255,0.35);}
+        header h1{font-size:2.4em; margin-bottom:8px;}
+        header p{font-size:1.1em; opacity:0.9;}
+        .header-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+        .badge{
+            background:rgba(255,255,255,0.2); padding:6px 16px;
+            border-radius:20px; font-size:0.9em; font-weight:600;
+        }
+        /* ── Sticky Nav ── */
+        nav.section-nav{
+            background:#f8fafc; padding:12px 20px;
+            display:flex; gap:8px; flex-wrap:wrap;
+            border-bottom:2px solid #e2e8f0;
+            position:sticky; top:0; z-index:100;
+        }
+        nav.section-nav a{
+            padding:7px 14px; background:white;
+            border:2px solid #14b8a6; color:#0d9488;
+            border-radius:20px; text-decoration:none;
+            font-weight:600; font-size:0.85em; transition:all 0.25s;
+            white-space:nowrap;
+        }
+        nav.section-nav a:hover{background:#14b8a6;color:white;}
+        /* ── Content ── */
+        .content{padding:40px 40px 60px;}
+        section{margin-bottom:70px; scroll-margin-top:70px;}
+        h2{
+            color:#0d9488; font-size:1.8em; margin-bottom:20px;
+            border-bottom:3px solid #14b8a6; padding-bottom:10px;
+        }
+        h3{color:#0f766e; font-size:1.35em; margin:28px 0 14px;}
+        h4{color:#155e75; font-size:1.1em; margin:20px 0 10px;}
+        p{margin-bottom:14px; line-height:1.75;}
+        ul,ol{margin:10px 0 14px 28px;}
+        li{margin:6px 0;}
+        /* ── Callout Boxes ── */
+        .box{padding:18px 22px; margin:20px 0; border-radius:8px; border-left:5px solid;}
+        .box-teal{background:#f0fdfa; border-color:#14b8a6;}
+        .box-yellow{background:#fefce8; border-color:#eab308;}
+        .box-green{background:#f0fdf4; border-color:#22c55e;}
+        .box-purple{background:#faf5ff; border-color:#a855f7;}
+        .box-blue{background:#eff6ff; border-color:#3b82f6;}
+        .box-red{background:#fff1f2; border-color:#f43f5e;}
+        /* ── Real-world examples grid ── */
+        .examples-grid{
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+            gap:16px; margin:24px 0;
+        }
+        .example-card{
+            background:linear-gradient(135deg,#f0fdfa,#e6fffa);
+            border:2px solid #14b8a6; border-radius:12px;
+            padding:20px; text-align:center;
+        }
+        .example-card .icon{font-size:2.2em; margin-bottom:8px;}
+        .example-card h4{color:#0d9488; margin:0 0 6px; font-size:1em;}
+        .example-card p{font-size:0.85em; color:#475569; margin:0;}
+        /* ── Before/After Array ── */
+        .before-after{
+            display:flex; gap:30px; flex-wrap:wrap;
+            justify-content:center; align-items:center;
+            margin:24px 0;
+        }
+        .ba-section{text-align:center;}
+        .ba-label{
+            font-size:0.9em; font-weight:700; color:#64748b;
+            text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;
+        }
+        .ba-array{display:flex; gap:6px; justify-content:center;}
+        .ba-cell{
+            width:52px; height:52px; border-radius:8px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.2em; font-weight:700;
+        }
+        .ba-cell.unsorted{background:#fee2e2; color:#991b1b; border:2px solid #fca5a5;}
+        .ba-cell.sorted-asc{background:#bbf7d0; color:#065f46; border:2px solid #6ee7b7;}
+        .ba-cell.sorted-desc{background:#bfdbfe; color:#1e3a8a; border:2px solid #93c5fd;}
+        .ba-arrow{font-size:2em; color:#14b8a6; font-weight:bold; align-self:center;}
+        .sort-dir-toggle{
+            display:flex; justify-content:center; margin:16px 0;
+        }
+        /* ── Big-O Graph ── */
+        .complexity-cards{
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:16px; margin:20px 0;
+        }
+        .complexity-card{
+            padding:20px; border-radius:12px; text-align:center;
+            border:2px solid;
+        }
+        .complexity-card.quad{background:#fff1f2; border-color:#f43f5e; color:#9f1239;}
+        .complexity-card.log{background:#eff6ff; border-color:#3b82f6; color:#1e3a8a;}
+        .complexity-card.lin{background:#f0fdf4; border-color:#22c55e; color:#065f46;}
+        .complexity-card .big-o{font-size:1.8em; font-weight:800; margin:8px 0;}
+        .complexity-card .name{font-size:0.9em; opacity:0.8;}
+        canvas#complexityGraph{
+            width:100%; border-radius:10px; display:block;
+        }
+        /* ── Simulation ── */
+        .sim-container{
+            background:#f8fafc; border-radius:14px;
+            padding:28px; margin:24px 0;
+            border:2px solid #e2e8f0;
+        }
+        .sim-header{
+            display:flex; justify-content:space-between;
+            align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;
+        }
+        .sim-title{font-size:1.1em; font-weight:700; color:#0f766e;}
+        .array-display{
+            display:flex; gap:10px; justify-content:center;
+            align-items:flex-end; flex-wrap:wrap; margin:20px 0;
+        }
+        .array-element{display:flex; flex-direction:column; align-items:center; gap:5px;}
+        .array-cell{
+            width:66px; height:66px; border-radius:10px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.35em; font-weight:700;
+            border:3px solid #cbd5e1; background:#f1f5f9; color:#334155;
+            transition:all 0.35s ease;
+        }
+        .array-cell.comparing{background:#fde68a;border-color:#f59e0b;color:#78350f;transform:scale(1.05);}
+        .array-cell.extreme {background:#bfdbfe;border-color:#3b82f6;color:#1e3a8a;transform:scale(1.12);}
+        .array-cell.key     {background:#fce7f3;border-color:#ec4899;color:#831843;transform:scale(1.15) translateY(-10px);}
+        .array-cell.swapping{background:#fecaca;border-color:#ef4444;color:#7f1d1d;transform:scale(1.1);}
+        .array-cell.sorted  {background:#bbf7d0;border-color:#22c55e;color:#065f46;}
+        .array-cell.start-pos{background:#e0e7ff;border-color:#6366f1;color:#312e81;}
+        .array-cell.just-sorted{
+            background:#4ade80;border-color:#16a34a;color:#052e16;
+            transform:scale(1.08);
+            animation:pop 0.4s ease;
+        }
+        @keyframes pop{0%{transform:scale(1.25);}50%{transform:scale(0.95);}100%{transform:scale(1.08);}}
+        /* Vertical divider line between sorted | unsorted portions */
+        .sort-divider{
+            width:5px; min-height:82px;
+            background:linear-gradient(180deg,#0d9488,#06b6d4);
+            border-radius:3px; align-self:stretch; flex-shrink:0;
+            margin:0 8px;
+            box-shadow:0 0 10px rgba(20,184,166,0.5);
+            position:relative;
+        }
+        .sort-divider::before{
+            content:'sorted ←';
+            position:absolute; top:-22px; right:8px;
+            font-size:0.72em; font-weight:700; color:#0d9488;
+            white-space:nowrap;
+        }
+        .sort-divider::after{
+            content:'→ unsorted';
+            position:absolute; top:-22px; left:8px;
+            font-size:0.72em; font-weight:700; color:#64748b;
+            white-space:nowrap;
+        }
+        .array-index{font-size:0.78em;color:#94a3b8;font-weight:600;}
+        /* Sorted-part visual separator */
+        .array-display .separator{
+            width:3px; height:70px; background:#14b8a6;
+            border-radius:2px; align-self:center;
+        }
+        /* Message */
+        .sim-message{
+            background:white; border:2px solid #14b8a6;
+            border-radius:10px; padding:14px 20px;
+            margin:16px 0; color:#0f766e;
+            min-height:52px; text-align:center;
+            font-size:1em; font-weight:500; line-height:1.5;
+        }
+        /* Stats row */
+        .sim-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:10px 0;}
+        .sim-stat{
+            background:white; padding:8px 18px; border-radius:8px;
+            border:1px solid #e2e8f0; font-size:0.9em; color:#475569;
+        }
+        .sim-stat span{font-weight:700; color:#0d9488;}
+        /* Progress */
+        .sim-progress{background:#e2e8f0;border-radius:10px;height:8px;margin:14px 0;overflow:hidden;}
+        .sim-progress-fill{
+            height:100%;
+            background:linear-gradient(90deg,#14b8a6,#06b6d4);
+            border-radius:10px; transition:width 0.3s;
+        }
+        /* Buttons */
+        .sim-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px;}
+        .btn{
+            padding:10px 22px; border:none; border-radius:8px;
+            font-size:0.95em; font-weight:600; cursor:pointer; transition:all 0.2s;
+        }
+        .btn-primary{background:#14b8a6;color:white;}
+        .btn-primary:hover{background:#0d9488;}
+        .btn-primary:disabled{background:#94a3b8;cursor:not-allowed;}
+        .btn-secondary{background:#e2e8f0;color:#475569;}
+        .btn-secondary:hover:not(:disabled){background:#cbd5e1;}
+        .btn-secondary:disabled{opacity:0.5;cursor:not-allowed;}
+        .btn-toggle{background:white;border:2px solid #14b8a6;color:#0d9488;font-weight:700;}
+        .btn-toggle:hover{background:#f0fdfa;}
+        .btn-reset{background:#fef3c7;color:#92400e;border:2px solid #fbbf24;}
+        .btn-reset:hover{background:#fde68a;}
+        /* Legend */
+        .legend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:16px 0;font-size:0.82em;}
+        .legend-item{display:flex;align-items:center;gap:5px;}
+        .legend-swatch{
+            width:18px;height:18px;border-radius:4px;border:2px solid;flex-shrink:0;
+        }
+        /* Code block */
+        .code-container{margin:20px 0;}
+        .code-header{
+            background:#14b8a6;color:white;padding:12px 20px;
+            border-radius:8px 8px 0 0;cursor:pointer;
+            display:flex;justify-content:space-between;align-items:center;
+            font-weight:700; transition:background 0.2s;
+        }
+        .code-header:hover{background:#0d9488;}
+        .code-toggle{transition:transform 0.3s;}
+        .code-toggle.collapsed{transform:rotate(-90deg);}
+        .code-block{
+            background:#0f172a;color:#e2e8f0;padding:22px 26px;
+            border-radius:0 0 8px 8px;overflow-x:auto;
+            font-family:'Courier New',monospace;font-size:1em;
+            line-height:1.75;white-space:pre;
+            transition:max-height 0.35s ease,padding 0.35s ease;
+        }
+        .code-block.collapsed{max-height:0!important;padding:0 26px;overflow:hidden;}
+        .kw{color:#7dd3fc;}.cm{color:#64748b;}.nm{color:#a5f3fc;}.st{color:#86efac;}
+        /* Math box */
+        .math-box{
+            background:#faf5ff;border:2px solid #a855f7;
+            border-radius:12px;padding:24px;margin:20px 0;text-align:center;
+        }
+        .math-formula{
+            font-size:1.2em;color:#6d28d9;font-style:italic;
+            margin:8px 0;font-family:'Times New Roman',serif;
+        }
+        .math-step{margin:6px 0;font-size:1em;color:#4c1d95;}
+        /* Proper fraction display */
+        .frac{display:inline-block;text-align:center;vertical-align:middle;font-family:'Times New Roman',serif;font-style:italic;line-height:1.1;}
+        .frac .num{display:block;border-bottom:1.5px solid #6d28d9;padding:0 5px 2px;}
+        .frac .den{display:block;padding:2px 5px 0;}
+        /* Mermaid */
+        .mermaid{display:flex;justify-content:center;margin:20px 0;}
+        .mermaid svg{max-width:100%;height:auto;}
+        /* Comparison section */
+        .scenario-grid{display:flex;flex-direction:column;gap:18px;margin:20px 0;}
+        .scenario{
+            background:white;border:2px solid #e2e8f0;
+            border-radius:12px;padding:20px;
+        }
+        .scenario-header{
+            display:flex;justify-content:space-between;align-items:center;
+            flex-wrap:wrap;gap:10px;margin-bottom:14px;
+        }
+        .scenario-title{font-weight:700;color:#0f766e;font-size:1em;}
+        .scenario-array{
+            display:flex;gap:5px;flex-wrap:wrap;
+        }
+        .scenario-cell{
+            width:38px;height:38px;border-radius:6px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:0.9em;font-weight:700;
+            background:#f1f5f9;border:2px solid #cbd5e1;color:#334155;
+        }
+        .bar-row{display:flex;align-items:center;gap:10px;margin:6px 0;}
+        .bar-label{width:120px;font-size:0.85em;color:#475569;text-align:right;flex-shrink:0;}
+        .bar-track{flex:1;background:#f1f5f9;border-radius:5px;height:28px;overflow:hidden;}
+        .bar-fill{
+            height:100%;border-radius:5px;
+            display:flex;align-items:center;padding-left:8px;
+            color:white;font-weight:700;font-size:0.85em;
+            transition:width 0.9s ease;
+        }
+        .bar-selection{background:linear-gradient(90deg,#f43f5e,#e11d48);}
+        .bar-insertion{background:linear-gradient(90deg,#3b82f6,#2563eb);}
+        .bar-bubble{background:linear-gradient(90deg,#f97316,#ea580c);}
+        .winner-badge{
+            background:#bbf7d0;color:#065f46;
+            padding:3px 10px;border-radius:10px;
+            font-size:0.8em;font-weight:700;
+        }
+        /* Responsive */
+        @media(max-width:640px){
+            .content{padding:20px 16px 40px;}
+            .array-cell{width:52px;height:52px;font-size:1.1em;}
+            h2{font-size:1.4em;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════════════════════ HEADER ══════════════════════════ -->
+<header>
+    <a href="index.html" class="back-link">← Sorting Hub</a>
+    <h1>Quadratic Sorting Algorithms</h1>
+    <p>CPCS204 — Data Structures I</p>
+    <div class="header-badges">
+        <span class="badge">Module 12</span>
+        <span class="badge">Quadratic Sorting — O(n²)</span>
+        <span class="badge">Selection · Insertion · Bubble</span>
+    </div>
+</header>
+
+<!-- ══════════════════════════ NAV ══════════════════════════ -->
+<nav class="section-nav">
+    <a href="#selection">1 · Selection Sort</a>
+    <a href="#insertion">2 · Insertion Sort</a>
+    <a href="#bubble">3 · Bubble Sort</a>
+    <a href="#comparison">4 · Comparison &amp; Insight</a>
+</nav>
+
+<div class="content">
+
+<!-- ══════════════════════════ SECTION 1: SELECTION SORT ══════════════════════════ -->
+<section id="selection">
+    <h2>1 · Selection Sort</h2>
+
+    <div class="box box-green">
+        <strong>Core Idea:</strong> Divide the array into a <em>sorted part</em> (on the left) and
+        an <em>unsorted part</em> (on the right). In each pass, find the minimum (or maximum)
+        element in the unsorted part and move it to the boundary.
+    </div>
+
+    <h3>How It Works (Ascending)</h3>
+    <ol>
+        <li>Assume the first element of the unsorted part is the minimum.</li>
+        <li>Scan the rest of the unsorted part, updating the minimum if a smaller element is found.</li>
+        <li>After the scan, swap the found minimum with the element at the boundary.</li>
+        <li>Move the boundary one step to the right. Repeat until the entire array is sorted.</li>
+    </ol>
+
+
+    <h3>Algorithm Analysis — Why O(n²)?</h3>
+    <p>Selection sort uses two nested loops. Let us count exactly how many comparisons it makes:</p>
+
+    <div class="math-box">
+
+        <!-- Step 1 -->
+        <p class="math-step"><strong>Step 1 — Count comparisons per pass:</strong></p>
+        <p class="math-formula">T(n) = n + (n−1) + (n−2) + (n−3) + … + 3 + 2 + 1</p>
+        <p class="math-step">Pass 1 scans n elements &nbsp;|&nbsp; Pass 2 scans n−1 &nbsp;|&nbsp; … &nbsp;|&nbsp; Pass n scans 1</p>
+
+        <hr style="margin:18px 0;border-color:#c4b5fd;">
+
+        <!-- Gauss column-pair visual -->
+        <p class="math-step" style="margin-bottom:10px;">Write the sum forward and backward, then add column by column — each pair sums to <strong>(n+1)</strong>, and there are <strong>n</strong> pairs:</p>
+        <div style="background:#f3e8ff;border:2px solid #a855f7;border-radius:10px;padding:18px 14px;overflow-x:auto;margin:8px 0 16px;">
+            <table style="margin:0 auto;border-collapse:collapse;font-family:'Courier New',monospace;font-size:1em;color:#4c1d95;">
+                <tr>
+                    <td style="padding:4px 8px;text-align:right;font-weight:700;white-space:nowrap;">T(n) =</td>
+                    <td style="padding:4px 8px;text-align:center;">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;">&nbsp;&nbsp;3&nbsp;&nbsp;</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;color:#a855f7;">…</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;">(n−1)</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;">&nbsp;&nbsp;n&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="padding:4px 8px;text-align:right;font-weight:700;white-space:nowrap;">T(n) =</td>
+                    <td style="padding:4px 8px;text-align:center;">&nbsp;&nbsp;n&nbsp;&nbsp;</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;">(n−1)</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;">(n−2)</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;color:#a855f7;">…</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;">&nbsp;&nbsp;2&nbsp;&nbsp;</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;">&nbsp;&nbsp;1&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="12" style="padding:0;"><hr style="border:none;border-top:2px solid #a855f7;margin:6px 0 4px;"></td>
+                </tr>
+                <tr style="color:#6d28d9;font-weight:700;">
+                    <td style="padding:4px 8px;text-align:right;white-space:nowrap;">2·T(n) =</td>
+                    <td style="padding:6px 8px;text-align:center;background:#ede9fe;border-radius:4px;">(n+1)</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 8px;text-align:center;background:#ede9fe;border-radius:4px;">(n+1)</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 8px;text-align:center;background:#ede9fe;border-radius:4px;">(n+1)</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 8px;text-align:center;color:#a855f7;">…</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 8px;text-align:center;background:#ede9fe;border-radius:4px;">(n+1)</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 8px;text-align:center;background:#ede9fe;border-radius:4px;">(n+1)</td>
+                </tr>
+            </table>
+            <p style="text-align:center;margin:12px 0 0;font-family:'Times New Roman',serif;font-style:italic;color:#6d28d9;font-weight:700;font-size:1.1em;">
+                2 · T(n) = n &times; (n+1) &nbsp;&nbsp; ← &nbsp; n pairs, each equal to (n+1)
+            </p>
+        </div>
+
+        <!-- Step 2 -->
+        <p class="math-step"><strong>Step 2 — Divide both sides by 2:</strong></p>
+        <p class="math-formula" style="font-size:1.35em;margin:14px 0;">
+            T(n) &nbsp;=&nbsp;
+            <span class="frac"><span class="num">n &thinsp;(n+1)</span><span class="den">2</span></span>
+        </p>
+
+        <!-- Step 3 -->
+        <p class="math-step"><strong>Step 3 — Expand the numerator (two terms):</strong></p>
+        <p class="math-formula" style="font-size:1.35em;margin:14px 0;">
+            T(n) &nbsp;=&nbsp;
+            <span class="frac"><span class="num">n² + n</span><span class="den">2</span></span>
+            &nbsp;=&nbsp;
+            <span class="frac"><span class="num">1</span><span class="den">2</span></span>n²
+            &nbsp;+&nbsp;
+            <span class="frac"><span class="num">1</span><span class="den">2</span></span>n
+        </p>
+        <p class="math-step">The dominant term is <strong>½n²</strong>; the lower-order term <strong>½n</strong> is negligible for large n.</p>
+
+        <!-- Result -->
+        <p class="math-formula" style="margin-top:18px;font-size:1.55em;">∴ &nbsp; T(n) ∈ O(n²)</p>
+        <p class="math-step">Drop the constant ½ and the lower-order term ½n. Only n² matters.</p>
+
+        <hr style="margin:20px 0;border-color:#c4b5fd;">
+
+        <!-- Concrete example n = 6 -->
+        <p class="math-step"><strong>Concrete example — n = 6:</strong></p>
+        <div style="background:#f3e8ff;border:2px solid #a855f7;border-radius:10px;padding:16px 14px;overflow-x:auto;margin:10px 0;">
+            <table style="margin:0 auto;border-collapse:collapse;font-family:'Courier New',monospace;font-size:1em;color:#4c1d95;">
+                <tr>
+                    <td style="padding:4px 10px;text-align:right;font-weight:700;">T(6) =</td>
+                    <td style="padding:4px 10px;text-align:center;">1</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">2</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">3</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">4</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">5</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">6</td>
+                </tr>
+                <tr>
+                    <td style="padding:4px 10px;text-align:right;font-weight:700;">T(6) =</td>
+                    <td style="padding:4px 10px;text-align:center;">6</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">5</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">4</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">3</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">2</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:4px 10px;text-align:center;">1</td>
+                </tr>
+                <tr>
+                    <td colspan="12" style="padding:0;"><hr style="border:none;border-top:2px solid #a855f7;margin:6px 0 4px;"></td>
+                </tr>
+                <tr style="color:#6d28d9;font-weight:700;">
+                    <td style="padding:4px 10px;text-align:right;">2·T(6) =</td>
+                    <td style="padding:6px 10px;text-align:center;background:#ede9fe;border-radius:4px;">7</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 10px;text-align:center;background:#ede9fe;border-radius:4px;">7</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 10px;text-align:center;background:#ede9fe;border-radius:4px;">7</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 10px;text-align:center;background:#ede9fe;border-radius:4px;">7</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 10px;text-align:center;background:#ede9fe;border-radius:4px;">7</td>
+                    <td style="padding:4px 4px;color:#a855f7;">+</td>
+                    <td style="padding:6px 10px;text-align:center;background:#ede9fe;border-radius:4px;">7</td>
+                </tr>
+            </table>
+            <p style="text-align:center;margin:12px 0 4px;font-family:'Times New Roman',serif;font-style:italic;color:#6d28d9;font-weight:700;font-size:1.1em;">
+                2 · T(6) = 6 &times; 7 = 42
+            </p>
+            <p style="text-align:center;margin:6px 0 0;font-family:'Times New Roman',serif;font-style:italic;color:#6d28d9;font-size:1.2em;">
+                T(6) &nbsp;=&nbsp;
+                <span class="frac" style="font-size:1em;"><span class="num">42</span><span class="den">2</span></span>
+                &nbsp;=&nbsp; <strong style="font-size:1.15em;">21</strong> comparisons &nbsp;✓
+            </p>
+        </div>
+        <p class="math-step" style="text-align:center;">
+            Verify: &nbsp;
+            <span class="frac" style="font-size:1.05em;"><span class="num">n(n+1)</span><span class="den">2</span></span>
+            &nbsp;=&nbsp;
+            <span class="frac" style="font-size:1.05em;"><span class="num">6 &times; 7</span><span class="den">2</span></span>
+            &nbsp;=&nbsp;
+            <span class="frac" style="font-size:1.05em;"><span class="num">42</span><span class="den">2</span></span>
+            &nbsp;=&nbsp; <strong>21</strong> &nbsp;✓
+        </p>
+
+        <div class="box box-yellow" style="text-align:left;margin-top:16px;">
+            <strong>Important:</strong> Selection sort <em>always</em> makes exactly n(n+1)/2 comparisons,
+            regardless of whether the array is already sorted or completely reversed.
+            The number of <em>swaps</em> may vary (0 to n−1), but comparisons never do.
+        </div>
+    </div>
+
+    <div class="box box-red" style="margin-top:20px;">
+        <strong>Selection Sort — Characteristics:</strong>
+        <ul style="margin-top:8px;">
+            <li>Always performs the same number of comparisons regardless of input order</li>
+            <li><strong>Not Adaptive</strong> — does not benefit from partially sorted data</li>
+            <li>Time Complexity: <strong>O(n²) in all cases</strong> (best, average, and worst)</li>
+            <li>The number of swaps varies (0 to n−1), but comparisons are always exactly n(n−1)/2</li>
+        </ul>
+    </div>
+
+    <h3>Java Implementation</h3>
+    <div class="code-container">
+        <div class="code-header" onclick="toggleCode('sel-code')">
+            <span>Selection Sort — Java</span><span class="code-toggle" id="sel-code-toggle">▼</span>
+        </div>
+        <pre class="code-block" id="sel-code"><span class="kw">public static void</span> selectionSort(<span class="kw">int</span>[] arr) {
+    <span class="kw">int</span> n = arr.length;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i < n - <span class="nm">1</span>; i++) {        <span class="cm">// boundary position</span>
+        <span class="kw">int</span> minIdx = i;                            <span class="cm">// assume min is at boundary</span>
+        <span class="kw">for</span> (<span class="kw">int</span> j = i + <span class="nm">1</span>; j < n; j++) {        <span class="cm">// scan unsorted part</span>
+            <span class="kw">if</span> (arr[j] < arr[minIdx]) {
+                minIdx = j;                        <span class="cm">// update min index</span>
+            }
+        }
+        <span class="kw">if</span> (minIdx != i) {                         <span class="cm">// swap if needed</span>
+            <span class="kw">int</span> temp = arr[i];
+            arr[i]      = arr[minIdx];
+            arr[minIdx] = temp;
+        }
+    }
+}</pre>
+    </div>
+
+    <h3>Step-by-Step Simulation</h3>
+    <p>Use the <strong>Next</strong> button to walk through each comparison and swap one step at a time.
+       Toggle between ascending and descending order.</p>
+
+    <div class="sim-container" id="sim-selection">
+        <div class="sim-header">
+            <span class="sim-title">Selection Sort Simulation</span>
+            <button class="btn btn-toggle" id="dir-selection" onclick="selSim.toggleDir()">Ascending ↑</button>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-swatch" style="background:#e0e7ff;border-color:#6366f1;"></div><span>Start of unsorted part</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>Comparing</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#bfdbfe;border-color:#3b82f6;"></div><span>Current min / max</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>Swapping</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>Sorted</span></div>
+        </div>
+        <div class="array-display" id="arr-selection"></div>
+        <div class="sim-progress"><div class="sim-progress-fill" id="prog-selection" style="width:0%"></div></div>
+        <div class="sim-message" id="msg-selection">Press Next to begin.</div>
+        <div class="sim-stats">
+            <div class="sim-stat">Comparisons: <span id="cmp-selection">0</span></div>
+            <div class="sim-stat">Swaps: <span id="swp-selection">0</span></div>
+            <div class="sim-stat">Step: <span id="stp-selection">1 / ?</span></div>
+        </div>
+        <div class="sim-controls">
+            <button class="btn btn-secondary" id="prev-selection" onclick="selSim.prev()" disabled>◀ Prev</button>
+            <button class="btn btn-primary"   id="next-selection" onclick="selSim.next()">Next ▶</button>
+            <button class="btn btn-reset"     onclick="selSim.reset()">↺ Reset</button>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════ SECTION 4: INSERTION SORT ══════════════════════════ -->
+<section id="insertion">
+    <h2>2 · Insertion Sort</h2>
+
+    <div class="box box-blue">
+        <strong>Core Idea:</strong> Like sorting a hand of playing cards.
+        Start with one card (trivially sorted). Pick the next card and insert it into
+        the correct position among the already-sorted cards. Repeat.
+    </div>
+
+    <h3>How It Works (Ascending)</h3>
+    <ol>
+        <li>The first element alone forms a <em>sorted sub-array</em> of size 1 — trivially sorted!</li>
+        <li>Take the next element (the <em>key</em>) from the unsorted part.</li>
+        <li>Compare the key with elements in the sorted part, scanning <em>right to left</em>.</li>
+        <li>Shift each element that is greater than the key one position to the right.</li>
+        <li>Drop the key into the gap created. The sorted sub-array grows by one.</li>
+        <li>Repeat from step 2 until all elements have been inserted.</li>
+    </ol>
+
+
+    <h3>Algorithm Analysis</h3>
+    <div class="math-box">
+        <p class="math-formula">Best Case (already sorted): O(n)</p>
+        <p class="math-step">Each key is already in place → inner loop runs 0 times → only n−1 comparisons total</p>
+        <p class="math-formula" style="margin-top:14px;">Worst Case (reverse sorted): O(n²)</p>
+        <p class="math-step">T(n) = 1 + 2 + 3 + … + (n−1) = n(n−1)/2 — same as selection sort</p>
+        <p class="math-formula" style="margin-top:14px;">Average Case: O(n²)</p>
+        <div class="box box-green" style="text-align:left;margin-top:12px;">
+            <strong>Key insight:</strong> Insertion sort can <em>stop early</em>
+            (break out of the inner loop) as soon as it finds the correct position.
+            This makes it much faster than Selection Sort when the data is <em>nearly sorted</em>!
+        </div>
+    </div>
+
+    <div class="box box-teal" style="margin-top:20px;">
+        <strong>Insertion Sort — Characteristics:</strong>
+        <ul style="margin-top:8px;">
+            <li><strong>Naturally Adaptive</strong> — no extra optimization flag needed; the inner loop stops as soon as the position is found</li>
+            <li>Best Case: <strong>O(n)</strong> — already sorted; each element needs only 1 comparison</li>
+            <li>Worst Case: <strong>O(n²)</strong> — reverse sorted data</li>
+            <li>Highly efficient for small arrays or nearly sorted data; often outperforms both Selection Sort and Bubble Sort in practice</li>
+        </ul>
+    </div>
+
+    <h3>Java Implementation</h3>
+    <div class="code-container">
+        <div class="code-header" onclick="toggleCode('ins-code')">
+            <span>Insertion Sort — Java</span><span class="code-toggle" id="ins-code-toggle">▼</span>
+        </div>
+        <pre class="code-block" id="ins-code"><span class="kw">public static void</span> insertionSort(<span class="kw">int</span>[] arr) {
+    <span class="kw">int</span> n = arr.length;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">1</span>; i < n; i++) {
+        <span class="kw">int</span> key = arr[i];         <span class="cm">// element to be inserted</span>
+        <span class="kw">int</span> j   = i - <span class="nm">1</span>;
+        <span class="cm">// shift elements greater than key to the right</span>
+        <span class="kw">while</span> (j >= <span class="nm">0</span> && arr[j] > key) {
+            arr[j + <span class="nm">1</span>] = arr[j];   <span class="cm">// shift right</span>
+            j--;
+        }
+        arr[j + <span class="nm">1</span>] = key;          <span class="cm">// insert key at correct position</span>
+    }
+}</pre>
+    </div>
+
+    <h3>Step-by-Step Simulation</h3>
+    <p>
+        One array is shown. The <strong>teal vertical line</strong> divides it:
+        everything to the <span style="color:#22c55e;font-weight:bold;">left</span> is <em>assumed sorted</em>,
+        everything to the <span style="color:#64748b;font-weight:bold;">right</span> is unsorted.
+        The <span style="color:#ec4899;font-weight:bold;">pink lifted</span> element (first right of the line) is the key —
+        it is compared with sorted elements, shifted right to make room, then inserted.
+        The line then moves one step right.
+    </p>
+
+    <div class="sim-container" id="sim-insertion">
+        <div class="sim-header">
+            <span class="sim-title">Insertion Sort Simulation</span>
+            <button class="btn btn-toggle" id="dir-insertion" onclick="insSim.toggleDir()">Ascending ↑</button>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>Sorted (left of line)</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fce7f3;border-color:#ec4899;"></div><span>Key (being inserted)</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>Comparing</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>Swapping pair</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#4ade80;border-color:#16a34a;"></div><span>Reached correct position → line moves</span></div>
+        </div>
+
+        <div class="array-display" id="arr-insertion" style="padding-top:28px;"></div>
+
+        <div class="sim-progress"><div class="sim-progress-fill" id="prog-insertion" style="width:0%"></div></div>
+        <div class="sim-message" id="msg-insertion">Press Next to begin.</div>
+        <div class="sim-stats">
+            <div class="sim-stat">Comparisons: <span id="cmp-insertion">0</span></div>
+            <div class="sim-stat">Swaps: <span id="swp-insertion">0</span></div>
+            <div class="sim-stat">Step: <span id="stp-insertion">1 / ?</span></div>
+        </div>
+        <div class="sim-controls">
+            <button class="btn btn-secondary" id="prev-insertion" onclick="insSim.prev()" disabled>◀ Prev</button>
+            <button class="btn btn-primary"   id="next-insertion" onclick="insSim.next()">Next ▶</button>
+            <button class="btn btn-reset"     onclick="insSim.reset()">↺ Reset</button>
+        </div>
+    </div>
+</section>
+
+    <!-- ══ OBSERVATION BOX ══ -->
+    <div style="margin-top:30px;border:3px solid #22c55e;border-radius:14px;overflow:hidden;">
+        <div style="background:#16a34a;color:white;padding:14px 22px;font-size:1.05em;font-weight:700;">
+            📌 Important Observation for Students
+        </div>
+        <div style="background:#f0fdf4;padding:22px 26px;">
+            <p style="margin-bottom:14px;">
+                Try pressing <strong>Next</strong> when the key is <strong>82</strong>
+                (the last element in our array).
+                Notice that only <strong>one comparison</strong> is made, and the line immediately
+                moves right — no swap at all.
+            </p>
+            <p style="margin-bottom:14px;"><strong>Why?</strong> Because everything to the left of the
+                divider line is <em>guaranteed to be sorted</em>.
+                The last element in the sorted portion is the largest among them.
+                So if the key is already larger than that element, it must be larger than
+                <em>all</em> sorted elements — no further comparisons are needed.
+            </p>
+            <div style="background:white;border:2px solid #86efac;border-radius:10px;padding:16px;margin-top:8px;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.95em;">
+                    <tr>
+                        <th style="text-align:left;padding:8px 12px;background:#dcfce7;border-radius:6px;">Data Condition</th>
+                        <th style="text-align:center;padding:8px 12px;background:#dcfce7;">Comparisons per key</th>
+                        <th style="text-align:center;padding:8px 12px;background:#dcfce7;">Total comparisons</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px 12px;">Fully sorted — every key is already in place</td>
+                        <td style="text-align:center;padding:8px 12px;color:#16a34a;font-weight:700;">1 each</td>
+                        <td style="text-align:center;padding:8px 12px;color:#16a34a;font-weight:700;">n − 1  →  O(n)</td>
+                    </tr>
+                    <tr style="background:#f9fafb;">
+                        <td style="padding:8px 12px;">Nearly sorted — most keys need few steps</td>
+                        <td style="text-align:center;padding:8px 12px;color:#0891b2;font-weight:700;">1 – 3 each</td>
+                        <td style="text-align:center;padding:8px 12px;color:#0891b2;font-weight:700;">Close to O(n)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px 12px;">Reverse sorted — every key walks to position 0</td>
+                        <td style="text-align:center;padding:8px 12px;color:#dc2626;font-weight:700;">i each</td>
+                        <td style="text-align:center;padding:8px 12px;color:#dc2626;font-weight:700;">n(n−1)/2  →  O(n²)</td>
+                    </tr>
+                </table>
+            </div>
+            <p style="margin-top:14px;margin-bottom:0;font-weight:600;color:#065f46;">
+                Conclusion: Selection Sort always makes exactly n(n−1)/2 comparisons no matter what
+                the data looks like. Insertion Sort adapts — on nearly-sorted data it can be
+                dramatically faster. This is its greatest strength.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════ SECTION 5: BUBBLE SORT ══════════════════════════ -->
+<section id="bubble">
+    <h2>3 · Bubble Sort</h2>
+
+    <div class="box box-red">
+        <strong>Core Idea:</strong> Compare adjacent pairs and swap them if they are in the wrong order.
+        After each pass, the largest unsorted element has "bubbled up" to its correct position at the end.
+    </div>
+
+    <h3>Part A — Basic Bubble Sort</h3>
+    <p>In its basic form, Bubble Sort runs all n−1 passes regardless of input order:</p>
+    <ol>
+        <li>Start at the beginning of the array.</li>
+        <li>Compare each adjacent pair (arr[j], arr[j+1]). If arr[j] > arr[j+1], swap them.</li>
+        <li>After one full pass, the largest element has "bubbled" to the last position — correctly placed.</li>
+        <li>Repeat for all n−1 passes — <strong>always runs every pass</strong>, even if the array is already sorted.</li>
+    </ol>
+
+    <div class="box box-red">
+        <strong>Basic Bubble Sort — Characteristics:</strong>
+        <ul style="margin-top:8px;">
+            <li>Time Complexity: <strong>O(n²) in all cases</strong> — always runs all n−1 passes</li>
+            <li><strong>Not Adaptive</strong> — cannot detect if the array is already sorted</li>
+            <li>Identical to Selection Sort in performance: both always make exactly n(n−1)/2 comparisons</li>
+        </ul>
+    </div>
+
+    <h3>Part B — Optimized Bubble Sort (Early Exit)</h3>
+    <p>A single <strong>boolean flag</strong> (<code>swapped</code>) transforms Bubble Sort into an adaptive algorithm — this is considered a "smart optimization":</p>
+    <ol>
+        <li>At the start of each pass, set <code>swapped = false</code>.</li>
+        <li>If any swap occurs during the pass, set <code>swapped = true</code>.</li>
+        <li>After the pass: <strong>if <code>swapped == false</code></strong>, no elements were out of order → the array is already sorted → <strong>stop immediately</strong>.</li>
+    </ol>
+
+    <div class="box box-green">
+        <strong>Optimized Bubble Sort — Characteristics:</strong>
+        <ul style="margin-top:8px;">
+            <li><strong>Adaptive: YES</strong> — the "no swaps" check detects sorted data and exits early</li>
+            <li>Best Case: <strong>O(n)</strong> — already sorted data triggers early exit after just one pass</li>
+            <li>Worst Case: <strong>O(n²)</strong> — reverse sorted data (same as basic version)</li>
+        </ul>
+    </div>
+
+
+    <div class="box box-yellow" style="margin-bottom:20px;">
+        <strong>Why is it called "Bubble Sort"?</strong><br>
+        Watch the simulation: in each pass, the largest remaining element "bubbles up" to the right end,
+        like a bubble rising through water — it keeps swapping with its right neighbour until it reaches
+        the surface (its correct position).
+    </div>
+
+    <h3>Algorithm Analysis</h3>
+    <div class="math-box">
+        <p class="math-formula">Worst Case: O(n²)</p>
+        <p class="math-step">Reverse-sorted input — every pair needs swapping every pass</p>
+        <p class="math-step">T(n) = (n−1) + (n−2) + … + 1 = n(n−1)/2</p>
+        <p class="math-formula" style="margin-top:14px;">Best Case (with early-exit optimisation): O(n)</p>
+        <p class="math-step">Already sorted — first pass finds no swaps → stops immediately after n−1 comparisons</p>
+    </div>
+
+    <div class="box box-yellow" style="margin-top:0;">
+        <strong>Optimized Bubble Sort:</strong> There is a well-known variant that adds a <em>swapped</em> flag — if a full pass completes with no swaps, the array is already sorted and the algorithm terminates immediately, giving <strong>O(n)</strong> in the best case.
+        If you would like to explore this further, search <em>"optimized bubble sort"</em> online.
+    </div>
+
+    <h3>Java Implementation</h3>
+    <div class="code-container">
+        <div class="code-header" onclick="toggleCode('bub-code')">
+            <span>Bubble Sort — Java (with early-exit optimisation)</span><span class="code-toggle" id="bub-code-toggle">▼</span>
+        </div>
+        <pre class="code-block" id="bub-code"><span class="kw">public static void</span> bubbleSort(<span class="kw">int</span>[] arr) {
+    <span class="kw">int</span> n = arr.length;
+    <span class="kw">for</span> (<span class="kw">int</span> pass = <span class="nm">0</span>; pass < n - <span class="nm">1</span>; pass++) {
+        <span class="kw">boolean</span> swapped = <span class="kw">false</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = <span class="nm">0</span>; j < n - <span class="nm">1</span> - pass; j++) {
+            <span class="kw">if</span> (arr[j] > arr[j + <span class="nm">1</span>]) {
+                <span class="kw">int</span> temp  = arr[j];
+                arr[j]     = arr[j + <span class="nm">1</span>];
+                arr[j + <span class="nm">1</span>] = temp;
+                swapped = <span class="kw">true</span>;
+            }
+        }
+        <span class="kw">if</span> (!swapped) <span class="kw">break</span>;  <span class="cm">// already sorted — early exit</span>
+    }
+}</pre>
+    </div>
+
+    <h3>Step-by-Step Simulation</h3>
+    <p>Watch adjacent pairs being compared. When a <span style="color:#ef4444;font-weight:bold;">red</span> pair
+       is swapped, the larger element moves right. After each pass, one more element reaches its final
+       <span style="color:#22c55e;font-weight:bold;">green</span> position.
+       <strong>Watch the step counter</strong> — if the array gets sorted before all passes finish,
+       bubble sort will announce early exit and stop, making it more efficient than selection sort
+       on this data.</p>
+
+    <div class="sim-container" id="sim-bubble">
+        <div class="sim-header">
+            <span class="sim-title">Bubble Sort Simulation</span>
+            <button class="btn btn-toggle" id="dir-bubble" onclick="bubSim.toggleDir()">Ascending ↑</button>
+        </div>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>Comparing adjacent pair</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>Swapping</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>Correctly placed (sorted)</span></div>
+        </div>
+        <div class="array-display" id="arr-bubble"></div>
+        <div class="sim-progress"><div class="sim-progress-fill" id="prog-bubble" style="width:0%"></div></div>
+        <div class="sim-message" id="msg-bubble">Press Next to begin.</div>
+        <div class="sim-stats">
+            <div class="sim-stat">Comparisons: <span id="cmp-bubble">0</span></div>
+            <div class="sim-stat">Swaps: <span id="swp-bubble">0</span></div>
+            <div class="sim-stat">Step: <span id="stp-bubble">1 / ?</span></div>
+        </div>
+        <div class="sim-controls">
+            <button class="btn btn-secondary" id="prev-bubble" onclick="bubSim.prev()" disabled>◀ Prev</button>
+            <button class="btn btn-primary"   id="next-bubble" onclick="bubSim.next()">Next ▶</button>
+            <button class="btn btn-reset"     onclick="bubSim.reset()">↺ Reset</button>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════ SECTION 6: COMPARISON ══════════════════════════ -->
+<section id="comparison">
+    <h2>4 · Insertion Sort vs Selection Sort — Does Data Matter?</h2>
+
+    <div class="box box-teal">
+        <strong>A student asks:</strong> "Professor, if both Selection Sort and Insertion Sort are O(n²),
+        which one is actually faster?"<br><br>
+        <strong>Professor replies:</strong> "Excellent question! They have the same worst-case complexity,
+        but in practice Insertion Sort can be <em>much faster</em> when the data is nearly sorted.
+        Let me show you why."
+    </div>
+
+    <h3>The Key Difference</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;">
+        <div class="box box-blue" style="margin:0;">
+            <h4 style="margin-top:0;color:#1e40af;">Selection Sort</h4>
+            <p style="margin:0;font-size:0.95em;">
+                <strong>Always</strong> scans the entire remaining unsorted part to find the minimum.<br>
+                Number of comparisons = n(n−1)/2, <em>regardless of the input.</em>
+            </p>
+        </div>
+        <div class="box box-green" style="margin:0;">
+            <h4 style="margin-top:0;color:#065f46;">Insertion Sort</h4>
+            <p style="margin:0;font-size:0.95em;">
+                Can <strong>stop early</strong> once the correct insertion position is found.<br>
+                For nearly-sorted data, almost every key stops after just 1–2 comparisons!
+            </p>
+        </div>
+    </div>
+
+    <h3>Comparison on 5 Different Datasets (8 elements, ascending)</h3>
+
+    <div style="border:3px solid #f43f5e;border-radius:12px;overflow:hidden;margin-bottom:20px;">
+        <div style="background:#f43f5e;color:white;padding:12px 20px;font-weight:700;">
+            ⚠️ Important Note Before You Read the Table
+        </div>
+        <div style="background:#fff1f2;padding:18px 22px;">
+            <p style="margin-bottom:10px;">
+                <strong>Basic Bubble Sort (no early-exit check)</strong> always makes exactly
+                <strong>n(n−1)/2 = 28 comparisons</strong> for n=8, regardless of the data —
+                <em>identical to Selection Sort</em>. It has no way to detect that the array is already sorted.
+            </p>
+            <p style="margin-bottom:0;">
+                The table below uses <strong>Optimized Bubble Sort</strong> — the version with the
+                early-exit check (<code>if no swaps in a pass → stop</code>).
+                This is the version taught in this chapter and shown in the simulation above.
+                The difference only matters when data is <em>nearly or fully sorted</em>.
+            </p>
+        </div>
+    </div>
+
+    <p>Click the button below to run all three algorithms on each dataset and count the comparisons.</p>
+    <div style="text-align:center;margin:16px 0;">
+        <button class="btn btn-primary" onclick="runComparison()" style="font-size:1.05em;padding:12px 30px;">
+            ▶ Run Comparison
+        </button>
+    </div>
+    <div class="scenario-grid" id="scenario-grid"></div>
+
+    <div class="box box-purple" id="comparison-insight" style="display:none;">
+        <strong>What did we observe?</strong>
+        <ul id="insight-list"></ul>
+    </div>
+
+    <h3>Final Insight — Key Differences at a Glance</h3>
+    <div style="overflow-x:auto;margin:20px 0;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.95em;text-align:center;">
+            <thead>
+                <tr style="background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;">
+                    <th style="padding:12px 16px;text-align:left;border-radius:8px 0 0 0;">Algorithm</th>
+                    <th style="padding:12px 16px;">Best Case</th>
+                    <th style="padding:12px 16px;">Worst Case</th>
+                    <th style="padding:12px 16px;">Adaptive?</th>
+                    <th style="padding:12px 16px;border-radius:0 8px 0 0;">Key Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background:#fff1f2;">
+                    <td style="padding:12px 16px;font-weight:700;text-align:left;color:#9f1239;">Selection Sort</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">✗ No</td>
+                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">Simple but always the same — input-insensitive</td>
+                </tr>
+                <tr style="background:#fff7ed;">
+                    <td style="padding:12px 16px;font-weight:700;text-align:left;color:#9a3412;">Bubble Sort (Basic)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">✗ No</td>
+                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">Identical to Selection Sort — no way to stop early</td>
+                </tr>
+                <tr style="background:#f0fdf4;">
+                    <td style="padding:12px 16px;font-weight:700;text-align:left;color:#065f46;">Bubble Sort (Optimized)</td>
+                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">O(n)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
+                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">✓ Yes</td>
+                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">Becomes "smart" using the <code>swapped</code> flag</td>
+                </tr>
+                <tr style="background:#eff6ff;">
+                    <td style="padding:12px 16px;font-weight:700;text-align:left;color:#1e40af;">Insertion Sort</td>
+                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">O(n)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
+                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">✓ Yes</td>
+                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">Naturally efficient — adaptive without any extra flag</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box box-yellow">
+        <strong>The Bottom Line:</strong>
+        <ul style="margin-top:8px;">
+            <li><strong>Selection Sort</strong> — Simple but never adaptive. Always O(n²).</li>
+            <li><strong>Bubble Sort (Basic)</strong> — Equivalent to Selection Sort. Always O(n²).</li>
+            <li><strong>Bubble Sort (Optimized)</strong> — Becomes adaptive with the <code>swapped</code> flag. Best case O(n).</li>
+            <li><strong>Insertion Sort</strong> — Naturally adaptive without any extra trick. Best case O(n). Often the best choice among these three for real-world data.</li>
+        </ul>
+    </div>
+</section>
+
+</div><!-- /content -->
+</div><!-- /container -->
+
+<!-- ══════════════════════════ JAVASCRIPT ══════════════════════════ -->
+<script>
+
+// ─── (Complexity graph moved to sorting/index.html) ────────────────────────
+function drawComplexityGraph() {
+    const canvas = document.getElementById('complexityGraph');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.offsetWidth || 700;
+    const H = 280;
+    canvas.width  = W;
+    canvas.height = H;
+
+    const pad = { t:20, r:20, b:50, l:60 };
+    const gW = W - pad.l - pad.r;
+    const gH = H - pad.t - pad.b;
+    const N  = 20;
+    const maxY = N * N;
+
+    function xp(n) { return pad.l + (n / N) * gW; }
+    function yp(v) { return pad.t + gH - (v / maxY) * gH; }
+
+    // background grid
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+        const y = pad.t + (i / 4) * gH;
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l+gW, y); ctx.stroke();
+        ctx.fillStyle = '#94a3b8'; ctx.font = '11px Segoe UI'; ctx.textAlign='right';
+        ctx.fillText(Math.round(maxY*(4-i)/4), pad.l-6, y+4);
+    }
+    for (let n = 0; n <= N; n+=5) {
+        const x = xp(n);
+        ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t+gH); ctx.stroke();
+        ctx.fillStyle = '#94a3b8'; ctx.font = '11px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText(n, x, pad.t+gH+18);
+    }
+
+    // axes
+    ctx.strokeStyle = '#64748b'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t+gH); ctx.lineTo(pad.l+gW, pad.t+gH); ctx.stroke();
+
+    // axis labels
+    ctx.fillStyle = '#94a3b8'; ctx.font = '12px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText('n  (array size)', pad.l + gW/2, H-6);
+    ctx.save(); ctx.translate(14, pad.t + gH/2);
+    ctx.rotate(-Math.PI/2); ctx.fillText('Operations', 0, 0); ctx.restore();
+
+    // O(n) line
+    ctx.beginPath(); ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2.5;
+    for (let n = 0; n <= N; n++) { n===0 ? ctx.moveTo(xp(n),yp(n)) : ctx.lineTo(xp(n),yp(n)); }
+    ctx.stroke();
+
+    // O(n log n) line
+    ctx.beginPath(); ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2.5;
+    for (let n = 1; n <= N; n++) {
+        const v = n * Math.log2(n);
+        n===1 ? ctx.moveTo(xp(n),yp(v)) : ctx.lineTo(xp(n),yp(v));
+    }
+    ctx.stroke();
+
+    // O(n²) line
+    ctx.beginPath(); ctx.strokeStyle = '#f87171'; ctx.lineWidth = 3;
+    for (let n = 0; n <= N; n++) { n===0 ? ctx.moveTo(xp(n),yp(n*n)) : ctx.lineTo(xp(n),yp(n*n)); }
+    ctx.stroke();
+
+    // legend
+    const legends = [
+        { color:'#f87171', label:'O(n²) — Quadratic (Selection/Insertion/Bubble)' },
+        { color:'#60a5fa', label:'O(n log n) — Logarithmic (Quick/Merge Sort)' },
+        { color:'#4ade80', label:'O(n) — Linear (ideal)' },
+    ];
+    ctx.font = '12px Segoe UI'; ctx.textAlign='left';
+    legends.forEach((l,i) => {
+        const lx=pad.l+10, ly=pad.t+12+i*20;
+        ctx.fillStyle=l.color;
+        ctx.fillRect(lx, ly-9, 28, 12);
+        ctx.fillStyle='#e2e8f0';
+        ctx.fillText(l.label, lx+34, ly);
+    });
+}
+
+// ─── Simulation Engine ─────────────────────────────────────────────────────
+class SortSim {
+    constructor(id, genFn) {
+        this.id    = id;
+        this.genFn = genFn;
+        this.base  = [38, 27, 43, 3, 9, 82];
+        this.asc   = true;
+        this.steps = [];
+        this.step  = 0;
+        this.init();
+    }
+    init() {
+        this.steps = this.genFn([...this.base], this.asc);
+        this.step  = 0;
+        this.render();
+    }
+    next()   { if (this.step < this.steps.length-1) { this.step++; this.render(); } }
+    prev()   { if (this.step > 0)                   { this.step--; this.render(); } }
+    reset()  { this.step = 0; this.render(); }
+    toggleDir() {
+        this.asc = !this.asc;
+        const btn = document.getElementById('dir-' + this.id);
+        if (btn) btn.textContent = this.asc ? 'Ascending ↑' : 'Descending ↓';
+        this.init();
+    }
+    render() {
+        const s = this.steps[this.step];
+        const n = this.steps.length;
+        // array
+        const disp = document.getElementById('arr-' + this.id);
+        if (!disp) return;
+        disp.innerHTML = '';
+        s.array.forEach((val, i) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'array-element';
+            const cell = document.createElement('div');
+            cell.className = 'array-cell ' + (s.colors[i] || '');
+            cell.textContent = val;
+            const idx = document.createElement('div');
+            idx.className = 'array-index';
+            idx.textContent = '[' + i + ']';
+            wrap.appendChild(cell);
+            wrap.appendChild(idx);
+            disp.appendChild(wrap);
+        });
+        document.getElementById('msg-'  + this.id).textContent = s.message;
+        document.getElementById('cmp-'  + this.id).textContent = s.comparisons;
+        document.getElementById('swp-'  + this.id).textContent = s.swaps;
+        document.getElementById('stp-'  + this.id).textContent = (this.step+1) + ' / ' + n;
+        document.getElementById('prog-' + this.id).style.width = ((this.step+1)/n*100) + '%';
+        document.getElementById('prev-' + this.id).disabled = this.step === 0;
+        document.getElementById('next-' + this.id).disabled = this.step === n-1;
+    }
+}
+
+// ─── Step Generators ──────────────────────────────────────────────────────
+function selectionSteps(arr, asc) {
+    const steps = [];
+    const a = [...arr];
+    const n = a.length;
+    let cmp = 0, swp = 0;
+    const col = new Array(n).fill('');
+
+    function snap(colors, msg) {
+        steps.push({ array:[...a], colors:[...colors], message:msg, comparisons:cmp, swaps:swp });
+    }
+
+    snap([...col], `Array has ${n} elements. Selection Sort will find the ${asc?'minimum':'maximum'} each pass and place it at the front.`);
+
+    for (let i = 0; i < n-1; i++) {
+        for (let k=0;k<i;k++) col[k]='sorted';
+        for (let k=i;k<n;k++) col[k]='';
+        let ext = i;
+        col[i] = 'start-pos';
+        snap([...col], `Pass ${i+1}: Starting at index [${i}] = ${a[i]}. Assume this is the ${asc?'minimum':'maximum'} of the unsorted part.`);
+
+        for (let j=i+1; j<n; j++) {
+            col[j] = 'comparing';
+            cmp++;
+            const better = asc ? a[j] < a[ext] : a[j] > a[ext];
+            snap([...col], `Compare a[${j}]=${a[j]} with current ${asc?'min':'max'} a[${ext}]=${a[ext]}. ${better ? '→ New '+( asc?'minimum':'maximum')+'!' : '→ No change.'} (Comparisons: ${cmp})`);
+            if (better) {
+                col[ext] = ext < i ? 'sorted' : '';
+                ext = j;
+                col[j] = 'extreme';
+                snap([...col], `New ${asc?'minimum':'maximum'} found: a[${j}] = ${a[j]}`);
+            } else {
+                col[j] = '';
+            }
+        }
+
+        if (ext !== i) {
+            col[i] = 'swapping'; col[ext] = 'swapping';
+            snap([...col], `${asc?'Minimum':'Maximum'} found at index [${ext}] = ${a[ext]}. Swapping with index [${i}] = ${a[i]}.`);
+            [a[i], a[ext]] = [a[ext], a[i]];
+            swp++;
+            for (let k=0;k<=i;k++) col[k]=(k===i?'just-sorted':'sorted');
+            col[ext] = '';
+            snap([...col], `Swap done! a[${i}] = ${a[i]} is now in its correct position. (Swaps: ${swp})`);
+            col[i] = 'sorted';
+        } else {
+            col[i] = 'sorted';
+            snap([...col], `a[${i}] = ${a[i]} is already the ${asc?'minimum':'maximum'} of the unsorted part. No swap needed.`);
+        }
+        for (let k=i+1;k<n;k++) if(col[k]!=='sorted') col[k]='';
+    }
+    col[n-1]='sorted';
+    snap([...col], `Sorting complete! Array is in ${asc?'ascending':'descending'} order. Total: ${cmp} comparisons, ${swp} swaps.`);
+    return steps;
+}
+
+function insertionSteps(arr, asc) {
+    // Swap-based insertion sort: the key element physically stays in the
+    // array and "walks left" by making adjacent swaps with each larger
+    // neighbour — students can see it moving step by step.
+    const steps = [];
+    const a = [...arr];
+    const n = a.length;
+    let cmp = 0, swp = 0;
+    const col = new Array(n).fill('');
+
+    function snap(sortedCount, msg) {
+        steps.push({
+            array:       [...a],
+            colors:      [...col],
+            sortedCount: sortedCount,
+            message:     msg,
+            comparisons: cmp,
+            swaps:       swp
+        });
+    }
+
+    // ── Initial state ──────────────────────────────────────────────────────
+    snap(0, `Array: [${a.join(', ')}]. We will place the divider after the first element.`);
+
+    col[0] = 'sorted';
+    snap(1, `Divider placed after a[0] = ${a[0]}. A single element is always sorted! ✓`);
+
+    // ── Insert elements 1 … n-1 ───────────────────────────────────────────
+    for (let i = 1; i < n; i++) {
+
+        col[i] = 'key';
+        snap(i, `Key = a[${i}] = ${a[i]}. It will walk left, swapping with each larger element until it reaches its correct position.`);
+
+        let j = i;
+        while (j > 0) {
+            col[j - 1] = 'comparing';
+            cmp++;
+            const mustSwap = asc ? a[j - 1] > a[j] : a[j - 1] < a[j];
+
+            snap(i, `Compare a[${j-1}] = ${a[j-1]}  with  key a[${j}] = ${a[j]}.  ` +
+                (mustSwap
+                    ? `${a[j-1]} > ${a[j]}  →  swap!  (Comparisons: ${cmp})`
+                    : `${a[j-1]} ≤ ${a[j]}  →  correct position found.  (Comparisons: ${cmp})`));
+
+            if (mustSwap) {
+                const keyVal  = a[j];
+                const leftVal = a[j - 1];
+                col[j - 1] = 'swapping';
+                col[j]     = 'swapping';
+                [a[j - 1], a[j]] = [a[j], a[j - 1]];
+                swp++;
+                snap(i, `Swap: ${leftVal} ↔ ${keyVal}.  Key ${keyVal} moves left to position [${j-1}].  (Swaps: ${swp})`);
+                col[j]     = 'sorted';   // element that got displaced is now sorted here
+                col[j - 1] = 'key';      // key moved one step left
+                j--;
+            } else {
+                col[j - 1] = 'sorted';
+                break;
+            }
+        }
+
+        // Key has reached its final position
+        col[j] = 'just-sorted';
+        for (let k = 0; k < j; k++) col[k] = 'sorted';
+        snap(i + 1, `✓  a[${j}] = ${a[j]} is now in the correct position. Line moves right.  Sorted: [${a.slice(0, i + 1).join(', ')}]`);
+        for (let k = 0; k <= i; k++) col[k] = 'sorted';
+        for (let k = i + 1; k < n; k++) col[k] = '';
+    }
+
+    snap(n, `Sorting complete!  [${a.join(', ')}].  Total: ${cmp} comparisons, ${swp} swaps.`);
+    return steps;
+}
+
+function bubbleSteps(arr, asc) {
+    const steps = [];
+    const a = [...arr];
+    const n = a.length;
+    let cmp = 0, swp = 0;
+    const col = new Array(n).fill('');
+
+    function snap(colors, msg) {
+        steps.push({ array:[...a], colors:[...colors], message:msg, comparisons:cmp, swaps:swp });
+    }
+
+    snap([...col], `Start: Bubble Sort compares adjacent pairs. After each pass, the largest unsorted element "bubbles" to the end.`);
+
+    for (let pass=0; pass<n-1; pass++) {
+        for (let k=n-1-pass+1;k<n;k++) col[k]='sorted';
+        for (let k=0;k<n-1-pass+1;k++) if(col[k]!=='sorted') col[k]='';
+        let swapped = false;
+        snap([...col], `Pass ${pass+1}: Scanning from index 0 to ${n-2-pass}.`);
+
+        for (let j=0; j<n-1-pass; j++) {
+            col[j]='comparing'; col[j+1]='comparing';
+            cmp++;
+            const doSwap = asc ? a[j] > a[j+1] : a[j] < a[j+1];
+            snap([...col], `Compare a[${j}]=${a[j]} and a[${j+1}]=${a[j+1]}. ${doSwap ? '→ Out of order — swap!' : '→ In order — keep.'} (Comparisons: ${cmp})`);
+            if (doSwap) {
+                col[j]='swapping'; col[j+1]='swapping';
+                snap([...col], `Swapping a[${j}]=${a[j]} ↔ a[${j+1}]=${a[j+1]}. (Swaps: ${swp+1})`);
+                [a[j], a[j+1]] = [a[j+1], a[j]];
+                swp++; swapped = true;
+                col[j]=''; col[j+1]='';
+            } else {
+                col[j]=''; col[j+1]='';
+            }
+        }
+
+        col[n-1-pass]='just-sorted';
+        snap([...col], `End of Pass ${pass+1}: a[${n-1-pass}] = ${a[n-1-pass]} is in its final position.`);
+        col[n-1-pass]='sorted';
+
+        if (!swapped) {
+            for (let k=0;k<n;k++) col[k]='sorted';
+            snap([...col], `No swaps in Pass ${pass+1}! Array is already sorted — early exit. Total: ${cmp} comparisons.`);
+            return steps;
+        }
+    }
+
+    col[0]='sorted';
+    snap([...col], `Sorting complete! Array in ${asc?'ascending':'descending'} order. Total: ${cmp} comparisons, ${swp} swaps.`);
+    return steps;
+}
+
+// ─── Comparison Section ────────────────────────────────────────────────────
+const SCENARIOS = [
+    { label:'Reverse Sorted (worst case)',  arr:[82,74,56,43,38,27,9,3],  pct:'0% sorted' },
+    { label:'Random',                       arr:[38,27,43,3,9,82,56,74],  pct:'random' },
+    { label:'Partially Sorted (~50%)',      arr:[3,9,27,38,82,74,56,43],  pct:'~50% sorted' },
+    { label:'Nearly Sorted (1 pair swapped)', arr:[3,9,27,38,43,56,82,74], pct:'~88% sorted' },
+    { label:'Fully Sorted (best case)',     arr:[3,9,27,38,43,56,74,82],  pct:'100% sorted' },
+];
+
+function countSel(arr) {
+    const a=[...arr],n=a.length; let c=0,s=0;
+    for(let i=0;i<n-1;i++){let m=i;for(let j=i+1;j<n;j++){c++;if(a[j]<a[m])m=j;}if(m!==i){[a[i],a[m]]=[a[m],a[i]];s++;}}
+    return{c,s};
+}
+function countIns(arr) {
+    const a=[...arr],n=a.length; let c=0,s=0;
+    for(let i=1;i<n;i++){const k=a[i];let j=i-1;while(j>=0){c++;if(a[j]>k){a[j+1]=a[j];s++;j--;}else break;}a[j+1]=k;}
+    return{c,s};
+}
+function countBub(arr) {
+    const a=[...arr],n=a.length; let c=0,s=0;
+    for(let p=0;p<n-1;p++){let sw=false;for(let j=0;j<n-1-p;j++){c++;if(a[j]>a[j+1]){[a[j],a[j+1]]=[a[j+1],a[j]];s++;sw=true;}}if(!sw)break;}
+    return{c,s};
+}
+
+function runComparison() {
+    const grid = document.getElementById('scenario-grid');
+    grid.innerHTML = '';
+    const maxCmp = SCENARIOS.reduce((m,sc)=>{
+        return Math.max(m, countSel(sc.arr).c, countIns(sc.arr).c, countBub(sc.arr).c);
+    }, 1);
+
+    let insWins=0, selWins=0;
+
+    SCENARIOS.forEach(sc => {
+        const sel = countSel(sc.arr);
+        const ins = countIns(sc.arr);
+        const bub = countBub(sc.arr);
+        if (ins.c < sel.c) insWins++;
+        else if (sel.c < ins.c) selWins++;
+
+        const minC = Math.min(sel.c, ins.c, bub.c);
+        const div  = document.createElement('div');
+        div.className = 'scenario';
+
+        const arrHtml = sc.arr.map(v=>`<div class="scenario-cell">${v}</div>`).join('');
+
+        div.innerHTML = `
+        <div class="scenario-header">
+            <span class="scenario-title">${sc.label} <small style="color:#94a3b8;font-weight:400;">(${sc.pct})</small></span>
+            <div class="scenario-array">${arrHtml}</div>
+        </div>
+        <div class="bar-row">
+            <div class="bar-label">Selection Sort</div>
+            <div class="bar-track"><div class="bar-fill bar-selection" style="width:${(sel.c/maxCmp*100)}%">${sel.c} cmps</div></div>
+            ${sel.c===minC ? '<span class="winner-badge">Best ✓</span>' : ''}
+        </div>
+        <div class="bar-row">
+            <div class="bar-label">Insertion Sort</div>
+            <div class="bar-track"><div class="bar-fill bar-insertion" style="width:${(ins.c/maxCmp*100)}%">${ins.c} cmps</div></div>
+            ${ins.c===minC ? '<span class="winner-badge">Best ✓</span>' : ''}
+        </div>
+        <div class="bar-row">
+            <div class="bar-label">Bubble Sort*</div>
+            <div class="bar-track"><div class="bar-fill bar-bubble" style="width:${(bub.c/maxCmp*100)}%">${bub.c} cmps</div></div>
+            ${bub.c===minC ? '<span class="winner-badge">Best ✓</span>' : ''}
+        </div>`;
+        grid.appendChild(div);
+    });
+
+    const insight = document.getElementById('comparison-insight');
+    const list    = document.getElementById('insight-list');
+    insight.style.display = 'block';
+    list.innerHTML = `
+        <li><strong>Selection Sort</strong> always makes exactly <strong>${countSel([3,9,27,38,43,56,74,82]).c}</strong> comparisons for n=8 — no matter the order of the data. It is completely <em>input-insensitive</em>.</li>
+        <li><strong>Insertion Sort</strong> is <em>input-sensitive</em>: it stops comparing as soon as the key finds its position. The more sorted the data, the fewer comparisons needed.</li>
+        <li>Even for <strong>random data</strong>, Insertion Sort makes only <strong>${countIns([38,27,43,3,9,82,56,74]).c}</strong> comparisons — that is <em>half</em> of Selection Sort's ${countSel([38,27,43,3,9,82,56,74]).c}. This is because on average the inner loop runs only halfway before stopping.</li>
+        <li>For <strong>fully sorted data</strong>, Insertion Sort makes only <strong>${countIns([3,9,27,38,43,56,74,82]).c}</strong> comparisons (one per element) vs Selection Sort's fixed <strong>${countSel([3,9,27,38,43,56,74,82]).c}</strong>.</li>
+        <li><strong>Bubble Sort</strong> also benefits from nearly-sorted data via early exit, but not as much as Insertion Sort — even on random data Bubble makes ${countBub([38,27,43,3,9,82,56,74]).c} comparisons vs Insertion's ${countIns([38,27,43,3,9,82,56,74]).c}.</li>
+        <li><strong>Conclusion:</strong> Insertion Sort ≤ Bubble Sort ≤ Selection Sort in comparisons for all cases. Use Insertion Sort for small or nearly-sorted arrays. For large data, prefer O(n log n) algorithms such as Quick Sort or Merge Sort.</li>
+    `;
+}
+
+// ─── Insertion Sort Sim (single array + moving divider line) ──────────────
+class InsertionSortSim {
+    constructor() {
+        this.base  = [38, 27, 43, 3, 9, 82];
+        this.asc   = true;
+        this.steps = [];
+        this.step  = 0;
+        this.init();
+    }
+    init() {
+        this.steps = insertionSteps([...this.base], this.asc);
+        this.step  = 0;
+        this.render();
+    }
+    next()  { if (this.step < this.steps.length - 1) { this.step++; this.render(); } }
+    prev()  { if (this.step > 0)                     { this.step--; this.render(); } }
+    reset() { this.step = 0; this.render(); }
+    toggleDir() {
+        this.asc = !this.asc;
+        const btn = document.getElementById('dir-insertion');
+        if (btn) btn.textContent = this.asc ? 'Ascending ↑' : 'Descending ↓';
+        this.init();
+    }
+    render() {
+        const s = this.steps[this.step];
+        const n = this.steps.length;
+        const disp = document.getElementById('arr-insertion');
+        if (!disp) return;
+
+        disp.innerHTML = '';
+        s.array.forEach((val, i) => {
+            // Insert the vertical divider BEFORE the first unsorted element
+            if (i === s.sortedCount && s.sortedCount > 0 && s.sortedCount < s.array.length) {
+                const sep = document.createElement('div');
+                sep.className = 'sort-divider';
+                disp.appendChild(sep);
+            }
+            const wrap = document.createElement('div');
+            wrap.className = 'array-element';
+            const cell = document.createElement('div');
+            cell.className = 'array-cell ' + (s.colors[i] || '');
+            cell.textContent = val;
+            const idx = document.createElement('div');
+            idx.className = 'array-index';
+            idx.textContent = '[' + i + ']';
+            wrap.appendChild(cell);
+            wrap.appendChild(idx);
+            disp.appendChild(wrap);
+        });
+
+        document.getElementById('msg-insertion').textContent  = s.message;
+        document.getElementById('cmp-insertion').textContent  = s.comparisons;
+        document.getElementById('swp-insertion').textContent  = s.swaps;
+        document.getElementById('stp-insertion').textContent  = (this.step + 1) + ' / ' + n;
+        document.getElementById('prog-insertion').style.width = ((this.step + 1) / n * 100) + '%';
+        document.getElementById('prev-insertion').disabled    = this.step === 0;
+        document.getElementById('next-insertion').disabled    = this.step === n - 1;
+    }
+}
+
+// ─── Code toggle ──────────────────────────────────────────────────────────
+function toggleCode(id) {
+    const block  = document.getElementById(id);
+    const toggle = document.getElementById(id + '-toggle');
+    if (!block) return;
+    block.classList.toggle('collapsed');
+    toggle.classList.toggle('collapsed');
+}
+
+// ─── Init ──────────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+    window.selSim = new SortSim('selection', selectionSteps);
+    window.insSim = new InsertionSortSim();
+    window.bubSim = new SortSim('bubble',    bubbleSteps);
+});
+</script>
+</body>
+</html>

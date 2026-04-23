@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorting Practice Questions — CPCS204</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #06b6d4 100%);
+    min-height: 100vh;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #334155;
+}
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* ── Header ── */
+header {
+    background: linear-gradient(135deg, #0d9488, #14b8a6, #06b6d4);
+    color: white; padding: 40px 30px; text-align: center;
+}
+header h1 { font-size: 2.2em; font-weight: 800; margin: 12px 0 6px; }
+header p  { font-size: 1.1em; opacity: 0.9; margin-bottom: 18px; }
+.back-link {
+    display: inline-block; color: white; text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.7); border-radius: 20px;
+    padding: 6px 18px; font-size: 0.9em; font-weight: 600;
+    transition: background 0.2s; margin-bottom: 10px;
+}
+.back-link:hover { background: rgba(255,255,255,0.2); }
+.header-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+.badge {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 20px; padding: 4px 14px; font-size: 0.85em; font-weight: 600;
+}
+
+/* ── Tabs ── */
+.tab-nav {
+    display: flex; background: #f8fafc; border-bottom: 2px solid #e2e8f0; overflow-x: auto;
+}
+.tab-btn {
+    flex: 1; min-width: 130px; padding: 14px 8px; font-size: 0.88em; font-weight: 700;
+    border: none; background: transparent; cursor: pointer; color: #64748b;
+    border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap;
+}
+.tab-btn:hover  { background: #f1f5f9; color: #0d9488; }
+.tab-btn.active { color: #0d9488; border-bottom-color: #0d9488; background: white; }
+
+/* ── Panel ── */
+.tab-panel { display: none; padding: 36px 40px 48px; }
+.tab-panel.active { display: block; }
+
+/* ── Algorithm Contract ── */
+.contract {
+    background: #f0fdfa; border: 2px solid #0d9488; border-radius: 12px;
+    padding: 22px 26px; margin-bottom: 24px;
+}
+.contract h3 { color: #0d9488; font-size: 1.15em; margin-bottom: 10px; }
+.contract p   { line-height: 1.7; margin-bottom: 8px; font-size: 0.96em; }
+.contract ul  { margin: 4px 0 10px 20px; line-height: 1.85; font-size: 0.94em; }
+.complexity-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.complexity-chip {
+    background: white; border: 2px solid #0d9488; border-radius: 8px;
+    padding: 5px 12px; font-size: 0.83em; font-weight: 700; color: #0d9488;
+}
+.complexity-chip span { font-weight: 400; color: #475569; margin-left: 3px; }
+
+/* ── Controls ── */
+.controls {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 22px; padding: 16px 18px;
+    background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;
+}
+.controls label { font-weight: 700; color: #334155; white-space: nowrap; }
+.arr-input {
+    padding: 7px 13px; border: 2px solid #cbd5e1; border-radius: 8px;
+    font-size: 0.94em; font-family: monospace; min-width: 210px; flex: 1;
+    transition: border-color 0.2s;
+}
+.arr-input:focus { outline: none; border-color: #0d9488; }
+.btn {
+    cursor: pointer; border: none; border-radius: 8px; padding: 8px 18px;
+    font-size: 0.9em; font-weight: 700; transition: opacity 0.2s, transform 0.1s;
+    white-space: nowrap;
+}
+.btn:hover { opacity: 0.87; transform: translateY(-1px); }
+.btn-random { background: #f1f5f9; color: #475569; border: 2px solid #cbd5e1; }
+.btn-start  { background: #0d9488; color: white; }
+.btn-check  { background: #2563eb; color: white; }
+.btn-reveal { background: #7c3aed; color: white; }
+.btn-reset  { background: #64748b; color: white; }
+
+/* ── Tile bank ── */
+.tile-bank {
+    background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 18px;
+}
+.bank-top { display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+.bank-left { flex: 1; min-width: 0; }
+.bank-label {
+    font-size: 0.8em; font-weight: 700; color: #64748b;
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+}
+.bank-tiles { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Bank drop zone (to clear tiles) */
+.bank-drop-zone {
+    flex-shrink: 0; width: 120px; min-height: 68px;
+    border: 2.5px dashed #cbd5e1; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 10px;
+    font-size: 0.78em; font-weight: 600; color: #94a3b8;
+    transition: all 0.2s; cursor: default; align-self: stretch;
+}
+.bank-drop-zone.drag-over {
+    border-color: #dc2626; background: #fef2f2; color: #b91c1c;
+    box-shadow: 0 0 0 3px rgba(220,38,38,0.15);
+}
+
+/* Bank tile */
+.bank-tile {
+    width: 62px; height: 62px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px; cursor: grab; user-select: none;
+    border: 2.5px solid var(--tc, #0d9488);
+    background: var(--tb, #f0fdfa);
+    color: var(--tc, #0d9488);
+    transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s;
+}
+.bank-tile:hover {
+    transform: translateY(-5px) scale(1.07);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.15); z-index: 20;
+}
+.bank-tile.dragging { opacity: 0.4; transform: scale(0.9); }
+
+/* ── Practice table ── */
+.table-wrapper { overflow-x: auto; margin-bottom: 18px; }
+.practice-table { border-collapse: collapse; width: 100%; font-size: 0.93em; }
+.practice-table thead th {
+    background: #0d9488; color: white; padding: 10px 12px;
+    text-align: center; font-weight: 700; font-size: 0.85em;
+}
+.practice-table td { border: 1px solid #cbd5e1; padding: 6px 4px; text-align: center; }
+.practice-table tbody tr:nth-child(even) td { background: #f8fafc; }
+.practice-table tbody tr:nth-child(even) td.step-label { background: #eef2f7; }
+.step-label {
+    font-weight: 700; color: #475569; font-size: 0.8em;
+    text-align: left !important; white-space: nowrap;
+    background: #f1f5f9 !important; padding: 8px 14px !important;
+    min-width: 170px;
+}
+.init-cell {
+    font-weight: 800; font-size: 1.05em;
+    color: #0d9488; background: #f0fdfa !important;
+}
+
+/* ── Drop slot ── */
+.slot {
+    width: 56px; height: 56px; margin: 0 auto;
+    border-radius: 10px; border: 2.5px dashed #c8d4df;
+    display: flex; align-items: center; justify-content: center;
+    background: #f9fafb; transition: all 0.2s; position: relative;
+}
+.slot.drag-over {
+    border-color: #0d9488; background: #f0fdfa;
+    box-shadow: 0 0 0 4px rgba(13,148,136,0.2); transform: scale(1.07);
+}
+.slot.correct { border: 2.5px solid #16a34a !important; background: #dcfce7 !important; animation: gpulse 0.5s ease; }
+.slot.wrong   { border: 2.5px solid #dc2626 !important; background: #fee2e2 !important; animation: shake 0.4s ease; }
+.slot-hint { font-size: 14px; font-weight: 800; color: #d1d9e0; pointer-events: none; }
+
+/* ── Tile inside slot ── */
+.tile-in-slot {
+    width: 48px; height: 48px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 16px; cursor: grab; user-select: none;
+    background: linear-gradient(135deg, rgba(13,148,136,0.13), rgba(6,182,212,0.13));
+    color: #0f766e; border: 2px solid rgba(13,148,136,0.3);
+    transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s;
+}
+.tile-in-slot:hover    { transform: scale(1.1); box-shadow: 0 5px 14px rgba(13,148,136,0.25); }
+.tile-in-slot.dragging { opacity: 0.35; }
+.tile-in-slot.revealed {
+    background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+    color: #5b21b6; border-color: #a78bfa;
+}
+
+/* ── Action row & result ── */
+.action-row {
+    display: none; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px;
+}
+.action-row.visible { display: flex; }
+
+.result-banner {
+    display: none; padding: 14px 20px; border-radius: 10px;
+    font-weight: 700; font-size: 1em; line-height: 1.5; margin-top: 4px;
+}
+.result-banner.visible { display: block; }
+.result-banner.ok  { background: #dcfce7; border: 2px solid #16a34a; color: #15803d; }
+.result-banner.err { background: #fee2e2; border: 2px solid #dc2626; color: #b91c1c; }
+
+/* ── Animations ── */
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+@keyframes gpulse {
+    0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.5); }
+    60%  { box-shadow: 0 0 0 8px rgba(22,163,74,0); }
+    100% { box-shadow: none; }
+}
+
+/* ── Question Prompt ── */
+.question-prompt {
+    background: #fffbeb; border: 2px solid #f59e0b; border-radius: 10px;
+    padding: 14px 20px; margin-bottom: 18px;
+    font-size: 0.95em; line-height: 1.7; color: #334155;
+}
+.question-prompt strong { color: #78350f; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+    .tab-panel { padding: 20px 14px 36px; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .slot { width: 46px; height: 46px; }
+    .tile-in-slot { width: 40px; height: 40px; font-size: 14px; }
+    .bank-tile { width: 52px; height: 52px; font-size: 16px; }
+    .bank-drop-zone { width: 90px; font-size: 0.7em; }
+    .complexity-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══ HEADER ══ -->
+<header>
+  <a href="index.html" class="back-link">← Back to Sorting</a>
+  <h1>Sorting Practice Questions</h1>
+  <p>CPCS204 — Data Structures I</p>
+  <div class="header-badges">
+    <span class="badge">5 Sort Algorithms</span>
+    <span class="badge">Drag &amp; Drop</span>
+    <span class="badge">Full Table View</span>
+  </div>
+</header>
+
+<!-- ══ TAB NAV ══ -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('sel',this)">Selection Sort</button>
+  <button class="tab-btn"        onclick="showTab('bub',this)">Bubble Sort</button>
+  <button class="tab-btn"        onclick="showTab('ins',this)">Insertion Sort</button>
+  <button class="tab-btn"        onclick="showTab('mrg',this)">Merge Sort</button>
+  <button class="tab-btn"        onclick="showTab('qck',this)">Quick Sort</button>
+</div>
+
+<!-- ══ SELECTION SORT ══ -->
+<div id="tab-sel" class="tab-panel active">
+  <div class="question-prompt">
+    <strong>Question:</strong> Given the initial array, apply <strong>Selection Sort</strong> to sort in <strong>ascending order</strong> (smallest → largest). Scan from <strong>left to right starting at index 0</strong> each loop, find the minimum, and swap it into position. Drag the tiles to fill in the full array state after each loop.
+  </div>
+  <div class="contract">
+    <h3>Selection Sort — Algorithm Contract</h3>
+    <p><strong>Idea:</strong> Repeatedly find the <strong>minimum element</strong> from the unsorted portion and swap it into its correct position.</p>
+    <ul>
+      <li>Pass 1: Scan all n elements → find min → swap to index 0</li>
+      <li>Pass 2: Scan indices 1..n−1 → find min → swap to index 1</li>
+      <li>After n−1 passes the array is fully sorted</li>
+    </ul>
+    <div class="complexity-row">
+      <div class="complexity-chip">Best <span>O(n²)</span></div>
+      <div class="complexity-chip">Average <span>O(n²)</span></div>
+      <div class="complexity-chip">Worst <span>O(n²)</span></div>
+      <div class="complexity-chip">Space <span>O(1)</span></div>
+      <div class="complexity-chip">Stable? <span>No</span></div>
+    </div>
+  </div>
+  <div class="controls">
+    <label>Array:</label>
+    <input class="arr-input" id="sel-in" value="25,44,34,27,10,120,56,98">
+    <button class="btn btn-random" onclick="randomArr('sel-in')">Random</button>
+    <button class="btn btn-start"  onclick="startSort('sel')">Start</button>
+  </div>
+  <div id="sel-bank"  class="tile-bank"    style="display:none"></div>
+  <div id="sel-table" class="table-wrapper" style="display:none"></div>
+  <div id="sel-actions" class="action-row">
+    <button class="btn btn-check"  onclick="checkSort('sel')">Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealSort('sel')">Show Answers</button>
+    <button class="btn btn-reset"  onclick="resetSort('sel')">Reset</button>
+  </div>
+  <div class="result-banner" id="sel-res"></div>
+</div>
+
+<!-- ══ BUBBLE SORT ══ -->
+<div id="tab-bub" class="tab-panel">
+  <div class="question-prompt">
+    <strong>Question:</strong> Given the initial array, apply <strong>Bubble Sort</strong> to sort in <strong>ascending order</strong> (smallest → largest). Each loop compares adjacent pairs starting from <strong>index 0</strong>, swapping out-of-order elements. Drag the tiles to fill in the full array state after each loop.
+  </div>
+  <div class="contract">
+    <h3>Bubble Sort — Algorithm Contract</h3>
+    <p><strong>Idea:</strong> Repeatedly compare <strong>adjacent pairs</strong> and swap if out of order. The largest unsorted element "bubbles up" each pass.</p>
+    <ul>
+      <li>Pass 1: Compare a[0]&amp;a[1], a[1]&amp;a[2], … → largest at end</li>
+      <li>Pass 2: Repeat for 0..n−2 → second-largest settles</li>
+      <li>Early exit: stop if no swaps occur in a pass</li>
+    </ul>
+    <div class="complexity-row">
+      <div class="complexity-chip">Best <span>O(n)</span></div>
+      <div class="complexity-chip">Average <span>O(n²)</span></div>
+      <div class="complexity-chip">Worst <span>O(n²)</span></div>
+      <div class="complexity-chip">Space <span>O(1)</span></div>
+      <div class="complexity-chip">Stable? <span>Yes</span></div>
+    </div>
+  </div>
+  <div class="controls">
+    <label>Array:</label>
+    <input class="arr-input" id="bub-in" value="25,44,34,27,10,120,56,98">
+    <button class="btn btn-random" onclick="randomArr('bub-in')">Random</button>
+    <button class="btn btn-start"  onclick="startSort('bub')">Start</button>
+  </div>
+  <div id="bub-bank"  class="tile-bank"    style="display:none"></div>
+  <div id="bub-table" class="table-wrapper" style="display:none"></div>
+  <div id="bub-actions" class="action-row">
+    <button class="btn btn-check"  onclick="checkSort('bub')">Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealSort('bub')">Show Answers</button>
+    <button class="btn btn-reset"  onclick="resetSort('bub')">Reset</button>
+  </div>
+  <div class="result-banner" id="bub-res"></div>
+</div>
+
+<!-- ══ INSERTION SORT ══ -->
+<div id="tab-ins" class="tab-panel">
+  <div class="question-prompt">
+    <strong>Question:</strong> Given the initial array, apply <strong>Insertion Sort</strong> to sort in <strong>ascending order</strong> (smallest → largest). Start with the element at <strong>index 1</strong> as the first key; shift larger elements rightward to insert each key in its correct position. Drag the tiles to fill in the full array state after each step.
+  </div>
+  <div class="contract">
+    <h3>Insertion Sort — Algorithm Contract</h3>
+    <p><strong>Idea:</strong> Build a sorted sub-array one element at a time by <strong>inserting</strong> each new element into its correct position.</p>
+    <ul>
+      <li>Step 1: Take a[1] as key → shift larger elements right → insert</li>
+      <li>Step 2: Take a[2] → shift right as needed → insert</li>
+      <li>After n−1 steps the full array is sorted</li>
+    </ul>
+    <div class="complexity-row">
+      <div class="complexity-chip">Best <span>O(n)</span></div>
+      <div class="complexity-chip">Average <span>O(n²)</span></div>
+      <div class="complexity-chip">Worst <span>O(n²)</span></div>
+      <div class="complexity-chip">Space <span>O(1)</span></div>
+      <div class="complexity-chip">Stable? <span>Yes</span></div>
+    </div>
+  </div>
+  <div class="controls">
+    <label>Array:</label>
+    <input class="arr-input" id="ins-in" value="25,44,34,27,10,120,56,98">
+    <button class="btn btn-random" onclick="randomArr('ins-in')">Random</button>
+    <button class="btn btn-start"  onclick="startSort('ins')">Start</button>
+  </div>
+  <div id="ins-bank"  class="tile-bank"    style="display:none"></div>
+  <div id="ins-table" class="table-wrapper" style="display:none"></div>
+  <div id="ins-actions" class="action-row">
+    <button class="btn btn-check"  onclick="checkSort('ins')">Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealSort('ins')">Show Answers</button>
+    <button class="btn btn-reset"  onclick="resetSort('ins')">Reset</button>
+  </div>
+  <div class="result-banner" id="ins-res"></div>
+</div>
+
+<!-- ══ MERGE SORT ══ -->
+<div id="tab-mrg" class="tab-panel">
+  <div class="question-prompt">
+    <strong>Question:</strong> Given the initial array, apply <strong>Merge Sort</strong> to sort in <strong>ascending order</strong> (smallest → largest). The array is recursively split in half, then sorted halves are merged by always picking the smaller front element. Each row shows the <strong>full array</strong> state after one merge operation completes. Drag the tiles to fill in the result.
+  </div>
+  <div class="contract">
+    <h3>Merge Sort — Algorithm Contract</h3>
+    <p><strong>Idea:</strong> Divide-and-conquer. Recursively split until 1-element sub-arrays, then <strong>merge</strong> sorted halves by comparing front elements.</p>
+    <ul>
+      <li>Divide: split [L..R] into [L..mid] and [mid+1..R] recursively</li>
+      <li>Merge: always pick the smaller front element from each half</li>
+      <li>Each row shows the <strong>full array</strong> state after one merge operation</li>
+    </ul>
+    <div class="complexity-row">
+      <div class="complexity-chip">Best <span>O(n log n)</span></div>
+      <div class="complexity-chip">Average <span>O(n log n)</span></div>
+      <div class="complexity-chip">Worst <span>O(n log n)</span></div>
+      <div class="complexity-chip">Space <span>O(n)</span></div>
+      <div class="complexity-chip">Stable? <span>Yes</span></div>
+    </div>
+  </div>
+  <div class="controls">
+    <label>Array:</label>
+    <input class="arr-input" id="mrg-in" value="25,44,34,27,10,120,56,98">
+    <button class="btn btn-random" onclick="randomArr('mrg-in')">Random</button>
+    <button class="btn btn-start"  onclick="startSort('mrg')">Start</button>
+  </div>
+  <div id="mrg-bank"  class="tile-bank"    style="display:none"></div>
+  <div id="mrg-table" class="table-wrapper" style="display:none"></div>
+  <div id="mrg-actions" class="action-row">
+    <button class="btn btn-check"  onclick="checkSort('mrg')">Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealSort('mrg')">Show Answers</button>
+    <button class="btn btn-reset"  onclick="resetSort('mrg')">Reset</button>
+  </div>
+  <div class="result-banner" id="mrg-res"></div>
+</div>
+
+<!-- ══ QUICK SORT ══ -->
+<div id="tab-qck" class="tab-panel">
+  <div class="question-prompt">
+    <strong>Question:</strong> Given the initial array, apply <strong>Quick Sort</strong> to sort in <strong>ascending order</strong> (smallest → largest), based on the <strong>Hoare Partition Scheme</strong>. Assume the <strong>first element</strong> of each sub-array is the <strong>pivot</strong>. Each row shows the <strong>full array</strong> state after one partition completes. Drag the tiles to fill in the array state after each partition.
+  </div>
+  <div class="contract">
+    <h3>Quick Sort — Algorithm Contract</h3>
+    <p><strong>Idea:</strong> Divide-and-conquer. Pick the <strong>first element as pivot</strong> (Hoare Partition Scheme), partition using two pointers that scan inward and swap, then recurse on each side.</p>
+    <ul>
+      <li>Pivot = <strong>first element</strong> A[l] of the current sub-array range (pivot selection is flexible — random or other strategies are valid too)</li>
+      <li>Partition: pointer i scans right (past elements ≤ pivot), pointer j scans left (past elements &gt; pivot); swap when both stop; place pivot at j when i ≥ j</li>
+      <li>Each row shows the <strong>full array</strong> after one partition completes</li>
+    </ul>
+    <div class="complexity-row">
+      <div class="complexity-chip">Best <span>O(n log n)</span></div>
+      <div class="complexity-chip">Average <span>O(n log n)</span></div>
+      <div class="complexity-chip">Worst <span>O(n²)</span></div>
+      <div class="complexity-chip">Space <span>O(log n)</span></div>
+      <div class="complexity-chip">Stable? <span>No</span></div>
+    </div>
+  </div>
+  <div class="controls">
+    <label>Array:</label>
+    <input class="arr-input" id="qck-in" value="25,44,34,27,10,120,56,98">
+    <button class="btn btn-random" onclick="randomArr('qck-in')">Random</button>
+    <button class="btn btn-start"  onclick="startSort('qck')">Start</button>
+  </div>
+  <div id="qck-bank"  class="tile-bank"    style="display:none"></div>
+  <div id="qck-table" class="table-wrapper" style="display:none"></div>
+  <div id="qck-actions" class="action-row">
+    <button class="btn btn-check"  onclick="checkSort('qck')">Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealSort('qck')">Show Answers</button>
+    <button class="btn btn-reset"  onclick="resetSort('qck')">Reset</button>
+  </div>
+  <div class="result-banner" id="qck-res"></div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ── Tab switching ──────────────────────────────────────────────────────────
+function showTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ── Random array ───────────────────────────────────────────────────────────
+function randomArr(inputId) {
+    const s = new Set();
+    while (s.size < 8) s.add(Math.floor(Math.random() * 89) + 10);
+    document.getElementById(inputId).value = [...s].join(',');
+}
+
+// ── Config ─────────────────────────────────────────────────────────────────
+const CFG = {
+    sel: { inp:'sel-in', bank:'sel-bank', tbl:'sel-table', act:'sel-actions', res:'sel-res', fn:selSteps, color:'#c2410c', bg:'#fff7ed' },
+    bub: { inp:'bub-in', bank:'bub-bank', tbl:'bub-table', act:'bub-actions', res:'bub-res', fn:bubSteps, color:'#065f46', bg:'#ecfdf5' },
+    ins: { inp:'ins-in', bank:'ins-bank', tbl:'ins-table', act:'ins-actions', res:'ins-res', fn:insSteps, color:'#5b21b6', bg:'#f5f3ff' },
+    mrg: { inp:'mrg-in', bank:'mrg-bank', tbl:'mrg-table', act:'mrg-actions', res:'mrg-res', fn:mrgSteps, color:'#0d9488', bg:'#f0fdfa' },
+    qck: { inp:'qck-in', bank:'qck-bank', tbl:'qck-table', act:'qck-actions', res:'qck-res', fn:qckSteps, color:'#1d4ed8', bg:'#eff6ff' },
+};
+
+// ── Sort step generators ───────────────────────────────────────────────────
+function selSteps(arr) {
+    const a = [...arr], out = [];
+    for (let i = 0; i < a.length - 1; i++) {
+        let m = i;
+        for (let j = i + 1; j < a.length; j++) if (a[j] < a[m]) m = j;
+        if (m !== i) [a[i], a[m]] = [a[m], a[i]];
+        out.push({ lbl: `Loop ${i+1}`, arr: [...a] });
+    }
+    return out;
+}
+
+function bubSteps(arr) {
+    const a = [...arr], out = [], n = a.length;
+    for (let i = 0; i < n - 1; i++) {
+        let sw = false;
+        for (let j = 0; j < n - 1 - i; j++) {
+            if (a[j] > a[j+1]) { [a[j], a[j+1]] = [a[j+1], a[j]]; sw = true; }
+        }
+        out.push({ lbl: `Loop ${i+1}` + (sw ? '' : '  (early exit)'), arr: [...a] });
+        if (!sw) break;
+    }
+    return out;
+}
+
+function insSteps(arr) {
+    const a = [...arr], out = [];
+    for (let i = 1; i < a.length; i++) {
+        const key = a[i]; let j = i - 1;
+        while (j >= 0 && a[j] > key) { a[j+1] = a[j]; j--; }
+        a[j+1] = key;
+        out.push({ lbl: `Step ${i}`, arr: [...a] });
+    }
+    return out;
+}
+
+function mrgSteps(arr) {
+    const out = [], full = [...arr];
+    function mg(L, R) {
+        const res = [], l = [...L], r = [...R];
+        while (l.length && r.length) res.push(l[0] <= r[0] ? l.shift() : r.shift());
+        return res.concat(l, r);
+    }
+    function ms(a, off) {
+        if (a.length <= 1) return a;
+        const mid = Math.floor(a.length / 2);
+        const L = ms(a.slice(0, mid), off);
+        const R = ms(a.slice(mid), off + mid);
+        const M = mg(L, R);
+        for (let i = 0; i < M.length; i++) full[off + i] = M[i];
+        out.push({ lbl: `Merge ${out.length + 1}`, arr: [...full] });
+        return M;
+    }
+    ms([...arr], 0);
+    return out;
+}
+
+function qckSteps(arr) {
+    const out = [], a = [...arr];
+    function part(lo, hi) {
+        const piv = a[lo];
+        let i = lo - 1, j = hi + 1;
+        while (i < j) {
+            do { i++; } while (i <= hi && a[i] <= piv);
+            do { j--; } while (a[j] > piv);
+            if (i < j) [a[i], a[j]] = [a[j], a[i]];
+        }
+        [a[lo], a[j]] = [a[j], a[lo]];
+        out.push({ lbl: `Partition ${out.length + 1}`, arr: [...a] });
+        return j;
+    }
+    function qs(lo, hi) {
+        if (lo < hi) { const p = part(lo, hi); qs(lo, p - 1); qs(p + 1, hi); }
+    }
+    qs(0, a.length - 1);
+    return out;
+}
+
+// ── State: SV[type][stepIdx][colIdx] = value | null ───────────────────────
+const ST = {};  // { arr, steps }
+const SV = {};  // slot values
+
+// ── Drag state ─────────────────────────────────────────────────────────────
+const drag = { from:null, type:null, value:null, si:null, idx:null };
+
+// ── Start ──────────────────────────────────────────────────────────────────
+function startSort(type) {
+    const raw = document.getElementById(CFG[type].inp).value
+        .split(',').map(s => parseInt(s.trim())).filter(v => !isNaN(v));
+    if (raw.length < 2) { alert('Please enter at least 2 numbers.'); return; }
+
+    const steps = CFG[type].fn(raw);
+    ST[type] = { arr: raw, steps };
+    SV[type] = steps.map(() => raw.map(() => null));
+
+    buildBank(type, raw);
+    buildTable(type, raw, steps);
+
+    document.getElementById(CFG[type].act).classList.add('visible');
+    clearResult(type);
+}
+
+// ── Build number bank ──────────────────────────────────────────────────────
+function buildBank(type, arr) {
+    const { color, bg, bank } = CFG[type];
+    const bankEl = document.getElementById(bank);
+    bankEl.style.display = '';
+
+    // Bank tiles — infinite source, dragging copies the value
+    const tilesHTML = arr.map(v =>
+        `<div class="bank-tile" style="--tc:${color};--tb:${bg}"
+             draggable="true" data-value="${v}">${v}</div>`
+    ).join('');
+
+    bankEl.innerHTML = `
+        <div class="bank-top">
+          <div class="bank-left">
+            <div class="bank-label">Number Bank — drag tiles into the table cells</div>
+            <div class="bank-tiles" id="${bank}-tiles">${tilesHTML}</div>
+          </div>
+          <div class="bank-drop-zone" id="${bank}-dz">
+            Drop here<br>to clear a cell
+          </div>
+        </div>`;
+
+    // Bank tile dragstart (copies — source unchanged)
+    bankEl.querySelectorAll('.bank-tile').forEach(t => {
+        t.addEventListener('dragstart', e => {
+            drag.from = 'bank'; drag.type = type;
+            drag.value = parseInt(t.dataset.value);
+            drag.si = null; drag.idx = null;
+            t.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        t.addEventListener('dragend', () => t.classList.remove('dragging'));
+    });
+
+    // Drop zone — clearing a slot tile by dropping it here
+    const dz = bankEl.querySelector('.bank-drop-zone');
+    dz.addEventListener('dragover',  e => e.preventDefault());
+    dz.addEventListener('dragenter', () => { if (drag.from === 'slot') dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+    dz.addEventListener('drop', e => {
+        e.preventDefault();
+        dz.classList.remove('drag-over');
+        if (drag.from !== 'slot' || drag.type !== type) return;
+        SV[type][drag.si][drag.idx] = null;
+        refreshSlot(type, drag.si, drag.idx);
+        clearFeedback(type);
+    });
+}
+
+// ── Build full table ───────────────────────────────────────────────────────
+function buildTable(type, arr, steps) {
+    const tblEl = document.getElementById(CFG[type].tbl);
+    tblEl.style.display = '';
+    const n = arr.length;
+
+    let h = `<table class="practice-table"><thead><tr><th>Step</th>`;
+    for (let i = 0; i < n; i++) h += `<th>a[${i}]</th>`;
+    h += `</tr></thead><tbody>`;
+
+    // Initial row — read-only
+    h += `<tr><td class="step-label">Initial array</td>`;
+    arr.forEach(v => { h += `<td class="init-cell">${v}</td>`; });
+    h += `</tr>`;
+
+    // Step rows — each cell is a drop slot
+    steps.forEach((s, si) => {
+        h += `<tr><td class="step-label">${s.lbl}</td>`;
+        for (let idx = 0; idx < n; idx++) {
+            h += `<td><div class="slot" id="${type}-s-${si}-${idx}"
+                        data-si="${si}" data-idx="${idx}">
+                    <span class="slot-hint">?</span>
+                  </div></td>`;
+        }
+        h += `</tr>`;
+    });
+
+    h += `</tbody></table>`;
+    tblEl.innerHTML = h;
+
+    // Attach drop listeners to every slot
+    tblEl.querySelectorAll('.slot').forEach(slot => {
+        slot.addEventListener('dragover',  e => { e.preventDefault(); slot.classList.add('drag-over'); });
+        slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+        slot.addEventListener('drop', e => {
+            e.preventDefault();
+            slot.classList.remove('drag-over');
+            if (drag.type !== type) return;
+
+            const toSi  = parseInt(slot.dataset.si);
+            const toIdx = parseInt(slot.dataset.idx);
+
+            if (drag.from === 'bank') {
+                // Copy from bank → place in slot
+                SV[type][toSi][toIdx] = drag.value;
+                refreshSlot(type, toSi, toIdx);
+
+            } else if (drag.from === 'slot') {
+                // Move/swap between slots
+                if (drag.si === toSi && drag.idx === toIdx) return;
+                const prevVal = SV[type][toSi][toIdx];
+                SV[type][toSi][toIdx]     = drag.value;
+                SV[type][drag.si][drag.idx] = prevVal;
+                refreshSlot(type, toSi, toIdx);
+                refreshSlot(type, drag.si, drag.idx);
+            }
+            clearFeedback(type);
+        });
+    });
+}
+
+// ── Refresh one slot's content ─────────────────────────────────────────────
+function refreshSlot(type, si, idx, revealed = false) {
+    const slot = document.getElementById(`${type}-s-${si}-${idx}`);
+    if (!slot) return;
+    const val = SV[type][si][idx];
+
+    if (val === null) {
+        slot.innerHTML = `<span class="slot-hint">?</span>`;
+    } else {
+        const cls = 'tile-in-slot' + (revealed ? ' revealed' : '');
+        slot.innerHTML = `<div class="${cls}" draggable="true"
+            data-si="${si}" data-idx="${idx}" data-value="${val}">${val}</div>`;
+        // Attach dragstart to the new tile-in-slot
+        const t = slot.querySelector('.tile-in-slot');
+        t.addEventListener('dragstart', e => {
+            drag.from = 'slot'; drag.type = type;
+            drag.value = val; drag.si = si; drag.idx = idx;
+            t.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        t.addEventListener('dragend', () => t.classList.remove('dragging'));
+    }
+}
+
+// ── Clear all slot feedback (correct/wrong) ────────────────────────────────
+function clearFeedback(type) {
+    document.querySelectorAll(`[id^="${type}-s-"]`).forEach(s => s.classList.remove('correct','wrong'));
+    const r = document.getElementById(CFG[type].res);
+    r.className = 'result-banner'; r.textContent = '';
+}
+
+// ── Check answers ──────────────────────────────────────────────────────────
+function checkSort(type) {
+    const { steps } = ST[type];
+    let total = 0, correct = 0;
+    steps.forEach((s, si) => {
+        s.arr.forEach((expected, idx) => {
+            const slot = document.getElementById(`${type}-s-${si}-${idx}`);
+            slot.classList.remove('correct', 'wrong');
+            total++;
+            if (SV[type][si][idx] === expected) { slot.classList.add('correct'); correct++; }
+            else slot.classList.add('wrong');
+        });
+    });
+    const el = document.getElementById(CFG[type].res);
+    el.classList.add('visible');
+    if (correct === total) {
+        el.className = 'result-banner visible ok';
+        el.textContent = `All ${total} cells correct — excellent work!`;
+    } else {
+        el.className = 'result-banner visible err';
+        el.textContent = `${correct} / ${total} correct. Red cells need fixing. Use "Show Answers" to reveal correct values.`;
+    }
+}
+
+// ── Show all correct answers ───────────────────────────────────────────────
+function revealSort(type) {
+    const { steps } = ST[type];
+    steps.forEach((s, si) => {
+        s.arr.forEach((val, idx) => {
+            SV[type][si][idx] = val;
+            refreshSlot(type, si, idx, true);
+            const slot = document.getElementById(`${type}-s-${si}-${idx}`);
+            slot.classList.remove('correct', 'wrong');
+        });
+    });
+    const el = document.getElementById(CFG[type].res);
+    el.className = 'result-banner visible ok';
+    el.textContent = 'Answers revealed (purple tiles). Study the pattern, then reset and try again!';
+}
+
+// ── Reset all slots ────────────────────────────────────────────────────────
+function resetSort(type) {
+    const { steps } = ST[type];
+    steps.forEach((s, si) => {
+        s.arr.forEach((_, idx) => {
+            SV[type][si][idx] = null;
+            refreshSlot(type, si, idx);
+            const slot = document.getElementById(`${type}-s-${si}-${idx}`);
+            slot.classList.remove('correct', 'wrong');
+        });
+    });
+    clearResult(type);
+}
+
+function clearResult(type) {
+    const el = document.getElementById(CFG[type].res);
+    el.className = 'result-banner'; el.textContent = '';
+}
+</script>
+</body>
+</html>

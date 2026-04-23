@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Sort &amp; Merge Sort – CPCS204</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true, theme:'base', securityLevel:'loose'});</script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+            background:linear-gradient(135deg,#0d9488 0%,#14b8a6 50%,#06b6d4 100%);
+            min-height:100vh; padding:20px; line-height:1.6; color:#334155;
+        }
+        .container{
+            max-width:1100px; margin:0 auto; background:white;
+            border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden;
+        }
+        /* ── Header ── */
+        header{
+            background:linear-gradient(135deg,#0d9488,#14b8a6,#06b6d4);
+            color:white; padding:40px 30px; text-align:center;
+        }
+        header .back-link{
+            display:inline-block; margin-bottom:16px;
+            background:rgba(255,255,255,0.2); color:white;
+            padding:6px 16px; border-radius:20px; text-decoration:none;
+            font-size:0.9em; transition:background 0.3s;
+        }
+        header .back-link:hover{background:rgba(255,255,255,0.35);}
+        header h1{font-size:2.4em; margin-bottom:8px;}
+        header p{font-size:1.1em; opacity:0.9;}
+        .header-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+        .badge{
+            background:rgba(255,255,255,0.2); padding:6px 16px;
+            border-radius:20px; font-size:0.9em; font-weight:600;
+        }
+        /* ── Sticky Nav ── */
+        nav.section-nav{
+            background:#f8fafc; padding:12px 20px;
+            display:flex; gap:8px; flex-wrap:wrap;
+            border-bottom:2px solid #e2e8f0;
+            position:sticky; top:0; z-index:100;
+        }
+        nav.section-nav a{
+            padding:7px 14px; background:white;
+            border:2px solid #14b8a6; color:#0d9488;
+            border-radius:20px; text-decoration:none;
+            font-weight:600; font-size:0.85em; transition:all 0.25s;
+            white-space:nowrap;
+        }
+        nav.section-nav a:hover{background:#14b8a6;color:white;}
+        /* ── Content ── */
+        .content{padding:40px 40px 60px;}
+        section{margin-bottom:70px; scroll-margin-top:70px;}
+        h2{
+            color:#0d9488; font-size:1.8em; margin-bottom:20px;
+            border-bottom:3px solid #14b8a6; padding-bottom:10px;
+        }
+        h3{color:#0f766e; font-size:1.35em; margin:28px 0 14px;}
+        h4{color:#155e75; font-size:1.1em; margin:20px 0 10px;}
+        p{margin-bottom:14px; line-height:1.75;}
+        ul,ol{margin:10px 0 14px 28px;}
+        li{margin:6px 0;}
+        /* ── Callout Boxes ── */
+        .box{padding:18px 22px; margin:20px 0; border-radius:8px; border-left:5px solid;}
+        .box-teal{background:#f0fdfa; border-color:#14b8a6;}
+        .box-yellow{background:#fefce8; border-color:#eab308;}
+        .box-green{background:#f0fdf4; border-color:#22c55e;}
+        .box-purple{background:#faf5ff; border-color:#a855f7;}
+        .box-blue{background:#eff6ff; border-color:#3b82f6;}
+        .box-red{background:#fff1f2; border-color:#f43f5e;}
+        .box-orange{background:#fff7ed; border-color:#f97316;}
+        /* ── Complexity Cards ── */
+        .complexity-cards{
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:16px; margin:20px 0;
+        }
+        .complexity-card{
+            padding:20px; border-radius:12px; text-align:center; border:2px solid;
+        }
+        .complexity-card.quad{background:#fff1f2; border-color:#f43f5e; color:#9f1239;}
+        .complexity-card.log{background:#eff6ff; border-color:#3b82f6; color:#1e3a8a;}
+        .complexity-card .big-o{font-size:1.8em; font-weight:800; margin:8px 0;}
+        .complexity-card .name{font-size:0.9em; opacity:0.8;}
+        /* ── Code block ── */
+        .code-container{margin:20px 0;}
+        .code-header{
+            background:#14b8a6;color:white;padding:12px 20px;
+            border-radius:8px 8px 0 0;cursor:pointer;
+            display:flex;justify-content:space-between;align-items:center;
+            font-weight:700; transition:background 0.2s;
+        }
+        .code-header:hover{background:#0d9488;}
+        .code-toggle{transition:transform 0.3s;}
+        .code-toggle.collapsed{transform:rotate(-90deg);}
+        .code-block{
+            background:#0f172a;color:#e2e8f0;padding:22px 26px;
+            border-radius:0 0 8px 8px;overflow-x:auto;
+            font-family:'Courier New',monospace;font-size:1em;
+            line-height:1.75;white-space:pre;
+            transition:max-height 0.35s ease,padding 0.35s ease;
+        }
+        .code-block.collapsed{max-height:0!important;padding:0 26px;overflow:hidden;}
+        .kw{color:#7dd3fc;}.cm{color:#64748b;}.nm{color:#a5f3fc;}.st{color:#86efac;}
+        /* ── Math box ── */
+        .math-box{
+            background:#faf5ff; border:2px solid #a855f7;
+            border-radius:12px; padding:24px; margin:20px 0; text-align:center;
+        }
+        .math-formula{
+            font-size:1.2em; color:#6d28d9; font-style:italic;
+            margin:8px 0; font-family:'Times New Roman',serif;
+        }
+        .math-step{margin:6px 0; font-size:1em; color:#4c1d95;}
+        .frac{display:inline-block;text-align:center;vertical-align:middle;font-family:'Times New Roman',serif;font-style:italic;line-height:1.1;}
+        .frac .num{display:block;border-bottom:1.5px solid #6d28d9;padding:0 5px 2px;}
+        .frac .den{display:block;padding:2px 5px 0;}
+        /* ── Mermaid ── */
+        .mermaid{display:flex;justify-content:center;margin:20px 0;}
+        .mermaid svg{max-width:100%;height:auto;}
+        /* ── Recursion tree visual ── */
+        .rec-tree{
+            background:#f0fdf4; border:2px solid #22c55e;
+            border-radius:12px; padding:24px; margin:20px 0;
+            font-family:'Courier New',monospace; font-size:0.92em;
+            overflow-x:auto; line-height:2;
+        }
+        .rec-level{display:flex; gap:6px; justify-content:center; margin:4px 0; flex-wrap:wrap;}
+        .rec-node{
+            background:white; border:2px solid #14b8a6; border-radius:8px;
+            padding:4px 10px; color:#0d9488; font-weight:700; font-size:0.88em;
+            white-space:nowrap;
+        }
+        .rec-node.base{background:#bbf7d0; border-color:#22c55e; color:#065f46;}
+        .rec-work{
+            text-align:right; color:#64748b; font-size:0.85em;
+            padding-right:16px; font-style:italic; min-width:90px;
+        }
+        .rec-row{display:flex; align-items:center; margin:2px 0;}
+        /* ── Comparison table ── */
+        .cmp-table{width:100%;border-collapse:collapse;font-size:0.95em;margin:20px 0;}
+        .cmp-table th{
+            background:linear-gradient(135deg,#0d9488,#14b8a6);
+            color:white; padding:12px 16px; text-align:center;
+        }
+        .cmp-table th:first-child{text-align:left; border-radius:8px 0 0 0;}
+        .cmp-table th:last-child{border-radius:0 8px 0 0;}
+        .cmp-table td{padding:11px 16px; border-bottom:1px solid #e2e8f0; text-align:center;}
+        .cmp-table td:first-child{text-align:left; font-weight:700;}
+        .cmp-table tr:nth-child(even){background:#f8fafc;}
+        .cmp-table tr:hover{background:#f0fdfa;}
+        .good{color:#16a34a; font-weight:700;}
+        .bad{color:#dc2626; font-weight:700;}
+        .mid{color:#d97706; font-weight:700;}
+        /* ── Simulation launch box ── */
+        .sim-launch{
+            border:2px solid #14b8a6; border-radius:12px;
+            padding:30px; margin:24px 0; text-align:center;
+            background:linear-gradient(135deg,#f0fdfa,#e0f2fe);
+            box-shadow:0 4px 20px rgba(20,184,166,0.15);
+        }
+        .sim-launch p{margin-bottom:18px; color:#0f766e; font-size:1em;}
+        .sim-btn{
+            display:inline-block;
+            background:linear-gradient(135deg,#0d9488,#14b8a6);
+            color:white; text-decoration:none;
+            padding:14px 36px; border-radius:30px;
+            font-size:1.1em; font-weight:700;
+            box-shadow:0 4px 15px rgba(20,184,166,0.4);
+            transition:transform 0.2s, box-shadow 0.2s;
+            letter-spacing:0.5px;
+        }
+        .sim-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 6px 20px rgba(20,184,166,0.55);
+        }
+        .sim-btn .arrow{font-size:1.2em; margin-right:8px;}
+        /* ── Classroom Motivation ── */
+        .story-intro{
+            background:linear-gradient(135deg,#eff6ff,#dbeafe);
+            border:2px solid #3b82f6; border-radius:12px;
+            padding:20px 24px; margin:20px 0;
+        }
+        .story-step{
+            display:flex; gap:14px; align-items:flex-start;
+            margin:16px 0; padding:16px 18px;
+            background:#f8fafc; border-radius:10px;
+            border-left:4px solid #14b8a6;
+        }
+        .step-num{
+            min-width:34px; height:34px; border-radius:50%;
+            background:#14b8a6; color:white;
+            font-weight:800; font-size:1em;
+            display:flex; align-items:center; justify-content:center;
+            flex-shrink:0; margin-top:2px;
+        }
+        .student-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0;}
+        .student-card{
+            display:flex; flex-direction:column; align-items:center;
+            gap:3px; padding:10px 8px; border-radius:10px;
+            background:#f8fafc; border:2px solid #e2e8f0; min-width:68px;
+        }
+        .student-card .s-face{font-size:1.9em;line-height:1;}
+        .student-card .s-name{font-weight:700;color:#334155;font-size:0.82em;}
+        .student-card .s-phone{
+            background:#0f172a; color:#4ade80;
+            font-family:'Courier New',monospace;
+            font-size:0.8em; font-weight:700;
+            padding:2px 7px; border-radius:4px; letter-spacing:0.5px;
+        }
+        .student-card.left-card{background:#eff6ff;border-color:#3b82f6;}
+        .student-card.left-card .s-phone{background:#1e40af;color:#bfdbfe;}
+        .student-card.pivot-card{
+            background:#fff1f2; border-color:#ef4444;
+            box-shadow:0 0 0 3px rgba(239,68,68,0.2);
+        }
+        .student-card.pivot-card .s-name{color:#b91c1c;}
+        .student-card.pivot-card .s-phone{background:#b91c1c;color:white;}
+        .student-card.right-card{background:#f0fdf4;border-color:#22c55e;}
+        .student-card.right-card .s-phone{background:#166534;color:#bbf7d0;}
+        .partition-wrap{
+            display:flex; align-items:stretch; margin:20px 0;
+            border-radius:12px; overflow:hidden; border:2px solid #e2e8f0;
+        }
+        .p-group{padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;}
+        .p-group.left-grp{background:#eff6ff;flex:1;}
+        .p-group.pivot-grp{
+            background:#fff1f2;
+            border-left:3px solid #ef4444; border-right:3px solid #ef4444;
+            flex:0; min-width:100px;
+        }
+        .p-group.right-grp{background:#f0fdf4;flex:1;}
+        .p-group-label{font-weight:700;font-size:0.75em;text-transform:uppercase;letter-spacing:0.5px;text-align:center;}
+        .p-group.left-grp .p-group-label{color:#1e40af;}
+        .p-group.pivot-grp .p-group-label{color:#b91c1c;}
+        .p-group.right-grp .p-group-label{color:#166534;}
+        /* ── Merge Array Visualizer ── */
+        .mv-container{background:#f8fafc;border:2px solid #14b8a6;border-radius:12px;padding:28px;margin:24px 0;}
+        .mv-arrays{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;align-items:flex-start;}
+        .mv-array-group{display:flex;flex-direction:column;align-items:center;gap:6px;}
+        .mv-arr-label{font-weight:700;font-size:0.88em;color:#0f766e;text-transform:uppercase;letter-spacing:0.5px;}
+        .mv-cells{display:flex;}
+        .mv-cell{
+            width:56px;height:56px;border:2px solid #14b8a6;
+            display:flex;align-items:center;justify-content:center;
+            font-weight:700;font-size:1.15em;color:#0d9488;background:white;
+            transition:all 0.3s;
+        }
+        .mv-cell+.mv-cell{border-left:none;}
+        .mv-cell.mv-active{background:#14b8a6;color:white;transform:scale(1.1);z-index:1;border-color:#0d9488;box-shadow:0 4px 14px rgba(20,184,166,0.45);}
+        .mv-cell.mv-done{background:#f1f5f9;color:#cbd5e1;border-color:#e2e8f0;}
+        .mv-ptrs{display:flex;}
+        .mv-ptr-cell{width:56px;text-align:center;font-size:0.8em;font-weight:700;color:#0d9488;height:22px;display:flex;align-items:center;justify-content:center;}
+        .mv-result-cells{display:flex;}
+        .mv-rcell{
+            width:56px;height:56px;border:2px solid #e2e8f0;background:#f8fafc;
+            display:flex;align-items:center;justify-content:center;
+            font-weight:700;font-size:1.15em;color:#94a3b8;transition:all 0.35s;
+        }
+        .mv-rcell+.mv-rcell{border-left:none;}
+        .mv-rcell.mv-filled{background:#f0fdf4;color:#15803d;border-color:#22c55e;}
+        .mv-rcell.mv-just{background:#22c55e;color:white;border-color:#16a34a;transform:scale(1.1);}
+        .mv-status{
+            text-align:center;padding:14px 18px;border-radius:8px;margin:16px 0;
+            font-size:0.95em;font-weight:600;min-height:58px;
+            display:flex;align-items:center;justify-content:center;
+            border:1.5px solid #3b82f6;background:#eff6ff;color:#1e3a8a;
+            transition:background 0.3s,border-color 0.3s,color 0.3s;
+        }
+        .mv-status.mv-done-status{border-color:#22c55e;background:#f0fdf4;color:#15803d;}
+        .mv-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+        .mv-btn{padding:10px 24px;border:none;border-radius:20px;font-size:0.9em;font-weight:700;cursor:pointer;transition:all 0.2s;}
+        .mv-btn-primary{background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;}
+        .mv-btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(20,184,166,0.4);}
+        .mv-btn-primary:disabled{background:#94a3b8;cursor:not-allowed;transform:none;box-shadow:none;}
+        .mv-btn-sec{background:white;color:#0d9488;border:2px solid #14b8a6;}
+        .mv-btn-sec:hover{background:#f0fdfa;}
+        .mv-step-info{text-align:center;font-size:0.82em;color:#64748b;margin-top:10px;}
+        .mv-vs{font-size:1.5em;font-weight:800;color:#14b8a6;display:flex;align-items:center;padding-top:26px;}
+        /* ── Responsive ── */
+        @media(max-width:640px){
+            .content{padding:20px 16px 40px;}
+            h2{font-size:1.4em;}
+            .partition-wrap{flex-direction:column;}
+            .p-group.pivot-grp{min-width:unset;border-left:none;border-right:none;border-top:3px solid #ef4444;border-bottom:3px solid #ef4444;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+    <a href="index.html" class="back-link">← Sorting Hub</a>
+    <h1>Quick Sort &amp; Merge Sort</h1>
+    <p>CPCS204 — Data Structures I</p>
+    <div class="header-badges">
+        <span class="badge">Module 13</span>
+        <span class="badge">Logarithmic Sorting — O(n log n)</span>
+        <span class="badge">Quick Sort · Merge Sort</span>
+    </div>
+</header>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav class="section-nav">
+    <a href="#intro">1 · Why O(n log n)?</a>
+    <a href="#overview">2 · Overview</a>
+    <a href="#quicksort">3 · Quick Sort</a>
+    <a href="#mergesort">4 · Merge Sort</a>
+    <a href="#comparison">5 · Comparison</a>
+</nav>
+
+<div class="content">
+
+<!-- ══════════════ SECTION 1 ══════════════ -->
+<section id="intro">
+    <h2>1 · Why Do We Need O(n log n)?</h2>
+
+    <p>
+        In the previous chapter we studied <strong>quadratic sorting algorithms</strong> —
+        Selection Sort, Insertion Sort, and Bubble Sort. They are simple and educational,
+        but their O(n²) complexity makes them impractical for large datasets.
+    </p>
+
+    <div class="complexity-cards">
+        <div class="complexity-card quad">
+            <div class="big-o">O(n²)</div>
+            <div class="name">Quadratic</div>
+            <p style="font-size:0.85em;margin-top:8px;">n = 1,000,000 → 10<sup>12</sup> operations<br>Too slow for real-world data</p>
+        </div>
+        <div class="complexity-card log">
+            <div class="big-o">O(n log n)</div>
+            <div class="name">Logarithmic</div>
+            <p style="font-size:0.85em;margin-top:8px;">n = 1,000,000 → ~20,000,000 operations<br>50,000× faster than O(n²)!</p>
+        </div>
+    </div>
+
+    <div class="box box-teal">
+        <strong>Key Question:</strong> Can we sort faster than O(n²)? <br>
+        <strong>Answer:</strong> Yes — by using <em>Divide and Conquer</em>.
+        Instead of comparing every element with every other element,
+        we <em>divide</em> the problem in half at each step, solve each half,
+        then <em>combine</em> the results. This reduces the number of levels to log₂(n).
+    </div>
+
+    <h3>The Divide and Conquer Strategy</h3>
+    <ol>
+        <li><strong>Divide</strong> — Split the problem into smaller sub-problems</li>
+        <li><strong>Conquer</strong> — Solve each sub-problem recursively</li>
+        <li><strong>Combine</strong> — Merge the solved sub-problems into a final solution</li>
+    </ol>
+
+    <div class="box box-yellow">
+        <strong>Why log n levels?</strong> If we halve the array at each step, starting from n elements:
+        n → n/2 → n/4 → n/8 → … → 1.
+        The number of times we can halve n before reaching 1 is <strong>log₂(n)</strong>.
+        At n = 1,000,000, that is only about 20 levels.
+    </div>
+</section>
+
+<!-- ══════════════ SECTION 2 ══════════════ -->
+<section id="overview">
+    <h2>2 · Chapter Overview</h2>
+
+    <p>We study two O(n log n) sorting algorithms in this chapter, both based on Divide and Conquer:</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;">
+        <div class="box box-blue" style="margin:0;">
+            <h4 style="margin-top:0;color:#1e40af;">Quick Sort</h4>
+            <ul style="margin:8px 0 0 18px;font-size:0.95em;">
+                <li>Choose a <strong>pivot</strong> element</li>
+                <li>Partition: elements &lt; pivot go left, elements &gt; pivot go right</li>
+                <li>Recursively sort each partition</li>
+                <li>Average O(n log n), Worst O(n²)</li>
+                <li>In-place (no extra array needed)</li>
+            </ul>
+        </div>
+        <div class="box box-green" style="margin:0;">
+            <h4 style="margin-top:0;color:#065f46;">Merge Sort</h4>
+            <ul style="margin:8px 0 0 18px;font-size:0.95em;">
+                <li>Divide array in half</li>
+                <li>Recursively sort each half</li>
+                <li>Merge two sorted halves into one</li>
+                <li><strong>Always</strong> O(n log n) — guaranteed</li>
+                <li>Requires O(n) extra space</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>The Recurrence — Why Both Are O(n log n)</h3>
+    <p>Both algorithms share the same recurrence relation in their average/typical case:</p>
+
+    <div class="math-box">
+        <p class="math-formula">T(n) = 2 · T<span style="font-size:0.9em;">(</span><span class="frac" style="font-size:0.85em;"><span class="num">n</span><span class="den">2</span></span><span style="font-size:0.9em;">)</span> + n</p>
+        <p class="math-step">Solving by substitution (or Master Theorem):</p>
+        <p class="math-formula" style="margin-top:10px;">T(n) = n log₂ n &nbsp;∈&nbsp; O(n log n)</p>
+        <p class="math-step">At each level: O(n) work. Number of levels: log₂(n). Total: O(n log n).</p>
+    </div>
+</section>
+
+<!-- ══════════════ SECTION 3: QUICK SORT ══════════════ -->
+<section id="quicksort">
+    <h2>3 · Quick Sort</h2>
+
+    <!-- ── CLASSROOM MOTIVATION ── -->
+    <h3>Classroom Motivation — The Story Behind Quick Sort</h3>
+
+    <div class="story-intro">
+        <p style="margin-bottom:8px;"><strong>Imagine this classroom scenario...</strong></p>
+        <p style="margin:0;">
+            Your teacher wants to arrange <strong>8 students</strong> in a single line from shortest to tallest.
+            Each student holds a phone that displays their exact height.
+            They are currently standing in a <em>random order</em>.
+            How should the teacher sort them efficiently?
+        </p>
+    </div>
+
+    <h4 style="color:#155e75;margin:24px 0 10px;">The Students — Currently in Random Order:</h4>
+    <div class="student-row">
+        <div class="student-card"><span class="s-face">👧</span><span class="s-name">Sara</span><span class="s-phone">162 cm</span></div>
+        <div class="student-card"><span class="s-face">👦</span><span class="s-name">Ali</span><span class="s-phone">155 cm</span></div>
+        <div class="student-card"><span class="s-face">👦</span><span class="s-name">Fahad</span><span class="s-phone">178 cm</span></div>
+        <div class="student-card"><span class="s-face">👧</span><span class="s-name">Nora</span><span class="s-phone">148 cm</span></div>
+        <div class="student-card"><span class="s-face">👦</span><span class="s-name">Omar</span><span class="s-phone">170 cm</span></div>
+        <div class="student-card"><span class="s-face">👧</span><span class="s-name">Hana</span><span class="s-phone">145 cm</span></div>
+        <div class="student-card"><span class="s-face">👦</span><span class="s-name">Rami</span><span class="s-phone">165 cm</span></div>
+        <div class="student-card"><span class="s-face">👧</span><span class="s-name">Lina</span><span class="s-phone">158 cm</span></div>
+    </div>
+
+    <div class="story-step">
+        <div class="step-num">1</div>
+        <div>
+            <strong>Naive Approach: Compare Every Student with Every Other — O(n²)</strong>
+            <p style="margin:8px 0 0;">
+                Take Ali (155 cm). Compare him with Sara (162 cm) — Sara is taller.
+                Compare Ali with Fahad (178 cm) — Fahad is taller. And so on for every pair.
+                You must compare <em>every student with every other student</em>.
+            </p>
+            <p style="margin:6px 0 0;">
+                For 8 students: &nbsp;<strong>8 × 7 / 2 = 28 comparisons.</strong><br>
+                For 1,000 students: &nbsp;<strong>499,500 comparisons.</strong><br>
+                For 1,000,000 students: &nbsp;<strong>500 billion comparisons!</strong>
+                &nbsp;→&nbsp;<span class="bad">O(n²)</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="story-step">
+        <div class="step-num">2</div>
+        <div>
+            <strong>The Smart Idea: Pick One Student as a "Divider" (Pivot)</strong>
+            <p style="margin:8px 0 6px;">
+                Pick <strong>Sara (162 cm)</strong> — the first student in line — and call her the <em>pivot</em>.
+                Now ask each of the other 7 students one simple question:
+            </p>
+            <div style="padding:10px 16px;background:white;border-radius:8px;border-left:3px solid #14b8a6;margin-bottom:8px;">
+                "Are you <strong>shorter</strong> than Sara (162 cm)? → Step to the <strong>LEFT</strong>."<br>
+                "Are you <strong>taller</strong> than Sara (162 cm)? → Step to the <strong>RIGHT</strong>."
+            </div>
+            <p style="margin:0;">
+                Only <strong>7 comparisons</strong> to split the entire group.
+                And Sara is now in her <strong>correct final position — permanently.</strong>
+                She never needs to move again.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Partition visual ── -->
+    <div class="partition-wrap">
+        <div class="p-group left-grp">
+            <div class="p-group-label">◀ Shorter than Sara (162 cm)</div>
+            <div class="student-row">
+                <div class="student-card left-card"><span class="s-face">👦</span><span class="s-name">Ali</span><span class="s-phone">155 cm</span></div>
+                <div class="student-card left-card"><span class="s-face">👧</span><span class="s-name">Nora</span><span class="s-phone">148 cm</span></div>
+                <div class="student-card left-card"><span class="s-face">👧</span><span class="s-name">Hana</span><span class="s-phone">145 cm</span></div>
+                <div class="student-card left-card"><span class="s-face">👧</span><span class="s-name">Lina</span><span class="s-phone">158 cm</span></div>
+            </div>
+            <div style="font-size:0.8em;color:#1e40af;font-weight:600;">4 students · still unsorted</div>
+        </div>
+        <div class="p-group pivot-grp">
+            <div class="p-group-label">★ Pivot</div>
+            <div class="student-card pivot-card">
+                <span class="s-face">👧</span>
+                <span class="s-name">Sara</span>
+                <span class="s-phone">162 cm</span>
+            </div>
+            <div style="font-size:0.75em;color:#b91c1c;font-weight:700;text-align:center;">✓ Final position!</div>
+        </div>
+        <div class="p-group right-grp">
+            <div class="p-group-label">Taller than Sara (162 cm) ▶</div>
+            <div class="student-row">
+                <div class="student-card right-card"><span class="s-face">👦</span><span class="s-name">Fahad</span><span class="s-phone">178 cm</span></div>
+                <div class="student-card right-card"><span class="s-face">👦</span><span class="s-name">Omar</span><span class="s-phone">170 cm</span></div>
+                <div class="student-card right-card"><span class="s-face">👦</span><span class="s-name">Rami</span><span class="s-phone">165 cm</span></div>
+            </div>
+            <div style="font-size:0.8em;color:#166534;font-weight:600;">3 students · still unsorted</div>
+        </div>
+    </div>
+
+    <div class="story-step">
+        <div class="step-num">3</div>
+        <div>
+            <strong>Now Sort Each Group Independently — Divide and Conquer!</strong>
+            <p style="margin:8px 0 0;">
+                The left group (4 students) and the right group (3 students) are
+                <em>completely independent</em> — they will never need to compare with each other again,
+                because we already know every student on the left is shorter than every student on the right.
+            </p>
+            <p style="margin:8px 0 0;">
+                Apply the <em>exact same pivot idea</em> recursively inside each group: pick a pivot,
+                ask everyone to go left or right, repeat. Each level of recursion does at most
+                <strong>n comparisons in total</strong> across all groups at that level.
+                With balanced splits there are only <strong>log₂(8) = 3 levels</strong>:
+            </p>
+            <div style="margin:8px 0 0;padding:10px 14px;background:white;border-radius:6px;font-weight:700;color:#0d9488;border-left:3px solid #14b8a6;">
+                3 levels × 8 comparisons per level = <strong>24 comparisons</strong>
+                &nbsp;vs&nbsp; 28 for the naive approach
+                &nbsp;→&nbsp; <span class="good">O(n log n)</span>
+            </div>
+            <p style="margin:8px 0 0;">
+                For 1,000,000 students: only <strong>~20,000,000 comparisons</strong>
+                instead of 500 billion. That is <strong>25,000× faster!</strong>
+            </p>
+        </div>
+    </div>
+
+    <div class="story-step" style="border-left-color:#eab308;background:#fefce8;">
+        <div class="step-num" style="background:#d97706;">!</div>
+        <div>
+            <strong>The Big Challenge: What if You Pick the Wrong Pivot?</strong>
+            <p style="margin:8px 0 0;">
+                What if, instead of Sara (162 cm), we had picked <strong>Hana (145 cm)</strong> — the shortest student?
+                All 7 remaining students are taller → they <em>all</em> go to the right. The left side is empty.
+                We only shrank the problem by 1 student. This repeats n times:
+            </p>
+            <p style="margin:8px 0 0;">
+                <strong>n levels × n comparisons per level = <span class="bad">O(n²)</span> — same as the naive approach!</strong>
+            </p>
+            <p style="margin:8px 0 0;font-style:italic;color:#92400e;">
+                Choosing a good pivot is the <strong>central challenge of Quick Sort</strong>.
+                How do you reliably find the "middle" student? This is an active research problem in computer science —
+                it is called the <em>pivot selection problem</em> and is still studied today.
+            </p>
+        </div>
+    </div>
+
+    <div class="box box-teal">
+        <strong>This is exactly what Quick Sort does!</strong>
+        It picks a pivot element, partitions everything smaller to the left and everything larger to the right
+        in a single pass, then recursively repeats on each partition.
+        Despite the worst-case risk, Quick Sort is the most widely used sorting algorithm in practice
+        due to its outstanding speed and cache performance.
+    </div>
+
+    <hr style="margin:32px 0;border:none;border-top:2px solid #e2e8f0;">
+
+    <div class="box box-blue">
+        <strong>Core Idea:</strong> Choose a <em>pivot</em> element.
+        Rearrange (partition) the array so everything <strong>smaller than the pivot</strong>
+        is on the left and everything <strong>larger</strong> is on the right.
+        The pivot is now in its <em>correct final position</em>.
+        Recursively apply the same process to each half.
+    </div>
+
+    <h3>How It Works — Hoare Partition Scheme</h3>
+    <ol>
+        <li>Choose a pivot element. The pivot can be selected randomly, or using other strategies (first, last, median-of-three). In this tutorial we use the <strong>first element A[l]</strong> as the pivot.</li>
+        <li><strong>Partition</strong> the array around the pivot:
+            <ul>
+                <li>Pointer <strong>i</strong> scans from the left, looking for elements <em>greater</em> than the pivot.</li>
+                <li>Pointer <strong>j</strong> scans from the right, looking for elements <em>smaller or equal</em> to the pivot.</li>
+                <li>When both stop, swap A[i] and A[j].</li>
+                <li>When i ≥ j, place the pivot at position j — it is now in its final sorted position.</li>
+            </ul>
+        </li>
+        <li>Recursively sort the left sub-array (indices l … j−1) and the right sub-array (j+1 … h).</li>
+        <li>Base case: a sub-array of size 0 or 1 is already sorted — stop.</li>
+    </ol>
+
+    <h3>Algorithm Analysis</h3>
+    <div class="math-box">
+        <p class="math-step"><strong>Average Case and Best Case — O(n log n):</strong></p>
+        <p class="math-step">Each partition splits the array roughly in half → log₂(n) levels × O(n) work per level</p>
+        <p class="math-formula" style="margin-top:10px;">T(n) = 2 · T<span style="font-size:0.9em;">(</span><span class="frac" style="font-size:0.85em;"><span class="num">n</span><span class="den">2</span></span><span style="font-size:0.9em;">)</span> + n &nbsp;&nbsp;→&nbsp;&nbsp; O(n log n)</p>
+
+        <hr style="margin:16px 0;border-color:#c4b5fd;">
+        <p class="math-step"><strong>Worst Case — O(n²):</strong></p>
+        <p class="math-step">Occurs when the pivot is always the smallest or largest element (sorted or reverse-sorted input).</p>
+        <p class="math-step">Each partition produces one sub-array of size n−1 and one of size 0 → n levels → O(n) work each</p>
+        <p class="math-formula" style="margin-top:10px;">T(n) = T(n−1) + n &nbsp;&nbsp;→&nbsp;&nbsp; O(n²)</p>
+
+        <div class="box box-yellow" style="text-align:left;margin-top:14px;">
+            <strong>Avoiding the worst case:</strong> Choose a random pivot, or use the
+            <em>median-of-three</em> strategy (take the median of first, middle, and last elements).
+            In practice, Quick Sort is often the fastest algorithm due to excellent cache performance.
+        </div>
+    </div>
+
+    <h3>Recursion Tree (Average Case, n = 8)</h3>
+    <div class="mermaid">
+flowchart TD
+    L0["[0..7]  n = 8"] --> L1a["[0..3]  n = 4"]
+    L0 --> L1b["[4..7]  n = 4"]
+    L1a --> L2a["[0..1]"]
+    L1a --> L2b["[2..3]"]
+    L1b --> L2c["[4..5]"]
+    L1b --> L2d["[6..7]"]
+    L2a --> B0["[0]"]
+    L2a --> B1["[1]"]
+    L2b --> B2["[2]"]
+    L2b --> B3["[3]"]
+    L2c --> B4["[4]"]
+    L2c --> B5["[5]"]
+    L2d --> B6["[6]"]
+    L2d --> B7["[7]"]
+
+    style L0  fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a
+    style L1a fill:#e0f2fe,stroke:#14b8a6,color:#0d9488
+    style L1b fill:#e0f2fe,stroke:#14b8a6,color:#0d9488
+    style L2a fill:#f0fdfa,stroke:#14b8a6,color:#0d9488
+    style L2b fill:#f0fdfa,stroke:#14b8a6,color:#0d9488
+    style L2c fill:#f0fdfa,stroke:#14b8a6,color:#0d9488
+    style L2d fill:#f0fdfa,stroke:#14b8a6,color:#0d9488
+    style B0  fill:#bbf7d0,stroke:#22c55e,color:#065f46
+    style B1  fill:#bbf7d0,stroke:#22c55e,color:#065f46
+    style B2  fill:#bbf7d0,stroke:#22c55e,color:#065f46
+    style B3  fill:#bbf7d0,stroke:#22c55e,color:#065f46
+    style B4  fill:#bbf7d0,stroke:#22c55e,color:#065f46
+    style B5  fill:#bbf7d0,stroke:#22c55e,color:#065f46
+    style B6  fill:#bbf7d0,stroke:#22c55e,color:#065f46
+    style B7  fill:#bbf7d0,stroke:#22c55e,color:#065f46
+    </div>
+    <p style="text-align:center;margin-top:14px;color:#0d9488;font-weight:700;">
+        log₂(8) = 3 levels &nbsp;×&nbsp; 8 operations per level &nbsp;=&nbsp; 24 total &nbsp;→&nbsp; O(n log n)
+    </p>
+
+    <h3>Java Implementation</h3>
+    <div class="code-container">
+        <div class="code-header" onclick="toggleCode('qs-code')">
+            <span>Quick Sort — Hoare Partition Scheme (Java)</span><span class="code-toggle" id="qs-code-toggle">▼</span>
+        </div>
+        <pre class="code-block" id="qs-code"><span class="cm">// ═══════════════════════════════════════════════════════════════════════
+//  PART 1 — quickSort   (the main recursive function)
+//  Goal : sort the sub-array  A[l .. h]  in ascending order.
+// ═══════════════════════════════════════════════════════════════════════</span>
+<span class="kw">public static void</span> quickSort(<span class="kw">int</span>[] A, <span class="kw">int</span> l, <span class="kw">int</span> h) {
+
+    <span class="cm">// Base case: if the sub-array has 0 or 1 element it is already sorted → stop.</span>
+    <span class="kw">if</span> (l < h) {
+
+        <span class="cm">// Partition the array and receive the pivot's final sorted position j.</span>
+        <span class="kw">int</span> j = partition(A, l, h);
+
+        <span class="cm">// Recursively sort the LEFT  partition → all elements smaller than the pivot.</span>
+        quickSort(A, l, j - <span class="nm">1</span>);
+
+        <span class="cm">// Recursively sort the RIGHT partition → all elements greater than the pivot.</span>
+        quickSort(A, j + <span class="nm">1</span>, h);
+    }
+}
+
+
+<span class="cm">// ═══════════════════════════════════════════════════════════════════════
+//  PART 2 — partition   (Hoare Partition Scheme)
+//  Goal : rearrange A[l..h] so that
+//           A[l .. j]    contains elements  ≤ pivot   (left partition)
+//           A[j+1 .. h]  contains elements  > pivot   (right partition)
+//  Returns j — the pivot's final sorted index.
+// ═══════════════════════════════════════════════════════════════════════</span>
+<span class="kw">public static int</span> partition(<span class="kw">int</span>[] A, <span class="kw">int</span> l, <span class="kw">int</span> h) {
+
+    <span class="cm">// ── Choose the pivot ─────────────────────────────────────────────────
+    // Here we use the FIRST element A[l] as the pivot.
+    // The pivot can also be chosen randomly or by other strategies.</span>
+    <span class="kw">int</span> pivot = A[l];
+
+    <span class="cm">// ── Set up the two pointers ──────────────────────────────────────────
+    // i starts ONE STEP BEFORE the left boundary  → will scan to the RIGHT →
+    // j starts ONE STEP AFTER  the right boundary → will scan to the LEFT  ←
+    // Starting outside the range lets the do-while loops enter correctly.</span>
+    <span class="kw">int</span> i = l - <span class="nm">1</span>;
+    <span class="kw">int</span> j = h + <span class="nm">1</span>;
+
+
+    <span class="cm">// ── Outer loop — repeat until i and j cross each other ───────────────</span>
+    <span class="kw">while</span> (i < j) {
+
+        <span class="cm">// ── MOVE i TO THE RIGHT  → ───────────────────────────────────────
+        // Advance i one step at a time.
+        //   • While A[i] <= pivot : this element is small enough — it BELONGS
+        //     on the left side — keep moving right.
+        //   • Stop  when  A[i]  > pivot : this element is TOO BIG for the left
+        //     side — it is in the WRONG place and needs to move right.</span>
+        <span class="kw">do</span> {
+            i++;
+        } <span class="kw">while</span> (A[i] <= pivot);
+
+        <span class="cm">// ── MOVE j TO THE LEFT   ← ───────────────────────────────────────
+        // Advance j one step at a time (moving leftward).
+        //   • While A[j]  > pivot : this element is large enough — it BELONGS
+        //     on the right side — keep moving left.
+        //   • Stop  when  A[j] <= pivot : this element is TOO SMALL for the right
+        //     side — it is in the WRONG place and needs to move left.</span>
+        <span class="kw">do</span> {
+            j--;
+        } <span class="kw">while</span> (A[j] > pivot);
+
+        <span class="cm">// ── SWAP if i has NOT yet crossed j ──────────────────────────────
+        // Both pointers stopped on misplaced elements:
+        //   A[i] is too BIG  (> pivot) but sits on the LEFT  side — wrong place.
+        //   A[j] is too SMALL (≤ pivot) but sits on the RIGHT side — wrong place.
+        // Swapping them corrects both elements in one move.
+        //
+        // If i >= j the pointers have CROSSED — partitioning is complete.
+        // Do NOT swap — the loop condition (i < j) will exit on the next check.</span>
+        <span class="kw">if</span> (i < j) {
+            swap(A, i, j);
+        }
+
+    } <span class="cm">// ── end of outer while loop ──────────────────────────────────────────</span>
+
+
+    <span class="cm">// ── Place the pivot in its final sorted position ─────────────────────
+    // After the loop ends, j marks the boundary between the two partitions:
+    //     A[l .. j]    → all ≤ pivot   (left partition)
+    //     A[j+1 .. h]  → all  > pivot  (right partition)
+    //
+    // The pivot is still at A[l] (its original position).
+    // Swap A[l] with A[j] to move the pivot to index j — the centre.
+    // The pivot is now in its CORRECT FINAL SORTED POSITION.</span>
+    swap(A, l, j);
+
+    <span class="cm">// Return j so quickSort knows where to split for the two recursive calls.</span>
+    <span class="kw">return</span> j;
+}
+
+
+<span class="cm">// ═══════════════════════════════════════════════════════════════════════
+//  PART 3 — swap helper
+//  Exchanges the values at positions i and j inside the array.
+// ═══════════════════════════════════════════════════════════════════════</span>
+<span class="kw">private static void</span> swap(<span class="kw">int</span>[] A, <span class="kw">int</span> i, <span class="kw">int</span> j) {
+    <span class="kw">int</span> temp = A[i];    <span class="cm">// Step 1 — save A[i] in a temporary variable so we don't lose it</span>
+    A[i]      = A[j];   <span class="cm">// Step 2 — overwrite A[i] with the value from A[j]</span>
+    A[j]      = temp;   <span class="cm">// Step 3 — put the saved original value of A[i] into A[j]</span>
+}</pre>
+    </div>
+
+    <h4 style="color:#0f766e;margin:30px 0 16px;">Understanding the Code — Step by Step</h4>
+
+    <div class="story-step">
+        <div class="step-num">P</div>
+        <div>
+            <strong>Choosing the Pivot</strong>
+            <p style="margin:8px 0 0;">
+                <code style="background:#f0fdfa;padding:2px 6px;border-radius:4px;">pivot = A[l]</code> — we pick the <strong>first element</strong> of the current sub-array as the pivot value.
+                The pivot is the element that will end up in its <em>correct final sorted position</em> after one call to <code>partition()</code>.
+                The pivot value can also be chosen randomly — the two-pointer mechanism works the same way regardless of which element is chosen.
+            </p>
+        </div>
+    </div>
+
+    <div class="story-step">
+        <div class="step-num" style="background:#1d4ed8;">i →</div>
+        <div>
+            <strong>Moving pointer <code>i</code> to the RIGHT</strong>
+            <p style="margin:8px 0 4px;"><code style="background:#f0fdfa;padding:2px 6px;border-radius:4px;">i</code> starts at <code>l − 1</code> (one step before the left boundary). The <code>do { i++; } while (A[i] &lt;= pivot)</code> loop advances it rightward:</p>
+            <ul style="margin:6px 0 0 0;">
+                <li><strong>Keep going</strong> while <code>A[i] ≤ pivot</code> → the element is small enough, it <em>belongs on the left</em>.</li>
+                <li><strong>Stop</strong> when <code>A[i] &gt; pivot</code> → found an element that is <em>too big for the left side</em> — it needs to swap to the right.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="story-step">
+        <div class="step-num" style="background:#16a34a;">← j</div>
+        <div>
+            <strong>Moving pointer <code>j</code> to the LEFT</strong>
+            <p style="margin:8px 0 4px;"><code style="background:#f0fdfa;padding:2px 6px;border-radius:4px;">j</code> starts at <code>h + 1</code> (one step after the right boundary). The <code>do { j--; } while (A[j] &gt; pivot)</code> loop advances it leftward:</p>
+            <ul style="margin:6px 0 0 0;">
+                <li><strong>Keep going</strong> while <code>A[j] &gt; pivot</code> → the element is large enough, it <em>belongs on the right</em>.</li>
+                <li><strong>Stop</strong> when <code>A[j] ≤ pivot</code> → found an element that is <em>too small for the right side</em> — it needs to swap to the left.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="story-step">
+        <div class="step-num" style="background:#d97706;">↔</div>
+        <div>
+            <strong>Swapping the two misplaced elements</strong>
+            <p style="margin:8px 0 4px;">Both pointers stopped on elements that are in the wrong place. If <code>i &lt; j</code> (not yet crossed), call <code>swap(A, i, j)</code>:</p>
+            <ul style="margin:6px 0 8px 0;">
+                <li><code>A[i]</code> was too big on the left side → moves to the right ✓</li>
+                <li><code>A[j]</code> was too small on the right side → moves to the left ✓</li>
+            </ul>
+            <p style="margin:0;">After the swap, the <code>while (i &lt; j)</code> outer loop repeats — <code>i</code> and <code>j</code> continue scanning from where they stopped until they find the next pair of misplaced elements.</p>
+        </div>
+    </div>
+
+    <div class="story-step" style="border-left-color:#ef4444;background:#fff1f2;">
+        <div class="step-num" style="background:#ef4444;">i≥j</div>
+        <div>
+            <strong>When <code>i ≥ j</code> — pointers have crossed → loop exits</strong>
+            <p style="margin:8px 0 4px;">When <code>i</code> reaches or passes <code>j</code>, it means every element has been checked:</p>
+            <ul style="margin:6px 0 8px 0;">
+                <li>The <code>if (i &lt; j)</code> condition is <strong>false</strong> → no swap happens.</li>
+                <li>The outer <code>while (i &lt; j)</code> condition is also <strong>false</strong> → the loop exits.</li>
+            </ul>
+            <p style="margin:0;">The array is now partitioned: <code>A[l..j]</code> holds all elements ≤ pivot, and <code>A[j+1..h]</code> holds all elements &gt; pivot. Finally <code>swap(A, l, j)</code> moves the pivot from <code>A[l]</code> into <code>A[j]</code> — its correct sorted position forever.</p>
+        </div>
+    </div>
+
+    <h3>Step-by-Step Simulation</h3>
+    <p>Open the interactive simulation to explore the <strong>partition algorithm</strong> step by step.
+       Enter a custom array, choose a pivot index, and watch the Hoare scheme in action.</p>
+    <div class="sim-launch">
+        <p>Interactive simulation — enter any array, pick a pivot, and step through every swap.</p>
+        <a href="quicksort-simulation.html" target="_blank" class="sim-btn">
+            <span class="arrow">▶</span> Launch Quick Sort Simulation
+        </a>
+    </div>
+</section>
+
+<!-- ══════════════ SECTION 4: MERGE SORT ══════════════ -->
+<section id="mergesort">
+    <h2>4 · Merge Sort</h2>
+
+    <div class="box box-green">
+        <strong>Core Idea:</strong> Divide the array in half, recursively sort each half,
+        then <em>merge</em> the two sorted halves into one sorted array.
+        Unlike Quick Sort, no pivot or partitioning is needed — the "work"
+        happens entirely during the merge step.
+    </div>
+
+    <!-- ══ BIG DATA MOTIVATION ══ -->
+    <h3>Why Merge Sort Matters — The Big Data Problem</h3>
+
+    <div class="story-intro">
+        <p style="margin-bottom:8px;"><strong>A real-world challenge the professor poses to the class…</strong></p>
+        <p style="margin:0;">
+            Your company needs to sort a log file of <strong>10 GB</strong>,
+            but the server has only <strong>1–2 GB of RAM</strong>.
+            How do you sort a dataset that is 5× larger than your available memory?
+        </p>
+    </div>
+
+    <div class="story-step">
+        <div class="step-num">1</div>
+        <div>
+            <strong>Divide the 10 GB file into 5 chunks of 2 GB each</strong>
+            <p style="margin:8px 0 0;">
+                Load each 2 GB chunk into RAM one at a time, sort it completely
+                (using Quick Sort, for example — it fits in memory now!),
+                then write the sorted result back to disk. Repeat for all 5 chunks.
+                You now have <strong>5 sorted files</strong> on disk.
+            </p>
+        </div>
+    </div>
+
+    <!-- chunk diagram -->
+    <div style="display:flex;gap:10px;justify-content:center;align-items:center;margin:16px 0;flex-wrap:wrap;">
+        <div style="text-align:center;">
+            <div style="background:#fef9c3;border:2px solid #eab308;border-radius:8px;padding:12px 16px;font-weight:700;color:#92400e;font-size:0.9em;">
+                10 GB Dataset<br><span style="font-size:0.8em;font-weight:400;color:#a16207;">unsorted</span>
+            </div>
+        </div>
+        <div style="font-size:1.5em;color:#14b8a6;font-weight:800;">→</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+            <div style="background:#f0fdf4;border:2px solid #22c55e;border-radius:8px;padding:10px 14px;font-weight:700;color:#065f46;font-size:0.85em;text-align:center;">Chunk₁<br><span style="font-size:0.78em;color:#16a34a;">sorted ✓</span></div>
+            <div style="background:#f0fdf4;border:2px solid #22c55e;border-radius:8px;padding:10px 14px;font-weight:700;color:#065f46;font-size:0.85em;text-align:center;">Chunk₂<br><span style="font-size:0.78em;color:#16a34a;">sorted ✓</span></div>
+            <div style="background:#f0fdf4;border:2px solid #22c55e;border-radius:8px;padding:10px 14px;font-weight:700;color:#065f46;font-size:0.85em;text-align:center;">Chunk₃<br><span style="font-size:0.78em;color:#16a34a;">sorted ✓</span></div>
+            <div style="background:#f0fdf4;border:2px solid #22c55e;border-radius:8px;padding:10px 14px;font-weight:700;color:#065f46;font-size:0.85em;text-align:center;">Chunk₄<br><span style="font-size:0.78em;color:#16a34a;">sorted ✓</span></div>
+            <div style="background:#f0fdf4;border:2px solid #22c55e;border-radius:8px;padding:10px 14px;font-weight:700;color:#065f46;font-size:0.85em;text-align:center;">Chunk₅<br><span style="font-size:0.78em;color:#16a34a;">sorted ✓</span></div>
+        </div>
+        <div style="font-size:1.5em;color:#14b8a6;font-weight:800;">→</div>
+        <div style="text-align:center;">
+            <div style="background:#eff6ff;border:2px solid #3b82f6;border-radius:8px;padding:12px 16px;font-weight:700;color:#1e3a8a;font-size:0.9em;">
+                Final Sorted File<br><span style="font-size:0.8em;font-weight:400;color:#2563eb;">10 GB ✓</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-step">
+        <div class="step-num">2</div>
+        <div>
+            <strong>Merge the 5 sorted chunks into one final sorted file — without loading them all into RAM</strong>
+            <p style="margin:8px 0 0;">
+                Open all 5 sorted files simultaneously. Read just <strong>one record from each</strong>.
+                You now have 5 values in memory — pick the smallest, write it to the output file on disk,
+                then read the next record from the file that just contributed.
+                Repeat until all files are exhausted.
+            </p>
+            <p style="margin:8px 0 0;">
+                Memory used during the entire merge: <strong>only 5 records at a time</strong> —
+                no matter how many gigabytes the files are!
+            </p>
+        </div>
+    </div>
+
+    <div class="story-step" style="border-left-color:#a855f7;background:#faf5ff;">
+        <div class="step-num" style="background:#a855f7;">?</div>
+        <div>
+            <strong>Student: "Wait — to join two 2 GB sorted chunks, don't we need 4 GB of RAM?"</strong>
+            <p style="margin:8px 0 0;">
+                <strong>Great question!</strong> The answer is <em>no</em> — and this is the key insight of Merge Sort.
+                You do not need both files in memory at the same time.
+                You open both files, read <em>one element from each</em>, compare them,
+                write the smaller to the output file on disk, then read the next element
+                from whichever file just contributed. At any moment you hold
+                <strong>exactly one element from each file</strong> in memory.
+            </p>
+            <p style="margin:8px 0 0;">
+                The merged result is written directly to disk, not to a RAM buffer.
+                This is called <strong>external sorting</strong> — and Merge Sort is the algorithm uniquely suited for it.
+                It is used by databases, operating systems, and distributed computing frameworks
+                (like Hadoop and Spark) to sort terabytes of data on clusters of machines.
+            </p>
+        </div>
+    </div>
+
+    <div class="box box-teal">
+        <strong>The key operation in all of this:</strong> merging two <em>sorted</em> sequences
+        into one sorted sequence. Once you master this single skill, you understand both
+        the algorithm and its real-world power.
+    </div>
+
+    <hr style="margin:36px 0;border:none;border-top:2px solid #e2e8f0;">
+
+    <!-- ══ PREREQUISITE: MERGING TWO SORTED ARRAYS ══ -->
+    <h3 id="merge-two-arrays">Step 0 — The Core Skill: Merging Two Sorted Arrays</h3>
+
+    <p>
+        Before studying the full recursive Merge Sort algorithm, let us master the
+        <strong>merge step</strong> in isolation. This is the "combine" phase of Divide and Conquer —
+        where all the real work of Merge Sort happens.
+    </p>
+
+    <div class="box box-blue">
+        <strong>Problem:</strong> Given two sorted arrays, produce one merged sorted array.<br><br>
+        <strong>Left &nbsp; L = </strong>[3, 9, 27, 56]<br>
+        <strong>Right R = </strong>[10, 38, 43, 82]<br><br>
+        <strong>Expected output: </strong>[3, 9, 10, 27, 38, 43, 56, 82]
+    </div>
+
+    <h4>The Two-Pointer Algorithm</h4>
+    <ol>
+        <li>Place pointer <strong>i = 0</strong> at the front of Left array L.</li>
+        <li>Place pointer <strong>j = 0</strong> at the front of Right array R.</li>
+        <li><strong>While</strong> both pointers are within their arrays:
+            <ul>
+                <li>If L[i] ≤ R[j]: copy L[i] into the result, advance i.</li>
+                <li>If L[i] &gt; R[j]: copy R[j] into the result, advance j.</li>
+            </ul>
+        </li>
+        <li>When one array is exhausted, copy all remaining elements from the other directly to the result.</li>
+    </ol>
+
+    <div class="box box-yellow">
+        <strong>Why this works:</strong> Because both arrays are <em>already sorted</em>,
+        the globally smallest remaining element is always at the front of one of the two arrays —
+        either L[i] or R[j]. We never need to search beyond those two positions.
+        One comparison, one copy, one pointer advance. This gives us an <strong>O(n) merge</strong>.
+    </div>
+
+    <!-- ── ANIMATED VISUALIZER ── -->
+    <h4>Interactive Animation — Watch the Merge Happen Step by Step</h4>
+    <div class="mv-container">
+        <div style="text-align:center;margin-bottom:20px;font-weight:700;color:#0f766e;font-size:1.05em;">
+            Merging L = [3, 9, 27, 56] &nbsp;and&nbsp; R = [10, 38, 43, 82]
+        </div>
+
+        <div class="mv-arrays">
+            <!-- Left -->
+            <div class="mv-array-group">
+                <div class="mv-arr-label">Left Array L</div>
+                <div class="mv-cells" id="mvLeftCells"></div>
+                <div class="mv-ptrs"  id="mvLeftPtr"></div>
+            </div>
+
+            <div class="mv-vs">vs</div>
+
+            <!-- Right -->
+            <div class="mv-array-group">
+                <div class="mv-arr-label">Right Array R</div>
+                <div class="mv-cells" id="mvRightCells"></div>
+                <div class="mv-ptrs"  id="mvRightPtr"></div>
+            </div>
+        </div>
+
+        <div style="text-align:center;margin:10px 0 4px;font-weight:700;font-size:0.88em;color:#0f766e;text-transform:uppercase;letter-spacing:0.5px;">
+            Merged Result
+        </div>
+        <div style="display:flex;justify-content:center;">
+            <div class="mv-result-cells" id="mvResultCells"></div>
+        </div>
+
+        <div class="mv-status" id="mvStatus">Ready — click "Next Step" to begin the merge.</div>
+
+        <div class="mv-controls">
+            <button class="mv-btn mv-btn-primary" id="mvNextBtn" onclick="mvStep()">Next Step ▶</button>
+            <button class="mv-btn mv-btn-sec"     id="mvAutoBtn" onclick="mvAuto()">▶ Auto Play</button>
+            <button class="mv-btn mv-btn-sec"                    onclick="mvReset()">↺ Reset</button>
+        </div>
+        <div class="mv-step-info" id="mvStepCount">Step 0 of 8</div>
+    </div>
+
+    <hr style="margin:36px 0;border:none;border-top:2px solid #e2e8f0;">
+    <h3>How It Works — The Full Merge Sort Algorithm</h3>
+    <ol>
+        <li><strong>Divide:</strong> Find the midpoint m = (l + h) / 2. Split into A[l…m] and A[m+1…h].</li>
+        <li><strong>Conquer:</strong> Recursively call mergeSort on each half.</li>
+        <li><strong>Base case:</strong> A sub-array of size 1 (l == h) is already sorted — return immediately.</li>
+        <li><strong>Merge:</strong> Use two pointers i (left half) and j (right half).
+            Compare A[i] and A[j], copy the smaller into a temporary array B, advance that pointer.
+            When one half is exhausted, copy the remainder of the other half.
+            Finally copy B back into A.</li>
+    </ol>
+
+    <h3>Algorithm Analysis</h3>
+    <div class="math-box">
+        <p class="math-step"><strong>All Cases (Best, Average, Worst) — O(n log n):</strong></p>
+        <p class="math-step">Merge Sort <em>always</em> divides exactly in half and always merges all n elements.</p>
+        <p class="math-step">There is <strong>no worst case</strong> — the behaviour is the same regardless of input order.</p>
+        <p class="math-formula" style="margin-top:12px;">T(n) = 2 · T<span style="font-size:0.9em;">(</span><span class="frac" style="font-size:0.85em;"><span class="num">n</span><span class="den">2</span></span><span style="font-size:0.9em;">)</span> + n &nbsp;&nbsp;→&nbsp;&nbsp; O(n log n)</p>
+
+        <hr style="margin:16px 0;border-color:#c4b5fd;">
+        <p class="math-step"><strong>Space Complexity — O(n):</strong></p>
+        <p class="math-step">The merge step requires a temporary array B of size n.
+        This is the main trade-off compared to Quick Sort (which is in-place).</p>
+
+        <div class="box box-green" style="text-align:left;margin-top:14px;">
+            <strong>Key advantage:</strong> Merge Sort is <em>stable</em> (equal elements keep their original order)
+            and guarantees O(n log n) even on sorted, reverse-sorted, or adversarial input.
+            It is the preferred choice when guaranteed performance and stability are required.
+        </div>
+    </div>
+
+    <h3>Recursion Tree (n = 8)</h3>
+    <div class="rec-tree">
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level"><div class="rec-node">[38,27,43,3,9,82,10,56]</div></div>
+            </div>
+            <div class="rec-work">merge: 8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node">[38,27,43,3]</div>
+                    <div class="rec-node">[9,82,10,56]</div>
+                </div>
+            </div>
+            <div class="rec-work">merge: 4+4=8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙↘ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↙↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node">[38,27]</div>
+                    <div class="rec-node">[43,3]</div>
+                    <div class="rec-node">[9,82]</div>
+                    <div class="rec-node">[10,56]</div>
+                </div>
+            </div>
+            <div class="rec-work">merge: 2×4=8</div>
+        </div>
+        <div style="text-align:center;color:#14b8a6;font-size:1.2em;">↙↘ ↙↘ ↙↘ ↙↘</div>
+        <div class="rec-row">
+            <div style="flex:1;">
+                <div class="rec-level">
+                    <div class="rec-node base">[38]</div>
+                    <div class="rec-node base">[27]</div>
+                    <div class="rec-node base">[43]</div>
+                    <div class="rec-node base">[3]</div>
+                    <div class="rec-node base">[9]</div>
+                    <div class="rec-node base">[82]</div>
+                    <div class="rec-node base">[10]</div>
+                    <div class="rec-node base">[56]</div>
+                </div>
+            </div>
+            <div class="rec-work">base cases</div>
+        </div>
+        <p style="text-align:center;margin-top:14px;color:#0d9488;font-weight:700;">
+            log₂(8) = 3 levels &nbsp;×&nbsp; 8 merge operations per level &nbsp;=&nbsp; 24 total &nbsp;→&nbsp; O(n log n)
+        </p>
+    </div>
+
+    <h3>Java Implementation</h3>
+    <div class="code-container">
+        <div class="code-header" onclick="toggleCode('ms-code')">
+            <span>Merge Sort — Java</span><span class="code-toggle" id="ms-code-toggle">▼</span>
+        </div>
+        <pre class="code-block" id="ms-code"><span class="cm">// Main recursive function</span>
+<span class="kw">public static void</span> mergeSort(<span class="kw">int</span>[] A, <span class="kw">int</span> l, <span class="kw">int</span> h) {
+    <span class="kw">if</span> (l < h) {
+        <span class="kw">int</span> m = (l + h) / <span class="nm">2</span>;          <span class="cm">// find midpoint</span>
+        mergeSort(A, l, m);            <span class="cm">// sort left half</span>
+        mergeSort(A, m + <span class="nm">1</span>, h);        <span class="cm">// sort right half</span>
+        merge(A, l, m, h);             <span class="cm">// merge sorted halves</span>
+    }
+}
+
+<span class="cm">// Merge two sorted sub-arrays A[l..m] and A[m+1..h]</span>
+<span class="kw">public static void</span> merge(<span class="kw">int</span>[] A, <span class="kw">int</span> l, <span class="kw">int</span> m, <span class="kw">int</span> h) {
+    <span class="kw">int</span> i = l, j = m + <span class="nm">1</span>, k = l;
+    <span class="kw">int</span>[] B = <span class="kw">new int</span>[A.length];      <span class="cm">// temporary array</span>
+
+    <span class="kw">while</span> (i <= m && j <= h) {
+        <span class="kw">if</span> (A[i] <= A[j]) {
+            B[k++] = A[i++];           <span class="cm">// take from left half</span>
+        } <span class="kw">else</span> {
+            B[k++] = A[j++];           <span class="cm">// take from right half</span>
+        }
+    }
+    <span class="kw">while</span> (i <= m)  B[k++] = A[i++];  <span class="cm">// copy remaining left</span>
+    <span class="kw">while</span> (j <= h)  B[k++] = A[j++];  <span class="cm">// copy remaining right</span>
+
+    <span class="kw">for</span> (<span class="kw">int</span> x = l; x <= h; x++) A[x] = B[x]; <span class="cm">// copy back</span>
+}</pre>
+    </div>
+
+    <h3>Step-by-Step Simulation</h3>
+    <p>Open the interactive simulation to watch Merge Sort's full execution as a <strong>binary tree</strong> —
+       the divide phase splits the tree top-down, and the merge phase rebuilds it bottom-up.</p>
+    <div class="sim-launch">
+        <p>Binary tree visualization — watch the array split level by level, then merge back sorted.</p>
+        <a href="mergesort-simulation.html" target="_blank" class="sim-btn">
+            <span class="arrow">▶</span> Launch Merge Sort Simulation
+        </a>
+    </div>
+</section>
+
+<!-- ══════════════ SECTION 5: COMPARISON ══════════════ -->
+<section id="comparison">
+    <h2>5 · Quick Sort vs Merge Sort</h2>
+
+    <div class="box box-teal">
+        Both algorithms are O(n log n) — but they are <em>not</em> identical.
+        Understanding their differences helps you choose the right algorithm for the right situation.
+    </div>
+
+    <table class="cmp-table">
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Quick Sort</th>
+                <th>Merge Sort</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Best Case</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+            </tr>
+            <tr>
+                <td>Average Case</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+            </tr>
+            <tr>
+                <td>Worst Case</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(n log n)</td>
+            </tr>
+            <tr>
+                <td>Space Complexity</td>
+                <td class="good">O(log n) — in-place*</td>
+                <td class="bad">O(n) — extra array</td>
+            </tr>
+            <tr>
+                <td>Stable?</td>
+                <td class="bad">No</td>
+                <td class="good">Yes</td>
+            </tr>
+            <tr>
+                <td>Cache Performance</td>
+                <td class="good">Excellent</td>
+                <td class="mid">Good</td>
+            </tr>
+            <tr>
+                <td>Preferred for</td>
+                <td>General-purpose, in-memory sorting</td>
+                <td>Linked lists, external sorting, stable sort required</td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="font-size:0.85em;color:#64748b;">* O(log n) stack space for recursion</p>
+
+    <h3>The Full Picture — All Sorting Algorithms</h3>
+    <table class="cmp-table">
+        <thead>
+            <tr>
+                <th>Algorithm</th>
+                <th>Best</th>
+                <th>Average</th>
+                <th>Worst</th>
+                <th>Space</th>
+                <th>Adaptive?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Selection Sort</td>
+                <td class="bad">O(n²)</td>
+                <td class="bad">O(n²)</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(1)</td>
+                <td class="bad">No</td>
+            </tr>
+            <tr>
+                <td>Bubble Sort (optimized)</td>
+                <td class="good">O(n)</td>
+                <td class="bad">O(n²)</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(1)</td>
+                <td class="good">Yes</td>
+            </tr>
+            <tr>
+                <td>Insertion Sort</td>
+                <td class="good">O(n)</td>
+                <td class="bad">O(n²)</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(1)</td>
+                <td class="good">Yes</td>
+            </tr>
+            <tr>
+                <td>Quick Sort</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+                <td class="bad">O(n²)</td>
+                <td class="good">O(log n)</td>
+                <td class="bad">No</td>
+            </tr>
+            <tr>
+                <td>Merge Sort</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+                <td class="good">O(n log n)</td>
+                <td class="bad">O(n)</td>
+                <td class="bad">No</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box box-yellow" style="margin-top:24px;">
+        <strong>Practical Guidance:</strong>
+        <ul style="margin-top:8px;">
+            <li>For <strong>general in-memory sorting</strong> → Quick Sort (fastest in practice due to cache locality)</li>
+            <li>For <strong>guaranteed O(n log n)</strong> or <strong>stable sorting</strong> → Merge Sort</li>
+            <li>For <strong>small arrays (n &lt; 20)</strong> or <strong>nearly sorted data</strong> → Insertion Sort</li>
+            <li>Most language libraries (Java's <code>Arrays.sort</code>, Python's <code>sorted</code>) use <strong>hybrid algorithms</strong> that combine Quick Sort / Merge Sort with Insertion Sort for small sub-arrays.</li>
+        </ul>
+    </div>
+</section>
+
+</div><!-- /content -->
+</div><!-- /container -->
+
+<script>
+// ── Merge Two Sorted Arrays Visualizer ──
+(function(){
+    const L = [3, 9, 27, 56];
+    const R = [10, 38, 43, 82];
+    const STEPS = [
+        {i:0, j:0, result:[],                          msg:"Pointers set: i → L[0]=3,  j → R[0]=10. Result is empty. Click 'Next Step' to compare first elements."},
+        {i:1, j:0, result:[3],                         msg:"L[i]=3 ≤ R[j]=10  →  take 3 from Left. Write 3 to result. Advance i to 1."},
+        {i:2, j:0, result:[3,9],                       msg:"L[i]=9 ≤ R[j]=10  →  take 9 from Left. Write 9 to result. Advance i to 2."},
+        {i:2, j:1, result:[3,9,10],                    msg:"L[i]=27 > R[j]=10  →  take 10 from Right. Write 10 to result. Advance j to 1."},
+        {i:3, j:1, result:[3,9,10,27],                 msg:"L[i]=27 ≤ R[j]=38  →  take 27 from Left. Write 27 to result. Advance i to 3."},
+        {i:3, j:2, result:[3,9,10,27,38],              msg:"L[i]=56 > R[j]=38  →  take 38 from Right. Write 38 to result. Advance j to 2."},
+        {i:3, j:3, result:[3,9,10,27,38,43],           msg:"L[i]=56 > R[j]=43  →  take 43 from Right. Write 43 to result. Advance j to 3."},
+        {i:4, j:3, result:[3,9,10,27,38,43,56],        msg:"L[i]=56 ≤ R[j]=82  →  take 56 from Left. Write 56 to result. Advance i to 4. Left array exhausted!"},
+        {i:4, j:4, result:[3,9,10,27,38,43,56,82],     msg:"Left exhausted. Copy remaining Right element: 82. Merge complete!  Result: [3, 9, 10, 27, 38, 43, 56, 82] ✓", done:true}
+    ];
+
+    let cur = 0, timer = null;
+
+    function render() {
+        const s = STEPS[cur];
+        // Left cells
+        document.getElementById('mvLeftCells').innerHTML = L.map(function(v,k){
+            var c = 'mv-cell';
+            if (k < s.i) c += ' mv-done';
+            else if (k === s.i && s.i < L.length) c += ' mv-active';
+            return '<div class="' + c + '">' + v + '</div>';
+        }).join('');
+        // Left pointer row
+        document.getElementById('mvLeftPtr').innerHTML = L.map(function(_,k){
+            return '<div class="mv-ptr-cell">' + (k === s.i && s.i < L.length ? '▲ i' : '') + '</div>';
+        }).join('');
+        // Right cells
+        document.getElementById('mvRightCells').innerHTML = R.map(function(v,k){
+            var c = 'mv-cell';
+            if (k < s.j) c += ' mv-done';
+            else if (k === s.j && s.j < R.length) c += ' mv-active';
+            return '<div class="' + c + '">' + v + '</div>';
+        }).join('');
+        // Right pointer row
+        document.getElementById('mvRightPtr').innerHTML = R.map(function(_,k){
+            return '<div class="mv-ptr-cell">' + (k === s.j && s.j < R.length ? '▲ j' : '') + '</div>';
+        }).join('');
+        // Result cells
+        var total = L.length + R.length;
+        var html = '';
+        for (var k = 0; k < total; k++) {
+            if (k < s.result.length) {
+                var isJust = (k === s.result.length - 1 && cur > 0);
+                html += '<div class="mv-rcell ' + (isJust ? 'mv-just' : 'mv-filled') + '">' + s.result[k] + '</div>';
+            } else {
+                html += '<div class="mv-rcell"></div>';
+            }
+        }
+        document.getElementById('mvResultCells').innerHTML = html;
+        // Status
+        var st = document.getElementById('mvStatus');
+        st.textContent = s.msg;
+        st.className = 'mv-status' + (s.done ? ' mv-done-status' : '');
+        // Step counter
+        document.getElementById('mvStepCount').textContent = 'Step ' + cur + ' of ' + (STEPS.length - 1);
+        // Next button
+        document.getElementById('mvNextBtn').disabled = (cur >= STEPS.length - 1);
+    }
+
+    window.mvStep = function() {
+        if (cur < STEPS.length - 1) { cur++; render(); }
+    };
+    window.mvReset = function() {
+        if (timer) { clearInterval(timer); timer = null; document.getElementById('mvAutoBtn').textContent = '▶ Auto Play'; }
+        cur = 0; render();
+    };
+    window.mvAuto = function() {
+        var btn = document.getElementById('mvAutoBtn');
+        if (timer) {
+            clearInterval(timer); timer = null; btn.textContent = '▶ Auto Play';
+        } else {
+            btn.textContent = '⏸ Pause';
+            timer = setInterval(function() {
+                if (cur >= STEPS.length - 1) {
+                    clearInterval(timer); timer = null; btn.textContent = '▶ Auto Play';
+                } else { cur++; render(); }
+            }, 1100);
+        }
+    };
+
+    render();
+})();
+
+function toggleCode(id) {
+    const block  = document.getElementById(id);
+    const toggle = document.getElementById(id + '-toggle');
+    if (!block) return;
+    block.classList.toggle('collapsed');
+    toggle.classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>
