@@ -212,17 +212,15 @@
             font-weight: bold;
         }
 
-        .footer {
+        /* ── FOOTER ── */
+        footer {
+            background: #1f2937;
+            color: white;
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #000;
-            color: #000;
+            padding: 25px;
         }
-
-        .footer strong {
-            color: #000;
-        }
+        footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
+        footer strong { opacity: 1; }
 
         @media print {
             body {
@@ -526,11 +524,13 @@
             </div>
         </div>
 
-        <div class="footer">
-            <p><strong>Prepared by Dr. Almalawi</strong></p>
-            <p>CPCS 204 - Data Structures</p>
-        </div>
     </div>
+
+<footer>
+    <p><strong>CPCS 204</strong> &mdash; Data Structures I</p>
+    <p>Faculty of Computing and Information Technology &mdash; King Abdulaziz University</p>
+    <p>Prepared by Dr. Almalawi</p>
+</footer>
 
     <script>
         function toggleSolution(id) {

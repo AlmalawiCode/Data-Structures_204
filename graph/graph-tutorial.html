@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graphs – CPCS204 Data Structures</title>
+  <style>
+    /* ============================
+       RESET & BASE
+    ============================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f1f5f9;
+      min-height: 100vh;
+      padding: 0 0 60px 0;
+      color: #1e293b;
+    }
+
+    /* ============================
+       HEADER
+    ============================ */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2563eb 100%);
+      color: #fff;
+      padding: 52px 24px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header > * { position: relative; z-index: 1; }
+
+    header .back-link {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      color: rgba(255,255,255,0.80);
+      text-decoration: none;
+      font-size: 0.88em;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+      z-index: 2;
+    }
+    header .back-link:hover { color: #fff; }
+
+    header .chapter-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.28);
+      color: #93c5fd;
+      font-size: 0.75em;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 18px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    header h1 {
+      font-size: 3.2em;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      color: #fff;
+    }
+
+    header .subtitle {
+      font-size: 1.1em;
+      color: #93c5fd;
+      margin-top: 10px;
+      font-weight: 400;
+    }
+
+    /* ============================
+       STICKY NAV / TOC
+    ============================ */
+    nav.toc {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #eff6ff;
+      border-bottom: 2px solid #bfdbfe;
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      box-shadow: 0 2px 12px rgba(37,99,235,0.10);
+    }
+
+    nav.toc span.toc-label {
+      font-size: 0.75em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #6b7280;
+      margin-right: 4px;
+    }
+
+    nav.toc a {
+      text-decoration: none;
+      color: #2563eb;
+      font-size: 0.80em;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1.5px solid #2563eb;
+      transition: background 0.18s, color 0.18s;
+      white-space: nowrap;
+    }
+    nav.toc a:hover {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    /* ============================
+       MAIN CONTAINER
+    ============================ */
+    main {
+      max-width: 1100px;
+      margin: 36px auto 0;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 48px rgba(15,23,42,0.18);
+      padding: 0 0 60px 0;
+      overflow: hidden;
+    }
+
+    /* ============================
+       SECTIONS
+    ============================ */
+    section {
+      padding: 52px 56px 44px;
+      border-bottom: 1px solid #eff6ff;
+    }
+    section:last-of-type { border-bottom: none; }
+
+    section h2 {
+      font-size: 1.65em;
+      font-weight: 800;
+      color: #1e3a5f;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid #2563eb;
+      line-height: 1.2;
+    }
+
+    section p {
+      font-size: 1.02em;
+      line-height: 1.8;
+      color: #374151;
+      margin-bottom: 16px;
+      font-weight: 400;
+    }
+    section p:last-child { margin-bottom: 0; }
+
+    /* ============================
+       SECTION 1 — INTRO SPECIAL
+    ============================ */
+    .cabinet-intro {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      border-left: 5px solid #2563eb;
+      transition: box-shadow 0.25s ease;
+    }
+    .cabinet-intro:hover {
+      box-shadow: 0 6px 24px rgba(37,99,235,0.12);
+    }
+    .cabinet-intro h3 {
+      font-size: 1.12em;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin-bottom: 12px;
+    }
+    .cabinet-intro p {
+      margin: 0;
+      color: #1e293b;
+      font-size: 0.98em;
+      line-height: 1.80;
+    }
+    .arabic-term {
+      font-style: italic;
+      font-weight: 700;
+      color: #2563eb;
+    }
+
+    /* Saudi Arabia Map */
+    .map-section {
+      margin: 32px 0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+      border-radius: 18px;
+      padding: 4px;
+      transition: box-shadow 0.3s ease;
+    }
+    .map-section:hover {
+      box-shadow: 0 8px 32px rgba(15,23,42,0.22);
+    }
+    .map-inner {
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .map-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .map-header .map-icon { font-size: 1.8em; line-height: 1.2; }
+    .map-header-text h3 {
+      font-size: 1.05em;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+    .map-header-text p {
+      font-size: 0.82em;
+      color: rgba(255,255,255,0.68);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .map-img-wrap {
+      padding: 20px;
+      text-align: center;
+      background: #eff6ff;
+    }
+    .map-img-wrap img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+    }
+    .map-caption {
+      font-size: 0.80em;
+      color: #6b7280;
+      text-align: center;
+      padding: 10px 20px 16px;
+      font-style: italic;
+      background: #eff6ff;
+    }
+
+    /* Challenge Cards */
+    .challenge-prompt {
+      text-align: center;
+      margin: 28px 0 20px;
+    }
+    .challenge-prompt h3 {
+      font-size: 1.20em;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin-bottom: 6px;
+    }
+    .challenge-prompt p {
+      font-size: 0.93em;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .challenge-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.5px solid #fca5a5;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .challenge-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(239,68,68,0.12);
+    }
+    .challenge-card .cc-header {
+      background: #ef4444;
+      color: #fff;
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.98em;
+    }
+    .challenge-card .cc-icon { font-size: 1.1em; }
+    .challenge-card .cc-body {
+      background: #fff5f5;
+      padding: 14px 16px;
+      font-size: 0.875em;
+      color: #374151;
+      line-height: 1.70;
+    }
+    .challenge-card .cc-body code {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    .challenge-card .cc-verdict {
+      background: #fee2e2;
+      padding: 9px 16px;
+      font-size: 0.82em;
+      font-weight: 600;
+      color: #b91c1c;
+      border-top: 1px solid #fca5a5;
+    }
+
+    .answer-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #059669;
+      margin-top: 4px;
+      transition: box-shadow 0.3s ease;
+    }
+    .answer-card:hover {
+      box-shadow: 0 8px 28px rgba(5,150,105,0.18);
+    }
+    .answer-card .ac-header {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: #fff;
+      padding: 15px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.08em;
+    }
+    .answer-card .ac-icon { font-size: 1.5em; }
+    .answer-card .ac-body {
+      background: #f0fdf4;
+      padding: 20px 22px;
+      font-size: 0.97em;
+      color: #1e293b;
+      line-height: 1.80;
+    }
+    .answer-card .ac-body strong { color: #059669; }
+
+    /* ============================
+       CALLOUT BOXES
+    ============================ */
+    .box-blue {
+      background: #eff6ff;
+      border-left: 5px solid #2563eb;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 18px 0;
+      color: #1e3a5f;
+      font-size: 0.98em;
+      line-height: 1.78;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .box-blue:hover {
+      box-shadow: 0 4px 16px rgba(37,99,235,0.10);
+      transform: translateX(3px);
+    }
+    .box-yellow {
+      background: #fefce8;
+      border-left: 5px solid #f59e0b;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 18px 0;
+      color: #78350f;
+      font-size: 0.98em;
+      line-height: 1.78;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .box-yellow:hover {
+      box-shadow: 0 4px 16px rgba(245,158,11,0.12);
+      transform: translateX(3px);
+    }
+    .box-green {
+      background: #f0fdf4;
+      border-left: 5px solid #22c55e;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 18px 0;
+      color: #14532d;
+      font-size: 0.98em;
+      line-height: 1.78;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .box-green:hover {
+      box-shadow: 0 4px 16px rgba(34,197,94,0.12);
+      transform: translateX(3px);
+    }
+    .box-blue strong, .box-yellow strong, .box-green strong {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1.02em;
+    }
+
+    /* ── WHY-GRAPHS CARDS ── */
+    .why-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin: 24px 0 20px;
+    }
+    .why-card {
+      border-radius: 14px;
+      padding: 22px 18px 20px;
+      text-align: center;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .why-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+    }
+    .why-card-icon {
+      width: 60px; height: 60px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px; font-size: 1.5rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    .why-card-num {
+      position: absolute; top: -2px; right: -4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #1e293b; color: #fff;
+      font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .why-card h3 { font-size: 1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 8px; }
+    .why-card p { font-size: 0.88em; color: #475569; line-height: 1.6; margin: 0; }
+    @media (max-width: 700px) {
+      .why-cards { grid-template-columns: 1fr; }
+    }
+
+    /* ============================
+       SVG CONTAINERS
+    ============================ */
+    .svg-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 28px 0;
+    }
+    .svg-wrap svg {
+      border-radius: 12px;
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      transition: box-shadow 0.25s ease;
+    }
+    .svg-wrap svg:hover {
+      box-shadow: 0 4px 18px rgba(37,99,235,0.12);
+    }
+
+    /* ============================
+       SECTION 1 — REAL-WORLD CARDS
+    ============================ */
+    .realworld-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .rw-card {
+      flex: 1 1 200px;
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 1.5px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 18px 16px;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .rw-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(37,99,235,0.15);
+    }
+    .rw-card .rw-icon {
+      font-size: 1.6em; line-height: 1;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #1e3a5f);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 10px rgba(37,99,235,0.25);
+    }
+    .rw-card h4 { font-size: 0.95em; font-weight: 700; color: #1e3a5f; }
+    .rw-card p { font-size: 0.85em; color: #374151; line-height: 1.55; margin: 0; }
+
+    /* ============================
+       SECTION 4 — GRAPH TYPES GRID
+    ============================ */
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .type-card {
+      border: 1.5px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 20px;
+      background: #eff6ff;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .type-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(37,99,235,0.13);
+    }
+    .type-card h3 { font-size: 1.05em; font-weight: 700; color: #1e3a5f; margin-bottom: 8px; }
+    .type-card p { font-size: 0.9em; color: #4b5563; margin-bottom: 12px; line-height: 1.6; }
+    .type-card .svg-pair { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .type-card .svg-label { text-align: center; font-size: 0.78em; color: #6b7280; font-weight: 600; margin-top: 4px; }
+
+    /* ============================
+       SECTION 5 — TERMINOLOGY
+    ============================ */
+    .term-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+    .term-item {
+      display: flex; gap: 0; border-radius: 12px; overflow: hidden; border: 1.5px solid #bfdbfe;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .term-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(37,99,235,0.10);
+    }
+    .term-name {
+      background: linear-gradient(135deg, #1e3a5f, #2563eb);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.88em;
+      padding: 14px 18px;
+      min-width: 175px;
+      display: flex;
+      align-items: center;
+      line-height: 1.3;
+    }
+    .term-def { background: #eff6ff; padding: 14px 18px; font-size: 0.92em; color: #1a1a2e; line-height: 1.65; flex: 1; }
+    .term-def .example { font-style: italic; color: #6b7280; font-size: 0.9em; margin-top: 4px; }
+
+    /* ============================
+       SECTION 6 — ADJACENCY MATRIX
+    ============================ */
+    .matrix-wrap { overflow-x: auto; margin: 24px 0; }
+    .adj-matrix { border-collapse: collapse; font-size: 0.95em; font-family: 'Courier New', monospace; margin: 0 auto; }
+    .adj-matrix th, .adj-matrix td { border: 1px solid #bfdbfe; width: 46px; height: 46px; text-align: center; vertical-align: middle; }
+    .adj-matrix th { background: #2563eb; color: #fff; font-weight: 700; }
+    .adj-matrix td.cell-one { background: #dbeafe; color: #1e3a5f; font-weight: 700; }
+    .adj-matrix td.cell-zero { background: #fff; color: #9ca3af; }
+
+    /* ============================
+       SECTION 7 — ADJACENCY LIST CODE
+    ============================ */
+    .code-block { background: #0f172a; border-radius: 12px; padding: 24px 28px; margin: 18px 0; overflow-x: auto; transition: box-shadow 0.25s ease; }
+    .code-block:hover { box-shadow: 0 6px 24px rgba(15,23,42,0.25); }
+    .code-block code { font-family: 'Courier New', 'Consolas', monospace; font-size: 1em; line-height: 2; color: #e2e8f0; display: block; white-space: pre; }
+    .code-block code .key { color: #60a5fa; font-weight: 700; }
+    .code-block code .val { color: #86efac; }
+    .code-block code .arrow { color: #fbbf24; }
+
+    /* ============================
+       SECTION 8 — COMPARISON TABLE
+    ============================ */
+    .compare-table-wrap { overflow-x: auto; margin: 24px 0; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+    .compare-table th { background: #2563eb; color: #fff; padding: 14px 18px; text-align: left; font-weight: 700; }
+    .compare-table th:first-child { border-radius: 10px 0 0 0; }
+    .compare-table th:last-child { border-radius: 0 10px 0 0; }
+    .compare-table td { padding: 13px 18px; border-bottom: 1px solid #e5e7eb; color: #374151; vertical-align: top; }
+    .compare-table tr:nth-child(even) td { background: #eff6ff; }
+    .compare-table tr:nth-child(odd) td { background: #fff; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tbody tr { transition: background 0.15s ease; }
+    .compare-table tbody tr:hover td { background: #dbeafe; }
+    .compare-table td strong { color: #1e3a5f; font-weight: 700; }
+
+    .badge-blue { display: inline-block; background: #dbeafe; color: #1e3a5f; font-size: 0.82em; font-weight: 700; padding: 2px 10px; border-radius: 12px; border: 1px solid #bfdbfe; }
+    .badge-green { display: inline-block; background: #dcfce7; color: #166534; font-size: 0.82em; font-weight: 700; padding: 2px 10px; border-radius: 12px; border: 1px solid #bbf7d0; }
+
+    /* ============================
+       SECTION 9 — NEXT / CONTINUE
+    ============================ */
+    .next-section { text-align: center; padding: 52px 56px; }
+    .next-section h2 { border-bottom: none; padding-bottom: 0; font-size: 1.6em; color: #1e3a5f; margin-bottom: 10px; }
+    .next-section p { color: #6b7280; font-size: 1em; margin-bottom: 28px; }
+
+    .btn-next {
+      display: inline-block;
+      background: linear-gradient(135deg, #2563eb, #1e3a5f);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.15em;
+      font-weight: 700;
+      padding: 16px 44px;
+      border-radius: 50px;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.40);
+      transition: transform 0.18s, box-shadow 0.18s;
+      letter-spacing: 0.01em;
+    }
+    .btn-next:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(37,99,235,0.50);
+    }
+
+    .preview-card {
+      display: inline-flex;
+      gap: 32px;
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 16px;
+      padding: 22px 32px;
+      margin-top: 32px;
+      text-align: left;
+      flex-wrap: wrap;
+    }
+    .preview-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px; border-radius: 10px;
+      transition: background 0.2s ease;
+    }
+    .preview-item:hover { background: rgba(37,99,235,0.08); }
+    .preview-item .pi-icon {
+      font-size: 1.3em; margin-top: 0;
+      width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, #2563eb, #1e3a5f);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 10px rgba(37,99,235,0.25);
+    }
+    .preview-item h4 { font-size: 0.95em; font-weight: 700; color: #1e3a5f; margin-bottom: 3px; }
+    .preview-item p { font-size: 0.83em; color: #4b5563; line-height: 1.45; margin: 0; }
+
+    /* ============================
+       FOOTER
+    ============================ */
+    footer {
+      background: #1f2937;
+      color: white;
+      text-align: center;
+      padding: 25px;
+    }
+    footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
+    footer strong { opacity: 1; }
+
+    /* ============================
+       RESPONSIVE
+    ============================ */
+    @media (max-width: 900px) {
+      .challenge-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      section { padding: 36px 22px 30px; }
+      section h2 { font-size: 1.3em; }
+      header h1 { font-size: 2em; }
+      .types-grid { grid-template-columns: 1fr; }
+      .next-section { padding: 36px 22px; }
+      .preview-card { flex-direction: column; }
+      .cabinet-intro { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ======================================================
+     HEADER
+====================================================== -->
+<header>
+  <a class="back-link" href="../index.html">&#8592; Back to Course</a>
+  <div class="chapter-badge">Chapter 9 &nbsp;&middot;&nbsp; CPCS204</div>
+  <h1>Graphs</h1>
+  <p class="subtitle">A Powerful Data Structure for Connected Worlds</p>
+</header>
+
+<!-- ======================================================
+     STICKY TOC
+====================================================== -->
+<nav class="toc">
+  <span class="toc-label">Jump to:</span>
+  <a href="#intro">Introduction</a>
+  <a href="#definition">Definition</a>
+  <a href="#why">Why Graphs?</a>
+  <a href="#types">Types</a>
+  <a href="#terminology">Terminology</a>
+  <a href="#matrix">Adjacency Matrix</a>
+  <a href="#adjlist">Adjacency List</a>
+  <a href="#compare">Matrix vs List</a>
+  <a href="#next">Next: Traversal</a>
+</nav>
+
+<!-- ======================================================
+     MAIN CONTENT
+====================================================== -->
+<main>
+
+  <!-- ===========================
+       SECTION 1 — INTRODUCTION (NEW)
+  =========================== -->
+  <section id="intro">
+    <h2>Introduction: Think of a Cabinet</h2>
+
+    <div class="cabinet-intro">
+      <h3>&#x1F5C4;&#xFE0F; Data Structures are Like Cabinets</h3>
+      <p>
+        A helpful way to understand data structures: think of a <strong>cabinet</strong>.
+        A wardrobe has shelves and hanging space — designed for clothes.
+        A filing cabinet has labeled drawers — designed for documents.
+        A bookshelf has rows — designed for books.<br><br>
+        Each cabinet is built for a specific kind of storage. In the same way,
+        the data structures you have already learned —
+        <strong>arrays, linked lists, stacks, queues, and trees</strong> —
+        are different kinds of "cabinets" for organizing data inside the computer.
+        Each one is built for a specific purpose, with its own strengths and limitations.<br><br>
+        Today, we ask: <em>which cabinet do we use for a map?</em>
+        And we add a powerful new structure to our collection: the <strong>Graph</strong>.
+      </p>
+    </div>
+
+    <!-- SAUDI ARABIA MAP -->
+    <div class="map-section">
+      <div class="map-inner">
+        <div class="map-header">
+          <span class="map-icon">&#x1F5FA;&#xFE0F;</span>
+          <div class="map-header-text">
+            <h3>A Real-World Challenge: Cities of Saudi Arabia</h3>
+            <p>Study this map carefully — then ask yourself: how would I store this data in a program?</p>
+          </div>
+        </div>
+        <div class="map-img-wrap">
+          <img src="sauidCites.png" alt="Map of Saudi Arabian cities with road connections and distances" />
+        </div>
+        <div class="map-caption">
+          Saudi Arabian cities (vertices) connected by roads (edges). Each connection has a distance in kilometers.
+          Source: CPCS204 Course Material &mdash; King Abdulaziz University, FCIT
+        </div>
+      </div>
+    </div>
+
+    <p>
+      Look at the map above. It shows major cities of Saudi Arabia &mdash;
+      <strong>Riyadh, Jeddah, Mecca, Medina, Dammam, Tabuk</strong>, and more &mdash;
+      each connected to others by roads, with distances marked in kilometers.
+    </p>
+
+    <div class="box-blue">
+      <strong>The Challenge</strong>
+      Write a program to store: all the cities, which cities are directly connected by road,
+      and the distance (in km) between each connected pair.
+      A traveler should be able to ask: <em>"Which cities can I reach directly from Riyadh?"</em>
+      or <em>"What is the road distance from Jeddah to Mecca?"</em>
+    </div>
+
+    <div class="challenge-prompt">
+      <h3>&#x1F914; Which data structure would you use?</h3>
+      <p>Think carefully — which of your existing "cabinets" fits this problem?</p>
+    </div>
+
+    <div class="challenge-grid">
+
+      <div class="challenge-card">
+        <div class="cc-header"><span class="cc-icon">&#x274C;</span> Array</div>
+        <div class="cc-body">
+          An array stores a sequence: <code>cities[0]="Riyadh"</code>, <code>cities[1]="Jeddah"</code>...
+          But how do you encode that Riyadh connects to <em>both</em> Jeddah <em>and</em> Medina <em>and</em> Dammam?
+          An array just stores values in a line — it has no concept of "connection" between elements.
+        </div>
+        <div class="cc-verdict">&#10007; Cannot represent multiple connections between cities</div>
+      </div>
+
+      <div class="challenge-card">
+        <div class="cc-header"><span class="cc-icon">&#x274C;</span> Linked List</div>
+        <div class="cc-body">
+          A linked list goes: Riyadh &#8594; Jeddah &#8594; Mecca &#8594; null.
+          Each node has <em>one</em> next pointer.
+          But Riyadh connects to many cities at once — Jeddah, Medina, Dammam, and more.
+          A linked list can only link each city to exactly one neighbor.
+        </div>
+        <div class="cc-verdict">&#10007; Each node has only one "next" — cannot fan out</div>
+      </div>
+
+      <div class="challenge-card">
+        <div class="cc-header"><span class="cc-icon">&#x274C;</span> Tree</div>
+        <div class="cc-body">
+          A tree has a root with children and grandchildren — a hierarchy.
+          But Riyadh and Jeddah are equal neighboring cities, not parent and child.
+          Trees cannot represent cycles (circular routes), and road networks are full of them.
+          The structure is simply wrong for this data.
+        </div>
+        <div class="cc-verdict">&#10007; Hierarchical — cities are peers, not parent/child</div>
+      </div>
+
+    </div>
+
+    <div class="answer-card">
+      <div class="ac-header"><span class="ac-icon">&#x2705;</span> The Answer: A Graph!</div>
+      <div class="ac-body">
+        A <strong>Graph</strong> is a data structure that stores a set of <strong>entities (cities)</strong>
+        and the <strong>connections (roads)</strong> between them —
+        where any entity can connect to any number of other entities, in any direction,
+        with any weight (distance).
+        Riyadh can connect to five cities, Jeddah to four, each road storing its own distance.
+        No other structure you have learned can do this naturally.<br><br>
+        <strong>This is what we study today.</strong>
+        Graphs are one of the most powerful and widely-used structures in all of computer science —
+        and they begin right here, with a map of Saudi Arabia.
+      </div>
+    </div>
+
+    <p style="margin-top: 28px;">
+      Before we define it formally, consider these everyday systems you already use —
+      all of them are graphs:
+    </p>
+
+    <div class="realworld-grid">
+      <div class="rw-card">
+        <div class="rw-icon">&#127757;</div>
+        <h4>Google Maps</h4>
+        <p>Cities and locations are connected by roads. Finding the shortest route between two cities is a graph problem solved millions of times per second.</p>
+      </div>
+      <div class="rw-card">
+        <div class="rw-icon">&#128101;</div>
+        <h4>Social Networks</h4>
+        <p>Facebook, LinkedIn, and Twitter are graphs. People are nodes, friendships and follows are edges. "Friends of friends" is graph traversal.</p>
+      </div>
+      <div class="rw-card">
+        <div class="rw-icon">&#9992;</div>
+        <h4>Flight Routes</h4>
+        <p>Airlines connect airports with direct flights. Planning a trip with a layover is finding a path through a graph of airports and routes.</p>
+      </div>
+      <div class="rw-card">
+        <div class="rw-icon">&#127760;</div>
+        <h4>Internet Routing</h4>
+        <p>Computers and servers are connected by cables and wireless links. Every webpage you load travels through a graph of network devices.</p>
+      </div>
+      <div class="rw-card">
+        <div class="rw-icon">&#9881;</div>
+        <h4>Task Scheduling</h4>
+        <p>In compilers and build systems, tasks have dependencies — "task A must run before task B." This is a directed graph called a DAG.</p>
+      </div>
+    </div>
+
+    <div class="box-green">
+      <strong>Key Insight</strong>
+      All of these problems share a common structure: a set of <em>things</em> (cities, people, computers, tasks)
+      connected by <em>relationships</em> (roads, friendships, cables, dependencies).
+      Graphs are the data structure that captures exactly this — many-to-many connections.
+    </div>
+  </section>
+
+  <!-- ===========================
+       SECTION 2 — DEFINITION
+  =========================== -->
+  <section id="definition">
+    <h2>What Is a Graph? — Formal Definition</h2>
+
+    <p>
+      A graph is defined mathematically as an ordered pair:
+    </p>
+
+    <div class="box-blue">
+      <strong>G = (V, E)</strong>
+      Where <strong>V</strong> is a set of <em>vertices</em> (also called nodes) and <strong>E</strong> is a set of <em>edges</em> (also called connections or links).
+      Each edge connects two vertices.
+    </div>
+
+    <p>
+      For example, a graph with five cities and four connecting roads would have
+      <strong>V = {A, B, C, D, E}</strong> and <strong>E = {(A,B), (A,C), (B,D), (C,D), (D,E)}</strong>.
+    </p>
+
+    <div class="svg-wrap">
+      <svg width="500" height="200" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Edges drawn FIRST so circles appear on top -->
+        <line x1="80" y1="100" x2="200" y2="40"  stroke="#1e3a5f" stroke-width="2.5"/>
+        <line x1="80" y1="100" x2="200" y2="160" stroke="#1e3a5f" stroke-width="2.5"/>
+        <line x1="200" y1="40"  x2="340" y2="100" stroke="#1e3a5f" stroke-width="2.5"/>
+        <line x1="200" y1="160" x2="340" y2="100" stroke="#1e3a5f" stroke-width="2.5"/>
+        <line x1="340" y1="100" x2="450" y2="100" stroke="#1e3a5f" stroke-width="2.5"/>
+
+        <!-- Node A -->
+        <circle cx="80"  cy="100" r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="80"  y="106" text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">A</text>
+
+        <!-- Node B -->
+        <circle cx="200" cy="40"  r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="200" y="46"  text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">B</text>
+
+        <!-- Node C -->
+        <circle cx="200" cy="160" r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="200" y="166" text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">C</text>
+
+        <!-- Node D -->
+        <circle cx="340" cy="100" r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="340" y="106" text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">D</text>
+
+        <!-- Node E -->
+        <circle cx="450" cy="100" r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="450" y="106" text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">E</text>
+
+        <!-- Edge labels -->
+        <text x="130" y="60"  text-anchor="middle" fill="#6b7280" font-size="11" font-family="'Segoe UI', sans-serif">(A,B)</text>
+        <text x="130" y="148" text-anchor="middle" fill="#6b7280" font-size="11" font-family="'Segoe UI', sans-serif">(A,C)</text>
+        <text x="278" y="58"  text-anchor="middle" fill="#6b7280" font-size="11" font-family="'Segoe UI', sans-serif">(B,D)</text>
+        <text x="278" y="148" text-anchor="middle" fill="#6b7280" font-size="11" font-family="'Segoe UI', sans-serif">(C,D)</text>
+        <text x="396" y="91"  text-anchor="middle" fill="#6b7280" font-size="11" font-family="'Segoe UI', sans-serif">(D,E)</text>
+      </svg>
+    </div>
+
+    <p>
+      In this graph, <strong>V = {A, B, C, D, E}</strong> — five vertices.
+      The edges <strong>E = {(A,B), (A,C), (B,D), (C,D), (D,E)}</strong> connect them.
+      Notice that this graph has no direction (edges go both ways) and no weights — it is the simplest kind.
+    </p>
+
+    <div class="box-yellow">
+      <strong>Graphs vs Trees</strong>
+      A tree is actually a special type of graph — a connected, undirected graph with no cycles.
+      Graphs are more general: they can have cycles, disconnected components, directed edges, and weighted edges.
+    </div>
+  </section>
+
+  <!-- ===========================
+       SECTION 3 — WHY GRAPHS?
+  =========================== -->
+  <section id="why">
+    <h2>Why Graphs?</h2>
+
+    <p>
+      You might ask: <em>"Can't we store graph data in an array or linked list?"</em>
+      Let us think carefully about what arrays and linked lists can and cannot represent.
+    </p>
+
+    <div class="box-yellow">
+      <strong>Problem: Arrays and Linked Lists are Linear</strong>
+      An array stores a sequence: element[0], element[1], element[2], ...
+      A linked list stores a chain: node &#8594; node &#8594; node &#8594; null.
+      Both structures have one fundamental property: <em>each element has at most one predecessor and one successor</em>.
+      This makes them linear — fine for sequences, but broken for networks.
+    </div>
+
+    <p>
+      Consider a road network. The city of Jeddah is connected to Mecca, Medina, Taif, and Riyadh.
+      In a linked list, Jeddah can only point to <em>one</em> city.
+      In an array, Jeddah is just an index — you cannot encode "Jeddah is connected to Mecca and Taif" without a separate, complex structure.
+    </p>
+
+    <p>
+      Here is why graphs are the right tool for each domain:
+    </p>
+
+    <div class="why-cards">
+      <div class="why-card">
+        <div class="why-card-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">
+          <span class="why-card-num">1</span>&#128663;
+        </div>
+        <h3>Road Networks</h3>
+        <p>Cities are vertices, roads are edges. A city can have many roads (many neighbors) and each edge can store the distance. No linear structure can represent this naturally.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon" style="background:linear-gradient(135deg,#f97316,#ea580c)">
+          <span class="why-card-num">2</span>&#128101;
+        </div>
+        <h3>Social Networks</h3>
+        <p>A person (vertex) can have hundreds of friends (edges). Friendship is mutual — the edge is undirected. "Mutual friends" is a graph intersection problem.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a)">
+          <span class="why-card-num">3</span>&#127760;
+        </div>
+        <h3>Internet Routing</h3>
+        <p>Routers (vertices) connect to several other routers (edges). Packets travel along graph paths. Dijkstra's algorithm finds the fastest route on a weighted graph.</p>
+      </div>
+    </div>
+
+    <div class="box-green" style="text-align:center;">
+      <strong>Conclusion</strong>
+      Some data by nature is about <em>many-to-many relationships</em>.
+      Graphs are the only data structure designed precisely for this.
+      When entities can be connected to multiple other entities in arbitrary ways — use a graph.
+    </div>
+  </section>
+
+  <!-- ===========================
+       SECTION 4 — TYPES OF GRAPHS
+  =========================== -->
+  <section id="types">
+    <h2>Types of Graphs</h2>
+
+    <p>
+      Graphs come in many varieties depending on the nature of their edges and connectivity.
+      Understanding the types is essential for choosing the right algorithm.
+    </p>
+
+    <div class="types-grid">
+
+      <!-- TYPE 1: Undirected vs Directed -->
+      <div class="type-card">
+        <h3>Undirected vs Directed</h3>
+        <p>
+          In an <strong>undirected</strong> graph, edges have no direction — if A connects to B, then B also connects to A.
+          In a <strong>directed</strong> graph (digraph), edges have a direction — an arrow from A to B does not imply B to A.
+        </p>
+        <div class="svg-pair">
+          <div>
+            <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+              <line x1="30" y1="80" x2="65" y2="20" stroke="#1e3a5f" stroke-width="2"/>
+              <line x1="65" y1="20" x2="100" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+              <line x1="30" y1="80" x2="100" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="30"  cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="65"  cy="20" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="100" cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <text x="30"  y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
+              <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
+            </svg>
+            <div class="svg-label">Undirected</div>
+          </div>
+          <div>
+            <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <polygon points="0 0, 8 3, 0 6" fill="#1e3a5f"/>
+                </marker>
+              </defs>
+              <line x1="42" y1="69" x2="57" y2="34" stroke="#1e3a5f" stroke-width="2" marker-end="url(#arr1)"/>
+              <line x1="72" y1="27" x2="90" y2="66" stroke="#1e3a5f" stroke-width="2" marker-end="url(#arr1)"/>
+              <line x1="87" y1="80" x2="43" y2="80" stroke="#1e3a5f" stroke-width="2" marker-end="url(#arr1)"/>
+              <circle cx="30"  cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="65"  cy="20" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="100" cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <text x="30"  y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
+              <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
+            </svg>
+            <div class="svg-label">Directed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPE 2: Weighted vs Unweighted -->
+      <div class="type-card">
+        <h3>Weighted vs Unweighted</h3>
+        <p>
+          In an <strong>unweighted</strong> graph, all edges are equal.
+          In a <strong>weighted</strong> graph, each edge carries a numeric value (cost, distance, capacity).
+          Road maps use weighted graphs — the weight is the distance between cities.
+        </p>
+        <div class="svg-pair">
+          <div>
+            <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+              <line x1="30" y1="80" x2="65" y2="20" stroke="#1e3a5f" stroke-width="2"/>
+              <line x1="65" y1="20" x2="100" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+              <line x1="30" y1="80" x2="100" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="30"  cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="65"  cy="20" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="100" cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <text x="30"  y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
+              <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
+            </svg>
+            <div class="svg-label">Unweighted</div>
+          </div>
+          <div>
+            <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+              <line x1="30" y1="80" x2="65" y2="20" stroke="#1e3a5f" stroke-width="2"/>
+              <line x1="65" y1="20" x2="100" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+              <line x1="30" y1="80" x2="100" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+              <text x="42" y="46" text-anchor="middle" fill="#b45309" font-weight="bold" font-size="12" font-family="'Segoe UI', sans-serif">5</text>
+              <text x="89" y="46" text-anchor="middle" fill="#b45309" font-weight="bold" font-size="12" font-family="'Segoe UI', sans-serif">3</text>
+              <text x="65" y="95" text-anchor="middle" fill="#b45309" font-weight="bold" font-size="12" font-family="'Segoe UI', sans-serif">8</text>
+              <circle cx="30"  cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="65"  cy="20" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="100" cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <text x="30"  y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
+              <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
+            </svg>
+            <div class="svg-label">Weighted</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPE 3: Cyclic vs Acyclic -->
+      <div class="type-card">
+        <h3>Cyclic vs Acyclic</h3>
+        <p>
+          A <strong>cyclic</strong> graph contains at least one cycle — a path that starts and ends at the same vertex.
+          An <strong>acyclic</strong> graph has no cycles.
+          Trees are acyclic. Road networks are typically cyclic.
+        </p>
+        <div class="svg-pair">
+          <div>
+            <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr-cyc" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <polygon points="0 0, 8 3, 0 6" fill="#1e3a5f"/>
+                </marker>
+              </defs>
+              <line x1="42" y1="69" x2="57" y2="34" stroke="#1e3a5f" stroke-width="2" marker-end="url(#arr-cyc)"/>
+              <line x1="72" y1="27" x2="90" y2="66" stroke="#1e3a5f" stroke-width="2" marker-end="url(#arr-cyc)"/>
+              <line x1="87" y1="80" x2="43" y2="80" stroke="#1e3a5f" stroke-width="2" marker-end="url(#arr-cyc)"/>
+              <circle cx="30"  cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="65"  cy="20" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="100" cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <text x="30"  y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
+              <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
+            </svg>
+            <div class="svg-label">Cyclic (A&#8594;B&#8594;C&#8594;A)</div>
+          </div>
+          <div>
+            <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr-acyc" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <polygon points="0 0, 8 3, 0 6" fill="#22c55e"/>
+                </marker>
+              </defs>
+              <line x1="42" y1="69" x2="57" y2="34" stroke="#22c55e" stroke-width="2" marker-end="url(#arr-acyc)"/>
+              <line x1="72" y1="27" x2="90" y2="66" stroke="#22c55e" stroke-width="2" marker-end="url(#arr-acyc)"/>
+              <line x1="46" y1="74" x2="83" y2="74" stroke="#22c55e" stroke-width="2" marker-end="url(#arr-acyc)"/>
+              <circle cx="30"  cy="80" r="18" fill="#22c55e" stroke="#166534" stroke-width="2"/>
+              <circle cx="65"  cy="20" r="18" fill="#22c55e" stroke="#166534" stroke-width="2"/>
+              <circle cx="100" cy="80" r="18" fill="#22c55e" stroke="#166534" stroke-width="2"/>
+              <text x="30"  y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
+              <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
+            </svg>
+            <div class="svg-label">Acyclic (no cycle)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPE 4: Connected vs Disconnected -->
+      <div class="type-card">
+        <h3>Connected vs Disconnected</h3>
+        <p>
+          A <strong>connected</strong> graph has a path between every pair of vertices.
+          A <strong>disconnected</strong> graph has at least two vertices with no path between them — it contains multiple connected components.
+        </p>
+        <div class="svg-pair">
+          <div>
+            <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+              <line x1="30" y1="80" x2="65" y2="20" stroke="#1e3a5f" stroke-width="2"/>
+              <line x1="65" y1="20" x2="100" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+              <line x1="30" y1="80" x2="100" y2="80" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="30"  cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="65"  cy="20" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="100" cy="80" r="18" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <text x="30"  y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
+              <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
+            </svg>
+            <div class="svg-label">Connected</div>
+          </div>
+          <div>
+            <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+              <line x1="20" y1="60" x2="55" y2="60" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="20" cy="60" r="16" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <circle cx="55" cy="60" r="16" fill="#2563eb" stroke="#1e3a5f" stroke-width="2"/>
+              <text x="20" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="55" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
+              <circle cx="105" cy="60" r="16" fill="#94a3b8" stroke="#64748b" stroke-width="2"/>
+              <text x="105" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
+              <text x="80" y="64" text-anchor="middle" fill="#ef4444" font-size="18" font-family="'Segoe UI', sans-serif">&#10007;</text>
+            </svg>
+            <div class="svg-label">Disconnected</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPE 5: DAG -->
+      <div class="type-card">
+        <h3>DAG — Directed Acyclic Graph</h3>
+        <p>
+          A DAG is a directed graph with no cycles. It is fundamental in task scheduling, compilers (dependency resolution), spreadsheets, and package managers.
+          Topological sort — ordering tasks by dependencies — only works on DAGs.
+        </p>
+        <div class="svg-pair">
+          <div>
+            <svg width="240" height="100" viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="arr-dag" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <polygon points="0 0, 8 3, 0 6" fill="#7c3aed"/>
+                </marker>
+              </defs>
+              <line x1="46" y1="50" x2="84" y2="30" stroke="#7c3aed" stroke-width="2" marker-end="url(#arr-dag)"/>
+              <line x1="46" y1="50" x2="84" y2="70" stroke="#7c3aed" stroke-width="2" marker-end="url(#arr-dag)"/>
+              <line x1="116" y1="25" x2="154" y2="48" stroke="#7c3aed" stroke-width="2" marker-end="url(#arr-dag)"/>
+              <line x1="116" y1="75" x2="154" y2="53" stroke="#7c3aed" stroke-width="2" marker-end="url(#arr-dag)"/>
+              <line x1="186" y1="50" x2="214" y2="50" stroke="#7c3aed" stroke-width="2" marker-end="url(#arr-dag)"/>
+              <circle cx="30"  cy="50" r="18" fill="#7c3aed" stroke="#4c1d95" stroke-width="2"/>
+              <circle cx="100" cy="25" r="18" fill="#7c3aed" stroke="#4c1d95" stroke-width="2"/>
+              <circle cx="100" cy="75" r="18" fill="#7c3aed" stroke="#4c1d95" stroke-width="2"/>
+              <circle cx="170" cy="50" r="18" fill="#7c3aed" stroke="#4c1d95" stroke-width="2"/>
+              <circle cx="225" cy="50" r="16" fill="#7c3aed" stroke="#4c1d95" stroke-width="2"/>
+              <text x="30"  y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="11" font-family="'Segoe UI', sans-serif">A</text>
+              <text x="100" y="30" text-anchor="middle" fill="white" font-weight="bold" font-size="11" font-family="'Segoe UI', sans-serif">B</text>
+              <text x="100" y="80" text-anchor="middle" fill="white" font-weight="bold" font-size="11" font-family="'Segoe UI', sans-serif">C</text>
+              <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="11" font-family="'Segoe UI', sans-serif">D</text>
+              <text x="225" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="11" font-family="'Segoe UI', sans-serif">E</text>
+            </svg>
+            <div class="svg-label">DAG — No cycles, directions flow forward</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end types-grid -->
+  </section>
+
+  <!-- ===========================
+       SECTION 5 — TERMINOLOGY
+  =========================== -->
+  <section id="terminology">
+    <h2>Terminology</h2>
+
+    <p>
+      Before studying graph algorithms, you must be comfortable with the vocabulary.
+      Every term below appears repeatedly in algorithm descriptions.
+    </p>
+
+    <ul class="term-list">
+      <li class="term-item">
+        <div class="term-name">Vertex / Node</div>
+        <div class="term-def">
+          A fundamental unit of a graph. Represents an entity: a city, a person, a computer, a task.
+          The set of all vertices is denoted <strong>V</strong>.
+          <div class="example">Example: In a flight map, each airport is a vertex.</div>
+        </div>
+      </li>
+      <li class="term-item">
+        <div class="term-name">Edge</div>
+        <div class="term-def">
+          A connection between two vertices. Represents a relationship or link.
+          The set of all edges is denoted <strong>E</strong>. An edge can be directed (one-way) or undirected (two-way).
+          <div class="example">Example: A direct flight between two airports is an edge.</div>
+        </div>
+      </li>
+      <li class="term-item">
+        <div class="term-name">Degree</div>
+        <div class="term-def">
+          The <strong>degree</strong> of a vertex is the number of edges connected to it.
+          For directed graphs: <strong>in-degree</strong> = edges coming in, <strong>out-degree</strong> = edges going out.
+          <div class="example">Example: If city D connects to B, C, and E — its degree is 3.</div>
+        </div>
+      </li>
+      <li class="term-item">
+        <div class="term-name">Path</div>
+        <div class="term-def">
+          A <strong>path</strong> is a sequence of vertices where each consecutive pair is connected by an edge.
+          A <strong>simple path</strong> visits no vertex more than once.
+          <div class="example">Example: A &#8594; B &#8594; D &#8594; E is a path of length 3 (three edges).</div>
+        </div>
+      </li>
+      <li class="term-item">
+        <div class="term-name">Cycle</div>
+        <div class="term-def">
+          A <strong>cycle</strong> is a path that starts and ends at the same vertex, passing through at least one other vertex.
+          Detecting cycles is critical in deadlock detection and dependency resolution.
+          <div class="example">Example: A &#8594; B &#8594; D &#8594; C &#8594; A is a cycle.</div>
+        </div>
+      </li>
+      <li class="term-item">
+        <div class="term-name">Adjacent</div>
+        <div class="term-def">
+          Two vertices are <strong>adjacent</strong> (or neighbors) if there is an edge directly connecting them.
+          In a directed graph, adjacency is directional: if edge (u,v) exists, v is adjacent to u but not necessarily u to v.
+          <div class="example">Example: A and B are adjacent because edge (A,B) exists.</div>
+        </div>
+      </li>
+      <li class="term-item">
+        <div class="term-name">Connected Component</div>
+        <div class="term-def">
+          A <strong>connected component</strong> is a maximal subset of vertices such that every vertex in the subset is reachable from every other vertex in the subset.
+          A connected graph has exactly one component.
+          <div class="example">Example: A disconnected graph with 6 vertices might have two components: {A,B,C} and {D,E,F}.</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="box-yellow">
+      <strong>Quick Memory Aid</strong>
+      Think of a graph as a city map. Vertices = intersections. Edges = roads.
+      Degree = number of roads at an intersection. Path = a route from one place to another.
+      Cycle = a road loop. Adjacent = directly connected by one road. Component = a region you can reach.
+    </div>
+  </section>
+
+  <!-- ===========================
+       SECTION 6 — ADJACENCY MATRIX
+  =========================== -->
+  <section id="matrix">
+    <h2>Adjacency Matrix</h2>
+
+    <p>
+      An <strong>adjacency matrix</strong> is one of the two main ways to represent a graph in memory.
+      It uses a 2D array (matrix) of size <strong>V &times; V</strong>, where V is the number of vertices.
+    </p>
+
+    <div class="box-blue">
+      <strong>Rule:</strong>
+      <code>matrix[i][j] = 1</code> if there is an edge from vertex i to vertex j, otherwise <code>matrix[i][j] = 0</code>.
+      For undirected graphs, the matrix is symmetric: <code>matrix[i][j] = matrix[j][i]</code>.
+    </div>
+
+    <p>Consider the same 5-node graph from Section 2: edges (A,B), (A,C), (B,D), (C,D), (D,E).</p>
+
+    <div class="svg-wrap">
+      <svg width="500" height="200" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+        <line x1="80" y1="100" x2="200" y2="40"  stroke="#1e3a5f" stroke-width="2.5"/>
+        <line x1="80" y1="100" x2="200" y2="160" stroke="#1e3a5f" stroke-width="2.5"/>
+        <line x1="200" y1="40"  x2="340" y2="100" stroke="#1e3a5f" stroke-width="2.5"/>
+        <line x1="200" y1="160" x2="340" y2="100" stroke="#1e3a5f" stroke-width="2.5"/>
+        <line x1="340" y1="100" x2="450" y2="100" stroke="#1e3a5f" stroke-width="2.5"/>
+        <circle cx="80"  cy="100" r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="80"  y="106" text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">A</text>
+        <circle cx="200" cy="40"  r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="200" y="46"  text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">B</text>
+        <circle cx="200" cy="160" r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="200" y="166" text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">C</text>
+        <circle cx="340" cy="100" r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="340" y="106" text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">D</text>
+        <circle cx="450" cy="100" r="24" fill="#2563eb" stroke="#1e3a5f" stroke-width="2.5"/>
+        <text x="450" y="106" text-anchor="middle" fill="white" font-weight="bold" font-size="16" font-family="'Segoe UI', sans-serif">E</text>
+      </svg>
+    </div>
+
+    <div class="matrix-wrap">
+      <table class="adj-matrix">
+        <thead>
+          <tr>
+            <th></th>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D</th>
+            <th>E</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>A</th>
+            <td class="cell-zero">0</td>
+            <td class="cell-one">1</td>
+            <td class="cell-one">1</td>
+            <td class="cell-zero">0</td>
+            <td class="cell-zero">0</td>
+          </tr>
+          <tr>
+            <th>B</th>
+            <td class="cell-one">1</td>
+            <td class="cell-zero">0</td>
+            <td class="cell-zero">0</td>
+            <td class="cell-one">1</td>
+            <td class="cell-zero">0</td>
+          </tr>
+          <tr>
+            <th>C</th>
+            <td class="cell-one">1</td>
+            <td class="cell-zero">0</td>
+            <td class="cell-zero">0</td>
+            <td class="cell-one">1</td>
+            <td class="cell-zero">0</td>
+          </tr>
+          <tr>
+            <th>D</th>
+            <td class="cell-zero">0</td>
+            <td class="cell-one">1</td>
+            <td class="cell-one">1</td>
+            <td class="cell-zero">0</td>
+            <td class="cell-one">1</td>
+          </tr>
+          <tr>
+            <th>E</th>
+            <td class="cell-zero">0</td>
+            <td class="cell-zero">0</td>
+            <td class="cell-zero">0</td>
+            <td class="cell-one">1</td>
+            <td class="cell-zero">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      The <span style="background:#dbeafe;color:#1e3a5f;font-weight:bold;padding:2px 8px;border-radius:4px;">blue 1s</span> mark positions where an edge exists.
+      Notice the matrix is symmetric along the diagonal — this is because the graph is undirected.
+      The diagonal is all zeros because a vertex does not have an edge to itself.
+    </p>
+
+    <div class="box-green">
+      <strong>Advantages</strong>
+      Checking whether an edge (u, v) exists takes <strong>O(1)</strong> time — just look up matrix[u][v].
+      Adding or removing an edge is also O(1). Simple to implement.
+    </div>
+
+    <div class="box-yellow">
+      <strong>Disadvantages</strong>
+      Space usage is always <strong>O(V&sup2;)</strong> regardless of how many edges exist.
+      For a graph with 1000 vertices, this means a 1,000,000-cell matrix — most of which may be zero for a sparse graph.
+      Iterating over all neighbors of a vertex takes O(V) time, not O(degree).
+    </div>
+  </section>
+
+  <!-- ===========================
+       SECTION 7 — ADJACENCY LIST
+  =========================== -->
+  <section id="adjlist">
+    <h2>Adjacency List</h2>
+
+    <p>
+      An <strong>adjacency list</strong> represents the graph by storing, for each vertex, a list of its neighbors.
+      Instead of a full V&times;V matrix, we only store the edges that actually exist.
+    </p>
+
+    <div class="box-blue">
+      <strong>Structure:</strong>
+      An array (or dictionary) of size V. Each entry is a list (linked list, dynamic array, etc.)
+      containing the vertices adjacent to that vertex.
+    </div>
+
+    <p>For the same graph — edges (A,B), (A,C), (B,D), (C,D), (D,E):</p>
+
+    <div class="code-block">
+      <code><span class="key">A</span> <span class="arrow">--&gt;</span> <span class="val">[ B, C ]</span>
+<span class="key">B</span> <span class="arrow">--&gt;</span> <span class="val">[ A, D ]</span>
+<span class="key">C</span> <span class="arrow">--&gt;</span> <span class="val">[ A, D ]</span>
+<span class="key">D</span> <span class="arrow">--&gt;</span> <span class="val">[ B, C, E ]</span>
+<span class="key">E</span> <span class="arrow">--&gt;</span> <span class="val">[ D ]</span></code>
+    </div>
+
+    <p>
+      Each key is a vertex and each value is the list of its direct neighbors.
+      Vertex D has three neighbors (B, C, E) so its list has three entries.
+      Vertex E has only one neighbor (D), so its list has one entry.
+    </p>
+
+    <div class="box-green">
+      <strong>Advantages</strong>
+      Space usage is <strong>O(V + E)</strong> — only actual edges are stored. Far more efficient than a matrix for sparse graphs.
+      Iterating over all neighbors of a vertex takes <strong>O(degree)</strong> time, not O(V).
+      This is what most graph algorithms (DFS, BFS, Dijkstra's) rely on.
+    </div>
+
+    <div class="box-yellow">
+      <strong>Disadvantages</strong>
+      Checking whether a specific edge (u, v) exists requires scanning u's adjacency list: <strong>O(degree(u))</strong> time.
+      For dense graphs (many edges), this can be slower than the matrix's O(1) lookup.
+    </div>
+
+    <div class="box-blue">
+      <strong>In Practice</strong>
+      Most real-world graphs are <em>sparse</em> — a person on Facebook has hundreds of friends, not billions.
+      A city has dozens of roads, not connections to every other city on Earth.
+      For sparse graphs, the adjacency list almost always outperforms the adjacency matrix.
+    </div>
+  </section>
+
+  <!-- ===========================
+       SECTION 8 — COMPARISON
+  =========================== -->
+  <section id="compare">
+    <h2>Adjacency Matrix vs Adjacency List</h2>
+
+    <p>
+      Choosing the right representation affects the performance of every graph algorithm you run.
+      Here is a direct comparison:
+    </p>
+
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Adjacency Matrix</th>
+            <th>Adjacency List</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Space Complexity</strong></td>
+            <td><span class="badge-blue">O(V&sup2;)</span> — always allocates V&times;V cells</td>
+            <td><span class="badge-green">O(V + E)</span> — only stores existing edges</td>
+          </tr>
+          <tr>
+            <td><strong>Check edge (u, v)</strong></td>
+            <td><span class="badge-green">O(1)</span> — direct array lookup</td>
+            <td><span class="badge-blue">O(degree(u))</span> — must scan neighbor list</td>
+          </tr>
+          <tr>
+            <td><strong>Add an edge</strong></td>
+            <td><span class="badge-green">O(1)</span> — set two cells to 1</td>
+            <td><span class="badge-green">O(1)</span> — append to adjacency list</td>
+          </tr>
+          <tr>
+            <td><strong>Remove an edge</strong></td>
+            <td><span class="badge-green">O(1)</span> — set two cells to 0</td>
+            <td><span class="badge-blue">O(degree(u))</span> — find and remove from list</td>
+          </tr>
+          <tr>
+            <td><strong>Iterate all neighbors of u</strong></td>
+            <td><span class="badge-blue">O(V)</span> — must scan entire row, even zeros</td>
+            <td><span class="badge-green">O(degree(u))</span> — only visits real neighbors</td>
+          </tr>
+          <tr>
+            <td><strong>Best suited for</strong></td>
+            <td>Dense graphs (E close to V&sup2;), or when frequent edge-existence checks are needed</td>
+            <td>Sparse graphs (E much less than V&sup2;), which is most real-world graphs</td>
+          </tr>
+          <tr>
+            <td><strong>Memory with V=1000</strong></td>
+            <td>1,000,000 cells (even if only 2,000 edges exist)</td>
+            <td>~4,000 entries (2 &times; E for undirected graph with 2000 edges)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box-green">
+      <strong>Rule of Thumb</strong>
+      Use an <strong>adjacency list</strong> as your default choice. Switch to a matrix only when:
+      (a) the graph is dense, or
+      (b) you need O(1) edge existence checks and memory is not a concern.
+      DFS, BFS, Dijkstra's, and most classic algorithms are designed around adjacency lists.
+    </div>
+  </section>
+
+  <!-- ===========================
+       SECTION 9 — NEXT / CONTINUE
+  =========================== -->
+  <section id="next" class="next-section">
+    <h2>Ready to Explore Graphs?</h2>
+    <p>You now understand what graphs are, why they matter, their types, terminology, and how to represent them. The next step is learning how to <em>traverse</em> a graph.</p>
+
+    <a class="btn-next" href="graph-traversal.html">Next: Graph Traversal (DFS &amp; BFS) &#8594;</a>
+
+    <div style="margin-top: 32px;">
+      <div class="preview-card">
+        <div class="preview-item">
+          <div class="pi-icon">&#128269;</div>
+          <div>
+            <h4>Depth-First Search (DFS)</h4>
+            <p>Explores as deep as possible before backtracking. Uses a stack. Finds paths, detects cycles, and classifies edges.</p>
+          </div>
+        </div>
+        <div class="preview-item">
+          <div class="pi-icon">&#127774;</div>
+          <div>
+            <h4>Breadth-First Search (BFS)</h4>
+            <p>Explores all neighbors before going deeper. Uses a queue. Finds shortest paths in unweighted graphs.</p>
+          </div>
+        </div>
+        <div class="preview-item">
+          <div class="pi-icon">&#9654;</div>
+          <div>
+            <h4>Step-by-Step Simulation</h4>
+            <p>Interactive animation showing exactly how DFS and BFS visit vertices, with the stack/queue state at every step.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ======================================================
+     FOOTER
+====================================================== -->
+<footer>
+    <p><strong>CPCS 204</strong> &mdash; Data Structures I</p>
+    <p>Faculty of Computing and Information Technology &mdash; King Abdulaziz University</p>
+    <p>Prepared by Dr. Almalawi</p>
+</footer>
+
+</body>
+</html>

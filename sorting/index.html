@@ -281,6 +281,15 @@
       .resources-row { grid-template-columns: 1fr; }
       .ba-cell { width: 42px; height: 42px; font-size: 1em; }
     }
+    /* ── FOOTER ── */
+    footer {
+        background: #1f2937;
+        color: white;
+        text-align: center;
+        padding: 25px;
+    }
+    footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
+    footer strong { opacity: 1; }
   </style>
 </head>
 <body>
@@ -450,10 +459,10 @@
       <p>After finishing each tutorial, use these to deepen your understanding:</p>
 
       <div class="resources-row">
-        <a href="sorting-practice-v2.html" class="resource-card">
-          <div class="resource-icon">✏️</div>
-          <div class="resource-title">② Quadratic Sorts Practice</div>
-          <div class="resource-type">Interactive · Drag &amp; Drop</div>
+        <a href="sorting-questions.html" class="resource-card">
+          <div class="resource-icon">📝</div>
+          <div class="resource-title">② Practice Questions</div>
+          <div class="resource-type">Drag &amp; Drop · All 5 Sorts</div>
         </a>
         <a href="quicksort-simulation.html" class="resource-card">
           <div class="resource-icon">⚡</div>
@@ -592,5 +601,10 @@ window.addEventListener('load', function() {
 
 window.addEventListener('resize', drawComplexityGraph);
 </script>
+<footer>
+    <p><strong>CPCS 204</strong> &mdash; Data Structures I</p>
+    <p>Faculty of Computing and Information Technology &mdash; King Abdulaziz University</p>
+    <p>Prepared by Dr. Almalawi</p>
+</footer>
 </body>
 </html>

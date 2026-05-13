@@ -172,27 +172,28 @@
 
         /* Code Panel */
         .code-panel {
-            background: #0f172a;
+            background: white;
+            border: 2px solid #e2e8f0;
             border-radius: 10px;
-            padding: 20px;
+            padding: 16px 14px;
             overflow-y: auto;
-            max-height: 700px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            max-height: 880px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .code-panel h4 {
-            color: #ffd700;
+            color: #0d9488;
             margin-bottom: 15px;
             font-size: 1.2em;
-            border-bottom: 2px solid #555;
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 8px;
         }
 
         .code-line {
-            color: #f8f8f2;
+            color: #1e293b;
             font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-            line-height: 1.8;
+            font-size: 0.84em;
+            line-height: 1.85;
             padding: 4px 12px;
             margin: 2px 0;
             border-radius: 3px;
@@ -206,6 +207,45 @@
             transform: translateX(5px);
             box-shadow: 0 0 10px rgba(253, 230, 138, 0.5);
         }
+
+        /* ── Loop colour zones — text colour only, no background ── */
+        .zone-outer {
+            color: #b45309;
+            border-left: 3px solid #f59e0b;
+            padding-left: 9px !important;
+        }
+        .zone-i {
+            color: #1d4ed8;
+            border-left: 3px solid #60a5fa;
+            padding-left: 9px !important;
+        }
+        .zone-j {
+            color: #15803d;
+            border-left: 3px solid #22c55e;
+            padding-left: 9px !important;
+        }
+        /* highlight overrides zone text colour */
+        .code-line.highlight.zone-outer,
+        .code-line.highlight.zone-i,
+        .code-line.highlight.zone-j {
+            background: #fde68a;
+            color: #78350f;
+        }
+
+        /* ── Zone legend ── */
+        .zone-legend {
+            display: flex; gap: 6px; flex-wrap: wrap;
+            margin-bottom: 12px; padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .zl-chip {
+            font-size: 0.72em; font-weight: 700;
+            padding: 3px 9px; border-radius: 4px;
+            border-left: 3px solid; white-space: nowrap;
+        }
+        .zl-outer { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+        .zl-i     { background: #dbeafe; border-color: #60a5fa; color: #1e3a8a; }
+        .zl-j     { background: #dcfce7; border-color: #22c55e; color: #14532d; }
 
         .code-line .keyword {
             color: #ff79c6;
@@ -535,6 +575,15 @@
             cursor: pointer;
             background: white;
         }
+        /* ── FOOTER ── */
+        footer {
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+        footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
+        footer strong { opacity: 1; }
     </style>
 </head>
 <body>
@@ -624,6 +673,11 @@
                         <!-- Code Panel -->
                         <div class="code-panel">
                             <h4>Java Code</h4>
+                            <div class="zone-legend">
+                                <span class="zl-chip zl-outer">Outer while loop</span>
+                                <span class="zl-chip zl-i">i do-while →</span>
+                                <span class="zl-chip zl-j">j do-while ←</span>
+                            </div>
                             <div id="codeDisplay"></div>
                         </div>
 
@@ -682,32 +736,68 @@
         // 'line' is the text shown in the code panel; 'num' is the line index used
         // to highlight the correct line during animation.
         const javaCode = [
-            { line: 'public static int partition(int[] A, int l, int h, int p) {', num: 0 },  // method signature: array A, low index l, high index h, pivot index p
-            { line: '    int pivot = A[p];', num: 1 },       // store the pivot VALUE (not index) so we can compare against it
-            { line: '    int i = l - 1;', num: 2 },          // i starts one position LEFT of the low boundary (will increment before first use)
-            { line: '    int j = h + 1;', num: 3 },          // j starts one position RIGHT of the high boundary (will decrement before first use)
-            { line: '', num: 4 },                             // blank line for readability
-            { line: '    while (i < j) {', num: 5 },         // keep looping as long as the two pointers have not crossed
-            { line: '        do {', num: 6 },                 // do-while so i increments BEFORE the condition is checked
-            { line: '            i++;', num: 7 },             // move i one step to the right
-            { line: '        } while (A[i] <= pivot);', num: 8 },  // keep moving i right while the element is ≤ pivot; stop when we find one that is > pivot
-            { line: '', num: 9 },                             // blank line for readability
-            { line: '        do {', num: 10 },                // do-while so j decrements BEFORE the condition is checked
-            { line: '            j--;', num: 11 },            // move j one step to the left
-            { line: '        } while (A[j] > pivot);', num: 12 },  // keep moving j left while the element is > pivot; stop when we find one that is ≤ pivot
-            { line: '', num: 13 },                            // blank line for readability
-            { line: '        if (i < j) swap(A, i, j);', num: 14 }, // if pointers haven't crossed: swap the misplaced elements A[i] and A[j]
-            { line: '    }', num: 15 },                       // end of while loop
-            { line: '', num: 16 },                            // blank line for readability
-            { line: '    swap(A, p, j);', num: 17 },          // place the pivot in its final sorted position (swap pivot element with A[j])
-            { line: '    return j;', num: 18 },               // return j as the partition index (pivot's final position)
-            { line: '}', num: 19 },                           // end of partition method
-            { line: '', num: 20 },                            // blank line for readability
-            { line: 'private static void swap(int[] A, int i, int j) {', num: 21 }, // helper method to swap two elements in the array
-            { line: '    int t = A[i];', num: 22 },           // save A[i] in a temporary variable so it isn't overwritten
-            { line: '    A[i] = A[j];', num: 23 },            // copy A[j] into position i
-            { line: '    A[j] = t;', num: 24 },               // copy the saved value (original A[i]) into position j
-            { line: '}', num: 25 }                            // end of swap method
+            // ── Section header ───────────────────────────────────────────────────────────
+            { line: '// ═══════════════════════════════════════════════', num: 0 },
+            { line: '//  Hoare Partition Scheme', num: 1 },
+            { line: '// ═══════════════════════════════════════════════', num: 2 },
+            { line: 'public static int partition(int[] A, int l, int h, int p) {', num: 3 },
+
+            // ── Pivot and pointers ───────────────────────────────────────────────────────
+            { line: '', num: 4 },
+            { line: '    int pivot = A[p];  // save pivot VALUE from chosen index', num: 5 },
+            { line: '    int i = l - 1;    // i starts ONE STEP BEFORE left boundary', num: 6 },
+            { line: '    int j = h + 1;    // j starts ONE STEP AFTER  right boundary', num: 7 },
+            { line: '', num: 8 },
+
+            // ── Outer while loop ─────────────────────────────────────────────────────────
+            { line: '    while (i < j) {   // repeat until i and j cross', num: 9,  zone: 'outer' },
+            { line: '', num: 10, zone: 'outer' },
+
+            // ── Move i right ─────────────────────────────────────────────────────────────
+            { line: '        // MOVE i to the RIGHT  →', num: 11, zone: 'i' },
+            { line: '        do {', num: 12, zone: 'i' },
+            { line: '            i++;  // advance i one step to the right', num: 13, zone: 'i' },
+            { line: '        } while (A[i] <= pivot);', num: 14, zone: 'i' },
+            { line: '        //   keep going while A[i] <= pivot', num: 15, zone: 'i' },
+            { line: '        //   stop   when  A[i]  > pivot', num: 16, zone: 'i' },
+            { line: '', num: 17 },
+
+            // ── Move j left ──────────────────────────────────────────────────────────────
+            { line: '        // MOVE j to the LEFT   ←', num: 18, zone: 'j' },
+            { line: '        do {', num: 19, zone: 'j' },
+            { line: '            j--;  // advance j one step to the left', num: 20, zone: 'j' },
+            { line: '        } while (A[j] > pivot);', num: 21, zone: 'j' },
+            { line: '        //   keep going while A[j]  > pivot', num: 22, zone: 'j' },
+            { line: '        //   stop   when  A[j] <= pivot', num: 23, zone: 'j' },
+            { line: '', num: 24 },
+
+            // ── Conditional swap ─────────────────────────────────────────────────────────
+            { line: '        // SWAP — only if i has NOT yet crossed j', num: 25, zone: 'outer' },
+            { line: '        if (i < j) {', num: 26, zone: 'outer' },
+            { line: '            swap(A, i, j);  // exchange misplaced A[i] and A[j]', num: 27, zone: 'outer' },
+            { line: '        }', num: 28, zone: 'outer' },
+            { line: '        // if i >= j: pointers crossed, loop will exit', num: 29, zone: 'outer' },
+            { line: '', num: 30, zone: 'outer' },
+
+            // ── End while ────────────────────────────────────────────────────────────────
+            { line: '    }  // end while', num: 31, zone: 'outer' },
+            { line: '', num: 32 },
+
+            // ── Place pivot and return ────────────────────────────────────────────────────
+            { line: '    swap(A, p, j);  // place pivot at its final sorted position j', num: 33 },
+            { line: '    return j;       // return pivot final index to quickSort', num: 34 },
+            { line: '}', num: 35 },
+            { line: '', num: 36 },
+
+            // ── Swap helper ──────────────────────────────────────────────────────────────
+            { line: '// ═══════════════════════════════════════════════', num: 37 },
+            { line: '//  Swap Helper', num: 38 },
+            { line: '// ═══════════════════════════════════════════════', num: 39 },
+            { line: 'private static void swap(int[] A, int i, int j) {', num: 40 },
+            { line: '    int temp = A[i]; // Step 1: save A[i] in temp variable', num: 41 },
+            { line: '    A[i]     = A[j]; // Step 2: overwrite A[i] with A[j]', num: 42 },
+            { line: '    A[j]     = temp; // Step 3: put saved value into A[j]', num: 43 },
+            { line: '}', num: 44 },
         ];
 
         // ─── Animation State Variables ───────────────────────────────────────────────
@@ -729,11 +819,12 @@
             codeDisplay.innerHTML = '';                                   // clear any previous content
 
             javaCode.forEach(line => {
-                const lineDiv = document.createElement('div'); // create a div for this line
-                lineDiv.className = 'code-line';               // apply base code-line styles
-                lineDiv.id = `code-line-${line.num}`;          // unique id so we can highlight this line later
-                lineDiv.textContent = line.line;               // set the Java source text (plain text, not HTML)
-                codeDisplay.appendChild(lineDiv);              // add the div to the panel
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'code-line';
+                if (line.zone) lineDiv.classList.add('zone-' + line.zone); // apply colour zone
+                lineDiv.id = `code-line-${line.num}`;
+                lineDiv.textContent = line.line;
+                codeDisplay.appendChild(lineDiv);
             });
         }
 
@@ -897,54 +988,53 @@
 
             // ── Step 0: Show the initial state before any code runs ──
             steps.push({
-                array: [...array],          // snapshot of the array
-                i: -1,                      // i not yet initialised → hide pointer
-                j: -1,                      // j not yet initialised → hide pointer
-                pivot: -1,                  // pivot not yet set
+                array: [...array],
+                i: -1, j: -1,
+                pivot: -1,
                 l: l, h: h,
-                description: `Initial array. Parameter: l=${l}, h=${h}, p=${selectedPivotIndex}`, // explain the function arguments
-                codeLine: 0,                // highlight the method signature line
-                pivotIndex: -1,             // no pivot colour yet
-                showPointers: false         // don't draw i/j labels
+                description: `Initial array. Parameter: l=${l}, h=${h}, p=${selectedPivotIndex}`,
+                codeLine: 3,                // method signature line
+                pivotIndex: -1,
+                showPointers: false
             });
 
-            // ── Step 1: Read the pivot value from the array (code line 1) ──
-            const selectedValue = array[selectedPivotIndex]; // the actual numeric pivot value
-            pivot = selectedValue;                            // save it in the global pivot variable
+            // ── Step 1: pivot = A[p] ──
+            const selectedValue = array[selectedPivotIndex];
+            pivot = selectedValue;
 
             steps.push({
                 array: [...array],
                 i: -1, j: -1,
                 pivot: pivot,
                 l: l, h: h,
-                description: `Set pivot = A[${selectedPivotIndex}] = ${pivot}`, // show which element was chosen and its value
-                codeLine: 1,
-                pivotIndex: selectedPivotIndex, // colour this element yellow
+                description: `Set pivot = A[${selectedPivotIndex}] = ${pivot}`,
+                codeLine: 5,                // int pivot = A[p]
+                pivotIndex: selectedPivotIndex,
                 showPointers: false
             });
 
-            // ── Step 2: Initialise i = l - 1 (code line 2) ──
-            i = l - 1; // i starts one before the low boundary so the do-while increments it first
+            // ── Step 2: i = l - 1 ──
+            i = l - 1;
             steps.push({
                 array: [...array],
                 i: i, j: -1,
                 pivot: pivot,
                 l: l, h: h,
-                description: `Initialize i = ${l} - 1 = ${i}`, // show the calculation
-                codeLine: 2,
+                description: `Initialize i = ${l} - 1 = ${i}`,
+                codeLine: 6,                // int i = l - 1
                 pivotIndex: selectedPivotIndex,
                 showPointers: false
             });
 
-            // ── Step 3: Initialise j = h + 1 (code line 3) ──
-            j = h + 1; // j starts one beyond the high boundary so the do-while decrements it first
+            // ── Step 3: j = h + 1 ──
+            j = h + 1;
             steps.push({
                 array: [...array],
                 i: i, j: j,
                 pivot: pivot,
                 l: l, h: h,
                 description: `Initialize j = ${h} + 1 = ${j} (beyond array bounds, will decrement first in do-while)`,
-                codeLine: 3,
+                codeLine: 7,                // int j = h + 1
                 pivotIndex: selectedPivotIndex,
                 showPointers: false
             });
@@ -962,38 +1052,36 @@
                 do {
                     i++; // increment i (move right)
                     if (!iStarted) {
-                        // First iteration of the do-while: show i being incremented (code line 7)
                         steps.push({
                             array: [...array],
                             i: i, j: j,
                             pivot: pivot, l: l, h: h,
-                            description: `Increment i to ${i}. Check if A[${i}] = ${array[i]} <= pivot (${pivot})`, // show what we're comparing
-                            codeLine: 7,               // highlight "i++"
+                            description: `Increment i to ${i}. Check if A[${i}] = ${array[i]} <= pivot (${pivot})`,
+                            codeLine: 13,              // i++ line
                             pivotIndex: currentPivotIndex,
-                            showPointers: true         // draw i/j labels on the array
+                            showPointers: true
                         });
-                        iStarted = true; // don't repeat this branch for subsequent iterations
+                        iStarted = true;
                     } else {
-                        // Subsequent iterations: A[i] was still ≤ pivot, so we keep going (code line 8)
                         steps.push({
                             array: [...array],
                             i: i, j: j,
                             pivot: pivot, l: l, h: h,
-                            description: `A[${i}] = ${array[i]} <= ${pivot}, continue incrementing i`, // condition was true → loop again
-                            codeLine: 8,               // highlight the while condition
+                            description: `A[${i}] = ${array[i]} <= ${pivot}, continue incrementing i`,
+                            codeLine: 14,              // } while (A[i] <= pivot) line
                             pivotIndex: currentPivotIndex,
                             showPointers: true
                         });
                     }
-                } while (array[i] <= pivot); // keep incrementing while element ≤ pivot
+                } while (array[i] <= pivot);
 
                 // A[i] > pivot: log the stopping point
                 steps.push({
                     array: [...array],
                     i: i, j: j,
                     pivot: pivot, l: l, h: h,
-                    description: `Found A[${i}] = ${array[i]} > pivot (${pivot}). Stop incrementing i.`, // explain why we stopped
-                    codeLine: 8,
+                    description: `Found A[${i}] = ${array[i]} > pivot (${pivot}). Stop incrementing i.`,
+                    codeLine: 14,              // } while condition
                     pivotIndex: currentPivotIndex,
                     showPointers: true
                 });
@@ -1003,30 +1091,28 @@
                 do {
                     j--; // decrement j (move left)
                     if (!jStarted) {
-                        // First iteration: show j being decremented (code line 11)
                         steps.push({
                             array: [...array],
                             i: i, j: j,
                             pivot: pivot, l: l, h: h,
                             description: `Decrement j to ${j}. Check if A[${j}] = ${array[j]} > pivot (${pivot})`,
-                            codeLine: 11,              // highlight "j--"
+                            codeLine: 20,              // j-- line
                             pivotIndex: currentPivotIndex,
                             showPointers: true
                         });
                         jStarted = true;
                     } else {
-                        // Subsequent iterations: A[j] was still > pivot, so keep going (code line 12)
                         steps.push({
                             array: [...array],
                             i: i, j: j,
                             pivot: pivot, l: l, h: h,
                             description: `A[${j}] = ${array[j]} > ${pivot}, continue decrementing j`,
-                            codeLine: 12,              // highlight the while condition
+                            codeLine: 21,              // } while (A[j] > pivot) line
                             pivotIndex: currentPivotIndex,
                             showPointers: true
                         });
                     }
-                } while (array[j] > pivot); // keep decrementing while element > pivot
+                } while (array[j] > pivot);
 
                 // A[j] <= pivot: log the stopping point
                 steps.push({
@@ -1034,80 +1120,78 @@
                     i: i, j: j,
                     pivot: pivot, l: l, h: h,
                     description: `Found A[${j}] = ${array[j]} <= pivot (${pivot}). Stop decrementing j.`,
-                    codeLine: 12,
+                    codeLine: 21,              // } while condition
                     pivotIndex: currentPivotIndex,
                     showPointers: true
                 });
 
                 // ── Swap if i < j (code line 14) ──
                 if (i < j) {
-                    // Pointers haven't crossed: the two elements are on the wrong sides → swap them
+                    // Pointers haven't crossed: swap misplaced elements
                     steps.push({
                         array: [...array],
                         i: i, j: j,
                         pivot: pivot, l: l, h: h,
-                        description: `i (${i}) < j (${j}), so swap A[${i}] = ${array[i]} with A[${j}] = ${array[j]}`, // explain the swap
-                        codeLine: 14,
+                        description: `i (${i}) < j (${j}), so swap A[${i}] = ${array[i]} with A[${j}] = ${array[j]}`,
+                        codeLine: 26,          // if (i < j) { line
                         pivotIndex: currentPivotIndex,
                         showPointers: true
                     });
 
-                    // Track whether the pivot element itself gets swapped to a new position
                     if (i === currentPivotIndex) {
-                        currentPivotIndex = j; // pivot was at i; after swap it will be at j
+                        currentPivotIndex = j;
                     } else if (j === currentPivotIndex) {
-                        currentPivotIndex = i; // pivot was at j; after swap it will be at i
+                        currentPivotIndex = i;
                     }
 
-                    [array[i], array[j]] = [array[j], array[i]]; // perform the actual swap using destructuring
+                    [array[i], array[j]] = [array[j], array[i]];
 
-                    // Show the array after the swap with the swapping animation flag
                     steps.push({
-                        array: [...array],       // snapshot after the swap
+                        array: [...array],
                         i: i, j: j,
                         pivot: pivot, l: l, h: h,
-                        description: `After swap: A[${i}] = ${array[i]}, A[${j}] = ${array[j]}`, // confirm new values
-                        codeLine: 14,
+                        description: `After swap: A[${i}] = ${array[i]}, A[${j}] = ${array[j]}`,
+                        codeLine: 27,          // swap(A, i, j) line
                         pivotIndex: currentPivotIndex,
-                        swapped: true,           // tells showStep() to add the CSS swap-pulse animation
+                        swapped: true,
                         showPointers: true
                     });
                 } else {
-                    // i >= j: pointers crossed → exit the while loop
+                    // i >= j: pointers crossed → loop exits
                     steps.push({
                         array: [...array],
                         i: i, j: j,
                         pivot: pivot, l: l, h: h,
-                        description: `i (${i}) >= j (${j}), exit while loop`, // explain why the outer while condition is now false
-                        codeLine: 5,             // highlight the while condition
+                        description: `i (${i}) >= j (${j}), exit while loop`,
+                        codeLine: 9,           // while (i < j) line
                         pivotIndex: currentPivotIndex,
                         showPointers: true
                     });
                 }
             } // end while (i < j)
 
-            // ── Final swap: put the pivot in its correct sorted position (code line 17) ──
+            // ── Final swap: place the pivot in its correct sorted position ──
             steps.push({
                 array: [...array],
                 i: i, j: j,
                 pivot: pivot, l: l, h: h,
                 description: `Swap pivot A[${currentPivotIndex}] = ${array[currentPivotIndex]} with A[${j}] = ${array[j]} to place pivot in correct position`,
-                codeLine: 17,                // highlight "swap(A, p, j)"
+                codeLine: 33,          // swap(A, p, j) line
                 pivotIndex: currentPivotIndex,
                 showPointers: true
             });
 
-            [array[currentPivotIndex], array[j]] = [array[j], array[currentPivotIndex]]; // place pivot at index j
+            [array[currentPivotIndex], array[j]] = [array[j], array[currentPivotIndex]];
 
-            // ── Last step: show the partitioned result and return value ──
+            // ── Last step: show the partitioned result ──
             steps.push({
-                array: [...array],           // final state of the array
+                array: [...array],
                 i: i, j: j,
                 pivot: pivot, l: l, h: h,
-                description: `Partition complete! Pivot ${pivot} is now at index ${j}. Return ${j}.`, // summarise the outcome
-                codeLine: 18,                // highlight "return j"
-                pivotIndex: j,               // colour the pivot at its new position
-                final: true                  // triggers the green/red left/right colouring in renderArray()
+                description: `Partition complete! Pivot ${pivot} is now at index ${j}. Return ${j}.`,
+                codeLine: 34,          // return j line
+                pivotIndex: j,
+                final: true
             });
         }
 
@@ -1210,5 +1294,10 @@
             loadCustomArray(); // parse the default array value and prepare the animation
         };
     </script>
+<footer>
+    <p><strong>CPCS 204</strong> &mdash; Data Structures I</p>
+    <p>Faculty of Computing and Information Technology &mdash; King Abdulaziz University</p>
+    <p>Prepared by Dr. Almalawi</p>
+</footer>
 </body>
 </html>
