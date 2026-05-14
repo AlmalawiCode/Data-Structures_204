@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CPCS-204 — Data Structures I — Comprehensive Question Bank</title>
+
+<!-- Mermaid for diagram rendering -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (window.mermaid) {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "neutral",
+        flowchart: { htmlLabels: true, curve: "linear" },
+        themeVariables: {
+          fontFamily: "Georgia, 'Times New Roman', serif",
+          fontSize: "14px",
+          primaryColor: "#ffffff",
+          primaryBorderColor: "#222222",
+          primaryTextColor: "#111111",
+          lineColor: "#444444",
+          secondaryColor: "#f4f4f0",
+          tertiaryColor: "#fafaf6"
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+/* =========================================================================
+   PAGE SETUP — A4, print-first design
+   ========================================================================= */
+@page {
+  size: A4;
+  margin: 18mm 18mm 20mm 18mm;
+}
+
+:root {
+  --ink:        #1a1a1a;
+  --ink-soft:   #3a3a3a;
+  --rule:       #888;
+  --rule-soft:  #bbb;
+  --paper:      #ffffff;
+  --paper-tint: #fbfbf7;
+  --kau-green:  #0d5a31;
+  --kau-deep:   #063b21;
+  --accent:     #1c3f8a;
+  --warn:       #8a1c1c;
+  --gold:       #8a6a14;
+  --code-bg:    #f5f5ef;
+  --code-rule:  #d6d6cf;
+  --box-bg:     #fcfcfa;
+  --tag-easy:   #e9f5e9;
+  --tag-easy-i: #1e6b1e;
+  --tag-med:    #fbf3e0;
+  --tag-med-i:  #8a6014;
+  --tag-hard:   #f9e6e6;
+  --tag-hard-i: #8a1c1c;
+}
+
+/* =========================================================================
+   BASE TYPOGRAPHY
+   ========================================================================= */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ececec;
+  color: var(--ink);
+  font-family: "Georgia", "Cambria", "Times New Roman", serif;
+  font-size: 11.5pt;
+  line-height: 1.55;
+}
+body { padding: 14mm 0; }
+
+/* Each .sheet behaves as a printable A4 page in screen view */
+.sheet {
+  background: var(--paper);
+  width: 210mm;
+  min-height: 285mm;
+  margin: 0 auto 8mm;
+  padding: 18mm 20mm;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+  border: 1px solid #d8d8d8;
+  position: relative;
+}
+.sheet.cover { padding-top: 24mm; }
+
+/* Headings */
+h1, h2, h3, h4, h5 {
+  font-family: "Georgia", "Cambria", serif;
+  color: var(--ink);
+  margin-top: 0;
+}
+h1 { font-size: 22pt; letter-spacing: .5px; }
+h2 { font-size: 16pt; }
+h3 { font-size: 13pt; }
+h4 { font-size: 11.5pt; }
+
+/* =========================================================================
+   COVER PAGE
+   ========================================================================= */
+.cover-header {
+  text-align: center;
+  border-bottom: 3px double var(--kau-deep);
+  padding-bottom: 14px;
+}
+.cover-header .bismi { font-size: 11pt; color: var(--ink-soft); font-style: italic; }
+.cover-header h1 { color: var(--kau-deep); margin: 8px 0 2px; }
+.cover-header .uni-sub { font-size: 12pt; font-weight: 600; margin: 2px 0; }
+.cover-header .uni-dept { font-size: 11pt; color: var(--ink-soft); margin: 2px 0; }
+
+.cover-title {
+  text-align: center;
+  margin-top: 24px;
+  padding: 18px 12px;
+  border: 1.5px solid var(--kau-green);
+  background: var(--paper-tint);
+}
+.cover-title .doc-title { font-size: 20pt; color: var(--kau-deep); font-weight: 700; }
+.cover-title .doc-sub   { font-size: 13pt; color: var(--ink-soft); margin-top: 4px; }
+.cover-title .doc-meta  { font-size: 11pt; margin-top: 10px; color: var(--ink); letter-spacing: .3px; }
+
+.cover-info {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 30px;
+  font-size: 11pt;
+}
+.cover-info .row { display: flex; align-items: center; gap: 8px; }
+.cover-info .row span.label { width: 90px; font-weight: 600; }
+.cover-info .row span.field {
+  flex: 1; border-bottom: 1px solid var(--ink); height: 18px;
+}
+
+.cover-overview {
+  margin-top: 26px;
+  border: 1px solid var(--rule-soft);
+  background: var(--paper-tint);
+  padding: 14px 18px;
+}
+.cover-overview h3 {
+  margin: 0 0 8px;
+  color: var(--kau-deep);
+  border-bottom: 1px solid var(--rule-soft);
+  padding-bottom: 4px;
+}
+.cover-overview p { margin: 6px 0; font-size: 10.5pt; }
+
+.cover-toc {
+  margin-top: 22px;
+  border: 1px solid var(--rule-soft);
+  background: #fff;
+  padding: 14px 18px;
+}
+.cover-toc h3 {
+  margin: 0 0 10px;
+  color: var(--kau-deep);
+  border-bottom: 1px solid var(--rule-soft);
+  padding-bottom: 4px;
+}
+.cover-toc ol {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 10.8pt;
+  column-count: 2;
+  column-gap: 22px;
+}
+.cover-toc ol li { margin-bottom: 4px; break-inside: avoid; }
+.cover-toc .pg { color: var(--ink-soft); float: right; }
+
+/* =========================================================================
+   PART AND SECTION HEADERS
+   ========================================================================= */
+.part-header {
+  page-break-before: always;
+  margin: 0 0 14px;
+  text-align: center;
+}
+.part-header .label {
+  display: inline-block;
+  font-size: 10pt;
+  color: #fff;
+  background: var(--kau-deep);
+  padding: 3px 12px;
+  border-radius: 2px;
+  letter-spacing: 2px;
+}
+.part-header h2 {
+  color: var(--kau-deep);
+  margin: 8px 0 2px;
+  font-size: 18pt;
+}
+.part-header .sub {
+  font-size: 10.5pt;
+  color: var(--ink-soft);
+  font-style: italic;
+  border-bottom: 1.5px solid var(--kau-green);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+h3.q {
+  margin: 18px 0 6px;
+  padding: 5px 0 4px 8px;
+  border-left: 4px solid var(--kau-green);
+  background: var(--paper-tint);
+  font-size: 12pt;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  break-after: avoid;
+}
+h3.q .pts {
+  font-size: 10.5pt;
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+h4.sub {
+  margin: 14px 0 6px;
+  font-size: 11pt;
+  color: var(--kau-deep);
+  text-decoration: underline;
+  break-after: avoid;
+}
+
+/* Difficulty pill */
+.tag {
+  display: inline-block;
+  font-size: 8.5pt;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 8px;
+  margin-left: 6px;
+  letter-spacing: .5px;
+  vertical-align: 2px;
+}
+.tag-easy { background: var(--tag-easy); color: var(--tag-easy-i); border: 1px solid var(--tag-easy-i); }
+.tag-med  { background: var(--tag-med);  color: var(--tag-med-i);  border: 1px solid var(--tag-med-i);  }
+.tag-hard { background: var(--tag-hard); color: var(--tag-hard-i); border: 1px solid var(--tag-hard-i); }
+
+/* =========================================================================
+   TEXT, LISTS, BOXES
+   ========================================================================= */
+.q-body { margin: 4px 0 12px 4px; break-inside: avoid; }
+.q-body p { margin: 6px 0; }
+.q-body ol, .q-body ul { margin: 6px 0 6px 22px; padding: 0; }
+.q-body li { margin-bottom: 3px; }
+
+p .lead, p.lead { margin: 0 0 8px; }
+
+.note {
+  border-left: 4px solid var(--gold);
+  background: #fbf8ec;
+  padding: 8px 14px;
+  margin: 10px 0;
+  font-size: 10.8pt;
+}
+.note b { color: var(--gold); }
+
+.answer-line {
+  display: inline-block;
+  border-bottom: 1px solid var(--ink);
+  min-width: 140px;
+  height: 16px;
+  margin: 0 4px;
+}
+.answer-box {
+  border: 1px dashed var(--rule);
+  background: var(--box-bg);
+  min-height: 80px;
+  padding: 8px 10px;
+  margin: 8px 0 12px;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 10.5pt;
+  color: var(--ink-soft);
+  break-inside: avoid;
+}
+.answer-box.sm { min-height: 50px; }
+.answer-box.md { min-height: 120px; }
+.answer-box.lg { min-height: 180px; }
+.answer-box.xl { min-height: 240px; }
+
+.fill-area {
+  border: 1px dashed var(--rule);
+  background: var(--box-bg);
+  padding: 10px;
+  margin: 8px 0 12px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  font-size: 10.5pt;
+}
+
+/* =========================================================================
+   CODE BLOCKS  (LIGHT, PRINTER-FRIENDLY)
+   ========================================================================= */
+pre.code, code.inline {
+  font-family: "Consolas", "Cascadia Code", "Courier New", monospace;
+  font-size: 10.5pt;
+}
+pre.code {
+  background: var(--code-bg);
+  color: var(--ink);
+  border: 1px solid var(--code-rule);
+  border-left: 3px solid var(--kau-green);
+  padding: 10px 14px;
+  margin: 8px 0;
+  white-space: pre;
+  overflow-x: auto;
+  break-inside: avoid;
+  line-height: 1.45;
+}
+code.inline {
+  background: #efece2;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--ink);
+  border: 1px solid #e1ddc9;
+}
+.kw { color: #6b1b6b; font-weight: 600; }
+.ty { color: #14506b; font-weight: 600; }
+.st { color: #6b4a14; }
+.cm { color: #707070; font-style: italic; }
+
+/* =========================================================================
+   TABLES
+   ========================================================================= */
+table.data {
+  border-collapse: collapse;
+  margin: 8px 0 12px;
+  font-size: 10.5pt;
+  break-inside: avoid;
+}
+table.data th, table.data td {
+  border: 1px solid #333;
+  padding: 5px 9px;
+  text-align: center;
+  min-width: 36px;
+  background: #fff;
+}
+table.data th { background: #ecece4; font-weight: 700; }
+table.data .row-label { background: #f6f6ee; font-weight: 600; text-align: left; padding-left: 8px; }
+table.data.full { width: 100%; }
+
+/* Compact marks table for cover */
+table.marks {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px auto 0;
+  font-size: 10pt;
+}
+table.marks th, table.marks td {
+  border: 1px solid #444;
+  padding: 5px 6px;
+  text-align: center;
+  background: #fff;
+}
+table.marks th { background: #ecece4; }
+
+/* =========================================================================
+   MCQ AND TRUE/FALSE
+   ========================================================================= */
+.mcq {
+  margin: 6px 0 12px;
+  break-inside: avoid;
+}
+.mcq .stem { font-weight: 700; margin-bottom: 4px; }
+.mcq .opts {
+  margin-left: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 18px;
+  row-gap: 3px;
+  font-size: 10.8pt;
+}
+
+.tf {
+  margin: 8px 0;
+}
+.tf .item {
+  margin: 5px 0;
+  padding-left: 18px;
+  text-indent: -18px;
+  break-inside: avoid;
+}
+.tf .ch {
+  display: inline-block;
+  width: 70px;
+  margin-left: 10px;
+  color: var(--ink-soft);
+}
+.tf .ch::before {
+  content: "\25A1";
+  display: inline-block;
+  width: 14px;
+  color: #666;
+}
+
+/* =========================================================================
+   STACK / QUEUE VISUALS (PURE HTML/CSS)
+   ========================================================================= */
+.stack-row { display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0; break-inside: avoid; }
+.stack-col { display: flex; flex-direction: column; align-items: center; }
+.stack-col .stack {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.stack-col .stack .cell {
+  width: 72px;
+  height: 26px;
+  border: 1px solid #333;
+  border-top: none;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Consolas", monospace;
+  font-size: 10.5pt;
+}
+.stack-col .stack .cell:first-child { border-top: 1px solid #333; }
+.stack-col .label { margin-top: 4px; font-size: 10pt; font-weight: 600; }
+
+.queue-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 10px 0;
+  font-family: "Consolas", monospace;
+  font-size: 10.5pt;
+}
+.queue-row .cell {
+  width: 44px; height: 28px;
+  border: 1px solid #333;
+  border-right: none;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff;
+}
+.queue-row .cell:last-child { border-right: 1px solid #333; }
+.queue-row .marker {
+  font-size: 9pt;
+  text-align: center;
+  width: 44px;
+  margin-top: 2px;
+}
+
+/* Linked list visualization (inline) */
+.ll-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  font-family: "Consolas", monospace;
+  font-size: 10.5pt;
+  justify-content: center;
+}
+.ll-row .node {
+  border: 1px solid #333;
+  padding: 4px 10px;
+  background: #fff;
+  min-width: 38px;
+  text-align: center;
+}
+.ll-row .arr { font-size: 14pt; padding: 0 4px; color: #444; }
+
+/* =========================================================================
+   DIAGRAM BLOCK (Mermaid)
+   ========================================================================= */
+.diagram {
+  break-inside: avoid;
+  margin: 10px 0;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--rule-soft);
+  text-align: center;
+  overflow: hidden;
+}
+.diagram .mermaid { display: inline-block; margin: 0 auto; }
+.diagram-caption {
+  font-size: 9.5pt;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* =========================================================================
+   ANSWER KEY APPENDIX
+   ========================================================================= */
+.key-section {
+  margin: 14px 0;
+  padding: 8px 12px;
+  background: #f4f7f2;
+  border: 1px solid #b5cdb6;
+  break-inside: avoid;
+}
+.key-section h3 {
+  margin: 0 0 6px;
+  color: var(--kau-deep);
+  font-size: 12pt;
+  border-bottom: 1px dashed #aac3ab;
+  padding-bottom: 3px;
+}
+.key-item {
+  margin: 4px 0;
+  padding: 4px 8px;
+  background: #fff;
+  border-left: 3px solid var(--kau-green);
+  font-size: 10.5pt;
+}
+
+/* =========================================================================
+   PRINT MEDIA QUERY
+   ========================================================================= */
+@media print {
+  html, body { background: #fff; margin: 0; padding: 0; }
+  body { padding: 0; }
+  .sheet {
+    box-shadow: none;
+    border: none;
+    margin: 0;
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    page-break-after: always;
+  }
+  .sheet:last-child { page-break-after: auto; }
+  .part-header { page-break-before: always; }
+  h3.q, .answer-box, table.data, pre.code, .diagram, .mcq, .tf .item, .key-section {
+    page-break-inside: avoid;
+  }
+  /* Hide the on-screen note about Mermaid rendering */
+  .screen-only { display: none !important; }
+  /* Reset link colors to black */
+  a { color: var(--ink) !important; text-decoration: none; }
+}
+
+/* =========================================================================
+   PAGE NUMBER HINT (screen) — purely visual cue
+   ========================================================================= */
+.page-corner {
+  position: absolute;
+  top: 8mm;
+  right: 14mm;
+  font-size: 9pt;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<!-- =============================================================================
+                                COVER PAGE
+============================================================================== -->
+<section class="sheet cover">
+  <div class="cover-header">
+    <div class="bismi">In the Name of Allah, the Most Gracious, the Most Merciful</div>
+    <h1>King Abdulaziz University</h1>
+    <div class="uni-sub">Faculty of Computing &amp; Information Technology</div>
+    <div class="uni-dept">Computer Science Department</div>
+  </div>
+
+  <div class="cover-title">
+    <div class="doc-title">Comprehensive Question Bank &amp; Practice Final</div>
+    <div class="doc-sub">CPCS-204 &mdash; Data Structures I</div>
+    <div class="doc-meta">Academic Year 2025 &ndash; 2026 &nbsp;|&nbsp; Full-Course Revision Booklet</div>
+  </div>
+
+  <div class="cover-info">
+    <div class="row"><span class="label">Student ID:</span><span class="field"></span></div>
+    <div class="row"><span class="label">Section:</span><span class="field"></span></div>
+    <div class="row"><span class="label">Student Name:</span><span class="field"></span></div>
+    <div class="row"><span class="label">Instructor:</span><span class="field"></span></div>
+  </div>
+
+  <div class="cover-overview">
+    <h3>About This Booklet</h3>
+    <p>This document is a comprehensive revision booklet for <b>CPCS-204 (Data Structures I)</b>. It is organised as a question bank across <b>twelve parts</b>, ranging from foundational concepts to advanced tracing problems, and ends with an <b>Answer Key &amp; Hint Sheet</b>. The intent is to expose you to <b>every recurring style of question</b> that may appear on midterms and finals.</p>
+    <p>Each question is tagged with a difficulty label: <span class="tag tag-easy">EASY</span> <span class="tag tag-med">MEDIUM</span> <span class="tag tag-hard">HARD</span>. Diagrams accompany many questions to illustrate the underlying data structure or algorithm. The booklet is optimised for both screen reading and <b>A4 printing</b>.</p>
+    <p class="screen-only" style="color:var(--warn);font-size:10pt;"><b>Note (screen view only):</b> Tree, heap, list, and graph diagrams are rendered using Mermaid. If a diagram appears blank, ensure the page has internet access on first load, then refresh.</p>
+  </div>
+
+  <div class="cover-toc">
+    <h3>Table of Contents</h3>
+    <ol>
+      <li>Part I &mdash; Algorithm Analysis &amp; Big-O</li>
+      <li>Part II &mdash; Recursion (Tracing &amp; Code Writing)</li>
+      <li>Part III &mdash; Linked Lists (Singly &amp; Doubly)</li>
+      <li>Part IV &mdash; Stacks &amp; Expression Conversion</li>
+      <li>Part V &mdash; Queues &amp; Circular Queues</li>
+      <li>Part VI &mdash; Sorting Algorithms</li>
+      <li>Part VII &mdash; Trees &amp; Binary Search Trees</li>
+      <li>Part VIII &mdash; Heaps &amp; Priority Queues</li>
+      <li>Part IX &mdash; Hash Tables</li>
+      <li>Part X &mdash; Graphs (Representation &amp; Traversal)</li>
+      <li>Part XI &mdash; Mixed Conceptual &amp; True/False</li>
+      <li>Appendix &mdash; Answer Key &amp; Hint Sheet</li>
+    </ol>
+  </div>
+
+  <table class="marks">
+    <thead>
+      <tr>
+        <th rowspan="2">Topic</th>
+        <th>I</th><th>II</th><th>III</th><th>IV</th><th>V</th><th>VI</th>
+        <th>VII</th><th>VIII</th><th>IX</th><th>X</th><th>XI</th>
+        <th rowspan="2">Total</th>
+      </tr>
+      <tr>
+        <th>Big-O</th><th>Recur.</th><th>LL</th><th>Stack</th><th>Queue</th><th>Sort</th>
+        <th>Tree</th><th>Heap</th><th>Hash</th><th>Graph</th><th>Mixed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Marks</td>
+        <td>68</td><td>72</td><td>66</td><td>38</td><td>44</td><td>48</td>
+        <td>69</td><td>34</td><td>36</td><td>18</td><td>52</td>
+        <td><b>545</b></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- =============================================================================
+                       PART I — ALGORITHM ANALYSIS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART I</div>
+    <h2>Algorithm Analysis &amp; Big-O</h2>
+    <div class="sub">Time complexity, best/worst/average cases, recurrence relations</div>
+  </div>
+
+  <h3 class="q">Question 1.1 &mdash; Big-O of Single-Loop Fragments <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>State the <b>Big-O</b> of each fragment in terms of <code class="inline">n</code>. No justification required.</p>
+<pre class="code"><span class="cm">// (a)</span>
+<span class="kw">for</span> (<span class="ty">int</span> i = 0; i &lt; n; i += 3) {
+    System.out.println(i);
+}
+
+<span class="cm">// (b)</span>
+<span class="kw">for</span> (<span class="ty">int</span> i = 1; i &lt;= n; i = i * 3) {
+    sum += i;
+}
+
+<span class="cm">// (c)</span>
+<span class="kw">for</span> (<span class="ty">int</span> i = n; i &gt; 0; i = i / 2) {
+    <span class="kw">for</span> (<span class="ty">int</span> j = 0; j &lt; 100; j++) {
+        x++;
+    }
+}</pre>
+    <p><b>(a)</b> O(<span class="answer-line"></span>) &nbsp; <b>(b)</b> O(<span class="answer-line"></span>) &nbsp; <b>(c)</b> O(<span class="answer-line"></span>)</p>
+  </div>
+
+  <h3 class="q">Question 1.2 &mdash; Nested Loops with Mixed Increment <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Determine the Big-O running time. <b>Explain your answer</b>. A correct answer without explanation receives only half the marks.</p>
+<pre class="code"><span class="kw">public void</span> exam(<span class="ty">int</span>[][] M, <span class="ty">int</span> n) {
+    <span class="kw">for</span> (<span class="ty">int</span> i = 1; i &lt;= n; i++)
+        <span class="kw">for</span> (<span class="ty">int</span> j = 1; j &lt;= n; j = j * 2)
+            <span class="kw">for</span> (<span class="ty">int</span> k = 0; k &lt; n; k++)
+                M[i][j] = M[i][j] + k;
+}</pre>
+    <p><b>T(n) =</b> O(<span class="answer-line"></span>) &nbsp; <b>Explanation:</b></p>
+    <div class="answer-box"></div>
+  </div>
+
+  <h3 class="q">Question 1.3 &mdash; Triangular Loops <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+<pre class="code"><span class="ty">int</span> count = 0;
+<span class="kw">for</span> (<span class="ty">int</span> i = 0; i &lt; n; i++)
+    <span class="kw">for</span> (<span class="ty">int</span> j = i; j &lt; n; j++)
+        <span class="kw">for</span> (<span class="ty">int</span> k = j; k &lt; n; k++)
+            count++;</pre>
+    <p>Show that the body runs &Theta;(n<sup>3</sup>) times. Give the exact closed-form count and confirm the Big-O.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 1.4 &mdash; Empirical Running Time (Find C, Find n) <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Algorithm <b>K</b> runs in <b>O(n<sup>2</sup> log<sub>2</sub> n)</b>. For an input of size <b>n = 8</b>, the algorithm completes in <b>192 ms</b>.</p>
+    <ol type="i">
+      <li>Find the constant <b>C</b>. (5 pts)</li>
+      <li>For what input size will the algorithm complete in approximately <b>800 ms</b>? (5 pts)</li>
+    </ol>
+    <p><i>You must show your work.</i></p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">Question 1.5 &mdash; Logarithmic Algorithm Sizing <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Algorithm <b>R</b> runs in <b>O(log<sub>3</sub> n)</b>. It takes <b>24 ms</b> for input size <b>n = 81</b>.</p>
+    <ol type="a">
+      <li>Find the constant <b>C</b>.</li>
+      <li>What input size will require <b>72 ms</b>?</li>
+      <li>What input size will require <b>96 ms</b>?</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 1.6 &mdash; Recurrence Analysis <span class="tag tag-hard">HARD</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>For each recurrence, give a tight Big-O bound. Justify briefly by substitution or by sketching the recursion tree.</p>
+    <ol type="a">
+      <li><code class="inline">T(n) = T(n−1) + n</code>, T(1) = 1</li>
+      <li><code class="inline">T(n) = 2&middot;T(n/2) + n</code>, T(1) = 1</li>
+      <li><code class="inline">T(n) = T(n/2) + 1</code>, T(1) = 1</li>
+      <li><code class="inline">T(n) = 2&middot;T(n−1) + 1</code>, T(0) = 1</li>
+    </ol>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">Question 1.7 &mdash; Code Fragment with List Parameters <span class="tag tag-med">MEDIUM</span><span class="pts">[7 marks]</span></h3>
+  <div class="q-body">
+    <p>List <code class="inline">L</code> has <b>m</b> nodes; each <code class="inline">data</code> stores a positive integer of at most <b>d</b> digits.</p>
+<pre class="code"><span class="kw">public int</span> totalDigitSum(ll_node head) {
+    ll_node hp = head;
+    <span class="ty">int</span> total = 0;
+    <span class="kw">while</span> (hp != null) {
+        <span class="ty">int</span> v = hp.data;
+        <span class="kw">while</span> (v &gt; 0) {
+            total += v % 10;
+            v = v / 10;
+        }
+        hp = hp.next;
+    }
+    <span class="kw">return</span> total;
+}</pre>
+    <p><b>T =</b> O(<span class="answer-line"></span>) &nbsp; <b>Explanation:</b></p>
+    <div class="answer-box"></div>
+  </div>
+
+  <h3 class="q">Question 1.8 &mdash; Order Growth Rates <span class="tag tag-easy">EASY</span><span class="pts">[5 marks]</span></h3>
+  <div class="q-body">
+    <p>Arrange in <b>ascending</b> order of growth:</p>
+    <p style="text-align:center;font-family:Consolas,monospace;font-size:11pt;">
+      n! &nbsp; , &nbsp; 2<sup>n</sup> &nbsp; , &nbsp; n<sup>3</sup> &nbsp; , &nbsp; n&middot;log n &nbsp; , &nbsp; n<sup>2</sup> &nbsp; , &nbsp; log n &nbsp; , &nbsp; &radic;n &nbsp; , &nbsp; n &nbsp; , &nbsp; n<sup>log n</sup> &nbsp; , &nbsp; 1
+    </p>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">Question 1.9 &mdash; MCQ Cluster <span class="tag tag-easy">EASY</span><span class="pts">[10 marks &middot; 1 pt each]</span></h3>
+  <div class="q-body">
+    <div class="mcq">
+      <div class="stem">1) Which expression is NOT O(n<sup>2</sup>)?</div>
+      <div class="opts"><span>a) 3n<sup>2</sup> + 5n</span><span>b) n log n</span><span>c) n<sup>2</sup> + 10<sup>9</sup></span><span>d) n<sup>3</sup> / log n</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">2) The dominant term of <code class="inline">5n<sup>3</sup> + 100 n log n + 10000</code> is:</div>
+      <div class="opts"><span>a) 10000</span><span>b) 100 n log n</span><span>c) 5 n<sup>3</sup></span><span>d) cannot be determined</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">3) A function in &Theta;(n) is in:</div>
+      <div class="opts"><span>a) O(n) only</span><span>b) &Omega;(n) only</span><span>c) Both O(n) and &Omega;(n)</span><span>d) Neither</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">4) Big-O describes:</div>
+      <div class="opts"><span>a) Best case only</span><span>b) An upper bound</span><span>c) A lower bound</span><span>d) The exact running time</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">5) For small inputs, an O(n<sup>2</sup>) algorithm can beat an O(n log n) one because:</div>
+      <div class="opts"><span>a) Big-O is wrong</span><span>b) Hidden constants matter</span><span>c) Caches don't exist</span><span>d) It cannot</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">6) T(n) = T(n−1) + 1 has solution:</div>
+      <div class="opts"><span>a) O(log n)</span><span>b) O(n)</span><span>c) O(n log n)</span><span>d) O(2<sup>n</sup>)</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">7) T(n) = T(n/2) + O(1) has solution:</div>
+      <div class="opts"><span>a) O(1)</span><span>b) O(log n)</span><span>c) O(n)</span><span>d) O(n log n)</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">8) Doubling the input of an O(n<sup>2</sup>) algorithm multiplies time by:</div>
+      <div class="opts"><span>a) 2</span><span>b) 4</span><span>c) 8</span><span>d) log 2</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">9) Which is true?</div>
+      <div class="opts"><span>a) O(n) &sub; O(n<sup>2</sup>)</span><span>b) O(n<sup>2</sup>) &sub; O(n)</span><span>c) O(n!) = O(2<sup>n</sup>)</span><span>d) O(1) = O(log n)</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">10) T(n) = 2T(n/2) + n matches which algorithm?</div>
+      <div class="opts"><span>a) Binary Search</span><span>b) Merge Sort</span><span>c) Bubble Sort</span><span>d) Selection Sort</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART II — RECURSION
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART II</div>
+    <h2>Recursion</h2>
+    <div class="sub">Tracing recursive calls, writing recursive methods, base cases</div>
+  </div>
+
+  <h3 class="q">Question 2.1 &mdash; String Recursion Trace <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Trace the following method when called as <code class="inline">decode("ab2cd3e")</code>. Draw <b>all</b> recursive calls and the <b>final returned value</b>.</p>
+<pre class="code"><span class="kw">public static</span> <span class="ty">String</span> decode(<span class="ty">String</span> s) {
+    <span class="kw">if</span> (s.length() == 0)
+        <span class="kw">return</span> "";
+    <span class="kw">char</span> c = s.charAt(0);
+    <span class="kw">if</span> (Character.isDigit(c))
+        <span class="kw">return</span> "[" + c + "]" + decode(s.substring(1));
+    <span class="kw">return</span> c + decode(s.substring(1));
+}</pre>
+
+    <p>Draw all recursive calls (recursion-box style) and write the return value of each call:</p>
+    <div class="answer-box xl"></div>
+  </div>
+
+  <h3 class="q">Question 2.2 &mdash; Integer Recursion Trace <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Trace <code class="inline">mystery(12)</code>. Show all calls and the final returned value.</p>
+<pre class="code"><span class="kw">public static int</span> mystery(<span class="ty">int</span> n) {
+    <span class="kw">if</span> (n &lt; 2) <span class="kw">return</span> n;
+    <span class="kw">if</span> (n % 2 == 0)
+        <span class="kw">return</span> 1 + mystery(n / 2);
+    <span class="kw">return</span> 2 + mystery(n - 1);
+}</pre>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 2.3 &mdash; Divide-and-Conquer Trace <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Given <code class="inline">arr = {4, 7, 2, 9, 3, 1, 6}</code>, trace <code class="inline">find(arr, 0, 6)</code>.</p>
+<pre class="code"><span class="kw">public static int</span> find(<span class="ty">int</span>[] a, <span class="ty">int</span> lo, <span class="ty">int</span> hi) {
+    <span class="kw">if</span> (lo == hi) <span class="kw">return</span> a[lo];
+    <span class="ty">int</span> mid   = (lo + hi) / 2;
+    <span class="ty">int</span> left  = find(a, lo, mid);
+    <span class="ty">int</span> right = find(a, mid + 1, hi);
+    <span class="kw">return</span> Math.max(left, right);
+}</pre>
+
+    <p>Draw the complete call tree and label each leaf with its returned value. State the final value returned by the top-level call.</p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">Question 2.4 &mdash; Write a Recursive Method: power <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive method <code class="inline">power(int base, int exp)</code> returning <code class="inline">base<sup>exp</sup></code> for <code class="inline">exp &ge; 0</code>. No loops.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 2.5 &mdash; Write a Recursive Method: sumDigits <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive method <code class="inline">sumDigits(int n)</code> returning the sum of digits of <i>n</i>.</p>
+    <p>Example: <code class="inline">sumDigits(20461) = 2 + 0 + 4 + 6 + 1 = 13</code></p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 2.6 &mdash; Write a Recursive Method: countSub <span class="tag tag-hard">HARD</span><span class="pts">[12 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive method <code class="inline">countSub(String s, String t)</code> that returns the number of <b>non-overlapping</b> occurrences of <code class="inline">t</code> in <code class="inline">s</code>. Assume <code class="inline">t</code> is non-empty.</p>
+<pre class="code">countSub("banana_bananas", "ana")  &rarr; 2
+countSub("xyzxyz",         "xy")   &rarr; 2
+countSub("hello",          "world")&rarr; 0</pre>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">Question 2.7 &mdash; Write a Recursive Method: maxOf <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive <code class="inline">maxOf(int[] a, int size)</code> returning the largest of the first <i>size</i> elements. No loops.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 2.8 &mdash; Recursive Pattern: Diamond <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive <code class="inline">printDiamond(int n)</code>. Helper recursive methods are allowed; no loops.</p>
+    <p>Example: <code class="inline">printDiamond(3)</code> prints:</p>
+<pre class="code">  *
+ ***
+*****
+ ***
+  *</pre>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 2.9 &mdash; Identify Errors <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Each method below contains a bug. Identify it and write the corrected line(s).</p>
+<pre class="code"><span class="cm">// (a) intended: factorial(n) for n &gt;= 0</span>
+<span class="kw">public static int</span> fact(<span class="ty">int</span> n) {
+    <span class="kw">if</span> (n == 1) <span class="kw">return</span> 1;
+    <span class="kw">return</span> n * fact(n - 1);
+}
+
+<span class="cm">// (b) intended: print 1..n</span>
+<span class="kw">public static void</span> printUp(<span class="ty">int</span> n) {
+    <span class="kw">if</span> (n == 0) <span class="kw">return</span>;
+    System.out.println(n);
+    printUp(n - 1);
+}
+
+<span class="cm">// (c) intended: sum of a[0..size-1]</span>
+<span class="kw">public static int</span> sum(<span class="ty">int</span>[] a, <span class="ty">int</span> size) {
+    <span class="kw">return</span> a[size - 1] + sum(a, size - 1);
+}</pre>
+    <div class="answer-box md"></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                          PART III — LINKED LISTS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART III</div>
+    <h2>Linked Lists</h2>
+    <div class="sub">Singly and doubly linked lists &mdash; traversal, insertion, deletion, code writing</div>
+  </div>
+
+  <h3 class="q">Question 3.1 &mdash; Pointer Tracing <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Consider the singly linked list:</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  H[head] --> N1((5)) --> N2((8)) --> N3((12)) --> N4((17)) --> N5((23)) --> N["null"]
+      </div>
+      <div class="diagram-caption">Singly linked list with five nodes</div>
+    </div>
+
+    <p>State the result (or error) of each statement; treat them <b>independently</b>.</p>
+    <ol type="a">
+      <li><code class="inline">head.next.next.data</code></li>
+      <li><code class="inline">head.next.next.next.next.data</code></li>
+      <li><code class="inline">head.next.next.next.next.next.data</code></li>
+      <li>After <code class="inline">head = head.next.next;</code>, what is <code class="inline">head.data</code>?</li>
+      <li>After <code class="inline">head.next = head.next.next;</code>, write the new list.</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 3.2 &mdash; Code: Sum of Odd Values <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Write <code class="inline">sumOdd(LLnode head)</code> returning the sum of all odd-valued nodes; return 0 for an empty list.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 3.3 &mdash; Code: Insert in Sorted Order <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>The list is sorted ascending. Write <code class="inline">insertSorted(LLnode head, int v)</code> that inserts a new node in the correct position. Cover all four edge cases. Return the (possibly new) head.</p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">Question 3.4 &mdash; Code: Reverse a Singly Linked List <span class="tag tag-hard">HARD</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Reverse the list <b>in place</b> (no new nodes) and return the new head. Your method must run in O(n).</p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">Question 3.5 &mdash; Doubly Linked List: Insert Between Two Nodes <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p><code class="inline">helpPtr</code> points to the node containing <i>"Faisal"</i>. Write the statements needed to insert a new node containing <i>"Khalid"</i> between <code class="inline">helpPtr</code> and its successor.</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  S["..."] <--> F[Faisal<br/>helpPtr] <--> O[Omar] <--> E["..."]
+      </div>
+      <div class="diagram-caption">Before insertion &mdash; preserve both prev and next links of the new node.</div>
+    </div>
+
+    <p>Write the new-node creation and the four pointer assignments.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 3.6 &mdash; Doubly Linked List True / False <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Consider the doubly linked list <b>A &harr; B &harr; C &harr; D &harr; E</b> with <code class="inline">helpPtr</code> pointing to <b>C</b>.</p>
+    <div class="tf">
+      <div class="item">1) <code class="inline">helpPtr.next.next == E</code> &nbsp; <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">2) <code class="inline">helpPtr.prev.prev == A</code> &nbsp; <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">3) After <code class="inline">helpPtr.next = helpPtr.prev;</code>, C.next now points to B. &nbsp; <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">4) <code class="inline">helpPtr.prev.next == helpPtr</code> &nbsp; <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">5) <code class="inline">helpPtr.next.prev.next.data</code> equals <code class="inline">"D"</code>. &nbsp; <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">6) After <code class="inline">helpPtr = helpPtr.prev.prev;</code>, helpPtr is null. &nbsp; <span class="ch">True</span><span class="ch">False</span></div>
+    </div>
+  </div>
+
+  <h3 class="q">Question 3.7 &mdash; Code: Split by Parity <span class="tag tag-hard">HARD</span><span class="pts">[12 marks]</span></h3>
+  <div class="q-body">
+    <p>Write <code class="inline">split(LLnode head, LLnode evens, LLnode odds)</code> that walks the original list <b>once</b> and appends each value into either <code class="inline">evens</code> or <code class="inline">odds</code>. Return the count of odd values.</p>
+    <p><b>Input example:</b> <code class="inline">head: 3 &rarr; 8 &rarr; 6 &rarr; 7 &rarr; 11 &rarr; 4</code></p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">Question 3.8 &mdash; Conceptual MCQs <span class="tag tag-easy">EASY</span><span class="pts">[8 marks &middot; 1 pt each]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) Which is a <b>logical</b> data structure?</div>
+      <div class="opts"><span>a) Array</span><span>b) Linked List</span><span>c) Stack</span><span>d) Both (b) and (c)</span></div></div>
+    <div class="mcq"><div class="stem">2) O(1) random access is supported by:</div>
+      <div class="opts"><span>a) Singly linked list</span><span>b) Doubly linked list</span><span>c) Array</span><span>d) Circular linked list</span></div></div>
+    <div class="mcq"><div class="stem">3) Insert after a given node-pointer in a singly LL is:</div>
+      <div class="opts"><span>a) O(1)</span><span>b) O(log n)</span><span>c) O(n)</span><span>d) O(n<sup>2</sup>)</span></div></div>
+    <div class="mcq"><div class="stem">4) Deleting the last node of a singly LL (given only head) is:</div>
+      <div class="opts"><span>a) O(1)</span><span>b) O(log n)</span><span>c) O(n)</span><span>d) O(n log n)</span></div></div>
+    <div class="mcq"><div class="stem">5) Each node of a DLL has at least:</div>
+      <div class="opts"><span>a) 1 part</span><span>b) 2 parts</span><span>c) 3 parts</span><span>d) 4 parts</span></div></div>
+    <div class="mcq"><div class="stem">6) Circular linked list is best for:</div>
+      <div class="opts"><span>a) Round-robin scheduling</span><span>b) Random access</span><span>c) Binary search</span><span>d) Hashing</span></div></div>
+    <div class="mcq"><div class="stem">7) Deleting an interior node in O(1) requires:</div>
+      <div class="opts"><span>a) Only the node pointer in singly LL</span><span>b) A doubly linked list</span><span>c) Random access</span><span>d) A sorted list</span></div></div>
+    <div class="mcq"><div class="stem">8) Which traversal is impossible from the head of a singly LL?</div>
+      <div class="opts"><span>a) Forward</span><span>b) Backward</span><span>c) Length count</span><span>d) Tail print</span></div></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART IV — STACKS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART IV</div>
+    <h2>Stacks &amp; Expression Conversion</h2>
+    <div class="sub">Push/pop, postfix evaluation, infix conversion, applications</div>
+  </div>
+
+  <h3 class="q">Question 4.1 &mdash; Postfix Evaluation with Checkpoints <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Evaluate using a stack; show the stack at A, B, C; give the final value.</p>
+    <p style="text-align:center;font-family:Consolas,monospace;font-size:13pt;margin:8px 0;">
+      9 &nbsp; 2 &nbsp; 3 &nbsp; * &nbsp; &minus; &nbsp;<span style="color:var(--warn);">&#9660;A</span>&nbsp; 8 &nbsp; 4 &nbsp; / &nbsp; +&nbsp; <span style="color:var(--warn);">&#9660;B</span>&nbsp; 5 &nbsp; * &nbsp; 1 &nbsp; &minus; &nbsp;<span style="color:var(--warn);">&#9660;C</span>
+    </p>
+    <div class="stack-row">
+      <div class="stack-col">
+        <div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+        <div class="label">A (3 pts)</div>
+      </div>
+      <div class="stack-col">
+        <div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+        <div class="label">B (3 pts)</div>
+      </div>
+      <div class="stack-col">
+        <div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+        <div class="label">C (2 pts)</div>
+      </div>
+    </div>
+    <p><b>Final value:</b> <span class="answer-line"></span> &nbsp; (2 pts)</p>
+  </div>
+
+  <h3 class="q">Question 4.2 &mdash; Infix to Postfix <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Convert to postfix; show the operator stack at A, B, C; write the final postfix.</p>
+    <p style="text-align:center;font-family:Consolas,monospace;font-size:12pt;margin:8px 0;">
+      A + B * ( C &minus; D ) /<span style="color:var(--warn);"> &#9660;A</span> E ^ F<span style="color:var(--warn);"> &#9660;B</span> &minus; G % H<span style="color:var(--warn);"> &#9660;C</span>
+    </p>
+    <div class="stack-row">
+      <div class="stack-col"><div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div><div class="label">A</div></div>
+      <div class="stack-col"><div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div><div class="label">B</div></div>
+      <div class="stack-col"><div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div><div class="label">C</div></div>
+    </div>
+    <p><b>Postfix:</b></p>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">Question 4.3 &mdash; Infix to Prefix <span class="tag tag-hard">HARD</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Convert to <b>prefix</b>:</p>
+    <p style="text-align:center;font-family:Consolas,monospace;font-size:12pt;">
+      ( X + Y ) * Z &minus; W / ( P &minus; Q )
+    </p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 4.4 &mdash; Stack Operation Trace <span class="tag tag-easy">EASY</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Stack <code class="inline">S</code> starts empty.</p>
+<pre class="code">S.push(7);
+S.push(3);
+print(S.pop());        <span class="cm">// (a)</span>
+S.push(11);
+S.push(S.top() + 4);
+print(S.pop());        <span class="cm">// (b)</span>
+print(S.pop());        <span class="cm">// (c)</span>
+S.push(20);
+print(S.size());       <span class="cm">// (d)</span></pre>
+    <p><b>Outputs:</b></p>
+    <table class="data">
+      <thead><tr><th>(a)</th><th>(b)</th><th>(c)</th><th>(d)</th></tr></thead>
+      <tbody><tr><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+    <p><b>Final stack (top &rarr; bottom):</b> <span class="answer-line" style="min-width:280px;"></span></p>
+  </div>
+
+  <h3 class="q">Question 4.5 &mdash; Stack Applications <span class="tag tag-easy">EASY</span><span class="pts">[4 marks]</span></h3>
+  <div class="q-body">
+    <p>Give two real-world applications of a stack and explain in one sentence each why a stack fits.</p>
+    <div class="answer-box sm"></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART V — QUEUES
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART V</div>
+    <h2>Queues</h2>
+    <div class="sub">FIFO, circular queues, stack/queue interaction, priority queue concepts</div>
+  </div>
+
+  <h3 class="q">Question 5.1 &mdash; Stack/Queue Interaction Trace <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Both Q and S are initially empty. Show every output and the final contents.</p>
+<pre class="code">Q.enqueue('A');
+Q.enqueue('B');
+S.push(Q.dequeue());
+Q.enqueue('C');
+print(Q.dequeue());          <span class="cm">// (a)</span>
+S.push('D');
+Q.enqueue(S.pop());
+Q.enqueue('E');
+print(S.pop());              <span class="cm">// (b)</span>
+print(Q.dequeue());          <span class="cm">// (c)</span>
+print(Q.dequeue());          <span class="cm">// (d)</span>
+S.push('F');</pre>
+
+    <table class="data">
+      <thead><tr><th>(a)</th><th>(b)</th><th>(c)</th><th>(d)</th></tr></thead>
+      <tbody><tr><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+    <p><b>Final Q (front &rarr; rear):</b> <span class="answer-line" style="min-width:240px;"></span></p>
+    <p><b>Final S (top &rarr; bottom):</b> <span class="answer-line" style="min-width:240px;"></span></p>
+  </div>
+
+  <h3 class="q">Question 5.2 &mdash; Circular Queue Tracing <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Circular queue of size 8; initially <code class="inline">front = rear = &minus;1</code>.</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  I0((0)) --> I1((1)) --> I2((2)) --> I3((3)) --> I4((4)) --> I5((5)) --> I6((6)) --> I7((7)) --> I0
+      </div>
+      <div class="diagram-caption">Logical layout of a circular queue of capacity 8.</div>
+    </div>
+
+<pre class="code">CQ.enqueue(10); CQ.enqueue(20); CQ.enqueue(30);
+print(CQ.dequeue());           <span class="cm">// (a)</span>
+CQ.enqueue(40); CQ.enqueue(50); CQ.enqueue(60);
+print(CQ.dequeue());           <span class="cm">// (b)</span>
+print(CQ.dequeue());           <span class="cm">// (c)</span>
+CQ.enqueue(70); CQ.enqueue(80); CQ.enqueue(90);
+CQ.enqueue(100);                <span class="cm">// (d) attempt</span></pre>
+
+    <p><b>Final Array:</b></p>
+    <table class="data full">
+      <thead><tr><th>Index</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead>
+      <tbody><tr><td class="row-label">Value</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+    <p><b>front =</b> <span class="answer-line" style="min-width:60px;"></span> &nbsp;&nbsp; <b>rear =</b> <span class="answer-line" style="min-width:60px;"></span></p>
+    <table class="data">
+      <thead><tr><th>(a)</th><th>(b)</th><th>(c)</th><th>(d)</th></tr></thead>
+      <tbody><tr><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 5.3 &mdash; Reverse a Queue Using a Stack <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Reverse the contents of queue <code class="inline">q</code> using only <code class="inline">enqueue, dequeue, isEmpty, push, pop</code>. One auxiliary stack is allowed.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 5.4 &mdash; Merge Two Sorted Queues <span class="tag tag-hard">HARD</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Queues A and B are sorted ascending from the front. Return a new queue C with all values of A and B in sorted order. No duplicates.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 5.5 &mdash; Conceptual MCQs <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) The discipline of a queue is:</div>
+      <div class="opts"><span>a) FILO</span><span>b) FIFO</span><span>c) LIFO</span><span>d) Random</span></div></div>
+    <div class="mcq"><div class="stem">2) When a circular queue is full, the next enqueue must:</div>
+      <div class="opts"><span>a) Succeed silently</span><span>b) Overwrite the front</span><span>c) Throw overflow / return false</span><span>d) Resize automatically</span></div></div>
+    <div class="mcq"><div class="stem">3) Efficient queue via linked list requires:</div>
+      <div class="opts"><span>a) Head pointer only</span><span>b) Head and tail pointers</span><span>c) Stack only</span><span>d) BST</span></div></div>
+    <div class="mcq"><div class="stem">4) Best DS for a shortest-job-first print spooler:</div>
+      <div class="opts"><span>a) Simple queue</span><span>b) Stack</span><span>c) Priority queue (heap)</span><span>d) Circular queue</span></div></div>
+    <div class="mcq"><div class="stem">5) Circular queue of capacity k is empty when:</div>
+      <div class="opts"><span>a) front == rear == &minus;1</span><span>b) front == 0</span><span>c) rear == k &minus; 1</span><span>d) (rear+1)%k == front</span></div></div>
+    <div class="mcq"><div class="stem">6) Which queue operation (LL impl) is NOT O(1)?</div>
+      <div class="opts"><span>a) enqueue</span><span>b) dequeue</span><span>c) isEmpty</span><span>d) search</span></div></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART VI — SORTING
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART VI</div>
+    <h2>Sorting Algorithms</h2>
+    <div class="sub">Bubble, Selection, Insertion, Merge, Quick, Heap &mdash; trace + comparison</div>
+  </div>
+
+  <h3 class="q">Question 6.1 &mdash; Bubble Sort Trace <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Apply Bubble Sort (ascending) on <b>{ 28, 11, 47, 19, 35, 8 }</b>. Show contents after each pass.</p>
+    <table class="data full">
+      <thead><tr><th>Pass</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">Initial</td><td>28</td><td>11</td><td>47</td><td>19</td><td>35</td><td>8</td></tr>
+        <tr><td class="row-label">Pass 1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 6.2 &mdash; Selection Sort Trace <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Apply Selection Sort (descending) on <b>{ 5, 21, 7, 13, 3, 18, 9 }</b>.</p>
+    <table class="data full">
+      <thead><tr><th>Pass</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">Initial</td><td>5</td><td>21</td><td>7</td><td>13</td><td>3</td><td>18</td><td>9</td></tr>
+        <tr><td class="row-label">Pass 1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 6.3 &mdash; Insertion Sort Trace <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Apply Insertion Sort (ascending) on <b>{ M, A, R, K, B, T }</b>.</p>
+    <table class="data full">
+      <thead><tr><th>Pass</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">Initial</td><td>M</td><td>A</td><td>R</td><td>K</td><td>B</td><td>T</td></tr>
+        <tr><td class="row-label">Pass 1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pass 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 6.4 &mdash; Merge Sort Trace <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Show array contents after each merge call on <b>{ 12, 4, 19, 7, 25, 3, 16, 8 }</b> (ascending).</p>
+    <table class="data full">
+      <thead><tr><th>Step</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">Initial</td><td>12</td><td>4</td><td>19</td><td>7</td><td>25</td><td>3</td><td>16</td><td>8</td></tr>
+        <tr><td class="row-label">1st merge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">2nd merge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">3rd merge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">4th merge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">5th merge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">6th merge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">7th merge</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Final</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 6.5 &mdash; Quick Sort &mdash; Two Partition Calls <span class="tag tag-hard">HARD</span><span class="pts">[14 marks]</span></h3>
+  <div class="q-body">
+    <p>Use Quick Sort on <b>{ 31, 7, 49, 12, 38, 5, 26, 18, 44, 11 }</b> with the <b>first element of each partition as the pivot</b> (ascending). Show contents after each swap.</p>
+
+    <h4 class="sub">First Partition Call</h4>
+    <table class="data full">
+      <thead><tr><th>Index</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">Initial</td><td>31</td><td>7</td><td>49</td><td>12</td><td>38</td><td>5</td><td>26</td><td>18</td><td>44</td><td>11</td></tr>
+        <tr><td class="row-label">1st swap</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">2nd swap</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">3rd swap</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">4th swap</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pivot placed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h4 class="sub">Second Partition Call (on left sub-array)</h4>
+    <table class="data full">
+      <thead><tr><th>Index</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">From prev.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">1st swap</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">2nd swap</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">3rd swap</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Pivot placed</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 6.6 &mdash; Comparison Table <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <table class="data full">
+      <thead><tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Stable?</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">Bubble Sort</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Selection Sort</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Insertion Sort</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Merge Sort</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">Quick Sort</td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 6.7 &mdash; Conceptual Short Answer <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <ol type="a">
+      <li>Which input pattern triggers Quick Sort's worst case when using a first-element pivot?</li>
+      <li>Why is Merge Sort preferred for sorting linked lists over Quick Sort?</li>
+      <li>Why is Insertion Sort fast on nearly-sorted input?</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART VII — TREES
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART VII</div>
+    <h2>Trees &amp; Binary Search Trees</h2>
+    <div class="sub">Construction, traversals, insertion, deletion, recursive tree code</div>
+  </div>
+
+  <h3 class="q">Question 7.1 &mdash; Build a BST &amp; Traversals <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Insert the following values left-to-right (50 is the root) into an initially empty BST. Draw the final BST in the space below and write all four traversals.</p>
+    <p style="text-align:center;font-family:Consolas,monospace;font-size:13pt;">
+      <b>50, &nbsp; 30, &nbsp; 70, &nbsp; 20, &nbsp; 40, &nbsp; 60, &nbsp; 85, &nbsp; 10, &nbsp; 35, &nbsp; 65, &nbsp; 90, &nbsp; 33, &nbsp; 75</b>
+    </p>
+
+    <div class="fill-area" style="min-height:420px;">Draw your BST here</div>
+
+    <p><b>Pre-order:</b> <span class="answer-line" style="min-width:520px;"></span></p>
+    <p><b>In-order:</b> &nbsp; <span class="answer-line" style="min-width:520px;"></span></p>
+    <p><b>Post-order:</b> <span class="answer-line" style="min-width:520px;"></span></p>
+    <p><b>Level-order:</b> <span class="answer-line" style="min-width:520px;"></span></p>
+  </div>
+
+  <h3 class="q">Question 7.2 &mdash; Search Path <span class="tag tag-easy">EASY</span><span class="pts">[3 marks]</span></h3>
+  <div class="q-body">
+    <p>Using the BST from 7.1, list the sequence of nodes visited when searching for the key <b>34</b>. Found or not?</p>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">Question 7.3 &mdash; Deletion Cases <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Apply the following deletions sequentially to the BST in 7.1. Use the <b>in-order successor</b> strategy for two-child cases. Draw the tree after each deletion.</p>
+    <ol type="a">
+      <li>Delete <b>10</b> (leaf)</li>
+      <li>Delete <b>85</b> (one child)</li>
+      <li>Delete <b>30</b> (two children)</li>
+      <li>Delete <b>50</b> (root)</li>
+    </ol>
+    <div class="fill-area" style="min-height:540px;">Draw each updated tree here</div>
+  </div>
+
+  <h3 class="q">Question 7.4 &mdash; Recursive Code: countLeaves <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive <code class="inline">countLeaves(BSTNode p)</code>.</p>
+<pre class="code"><span class="kw">class</span> BSTNode {
+    <span class="ty">int</span> data;
+    BSTNode left, right;
+}
+
+<span class="kw">public int</span> countLeaves(BSTNode p) {
+
+    <span class="cm">// your code</span>
+
+}</pre>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 7.5 &mdash; Recursive Code: height <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive <code class="inline">height(BSTNode p)</code>. Single-node tree has height 0; empty tree has height &minus;1.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 7.6 &mdash; Recursive Code: rangeSum <span class="tag tag-hard">HARD</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive <code class="inline">rangeSum(BSTNode root, int lo, int hi)</code> returning the sum of values <b>v</b> with <code class="inline">lo &le; v &le; hi</code>. Prune subtrees that cannot contribute.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 7.7 &mdash; Recursive Code: sameStructure <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Write a recursive <code class="inline">sameStructure(BSTNode a, BSTNode b)</code> returning true iff two trees have identical shape and values.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 7.8 &mdash; Reconstruct a Tree <span class="tag tag-hard">HARD</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Pre-order: <code class="inline">F B A D C E G I H</code>; In-order: <code class="inline">A B C D E F G H I</code>. Draw the tree.</p>
+    <div class="fill-area" style="min-height:320px;">Draw your reconstructed tree</div>
+  </div>
+
+  <h3 class="q">Question 7.9 &mdash; Conceptual MCQs <span class="tag tag-easy">EASY</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) In-order on a BST gives:</div>
+      <div class="opts"><span>a) Random order</span><span>b) Sorted ascending</span><span>c) Insertion order</span><span>d) Level order</span></div></div>
+    <div class="mcq"><div class="stem">2) Edges in a tree with <i>n</i> nodes:</div>
+      <div class="opts"><span>a) n</span><span>b) n &minus; 1</span><span>c) n + 1</span><span>d) 2n</span></div></div>
+    <div class="mcq"><div class="stem">3) Maximum nodes in a complete binary tree of height h:</div>
+      <div class="opts"><span>a) h</span><span>b) 2h</span><span>c) 2<sup>h+1</sup> &minus; 1</span><span>d) 2<sup>h</sup> + 1</span></div></div>
+    <div class="mcq"><div class="stem">4) Worst-case BST search with <i>n</i> nodes:</div>
+      <div class="opts"><span>a) O(1)</span><span>b) O(log n)</span><span>c) O(n)</span><span>d) O(n log n)</span></div></div>
+    <div class="mcq"><div class="stem">5) Root, then left, then right is:</div>
+      <div class="opts"><span>a) Pre-order</span><span>b) In-order</span><span>c) Post-order</span><span>d) Level-order</span></div></div>
+    <div class="mcq"><div class="stem">6) Level-order uses which structure?</div>
+      <div class="opts"><span>a) Stack</span><span>b) Queue</span><span>c) Priority queue</span><span>d) Hash table</span></div></div>
+    <div class="mcq"><div class="stem">7) In-order successor of a node with non-null right subtree:</div>
+      <div class="opts"><span>a) Parent</span><span>b) Left child</span><span>c) Leftmost of right subtree</span><span>d) Right child only</span></div></div>
+    <div class="mcq"><div class="stem">8) A full binary tree means every internal node has:</div>
+      <div class="opts"><span>a) 1 child</span><span>b) 0 or 2 children</span><span>c) Exactly 2 children</span><span>d) At least 1 child</span></div></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART VIII — HEAPS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART VIII</div>
+    <h2>Heaps &amp; Priority Queues</h2>
+    <div class="sub">Max/Min heaps, insert/delete, heapify, build-heap, applications</div>
+  </div>
+
+  <h3 class="q">Question 8.1 &mdash; Build a Max-Heap Step-by-Step <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Insert <b>17, 9, 28, 14, 36, 8, 31, 22</b> one-by-one into an empty <b>Max-Heap</b>. Draw the heap after each insertion (8 snapshots in total). Show every percolate-up step where it applies.</p>
+    <div class="fill-area" style="min-height:480px;">Draw the 8 successive heap snapshots</div>
+  </div>
+
+  <h3 class="q">Question 8.2 &mdash; Build a Min-Heap from a Dataset <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Build a <b>Min-Heap</b> by inserting the following values one by one into an initially empty heap (alphabetical order, <code class="inline">A &lt; B &lt; ... &lt; Z</code>):</p>
+    <p style="text-align:center;font-family:Consolas,monospace;font-size:13pt;">
+      <b>M, &nbsp; R, &nbsp; A, &nbsp; K, &nbsp; B, &nbsp; T, &nbsp; H, &nbsp; C</b>
+    </p>
+    <p>Show the heap as a tree after <b>each insertion</b>, then write the <b>final tree representation</b> and its corresponding <b>array form</b>.</p>
+    <div class="fill-area" style="min-height:420px;">Draw the heap after each insertion (8 snapshots)</div>
+    <p><b>Final array form:</b></p>
+    <table class="data full">
+      <thead><tr><th>Index</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead>
+      <tbody><tr><td class="row-label">Value</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 8.3 &mdash; deleteMax Operation <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Using the final Max-Heap you obtained in Question 8.1, perform <b>two consecutive</b> <code class="inline">deleteMax</code> operations. For each operation:</p>
+    <ol type="a">
+      <li>Identify the element being removed.</li>
+      <li>Move the last leaf to the root.</li>
+      <li>Show each <b>heapify-down (percolate-down)</b> swap step until the Max-Heap property is restored.</li>
+    </ol>
+    <div class="fill-area" style="min-height:360px;">Show the heap after every swap during heapify-down</div>
+  </div>
+
+  <h3 class="q">Question 8.4 &mdash; Array Indexing of a Heap <span class="tag tag-easy">EASY</span><span class="pts">[4 marks]</span></h3>
+  <div class="q-body">
+    <ol type="a">
+      <li>Parent of index <code class="inline">i</code> (0-based array): __________</li>
+      <li>Left child of <code class="inline">i</code>: __________ &nbsp; Right child: __________</li>
+      <li>Index of the last non-leaf in a heap of <i>n</i> elements: __________</li>
+    </ol>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">Question 8.5 &mdash; Priority Queue Application <span class="tag tag-med">MEDIUM</span><span class="pts">[4 marks]</span></h3>
+  <div class="q-body">
+    <p>An emergency department triages patients by severity (1 = most critical). 1&ndash;3 patients arrive every minute; one is treated. Choose the data structure and state the two operation complexities.</p>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">Question 8.6 &mdash; Heap MCQs <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) Heap is most naturally implemented using:</div>
+      <div class="opts"><span>a) Linked list</span><span>b) Array</span><span>c) Hash table</span><span>d) Tree of nodes</span></div></div>
+    <div class="mcq"><div class="stem">2) Heap insert in a heap of <i>n</i> elements is:</div>
+      <div class="opts"><span>a) O(1)</span><span>b) O(log n)</span><span>c) O(n)</span><span>d) O(n log n)</span></div></div>
+    <div class="mcq"><div class="stem">3) In a Max-Heap, the parent of any node has a value:</div>
+      <div class="opts"><span>a) Less than both children</span><span>b) Greater than or equal to both children</span><span>c) Equal to its children</span><span>d) In random relation to its children</span></div></div>
+    <div class="mcq"><div class="stem">4) Bottom-up build-heap of <i>n</i> elements:</div>
+      <div class="opts"><span>a) O(log n)</span><span>b) O(n)</span><span>c) O(n log n)</span><span>d) O(n<sup>2</sup>)</span></div></div>
+    <div class="mcq"><div class="stem">5) In a Min-Heap, the maximum element is located:</div>
+      <div class="opts"><span>a) At the root</span><span>b) At some leaf</span><span>c) At index n/2</span><span>d) Cannot say without scan</span></div></div>
+    <div class="mcq"><div class="stem">6) A heap is always a:</div>
+      <div class="opts"><span>a) Full binary tree</span><span>b) Complete binary tree</span><span>c) Perfect binary tree</span><span>d) BST</span></div></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART IX — HASH TABLES
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART IX</div>
+    <h2>Hash Tables</h2>
+    <div class="sub">Hash functions, linear/quadratic/double probing, separate chaining</div>
+  </div>
+
+  <h3 class="q">Question 9.1 &mdash; Linear Probing <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Insert <b>{ 41, 12, 24, 5, 16, 35, 28, 19, 7 }</b> into a hash table of size <b>13</b> with <code class="inline">h(x) = x mod 13</code> using linear probing.</p>
+    <table class="data full">
+      <thead><tr><th>Index</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr></thead>
+      <tbody><tr><td class="row-label">Value</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 9.2 &mdash; Quadratic Probing <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Same keys, same hash function, probe sequence <code class="inline">h(x) + i<sup>2</sup></code> mod 13.</p>
+    <table class="data full">
+      <thead><tr><th>Index</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr></thead>
+      <tbody><tr><td class="row-label">Value</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 9.3 &mdash; Double Hashing <span class="tag tag-hard">HARD</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Insert the keys <b>{ 49, 26, 18, 7, 38, 25, 11, 33 }</b> into a hash table of size <b>11</b> using <b>double hashing</b>, given:</p>
+    <p style="text-align:center;font-family:Consolas,monospace;font-size:12.5pt;">
+      <b>h<sub>1</sub>(x) = x mod 11</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>h<sub>2</sub>(x) = 1 + (x mod 9)</b>
+    </p>
+    <table class="data full">
+      <thead><tr><th>Index</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+      <tbody><tr><td class="row-label">Value</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 9.4 &mdash; Separate Chaining <span class="tag tag-easy">EASY</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Insert <b>{ 14, 27, 33, 5, 22, 41, 18, 9, 26 }</b> into a hash table of size <b>7</b> with <code class="inline">h(x) = x mod 7</code> using head-insertion separate chaining.</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  Tk["Slot i"] --> N1["key<sub>1</sub>"] --> N2["key<sub>2</sub>"] --> NULL["null"]
+      </div>
+      <div class="diagram-caption">Concept: each slot is the head of its own linked list (chain). With <b>head insertion</b>, the most recently inserted key sits closest to the slot.</div>
+    </div>
+
+    <table class="data full">
+      <thead><tr><th>Index</th><th colspan="5">Chain (head &rarr; tail)</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">0</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">1</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">2</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">3</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">4</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">5</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">6</td><td colspan="5"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">Question 9.5 &mdash; Hash Function Concepts <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <ol type="a">
+      <li>Define the <b>load factor</b> &alpha;. Typical thresholds for resizing under linear probing vs separate chaining?</li>
+      <li>Why are <b>prime-sized</b> tables preferred when using <code class="inline">x mod m</code>?</li>
+      <li>What is <b>primary clustering</b>? Which probing strategy mitigates it best?</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 9.6 &mdash; Search Cost <span class="tag tag-med">MEDIUM</span><span class="pts">[4 marks]</span></h3>
+  <div class="q-body">
+    <p>Using the Linear Probing table from 8.1, list the slots inspected to search each key and indicate found/not found:</p>
+    <ol type="a"><li>Search 19</li><li>Search 36</li><li>Search 7</li><li>Search 50</li></ol>
+    <div class="answer-box sm"></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART X — GRAPHS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART X</div>
+    <h2>Graphs</h2>
+    <div class="sub">Representations, traversal, comparison</div>
+  </div>
+
+  <h3 class="q">Question 10.1 &mdash; Adjacency Matrix &amp; List <span class="tag tag-med">MEDIUM</span><span class="pts">[8 marks]</span></h3>
+  <div class="q-body">
+    <p>Consider the directed weighted graph:</p>
+<pre class="code">A &rarr; B (4),  A &rarr; D (7),  B &rarr; C (2),  B &rarr; E (5),
+C &rarr; F (1),  D &rarr; C (3),  D &rarr; E (9),  E &rarr; F (2),  F &rarr; A (6)</pre>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  A((A)) -->|4| B((B))
+  A -->|7| D((D))
+  B -->|2| C((C))
+  B -->|5| E((E))
+  C -->|1| F((F))
+  D -->|3| C
+  D -->|9| E
+  E -->|2| F
+  F -->|6| A
+      </div>
+      <div class="diagram-caption">Reference rendering of the graph (directed, weighted).</div>
+    </div>
+
+    <h4 class="sub">Adjacency Matrix</h4>
+    <table class="data">
+      <thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">A</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">B</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">C</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">D</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">E</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">F</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h4 class="sub">Adjacency List</h4>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 10.2 &mdash; BFS and DFS <span class="tag tag-med">MEDIUM</span><span class="pts">[6 marks]</span></h3>
+  <div class="q-body">
+    <p>Starting at <b>A</b>, with alphabetical tie-breaking, list the order of vertices visited by:</p>
+    <ol type="a"><li>BFS</li><li>DFS</li></ol>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">Question 10.3 &mdash; Representation Comparison <span class="tag tag-easy">EASY</span><span class="pts">[4 marks]</span></h3>
+  <div class="q-body">
+    <table class="data full">
+      <thead><tr><th></th><th>Adjacency Matrix</th><th>Adjacency List</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">Edge (u,v) check</td><td></td><td></td></tr>
+        <tr><td class="row-label">Iterate neighbors of u</td><td></td><td></td></tr>
+        <tr><td class="row-label">Best for which density</td><td></td><td></td></tr>
+        <tr><td class="row-label">One advantage</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART XI — MIXED
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">PART XI</div>
+    <h2>Mixed Conceptual &amp; True/False</h2>
+    <div class="sub">Cross-topic review, definitions, choose-the-structure</div>
+  </div>
+
+  <h3 class="q">Question 11.1 &mdash; True or False <span class="tag tag-easy">EASY</span><span class="pts">[12 marks &middot; 1 pt each]</span></h3>
+  <div class="q-body">
+    <div class="tf">
+      <div class="item">1) An array is a logical data structure. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">2) Worst case of binary search on a sorted array of <i>n</i> items is O(log n). <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">3) Both a stack and a queue can be implemented with a singly linked list. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">4) Insertion Sort is faster than Merge Sort on every input of size 1,000,000. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">5) A complete binary tree with <i>n</i> nodes has height &lfloor;log<sub>2</sub> n&rfloor;. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">6) Heaps are always implemented using linked lists. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">7) In-order traversal of a BST yields non-decreasing values. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">8) Quick Sort is always faster than Merge Sort because of better constants. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">9) Linear probing eliminates primary clustering. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">10) Inserting <i>n</i> values into a BST in <b>sorted</b> order produces a tree of height <i>n</i>&minus;1. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">11) Recursion always uses less memory than the equivalent iterative solution. <span class="ch">True</span><span class="ch">False</span></div>
+      <div class="item">12) DFS can be implemented using an explicit stack. <span class="ch">True</span><span class="ch">False</span></div>
+    </div>
+  </div>
+
+  <h3 class="q">Question 11.2 &mdash; Short Answer <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <ol type="a">
+      <li>Define <b>ADT</b>. Give two examples and typical implementations.</li>
+      <li>Difference between a <b>physical</b> and a <b>logical</b> data structure.</li>
+      <li>What is <b>tail recursion</b>, and why might a compiler optimise it?</li>
+      <li>Why does a BST search degenerate to O(n) when keys are inserted in sorted order?</li>
+      <li>Give a situation where a BST is preferred over a hash table.</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 11.3 &mdash; Choose the Right Structure <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks &middot; 2 pts each]</span></h3>
+  <div class="q-body">
+    <p>For each scenario, choose the <b>best</b> data structure and justify in one sentence.</p>
+    <ol type="a">
+      <li>Undo feature in a text editor (most recent first).</li>
+      <li>Ticket-counter system serving customers in arrival order.</li>
+      <li>Dictionary requiring fast lookup AND ordered range queries.</li>
+      <li>Leaderboard showing the highest-scoring player on demand.</li>
+      <li>Compiler symbol table with no need for ordered iteration.</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">Question 11.4 &mdash; Cross-Topic MCQs <span class="tag tag-med">MEDIUM</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) Balanced BST with 10<sup>6</sup> nodes has height approximately:</div>
+      <div class="opts"><span>a) 10</span><span>b) 20</span><span>c) 100</span><span>d) 1000</span></div></div>
+    <div class="mcq"><div class="stem">2) Which can be both empty and full at <code class="inline">front == rear</code>?</div>
+      <div class="opts"><span>a) Simple queue</span><span>b) Circular queue</span><span>c) Stack</span><span>d) BST</span></div></div>
+    <div class="mcq"><div class="stem">3) Worst sort to NEVER pick for sorting only 10 elements interactively:</div>
+      <div class="opts"><span>a) Insertion Sort</span><span>b) Selection Sort</span><span>c) Bubble Sort</span><span>d) None &mdash; all fine for 10</span></div></div>
+    <div class="mcq"><div class="stem">4) Worst-case comparisons of binary search on <i>n</i> = 64:</div>
+      <div class="opts"><span>a) 6</span><span>b) 7</span><span>c) 8</span><span>d) 64</span></div></div>
+    <div class="mcq"><div class="stem">5) Inserting 20, 10, 30, 5, 15 into a BST, post-order is:</div>
+      <div class="opts"><span>a) 5 15 10 30 20</span><span>b) 5 10 15 20 30</span><span>c) 20 10 5 15 30</span><span>d) 30 15 5 10 20</span></div></div>
+    <div class="mcq"><div class="stem">6) Best traversal to copy a tree:</div>
+      <div class="opts"><span>a) In-order</span><span>b) Pre-order</span><span>c) Post-order</span><span>d) Level-order</span></div></div>
+    <div class="mcq"><div class="stem">7) Best traversal to delete a tree:</div>
+      <div class="opts"><span>a) In-order</span><span>b) Pre-order</span><span>c) Post-order</span><span>d) Level-order</span></div></div>
+    <div class="mcq"><div class="stem">8) Inserting <code class="inline">10, 20, 30, 40, 50</code> into an empty BST produces a tree of height:</div>
+      <div class="opts"><span>a) 0</span><span>b) 2</span><span>c) 4</span><span>d) 5</span></div></div>
+    <div class="mcq"><div class="stem">9) Hash table of size 100 with 70 keys: load factor =</div>
+      <div class="opts"><span>a) 0.07</span><span>b) 0.7</span><span>c) 7</span><span>d) 70</span></div></div>
+    <div class="mcq"><div class="stem">10) Postfix of <code class="inline">a + b * c</code>:</div>
+      <div class="opts"><span>a) a b + c *</span><span>b) a b c * +</span><span>c) a b c + *</span><span>d) + a * b c</span></div></div>
+  </div>
+
+  <h3 class="q">Question 11.5 &mdash; Final Challenge <span class="tag tag-hard">HARD</span><span class="pts">[10 marks]</span></h3>
+  <div class="q-body">
+    <p>Design (in pseudocode) three different algorithms to print a singly linked list <b>in reverse</b>, and state the <b>time complexity</b> of each.</p>
+    <ol type="a">
+      <li>Using an auxiliary <b>stack</b>.</li>
+      <li>By <b>reversing</b> the list in place, printing it, then restoring the original order.</li>
+      <li>Using <b>recursion</b> (no explicit stack).</li>
+    </ol>
+    <div class="answer-box lg"></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            APPENDIX — ANSWER KEY
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">APPENDIX</div>
+    <h2>Answer Key &amp; Hint Sheet</h2>
+    <div class="sub">For self-study &mdash; try each question first</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part I &mdash; Algorithm Analysis</h3>
+    <div class="key-item"><b>1.1</b> (a) O(n) &nbsp; (b) O(log<sub>3</sub> n) = O(log n) &nbsp; (c) O(log n) (outer halves; inner is constant).</div>
+    <div class="key-item"><b>1.2</b> Outer = n, middle = log<sub>2</sub> n, inner = n &rarr; <b>T(n) = O(n<sup>2</sup> log n)</b>.</div>
+    <div class="key-item"><b>1.3</b> Triple-nested with rising lower bounds: count = n(n+1)(n+2)/6 = &Theta;(n<sup>3</sup>) &rArr; O(n<sup>3</sup>).</div>
+    <div class="key-item"><b>1.4</b> T = C n<sup>2</sup> log<sub>2</sub> n. n = 8: 192 = C &middot; 64 &middot; 3 &rArr; C = 1. 800 ms &rArr; n<sup>2</sup> log<sub>2</sub> n &asymp; 800 &rArr; n &asymp; 14&ndash;15.</div>
+    <div class="key-item"><b>1.5</b> (a) 24 = C &middot; log<sub>3</sub> 81 = 4C &rArr; <b>C = 6</b>. (b) 72 = 6 log<sub>3</sub> n &rArr; n = 3<sup>12</sup>. (c) 96 = 6 log<sub>3</sub> n &rArr; n = 3<sup>16</sup>.</div>
+    <div class="key-item"><b>1.6</b> (a) O(n<sup>2</sup>) (b) O(n log n) (c) O(log n) (d) O(2<sup>n</sup>).</div>
+    <div class="key-item"><b>1.7</b> Outer m iterations &middot; inner d iterations &rArr; T = O(m &middot; d).</div>
+    <div class="key-item"><b>1.8</b> 1, log n, &radic;n, n, n log n, n<sup>2</sup>, n<sup>3</sup>, n<sup>log n</sup>, 2<sup>n</sup>, n!.</div>
+    <div class="key-item"><b>1.9 MCQ</b> 1-d, 2-c, 3-c, 4-b, 5-b, 6-b, 7-b, 8-b, 9-a, 10-b.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part II &mdash; Recursion</h3>
+    <div class="key-item"><b>2.1</b> "ab[2]cd[3]e".</div>
+    <div class="key-item"><b>2.2</b> 12 even &rarr; 1 + mystery(6); 6 even &rarr; 1 + mystery(3); 3 odd &rarr; 2 + mystery(2); 2 even &rarr; 1 + mystery(1); base = 1. Total <b>= 6</b>.</div>
+    <div class="key-item"><b>2.3</b> Returns max value <b>9</b>.</div>
+    <div class="key-item"><b>2.4</b> <code class="inline">if (exp == 0) return 1; return base * power(base, exp - 1);</code></div>
+    <div class="key-item"><b>2.5</b> <code class="inline">if (n &lt; 10) return n; return n % 10 + sumDigits(n / 10);</code></div>
+    <div class="key-item"><b>2.6</b> If <code class="inline">s.startsWith(t)</code>: 1 + countSub(s.substring(t.length()), t); else: countSub(s.substring(1), t); base when shorter than t &rarr; 0.</div>
+    <div class="key-item"><b>2.7</b> <code class="inline">if (size == 1) return a[0]; int r = maxOf(a, size - 1); return Math.max(a[size - 1], r);</code></div>
+    <div class="key-item"><b>2.8</b> Two recursive helpers: one prints n rows ascending then n&minus;1 rows descending; row helper recursively prints stars.</div>
+    <div class="key-item"><b>2.9</b> (a) Base fails for n = 0; use <code class="inline">if (n &le; 1) return 1;</code>. (b) Prints n..1; swap print and call. (c) Missing base case <code class="inline">if (size == 0) return 0;</code>.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part III &mdash; Linked Lists</h3>
+    <div class="key-item"><b>3.1</b> (a) 12 (b) 23 (c) NullPointerException (d) 12 (e) 5 &rarr; 12 &rarr; 17 &rarr; 23.</div>
+    <div class="key-item"><b>3.2</b> Walk, accumulate when (data % 2 != 0).</div>
+    <div class="key-item"><b>3.3</b> Handle empty/new-head; walk while next.data &lt; v; splice in.</div>
+    <div class="key-item"><b>3.4</b> 3 pointers: prev = null, curr = head; while curr: next = curr.next; curr.next = prev; prev = curr; curr = next; return prev.</div>
+    <div class="key-item"><b>3.5</b> Create node, then 4 assignments: <code class="inline">n.next = helpPtr.next; n.prev = helpPtr; helpPtr.next.prev = n; helpPtr.next = n;</code></div>
+    <div class="key-item"><b>3.6</b> All six are True.</div>
+    <div class="key-item"><b>3.7</b> One pass: even &rarr; evens tail, else odds tail and counter++.</div>
+    <div class="key-item"><b>3.8 MCQ</b> 1-d, 2-c, 3-a, 4-c, 5-c, 6-a, 7-b, 8-b.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part IV &mdash; Stacks</h3>
+    <div class="key-item"><b>4.1</b> A: [3]; B: [5]; C: [24]. Final = 24.</div>
+    <div class="key-item"><b>4.2</b> Postfix = <code class="inline">A B C D - * E F ^ / + G H % -</code></div>
+    <div class="key-item"><b>4.3</b> Prefix = <code class="inline">- * + X Y Z / W - P Q</code></div>
+    <div class="key-item"><b>4.4</b> Outputs (a) 3 (b) 15 (c) 11 (d) 2. Final stack top&rarr;bottom = {20, 7}.</div>
+    <div class="key-item"><b>4.5</b> Examples: function call/return (frames are LIFO); undo (most recent first).</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part V &mdash; Queues</h3>
+    <div class="key-item"><b>5.1</b> Outputs (a) B (b) D (c) C (d) A. Final Q = {E}. Final S = {F}.</div>
+    <div class="key-item"><b>5.2</b> Outputs (a) 10 (b) 20 (c) 30 (d) overflow. Slots filled with 40..90; (d) attempted overflow when full.</div>
+    <div class="key-item"><b>5.3</b> Dequeue all into stack; pop all back into queue.</div>
+    <div class="key-item"><b>5.4</b> Standard 2-pointer merge.</div>
+    <div class="key-item"><b>5.5 MCQ</b> 1-b, 2-c, 3-b, 4-c, 5-a, 6-d.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part VI &mdash; Sorting</h3>
+    <div class="key-item"><b>6.1 Bubble</b> P1 {11,28,19,35,8,47}; P2 {11,19,28,8,35,47}; P3 {11,19,8,28,35,47}; P4 {11,8,19,28,35,47}; P5 {8,11,19,28,35,47}.</div>
+    <div class="key-item"><b>6.2 Selection (desc)</b> P1 {21,5,7,13,3,18,9}; P2 {21,18,7,13,3,5,9}; P3 {21,18,13,7,3,5,9}; P4 {21,18,13,9,3,5,7}; P5 {21,18,13,9,7,5,3}.</div>
+    <div class="key-item"><b>6.3 Insertion</b> P1 {A,M,R,K,B,T}; P2 {A,M,R,K,B,T}; P3 {A,K,M,R,B,T}; P4 {A,B,K,M,R,T}; P5 {A,B,K,M,R,T}.</div>
+    <div class="key-item"><b>6.4 Merge</b> Final = {3,4,7,8,12,16,19,25}.</div>
+    <div class="key-item"><b>6.5 Quick</b> Pivot 31 placed; left side gets {7, 12, 5, 26, 18, 11}; recurse with pivot 7.</div>
+    <div class="key-item"><b>6.6 Comparison</b> Bubble n / n<sup>2</sup> / n<sup>2</sup> &mdash; stable. Selection n<sup>2</sup> / n<sup>2</sup> / n<sup>2</sup> &mdash; not stable. Insertion n / n<sup>2</sup> / n<sup>2</sup> &mdash; stable. Merge n log n / n log n / n log n &mdash; stable. Quick n log n / n log n / n<sup>2</sup> &mdash; not stable.</div>
+    <div class="key-item"><b>6.7</b> Sorted (or reverse) input is the worst for first-pivot Quick Sort. Merge sort handles LL well (no random access needed). Insertion is near-O(n) when already sorted because the inner loop exits early.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part VII &mdash; Trees</h3>
+    <div class="key-item"><b>7.1</b> Pre: 50 30 20 10 40 35 33 70 60 65 85 75 90. In: 10 20 30 33 35 40 50 60 65 70 75 85 90. Post: 10 20 33 35 40 30 65 60 75 90 85 70 50. Level: 50 30 70 20 40 60 85 10 35 65 75 90 33.</div>
+    <div class="key-item"><b>7.2</b> 50 &rarr; 30 &rarr; 40 &rarr; 35 &rarr; 33 &rarr; null. <b>Not found</b>.</div>
+    <div class="key-item"><b>7.3</b> Standard BST deletion; use in-order successor (smallest in right subtree) for two-child cases.</div>
+    <div class="key-item"><b>7.4</b> <code class="inline">if (p == null) return 0; if (p.left == null &amp;&amp; p.right == null) return 1; return countLeaves(p.left) + countLeaves(p.right);</code></div>
+    <div class="key-item"><b>7.5</b> <code class="inline">if (p == null) return -1; return 1 + Math.max(height(p.left), height(p.right));</code></div>
+    <div class="key-item"><b>7.6</b> If root.data &lt; lo: recurse right only. If &gt; hi: recurse left only. Else: include and recurse both.</div>
+    <div class="key-item"><b>7.7</b> Both null &rarr; true; one null &rarr; false; equal data and same recursion both sides.</div>
+    <div class="key-item"><b>7.8</b> Root F (first of pre-order). In-order splits at F: left = {A,B,C,D,E}; right = {G,H,I}. Recurse.</div>
+    <div class="key-item"><b>7.9 MCQ</b> 1-b, 2-b, 3-c, 4-c, 5-a, 6-b, 7-c, 8-b.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part VIII &mdash; Heaps</h3>
+    <div class="key-item"><b>8.1</b> After all insertions, root = 36; heap property maintained.</div>
+    <div class="key-item"><b>8.2</b> Min-heap root = A.</div>
+    <div class="key-item"><b>8.3</b> First deleteMax removes 36; replace with last leaf, heapify down. Repeat for next-largest.</div>
+    <div class="key-item"><b>8.4</b> (a) parent = (i&minus;1)/2. (b) left = 2i+1, right = 2i+2. (c) last non-leaf = (n/2) &minus; 1.</div>
+    <div class="key-item"><b>8.5</b> Min-heap priority queue; insert O(log n); remove-min O(log n).</div>
+    <div class="key-item"><b>8.6 MCQ</b> 1-b, 2-b, 3-b (Max-Heap property: parent &ge; children), 4-b, 5-b, 6-b.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part IX &mdash; Hash Tables</h3>
+    <div class="key-item"><b>9.1</b> mod-13 indices: 41&rarr;2, 12&rarr;12, 24&rarr;11, 5&rarr;5, 16&rarr;3, 35&rarr;9, 28 collides at 2 &rarr; probe 3..4, 19&rarr;6, 7&rarr;7.</div>
+    <div class="key-item"><b>9.2</b> Same primary indices; collisions resolved with +1, +4, +9, ... mod 13.</div>
+    <div class="key-item"><b>9.3</b> Compute h<sub>1</sub>, h<sub>2</sub> per key; e.g. for 49: h<sub>1</sub>=5, h<sub>2</sub>=1+(49 mod 9)=5; place at 5.</div>
+    <div class="key-item"><b>9.4</b> Buckets fill at indices 0..6 according to x mod 7. Head insertion reverses arrival order within each bucket.</div>
+    <div class="key-item"><b>9.5</b> (a) &alpha; = n/m; chaining resizes around &alpha; &gt; 1; probing around &alpha; &gt; 0.5&ndash;0.75. (b) Prime sizes reduce common factor patterns with keys. (c) Primary clustering = long contiguous runs in linear probing; quadratic / double hashing mitigates.</div>
+    <div class="key-item"><b>9.6</b> Search ends at first empty probe. Found ones return their found index; not-found ones report the probe sequence and the empty slot.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part X &mdash; Graphs</h3>
+    <div class="key-item"><b>10.1</b> Matrix entries = edge weights; 0 elsewhere. List: A:[B(4),D(7)] B:[C(2),E(5)] C:[F(1)] D:[C(3),E(9)] E:[F(2)] F:[A(6)].</div>
+    <div class="key-item"><b>10.2</b> BFS from A (alphabetical): A B D C E F. DFS from A: A B C F D E.</div>
+    <div class="key-item"><b>10.3</b> Matrix: O(1) edge check, O(V) neighbor iteration, best for <b>dense</b> graphs &mdash; advantage: fast edge lookup. List: O(deg) edge check, O(deg) neighbor iteration, best for <b>sparse</b> graphs &mdash; advantage: only stores actual edges.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>Part XI &mdash; Mixed</h3>
+    <div class="key-item"><b>11.1 T/F</b> 1-F, 2-T, 3-T, 4-F, 5-T, 6-F, 7-T, 8-F, 9-F, 10-T (sorted-order inserts produce a fully skewed BST), 11-F, 12-T.</div>
+    <div class="key-item"><b>11.2</b> (a) ADT = behavior contract independent of implementation (e.g. Stack &mdash; array or linked). (b) Physical = memory layout; Logical = ADT view. (c) Tail recursion has the call as the last op; compilers may turn it into a loop, saving stack frames. (d) Each new sorted key is larger than every existing one, so it goes to the right child only &mdash; the tree degenerates into a list of height <i>n</i>&minus;1, giving O(n) search. (e) Range queries / ordered iteration are O(log n + k) in a BST but O(n) in a hash table.</div>
+    <div class="key-item"><b>11.3</b> (a) Stack &mdash; LIFO undo. (b) Queue &mdash; FIFO arrival. (c) BST. (d) Max-heap. (e) Hash table.</div>
+    <div class="key-item"><b>11.4 MCQ</b> 1-b, 2-b, 3-d, 4-b, 5-a, 6-b, 7-c, 8-c (height = n&minus;1 = 4), 9-b, 10-b.</div>
+    <div class="key-item"><b>11.5</b> (a) Walk the list once, pushing each value, then pop and print &mdash; O(n) time. (b) Reverse the list, traverse and print, reverse it again &mdash; O(n) time. (c) <code class="inline">printRev(node) { if (node == null) return; printRev(node.next); print(node.data); }</code> &mdash; O(n) time.</div>
+  </div>
+
+  <p style="text-align:center;margin-top:24px;font-style:italic;color:var(--ink-soft);">
+    &mdash; End of Question Bank &mdash; Best of luck with CPCS-204!
+  </p>
+</section>
+
+</body>
+</html>
