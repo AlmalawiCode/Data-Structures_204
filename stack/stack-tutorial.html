@@ -116,6 +116,48 @@
             border-radius: 5px;
         }
 
+        /* Practice Exercises */
+        .exercise {
+            background: #f0f4ff;
+            border: 1px solid #d5ddff;
+            border-left: 5px solid #667eea;
+            padding: 20px 24px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .exercise .q-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .exercise .solution-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin-top: 12px;
+            transition: filter 0.2s;
+        }
+        .exercise .solution-btn:hover { filter: brightness(1.08); }
+        .exercise .solution {
+            margin-top: 15px;
+            padding: 18px 20px;
+            background: #ffffff;
+            border: 1px dashed #667eea;
+            border-radius: 6px;
+        }
+        .exercise .solution.hidden { display: none; }
+        .hidden { display: none; }
+
         ul, ol {
             margin-left: 30px;
             margin-top: 10px;
@@ -1989,6 +2031,78 @@
                         <li>Many algorithms (DFS, backtracking) depend on stack behavior</li>
                     </ul>
                     <p><strong>Understanding stacks is essential for becoming a proficient programmer!</strong></p>
+                </div>
+            </section>
+
+            <!-- Section 7: Practice Exercises -->
+            <section id="exercises">
+                <h2>10. Practice Exercises</h2>
+                <p>Try each problem on your own first, then click <strong>Show Solution</strong> to check your answer.</p>
+
+                <div class="exercise">
+                    <span class="q-number">Exercise 1</span>
+                    <p>Starting with an empty stack, the following operations are performed in order:</p>
+                    <p><code>push(A), push(B), pop(), push(C), push(D), pop(), pop(), push(E)</code></p>
+                    <p>What values are popped (in order), and what remains on the stack from bottom to top?</p>
+                    <button class="solution-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+                    <div id="sol1" class="solution hidden">
+                        <p><strong>Popped in order:</strong> B, D, C</p>
+                        <p><strong>Stack (bottom → top):</strong> A, E</p>
+                        <p><em>Because a stack is LIFO, each <code>pop()</code> removes the most recently pushed item that is still present.</em></p>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <span class="q-number">Exercise 2</span>
+                    <p>Write pseudocode that uses a stack to check whether a string of brackets
+                    <code>()</code>, <code>[]</code>, <code>{}</code> is <strong>balanced</strong>.</p>
+                    <button class="solution-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+                    <div id="sol2" class="solution hidden">
+<pre style="background:#000;color:#f8f8f2;padding:16px;border-radius:6px;overflow-x:auto;">isBalanced(s):
+    create empty stack
+    for each char c in s:
+        if c is an opening bracket:  push(c)
+        else if c is a closing bracket:
+            if stack isEmpty(): return false
+            open = pop()
+            if open does not match c: return false
+    return stack.isEmpty()</pre>
+                        <p><strong>Explanation:</strong> Push every opening bracket. On a closing bracket, the top of the
+                        stack must be its matching opener. If the stack is empty early, or non-empty at the end, the string
+                        is unbalanced. Time: O(n), Space: O(n).</p>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <span class="q-number">Exercise 3</span>
+                    <p>How can you reverse a string using only a stack? Describe the steps.</p>
+                    <button class="solution-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+                    <div id="sol3" class="solution hidden">
+                        <p><strong>Steps:</strong></p>
+                        <ol>
+                            <li><code>push()</code> every character of the string onto the stack.</li>
+                            <li><code>pop()</code> characters one by one, appending each to a result string.</li>
+                        </ol>
+                        <p>Because the last character pushed is the first popped (LIFO), the result comes out reversed.
+                        Time: O(n), Space: O(n).</p>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <span class="q-number">Exercise 4</span>
+                    <p>Evaluate the postfix expression using a stack: <code>5 3 + 8 2 - *</code></p>
+                    <button class="solution-btn" onclick="toggleSolution('sol4')">Show Solution</button>
+                    <div id="sol4" class="solution hidden">
+                        <p><strong>Answer: 48</strong></p>
+                        <ol>
+                            <li>Push 5, push 3 → stack: [5, 3]</li>
+                            <li><code>+</code> → pop 3 and 5, push 5+3=8 → stack: [8]</li>
+                            <li>Push 8, push 2 → stack: [8, 8, 2]</li>
+                            <li><code>-</code> → pop 2 and 8, push 8-2=6 → stack: [8, 6]</li>
+                            <li><code>*</code> → pop 6 and 8, push 8*6=48 → stack: [48]</li>
+                        </ol>
+                        <p>Final value left on the stack: <strong>48</strong>.</p>
+                    </div>
                 </div>
             </section>
         </div>
