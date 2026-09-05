@@ -1602,8 +1602,8 @@
                             <tbody>
                                 <tr>
                                     <td><strong>Value</strong></td>
-                                    <td>Ali</td>
                                     <td>Ahmed</td>
+                                    <td>Ali</td>
                                     <td>Fatima</td>
                                     <td>Huda</td>
                                     <td>Khalid</td>
@@ -1651,28 +1651,20 @@
                                     <td>10</td>
                                     <td>8</td>
                                     <td>Saeed</td>
-                                    <td>"Salma" < "Saeed", go left (high = 7)</td>
+                                    <td>"Salma" > "Saeed", go right (low = 9)</td>
                                 </tr>
                                 <tr>
                                     <td>After 2nd</td>
-                                    <td>6</td>
-                                    <td>7</td>
-                                    <td>6</td>
-                                    <td>Omar</td>
-                                    <td>"Salma" > "Omar", go right (low = 7)</td>
+                                    <td>9</td>
+                                    <td>10</td>
+                                    <td>9</td>
+                                    <td>Youssef</td>
+                                    <td>"Salma" < "Youssef", go left (high = 8)</td>
                                 </tr>
                                 <tr>
                                     <td>After 3rd</td>
-                                    <td>7</td>
-                                    <td>7</td>
-                                    <td>7</td>
-                                    <td>Rania</td>
-                                    <td>"Salma" > "Rania", go right (low = 8)</td>
-                                </tr>
-                                <tr>
-                                    <td>After 4th</td>
+                                    <td>9</td>
                                     <td>8</td>
-                                    <td>7</td>
                                     <td>-</td>
                                     <td>-</td>
                                     <td style="color: #ef4444; font-weight: bold;">low > high, NOT FOUND!</td>
@@ -1683,7 +1675,7 @@
                         <div class="warning-box">
                             <h4>Conclusion</h4>
                             <p>When <strong>low > high</strong>, it means we've exhausted all possibilities and the element is <strong>NOT in the array</strong>.</p>
-                            <p>The algorithm correctly concludes that "Salma" does not exist after only <strong>4 comparisons</strong>!</p>
+                            <p>The algorithm correctly concludes that "Salma" does not exist after only <strong>3 comparisons</strong>!</p>
                             <p>Note: log<sub>2</sub>(11) ≈ 3.46, so we need at most 4 comparisons for an array of 11 elements.</p>
                         </div>
                     </div>
