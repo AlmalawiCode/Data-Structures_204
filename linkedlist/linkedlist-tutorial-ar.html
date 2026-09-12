@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linked List Tutorial - CPCS 204</title>
+    <title>القوائم المرتبطة (Linked List) - CPCS 204</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +33,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -178,7 +199,7 @@
         }
 
         .teacher-says::before {
-            content: "Teacher: ";
+            content: "المعلم: ";
             font-weight: bold;
             color: #7b1fa2;
         }
@@ -192,7 +213,7 @@
         }
 
         .student-asks::before {
-            content: "Student: ";
+            content: "الطالب: ";
             font-weight: bold;
             color: #2e7d32;
         }
@@ -707,24 +728,6 @@
             z-index: 1000;
         }
 
-        .lang-switch-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            padding: 10px 22px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .lang-switch-btn:hover { background: #667eea; color: white; }
-
         .back-home-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
@@ -754,20 +757,57 @@
                 min-width: 120px;
             }
         }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .highlight-box  { border-left: none; border-right: 5px solid #667eea; }
+        .definition     { border-left: none; border-right: 5px solid #4caf50; }
+        .important      { border-left: none; border-right: 5px solid #ffc107; }
+        .warning        { border-left: none; border-right: 5px solid #f44336; }
+        .question-box   { border-left: none; border-right: 5px solid #2196f3; }
+        .teacher-says   { border-left: none; border-right: 5px solid #9c27b0; }
+        .student-asks   { border-left: none; border-right: 5px solid #4caf50; }
+
+        /* code and diagrams always stay left-to-right */
+        pre, code, .inline-code, .code-container, .code-header,
+        .node-container, .memory-visual, .ram-visual, .array-visual {
+            direction: ltr;
+        }
+        pre, .code-container { text-align: left; }
+        .inline-code { unicode-bidi: embed; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
+        .lang-switch-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .lang-switch-btn:hover { background: #667eea; color: white; }
     </style>
 </head>
 <body>
-    <a href="../index.html" class="back-home-btn">Home</a>
-    <a href="linkedlist-tutorial-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="../index.html" class="back-home-btn">الرئيسية</a>
+    <a href="linkedlist-tutorial.html" class="lang-switch-btn">English</a>
 
     <div class="container">
         <header>
             <div class="header-content">
-                <img src="../fcit.png" alt="FCIT Logo">
+                <img src="../fcit.png" alt="شعار كلية الحاسبات وتقنية المعلومات">
                 <div class="header-text">
-                    <h1>Linked List Data Structure</h1>
-                    <p class="course-code">CPCS 204 - Data Structures I</p>
-                    <p>Understanding Why We Need Linked Lists and How They Work</p>
+                    <h1>هيكل بيانات القائمة المرتبطة (Linked List)</h1>
+                    <p class="course-code">CPCS 204 - هياكل البيانات 1</p>
+                    <p>لماذا نحتاج إلى القوائم المرتبطة (Linked Lists) وكيف تعمل</p>
                 </div>
             </div>
         </header>
@@ -776,17 +816,17 @@
 
             <!-- Section 1: Introduction - The Problem with Arrays -->
             <section id="why-linkedlist">
-                <h2>Part 1: Why Do We Need Linked Lists?</h2>
+                <h2>الجزء الأول: لماذا نحتاج إلى القوائم المرتبطة (Linked Lists)؟</h2>
 
                 <div class="highlight-box">
-                    <p>Before we learn about linked lists, we must first understand <strong>the problem they solve</strong>. To do this, let's review what you already know: <strong>Arrays</strong>.</p>
+                    <p>قبل أن نتعلم القوائم المرتبطة، يجب أولاً أن نفهم <strong>المشكلة التي تحلها</strong>. ولنفعل ذلك، دعونا نراجع ما تعرفه مسبقًا: <strong>المصفوفات (Arrays)</strong>.</p>
                 </div>
 
-                <h3>Let's Start with Arrays</h3>
-                <p>You already know that an array stores elements in <strong>contiguous (consecutive) memory locations</strong>. Let's visualize an array of 5 integers:</p>
+                <h3>لنبدأ بالمصفوفات</h3>
+                <p>أنت تعلم مسبقًا أن المصفوفة تخزّن العناصر (Elements) في <strong>مواقع ذاكرة متجاورة (Contiguous Memory) أي متتالية</strong>. دعونا نتخيل مصفوفة مكوّنة من 5 أعداد صحيحة:</p>
 
                 <div class="memory-diagram">
-                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Array of 5 Elements in Memory</h4>
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">مصفوفة من 5 عناصر في الذاكرة (Memory)</h4>
                     <div class="memory-row">
                         <span class="memory-label">Array:</span>
                         <div class="memory-cell">
@@ -811,43 +851,43 @@
                         </div>
                     </div>
                     <p style="text-align: center; margin-top: 15px; color: #666;">
-                        <em>Notice: Each element is exactly 4 bytes apart (integer size). Memory addresses are consecutive!</em>
+                        <em>لاحظ: كل عنصر يبعد عن الذي يليه 4 بايتات بالضبط (حجم العدد الصحيح). عناوين الذاكرة متتالية!</em>
                     </p>
                 </div>
 
                 <div class="question-box">
-                    <strong>Question:</strong> If we created this array with 5 elements, can we extend it to add more elements (like a 6th element)?
+                    <strong>سؤال:</strong> إذا أنشأنا هذه المصفوفة بخمسة عناصر، فهل يمكننا توسيعها لإضافة عناصر أخرى (مثل عنصر سادس)؟
                 </div>
 
                 <div class="warning">
-                    <strong>Answer: NO!</strong> An array has a <strong>fixed size</strong>. Once created, it cannot be extended.
+                    <strong>الإجابة: لا!</strong> المصفوفة لها <strong>حجم ثابت (Fixed Size)</strong>. فبمجرد إنشائها، لا يمكن توسيعها.
                 </div>
 
-                <h3>But WHY is an Array Fixed?</h3>
+                <h3>ولكن لماذا حجم المصفوفة ثابت؟</h3>
 
-                <p>The array is fixed because it <strong>MUST use contiguous memory locations</strong>. But why is contiguous memory so important?</p>
+                <p>حجم المصفوفة ثابت لأنها <strong>يجب أن تستخدم مواقع ذاكرة متجاورة</strong>. ولكن لماذا الذاكرة المتجاورة بهذه الأهمية؟</p>
 
                 <div class="definition">
-                    <h4>The Benefit of Contiguous Memory</h4>
-                    <p>When elements are stored consecutively, the CPU can access <strong>any element instantly</strong> using this simple formula:</p>
+                    <h4>فائدة الذاكرة المتجاورة</h4>
+                    <p>عندما تُخزَّن العناصر بشكل متتالٍ، يستطيع المعالج الوصول إلى <strong>أي عنصر فورًا</strong> باستخدام هذه الصيغة البسيطة:</p>
                     <p style="text-align: center; font-size: 1.2em; margin: 15px 0;">
                         <code class="inline-code">Element Address = Base Address + (Index × Element Size)</code>
                     </p>
-                    <p><strong>Example:</strong> To find element at index 3:</p>
+                    <p><strong>مثال:</strong> لإيجاد العنصر عند الفهرس (Index) رقم 3:</p>
                     <p style="text-align: center;">
                         <code class="inline-code">Address = 1000 + (3 × 4) = 1000 + 12 = 1012</code>
                     </p>
-                    <p>The CPU only asks the Memory Management Unit (MMU) <strong>once</strong> for the base address, then uses simple math (offset) to find any element. This is called <strong>O(1) Random Access</strong> - incredibly fast!</p>
+                    <p>المعالج يسأل وحدة إدارة الذاكرة (MMU) <strong>مرة واحدة فقط</strong> عن العنوان الأساسي، ثم يستخدم عملية حسابية بسيطة (الإزاحة) لإيجاد أي عنصر. يُسمى هذا <strong>الوصول العشوائي O(1)</strong> - وهو سريع بشكل مذهل!</p>
                 </div>
 
-                <h3>The Extension Problem</h3>
+                <h3>مشكلة التوسيع</h3>
 
-                <p>Now let's understand why we cannot extend the array:</p>
+                <p>الآن دعونا نفهم لماذا لا يمكننا توسيع المصفوفة:</p>
 
                 <div class="memory-diagram">
-                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Memory is Shared by Many Programs</h4>
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">الذاكرة مشتركة بين برامج كثيرة</h4>
                     <div class="memory-row">
-                        <span class="memory-label">Our Array:</span>
+                        <span class="memory-label">مصفوفتنا:</span>
                         <div class="memory-cell">
                             <span class="memory-value">10</span>
                             <span class="memory-address">1000</span>
@@ -878,29 +918,29 @@
                         </div>
                     </div>
                     <p style="text-align: center; margin-top: 15px; color: #c62828;">
-                        <strong>The next memory locations (1020, 1024...) are OCCUPIED by another program!</strong>
+                        <strong>مواقع الذاكرة التالية (1020، 1024...) مشغولة ببرنامج آخر!</strong>
                     </p>
                 </div>
 
                 <div class="important">
-                    <h4>Key Understanding</h4>
-                    <p>Memory (RAM) is not only for your program. <strong>Many programs run simultaneously</strong> and share the same memory. The locations right after your array might be used by:</p>
+                    <h4>فهم أساسي</h4>
+                    <p>الذاكرة (RAM) ليست لبرنامجك وحده. <strong>برامج كثيرة تعمل في الوقت نفسه</strong> وتتشارك الذاكرة ذاتها. المواقع التي تلي مصفوفتك مباشرة قد تكون مستخدمة من قِبل:</p>
                     <ul>
-                        <li>Another program's data</li>
-                        <li>The operating system</li>
-                        <li>Another array in your own program</li>
+                        <li>بيانات برنامج آخر</li>
+                        <li>نظام التشغيل</li>
+                        <li>مصفوفة أخرى في برنامجك نفسه</li>
                     </ul>
-                    <p>Since we <strong>cannot guarantee</strong> that the next locations are free, we <strong>cannot extend</strong> the array!</p>
+                    <p>وبما أننا <strong>لا نستطيع أن نضمن</strong> أن المواقع التالية خالية، فإننا <strong>لا نستطيع توسيع</strong> المصفوفة!</p>
                 </div>
 
                 <div class="question-box">
-                    <strong>But what if we allocate a new block of memory that's NOT contiguous with our array?</strong>
+                    <strong>ولكن ماذا لو حجزنا كتلة جديدة من الذاكرة غير متجاورة مع مصفوفتنا؟</strong>
                 </div>
 
                 <div class="memory-diagram">
-                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Non-Contiguous Memory - The Problem</h4>
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">ذاكرة غير متجاورة - المشكلة</h4>
                     <div class="memory-row">
-                        <span class="memory-label">Original Array:</span>
+                        <span class="memory-label">المصفوفة الأصلية:</span>
                         <div class="memory-cell">
                             <span class="memory-value">10</span>
                             <span class="memory-address">1000</span>
@@ -923,35 +963,35 @@
                         </div>
                     </div>
                     <div class="memory-row" style="margin-top: 20px;">
-                        <span class="memory-label">New Block:</span>
-                        <span style="color: #666; margin-right: 20px;">... gap in memory ...</span>
+                        <span class="memory-label">الكتلة الجديدة:</span>
+                        <span style="color: #666; margin-right: 20px;">... فجوة في الذاكرة ...</span>
                         <div class="memory-cell new-array">
                             <span class="memory-value">60</span>
                             <span class="memory-address">2000</span>
                         </div>
                     </div>
                     <p style="text-align: center; margin-top: 15px; color: #f44336;">
-                        <strong>Problem:</strong> Address 2000 is NOT at offset 5 from 1000!<br>
-                        The formula <code class="inline-code">1000 + (5 × 4) = 1020</code> gives the WRONG address!<br>
-                        We lose the O(1) random access benefit!
+                        <strong>المشكلة:</strong> العنوان 2000 ليس عند الإزاحة 5 من العنوان 1000!<br>
+                        الصيغة <code class="inline-code">1000 + (5 × 4) = 1020</code> تعطي عنوانًا خاطئًا!<br>
+                        نخسر ميزة الوصول العشوائي O(1)!
                     </p>
                 </div>
 
                 <div class="warning">
-                    <strong>Conclusion:</strong> If memory is not contiguous, we <strong>cannot use the offset formula</strong>. The CPU would need to search for where each element is stored, making access very slow. This defeats the main purpose of arrays!
+                    <strong>الخلاصة:</strong> إذا لم تكن الذاكرة متجاورة، <strong>لا يمكننا استخدام صيغة الإزاحة</strong>. سيحتاج المعالج إلى البحث عن مكان تخزين كل عنصر، مما يجعل الوصول بطيئًا جدًا. وهذا يهدم الغرض الأساسي من المصفوفات!
                 </div>
             </section>
 
             <!-- Section 2: The Java Solution -->
             <section id="java-solution">
-                <h2>Part 2: How Java Handles Array Extension</h2>
+                <h2>الجزء الثاني: كيف تتعامل Java مع توسيع المصفوفة</h2>
 
-                <p>So how does Java let you "add" elements to an array (like in ArrayList)? The answer is: <strong>Create a new, larger array and copy everything!</strong></p>
+                <p>إذن كيف تسمح لك Java "بإضافة" عناصر إلى مصفوفة (كما في ArrayList)؟ الإجابة هي: <strong>إنشاء مصفوفة جديدة أكبر ونسخ كل شيء إليها!</strong></p>
 
                 <div class="memory-diagram">
-                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">The Copy Process</h4>
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">عملية النسخ</h4>
 
-                    <p style="text-align: center; margin-bottom: 15px;"><strong>Step 1:</strong> Original array is full</p>
+                    <p style="text-align: center; margin-bottom: 15px;"><strong>الخطوة 1:</strong> المصفوفة الأصلية ممتلئة</p>
                     <div class="memory-row" style="justify-content: center;">
                         <div class="memory-cell">
                             <span class="memory-value">10</span>
@@ -972,7 +1012,7 @@
 
                     <div class="arrow-down">&#8595;</div>
 
-                    <p style="text-align: center; margin-bottom: 15px;"><strong>Step 2:</strong> Create NEW larger array (at different memory location)</p>
+                    <p style="text-align: center; margin-bottom: 15px;"><strong>الخطوة 2:</strong> إنشاء مصفوفة جديدة أكبر (في موقع ذاكرة مختلف)</p>
                     <div class="memory-row" style="justify-content: center;">
                         <div class="memory-cell new-array">
                             <span class="memory-value"></span>
@@ -1008,7 +1048,7 @@
 
                     <div class="arrow-down">&#8595;</div>
 
-                    <p style="text-align: center; margin-bottom: 15px;"><strong>Step 3:</strong> Copy ALL elements to new array + add new element</p>
+                    <p style="text-align: center; margin-bottom: 15px;"><strong>الخطوة 3:</strong> نسخ جميع العناصر إلى المصفوفة الجديدة + إضافة العنصر الجديد</p>
                     <div class="memory-row" style="justify-content: center;">
                         <div class="memory-cell new-array">
                             <span class="memory-value">10</span>
@@ -1043,60 +1083,60 @@
                     </div>
                 </div>
 
-                <h3>Problems with This Approach</h3>
+                <h3>مشاكل هذا الأسلوب</h3>
 
                 <div class="warning">
-                    <h4>Problem 1: Very Slow!</h4>
-                    <p>If you have 1 million elements and want to add just ONE more, you must:</p>
+                    <h4>المشكلة 1: بطيء جدًا!</h4>
+                    <p>إذا كان لديك مليون عنصر وتريد إضافة عنصر واحد فقط، يجب عليك:</p>
                     <ol>
-                        <li>Create a new array with 1,000,001 spaces</li>
-                        <li>Copy ALL 1 million elements one by one</li>
-                        <li>Add the new element</li>
+                        <li>إنشاء مصفوفة جديدة بسعة 1,000,001 خانة</li>
+                        <li>نسخ المليون عنصر جميعها واحدًا تلو الآخر</li>
+                        <li>إضافة العنصر الجديد</li>
                     </ol>
-                    <p>This is <strong>O(n)</strong> time complexity - very slow for large arrays!</p>
+                    <p>هذا يعني تعقيدًا زمنيًا قدره <strong>O(n)</strong> - بطيء جدًا مع المصفوفات الكبيرة!</p>
                 </div>
 
                 <div class="warning">
-                    <h4>Problem 2: Memory Fragmentation (The Critical Problem!)</h4>
-                    <p>This is the most important problem to understand. Let's see a real scenario:</p>
+                    <h4>المشكلة 2: تجزئة الذاكرة (المشكلة الحرجة!)</h4>
+                    <p>هذه أهم مشكلة يجب فهمها. دعونا نرَ سيناريو واقعيًا:</p>
                 </div>
 
                 <div class="ram-diagram">
-                    <div class="ram-title">Scenario: 2GB RAM Computer</div>
+                    <div class="ram-title">سيناريو: حاسوب بذاكرة وصول عشوائي (RAM) سعتها 2GB</div>
 
-                    <p style="text-align: center; margin-bottom: 10px;">Current Memory State:</p>
+                    <p style="text-align: center; margin-bottom: 10px;">الحالة الحالية للذاكرة:</p>
                     <div class="ram-bar">
                         <div class="ram-section ram-used" style="width: 50%;">
-                            Your Array<br>(1 GB)
+                            مصفوفتك<br>(1 GB)
                         </div>
                         <div class="ram-section ram-free" style="width: 50%;">
-                            FREE<br>(1 GB)
+                            خالية<br>(1 GB)
                         </div>
                     </div>
 
                     <div class="ram-legend">
                         <div class="legend-item">
                             <div class="legend-color" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                            <span>Your Array (1 GB)</span>
+                            <span>مصفوفتك (1 GB)</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);"></div>
-                            <span>Free Space (1 GB)</span>
+                            <span>المساحة الخالية (1 GB)</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="question-box">
-                    <strong>Question:</strong> You want to add just <strong>1 KB</strong> of data to your 1 GB array. You have 1 GB free. Can you do it?
+                    <strong>سؤال:</strong> تريد إضافة <strong>1 KB</strong> فقط من البيانات إلى مصفوفتك التي حجمها 1 GB. ولديك 1 GB خالية. هل يمكنك ذلك؟
                 </div>
 
                 <div class="ram-diagram">
-                    <div class="ram-title">What You NEED vs What You HAVE</div>
+                    <div class="ram-title">ما تحتاجه مقابل ما تملكه</div>
 
-                    <p style="text-align: center; margin-bottom: 10px;">You need a NEW array of size: 1 GB + 1 KB</p>
+                    <p style="text-align: center; margin-bottom: 10px;">تحتاج إلى مصفوفة جديدة بحجم: 1 GB + 1 KB</p>
                     <div class="ram-bar">
                         <div class="ram-section ram-needed" style="width: 51%;">
-                            Needed: 1 GB + 1 KB<br>(Cannot create!)
+                            المطلوب: 1 GB + 1 KB<br>(لا يمكن إنشاؤها!)
                         </div>
                         <div class="ram-section" style="width: 49%; background: #333;">
 
@@ -1104,54 +1144,54 @@
                     </div>
 
                     <p style="text-align: center; margin: 20px 0; color: #f44336; font-size: 1.2em;">
-                        <strong>IMPOSSIBLE!</strong> You only have 1 GB free, but need 1 GB + 1 KB!
+                        <strong>مستحيل!</strong> لديك 1 GB فقط خالية، لكنك تحتاج إلى 1 GB + 1 KB!
                     </p>
 
-                    <p style="text-align: center; margin-bottom: 10px;">Even though you have 1 GB FREE, you CANNOT add just 1 KB!</p>
+                    <p style="text-align: center; margin-bottom: 10px;">رغم أن لديك 1 GB خالية، لا يمكنك إضافة 1 KB فقط!</p>
                 </div>
 
                 <div class="important">
-                    <h4>The Irony</h4>
-                    <p>You have <strong>1 GB of free memory</strong> but cannot add <strong>1 KB</strong> of data!</p>
-                    <p>This is because you need to create a completely new array that's <strong>larger</strong> than the current one, and there's not enough contiguous space for it.</p>
+                    <h4>المفارقة</h4>
+                    <p>لديك <strong>1 GB من الذاكرة الخالية</strong> ومع ذلك لا يمكنك إضافة <strong>1 KB</strong> من البيانات!</p>
+                    <p>والسبب أنك تحتاج إلى إنشاء مصفوفة جديدة كليًا <strong>أكبر</strong> من الحالية، ولا توجد مساحة متجاورة كافية لها.</p>
                 </div>
 
-                <h3>The "Disk Swap" Alternative</h3>
+                <h3>البديل: "التبديل مع القرص" (Disk Swap)</h3>
 
-                <p>A student might suggest: "Why not save the old array to the hard disk, create the new larger array, then copy back?"</p>
+                <p>قد يقترح أحد الطلاب: "لماذا لا نحفظ المصفوفة القديمة على القرص الصلب، ثم ننشئ المصفوفة الجديدة الأكبر، ثم ننسخ البيانات مرة أخرى؟"</p>
 
                 <div class="definition">
-                    <p><strong>Yes, this is technically possible, but...</strong></p>
+                    <p><strong>نعم، هذا ممكن تقنيًا، ولكن...</strong></p>
                     <ul>
-                        <li>Hard disk read/write is <strong>1000x slower</strong> than RAM</li>
-                        <li>Writing 1 GB to disk takes significant time</li>
-                        <li>Reading 1 GB back takes significant time</li>
-                        <li>This would make a simple "add" operation take seconds or minutes!</li>
+                        <li>القراءة والكتابة على القرص الصلب <strong>أبطأ بـ 1000 مرة</strong> من ذاكرة الوصول العشوائي</li>
+                        <li>كتابة 1 GB على القرص تستغرق وقتًا كبيرًا</li>
+                        <li>قراءة 1 GB مرة أخرى تستغرق وقتًا كبيرًا</li>
+                        <li>هذا سيجعل عملية "إضافة" بسيطة تستغرق ثوانيَ أو دقائق!</li>
                     </ul>
-                    <p>This solution is <strong>impractical</strong> for most applications.</p>
+                    <p>هذا الحل <strong>غير عملي</strong> لمعظم التطبيقات.</p>
                 </div>
 
                 <div class="highlight-box">
-                    <h4>We Need a Better Solution!</h4>
-                    <p>These problems with arrays led developers to think: <strong>Is there a way to link data together without needing contiguous memory?</strong></p>
-                    <p>Let's explore this idea using something you already know from Object-Oriented Programming...</p>
+                    <h4>نحتاج إلى حل أفضل!</h4>
+                    <p>هذه المشاكل في المصفوفات دفعت المطورين إلى التفكير: <strong>هل هناك طريقة لربط البيانات معًا دون الحاجة إلى ذاكرة متجاورة؟</strong></p>
+                    <p>دعونا نستكشف هذه الفكرة باستخدام شيء تعرفه مسبقًا من البرمجة كائنية التوجه (OOP)...</p>
                 </div>
             </section>
 
             <!-- Section 3: Building the Idea with OOP -->
             <section id="oop-idea">
-                <h2>Part 3: Let's Build the Idea Together</h2>
+                <h2>الجزء 3: لنبنِ الفكرة معاً</h2>
 
                 <div class="teacher-says">
-                    You already know Object-Oriented Programming. You know how to create classes and objects. Let me show you something interesting that will help us solve the array problem.
+                    أنتم تعرفون بالفعل البرمجة كائنية التوجه (OOP)، وتعرفون كيف تنشئون الأصناف (Class) والكائنات (Object). دعوني أريكم شيئاً مثيراً للاهتمام سيساعدنا على حل مشكلة المصفوفة.
                 </div>
 
-                <h3>Step 1: A Simple Student Class</h3>
+                <h3>الخطوة 1: صنف Student بسيط</h3>
 
-                <p>Let's start with a simple class you're familiar with:</p>
+                <p>لنبدأ بصنفٍ بسيط تعرفونه جيداً:</p>
 
                 <div class="code-container">
-                    <div class="code-header">Student.java - Simple Version</div>
+                    <div class="code-header">Student.java - النسخة البسيطة (Simple Version)</div>
                     <pre><span class="keyword">public class</span> <span class="type">Student</span> {
     <span class="type">String</span> name;
     <span class="keyword">int</span> age;
@@ -1163,19 +1203,19 @@
 }</pre>
                 </div>
 
-                <p>Now let's create a student object:</p>
+                <p>والآن لننشئ كائن طالب:</p>
 
                 <div class="code-container">
-                    <div class="code-header">Creating a Student Object</div>
+                    <div class="code-header">إنشاء كائن طالب (Student Object)</div>
                     <pre><span class="type">Student</span> s1 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ahmed"</span>, <span class="number">20</span>);</pre>
                 </div>
 
                 <div class="memory-diagram">
-                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">What Happens in Memory</h4>
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">ماذا يحدث في الذاكرة (Memory)</h4>
                     <div class="objects-flow">
                         <div class="variable-box">
                             <div class="variable-name">s1</div>
-                            <div class="variable-value">(reference)</div>
+                            <div class="variable-value">(مرجع)</div>
                         </div>
                         <span class="flow-arrow">&#8594;</span>
                         <div class="student-object">
@@ -1193,18 +1233,18 @@
                         </div>
                     </div>
                     <p style="text-align: center; margin-top: 15px; color: #666;">
-                        <em>The variable <code class="inline-code">s1</code> holds a <strong>reference</strong> (memory address) to the Student object.</em>
+                        <em>المتغير <code class="inline-code">s1</code> يحمل <strong>مرجعاً (Reference)</strong> (عنواناً في الذاكرة) يشير إلى كائن Student.</em>
                     </p>
                 </div>
 
-                <h3>Step 2: What If We Add a Reference to Another Student?</h3>
+                <h3>الخطوة 2: ماذا لو أضفنا مرجعاً إلى طالب آخر؟</h3>
 
                 <div class="teacher-says">
-                    Now, here's the interesting part. What if we add a variable inside the Student class that can hold a reference to <strong>another Student object</strong>?
+                    والآن، هنا يأتي الجزء المثير للاهتمام. ماذا لو أضفنا داخل الصنف Student متغيراً يمكنه أن يحمل مرجعاً إلى <strong>كائن Student آخر</strong>؟
                 </div>
 
                 <div class="code-container">
-                    <div class="code-header">Student.java - With a Reference to Another Student</div>
+                    <div class="code-header">Student.java - مع مرجع (Reference) إلى طالب آخر</div>
                     <pre><span class="keyword">public class</span> <span class="type">Student</span> {
     <span class="type">String</span> name;
     <span class="keyword">int</span> age;
@@ -1219,13 +1259,13 @@
                 </div>
 
                 <div class="highlight-box">
-                    <p><strong>Notice:</strong> We added <code class="inline-code">Student nextStudent</code> - this is a variable of type <code class="inline-code">Student</code> that can hold a reference to another Student object!</p>
+                    <p><strong>لاحظوا:</strong> أضفنا <code class="inline-code">Student nextStudent</code> - وهذا متغير من النوع <code class="inline-code">Student</code> يمكنه أن يحمل مرجعاً إلى كائن Student آخر!</p>
                 </div>
 
-                <h3>Step 3: Let's Create Two Students and Link Them</h3>
+                <h3>الخطوة 3: لننشئ طالبين ونربطهما معاً</h3>
 
                 <div class="code-container">
-                    <div class="code-header">Creating and Linking Students</div>
+                    <div class="code-header">إنشاء الطلاب وربطهم (Creating and Linking Students)</div>
                     <pre><span class="comment">// Create first student</span>
 <span class="type">Student</span> s1 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ahmed"</span>, <span class="number">20</span>);
 
@@ -1237,7 +1277,7 @@ s1.nextStudent = s2;</pre>
                 </div>
 
                 <div class="memory-diagram">
-                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Two Students Linked Together</h4>
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">طالبان مرتبطان معاً</h4>
                     <div class="objects-flow">
                         <div class="variable-box">
                             <div class="variable-name">s1</div>
@@ -1280,14 +1320,14 @@ s1.nextStudent = s2;</pre>
                         </div>
                     </div>
                     <p style="text-align: center; margin-top: 15px; color: #4caf50;">
-                        <strong>Ahmed's <code class="inline-code">nextStudent</code> points to Sara!</strong>
+                        <strong>المرجع <code class="inline-code">nextStudent</code> الخاص بأحمد يشير إلى سارة!</strong>
                     </p>
                 </div>
 
-                <h3>Step 4: Let's Add More Students!</h3>
+                <h3>الخطوة 4: لنضف المزيد من الطلاب!</h3>
 
                 <div class="code-container">
-                    <div class="code-header">Creating 5 Students and Linking Them</div>
+                    <div class="code-header">إنشاء 5 طلاب وربطهم معاً (Creating and Linking)</div>
                     <pre><span class="comment">// Create all students</span>
 <span class="type">Student</span> s1 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Ahmed"</span>, <span class="number">20</span>);
 <span class="type">Student</span> s2 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Sara"</span>, <span class="number">22</span>);
@@ -1304,7 +1344,7 @@ s4.nextStudent = s5;
                 </div>
 
                 <div class="memory-diagram">
-                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Five Students Linked in a Chain</h4>
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">خمسة طلاب مرتبطون في سلسلة (Chain)</h4>
                     <div class="objects-flow" style="flex-wrap: wrap;">
                         <div class="variable-box">
                             <div class="variable-name">s1</div>
@@ -1358,26 +1398,26 @@ s4.nextStudent = s5;
                 </div>
 
                 <div class="definition">
-                    <h4>Amazing Discovery!</h4>
-                    <p>We can keep adding students <strong>as long as we have memory</strong>! No need to:</p>
+                    <h4>اكتشاف مذهل!</h4>
+                    <p>يمكننا الاستمرار في إضافة الطلاب <strong>ما دامت لدينا ذاكرة متاحة</strong>! فلا حاجة إلى:</p>
                     <ul>
-                        <li>Declare a fixed size</li>
-                        <li>Copy old data to new arrays</li>
-                        <li>Find contiguous memory</li>
+                        <li>التصريح بحجمٍ ثابت</li>
+                        <li>نسخ البيانات القديمة إلى مصفوفات جديدة</li>
+                        <li>البحث عن ذاكرة متجاورة</li>
                     </ul>
-                    <p>Each new student can be created <strong>anywhere in memory</strong> - we just link it to the chain!</p>
+                    <p>كل طالب جديد يمكن إنشاؤه <strong>في أي مكان في الذاكرة</strong> - وكل ما نفعله هو ربطه بالسلسلة!</p>
                 </div>
 
-                <h3>Step 5: How Do We Access These Students?</h3>
+                <h3>الخطوة 5: كيف نصل إلى هؤلاء الطلاب؟</h3>
 
                 <div class="teacher-says">
-                    Good question! Let's say we want to print all the students' names. How do we access them?
+                    سؤال جيد! لنفترض أننا نريد طباعة أسماء جميع الطلاب. كيف نصل إليهم؟
                 </div>
 
-                <h4>The Direct Way (Using the Dot Notation)</h4>
+                <h4>الطريقة المباشرة (باستخدام صيغة النقطة Dot Notation)</h4>
 
                 <div class="code-container">
-                    <div class="code-header">Accessing Each Student Directly</div>
+                    <div class="code-header">الوصول إلى كل طالب مباشرة (Direct Access)</div>
                     <pre><span class="comment">// Access first student (Ahmed)</span>
 System.out.println(s1.name);  <span class="comment">// Output: Ahmed</span>
 
@@ -1395,17 +1435,17 @@ System.out.println(s1.nextStudent.nextStudent.nextStudent.nextStudent.name);  <s
                 </div>
 
                 <div class="student-asks">
-                    Wait... this works, but what if we have 1 MILLION students? Do we write <code class="inline-code">.nextStudent</code> a million times?! That's impossible!
+                    لحظة... هذه الطريقة تعمل، ولكن ماذا لو كان لدينا مليون طالب؟ هل سنكتب <code class="inline-code">.nextStudent</code> مليون مرة؟! هذا مستحيل!
                 </div>
 
                 <div class="teacher-says">
-                    Excellent observation! You're absolutely right. We need a smarter way. Let's use a <strong>loop</strong>!
+                    ملاحظة ممتازة! أنتم محقون تماماً. نحتاج إلى طريقة أذكى. لنستخدم <strong>حلقة تكرار</strong>!
                 </div>
 
-                <h4>The Smart Way (Using a Loop)</h4>
+                <h4>الطريقة الذكية (باستخدام حلقة تكرار Loop)</h4>
 
                 <div class="code-container">
-                    <div class="code-header">Traversing with a Loop</div>
+                    <div class="code-header">الاجتياز باستخدام حلقة تكرار (Traversing with a Loop)</div>
                     <pre><span class="comment">// Create a temporary variable to "walk" through the chain</span>
 <span class="type">Student</span> current = s1;  <span class="comment">// Start at the first student</span>
 
@@ -1428,9 +1468,9 @@ System.out.println(s1.nextStudent.nextStudent.nextStudent.nextStudent.name);  <s
                 </div>
 
                 <div class="step-visualization">
-                    <span class="step-title">How the Loop Works</span>
+                    <span class="step-title">كيف تعمل حلقة التكرار</span>
 
-                    <p><strong>Iteration 1:</strong> <code class="inline-code">current</code> points to Ahmed</p>
+                    <p><strong>التكرار 1:</strong> <code class="inline-code">current</code> يشير إلى أحمد</p>
                     <div class="objects-flow" style="margin: 10px 0;">
                         <div class="variable-box" style="background: #e8f5e9; border-color: #4caf50;">
                             <div class="variable-name" style="color: #2e7d32;">current</div>
@@ -1446,9 +1486,9 @@ System.out.println(s1.nextStudent.nextStudent.nextStudent.nextStudent.name);  <s
                         <span class="flow-arrow">&#8594;</span>
                         <span>...</span>
                     </div>
-                    <p style="color: #4caf50;">Print: "Name: Ahmed, Age: 20" → Then: <code class="inline-code">current = current.nextStudent</code></p>
+                    <p style="color: #4caf50;">الطباعة: "Name: Ahmed, Age: 20" → ثم: <code class="inline-code">current = current.nextStudent</code></p>
 
-                    <p><strong>Iteration 2:</strong> <code class="inline-code">current</code> points to Sara</p>
+                    <p><strong>التكرار 2:</strong> <code class="inline-code">current</code> يشير إلى سارة</p>
                     <div class="objects-flow" style="margin: 10px 0;">
                         <div class="student-object" style="min-width: 80px;">
                             <div class="student-object-header">Ahmed</div>
@@ -1464,124 +1504,124 @@ System.out.println(s1.nextStudent.nextStudent.nextStudent.nextStudent.name);  <s
                         <span class="flow-arrow">&#8594;</span>
                         <span>...</span>
                     </div>
-                    <p style="color: #4caf50;">Print: "Name: Sara, Age: 22" → Then move to next...</p>
+                    <p style="color: #4caf50;">الطباعة: "Name: Sara, Age: 22" → ثم ننتقل إلى التالي...</p>
 
-                    <p><strong>...continues until <code class="inline-code">current</code> becomes <code class="inline-code">null</code></strong></p>
+                    <p><strong>...ويستمر ذلك حتى يصبح <code class="inline-code">current</code> مساوياً لـ <code class="inline-code">null</code></strong></p>
                 </div>
 
                 <div class="definition">
-                    <h4>Key Insight</h4>
-                    <p>This loop works for <strong>any number of students</strong> - whether we have 5 or 5 million! The loop keeps going until it reaches the end (when <code class="inline-code">nextStudent</code> is <code class="inline-code">null</code>).</p>
+                    <h4>فكرة أساسية</h4>
+                    <p>حلقة التكرار هذه تعمل مع <strong>أي عدد من الطلاب</strong> - سواء كان لدينا 5 طلاب أو 5 ملايين! فالحلقة تستمر حتى تصل إلى النهاية (عندما يكون <code class="inline-code">nextStudent</code> مساوياً لـ <code class="inline-code">null</code>).</p>
                 </div>
             </section>
 
             <!-- Section 4: The Need for a Reusable Data Structure -->
             <section id="need-datastructure">
-                <h2>Part 4: Creating a Reusable Data Structure</h2>
+                <h2>الجزء الرابع: إنشاء هيكل بيانات (Data Structure) قابل لإعادة الاستخدام</h2>
 
                 <div class="teacher-says">
-                    What we built works great! But let me ask you something...
+                    ما بنيناه يعمل بشكل رائع! لكن دعوني أسألكم سؤالًا...
                 </div>
 
                 <div class="question-box">
-                    <strong>Question:</strong> What if tomorrow we need to link <strong>Car</strong> objects? Or <strong>Product</strong> objects? Or <strong>Employee</strong> objects? Should we add a <code class="inline-code">nextCar</code> variable to the Car class? A <code class="inline-code">nextProduct</code> to Product class?
+                    <strong>سؤال:</strong> ماذا لو احتجنا غدًا إلى ربط كائنات <strong>Car</strong>؟ أو كائنات <strong>Product</strong>؟ أو كائنات <strong>Employee</strong>؟ هل يجب أن نضيف متغير <code class="inline-code">nextCar</code> إلى الصنف Car؟ ومتغير <code class="inline-code">nextProduct</code> إلى الصنف Product؟
                 </div>
 
                 <div class="warning">
-                    <h4>Problems with Our Current Approach</h4>
+                    <h4>مشكلات أسلوبنا الحالي</h4>
                     <ul>
-                        <li>We have to <strong>modify every class</strong> we want to link</li>
-                        <li>Adding <code class="inline-code">nextStudent</code>, <code class="inline-code">nextCar</code>, etc. to every class is <strong>not good practice</strong></li>
-                        <li>The linking logic is <strong>mixed with the data class</strong></li>
-                        <li>We have to <strong>rewrite the traversal code</strong> for every type</li>
+                        <li>علينا أن <strong>نعدِّل كل صنف (Class)</strong> نريد ربطه</li>
+                        <li>إضافة <code class="inline-code">nextStudent</code> و<code class="inline-code">nextCar</code> وغيرهما إلى كل صنف <strong>ليست ممارسة جيدة</strong></li>
+                        <li>منطق الربط أصبح <strong>مختلطًا مع صنف البيانات</strong></li>
+                        <li>علينا أن <strong>نعيد كتابة كود الاجتياز</strong> لكل نوع</li>
                     </ul>
                 </div>
 
                 <div class="teacher-says">
-                    Why not create our own <strong>reusable data structure</strong> that can hold <strong>ANY type of object</strong>? Let's call it... a <strong>Linked List</strong>!
+                    لماذا لا ننشئ <strong>هيكل بيانات قابلًا لإعادة الاستخدام</strong> يمكنه استيعاب <strong>أي نوع من الكائنات (Object)</strong>؟ لنسمِّه... <strong>القائمة المرتبطة (Linked List)</strong>!
                 </div>
 
-                <h3>The Linked List Concept</h3>
+                <h3>مفهوم القائمة المرتبطة</h3>
 
                 <div class="definition">
-                    <h4>What is a Linked List?</h4>
-                    <p>A <strong>Linked List</strong> is a data structure that consists of:</p>
+                    <h4>ما هي القائمة المرتبطة؟</h4>
+                    <p><strong>القائمة المرتبطة (Linked List)</strong> هي هيكل بيانات يتكون من:</p>
                     <ol>
-                        <li><strong>Nodes</strong> - containers that hold data and link to each other</li>
-                        <li><strong>A Control Class</strong> - manages the nodes (add, remove, find, etc.)</li>
+                        <li><strong>العقد (Nodes)</strong> - حاويات تحمل البيانات وترتبط بعضها ببعض</li>
+                        <li><strong>صنف تحكم</strong> - يدير العقد (الإضافة، الإزالة، البحث، وغير ذلك)</li>
                     </ol>
                 </div>
 
-                <h3>The Node: A Universal Container</h3>
+                <h3>العقدة (Node): حاوية شاملة</h3>
 
-                <p>Instead of adding a "next" reference to every class (Student, Car, Product...), we create a <strong>separate container</strong> called a <strong>Node</strong>:</p>
+                <p>بدلًا من إضافة مرجع (Reference) باسم "next" إلى كل صنف (Student وCar وProduct...)، ننشئ <strong>حاوية (Container) منفصلة</strong> تسمى <strong>العقدة (Node)</strong>:</p>
 
                 <div class="memory-diagram">
-                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">The Node Concept</h4>
+                    <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">مفهوم العقدة</h4>
 
                     <div style="display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap;">
                         <div style="text-align: center;">
-                            <p style="margin-bottom: 10px; font-weight: bold;">A Node has two parts:</p>
+                            <p style="margin-bottom: 10px; font-weight: bold;">للعقدة جزآن:</p>
                             <div class="node" style="transform: scale(1.2);">
                                 <div class="node-data" style="min-width: 100px;">
                                     <small style="font-size: 0.7em;">DATA</small><br>
-                                    (any object)
+                                    (أي كائن)
                                 </div>
                                 <div class="node-next" style="min-width: 100px;">
                                     <small style="font-size: 0.7em;">NEXT</small><br>
-                                    (reference)
+                                    (مرجع)
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <p style="text-align: center; margin-top: 25px; color: #666;">
-                        <strong>DATA:</strong> Like a "car" or "box" - it carries any object (Student, Car, Integer, anything!)<br>
-                        <strong>NEXT:</strong> Points to the next Node in the chain
+                        <strong>DATA:</strong> مثل "عربة" أو "صندوق" - يحمل أي كائن (Student، Car، Integer، أي شيء!)<br>
+                        <strong>NEXT:</strong> يشير إلى العقدة التالية في السلسلة
                     </p>
                 </div>
 
                 <div class="highlight-box">
-                    <h4>Think of it Like a Train</h4>
-                    <p>Each train car (Node) has:</p>
+                    <h4>تخيَّلها كقطار</h4>
+                    <p>كل عربة قطار (عقدة) تحتوي على:</p>
                     <ul>
-                        <li><strong>A cargo area (DATA)</strong> - where you put whatever you want to transport</li>
-                        <li><strong>A coupler (NEXT)</strong> - connects to the next train car</li>
+                        <li><strong>منطقة شحن (DATA)</strong> - حيث تضع ما تريد نقله</li>
+                        <li><strong>وصلة ربط (NEXT)</strong> - تتصل بعربة القطار التالية</li>
                     </ul>
-                    <p>The train cars don't care what's inside them - they just carry and connect!</p>
+                    <p>عربات القطار لا يهمها ما بداخلها - هي فقط تحمل وتتصل!</p>
                 </div>
 
-                <h3>The Control Class: LinkedList</h3>
+                <h3>صنف التحكم: LinkedList</h3>
 
-                <p>We also need a <strong>control class</strong> that manages all the nodes. This class is responsible for:</p>
+                <p>نحتاج أيضًا إلى <strong>صنف تحكم</strong> يدير جميع العقد. هذا الصنف مسؤول عن:</p>
 
                 <div class="memory-diagram">
                     <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
                         <div style="background: #e8f5e9; padding: 15px 25px; border-radius: 8px; text-align: center;">
-                            <strong style="color: #2e7d32;">Add</strong><br>
-                            <small>Add new nodes</small>
+                            <strong style="color: #2e7d32;">الإضافة</strong><br>
+                            <small>إضافة عقد جديدة</small>
                         </div>
                         <div style="background: #e3f2fd; padding: 15px 25px; border-radius: 8px; text-align: center;">
-                            <strong style="color: #1565c0;">Remove</strong><br>
-                            <small>Delete nodes</small>
+                            <strong style="color: #1565c0;">الإزالة</strong><br>
+                            <small>الحذف (Delete) للعقد</small>
                         </div>
                         <div style="background: #fff3cd; padding: 15px 25px; border-radius: 8px; text-align: center;">
-                            <strong style="color: #856404;">Insert</strong><br>
-                            <small>Insert at position</small>
+                            <strong style="color: #856404;">الإدراج (Insert)</strong><br>
+                            <small>الإدراج في موضع محدد</small>
                         </div>
                         <div style="background: #f3e5f5; padding: 15px 25px; border-radius: 8px; text-align: center;">
-                            <strong style="color: #7b1fa2;">Search</strong><br>
-                            <small>Find elements</small>
+                            <strong style="color: #7b1fa2;">البحث</strong><br>
+                            <small>إيجاد العناصر</small>
                         </div>
                         <div style="background: #ffebee; padding: 15px 25px; border-radius: 8px; text-align: center;">
-                            <strong style="color: #c62828;">Traverse</strong><br>
-                            <small>Visit all nodes</small>
+                            <strong style="color: #c62828;">الاجتياز</strong><br>
+                            <small>زيارة جميع العقد</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="definition">
-                    <h4>Structure Overview</h4>
+                    <h4>نظرة عامة على البنية</h4>
                     <pre style="background: #f5f5f5; color: #333; border-radius: 8px; padding: 15px;">
 LinkedList (Control Class)
 │
@@ -1593,29 +1633,29 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="teacher-says">
-                    Now let's build this step by step! We'll start simple and add more features as we go.
+                    والآن لنبنِ هذا خطوة بخطوة! سنبدأ ببساطة ثم نضيف مزيدًا من الميزات تدريجيًا.
                 </div>
             </section>
 
             <!-- Section 5: Building the LinkedList - Step by Step -->
             <section id="building-linkedlist">
-                <h2>Part 5: Building Our LinkedList - Step by Step</h2>
+                <h2>الجزء الخامس: بناء قائمتنا المرتبطة - خطوة بخطوة</h2>
 
                 <div class="simulator-callout">
                     <div class="sim-icon">🎬</div>
                     <div class="sim-text">
-                        <h4>Interactive Operations Simulator</h4>
-                        <p>Watch every operation in this part <strong>execute one Java statement at a time</strong> — addFirst, addLast, add at position, and all deletions — with animated nodes, references, and class questions.</p>
+                        <h4>المحاكي (Simulator) التفاعلي للعمليات</h4>
+                        <p>شاهد كل عملية في هذا الجزء وهي <strong>تُنفَّذ جملة Java واحدة في كل مرة</strong> — addFirst وaddLast والإضافة في موضع محدد وجميع عمليات الحذف — مع عقد ومراجع متحركة وأسئلة صفِّية.</p>
                     </div>
-                    <a href="../AniLinkedList/index.html" class="sim-btn">Open the Simulator &rarr;</a>
+                    <a href="../AniLinkedList/index.html" class="sim-btn">افتح المحاكي &rarr;</a>
                 </div>
 
-                <h3>Step 1: Create the Node Class (Generic)</h3>
+                <h3>الخطوة 1: إنشاء الصنف Node (بأسلوب الأنواع المُعمَّمة)</h3>
 
-                <p>First, let's create our Node class. We'll make it <strong>generic</strong> using <code class="inline-code">&lt;T&gt;</code> so it can store <strong>any type of object</strong> - Student, Car, Product, Integer, or anything else!</p>
+                <p>أولًا، لننشئ الصنف Node الخاص بنا. سنجعله <strong>مُعمَّمًا (Generic)</strong> باستخدام <code class="inline-code">&lt;T&gt;</code> ليتمكن من تخزين <strong>أي نوع من الكائنات</strong> - Student أو Car أو Product أو Integer أو أي شيء آخر!</p>
 
                 <div class="code-container">
-                    <div class="code-header">Node Class (Generic)</div>
+                    <div class="code-header">الصنف العقدة (Node Class) - مُعمَّم (Generic)</div>
                     <pre><span class="comment">/**
  * Node class - A container that holds data and links to the next node.
  * Think of it as a "train car" that carries cargo and connects to the next car.
@@ -1640,21 +1680,21 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="definition">
-                    <h4>What is <code class="inline-code">&lt;T&gt;</code>?</h4>
-                    <p><code class="inline-code">&lt;T&gt;</code> is called a <strong>type parameter</strong> (or generic type). It's like a placeholder that says "I can hold any type". When you create a node, you specify what <code class="inline-code">T</code> actually is:</p>
+                    <h4>ما هو <code class="inline-code">&lt;T&gt;</code>؟</h4>
+                    <p>يسمى <code class="inline-code">&lt;T&gt;</code> <strong>معامل النوع</strong> (أو النوع المُعمَّم من الأنواع المُعمَّمة (Generics)). إنه مثل عنصر نائب يقول "أستطيع حمل أي نوع". وعندما تنشئ عقدة، فإنك تحدد ما هو <code class="inline-code">T</code> فعليًا:</p>
                     <ul>
-                        <li><code class="inline-code">Node&lt;Student&gt;</code> - A node that holds Student objects</li>
-                        <li><code class="inline-code">Node&lt;Integer&gt;</code> - A node that holds Integer objects</li>
-                        <li><code class="inline-code">Node&lt;Car&gt;</code> - A node that holds Car objects</li>
-                        <li><code class="inline-code">Node&lt;String&gt;</code> - A node that holds String objects</li>
+                        <li><code class="inline-code">Node&lt;Student&gt;</code> - عقدة تحمل كائنات Student</li>
+                        <li><code class="inline-code">Node&lt;Integer&gt;</code> - عقدة تحمل كائنات Integer</li>
+                        <li><code class="inline-code">Node&lt;Car&gt;</code> - عقدة تحمل كائنات Car</li>
+                        <li><code class="inline-code">Node&lt;String&gt;</code> - عقدة تحمل كائنات String</li>
                     </ul>
-                    <p>This is the power of generics - <strong>one class works for all types!</strong></p>
+                    <p>هذه هي قوة الأنواع المُعمَّمة - <strong>صنف واحد يعمل مع جميع الأنواع!</strong></p>
                 </div>
 
-                <h3>Step 2: Create the LinkedList Control Class (Generic)</h3>
+                <h3>الخطوة 2: إنشاء صنف التحكم LinkedList (بأسلوب الأنواع المُعمَّمة)</h3>
 
                 <div class="code-container">
-                    <div class="code-header">LinkedList Class - Basic Structure (Generic)</div>
+                    <div class="code-header">الصنف LinkedList - البنية الأساسية (LinkedList Class - Generic)</div>
                     <pre><span class="comment">/**
  * LinkedList class - Controls and manages a chain of nodes.
  * Responsible for adding, removing, and traversing the list.
@@ -1682,8 +1722,8 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="highlight-box">
-                    <h4>How to Use the Generic LinkedList</h4>
-                    <p>When creating a LinkedList, you specify what type it will hold:</p>
+                    <h4>كيف نستخدم LinkedList المُعمَّمة</h4>
+                    <p>عند إنشاء LinkedList، فإنك تحدد النوع الذي ستحمله:</p>
                     <pre style="background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; margin-top: 10px;"><span class="comment">// A LinkedList that holds Student objects</span>
 <span class="type">LinkedList</span>&lt;<span class="type">Student</span>&gt; studentList = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
 
@@ -1695,35 +1735,35 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="important">
-                    <h4>Why "head"?</h4>
-                    <p>We call the first node <code class="inline-code">head</code> because:</p>
+                    <h4>لماذا "head"؟</h4>
+                    <p>نسمي العقدة الأولى <code class="inline-code">head</code> للأسباب التالية:</p>
                     <ul>
-                        <li>It's the <strong>starting point</strong> of our list</li>
-                        <li>Like the head of a snake - where it begins</li>
-                        <li>To access ANY node, we must start from the head and follow the chain</li>
+                        <li>إنها <strong>نقطة البداية</strong> لقائمتنا</li>
+                        <li>مثل رأس الأفعى - حيث تبدأ</li>
+                        <li>للوصول إلى أي عقدة، يجب أن نبدأ من head ونتتبع السلسلة</li>
                     </ul>
                 </div>
 
-                <h3>Step 3: Add at Beginning (addFirst)</h3>
+                <h3>الخطوة 3: الإدراج في البداية (addFirst)</h3>
 
-                <p>Let's add our first operation: adding a new node at the <strong>beginning</strong> of the list.</p>
+                <p>لنضف أول عملية لدينا: إضافة عقدة (Node) جديدة في <strong>بداية</strong> القائمة.</p>
 
                 <div class="algorithm-steps">
-                    <h4>Algorithm: Add at Beginning</h4>
+                    <h4>الخوارزمية: الإدراج في البداية (addFirst)</h4>
                     <ol>
-                        <li>Create a new node with the given data</li>
-                        <li>Make the new node point to the current head</li>
-                        <li>Update head to point to the new node</li>
+                        <li>أنشئ عقدة جديدة تحمل البيانات المعطاة</li>
+                        <li>اجعل العقدة الجديدة تشير إلى head الحالي</li>
+                        <li>حدِّث head ليشير إلى العقدة الجديدة</li>
                     </ol>
                 </div>
 
-                <p>Let's build a list step by step by adding three nodes. Watch how the <strong>same code</strong> works every time!</p>
+                <p>لنبنِ قائمة خطوة بخطوة بإضافة ثلاث عقد، ولاحظ كيف يعمل <strong>الكود نفسه</strong> في كل مرة!</p>
 
                 <!-- Adding First Node -->
                 <div class="step-visualization">
-                    <span class="step-title">Adding the 1st Node: addFirst(10)</span>
+                    <span class="step-title">إضافة العقدة الأولى: addFirst(10)</span>
 
-                    <p><strong>Before:</strong> Empty list (head = null)</p>
+                    <p><strong>قبل:</strong> قائمة فارغة (head = null)</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box">
                             <div class="variable-name">head</div>
@@ -1732,25 +1772,25 @@ LinkedList (Control Class)
                         <span style="color: #999; font-style: italic;">null</span>
                     </div>
 
-                    <p><strong>Step 1:</strong> Create new node with data = 10</p>
+                    <p><strong>الخطوة 1:</strong> أنشئ عقدة جديدة تحمل البيانات data = 10</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node" style="border-color: #4caf50;">
                             <div class="node-data" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">10</div>
                             <div class="node-next">null</div>
                         </div>
-                        <span style="margin-left: 20px; color: #4caf50;">← newNode created</span>
+                        <span style="margin-left: 20px; color: #4caf50;">← تم إنشاء newNode</span>
                     </div>
 
-                    <p><strong>Step 2:</strong> <code class="inline-code">newNode.next = head</code></p>
+                    <p><strong>الخطوة 2:</strong> <code class="inline-code">newNode.next = head</code></p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node" style="border-color: #4caf50;">
                             <div class="node-data" style="background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);">10</div>
                             <div class="node-next">null</div>
                         </div>
-                        <span style="margin-left: 20px; color: #666;">← head is null, so newNode.next = null (correct!)</span>
+                        <span style="margin-left: 20px; color: #666;">← بما أن head يساوي null، فإن newNode.next = null (وهذا صحيح!)</span>
                     </div>
 
-                    <p><strong>Step 3:</strong> <code class="inline-code">head = newNode</code></p>
+                    <p><strong>الخطوة 3:</strong> <code class="inline-code">head = newNode</code></p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box" style="border-color: #4caf50; background: #e8f5e9;">
                             <div class="variable-name" style="color: #2e7d32;">head</div>
@@ -1762,14 +1802,14 @@ LinkedList (Control Class)
                         </div>
                     </div>
 
-                    <p><strong>Result:</strong> List is now <strong>[10]</strong></p>
+                    <p><strong>النتيجة:</strong> أصبحت القائمة الآن <strong>[10]</strong></p>
                 </div>
 
                 <!-- Adding Second Node -->
                 <div class="step-visualization" style="margin-top: 30px;">
-                    <span class="step-title">Adding the 2nd Node: addFirst(20)</span>
+                    <span class="step-title">إضافة العقدة الثانية: addFirst(20)</span>
 
-                    <p><strong>Before:</strong> List has [10]</p>
+                    <p><strong>قبل:</strong> القائمة تحتوي على [10]</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box">
                             <div class="variable-name">head</div>
@@ -1781,16 +1821,16 @@ LinkedList (Control Class)
                         </div>
                     </div>
 
-                    <p><strong>Step 1:</strong> Create new node with data = 20</p>
+                    <p><strong>الخطوة 1:</strong> أنشئ عقدة جديدة تحمل البيانات data = 20</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node" style="border-color: #2196f3;">
                             <div class="node-data" style="background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);">20</div>
                             <div class="node-next">null</div>
                         </div>
-                        <span style="margin-left: 20px; color: #2196f3;">← newNode created</span>
+                        <span style="margin-left: 20px; color: #2196f3;">← تم إنشاء newNode</span>
                     </div>
 
-                    <p><strong>Step 2:</strong> <code class="inline-code">newNode.next = head</code></p>
+                    <p><strong>الخطوة 2:</strong> <code class="inline-code">newNode.next = head</code></p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node" style="border-color: #2196f3;">
                             <div class="node-data" style="background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);">20</div>
@@ -1801,10 +1841,10 @@ LinkedList (Control Class)
                             <div class="node-data">10</div>
                             <div class="node-next">null</div>
                         </div>
-                        <span style="margin-left: 20px; color: #666;">← newNode.next now points to node 10</span>
+                        <span style="margin-left: 20px; color: #666;">← أصبح newNode.next يشير الآن إلى العقدة 10</span>
                     </div>
 
-                    <p><strong>Step 3:</strong> <code class="inline-code">head = newNode</code></p>
+                    <p><strong>الخطوة 3:</strong> <code class="inline-code">head = newNode</code></p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box" style="border-color: #2196f3; background: #e3f2fd;">
                             <div class="variable-name" style="color: #1565c0;">head</div>
@@ -1821,14 +1861,14 @@ LinkedList (Control Class)
                         </div>
                     </div>
 
-                    <p><strong>Result:</strong> List is now <strong>[20 → 10]</strong></p>
+                    <p><strong>النتيجة:</strong> أصبحت القائمة الآن <strong>[20 → 10]</strong></p>
                 </div>
 
                 <!-- Adding Third Node -->
                 <div class="step-visualization" style="margin-top: 30px;">
-                    <span class="step-title">Adding the 3rd Node: addFirst(30)</span>
+                    <span class="step-title">إضافة العقدة الثالثة: addFirst(30)</span>
 
-                    <p><strong>Before:</strong> List has [20 → 10]</p>
+                    <p><strong>قبل:</strong> القائمة تحتوي على [20 → 10]</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box">
                             <div class="variable-name">head</div>
@@ -1845,16 +1885,16 @@ LinkedList (Control Class)
                         </div>
                     </div>
 
-                    <p><strong>Step 1:</strong> Create new node with data = 30</p>
+                    <p><strong>الخطوة 1:</strong> أنشئ عقدة جديدة تحمل البيانات data = 30</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node" style="border-color: #9c27b0;">
                             <div class="node-data" style="background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);">30</div>
                             <div class="node-next">null</div>
                         </div>
-                        <span style="margin-left: 20px; color: #9c27b0;">← newNode created</span>
+                        <span style="margin-left: 20px; color: #9c27b0;">← تم إنشاء newNode</span>
                     </div>
 
-                    <p><strong>Step 2:</strong> <code class="inline-code">newNode.next = head</code></p>
+                    <p><strong>الخطوة 2:</strong> <code class="inline-code">newNode.next = head</code></p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node" style="border-color: #9c27b0;">
                             <div class="node-data" style="background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);">30</div>
@@ -1870,10 +1910,10 @@ LinkedList (Control Class)
                             <div class="node-data">10</div>
                             <div class="node-next">null</div>
                         </div>
-                        <span style="margin-left: 20px; color: #666;">← newNode.next now points to node 20</span>
+                        <span style="margin-left: 20px; color: #666;">← أصبح newNode.next يشير الآن إلى العقدة 20</span>
                     </div>
 
-                    <p><strong>Step 3:</strong> <code class="inline-code">head = newNode</code></p>
+                    <p><strong>الخطوة 3:</strong> <code class="inline-code">head = newNode</code></p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box" style="border-color: #9c27b0; background: #f3e5f5;">
                             <div class="variable-name" style="color: #7b1fa2;">head</div>
@@ -1895,29 +1935,29 @@ LinkedList (Control Class)
                         </div>
                     </div>
 
-                    <p><strong>Result:</strong> List is now <strong>[30 → 20 → 10]</strong></p>
+                    <p><strong>النتيجة:</strong> أصبحت القائمة الآن <strong>[30 → 20 → 10]</strong></p>
                 </div>
 
                 <div class="definition" style="margin-top: 30px;">
-                    <h4>Key Observation: The Same Code Works Every Time!</h4>
-                    <p>Did you notice? We used the <strong>exact same 3 steps</strong> for adding the 1st, 2nd, and 3rd node:</p>
+                    <h4>ملاحظة أساسية: الكود نفسه يعمل في كل مرة!</h4>
+                    <p>هل لاحظت؟ لقد استخدمنا <strong>الخطوات الثلاث نفسها تمامًا</strong> عند إضافة العقدة الأولى والثانية والثالثة:</p>
                     <ol>
-                        <li><code class="inline-code">Node newNode = new Node(data)</code> - Create new node</li>
-                        <li><code class="inline-code">newNode.next = head</code> - Point to current head (even if null!)</li>
-                        <li><code class="inline-code">head = newNode</code> - Update head to new node</li>
+                        <li><code class="inline-code">Node newNode = new Node(data)</code> - إنشاء عقدة جديدة</li>
+                        <li><code class="inline-code">newNode.next = head</code> - الإشارة إلى head الحالي (حتى لو كان null!)</li>
+                        <li><code class="inline-code">head = newNode</code> - تحديث head ليشير إلى العقدة الجديدة</li>
                     </ol>
-                    <p style="margin-top: 15px;"><strong>This is the power of good algorithm design</strong> - no special cases needed for empty vs non-empty list!</p>
+                    <p style="margin-top: 15px;"><strong>هذه هي قوة التصميم الجيد للخوارزميات</strong> - لا حاجة إلى حالات خاصة للتمييز بين القائمة الفارغة وغير الفارغة!</p>
                 </div>
 
                 <div class="important">
-                    <h4>Notice: addFirst() Adds in Reverse Order</h4>
-                    <p>We called: <code class="inline-code">addFirst(10)</code>, then <code class="inline-code">addFirst(20)</code>, then <code class="inline-code">addFirst(30)</code></p>
-                    <p>But the list is: <strong>[30 → 20 → 10]</strong></p>
-                    <p>This is because each new node is added at the <strong>beginning</strong>, pushing older nodes back!</p>
+                    <h4>لاحظ: دالة addFirst() تضيف العناصر بترتيب معكوس</h4>
+                    <p>لقد استدعينا: <code class="inline-code">addFirst(10)</code>، ثم <code class="inline-code">addFirst(20)</code>، ثم <code class="inline-code">addFirst(30)</code></p>
+                    <p>لكن القائمة أصبحت: <strong>[30 → 20 → 10]</strong></p>
+                    <p>والسبب أن كل عقدة جديدة تُضاف في <strong>البداية</strong>، فتدفع العقد الأقدم إلى الخلف!</p>
                 </div>
 
                 <div class="code-container">
-                    <div class="code-header">addFirst() Method</div>
+                    <div class="code-header">دالة addFirst()</div>
                     <pre><span class="comment">/**
  * Adds a new node at the BEGINNING of the list.
  * Time Complexity: O(1) - Always constant time!
@@ -1936,12 +1976,12 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Step 4: Print the List (Traversal)</h3>
+                <h3>الخطوة 4: طباعة القائمة (Traversal)</h3>
 
-                <p>Now let's add a method to print all elements - this is how we <strong>traverse</strong> the list.</p>
+                <p>لنضف الآن دالة لطباعة (Print) جميع العناصر - وهذه هي طريقة <strong>الاجتياز</strong> (Traversal) للقائمة.</p>
 
                 <div class="code-container">
-                    <div class="code-header">printList() Method</div>
+                    <div class="code-header">دالة printList()</div>
                     <pre><span class="comment">/**
  * Prints all elements in the list.
  * Time Complexity: O(n) - Must visit every node
@@ -1976,10 +2016,10 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Step 5: Let's Test What We Have!</h3>
+                <h3>الخطوة 5: لنختبر ما أنجزناه!</h3>
 
                 <div class="code-container">
-                    <div class="code-header">Testing addFirst() and printList()</div>
+                    <div class="code-header">اختبار دالتي addFirst() و printList()</div>
                     <pre><span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
     <span class="comment">// Create a LinkedList of Integer</span>
     <span class="type">LinkedList</span>&lt;<span class="type">Integer</span>&gt; numberList = <span class="keyword">new</span> <span class="type">LinkedList</span>&lt;&gt;();
@@ -2013,33 +2053,33 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="definition">
-                    <h4>It Works!</h4>
-                    <p>We now have a working linked list that can:</p>
+                    <h4>إنها تعمل!</h4>
+                    <p>أصبح لدينا الآن قائمة مرتبطة (Linked List) تعمل ويمكنها:</p>
                     <ul>
-                        <li>Add elements at the beginning</li>
-                        <li>Print all elements</li>
+                        <li>إضافة عناصر في البداية</li>
+                        <li>طباعة جميع العناصر</li>
                     </ul>
-                    <p>Let's add more operations!</p>
+                    <p>هيا نضف المزيد من العمليات!</p>
                 </div>
 
-                <h3>Step 6: Add at End (addLast)</h3>
+                <h3>الخطوة 6: الإضافة في النهاية (addLast)</h3>
 
-                <p>Sometimes we want to add elements at the <strong>end</strong> of the list.</p>
+                <p>أحيانًا نريد إضافة عناصر في <strong>نهاية</strong> القائمة.</p>
 
                 <div class="algorithm-steps">
-                    <h4>Algorithm: Add at End</h4>
+                    <h4>الخوارزمية: الإضافة في النهاية (addLast)</h4>
                     <ol>
-                        <li>Create a new node with the given data</li>
-                        <li>If the list is empty, make the new node the head</li>
-                        <li>Otherwise, traverse to the last node (where <code>next</code> is null)</li>
-                        <li>Set the last node's <code>next</code> to point to the new node</li>
+                        <li>أنشئ عقدة (Node) جديدة تحمل البيانات المعطاة</li>
+                        <li>إذا كانت القائمة فارغة، اجعل العقدة الجديدة هي head</li>
+                        <li>وإلا، قم بالاجتياز (Traversal) حتى تصل إلى العقدة الأخيرة (حيث يكون <code>next</code> مساويًا لـ null)</li>
+                        <li>اجعل مرجع <code>next</code> في العقدة الأخيرة يشير إلى العقدة الجديدة</li>
                     </ol>
                 </div>
 
                 <div class="step-visualization">
-                    <span class="step-title">Visual: Adding 40 at End</span>
+                    <span class="step-title">توضيح: إضافة 40 في النهاية</span>
 
-                    <p><strong>Before:</strong> List has [10 → 20 → 30]</p>
+                    <p><strong>قبل:</strong> القائمة تحتوي على [10 → 20 → 30]</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box">
                             <div class="variable-name">head</div>
@@ -2060,9 +2100,9 @@ LinkedList (Control Class)
                             <div class="node-next">null</div>
                         </div>
                     </div>
-                    <p style="color: #ffc107;"><em>We need to find the last node (where next is null)</em></p>
+                    <p style="color: #ffc107;"><em>نحتاج إلى إيجاد العقدة الأخيرة (حيث يكون next مساويًا لـ null)</em></p>
 
-                    <p><strong>After:</strong> Link the last node to new node</p>
+                    <p><strong>بعد:</strong> نربط العقدة الأخيرة بالعقدة الجديدة</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box">
                             <div class="variable-name">head</div>
@@ -2091,7 +2131,7 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="code-container">
-                    <div class="code-header">addLast() Method</div>
+                    <div class="code-header">دالة addLast()</div>
                     <pre><span class="comment">/**
  * Adds a new node at the END of the list.
  * Time Complexity: O(n) - Must traverse to the end
@@ -2119,14 +2159,14 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Step 7: Insert After a Value (addAfter)</h3>
+                <h3>الخطوة 7: الإدراج بعد قيمة (addAfter)</h3>
 
-                <p>What if we want to insert a new node <strong>after</strong> a specific value?</p>
+                <p>ماذا لو أردنا إدراج عقدة (Node) جديدة <strong>بعد</strong> قيمة معينة؟</p>
 
                 <div class="step-visualization">
-                    <span class="step-title">Visual: Insert 25 After 20</span>
+                    <span class="step-title">توضيح: إدراج 25 بعد 20</span>
 
-                    <p><strong>Before:</strong> [10 → 20 → 30 → 40]</p>
+                    <p><strong>قبل:</strong> [10 → 20 → 30 → 40]</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node">
                             <div class="node-data">10</div>
@@ -2149,7 +2189,7 @@ LinkedList (Control Class)
                         </div>
                     </div>
 
-                    <p><strong>After:</strong> [10 → 20 → <span style="color: #4caf50; font-weight: bold;">25</span> → 30 → 40]</p>
+                    <p><strong>بعد:</strong> [10 → 20 → <span style="color: #4caf50; font-weight: bold;">25</span> → 30 → 40]</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node">
                             <div class="node-data">10</div>
@@ -2179,7 +2219,7 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="code-container">
-                    <div class="code-header">addAfter() Method</div>
+                    <div class="code-header">دالة addAfter()</div>
                     <pre><span class="comment">/**
  * Adds a new node AFTER a node containing the target object.
  * Time Complexity: O(n) - Must search for the target
@@ -2215,12 +2255,12 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Step 8: Delete First Node (deleteFirst)</h3>
+                <h3>الخطوة 8: حذف العقدة الأولى (deleteFirst)</h3>
 
                 <div class="step-visualization">
-                    <span class="step-title">Visual: Delete First Node</span>
+                    <span class="step-title">توضيح مرئي: حذف العقدة الأولى (deleteFirst)</span>
 
-                    <p><strong>Before:</strong> [10 → 20 → 30]</p>
+                    <p><strong>قبل:</strong> [10 → 20 → 30]</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box">
                             <div class="variable-name">head</div>
@@ -2242,7 +2282,7 @@ LinkedList (Control Class)
                         </div>
                     </div>
 
-                    <p><strong>After:</strong> <code class="inline-code">head = head.next</code></p>
+                    <p><strong>بعد:</strong> <code class="inline-code">head = head.next</code></p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="variable-box" style="border-color: #4caf50; background: #e8f5e9;">
                             <div class="variable-name" style="color: #2e7d32;">head</div>
@@ -2258,11 +2298,11 @@ LinkedList (Control Class)
                             <div class="node-next">null</div>
                         </div>
                     </div>
-                    <p style="color: #f44336;"><em>Node with 10 is now disconnected and will be garbage collected</em></p>
+                    <p style="color: #f44336;"><em>أصبحت العقدة (Node) التي تحمل القيمة 10 الآن غير متصلة بالقائمة، وسيتولى جامع المهملات (Garbage Collector) التخلص منها</em></p>
                 </div>
 
                 <div class="code-container">
-                    <div class="code-header">deleteFirst() Method</div>
+                    <div class="code-header">دالة deleteFirst()</div>
                     <pre><span class="comment">/**
  * Deletes the FIRST node from the list.
  * Time Complexity: O(1) - Always constant time!
@@ -2286,10 +2326,10 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Step 9: Delete Last Node (deleteLast)</h3>
+                <h3>الخطوة 9: حذف العقدة الأخيرة (deleteLast)</h3>
 
                 <div class="code-container">
-                    <div class="code-header">deleteLast() Method</div>
+                    <div class="code-header">دالة deleteLast()</div>
                     <pre><span class="comment">/**
  * Deletes the LAST node from the list.
  * Time Complexity: O(n) - Must traverse to second-to-last node
@@ -2326,12 +2366,12 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Step 10: Delete by Value (deleteByValue)</h3>
+                <h3>الخطوة 10: الحذف بالقيمة (deleteByValue)</h3>
 
                 <div class="step-visualization">
-                    <span class="step-title">Visual: Delete Node with Value 20</span>
+                    <span class="step-title">توضيح مرئي: حذف العقدة التي تحمل القيمة 20</span>
 
-                    <p><strong>Before:</strong> [10 → 20 → 30]</p>
+                    <p><strong>قبل:</strong> [10 → 20 → 30]</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node">
                             <div class="node-data">10</div>
@@ -2349,7 +2389,7 @@ LinkedList (Control Class)
                         </div>
                     </div>
 
-                    <p><strong>After:</strong> Previous node skips over the deleted node</p>
+                    <p><strong>بعد:</strong> العقدة السابقة تتخطى العقدة المحذوفة</p>
                     <div class="node-container" style="margin: 15px 0;">
                         <div class="node">
                             <div class="node-data">10</div>
@@ -2364,7 +2404,7 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="code-container">
-                    <div class="code-header">deleteByValue() Method</div>
+                    <div class="code-header">دالة deleteByValue()</div>
                     <pre><span class="comment">/**
  * Deletes the first node containing the specified object.
  * Time Complexity: O(n) - Must search for the object
@@ -2402,10 +2442,10 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Step 11: Search (contains)</h3>
+                <h3>الخطوة 11: البحث (contains)</h3>
 
                 <div class="code-container">
-                    <div class="code-header">contains() Method</div>
+                    <div class="code-header">دالة contains()</div>
                     <pre><span class="comment">/**
  * Checks if the list contains a specific object.
  * Time Complexity: O(n) - Must search through the list
@@ -2427,10 +2467,10 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Step 12: Get Size</h3>
+                <h3>الخطوة 12: معرفة الحجم (size)</h3>
 
                 <div class="code-container">
-                    <div class="code-header">size() Method</div>
+                    <div class="code-header">دالة size()</div>
                     <pre><span class="comment">/**
  * Returns the number of nodes in the list.
  * Time Complexity: O(n) - Must count all nodes
@@ -2453,12 +2493,12 @@ LinkedList (Control Class)
 
             <!-- Section 6: Complete Implementation -->
             <section id="complete-code">
-                <h2>Part 6: Complete Generic LinkedList Implementation</h2>
+                <h2>الجزء 6: التنفيذ الكامل للقائمة المرتبطة المُعمَّمة (Generic LinkedList)</h2>
 
-                <p>Here is the complete <strong>Generic LinkedList</strong> class that can store <strong>any type of object</strong>:</p>
+                <p>فيما يلي الصنف الكامل <strong>للقائمة المرتبطة (Linked List) بالأنواع المُعمَّمة (Generics)</strong> الذي يمكنه تخزين <strong>أي نوع من الكائنات</strong>:</p>
 
                 <div class="code-container">
-                    <div class="code-header">Complete LinkedList.java (Generic)</div>
+                    <div class="code-header">الشيفرة الكاملة (LinkedList.java - Generic)</div>
                     <pre><span class="comment">/**
  * Complete Generic Singly Linked List Implementation
  * CPCS 204 - Data Structures I
@@ -2662,10 +2702,10 @@ LinkedList (Control Class)
 }</pre>
                 </div>
 
-                <h3>Example: Using LinkedList with Different Types</h3>
+                <h3>مثال: استخدام LinkedList مع أنواع مختلفة</h3>
 
                 <div class="code-container">
-                    <div class="code-header">Main.java - Testing with Different Types</div>
+                    <div class="code-header">اختبار القائمة مع أنواع مختلفة (Main.java)</div>
                     <pre><span class="keyword">public class</span> <span class="type">Main</span> {
     <span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
 
@@ -2761,92 +2801,92 @@ LinkedList (Control Class)
                 </div>
 
                 <div class="important">
-                    <h4>Important: toString() and equals() Methods</h4>
-                    <p>When using the LinkedList with custom objects (like Student), make sure to override:</p>
+                    <h4>مهم: الدالتان toString() و equals()</h4>
+                    <p>عند استخدام LinkedList مع كائنات خاصة (مثل Student)، تأكد من إعادة تعريف (Override) الدالتين:</p>
                     <ul>
-                        <li><code class="inline-code">toString()</code> - So the object prints nicely</li>
-                        <li><code class="inline-code">equals()</code> - So comparison methods (contains, deleteByValue, addAfter) work correctly</li>
+                        <li><code class="inline-code">toString()</code> - لكي يُطبع الكائن بشكل واضح ومقروء</li>
+                        <li><code class="inline-code">equals()</code> - لكي تعمل دوال المقارنة (contains، deleteByValue، addAfter) بشكل صحيح</li>
                     </ul>
                 </div>
             </section>
 
             <!-- Section 7: Summary -->
             <section id="summary">
-                <h2>Part 7: Summary</h2>
+                <h2>الجزء 7: الملخص</h2>
 
                 <div class="highlight-box">
-                    <h3>What We Learned</h3>
+                    <h3>ماذا تعلمنا</h3>
                     <ol>
-                        <li><strong>Arrays are fixed</strong> because they need contiguous memory for O(1) access</li>
-                        <li><strong>Memory fragmentation</strong> can prevent array extension even with free space</li>
-                        <li><strong>OOP concepts</strong> (objects with references) can link data together</li>
-                        <li><strong>Linked Lists</strong> are a reusable data structure built on this idea</li>
-                        <li><strong>Nodes</strong> are generic containers with data of type T and a next reference</li>
-                        <li><strong>Generics (<code>&lt;T&gt;</code>)</strong> allow the LinkedList to store ANY type of object</li>
-                        <li><strong>The control class</strong> manages all operations (add, remove, search, etc.)</li>
+                        <li><strong>المصفوفات ثابتة الحجم</strong> لأنها تحتاج إلى ذاكرة متجاورة لتحقيق الوصول بزمن O(1)</li>
+                        <li><strong>تجزئة الذاكرة</strong> قد تمنع توسيع المصفوفة حتى مع وجود مساحة حرة</li>
+                        <li><strong>مفاهيم البرمجة الكائنية</strong> (كائنات تحمل مراجع) يمكنها ربط البيانات ببعضها</li>
+                        <li><strong>القائمة المرتبطة (Linked List)</strong> هي بنية بيانات قابلة لإعادة الاستخدام مبنية على هذه الفكرة</li>
+                        <li><strong>العقدة (Node)</strong> هي حاوية مُعمَّمة تحمل بيانات من النوع T ومرجعًا إلى العقدة التالية next</li>
+                        <li><strong>الأنواع المُعمَّمة (Generics) (<code>&lt;T&gt;</code>)</strong> تسمح للقائمة بتخزين أي نوع من الكائنات</li>
+                        <li><strong>صنف التحكم</strong> يدير جميع العمليات (الإضافة، الحذف، البحث، وغيرها)</li>
                     </ol>
                 </div>
 
-                <h3>Time Complexity Summary</h3>
+                <h3>ملخص التعقيد الزمني (Time Complexity)</h3>
 
                 <table>
                     <thead>
                         <tr>
-                            <th>Operation</th>
-                            <th>Time Complexity</th>
-                            <th>Notes</th>
+                            <th>العملية</th>
+                            <th>التعقيد الزمني</th>
+                            <th>ملاحظات</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>addFirst()</td>
                             <td class="good">O(1)</td>
-                            <td>Just change head pointer</td>
+                            <td>يكفي تغيير مؤشر head فقط</td>
                         </tr>
                         <tr>
                             <td>addLast()</td>
                             <td>O(n)</td>
-                            <td>Must traverse to end</td>
+                            <td>يجب الاجتياز حتى نهاية القائمة</td>
                         </tr>
                         <tr>
                             <td>addAfter()</td>
                             <td>O(n)</td>
-                            <td>Must search for target</td>
+                            <td>يجب البحث عن العنصر الهدف</td>
                         </tr>
                         <tr>
                             <td>deleteFirst()</td>
                             <td class="good">O(1)</td>
-                            <td>Just change head pointer</td>
+                            <td>يكفي تغيير مؤشر head فقط</td>
                         </tr>
                         <tr>
                             <td>deleteLast()</td>
                             <td>O(n)</td>
-                            <td>Must find second-to-last</td>
+                            <td>يجب الوصول إلى العقدة قبل الأخيرة</td>
                         </tr>
                         <tr>
                             <td>deleteByValue()</td>
                             <td>O(n)</td>
-                            <td>Must search for value</td>
+                            <td>يجب البحث عن القيمة</td>
                         </tr>
                         <tr>
                             <td>contains()</td>
                             <td>O(n)</td>
-                            <td>Must search</td>
+                            <td>يجب البحث في القائمة</td>
                         </tr>
                         <tr>
                             <td>get(index)</td>
                             <td>O(n)</td>
-                            <td>Must traverse to index</td>
+                            <td>يجب الاجتياز حتى الموقع المطلوب</td>
                         </tr>
                         <tr>
                             <td>size()</td>
                             <td>O(n)</td>
-                            <td>Must count all nodes</td>
+                            <td>يجب عدّ جميع العقد</td>
                         </tr>
                         <tr>
                             <td>printList()</td>
                             <td>O(n)</td>
-                            <td>Must visit all nodes</td>
+                            <td>يجب زيارة جميع العقد</td>
                         </tr>
                     </tbody>
                 </table>
@@ -2854,19 +2894,19 @@ LinkedList (Control Class)
                 <div class="simulator-callout">
                     <div class="sim-icon">🎬</div>
                     <div class="sim-text">
-                        <h4>Practice What You Learned</h4>
-                        <p>Run every insertion and deletion yourself in the interactive simulator — step through the Java code, predict what each statement will do, and watch the references change.</p>
+                        <h4>طبّق ما تعلمته</h4>
+                        <p>نفّذ كل عمليات الإضافة والحذف بنفسك في المحاكي التفاعلي — تتبَّع شيفرة Java خطوة بخطوة، وتوقّع ما ستفعله كل جملة، وشاهد كيف تتغيّر المراجع.</p>
                     </div>
-                    <a href="../AniLinkedList/index.html" class="sim-btn">Open the Simulator &rarr;</a>
+                    <a href="../AniLinkedList/index.html" class="sim-btn">افتح المحاكي &larr;</a>
                 </div>
 
                 <div class="important">
-                    <h4>Coming Next</h4>
-                    <p>In the next tutorials, we will explore:</p>
+                    <h4>ماذا بعد؟</h4>
+                    <p>في الدروس القادمة، سنستكشف:</p>
                     <ul>
-                        <li><strong>Doubly Linked Lists</strong> - Nodes with both next AND previous references</li>
-                        <li><strong>Circular Linked Lists</strong> - The last node points back to the first</li>
-                        <li><strong>Stacks and Queues</strong> - Built using linked lists for efficient operations</li>
+                        <li><strong>القائمة المرتبطة المزدوجة (Doubly Linked List)</strong> - عقد تحمل مرجعين: التالي next والسابق previous</li>
+                        <li><strong>القائمة المرتبطة الدائرية (Circular Linked List)</strong> - العقدة الأخيرة تشير مرة أخرى إلى العقدة الأولى</li>
+                        <li><strong>المكدس (Stack) والطابور (Queue)</strong> - يُبنيان باستخدام القوائم المرتبطة لتحقيق عمليات فعّالة</li>
                     </ul>
                 </div>
             </section>
@@ -2875,8 +2915,8 @@ LinkedList (Control Class)
 
         <footer>
             <p><strong>CPCS 204</strong> &mdash; Data Structures I</p>
-            <p>Faculty of Computing and Information Technology &mdash; King Abdulaziz University</p>
-            <p>Prepared by Dr. Almalawi</p>
+            <p>كلية الحاسبات وتقنية المعلومات &mdash; جامعة الملك عبدالعزيز</p>
+            <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
         </footer>
     </div>
 
