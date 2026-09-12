@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاكي القائمة المرتبطة الأحادية (Singly Linked List)</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  @font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+    font-weight: 400;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+  }
+  @font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+    font-weight: 600;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+  }
+  @font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+    font-weight: 700;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+  }
+  /* Arabic UI text in Haradh; Latin/code text falls back to the Latin fonts */
+  body { font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  /* Code, diagrams and identifier-bearing panels always stay left-to-right */
+  .code, .var-panel table, .stage-wrap, .stage,
+  .explain-card .stmt { direction: ltr; }
+  .var-panel table { text-align: left; }
+  .explain-card { border-left: none; border-right: 6px solid var(--blue); }
+  .teach-card { border-left: 1px solid #bbf7d0; border-right: 6px solid var(--green); }
+  .explain-card .means, .explain-card .why { line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="title-block">
+    <h1>القائمة المرتبطة الأحادية <span class="accent">بلغة جافا (Java)</span></h1>
+    <p class="subtitle">محاكاة المراجع (References) خطوة بخطوة &mdash; CPCS&nbsp;204 هياكل البيانات</p>
+  </div>
+  <nav class="page-nav">
+    <a href="../linkedlist/linkedlist-tutorial-ar.html">&rarr; الدرس</a>
+    <a href="../index.html">الرئيسية</a>
+    <a href="index.html">English</a>
+  </nav>
+  <div class="size-badge">الحجم: <strong id="sizeBadge">4</strong></div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-op="addFirst">الإضافة في البداية</button>
+  <button class="tab" data-op="addLast">الإضافة في النهاية</button>
+  <button class="tab" data-op="addAt">الإضافة عند موضع</button>
+  <button class="tab" data-op="deleteFirst">حذف الأول</button>
+  <button class="tab" data-op="deleteLast">حذف الأخير</button>
+  <button class="tab" data-op="deleteAt">الحذف عند موضع</button>
+</nav>
+
+<section class="op-controls">
+  <label class="field" id="dataField">القيمة
+    <input type="number" id="dataInput" value="5">
+  </label>
+  <label class="field hidden" id="indexField">الفهرس
+    <input type="number" id="indexInput" value="2" min="0">
+  </label>
+  <button id="startBtn" class="btn primary">ابدأ المحاكاة</button>
+  <span id="message" class="message"></span>
+  <div class="spacer"></div>
+  <div class="speed-group">
+    <span class="speed-label">السرعة:</span>
+    <button class="speed" data-speed="0.5">0.5&times;</button>
+    <button class="speed active" data-speed="1">1&times;</button>
+    <button class="speed" data-speed="1.5">1.5&times;</button>
+    <button class="speed" data-speed="2">2&times;</button>
+  </div>
+  <div class="teach-wrap">
+    <button id="teachBtn" class="btn toggle" aria-pressed="false"
+      title="وضع الفصل الدراسي: تظهر أسئلة للطلاب مع إخفاء الإجابة">وضع التدريس: متوقف</button>
+    <button id="teachHelpBtn" class="help-btn" aria-label="ما هو وضع التدريس؟" title="ما هو وضع التدريس؟">؟</button>
+    <div id="teachHelp" class="help-pop hidden">
+      <h4>🎓 ما هو وضع التدريس؟</h4>
+      <p><b>وضع التدريس</b> مخصص للفصل الدراسي. عندما يكون <b>مفعّلاً</b>:</p>
+      <ul>
+        <li>عند الجمل المهمة يظهر سؤال <b>&laquo;اسأل الطلاب&raquo;</b> &mdash; مثل: <i>&laquo;إلى أي عقدة سيشير newNode.next بعد هذه الجملة؟&raquo;</i></li>
+        <li>تبقى الإجابة <b>مخفيّة</b> حتى تضغط <b>أظهر الإجابة</b> &mdash; اسأل طلابك أولاً!</li>
+        <li>أثناء <b>التشغيل</b> التلقائي، تتوقف المحاكاة <b>تلقائياً</b> عند كل سؤال.</li>
+      </ul>
+      <p>وعندما يكون <b>متوقفاً</b>، تعمل المحاكاة خطوة بخطوة دون أسئلة.</p>
+    </div>
+  </div>
+</section>
+
+<main class="split">
+
+  <section class="code-pane panel">
+    <h2 id="codeTitle">كود جافا (Java)</h2>
+    <pre id="codeView" class="code" aria-label="Java source code"></pre>
+    <div class="var-panel">
+      <h3>المتغيرات (Variables)</h3>
+      <table id="varTable"></table>
+    </div>
+  </section>
+
+  <section class="viz-pane panel">
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <svg id="linkSvg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="ah-link"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"  markerHeight="8"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+            <marker id="ah-fresh"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"  markerHeight="8"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+            <marker id="ah-head"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+            <marker id="ah-current" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d97706"/></marker>
+            <marker id="ah-new"     viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+            <marker id="ah-anno"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+          </defs>
+          <g id="linkLayer"></g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="explain-card" id="explainCard">
+      <div class="ex-row"><span class="ex-label">الجملة الحالية</span><code class="stmt" id="exStmt">&mdash;</code><span class="ex-status hidden" id="exStatus"></span></div>
+      <div class="ex-row"><span class="ex-label">ماذا تعني</span><span class="means" id="exMeans">اختر عملية ثم اضغط <b>ابدأ المحاكاة</b>.</span></div>
+      <div class="ex-row" id="exWhyRow"><span class="ex-label">لماذا نفعل ذلك</span><span class="why" id="exWhy"></span></div>
+    </div>
+
+    <div class="teach-card hidden" id="teachCard">
+      <div class="teach-head">🎓 اسأل الطلاب</div>
+      <div class="q" id="teachQ"></div>
+      <button id="revealBtn" class="btn">أظهر الإجابة</button>
+      <div class="a hidden" id="teachA"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="transport">
+  <button id="resetBtn" class="btn danger-outline" title="إعادة القائمة إلى 10 ← 20 ← 40 ← 50">إعادة تعيين القائمة</button>
+  <div class="spacer"></div>
+  <button id="prevBtn" class="btn" disabled>&#9198; الخطوة السابقة</button>
+  <button id="playBtn" class="btn primary" disabled>&#9654; تشغيل</button>
+  <button id="nextBtn" class="btn" disabled>الخطوة التالية &#9197;</button>
+  <button id="restartBtn" class="btn" disabled>&#8634; إعادة العملية</button>
+  <div class="spacer"></div>
+  <span class="step-indicator" id="stepIndicator">جاهز</span>
+</footer>
+
+<script src="script-ar.js"></script>
+</body>
+</html>
