@@ -1127,6 +1127,7 @@
                     <h4>The Irony</h4>
                     <p>You have <strong>1 GB of free memory</strong> but cannot add <strong>1 KB</strong> of data!</p>
                     <p>This is because you need to create a completely new array that's <strong>larger</strong> than the current one, and there's not enough contiguous space for it.</p>
+                    <p>And note: even when the total free memory is <strong>larger</strong> than what you need, the allocation can still fail — if the free space is scattered into small non-contiguous pieces (<strong>Fragmentation</strong>), no single block is big enough to hold the new array.</p>
                 </div>
 
                 <div class="deep-dive">
