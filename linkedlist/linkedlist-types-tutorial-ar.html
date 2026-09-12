@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Types of Linked Lists - CPCS 204</title>
+    <title>أنواع القوائم المرتبطة (Types of Linked Lists) - CPCS 204</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +31,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -127,7 +146,7 @@
         }
 
         .student-asks::before {
-            content: "Student: ";
+            content: "الطالب: ";
             font-weight: bold;
             color: #2e7d32;
         }
@@ -564,6 +583,25 @@
                 min-width: 60px;
             }
         }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .highlight-box  { border-left: none; border-right: 5px solid #667eea; }
+        .definition     { border-left: none; border-right: 5px solid #4caf50; }
+        .important      { border-left: none; border-right: 5px solid #ffc107; }
+        .warning        { border-left: none; border-right: 5px solid #f44336; }
+        .teacher-says   { border-left: none; border-right: 5px solid #9c27b0; }
+        .student-asks   { border-left: none; border-right: 5px solid #4caf50; }
+
+        pre, code, .inline-code, .code-container, .code-header,
+        .node-container, .memory-visual, svg {
+            direction: ltr;
+        }
+        pre, .code-container { text-align: left; }
+        .inline-code { unicode-bidi: embed; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -583,63 +621,63 @@
     </style>
 </head>
 <body>
-    <a href="linkedlist-types-tutorial-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="linkedlist-types-tutorial.html" class="lang-switch-btn">English</a>
     <div class="container">
         <header>
-            <h1>Types of Linked Lists</h1>
-            <p>CPCS 204 - Data Structures I</p>
-            <p>Circular, Doubly, and Circular Doubly Linked Lists</p>
+            <h1>أنواع القوائم المرتبطة (Types of Linked Lists)</h1>
+            <p>CPCS 204 - هياكل البيانات 1</p>
+            <p>القوائم المرتبطة الدائرية، والمزدوجة، والمزدوجة الدائرية (Circular, Doubly, and Circular Doubly Linked Lists)</p>
         </header>
 
         <div class="content">
             <!-- Navigation -->
             <div class="section-nav">
-                <h4>Quick Navigation</h4>
-                <a href="#introduction">Introduction</a>
-                <a href="#circular-singly">Circular Singly Linked List</a>
-                <a href="#doubly">Doubly Linked List</a>
-                <a href="#circular-doubly">Circular Doubly Linked List</a>
-                <a href="#comparison">Comparison</a>
+                <h4>التنقل السريع</h4>
+                <a href="#introduction">المقدمة</a>
+                <a href="#circular-singly">القائمة المرتبطة الأحادية الدائرية</a>
+                <a href="#doubly">القائمة المرتبطة المزدوجة</a>
+                <a href="#circular-doubly">القائمة المرتبطة المزدوجة الدائرية</a>
+                <a href="#comparison">المقارنة</a>
             </div>
 
             <!-- Introduction -->
             <section id="introduction">
-                <h2>Introduction</h2>
+                <h2>المقدمة</h2>
 
                 <div class="teacher-says">
-                    <strong>As we previously discussed</strong>, in a singly linked list, each node points to the next node, and the last node points to <span class="inline-code">null</span>. Now, we will explore <strong>three important variants</strong> of linked lists:
+                    <strong>كما ناقشنا سابقًا</strong>، في القائمة المرتبطة الأحادية (Singly Linked List) تشير كل عقدة (Node) إلى العقدة التالية، وتشير العقدة الأخيرة إلى <span class="inline-code">null</span>. سنستكشف الآن <strong>ثلاثة أنواع مهمة</strong> من القوائم المرتبطة:
                     <ol>
-                        <li><strong>Circular Singly Linked List</strong></li>
-                        <li><strong>Doubly Linked List</strong></li>
-                        <li><strong>Circular Doubly Linked List</strong></li>
+                        <li><strong>القائمة المرتبطة الأحادية الدائرية (Circular Singly Linked List)</strong></li>
+                        <li><strong>القائمة المرتبطة المزدوجة (Doubly Linked List)</strong></li>
+                        <li><strong>القائمة المرتبطة المزدوجة الدائرية (Circular Doubly Linked List)</strong></li>
                     </ol>
-                    Each variant solves specific problems and has its own use cases. Let's start with the circular linked list!
+                    كل نوع يحل مشكلات محددة وله استخداماته الخاصة. لنبدأ بالقائمة المرتبطة الدائرية!
                 </div>
 
                 <div class="highlight-box">
-                    <strong>Recall:</strong> In a singly linked list, each node has:
+                    <strong>تذكير:</strong> في القائمة المرتبطة الأحادية، تحتوي كل عقدة على:
                     <ul>
-                        <li><strong>Data</strong> - The value stored in the node</li>
-                        <li><strong>Next</strong> - A reference to the next node (or null if it's the last)</li>
+                        <li><strong>البيانات (Data)</strong> - القيمة المخزنة في العقدة</li>
+                        <li><strong>التالي (Next)</strong> - مرجع (Reference) يشير إلى العقدة التالية (أو null إذا كانت العقدة الأخيرة)</li>
                     </ul>
                 </div>
             </section>
 
             <!-- Circular Singly Linked List -->
             <section id="circular-singly">
-                <h2>1. Circular Singly Linked List</h2>
+                <h2>1. القائمة المرتبطة الأحادية الدائرية (Circular Singly Linked List)</h2>
 
-                <h3>What is a Circular Linked List?</h3>
+                <h3>ما هي القائمة المرتبطة الدائرية؟</h3>
 
                 <div class="definition">
-                    A <strong>Circular Singly Linked List</strong> is a variation of the singly linked list where the last node's <span class="inline-code">next</span> pointer points back to the <strong>first node</strong> instead of <span class="inline-code">null</span>. This creates a circular chain with no end!
+                    <strong>القائمة المرتبطة الأحادية الدائرية (Circular Singly Linked List)</strong> هي شكل مُعدَّل من القائمة المرتبطة الأحادية، حيث يشير مؤشر <span class="inline-code">next</span> في العقدة الأخيرة إلى <strong>العقدة الأولى</strong> بدلًا من <span class="inline-code">null</span>. وهذا يُنشئ سلسلة دائرية ليس لها نهاية!
                 </div>
 
                 <div class="teacher-says">
-                    Think of it like a circle of friends holding hands. The last person doesn't let go - they hold hands with the first person, completing the circle!
+                    تخيلها كحلقة من الأصدقاء يمسكون بأيدي بعضهم. الشخص الأخير لا يترك يده - بل يمسك بيد الشخص الأول، فتكتمل الدائرة!
                 </div>
 
-                <h3>Visual Representation</h3>
+                <h3>التمثيل المرئي</h3>
 
                 <div class="svg-container">
                     <svg width="700" height="200" viewBox="0 0 700 200">
@@ -674,7 +712,7 @@
                         <!-- Labels -->
                         <text x="125" y="55" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="14">head</text>
                         <text x="445" y="55" text-anchor="middle" fill="#ff9800" font-weight="bold" font-size="14">tail</text>
-                        <text x="570" y="150" text-anchor="start" fill="#f44336" font-weight="bold" font-size="12">Points back to first node</text>
+                        <text x="570" y="150" text-anchor="start" fill="#f44336" font-weight="bold" font-size="12">يشير مرة أخرى إلى العقدة الأولى</text>
 
                         <!-- Gradient Definition -->
                         <defs>
@@ -693,44 +731,44 @@
                 </div>
 
                 <div class="important">
-                    <strong>Key Observation:</strong> In a circular linked list, there is <strong>no null pointer</strong>! The last node always points back to the first node.
+                    <strong>ملاحظة أساسية:</strong> في القائمة المرتبطة الدائرية <strong>لا يوجد مؤشر null</strong>! فالعقدة الأخيرة تشير دائمًا إلى العقدة الأولى.
                 </div>
 
-                <h3>Real-World Applications</h3>
+                <h3>تطبيقات من الواقع</h3>
 
                 <div class="application-box">
-                    <strong>Application 1: CPU Process Scheduling (Round Robin)</strong>
-                    <p>Imagine a CPU needs to execute 3 processes: P1, P2, and P3. Using a circular linked list:</p>
+                    <strong>التطبيق 1: جدولة عمليات المعالج - جدولة رون روبن (Round-Robin)</strong>
+                    <p>تخيل أن المعالج (CPU) يحتاج إلى تنفيذ 3 عمليات: P1 و P2 و P3. باستخدام القائمة المرتبطة الدائرية:</p>
                     <ul>
-                        <li>CPU gives P1 a time slice (e.g., 5 milliseconds)</li>
-                        <li>Then moves to P2 (5 milliseconds)</li>
-                        <li>Then moves to P3 (5 milliseconds)</li>
-                        <li>Then <strong>automatically goes back to P1</strong> and continues the cycle!</li>
+                        <li>يعطي المعالج العملية P1 شريحة زمنية (مثلًا 5 ميلي ثانية)</li>
+                        <li>ثم ينتقل إلى P2 (5 ميلي ثانية)</li>
+                        <li>ثم ينتقل إلى P3 (5 ميلي ثانية)</li>
+                        <li>ثم <strong>يعود تلقائيًا إلى P1</strong> ويستمر في الدورة!</li>
                     </ul>
-                    <p>This is called <strong>Round Robin Scheduling</strong> - a circular linked list is perfect for this!</p>
+                    <p>يسمى هذا <strong>جدولة رون روبن (Round Robin Scheduling)</strong> - والقائمة المرتبطة الدائرية مثالية لذلك!</p>
                 </div>
 
                 <div class="application-box">
-                    <strong>Application 2: Multiplayer Board Games</strong>
-                    <p>Think of a game like Monopoly with 4 players:</p>
+                    <strong>التطبيق 2: ألعاب الطاولة متعددة اللاعبين</strong>
+                    <p>فكر في لعبة مثل مونوبولي (Monopoly) مع 4 لاعبين:</p>
                     <ul>
-                        <li>Player 1 takes their turn</li>
-                        <li>Then Player 2, Player 3, Player 4</li>
-                        <li>Then it goes back to Player 1 automatically!</li>
+                        <li>اللاعب 1 يأخذ دوره</li>
+                        <li>ثم اللاعب 2، فاللاعب 3، فاللاعب 4</li>
+                        <li>ثم يعود الدور إلى اللاعب 1 تلقائيًا!</li>
                     </ul>
-                    <p>A circular linked list naturally represents this turn-taking pattern.</p>
+                    <p>القائمة المرتبطة الدائرية تمثل نمط تبادل الأدوار هذا بشكل طبيعي.</p>
                 </div>
 
-                <h3>Implementation with Head and Tail</h3>
+                <h3>التنفيذ باستخدام head و tail</h3>
 
                 <div class="teacher-says">
-                    To make our implementation easier, we'll use <strong>both head and tail pointers</strong>. The tail pointer makes adding to the end much more efficient - O(1) instead of O(n)!
+                    لتسهيل التنفيذ، سنستخدم <strong>المؤشرين head و tail معًا</strong>. مؤشر tail يجعل الإضافة في نهاية القائمة أكثر كفاءة بكثير - O(1) بدلًا من O(n)!
                 </div>
 
-                <h4>Node Class for Circular Linked List</h4>
+                <h4>فئة العقدة للقائمة المرتبطة الدائرية</h4>
 
                 <div class="code-container">
-                    <div class="code-header">Node.java - Same as Singly Linked List</div>
+                    <div class="code-header">Node.java - نفس القائمة المرتبطة الأحادية (Singly Linked List)</div>
                     <pre><code><span class="keyword">public class</span> <span class="type">Node</span> {
     <span class="type">int</span> data;
     <span class="type">Node</span> next;
@@ -742,12 +780,12 @@
 }</code></pre>
                 </div>
 
-                <h3>Adding the First Node</h3>
+                <h3>إضافة العقدة الأولى</h3>
 
                 <div class="step-box">
                     <span class="step-number">1</span>
-                    <span class="step-title">Initial State - Empty List</span>
-                    <p>Both <span class="inline-code">head</span> and <span class="inline-code">tail</span> are <span class="inline-code">null</span></p>
+                    <span class="step-title">الحالة الابتدائية - قائمة فارغة</span>
+                    <p>كل من <span class="inline-code">head</span> و <span class="inline-code">tail</span> يساوي <span class="inline-code">null</span></p>
                 </div>
 
                 <div class="svg-container">
@@ -791,11 +829,11 @@
 
                 <div class="step-box">
                     <span class="step-number">2</span>
-                    <span class="step-title">Create First Node (data = 10)</span>
-                    <p>When we add the first node:</p>
+                    <span class="step-title">إنشاء العقدة الأولى (data = 10)</span>
+                    <p>عند إضافة العقدة الأولى:</p>
                     <ul>
-                        <li><span class="inline-code">head</span> and <span class="inline-code">tail</span> both point to this node</li>
-                        <li>The node's <span class="inline-code">next</span> points to <strong>itself</strong>!</li>
+                        <li>يشير كل من <span class="inline-code">head</span> و <span class="inline-code">tail</span> إلى هذه العقدة</li>
+                        <li>مؤشر <span class="inline-code">next</span> في العقدة يشير إلى <strong>العقدة نفسها</strong>!</li>
                     </ul>
                 </div>
 
@@ -822,7 +860,7 @@
                         <line x1="270" y1="140" x2="225" y2="130" stroke="#ff9800" stroke-width="2" marker-end="url(#arrowhead-orange)"/>
 
                         <!-- Label -->
-                        <text x="300" y="40" fill="#f44336" font-weight="bold" font-size="11">Points to itself!</text>
+                        <text x="300" y="40" fill="#f44336" font-weight="bold" font-size="11">تشير إلى نفسها!</text>
 
                         <defs>
                             <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -836,7 +874,7 @@
                 </div>
 
                 <div class="code-container">
-                    <div class="code-header">Adding First Node</div>
+                    <div class="code-header">إضافة العقدة الأولى (Adding First Node)</div>
                     <pre><code><span class="comment">// If list is empty (head == null)</span>
 <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">10</span>);
 head = newNode;
@@ -844,17 +882,17 @@ tail = newNode;
 tail.next = head;  <span class="comment">// Points to itself - making it circular!</span></code></pre>
                 </div>
 
-                <h3>Adding the Second Node (at the end)</h3>
+                <h3>إضافة العقدة الثانية (في النهاية)</h3>
 
                 <div class="step-box">
                     <span class="step-number">3</span>
-                    <span class="step-title">Add Second Node (data = 20)</span>
-                    <p>Steps to add at the end:</p>
+                    <span class="step-title">إضافة العقدة الثانية (data = 20)</span>
+                    <p>خطوات الإضافة في النهاية:</p>
                     <ol>
-                        <li>Create new node</li>
-                        <li>New node's next points to head</li>
-                        <li>Current tail's next points to new node</li>
-                        <li>Update tail to new node</li>
+                        <li>إنشاء عقدة جديدة</li>
+                        <li>مؤشر next للعقدة الجديدة يشير إلى head</li>
+                        <li>مؤشر next للعقدة tail الحالية يشير إلى العقدة الجديدة</li>
+                        <li>تحديث tail ليشير إلى العقدة الجديدة</li>
                     </ol>
                 </div>
 
@@ -888,16 +926,16 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                         <text x="300" y="167" text-anchor="middle" fill="white" font-weight="bold" font-size="11">tail</text>
 
                         <!-- Annotation -->
-                        <text x="410" y="50" fill="#f44336" font-weight="bold" font-size="11">Back to first node</text>
+                        <text x="410" y="50" fill="#f44336" font-weight="bold" font-size="11">عودة إلى العقدة الأولى</text>
                     </svg>
                 </div>
 
-                <h3>Adding the Third Node</h3>
+                <h3>إضافة العقدة الثالثة</h3>
 
                 <div class="step-box">
                     <span class="step-number">4</span>
-                    <span class="step-title">Add Third Node (data = 30)</span>
-                    <p>Same process - tail now points to node with 30, and 30's next points back to head!</p>
+                    <span class="step-title">إضافة العقدة الثالثة (data = 30)</span>
+                    <p>العملية نفسها - يشير tail الآن إلى العقدة التي تحمل القيمة 30، ومؤشر next للعقدة 30 يشير مرة أخرى إلى head!</p>
                 </div>
 
                 <div class="svg-container">
@@ -934,11 +972,11 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                         <rect x="430" y="150" width="60" height="25" fill="#ff9800" rx="5"/>
                         <text x="460" y="167" text-anchor="middle" fill="white" font-weight="bold" font-size="11">tail</text>
 
-                        <text x="580" y="50" fill="#f44336" font-weight="bold" font-size="11">Back to first node</text>
+                        <text x="580" y="50" fill="#f44336" font-weight="bold" font-size="11">عودة إلى العقدة الأولى</text>
                     </svg>
                 </div>
 
-                <h3>Complete Implementation</h3>
+                <h3>التنفيذ الكامل (Complete Implementation)</h3>
 
                 <div class="code-container">
                     <div class="code-header">CircularLinkedList.java</div>
@@ -980,25 +1018,25 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
 }</code></pre>
                 </div>
 
-                <h3>Traversing a Circular Linked List</h3>
+                <h3>اجتياز القائمة المرتبطة الدائرية (Traversing a Circular Linked List)</h3>
 
                 <div class="warning">
-                    <strong>DANGER: Infinite Loop!</strong>
-                    <p>Since there is no <span class="inline-code">null</span> to stop at, using a regular while loop like <span class="inline-code">while (current != null)</span> will run <strong>forever</strong>!</p>
+                    <strong>خطر: حلقة لا نهائية!</strong>
+                    <p>بما أنه لا يوجد <span class="inline-code">null</span> نتوقف عنده، فإن استخدام حلقة while العادية مثل <span class="inline-code">while (current != null)</span> سيستمر في التنفيذ <strong>إلى الأبد</strong>!</p>
                 </div>
 
                 <div class="teacher-says">
-                    We need a special condition to stop. We can either:
+                    نحتاج إلى شرط خاص للتوقف. يمكننا إما:
                     <ol>
-                        <li>Use a <strong>do-while</strong> loop and stop when we come back to head</li>
-                        <li>Use a <strong>while</strong> loop with a careful condition</li>
+                        <li>استخدام حلقة <strong>do-while</strong> والتوقف عند العودة إلى head</li>
+                        <li>استخدام حلقة <strong>while</strong> مع شرط مصاغ بعناية</li>
                     </ol>
                 </div>
 
-                <h4>Method 1: Using do-while Loop</h4>
+                <h4>الطريقة الأولى: استخدام حلقة do-while</h4>
 
                 <div class="code-container">
-                    <div class="code-header">Traversal with do-while</div>
+                    <div class="code-header">الاجتياز باستخدام حلقة do-while (Traversal with do-while)</div>
                     <pre><code><span class="keyword">public void</span> <span class="method">printList</span>() {
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
         System.out.println(<span class="string">"List is empty"</span>);
@@ -1020,19 +1058,19 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                 </div>
 
                 <div class="important">
-                    <strong>Why do-while?</strong>
-                    <p>The <span class="inline-code">do-while</span> loop executes at least once before checking the condition. This is perfect because:</p>
+                    <strong>لماذا حلقة do-while؟</strong>
+                    <p>تُنفَّذ حلقة <span class="inline-code">do-while</span> مرة واحدة على الأقل قبل فحص الشرط. وهذا مثالي للأسباب التالية:</p>
                     <ul>
-                        <li>We start at head and want to process it</li>
-                        <li>We keep going until we return to head</li>
-                        <li>If we used <span class="inline-code">while (current != head)</span>, we'd never enter the loop!</li>
+                        <li>نبدأ من head ونريد معالجته</li>
+                        <li>نواصل التقدم حتى نعود إلى head</li>
+                        <li>لو استخدمنا <span class="inline-code">while (current != head)</span>، لما دخلنا الحلقة أبداً!</li>
                     </ul>
                 </div>
 
-                <h4>Method 2: Using while Loop with Counter</h4>
+                <h4>الطريقة الثانية: استخدام حلقة while مع متغيّر تحكم</h4>
 
                 <div class="code-container">
-                    <div class="code-header">Traversal with while Loop (Alternative)</div>
+                    <div class="code-header">الاجتياز باستخدام حلقة while - طريقة بديلة (Traversal with while Loop)</div>
                     <pre><code><span class="keyword">public void</span> <span class="method">printListWhile</span>() {
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) {
         System.out.println(<span class="string">"List is empty"</span>);
@@ -1053,48 +1091,48 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                 </div>
 
                 <div class="highlight-box">
-                    <strong>Best Practice:</strong> The <span class="inline-code">do-while</span> approach is cleaner and more commonly used for circular list traversal.
+                    <strong>أفضل ممارسة:</strong> أسلوب حلقة <span class="inline-code">do-while</span> أكثر وضوحاً وأكثر شيوعاً في اجتياز القوائم الدائرية.
                 </div>
             </section>
 
             <!-- Doubly Linked List -->
             <section id="doubly">
-                <h2>2. Doubly Linked List</h2>
+                <h2>2. القائمة المرتبطة المزدوجة (Doubly Linked List)</h2>
 
-                <h3>The Problem with Singly Linked Lists</h3>
+                <h3>مشكلة القوائم المرتبطة الأحادية</h3>
 
                 <div class="student-asks">
-                    Professor, what if I'm in the middle of a singly linked list and I need to go back to the previous node?
+                    يا دكتور، ماذا لو كنت في منتصف قائمة مرتبطة أحادية واحتجت إلى العودة إلى العقدة (Node) السابقة؟
                 </div>
 
                 <div class="teacher-says">
-                    Excellent question! In a singly linked list, <strong>you cannot go backwards</strong>. Once you move forward, you've lost the reference to the previous node. To go back, you'd have to start from the head again - that's O(n) every time!
+                    سؤال ممتاز! في القائمة المرتبطة الأحادية <strong>لا يمكنك الرجوع للخلف</strong>. فبمجرد أن تتقدم للأمام، تكون قد فقدت المرجع (Reference) إلى العقدة السابقة. وللعودة إلى الخلف، سيتعين عليك البدء من head من جديد، أي بتكلفة O(n) في كل مرة!
                 </div>
 
                 <div class="definition">
-                    A <strong>Doubly Linked List</strong> solves this problem by having <strong>two pointers</strong> in each node:
+                    <strong>القائمة المرتبطة المزدوجة</strong> تحل هذه المشكلة بوجود <strong>مؤشرين</strong> في كل عقدة:
                     <ul>
-                        <li><strong>next</strong> - Points to the next node (forward direction)</li>
-                        <li><strong>prev</strong> - Points to the previous node (backward direction)</li>
+                        <li><strong>next</strong> - يشير إلى العقدة التالية (الاتجاه للأمام (Forward))</li>
+                        <li><strong>prev</strong> - يشير إلى العقدة السابقة (الاتجاه للخلف (Backward))</li>
                     </ul>
-                    This allows <strong>bidirectional traversal</strong>!
+                    وهذا يتيح <strong>الاجتياز (Traversal) في الاتجاهين</strong>!
                 </div>
 
-                <h3>Node Structure (Vertical Representation)</h3>
+                <h3>بنية العقدة (التمثيل الرأسي)</h3>
 
                 <div class="legend">
-                    <span style="font-weight: bold;">Legend:</span>
+                    <span style="font-weight: bold;">مفتاح الرموز:</span>
                     <div class="legend-item">
                         <div class="legend-color next"></div>
-                        <span>Next Pointer</span>
+                        <span>مؤشر next</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color data"></div>
-                        <span>Data</span>
+                        <span>البيانات</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color prev"></div>
-                        <span>Prev Pointer</span>
+                        <span>مؤشر prev</span>
                     </div>
                 </div>
 
@@ -1111,7 +1149,7 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                         <text x="100" y="145" text-anchor="middle" fill="white" font-weight="bold" font-size="14">prev</text>
 
                         <!-- Labels -->
-                        <text x="100" y="180" text-anchor="middle" fill="#333" font-weight="bold" font-size="12">Doubly Linked Node</text>
+                        <text x="100" y="180" text-anchor="middle" fill="#333" font-weight="bold" font-size="12">عقدة مزدوجة الارتباط</text>
 
                         <defs>
                             <linearGradient id="gradNext" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -1126,7 +1164,7 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                     </svg>
                 </div>
 
-                <h3>Doubly Linked List Visualization</h3>
+                <h3>تمثيل مرئي للقائمة المرتبطة المزدوجة</h3>
 
                 <div class="svg-container">
                     <svg width="800" height="280" viewBox="0 0 800 280">
@@ -1208,41 +1246,41 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                         <line x1="520" y1="210" x2="520" y2="195" stroke="#ff9800" stroke-width="2" marker-end="url(#arrowhead-orange)"/>
 
                         <!-- Arrow direction labels -->
-                        <text x="260" y="75" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="10">forward</text>
-                        <text x="260" y="200" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="10">backward</text>
+                        <text x="260" y="75" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="10">للأمام</text>
+                        <text x="260" y="200" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="10">للخلف</text>
                     </svg>
                 </div>
 
-                <h3>Real-World Applications</h3>
+                <h3>تطبيقات من الواقع العملي</h3>
 
                 <div class="application-box">
-                    <strong>Application 1: Browser History</strong>
-                    <p>When you browse the web:</p>
+                    <strong>التطبيق الأول: سجل التصفح في المتصفح</strong>
+                    <p>عندما تتصفح الويب:</p>
                     <ul>
-                        <li>Click "Back" button - go to previous page (use <span class="inline-code">prev</span> pointer)</li>
-                        <li>Click "Forward" button - go to next page (use <span class="inline-code">next</span> pointer)</li>
+                        <li>الضغط على زر "رجوع" - الانتقال إلى الصفحة السابقة (باستخدام مؤشر <span class="inline-code">prev</span>)</li>
+                        <li>الضغط على زر "تقدم" - الانتقال إلى الصفحة التالية (باستخدام مؤشر <span class="inline-code">next</span>)</li>
                     </ul>
-                    <p>A doubly linked list is perfect for browser navigation!</p>
+                    <p>القائمة المرتبطة المزدوجة مثالية للتنقل في المتصفح!</p>
                 </div>
 
-                <h3>Node Class for Doubly Linked List</h3>
+                <h3>فئة Node للقائمة المرتبطة المزدوجة</h3>
 
-                <h3>Adding Node at the End - Step by Step</h3>
+                <h3>إضافة عقدة في النهاية - خطوة بخطوة</h3>
 
                 <div class="step-box">
                     <span class="step-number">1</span>
-                    <span class="step-title">Initial State - Empty List</span>
-                    <p>Both <span class="inline-code">head</span> and <span class="inline-code">tail</span> are <span class="inline-code">null</span></p>
+                    <span class="step-title">الحالة الابتدائية - قائمة فارغة</span>
+                    <p>كلٌّ من <span class="inline-code">head</span> و <span class="inline-code">tail</span> يساوي <span class="inline-code">null</span></p>
                 </div>
 
                 <div class="step-box">
                     <span class="step-number">2</span>
-                    <span class="step-title">Add First Node (data = 10)</span>
-                    <p>When list is empty:</p>
+                    <span class="step-title">إضافة العقدة الأولى (data = 10)</span>
+                    <p>عندما تكون القائمة فارغة:</p>
                     <ul>
-                        <li>Create new node</li>
-                        <li>Both <span class="inline-code">head</span> and <span class="inline-code">tail</span> point to it</li>
-                        <li>Both <span class="inline-code">prev</span> and <span class="inline-code">next</span> are null</li>
+                        <li>إنشاء العقدة (Node) الجديدة</li>
+                        <li>يشير كلٌّ من <span class="inline-code">head</span> و <span class="inline-code">tail</span> إليها</li>
+                        <li>كلٌّ من <span class="inline-code">prev</span> و <span class="inline-code">next</span> يساوي null</li>
                     </ul>
                 </div>
 
@@ -1288,13 +1326,13 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
 
                 <div class="step-box">
                     <span class="step-number">3</span>
-                    <span class="step-title">Add Second Node (data = 20) at End</span>
-                    <p>Steps:</p>
+                    <span class="step-title">إضافة العقدة الثانية (data = 20) في النهاية</span>
+                    <p>الخطوات:</p>
                     <ol>
-                        <li>Create new node with data 20</li>
-                        <li>Set new node's <span class="inline-code">prev</span> to current tail (node 10)</li>
-                        <li>Set current tail's <span class="inline-code">next</span> to new node</li>
-                        <li>Update <span class="inline-code">tail</span> to new node</li>
+                        <li>إنشاء عقدة جديدة تحمل البيانات 20</li>
+                        <li>جعل المرجع (Reference) <span class="inline-code">prev</span> للعقدة الجديدة يشير إلى tail الحالي (العقدة 10)</li>
+                        <li>جعل <span class="inline-code">next</span> لـ tail الحالي يشير إلى العقدة الجديدة</li>
+                        <li>تحديث <span class="inline-code">tail</span> ليشير إلى العقدة الجديدة</li>
                     </ol>
                 </div>
 
@@ -1365,8 +1403,8 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
 
                 <div class="step-box">
                     <span class="step-number">4</span>
-                    <span class="step-title">Add Third Node (data = 30) at End</span>
-                    <p>Same process repeats - now we have 3 nodes connected bidirectionally!</p>
+                    <span class="step-title">إضافة العقدة الثالثة (data = 30) في النهاية</span>
+                    <p>تتكرر العملية نفسها - أصبح لدينا الآن 3 عقد متصلة في الاتجاهين!</p>
                 </div>
 
                 <div class="svg-container">
@@ -1442,10 +1480,10 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                     </svg>
                 </div>
 
-                <h3>Complete Implementation</h3>
+                <h3>التنفيذ الكامل</h3>
 
                 <div class="code-container">
-                    <div class="code-header">DoublyLinkedList.java</div>
+                    <div class="code-header">ملف القائمة المرتبطة المزدوجة (DoublyLinkedList.java)</div>
                     <pre><code><span class="keyword">public class</span> <span class="type">DoublyLinkedList</span> {
 
     <span class="comment">// Inner Node class</span>
@@ -1519,28 +1557,28 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                 </div>
 
                 <div class="highlight-box">
-                    <strong>Key Advantage:</strong> In a doubly linked list, we can traverse in <strong>both directions</strong>! This makes operations like deleting a specific node much easier - we don't need to track the previous node separately.
+                    <strong>الميزة الأساسية:</strong> في القائمة المرتبطة المزدوجة (Doubly Linked List)، يمكننا الاجتياز في <strong>كلا الاتجاهين</strong>! وهذا يجعل عمليات مثل حذف عقدة معيّنة أسهل بكثير - فلا نحتاج إلى تتبّع العقدة السابقة بشكل منفصل.
                 </div>
             </section>
 
             <!-- Circular Doubly Linked List -->
             <section id="circular-doubly">
-                <h2>3. Circular Doubly Linked List</h2>
+                <h2>3. القائمة المرتبطة المزدوجة الدائرية (Circular Doubly Linked List)</h2>
 
                 <div class="definition">
-                    A <strong>Circular Doubly Linked List</strong> combines the features of both:
+                    تجمع <strong>القائمة المرتبطة المزدوجة الدائرية</strong> بين خصائص النوعين معًا:
                     <ul>
-                        <li><strong>Circular</strong> - Last node connects back to first node</li>
-                        <li><strong>Doubly</strong> - Each node has both next and prev pointers</li>
+                        <li><strong>دائرية (Circular)</strong> - ترتبط العقدة الأخيرة بالعقدة الأولى مرة أخرى</li>
+                        <li><strong>مزدوجة (Doubly)</strong> - تمتلك كل عقدة (Node) مؤشرَي next وprev معًا</li>
                     </ul>
-                    This creates a <strong>bidirectional circle</strong> where you can traverse infinitely in both directions!
+                    وينتج عن ذلك <strong>دائرة ثنائية الاتجاه</strong> يمكنك فيها التنقّل إلى ما لا نهاية في كلا الاتجاهين!
                 </div>
 
                 <div class="teacher-says">
-                    Think of it as a merry-go-round where you can walk in either direction and you'll eventually return to where you started!
+                    تخيّلها كلعبة دوّارة (merry-go-round) يمكنك السير فيها في أي اتجاه، وستعود في النهاية إلى النقطة التي بدأت منها!
                 </div>
 
-                <h3>Visual Representation</h3>
+                <h3>التمثيل المرئي</h3>
 
                 <div class="svg-container">
                     <svg width="700" height="300" viewBox="0 0 700 300">
@@ -1611,31 +1649,31 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                 </div>
 
                 <div class="important">
-                    <strong>Key Points:</strong>
+                    <strong>نقاط أساسية:</strong>
                     <ul>
-                        <li><span class="inline-code">tail.next = head</span> (last node's next points to first)</li>
-                        <li><span class="inline-code">head.prev = tail</span> (first node's prev points to last)</li>
-                        <li>No null pointers anywhere!</li>
-                        <li>Can traverse infinitely in both directions</li>
+                        <li><span class="inline-code">tail.next = head</span> (مؤشر next للعقدة الأخيرة يشير إلى العقدة الأولى)</li>
+                        <li><span class="inline-code">head.prev = tail</span> (مؤشر prev للعقدة الأولى يشير إلى العقدة الأخيرة)</li>
+                        <li>لا توجد مؤشرات null في أي موضع!</li>
+                        <li>يمكن التنقّل إلى ما لا نهاية في كلا الاتجاهين</li>
                     </ul>
                 </div>
 
-                <h3>Real-World Application</h3>
+                <h3>تطبيق من الحياة الواقعية</h3>
 
                 <div class="application-box">
-                    <strong>Application: Media Player with Repeat Mode</strong>
-                    <p>When "Repeat All" is enabled on a playlist:</p>
+                    <strong>تطبيق: مشغّل الوسائط مع وضع التكرار</strong>
+                    <p>عند تفعيل خيار "تكرار الكل" (Repeat All) في قائمة التشغيل:</p>
                     <ul>
-                        <li>After the last track, go back to the first track (circular)</li>
-                        <li>User can press "Next" or "Previous" (doubly)</li>
-                        <li>Never stops - keeps cycling through the playlist!</li>
+                        <li>بعد المقطع الأخير، يعود التشغيل إلى المقطع الأول (دائرية)</li>
+                        <li>يمكن للمستخدم الضغط على "التالي" أو "السابق" (مزدوجة)</li>
+                        <li>لا يتوقف أبدًا - يستمر في الدوران عبر قائمة التشغيل!</li>
                     </ul>
                 </div>
 
-                <h3>Implementation</h3>
+                <h3>التنفيذ البرمجي</h3>
 
                 <div class="code-container">
-                    <div class="code-header">CircularDoublyLinkedList.java</div>
+                    <div class="code-header">ملف (CircularDoublyLinkedList.java)</div>
                     <pre><code><span class="keyword">public class</span> <span class="type">CircularDoublyLinkedList</span> {
 
     <span class="comment">// Inner Node class</span>
@@ -1712,90 +1750,90 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
                 </div>
 
                 <div class="warning">
-                    <strong>Remember:</strong> Always use <span class="inline-code">do-while</span> with the condition <span class="inline-code">current != head</span> to avoid infinite loops when traversing circular lists!
+                    <strong>تذكّر:</strong> استخدم دائمًا حلقة <span class="inline-code">do-while</span> مع الشرط <span class="inline-code">current != head</span> لتجنّب الحلقات اللانهائية عند التنقّل في القوائم الدائرية!
                 </div>
             </section>
 
             <!-- Comparison Section -->
             <section id="comparison">
-                <h2>Comparison of All Types</h2>
+                <h2>مقارنة بين جميع الأنواع</h2>
 
                 <table>
                     <tr>
-                        <th>Feature</th>
-                        <th>Singly Linked List</th>
-                        <th>Circular Singly</th>
-                        <th>Doubly Linked List</th>
-                        <th>Circular Doubly</th>
+                        <th>الخاصية</th>
+                        <th>القائمة المرتبطة الأحادية (Singly Linked List)</th>
+                        <th>الأحادية الدائرية (Circular Singly)</th>
+                        <th>القائمة المرتبطة المزدوجة (Doubly Linked List)</th>
+                        <th>المزدوجة الدائرية (Circular Doubly)</th>
                     </tr>
                     <tr>
-                        <td><strong>Traversal Direction</strong></td>
-                        <td>Forward only</td>
-                        <td>Forward only (circular)</td>
-                        <td>Forward & Backward</td>
-                        <td>Forward & Backward (circular)</td>
+                        <td><strong>اتجاه التنقّل</strong></td>
+                        <td>للأمام فقط</td>
+                        <td>للأمام فقط (دائرية)</td>
+                        <td>للأمام والخلف</td>
+                        <td>للأمام والخلف (دائرية)</td>
                     </tr>
                     <tr>
-                        <td><strong>Last Node Points To</strong></td>
+                        <td><strong>العقدة الأخيرة تشير إلى</strong></td>
                         <td class="bad">null</td>
-                        <td class="good">Head (first node)</td>
+                        <td class="good">head (العقدة الأولى)</td>
                         <td class="bad">null</td>
-                        <td class="good">Head (first node)</td>
+                        <td class="good">head (العقدة الأولى)</td>
                     </tr>
                     <tr>
-                        <td><strong>First Node's prev</strong></td>
-                        <td>N/A</td>
-                        <td>N/A</td>
+                        <td><strong>مؤشر prev للعقدة الأولى</strong></td>
+                        <td>لا ينطبق</td>
+                        <td>لا ينطبق</td>
                         <td class="bad">null</td>
-                        <td class="good">Tail (last node)</td>
+                        <td class="good">tail (العقدة الأخيرة)</td>
                     </tr>
                     <tr>
-                        <td><strong>Memory per Node</strong></td>
-                        <td>Data + 1 pointer</td>
-                        <td>Data + 1 pointer</td>
-                        <td>Data + 2 pointers</td>
-                        <td>Data + 2 pointers</td>
+                        <td><strong>استهلاك الذاكرة (Memory) لكل عقدة</strong></td>
+                        <td>البيانات + مؤشر واحد</td>
+                        <td>البيانات + مؤشر واحد</td>
+                        <td>البيانات + مؤشران</td>
+                        <td>البيانات + مؤشران</td>
                     </tr>
                     <tr>
-                        <td><strong>Go to Previous Node</strong></td>
-                        <td class="bad">O(n) - start from head</td>
-                        <td class="bad">O(n) - start from head</td>
-                        <td class="good">O(1) - use prev</td>
-                        <td class="good">O(1) - use prev</td>
+                        <td><strong>الانتقال إلى العقدة السابقة</strong></td>
+                        <td class="bad">O(n) - البدء من head</td>
+                        <td class="bad">O(n) - البدء من head</td>
+                        <td class="good">O(1) - استخدام prev</td>
+                        <td class="good">O(1) - استخدام prev</td>
                     </tr>
                     <tr>
-                        <td><strong>Use Case</strong></td>
-                        <td>Simple lists</td>
-                        <td>Round-robin, cycling</td>
-                        <td>Browser history</td>
-                        <td>Media players with repeat</td>
+                        <td><strong>حالة الاستخدام</strong></td>
+                        <td>القوائم البسيطة</td>
+                        <td>الجدولة الدورية (Round-robin)، والتكرار الدوري</td>
+                        <td>سجلّ المتصفح</td>
+                        <td>مشغّلات الوسائط مع خاصية التكرار</td>
                     </tr>
                 </table>
 
-                <h3>Summary</h3>
+                <h3>الملخّص</h3>
 
                 <div class="highlight-box">
-                    <strong>When to Use Each Type:</strong>
+                    <strong>متى تستخدم كل نوع:</strong>
                     <ul>
-                        <li><strong>Singly Linked List:</strong> When you only need forward traversal and want minimal memory usage</li>
-                        <li><strong>Circular Singly:</strong> When you need continuous cycling (CPU scheduling, turn-based games)</li>
-                        <li><strong>Doubly Linked List:</strong> When you need bidirectional traversal (undo/redo, browser history)</li>
-                        <li><strong>Circular Doubly:</strong> When you need both circular and bidirectional access (music player with repeat)</li>
+                        <li><strong>القائمة المرتبطة الأحادية:</strong> عندما تحتاج إلى التنقّل للأمام فقط وتريد أقل استهلاك للذاكرة</li>
+                        <li><strong>الأحادية الدائرية:</strong> عندما تحتاج إلى دوران مستمر (جدولة المعالج، والألعاب القائمة على الأدوار)</li>
+                        <li><strong>القائمة المرتبطة المزدوجة:</strong> عندما تحتاج إلى تنقّل ثنائي الاتجاه (التراجع/الإعادة، وسجلّ المتصفح)</li>
+                        <li><strong>المزدوجة الدائرية:</strong> عندما تحتاج إلى وصول دائري وثنائي الاتجاه معًا (مشغّل موسيقى مع خاصية التكرار)</li>
                     </ul>
                 </div>
             </section>
 
             <!-- Navigation -->
             <div class="nav-buttons">
-                <a href="linkedlist-tutorial.html" class="nav-btn">Previous: Linked List Basics</a>
-                <a href="../index.html" class="nav-btn">Back to Home</a>
+                <a href="linkedlist-tutorial.html" class="nav-btn">السابق: أساسيات القائمة المرتبطة</a>
+                <a href="../index.html" class="nav-btn">العودة إلى الصفحة الرئيسية</a>
             </div>
         </div>
 
         <footer>
             <p><strong>CPCS 204</strong> &mdash; Data Structures I</p>
-            <p>Faculty of Computing and Information Technology &mdash; King Abdulaziz University</p>
-            <p>Prepared by Dr. Almalawi</p>
+            <p>كلية الحاسبات وتقنية المعلومات &mdash; جامعة الملك عبدالعزيز</p>
+            <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
         </footer>
     </div>
 </body>
