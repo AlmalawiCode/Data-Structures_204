@@ -157,6 +157,19 @@
             border-radius: 5px;
         }
 
+        .deep-dive {
+            background: #e0f7f4;
+            border-left: 5px solid #0d9488;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .deep-dive h4 {
+            color: #0f766e;
+            margin-bottom: 10px;
+        }
+
         .question-box {
             background: #e3f2fd;
             border-left: 5px solid #2196f3;
@@ -1114,6 +1127,15 @@
                     <h4>The Irony</h4>
                     <p>You have <strong>1 GB of free memory</strong> but cannot add <strong>1 KB</strong> of data!</p>
                     <p>This is because you need to create a completely new array that's <strong>larger</strong> than the current one, and there's not enough contiguous space for it.</p>
+                </div>
+
+                <div class="deep-dive">
+                    <h4>🔬 Deep Dive: Doesn't ArrayList Solve This?</h4>
+                    <p>Java's built-in dynamic array is <code class="inline-code">ArrayList</code>. It is convenient — but it does <strong>not</strong> escape this problem, because the JVM <strong>cannot extend an existing array in place</strong>: a Java array's size is fixed for its entire lifetime.</p>
+                    <p>Whenever an <code class="inline-code">ArrayList</code> runs out of capacity, it always executes:</p>
+                    <p style="text-align: center; margin: 12px 0;"><code class="inline-code">elementData = Arrays.copyOf(elementData, newCapacity);</code></p>
+                    <p>That means: allocate a <strong>NEW array 1.5&times; bigger</strong>, then <strong>copy every element</strong> — every single time it grows. So the 1 GB scenario above applies to <code class="inline-code">ArrayList</code> too: during the resize, the old array AND the new one must both exist in memory <strong>at the same time</strong>.</p>
+                    <p><strong>To be fair:</strong> because growth is geometric (1.5&times;), resizes become rare, so adding at the END of an <code class="inline-code">ArrayList</code> is <strong>amortized O(1)</strong>. The real advantages of a Linked List are different: <strong>no large contiguous block is required, no resize spikes, and O(1) insertion/deletion at a known position without shifting elements</strong> — at the price of O(n) access by index.</p>
                 </div>
 
                 <h3>The "Disk Swap" Alternative</h3>

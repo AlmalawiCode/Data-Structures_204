@@ -178,6 +178,19 @@
             border-radius: 5px;
         }
 
+        .deep-dive {
+            background: #e0f7f4;
+            border-right: 5px solid #0d9488;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .deep-dive h4 {
+            color: #0f766e;
+            margin-bottom: 10px;
+        }
+
         .question-box {
             background: #e3f2fd;
             border-left: 5px solid #2196f3;
@@ -1154,6 +1167,15 @@
                     <h4>المفارقة</h4>
                     <p>لديك <strong>1 GB من الذاكرة الخالية</strong> ومع ذلك لا يمكنك إضافة <strong>1 KB</strong> من البيانات!</p>
                     <p>والسبب أنك تحتاج إلى إنشاء مصفوفة جديدة كليًا <strong>أكبر</strong> من الحالية، ولا توجد مساحة متجاورة كافية لها.</p>
+                </div>
+
+                <div class="deep-dive">
+                    <h4>🔬 تعمق علمي: ألا يحل ArrayList هذه المشكلة؟</h4>
+                    <p>المصفوفة الديناميكية (Dynamic Array) الجاهزة في جافا هي <code class="inline-code">ArrayList</code>. وهي مريحة في الاستخدام، لكنها <strong>لا</strong> تُفلت من هذه المشكلة، لأن آلة جافا الافتراضية (JVM) <strong>لا تستطيع توسيع مصفوفة موجودة في مكانها</strong>: فحجم المصفوفة في جافا ثابت طوال حياتها.</p>
+                    <p>عندما تمتلئ سعة <code class="inline-code">ArrayList</code>، فإنها تنفّذ دائماً:</p>
+                    <p style="text-align: center; margin: 12px 0;"><code class="inline-code">elementData = Arrays.copyOf(elementData, newCapacity);</code></p>
+                    <p>أي: حجز <strong>مصفوفة جديدة أكبر بمقدار 1.5&times;</strong> ثم <strong>نسخ كل العناصر</strong> — في كل مرة تنمو فيها. لذلك ينطبق سيناريو 1 GB أعلاه على <code class="inline-code">ArrayList</code> أيضاً: أثناء التوسعة يجب أن توجد المصفوفة القديمة والمصفوفة الجديدة في الذاكرة <strong>في الوقت نفسه</strong>.</p>
+                    <p><strong>ولكي نكون منصفين:</strong> بما أن النمو هندسي (1.5&times;)، تصبح عمليات التوسعة نادرة، ولذلك فإن الإضافة في نهاية <code class="inline-code">ArrayList</code> تكلفتها <strong>O(1) مُطفأة (Amortized)</strong>. أمّا المزايا الحقيقية للقائمة المرتبطة (Linked List) فهي مختلفة: <strong>لا حاجة إلى كتلة ذاكرة متجاورة كبيرة، ولا قفزات مفاجئة في كلفة التوسعة، وإدراج وحذف بكلفة O(1) عند موضع معروف دون إزاحة العناصر</strong> — مقابل وصول بالفهرس بكلفة O(n).</p>
                 </div>
 
                 <h3>البديل: "التبديل مع القرص" (Disk Swap)</h3>
