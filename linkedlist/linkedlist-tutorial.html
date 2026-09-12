@@ -99,6 +99,39 @@
             border-radius: 5px;
         }
 
+        .simulator-callout {
+            background: linear-gradient(135deg, #f0f4ff 0%, #ede9fe 100%);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .simulator-callout .sim-icon { font-size: 2.6em; }
+        .simulator-callout .sim-text { flex: 1; min-width: 240px; }
+        .simulator-callout h4 { margin: 0 0 6px 0; color: #4c3a9e; font-size: 1.25em; }
+        .simulator-callout p { margin: 0; color: #444; }
+        .simulator-callout .sim-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.05em;
+            padding: 14px 26px;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            white-space: nowrap;
+        }
+        .simulator-callout .sim-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+        }
+
         .definition {
             background: #e8f5e9;
             border-left: 5px solid #4caf50;
@@ -1549,6 +1582,15 @@ LinkedList (Control Class)
             <section id="building-linkedlist">
                 <h2>Part 5: Building Our LinkedList - Step by Step</h2>
 
+                <div class="simulator-callout">
+                    <div class="sim-icon">🎬</div>
+                    <div class="sim-text">
+                        <h4>Interactive Operations Simulator</h4>
+                        <p>Watch every operation in this part <strong>execute one Java statement at a time</strong> — addFirst, addLast, add at position, and all deletions — with animated nodes, references, and class questions.</p>
+                    </div>
+                    <a href="../AniLinkedList/index.html" class="sim-btn">Open the Simulator &rarr;</a>
+                </div>
+
                 <h3>Step 1: Create the Node Class (Generic)</h3>
 
                 <p>First, let's create our Node class. We'll make it <strong>generic</strong> using <code class="inline-code">&lt;T&gt;</code> so it can store <strong>any type of object</strong> - Student, Car, Product, Integer, or anything else!</p>
@@ -2789,6 +2831,15 @@ LinkedList (Control Class)
                         </tr>
                     </tbody>
                 </table>
+
+                <div class="simulator-callout">
+                    <div class="sim-icon">🎬</div>
+                    <div class="sim-text">
+                        <h4>Practice What You Learned</h4>
+                        <p>Run every insertion and deletion yourself in the interactive simulator — step through the Java code, predict what each statement will do, and watch the references change.</p>
+                    </div>
+                    <a href="../AniLinkedList/index.html" class="sim-btn">Open the Simulator &rarr;</a>
+                </div>
 
                 <div class="important">
                     <h4>Coming Next</h4>
