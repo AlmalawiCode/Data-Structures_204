@@ -137,6 +137,43 @@ body {
 .message { font-size: .95rem; color: var(--red); font-weight: 600; max-width: 420px; }
 .message.ok { color: var(--green); }
 
+/* teaching-mode help popover */
+.teach-wrap { position: relative; display: flex; align-items: center; gap: 6px; }
+.help-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: all .15s ease;
+}
+.help-btn:hover { border-color: var(--blue); background: #eff6ff; }
+.help-pop {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 400px;
+  max-width: 90vw;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--green);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(30, 41, 59, .18);
+  padding: 16px 20px;
+  z-index: 60;
+  font-size: .95rem;
+  line-height: 1.5;
+}
+.help-pop h4 { margin: 0 0 8px; color: #15803d; font-size: 1.02rem; }
+.help-pop p { margin: 6px 0; }
+.help-pop ul { margin: 6px 0; padding-left: 20px; }
+.help-pop li { margin: 4px 0; }
+
 .speed-group { display: flex; align-items: center; gap: 6px; }
 .speed-label { color: var(--ink-soft); font-weight: 600; margin-right: 2px; }
 .speed {

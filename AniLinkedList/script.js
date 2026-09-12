@@ -1172,6 +1172,16 @@ $('teachBtn').addEventListener('click', () => {
   b.classList.toggle('on', teachMode);
   b.setAttribute('aria-pressed', String(teachMode));
   if (!teachMode) hideTeach();
+  showMsg(teachMode
+    ? 'Teaching Mode ON — questions will appear at key steps; answers stay hidden until you press Reveal Answer.'
+    : 'Teaching Mode OFF — the animation runs without class questions.', true);
+});
+$('teachHelpBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  $('teachHelp').classList.toggle('hidden');
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.teach-wrap')) $('teachHelp').classList.add('hidden');
 });
 
 document.querySelectorAll('.speed').forEach(btn => {

@@ -46,7 +46,21 @@
     <button class="speed" data-speed="1.5">1.5&times;</button>
     <button class="speed" data-speed="2">2&times;</button>
   </div>
-  <button id="teachBtn" class="btn toggle" aria-pressed="false">Teaching Mode: Off</button>
+  <div class="teach-wrap">
+    <button id="teachBtn" class="btn toggle" aria-pressed="false"
+      title="Classroom mode: shows 'Ask the class' questions with hidden answers">Teaching Mode: Off</button>
+    <button id="teachHelpBtn" class="help-btn" aria-label="What is Teaching Mode?" title="What is Teaching Mode?">?</button>
+    <div id="teachHelp" class="help-pop hidden">
+      <h4>🎓 What is Teaching Mode?</h4>
+      <p><b>Teaching Mode</b> is for the classroom. When it is <b>On</b>:</p>
+      <ul>
+        <li>At key statements an <b>&ldquo;Ask the class&rdquo;</b> question appears &mdash; for example: <i>&ldquo;Which node will newNode.next reference after this statement?&rdquo;</i></li>
+        <li>The answer stays <b>hidden</b> until you press <b>Reveal Answer</b> &mdash; ask your students first!</li>
+        <li>During <b>Play</b>, the animation <b>pauses automatically</b> at every question.</li>
+      </ul>
+      <p>When it is <b>Off</b>, the animation runs step by step without questions.</p>
+    </div>
+  </div>
 </section>
 
 <main class="split">
