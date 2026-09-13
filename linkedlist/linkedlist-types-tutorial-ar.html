@@ -602,6 +602,38 @@
         body { line-height: 1.9; }
         h1, h2, h3, h4 { line-height: 1.6; }
 
+        .simulator-callout {
+            background: linear-gradient(135deg, #f0f4ff 0%, #ede9fe 100%);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .simulator-callout .sim-icon { font-size: 2.6em; }
+        .simulator-callout .sim-text { flex: 1; min-width: 240px; }
+        .simulator-callout h4 { margin: 0 0 6px 0; color: #4c3a9e; font-size: 1.25em; }
+        .simulator-callout p { margin: 0; color: #444; }
+        .simulator-callout .sim-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.05em;
+            padding: 14px 26px;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            white-space: nowrap;
+        }
+        .simulator-callout .sim-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+        }
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -1098,6 +1130,15 @@ tail.next = head;  <span class="comment">// Points to itself - making it circula
             <!-- Doubly Linked List -->
             <section id="doubly">
                 <h2>2. القائمة المرتبطة المزدوجة (Doubly Linked List)</h2>
+
+                <div class="simulator-callout">
+                    <div class="sim-icon">⇄</div>
+                    <div class="sim-text">
+                        <h4>المحاكي التفاعلي للقائمة المرتبطة المزدوجة (Doubly Linked List)</h4>
+                        <p>شاهد كل عملية في هذا القسم <strong>تُنفَّذ جملة جافا واحدة في كل مرة</strong> — الإدراج بأربعة روابط، و addLast/deleteLast بتكلفة O(1) عبر tail، والحذف الذي يقف على العقدة نفسها — مع أسهم prev/next متحركة وأسئلة صفية.</p>
+                    </div>
+                    <a href="../AniDoublyLinkedList/index-ar.html" class="sim-btn">افتح المحاكي &larr;</a>
+                </div>
 
                 <h3>مشكلة القوائم المرتبطة الأحادية</h3>
 
