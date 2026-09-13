@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Doubly Linked List — Interactive Java Simulator</title>
+<title>Circular Linked List — Interactive Java Simulator</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header class="app-header">
   <div class="title-block">
-    <h1>Doubly Linked List <span class="accent">in Java</span></h1>
+    <h1>Circular Linked List <span class="accent">in Java</span></h1>
     <p class="subtitle">Step-by-step reference animation &mdash; CPCS&nbsp;204 Data Structures</p>
   </div>
   <nav class="page-nav">
-    <a href="../linkedlist/linkedlist-types-tutorial.html#doubly">&larr; Tutorial</a>
+    <a href="../linkedlist/linkedlist-types-tutorial.html#circular-singly">&larr; Tutorial</a>
     <a href="../AniLinkedList/index.html">Singly</a>
-    <a href="../AniCircularLinkedList/index.html">Circular</a>
+    <a href="../AniDoublyLinkedList/index.html">Doubly</a>
     <a href="../index.html">Home</a>
   </nav>
   <div class="size-badge">Size: <strong id="sizeBadge">4</strong></div>
@@ -56,7 +56,7 @@
       <h4>🎓 What is Teaching Mode?</h4>
       <p><b>Teaching Mode</b> is for the classroom. When it is <b>On</b>:</p>
       <ul>
-        <li>At key statements an <b>&ldquo;Ask the class&rdquo;</b> question appears &mdash; for example: <i>&ldquo;Which node will newNode.prev reference after this statement?&rdquo;</i></li>
+        <li>At key statements an <b>&ldquo;Ask the class&rdquo;</b> question appears &mdash; for example: <i>&ldquo;Where does tail.next point in a circular list?&rdquo;</i></li>
         <li>The answer stays <b>hidden</b> until you press <b>Reveal Answer</b> &mdash; ask your students first!</li>
         <li>During <b>Play</b>, the animation <b>pauses automatically</b> at every question.</li>
       </ul>
@@ -82,7 +82,6 @@
         <svg id="linkSvg" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <marker id="ah-link"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"  markerHeight="8"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
-            <marker id="ah-plink"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"  markerHeight="8"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
             <marker id="ah-fresh"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"  markerHeight="8"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
             <marker id="ah-head"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
             <marker id="ah-tail"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0d9488"/></marker>
@@ -112,7 +111,7 @@
 </main>
 
 <footer class="transport">
-  <button id="resetBtn" class="btn danger-outline" title="Restore the list to 10 → 20 → 40 → 50">Reset List</button>
+  <button id="resetBtn" class="btn danger-outline" title="Restore the list to 10 → 20 → 40 → 50 → (back to 10)">Reset List</button>
   <div class="spacer"></div>
   <button id="prevBtn" class="btn" disabled>&#9198; Previous Step</button>
   <button id="playBtn" class="btn primary" disabled>&#9654; Play</button>

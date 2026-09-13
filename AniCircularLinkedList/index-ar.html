@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>محاكي القائمة المرتبطة الأحادية (Singly Linked List)</title>
+<title>محاكي القائمة المرتبطة الدائرية (Circular Linked List)</title>
 <link rel="stylesheet" href="styles.css">
 <style>
   @font-face {
@@ -24,9 +24,7 @@
     font-weight: 700;
     unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
   }
-  /* Arabic UI text in Haradh; Latin/code text falls back to the Latin fonts */
   body { font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-  /* Code, diagrams and identifier-bearing panels always stay left-to-right */
   .code, .var-panel table, .stage-wrap, .stage,
   .explain-card .stmt { direction: ltr; }
   .var-panel table { text-align: left; }
@@ -39,13 +37,13 @@
 
 <header class="app-header">
   <div class="title-block">
-    <h1>القائمة المرتبطة الأحادية <span class="accent">بلغة جافا (Java)</span></h1>
+    <h1>القائمة المرتبطة الدائرية <span class="accent">بلغة جافا (Java)</span></h1>
     <p class="subtitle">محاكاة المراجع (References) خطوة بخطوة &mdash; CPCS&nbsp;204 هياكل البيانات</p>
   </div>
   <nav class="page-nav">
-    <a href="../linkedlist/linkedlist-tutorial-ar.html">&rarr; الدرس</a>
+    <a href="../linkedlist/linkedlist-types-tutorial-ar.html">&rarr; الدرس</a>
+    <a href="../AniLinkedList/index-ar.html">الأحادية</a>
     <a href="../AniDoublyLinkedList/index-ar.html">المزدوجة</a>
-    <a href="../AniCircularLinkedList/index-ar.html">الدائرية</a>
     <a href="../index.html">الرئيسية</a>
     <a href="index.html">English</a>
   </nav>
@@ -86,7 +84,7 @@
       <h4>🎓 ما هو وضع التدريس؟</h4>
       <p><b>وضع التدريس</b> مخصص للفصل الدراسي. عندما يكون <b>مفعّلاً</b>:</p>
       <ul>
-        <li>عند الجمل المهمة يظهر سؤال <b>&laquo;اسأل الطلاب&raquo;</b> &mdash; مثل: <i>&laquo;إلى أي عقدة سيشير newNode.next بعد هذه الجملة؟&raquo;</i></li>
+        <li>عند الجمل المهمة يظهر سؤال <b>&laquo;اسأل الطلاب&raquo;</b> &mdash; مثل: <i>&laquo;إلى أي عقدة سيشير newNode.prev بعد هذه الجملة؟&raquo;</i></li>
         <li>تبقى الإجابة <b>مخفيّة</b> حتى تضغط <b>أظهر الإجابة</b> &mdash; اسأل طلابك أولاً!</li>
         <li>أثناء <b>التشغيل</b> التلقائي، تتوقف المحاكاة <b>تلقائياً</b> عند كل سؤال.</li>
       </ul>
@@ -112,8 +110,10 @@
         <svg id="linkSvg" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <marker id="ah-link"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"  markerHeight="8"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+            <marker id="ah-plink"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"  markerHeight="8"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
             <marker id="ah-fresh"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8"  markerHeight="8"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
             <marker id="ah-head"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+            <marker id="ah-tail"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0d9488"/></marker>
             <marker id="ah-current" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d97706"/></marker>
             <marker id="ah-new"     viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
             <marker id="ah-anno"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"  markerHeight="7"  orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
