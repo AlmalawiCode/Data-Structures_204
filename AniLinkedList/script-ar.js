@@ -1165,6 +1165,16 @@ $('resetBtn').addEventListener('click', () => {
   idleRender();
 });
 
+$('emptyBtn').addEventListener('click', () => {
+  setPlaying(false);
+  baseList = mkItems([]);
+  op = null;
+  stepIdx = -1;
+  hideMsg();
+  showMsg('مُسحت القائمة — ابدأ من قائمة فارغة وأضف العقدة الأولى.', true);
+  idleRender();
+});
+
 $('teachBtn').addEventListener('click', () => {
   teachMode = !teachMode;
   const b = $('teachBtn');

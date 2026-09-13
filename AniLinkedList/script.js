@@ -1165,6 +1165,16 @@ $('resetBtn').addEventListener('click', () => {
   idleRender();
 });
 
+$('emptyBtn').addEventListener('click', () => {
+  setPlaying(false);
+  baseList = mkItems([]);
+  op = null;
+  stepIdx = -1;
+  hideMsg();
+  showMsg('List cleared — start from an empty list and add the first node.', true);
+  idleRender();
+});
+
 $('teachBtn').addEventListener('click', () => {
   teachMode = !teachMode;
   const b = $('teachBtn');
