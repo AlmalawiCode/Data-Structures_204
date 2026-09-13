@@ -694,6 +694,24 @@
             color: #667eea;
         }
 
+        /* The five-student chain: keep all nodes on one connected line
+           (no wrapping), tighten spacing, and scroll only if truly narrow. */
+        #chain5 {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            justify-content: safe center;
+            gap: 4px;
+            padding-bottom: 12px;
+        }
+        #chain5 .student-object {
+            margin: 6px 2px;
+            min-width: 0;
+            flex-shrink: 0;
+        }
+        #chain5 .student-object-header { white-space: nowrap; }
+        #chain5 .flow-arrow,
+        #chain5 .variable-box { flex-shrink: 0; }
+
         /* ── FOOTER ── */
         footer {
             background: #1f2937;
@@ -1328,7 +1346,7 @@ s4.nextStudent = s5;
 
                 <div class="memory-diagram">
                     <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Five Students Linked in a Chain</h4>
-                    <div class="objects-flow" style="flex-wrap: wrap;">
+                    <div class="objects-flow" id="chain5">
                         <div class="variable-box">
                             <div class="variable-name">s1</div>
                         </div>
