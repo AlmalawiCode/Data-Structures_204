@@ -784,13 +784,34 @@
         .teacher-says   { border-left: none; border-right: 5px solid #9c27b0; }
         .student-asks   { border-left: none; border-right: 5px solid #4caf50; }
 
-        /* code and diagrams always stay left-to-right */
+        /* Code and data-structure diagrams always stay left-to-right,
+           so linked-list/array flow and arrows read the same as the code
+           (head → next → next), not reversed by the RTL page. */
         pre, code, .inline-code, .code-container, .code-header,
-        .node-container, .memory-visual, .ram-visual, .array-visual {
+        .node-container, .objects-flow, .memory-visual, .memory-row,
+        .ram-visual, .array-visual, svg {
             direction: ltr;
         }
         pre, .code-container { text-align: left; }
         .inline-code { unicode-bidi: embed; }
+
+        /* The five-student chain: keep all nodes on one connected line
+           (no wrapping), tighten spacing, and scroll only if truly narrow. */
+        #chain5 {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            justify-content: safe center;
+            gap: 4px;
+            padding-bottom: 12px;
+        }
+        #chain5 .student-object {
+            margin: 6px 2px;
+            min-width: 0;
+            flex-shrink: 0;
+        }
+        #chain5 .student-object-header { white-space: nowrap; }
+        #chain5 .flow-arrow,
+        #chain5 .variable-box { flex-shrink: 0; }
 
         body { line-height: 1.9; }
         h1, h2, h3, h4 { line-height: 1.6; }
@@ -1372,7 +1393,7 @@ s4.nextStudent = s5;
 
                 <div class="memory-diagram">
                     <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">خمسة طلاب مرتبطون في سلسلة (Chain)</h4>
-                    <div class="objects-flow" style="flex-wrap: wrap;">
+                    <div class="objects-flow" id="chain5">
                         <div class="variable-box">
                             <div class="variable-name">s1</div>
                         </div>
