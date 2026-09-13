@@ -29,6 +29,8 @@
   .explain-card .stmt { direction: ltr; }
   .var-panel table { text-align: left; }
   .explain-card { border-left: none; border-right: 6px solid var(--blue); }
+  /* RTL: keep the teaching-mode help popover on-screen (anchor to the left) */
+  .help-pop { right: auto; left: 0; }
   .teach-card { border-left: 1px solid #bbf7d0; border-right: 6px solid var(--green); }
   .explain-card .means, .explain-card .why { line-height: 1.8; }
 </style>
@@ -84,7 +86,7 @@
       <h4>🎓 ما هو وضع التدريس؟</h4>
       <p><b>وضع التدريس</b> مخصص للفصل الدراسي. عندما يكون <b>مفعّلاً</b>:</p>
       <ul>
-        <li>عند الجمل المهمة يظهر سؤال <b>&laquo;اسأل الطلاب&raquo;</b> &mdash; مثل: <i>&laquo;إلى أي عقدة سيشير newNode.prev بعد هذه الجملة؟&raquo;</i></li>
+        <li>عند الجمل المهمة يظهر سؤال <b>&laquo;اسأل الطلاب&raquo;</b> &mdash; مثل: <i>&laquo;إلى أين يشير tail.next في القائمة الدائرية؟&raquo;</i></li>
         <li>تبقى الإجابة <b>مخفيّة</b> حتى تضغط <b>أظهر الإجابة</b> &mdash; اسأل طلابك أولاً!</li>
         <li>أثناء <b>التشغيل</b> التلقائي، تتوقف المحاكاة <b>تلقائياً</b> عند كل سؤال.</li>
       </ul>
