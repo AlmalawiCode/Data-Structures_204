@@ -254,8 +254,9 @@ function renderVars(snap) {
     return { v: `Node(${snap.nodes[id] ? snap.nodes[id].data : '?'})`, none: false };
   };
   for (const name of ['head', 'current', 'newNode']) {
+    if (!(name in snap.refs)) continue;   // debugger style: only show a variable once it has been created
     const r = refStr(name);
-    rows.push({ name, cls: 'v-' + name, val: (r.none ? '—' : '→ ' + r.v), none: r.none });
+    rows.push({ name, cls: 'v-' + name, val: '→ ' + r.v, none: false });
   }
   rows.push({ name: 'size', cls: '', val: '= ' + snap.size, none: false });
   for (const k in snap.vars) {
