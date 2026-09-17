@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CPCS-204 — Linked List — Practice Exam (A4 printable)</title>
+<style>
+/* =======================================================================
+   CPCS-204 · Data Structures I — LINKED LIST practice exam
+   Print-first, A4. Each question is a CARD. Blue linked-list module theme.
+   A "Show model answers" toggle turns the same file into an answer key.
+   ======================================================================= */
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+
+:root{
+  --blue:      #2563eb;
+  --blue-dark: #1e3a5f;
+  --blue-deep: #0f172a;
+  --blue-tint: #eef4ff;
+  --ink:       #17202a;
+  --ink-soft:  #3a4656;
+  --rule:      #cbd5e1;
+  --rule-soft: #e2e8f0;
+  --paper:     #ffffff;
+  --code-bg:   #f6f8fc;
+  --code-rule: #d7e0f0;
+  --warn:      #b42318;
+  --ans:       #1d4ed8;
+  --tag-easy:  #e7f6ec; --tag-easy-i:#1a7f37;
+  --tag-med:   #fef3e0; --tag-med-i: #9a6212;
+  --tag-hard:  #fdeaea; --tag-hard-i:#b42318;
+}
+
+*{ box-sizing:border-box; }
+html,body{
+  margin:0; padding:0;
+  background:#e9edf3;
+  color:var(--ink);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size:11pt; line-height:1.5;
+}
+body{ padding:14mm 0; }
+
+/* ---- A4 sheet ---- */
+.sheet{
+  background:var(--paper);
+  width:210mm; min-height:297mm;
+  margin:0 auto 10mm;
+  padding:15mm 15mm 18mm;
+  box-shadow:0 3px 14px rgba(15,23,42,.18);
+  position:relative;
+}
+
+/* ---- running head ---- */
+.runhead{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid var(--blue-dark);
+  padding-bottom:6px; margin-bottom:14px;
+  font-size:9.5pt; color:var(--blue-dark);
+}
+.runhead b{ font-size:10.5pt; }
+
+/* ================= COVER ================= */
+.cover-top{ text-align:center; }
+.cover-top .uni{ font-size:15pt; font-weight:800; color:var(--blue-deep); }
+.cover-top .fac{ font-size:10.5pt; color:var(--ink-soft); margin-top:2px; }
+.cover-rule{ height:2px; background:var(--blue-dark); margin:12px 0; }
+.cover-title{ font-size:22pt; font-weight:800; color:var(--blue); letter-spacing:.5px; }
+.cover-sub{ font-size:13pt; font-weight:600; margin-top:4px; }
+.cover-tag{
+  display:inline-block; margin-top:10px; padding:4px 16px;
+  background:var(--blue-tint); color:var(--blue); border:1px solid var(--blue);
+  border-radius:999px; font-weight:700; font-size:10.5pt;
+}
+
+.id-grid{
+  margin:22px 0 4px; width:100%; border-collapse:collapse; font-size:11pt;
+}
+.id-grid td{ padding:9px 6px; }
+.id-grid .lbl{ width:120px; font-weight:700; color:var(--blue-dark); }
+.id-grid .line{ border-bottom:1.4px solid #64748b; }
+
+.instr{
+  margin-top:16px; border:1px solid var(--rule);
+  border-left:5px solid var(--blue); border-radius:8px;
+  background:#fafcff; padding:12px 16px;
+}
+.instr h3{ margin:0 0 6px; font-size:11.5pt; color:var(--blue-dark); }
+.instr ul{ margin:0; padding-left:18px; }
+.instr li{ margin:3px 0; }
+
+.marks-tbl{ width:100%; border-collapse:collapse; margin-top:18px; font-size:10pt; text-align:center; }
+.marks-tbl th, .marks-tbl td{ border:1px solid var(--rule); padding:6px 4px; }
+.marks-tbl thead th{ background:var(--blue-dark); color:#fff; }
+.marks-tbl .tot{ background:var(--blue-tint); font-weight:800; }
+
+/* ================= QUESTION CARD ================= */
+.card{
+  border:1px solid var(--rule);
+  border-radius:10px;
+  margin:0 0 16px;
+  overflow:hidden;
+  break-inside:avoid; page-break-inside:avoid;
+  background:#fff;
+}
+.card-head{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  background:linear-gradient(180deg,#f3f7ff,#e9f0ff);
+  border-bottom:1px solid var(--rule);
+  padding:9px 14px;
+}
+.qno{
+  font-weight:800; color:#fff; background:var(--blue);
+  border-radius:6px; padding:3px 11px; font-size:11pt; letter-spacing:.3px;
+}
+.qtitle{ font-weight:700; font-size:11.5pt; color:var(--blue-deep); flex:1 1 240px; }
+.chips{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.chip{ font-size:8.5pt; padding:2px 8px; border-radius:999px; font-weight:700; white-space:nowrap; }
+.chip.clo{ background:#eef2ff; color:#3730a3; border:1px solid #c7d2fe; }
+.chip.so { background:#ecfeff; color:#0e7490; border:1px solid #a5f3fc; }
+.chip.pts{ background:var(--blue-dark); color:#fff; }
+.tag-easy{ background:var(--tag-easy); color:var(--tag-easy-i); border:1px solid var(--tag-easy-i); }
+.tag-med { background:var(--tag-med);  color:var(--tag-med-i);  border:1px solid var(--tag-med-i);  }
+.tag-hard{ background:var(--tag-hard); color:var(--tag-hard-i); border:1px solid var(--tag-hard-i); }
+
+.card-body{ padding:12px 16px 14px; }
+.card-body p{ margin:6px 0; }
+.note{ color:var(--warn); font-style:italic; font-weight:600; font-size:10pt; }
+.hint{ color:var(--ink-soft); font-style:italic; font-size:10pt; }
+.worked{ background:#f5faff; border:1px dashed var(--blue); border-radius:8px; padding:8px 12px; margin:10px 0; font-size:10.5pt; }
+.worked b{ color:var(--blue-dark); }
+
+/* ---- code blocks ---- */
+pre.code{
+  background:var(--code-bg); border:1px solid var(--code-rule);
+  border-left:4px solid var(--blue); border-radius:6px;
+  padding:10px 12px; margin:10px 0; overflow:auto;
+  font-family:'Consolas','DejaVu Sans Mono',monospace; font-size:10pt; line-height:1.45;
+  counter-reset:ln;
+}
+pre.code .ln{ display:block; white-space:pre; }
+pre.code.numbered .ln::before{
+  counter-increment:ln; content:counter(ln);
+  display:inline-block; width:1.6em; margin-right:10px;
+  color:#94a3b8; text-align:right; border-right:1px solid #cbd5e1; padding-right:6px;
+}
+.kw{ color:#7c3aed; font-weight:700; }
+.ty{ color:#0e7490; font-weight:700; }
+.st{ color:#b45309; }
+.cm{ color:#64748b; font-style:italic; }
+code.inl{ background:var(--code-bg); border:1px solid var(--code-rule); border-radius:4px; padding:1px 5px; font-family:'Consolas',monospace; font-size:9.8pt; }
+
+/* ---- linked-list diagram (CSS boxes) ---- */
+.ll{ display:flex; align-items:center; flex-wrap:wrap; gap:0; margin:12px 0; font-family:'Consolas','DejaVu Sans Mono',monospace; }
+.ll .headlbl{
+  display:inline-flex; align-items:center; font-weight:700; color:var(--blue-dark);
+  background:var(--blue-tint); border:1.4px solid var(--blue); border-radius:6px;
+  padding:5px 10px; margin-right:2px;
+}
+.node{ display:flex; border:1.6px solid var(--blue-dark); border-radius:5px; overflow:hidden; background:#fff; }
+.node .cell{ padding:7px 11px; font-weight:700; }
+.node .data{ background:#fff; }
+.node .ptr{ background:var(--blue-tint); color:var(--blue); border-left:1.4px solid var(--blue-dark); font-size:9pt; }
+.node .prev{ background:#f1f5f9; color:#475569; border-right:1.4px solid var(--blue-dark); font-size:9pt; }
+.arrow{ flex:0 0 30px; height:0; border-top:2px solid var(--blue-dark); position:relative; }
+.arrow::after{ content:''; position:absolute; right:-1px; top:-5px;
+  border-left:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
+.darrow{ flex:0 0 34px; height:0; border-top:2px solid var(--blue-dark); position:relative; }
+.darrow::after{ content:''; position:absolute; right:-1px; top:-5px;
+  border-left:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
+.darrow::before{ content:''; position:absolute; left:-1px; top:-5px;
+  border-right:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
+.nul{ font-weight:800; color:#475569; padding:6px 4px; }
+.curve{ font-weight:700; color:var(--blue-dark); padding:0 6px; font-size:9.5pt; }
+
+/* ---- answer space ---- */
+.answer-space{ margin-top:10px; }
+.answer-space .lbl{ font-style:italic; color:var(--ink-soft); font-size:10pt; }
+.writeline{ border-bottom:1px solid #94a3b8; height:1.55em; margin-top:.45em; }
+.codebox{ border:1px dashed #94a3b8; border-radius:6px; min-height:120px; margin-top:8px;
+  background:repeating-linear-gradient(#fff,#fff 1.7em,#eef2f7 1.7em,#eef2f7 calc(1.7em + 1px)); }
+.codebox.tall{ min-height:200px; }
+.boxrow{ display:flex; gap:0; margin-top:8px; }
+.boxrow .b{ flex:1; border:1.4px solid var(--blue-dark); border-right:0; height:42px; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.boxrow .b:last-child{ border-right:1.4px solid var(--blue-dark); }
+.boxrow .b .k{ font-size:8pt; color:#64748b; font-weight:600; }
+.mini{ font-size:9pt; color:#64748b; }
+
+/* array cells */
+.arr{ display:flex; margin:8px 0; font-family:'Consolas',monospace; }
+.arr .c{ width:38px; height:38px; border:1.4px solid var(--blue-dark); border-right:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; }
+.arr .c:last-child{ border-right:1.4px solid var(--blue-dark); }
+.arr.idx .c{ border:0; height:auto; color:#64748b; font-size:9pt; }
+
+/* ---- model answer block (hidden until toggled) ---- */
+.answer-key{ display:none; }
+body.show-answers .answer-key{ display:block; }
+.answer-key{
+  margin-top:12px; border:1px solid #bbf7d0; border-left:5px solid #16a34a;
+  background:#f0fdf4; border-radius:8px; padding:10px 14px;
+}
+.answer-key .akh{ font-weight:800; color:#15803d; font-size:10.5pt; margin-bottom:4px; }
+.answer-key pre.code{ border-left-color:#16a34a; background:#f3fdf6; }
+.answer-key .val{ color:#166534; font-weight:800; }
+.answer-key .rub{ color:#0e7490; font-size:9.5pt; font-style:italic; }
+
+/* ---- floating toolbar (screen only) ---- */
+.toolbar{
+  position:fixed; top:14px; right:14px; z-index:50; display:flex; gap:8px;
+  background:#fff; border:1px solid var(--rule); border-radius:10px; padding:8px 10px;
+  box-shadow:0 4px 14px rgba(15,23,42,.18);
+}
+.toolbar button{
+  font:inherit; font-size:10pt; font-weight:700; cursor:pointer;
+  border:1px solid var(--blue); border-radius:7px; padding:7px 12px;
+  background:var(--blue); color:#fff;
+}
+.toolbar button.ghost{ background:#fff; color:var(--blue); }
+.toolbar button:active{ transform:translateY(1px); }
+
+.footline{ text-align:center; margin-top:6px; color:var(--ink-soft); font-size:9.5pt; }
+.endmark{ text-align:center; font-weight:800; color:var(--blue-dark); margin:18px 0 4px; }
+
+/* ================= PRINT ================= */
+@media print{
+  body{ background:#fff; padding:0; }
+  .toolbar{ display:none !important; }
+  .sheet{ box-shadow:none; margin:0; width:auto; min-height:auto; padding:0; }
+  .sheet + .sheet{ page-break-before:always; }
+  .card{ box-shadow:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== screen toolbar ===== -->
+<div class="toolbar">
+  <button id="toggleAns" class="ghost">👁 Show model answers</button>
+  <button onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<!-- =====================================================================
+     COVER PAGE
+     ===================================================================== -->
+<section class="sheet cover">
+  <div class="cover-top">
+    <div class="uni">King Abdulaziz University (KAU)</div>
+    <div class="fac">Faculty of Computing and Information Technology &middot; Computer Science Department</div>
+  </div>
+  <div class="cover-rule"></div>
+  <div class="cover-top">
+    <div class="cover-title">CPCS-204 &nbsp;Data Structures I</div>
+    <div class="cover-sub">Linked Lists — Focused Practice Exam</div>
+    <div class="cover-tag">Singly &middot; Doubly &middot; Circular Linked Lists</div>
+  </div>
+  <div class="cover-rule"></div>
+
+  <table class="id-grid">
+    <tr><td class="lbl">Student Name:</td><td class="line"></td></tr>
+    <tr><td class="lbl">Student ID:</td><td class="line"></td></tr>
+    <tr>
+      <td class="lbl">Section:</td><td class="line" style="width:35%"></td>
+      <td class="lbl" style="text-align:right;padding-right:14px">Instructor:</td><td class="line"></td>
+    </tr>
+  </table>
+
+  <div class="instr">
+    <h3>Instructions</h3>
+    <ul>
+      <li>This booklet contains <b>10 questions</b> on linked lists only. <b>Total: 80 marks</b> &middot; Suggested time: <b>60 minutes</b>.</li>
+      <li>Answer <b>all</b> questions in the spaces provided. <b>Place your answers in the boxes provided.</b></li>
+      <li>Unless stated otherwise, use the <b>standard node declaration</b> given inside each question
+          (<code class="inl">ll_node</code> with fields <code class="inl">data</code>, <code class="inl">next</code>, and — for doubly lists — <code class="inl">prev</code>).</li>
+      <li>Use a <b>help pointer</b> (e.g. <code class="inl">hp</code>) for traversal; do <b>not</b> lose the <code class="inl">head</code> reference.</li>
+      <li>Write clear Java. Partial (per-line) credit is given. <span class="note">On recursion items you will not get points unless you use recursion.</span></li>
+    </ul>
+  </div>
+
+  <table class="marks-tbl">
+    <thead>
+      <tr><th>Question</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Q5</th><th>Q6</th><th>Q7</th><th>Q8</th><th>Q9</th><th>Q10</th><th class="tot">Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Max Mark</b></td><td>6</td><td>6</td><td>6</td><td>10</td><td>12</td><td>10</td><td>8</td><td>10</td><td>6</td><td>6</td><td class="tot">80</td></tr>
+      <tr><td><b>Obtained</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="tot"></td></tr>
+    </tbody>
+  </table>
+
+  <p class="footline">Topics covered: traversal &amp; output tracing · pointer chasing · single-pass methods (max, delete-by-condition, append-aggregate) · frequency counting into an array · recursion on a list · doubly-linked pointer wiring · circular-list counting.</p>
+</section>
+
+<!-- =====================================================================
+     PAGE 2 — Q1, Q2, Q3
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span><b>CPCS-204</b> Data Structures I</span><span>Linked List — Practice Exam</span></div>
+
+  <!-- ============ Q1 : MCQ concepts ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q1</span>
+      <span class="qtitle">Linked-List Concepts (Multiple Choice)</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 1 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Circle the <b>single best</b> answer for each item.</p>
+
+      <p><b>1.</b> In a <b>singly</b> linked list, each node stores:</p>
+      <p>&nbsp;&nbsp;(a) only the data value &nbsp;&nbsp; (b) data and a reference to the <b>next</b> node
+         &nbsp;&nbsp; (c) data + references to both next and previous &nbsp;&nbsp; (d) data + a reference to the head</p>
+
+      <p><b>2.</b> Given only the <code class="inl">head</code>, which operation on a singly linked list is <b>O(1)</b>?</p>
+      <p>&nbsp;&nbsp;(a) inserting a new node at the <b>front</b> &nbsp;&nbsp; (b) inserting at the end
+         &nbsp;&nbsp; (c) deleting the last node &nbsp;&nbsp; (d) searching for a value</p>
+
+      <p><b>3.</b> In a <b>doubly</b> linked list, each node has references to:</p>
+      <p>&nbsp;&nbsp;(a) the next node only &nbsp;&nbsp; (b) the previous node only
+         &nbsp;&nbsp; (c) <b>both</b> the next and the previous nodes &nbsp;&nbsp; (d) the head and the tail</p>
+
+      <p><b>4.</b> In a <b>circular singly</b> linked list, the <code class="inl">next</code> field of the <b>last</b> node points to:</p>
+      <p>&nbsp;&nbsp;(a) <code class="inl">null</code> &nbsp;&nbsp; (b) itself &nbsp;&nbsp; (c) the <b>first</b> node (head) &nbsp;&nbsp; (d) the second node</p>
+
+      <p><b>5.</b> To delete the <b>last</b> node of a singly linked list that has <b>no tail pointer</b>, you must first:</p>
+      <p>&nbsp;&nbsp;(a) do nothing — it is O(1) &nbsp;&nbsp; (b) traverse to the <b>second-last</b> node, so it costs O(n)
+         &nbsp;&nbsp; (c) reverse the list &nbsp;&nbsp; (d) move the head</p>
+
+      <p><b>6.</b> A key advantage of a linked list over an array is:</p>
+      <p>&nbsp;&nbsp;(a) constant-time random access by index &nbsp;&nbsp; (b) uses less memory per element
+         &nbsp;&nbsp; (c) <b>grows/shrinks dynamically; insert/delete without shifting elements</b> &nbsp;&nbsp; (d) better cache locality</p>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q1</div>
+        <p>1:&nbsp;<span class="val">(b)</span> &nbsp; 2:&nbsp;<span class="val">(a)</span> &nbsp; 3:&nbsp;<span class="val">(c)</span> &nbsp; 4:&nbsp;<span class="val">(c)</span> &nbsp; 5:&nbsp;<span class="val">(b)</span> &nbsp; 6:&nbsp;<span class="val">(c)</span></p>
+        <p class="rub">1 mark each. (2) front-insertion only rewires head; end-insertion needs a full traversal → O(n).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q2 : Output tracing ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q2</span>
+      <span class="qtitle">Output Tracing — Traverse and Compute</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 3 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Use the standard declaration &nbsp;<code class="inl">class ll_node { int data; ll_node next; }</code>&nbsp; and the list:</p>
+      <div class="ll">
+        <span class="headlbl">head</span><span class="arrow"></span>
+        <span class="node"><span class="cell data">7</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+        <span class="node"><span class="cell data">2</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+        <span class="node"><span class="cell data">9</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+        <span class="node"><span class="cell data">4</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+        <span class="node"><span class="cell data">6</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+        <span class="nul">null</span>
+      </div>
+
+      <p><b>(a)</b> What is printed? <span class="hint">[3 marks]</span></p>
+      <pre class="code numbered"><span class="ln"><span class="ty">ll_node</span> hp = head;  <span class="ty">int</span> sum = <span class="st">0</span>;</span><span class="ln"><span class="kw">while</span> (hp != <span class="kw">null</span>) { sum += hp.data; hp = hp.next; }</span><span class="ln">System.out.println(sum);</span></pre>
+      <div class="answer-space"><span class="lbl">Output:</span><div class="writeline"></div></div>
+
+      <p style="margin-top:12px"><b>(b)</b> What is printed? <span class="hint">[3 marks]</span></p>
+      <pre class="code numbered"><span class="ln"><span class="ty">ll_node</span> hp = head;  <span class="ty">int</span> c = <span class="st">0</span>;</span><span class="ln"><span class="kw">while</span> (hp != <span class="kw">null</span>) { <span class="kw">if</span> (hp.data &gt; <span class="st">5</span>) c++; hp = hp.next; }</span><span class="ln">System.out.println(c);</span></pre>
+      <div class="answer-space"><span class="lbl">Output:</span><div class="writeline"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q2</div>
+        <p>(a) 7+2+9+4+6 = <span class="val">28</span></p>
+        <p>(b) values &gt; 5 are 7, 9, 6 → <span class="val">3</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q3 : DLL pointer chasing ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q3</span>
+      <span class="qtitle">Doubly Linked List — Pointer Chasing</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 1.5 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>For a doubly linked list &nbsp;<code class="inl">class ll_node { int data; ll_node next; ll_node prev; }</code>:</p>
+      <div class="ll">
+        <span class="headlbl">head</span><span class="arrow"></span>
+        <span class="node"><span class="cell prev">p</span><span class="cell data">10</span><span class="cell ptr">n</span></span><span class="darrow"></span>
+        <span class="node"><span class="cell prev">p</span><span class="cell data">20</span><span class="cell ptr">n</span></span><span class="darrow"></span>
+        <span class="node"><span class="cell prev">p</span><span class="cell data">30</span><span class="cell ptr">n</span></span><span class="darrow"></span>
+        <span class="node"><span class="cell prev">p</span><span class="cell data">40</span><span class="cell ptr">n</span></span><span class="darrow"></span>
+        <span class="node"><span class="cell prev">p</span><span class="cell data">50</span><span class="cell ptr">n</span></span>
+        <span class="curve">&nbsp;&larr; tail</span>
+      </div>
+      <p class="mini">(<code class="inl">head.prev == null</code> and <code class="inl">tail.next == null</code>.)</p>
+      <p>Write the value produced by each expression:</p>
+      <table style="width:100%; border-collapse:collapse; font-family:'Consolas',monospace; font-size:10pt;">
+        <tr><td style="padding:6px 4px;width:60%">1.&nbsp; <code class="inl">head.next.next.next.data</code></td><td style="border-bottom:1px solid #94a3b8;"></td></tr>
+        <tr><td style="padding:6px 4px">2.&nbsp; <code class="inl">tail.prev.prev.data</code></td><td style="border-bottom:1px solid #94a3b8;"></td></tr>
+        <tr><td style="padding:6px 4px">3.&nbsp; <code class="inl">head.next.next.prev.data</code></td><td style="border-bottom:1px solid #94a3b8;"></td></tr>
+        <tr><td style="padding:6px 4px">4.&nbsp; <code class="inl">head.next.next.prev.prev.data</code></td><td style="border-bottom:1px solid #94a3b8;"></td></tr>
+      </table>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q3</div>
+        <p>1: 10→20→30→<span class="val">40</span> &nbsp;|&nbsp; 2: 50→40→<span class="val">30</span> &nbsp;|&nbsp; 3: 10→20→30→(prev)<span class="val">20</span> &nbsp;|&nbsp; 4: 10→20→30→(prev)20→(prev)<span class="val">10</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 3 — Q4, Q5
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span><b>CPCS-204</b> Data Structures I</span><span>Linked List — Practice Exam</span></div>
+
+  <!-- ============ Q4 : write a method (max) ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q4</span>
+      <span class="qtitle">Write a Method — Maximum Value in the List</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Use the standard singly linked list declaration:</p>
+      <pre class="code"><span class="ln"><span class="kw">class</span> <span class="ty">ll_node</span> { <span class="ty">int</span> data;  <span class="ty">ll_node</span> next; }</span></pre>
+      <p>Write a Java method &nbsp;<code class="inl">public static int exam04(ll_node head)</code>&nbsp; that <b>returns the largest <code class="inl">data</code> value</b> stored in the list. If the list is empty (<code class="inl">head == null</code>), return <b>-1</b>.</p>
+      <div class="worked">
+        <b>Worked example.</b> For the list below the method must return <b>50</b>.
+        <div class="ll" style="margin:8px 0 0">
+          <span class="headlbl">head</span><span class="arrow"></span>
+          <span class="node"><span class="cell data">12</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">45</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">7</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">50</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">8</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="nul">null</span>
+        </div>
+      </div>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox tall"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q4</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">int</span> exam04(<span class="ty">ll_node</span> head) {</span><span class="ln">    <span class="kw">if</span> (head == <span class="kw">null</span>) <span class="kw">return</span> -<span class="st">1</span>;        <span class="cm">// empty-list guard</span></span><span class="ln">    <span class="ty">int</span> max = head.data;              <span class="cm">// first value is the running max</span></span><span class="ln">    <span class="ty">ll_node</span> hp = head.next;           <span class="cm">// help pointer starts at 2nd node</span></span><span class="ln">    <span class="kw">while</span> (hp != <span class="kw">null</span>) {</span><span class="ln">        <span class="kw">if</span> (hp.data &gt; max) max = hp.data;</span><span class="ln">        hp = hp.next;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> max;</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: empty guard 2 · init max 2 · correct traversal loop 3 · compare/update 2 · return 1.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q5 : delete by condition ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q5</span>
+      <span class="qtitle">Write a Method — Delete All Negative Nodes</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">12 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Write &nbsp;<code class="inl">public static ll_node exam05(ll_node head)</code>&nbsp; that <b>deletes every node whose <code class="inl">data</code> is negative</b> and returns the head of the resulting list. Your solution must correctly handle: deleting one or more nodes <b>at the front</b>, an <b>empty</b> list, and a list that becomes empty.</p>
+      <div class="worked">
+        <b>Worked example.</b>
+        <div class="ll" style="margin:8px 0">
+          <span class="headlbl">head</span><span class="arrow"></span>
+          <span class="node"><span class="cell data">-3</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">8</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">-1</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">4</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">-7</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">6</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="nul">null</span>
+        </div>
+        becomes &nbsp;<b>head → 8 → 4 → 6 → null</b>
+      </div>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox tall"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q5</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">ll_node</span> exam05(<span class="ty">ll_node</span> head) {</span><span class="ln">    <span class="cm">// 1) strip leading negative nodes</span></span><span class="ln">    <span class="kw">while</span> (head != <span class="kw">null</span> &amp;&amp; head.data &lt; <span class="st">0</span>)</span><span class="ln">        head = head.next;</span><span class="ln">    <span class="kw">if</span> (head == <span class="kw">null</span>) <span class="kw">return</span> <span class="kw">null</span>;   <span class="cm">// list emptied out</span></span><span class="ln"></span><span class="ln">    <span class="cm">// 2) now head is safe; unlink negatives with a trailing pointer</span></span><span class="ln">    <span class="ty">ll_node</span> hp = head;</span><span class="ln">    <span class="kw">while</span> (hp.next != <span class="kw">null</span>) {</span><span class="ln">        <span class="kw">if</span> (hp.next.data &lt; <span class="st">0</span>)</span><span class="ln">            hp.next = hp.next.next;    <span class="cm">// bypass the negative node</span></span><span class="ln">        <span class="kw">else</span></span><span class="ln">            hp = hp.next;              <span class="cm">// only advance when kept</span></span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> head;</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: leading-negatives loop 3 · emptied guard 2 · traversal with hp.next 3 · unlink (bypass) 2 · conditional advance 1 · return 1. Common bug: advancing hp after a delete skips the next node.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 4 — Q6, Q7
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span><b>CPCS-204</b> Data Structures I</span><span>Linked List — Practice Exam</span></div>
+
+  <!-- ============ Q6 : append aggregate ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q6</span>
+      <span class="qtitle">Write a Method — Append a Node Holding the Sum</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Write &nbsp;<code class="inl">public static void exam06(ll_node head)</code>&nbsp; that appends <b>one new node at the end</b> of the list whose <code class="inl">data</code> equals the <b>sum of all existing data values</b>. You may assume the list is <b>not empty</b> (<code class="inl">head != null</code>).</p>
+      <div class="worked">
+        <b>Worked example.</b> &nbsp;head → 2 → 5 → 3 → null &nbsp; becomes &nbsp; <b>head → 2 → 5 → 3 → 10 → null</b> &nbsp;(2+5+3 = 10).
+      </div>
+      <p class="hint">Hint: a single traversal can both accumulate the sum and find the last node.</p>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox tall"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q6</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">void</span> exam06(<span class="ty">ll_node</span> head) {</span><span class="ln">    <span class="ty">int</span> sum = <span class="st">0</span>;</span><span class="ln">    <span class="ty">ll_node</span> hp = head;</span><span class="ln">    <span class="kw">while</span> (hp.next != <span class="kw">null</span>) {   <span class="cm">// stop at the LAST node</span></span><span class="ln">        sum += hp.data;</span><span class="ln">        hp = hp.next;</span><span class="ln">    }</span><span class="ln">    sum += hp.data;              <span class="cm">// add the last node's data too</span></span><span class="ln"></span><span class="ln">    <span class="ty">ll_node</span> n = <span class="kw">new</span> <span class="ty">ll_node</span>();  <span class="cm">// build the new tail node</span></span><span class="ln">    n.data = sum;  n.next = <span class="kw">null</span>;</span><span class="ln">    hp.next = n;                 <span class="cm">// link it after the old last node</span></span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: init sum/hp 2 · loop to last node 3 · include last data 1 · create node + set data/next 2 · link at end 2. Deduct if the loop runs off the end (NullPointerException).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q7 : frequency counting into array ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q7</span>
+      <span class="qtitle">Frequency Counting into a Provided Array</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Every node's <code class="inl">data</code> is a single digit (0–9). Write
+         &nbsp;<code class="inl">public static void exam07(ll_node head, int[] freq)</code>&nbsp;
+         where <code class="inl">freq</code> has length 10. The method must set <code class="inl">freq[d]</code> to the number of nodes whose data equals <code class="inl">d</code>.</p>
+      <div class="worked">
+        <b>Worked example.</b>
+        <div class="ll" style="margin:8px 0">
+          <span class="headlbl">head</span><span class="arrow"></span>
+          <span class="node"><span class="cell data">3</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">1</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">3</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">7</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">3</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="node"><span class="cell data">1</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+          <span class="nul">null</span>
+        </div>
+        After the call, <code class="inl">freq</code> is:
+        <div class="arr idx"><span class="c">0</span><span class="c">1</span><span class="c">2</span><span class="c">3</span><span class="c">4</span><span class="c">5</span><span class="c">6</span><span class="c">7</span><span class="c">8</span><span class="c">9</span></div>
+        <div class="arr"><span class="c">0</span><span class="c">2</span><span class="c">0</span><span class="c">3</span><span class="c">0</span><span class="c">0</span><span class="c">0</span><span class="c">1</span><span class="c">0</span><span class="c">0</span></div>
+      </div>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q7</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">void</span> exam07(<span class="ty">ll_node</span> head, <span class="ty">int</span>[] freq) {</span><span class="ln">    <span class="ty">ll_node</span> hp = head;</span><span class="ln">    <span class="kw">while</span> (hp != <span class="kw">null</span>) {</span><span class="ln">        freq[hp.data]++;     <span class="cm">// data is a valid index 0..9</span></span><span class="ln">        hp = hp.next;</span><span class="ln">    }</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: help pointer 1 · loop 3 · use data as index &amp; increment 3 · advance 1. (No need to clear <code class="inl">freq</code> — assume it starts at 0.)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 5 — Q8, Q9, Q10
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span><b>CPCS-204</b> Data Structures I</span><span>Linked List — Practice Exam</span></div>
+
+  <!-- ============ Q8 : recursion ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q8</span>
+      <span class="qtitle">Recursive Method on a Linked List</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Write &nbsp;<code class="inl">public static int exam08(ll_node head)</code>&nbsp; that returns the <b>sum of the data values of nodes at even positions</b>, counting the head as position&nbsp;0 (so positions 0, 2, 4, … are added). An empty list returns 0.</p>
+      <p class="note">Note: you will not get points unless you use recursion (no loops).</p>
+      <div class="worked">
+        <b>Worked example.</b> &nbsp;head → 5 → 8 → 3 → 4 → 9 → null &nbsp;→ positions 0,2,4 hold 5, 3, 9 → returns <b>17</b>.
+      </div>
+      <p class="hint">Hint: think of a helper that recurses two nodes at a time, or pass the parity along.</p>
+      <div class="answer-space"><span class="lbl">Write your complete method (add a helper if you wish):</span><div class="codebox tall"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q8</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">int</span> exam08(<span class="ty">ll_node</span> head) {</span><span class="ln">    <span class="kw">if</span> (head == <span class="kw">null</span>) <span class="kw">return</span> <span class="st">0</span>;              <span class="cm">// base case</span></span><span class="ln">    <span class="kw">if</span> (head.next == <span class="kw">null</span>) <span class="kw">return</span> head.data;  <span class="cm">// single node left</span></span><span class="ln">    <span class="cm">// take current (even pos), skip next (odd pos), recurse past both</span></span><span class="ln">    <span class="kw">return</span> head.data + exam08(head.next.next);</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: base case(s) 3 · take current node's data 2 · skip two nodes in the recursive call 4 · overall correctness 1. Any correct recursion (e.g. a parity-flag helper) earns full marks; a loop-based answer earns 0.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q9 : DLL insert wiring ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q9</span>
+      <span class="qtitle">Doubly Linked List — Insert Between Two Nodes</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Node type: <code class="inl">class ll_node { int data; ll_node next; ll_node prev; }</code>. Pointer <code class="inl">p</code> refers to an existing node that is <b>not the last</b> node, and <code class="inl">newN</code> is a fresh node to insert <b>immediately after</b> <code class="inl">p</code> (between <code class="inl">p</code> and <code class="inl">p.next</code>).</p>
+      <p>Fill the <b>four</b> blanks so all four links are wired correctly. <b>Order matters.</b></p>
+      <pre class="code numbered"><span class="ln">newN.next = ________________;   <span class="cm">// (i)</span></span><span class="ln">newN.prev = ________________;   <span class="cm">// (ii)</span></span><span class="ln">________________.prev = newN;   <span class="cm">// (iii)</span></span><span class="ln">________________.next = newN;   <span class="cm">// (iv)</span></span></pre>
+      <p class="hint">Wire the new node's two links first, then fix the neighbours — and update <code class="inl">p.next.prev</code> before you overwrite <code class="inl">p.next</code>.</p>
+      <div class="answer-space">
+        <span class="lbl">(i)</span><div class="writeline"></div>
+        <span class="lbl">(ii)</span><div class="writeline"></div>
+        <span class="lbl">(iii)</span><div class="writeline"></div>
+        <span class="lbl">(iv)</span><div class="writeline"></div>
+      </div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q9</div>
+        <pre class="code numbered"><span class="ln">newN.next = <span class="val">p.next</span>;    <span class="cm">// (i)</span></span><span class="ln">newN.prev = <span class="val">p</span>;         <span class="cm">// (ii)</span></span><span class="ln"><span class="val">p.next</span>.prev = newN;    <span class="cm">// (iii)  fix the right neighbour BEFORE (iv)</span></span><span class="ln"><span class="val">p</span>.next = newN;         <span class="cm">// (iv)</span></span></pre>
+        <p class="rub">1.5 marks each. If (iv) is done before (iii), <code class="inl">p.next</code> already points to newN and the old right neighbour's <code class="inl">prev</code> is lost — that ordering is wrong.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q10 : circular list count ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q10</span>
+      <span class="qtitle">Circular Singly Linked List — Count the Nodes</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 7</span><span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>In a <b>circular</b> singly linked list the last node's <code class="inl">next</code> points back to <code class="inl">head</code> (there is no <code class="inl">null</code>):</p>
+      <div class="ll">
+        <span class="headlbl">head</span><span class="arrow"></span>
+        <span class="node"><span class="cell data">10</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+        <span class="node"><span class="cell data">20</span><span class="cell ptr">next</span></span><span class="arrow"></span>
+        <span class="node"><span class="cell data">30</span><span class="cell ptr">next</span></span>
+        <span class="curve">&nbsp;&#8630; back to head</span>
+      </div>
+      <p>Write &nbsp;<code class="inl">public static int exam10(ll_node head)</code>&nbsp; that returns the number of nodes. It must return <b>0</b> for an empty list (<code class="inl">head == null</code>) and must <b>not</b> loop forever.</p>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q10</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">int</span> exam10(<span class="ty">ll_node</span> head) {</span><span class="ln">    <span class="kw">if</span> (head == <span class="kw">null</span>) <span class="kw">return</span> <span class="st">0</span>;</span><span class="ln">    <span class="ty">int</span> count = <span class="st">1</span>;             <span class="cm">// count head, then walk until we return to it</span></span><span class="ln">    <span class="ty">ll_node</span> hp = head.next;</span><span class="ln">    <span class="kw">while</span> (hp != head) {</span><span class="ln">        count++;</span><span class="ln">        hp = hp.next;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> count;</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: empty guard 2 · start count at 1 / hp at head.next 2 · loop condition <code class="inl">hp != head</code> (not <code class="inl">hp != null</code>) 2. Using <code class="inl">hp != null</code> loops forever — key testing point.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="endmark">— End of Linked-List Practice Exam — Good Luck! —</div>
+  <p class="footline">CPCS-204 Data Structures I · King Abdulaziz University · FCIT</p>
+</section>
+
+<script>
+  var btn = document.getElementById('toggleAns');
+  btn.addEventListener('click', function () {
+    var on = document.body.classList.toggle('show-answers');
+    btn.textContent = on ? '🙈 Hide model answers' : '👁 Show model answers';
+    btn.classList.toggle('ghost', !on);
+  });
+</script>
+</body>
+</html>
