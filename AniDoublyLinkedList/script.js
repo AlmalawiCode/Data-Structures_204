@@ -1,8 +1,10 @@
 /* ============================================================
    Doubly Linked List Simulator — engine + operations
-   Vanilla JS. Nodes are [prev | data | next] boxes; forward
-   (next) arrows travel on the upper lane, backward (prev)
-   arrows on the lower lane. All arrows are redrawn each frame
+   Vanilla JS. Nodes are drawn as VERTICAL boxes:
+       next  (top cell)  |  data (middle)  |  prev (bottom cell)
+   so forward (next) arrows leave the top cell and travel on the
+   upper lane, backward (prev) arrows leave the bottom cell and
+   travel on the lower lane. All arrows are redrawn each frame
    from live DOM positions so they follow CSS transitions.
    Debugger stepping: the highlighted statement has NOT executed
    yet; each click animates the previous statement's effect.
@@ -12,9 +14,11 @@
 
 /* ---------------- constants & global state ---------------- */
 
-const NODE_W = 132, NODE_H = 64, GAP = 66;
-const PAD_X = 34, ROW_Y = 170, FLOAT_DY = 168;
-const LANE = 11;                   // vertical offset of next (up) / prev (down) lanes
+const NODE_W = 108, NODE_H = 112, GAP = 66;
+const PAD_X = 34, ROW_Y = 170, FLOAT_DY = 164;
+const CELL_H = 30;                 // height of the next (top) and prev (bottom) cells
+const NEXT_LANE = CELL_H / 2;      // next arrows leave the middle of the TOP cell
+const PREV_LANE = CELL_H / 2;      // prev arrows leave the middle of the BOTTOM cell
 
 let baseList = null;               // committed list: [{id, data}, …] — ids stay stable across ops
 let speed = 1;
@@ -152,7 +156,9 @@ function renderState(snap) {
       el.className = 'node';
       el.dataset.id = id;
       el.innerHTML = `<span class="idx hidden"></span>
-        <div class="cell prevf"></div><div class="cell data"></div><div class="cell nextf"></div>`;
+        <div class="cell nextf"><span class="fname">next</span><span class="fval"></span></div>
+        <div class="cell data"></div>
+        <div class="cell prevf"><span class="fname">prev</span><span class="fval"></span></div>`;
       const p = pos[id];
       el.style.left = p.x + 'px';
       el.style.top = p.y + 'px';
@@ -164,9 +170,9 @@ function renderState(snap) {
     const nf = el.querySelector('.nextf');
     const pf = el.querySelector('.prevf');
     const nNull = snap.next[id] === null, pNull = snap.prev[id] === null;
-    nf.textContent = nNull ? 'null' : '•';
+    nf.querySelector('.fval').textContent = nNull ? 'null' : '\u25CF';
     nf.classList.toggle('isnull', nNull);
-    pf.textContent = pNull ? 'null' : '•';
+    pf.querySelector('.fval').textContent = pNull ? 'null' : '\u25CF';
     pf.classList.toggle('isnull', pNull);
     const idxEl = el.querySelector('.idx');
     const rowIdx = snap.order.indexOf(id);
@@ -210,7 +216,7 @@ function renderState(snap) {
       lb.textContent = name + ' = null';
       lb.classList.add('isnull');
       lb.dataset.target = '';
-      lb.style.left = PAD_X + 'px';
+      lb.style.left = (PAD_X + NODE_W / 2) + 'px';
       lb.style.top = (ROW_Y - 64 - nullRefLevels[name] * 36) + 'px';
       lb.style.opacity = '1';
       return;
@@ -221,8 +227,10 @@ function renderState(snap) {
     const stack = REF_NAMES.filter(n => n in snap.refs && snap.refs[n] === target);
     const level = stack.indexOf(name);
     const p = pos[target];
-    lb.style.left = (p.x + NODE_W / 2 - 30) + 'px';
-    lb.style.top = (p.y - 60 - level * 36) + 'px';
+    const isFloating = !!snap.floating[target];
+    lb.style.left = (p.x + NODE_W / 2) + 'px';      // .ref-label is translateX(-50%)
+    lb.style.top = (isFloating ? p.y + NODE_H + 22 + level * 36
+                               : p.y - 60 - level * 36) + 'px';
     lb.style.opacity = '1';
   });
 
@@ -294,14 +302,14 @@ const nodeEl = id => stage.querySelector(`.node[data-id="${id}"]`);
 /* forward (next) link: upper lane, leaves the next cell rightward */
 function fPath(fromEl, toEl) {
   const a = stageRect(fromEl), b = stageRect(toEl);
-  const sx = a.x + a.w - 17, sy = a.y + a.h / 2 - LANE;
-  const tx = b.x - 3, ty = b.y + b.h / 2 - LANE;
+  const sx = a.x + a.w - 6, sy = a.y + NEXT_LANE;
+  const tx = b.x - 3, ty = b.y + NEXT_LANE;
   const sameRow = Math.abs(sy - ty) < 8;
   if (sameRow && tx > sx && tx - sx < GAP + 58) {
     return `M ${sx} ${sy} L ${tx} ${ty}`;
   }
   if (sameRow && tx > sx) {                          // skipping node(s): arc above
-    return `M ${sx} ${sy - 8} C ${sx + 60} ${sy - 72}, ${tx - 60} ${ty - 72}, ${tx + 1} ${ty - 8}`;
+    return `M ${sx} ${sy - 6} C ${sx + 60} ${sy - 40}, ${tx - 60} ${ty - 40}, ${tx + 1} ${ty - 6}`;
   }
   if (ty < sy - 40) {                                // target on the row above
     const ex = b.x + b.w * 0.3, ey = b.y + b.h + 3;
@@ -318,14 +326,14 @@ function fPath(fromEl, toEl) {
 /* backward (prev) link: lower lane, leaves the prev cell leftward */
 function bPath(fromEl, toEl) {
   const a = stageRect(fromEl), b = stageRect(toEl);
-  const sx = a.x + 17, sy = a.y + a.h / 2 + LANE;
-  const tx = b.x + b.w + 3, ty = b.y + b.h / 2 + LANE;
+  const sx = a.x + 6, sy = a.y + a.h - PREV_LANE;
+  const tx = b.x + b.w + 3, ty = b.y + b.h - PREV_LANE;
   const sameRow = Math.abs(sy - ty) < 8;
   if (sameRow && tx < sx && sx - tx < GAP + 58) {
     return `M ${sx} ${sy} L ${tx} ${ty}`;
   }
   if (sameRow && tx < sx) {                          // skipping node(s): arc below
-    return `M ${sx} ${sy + 8} C ${sx - 60} ${sy + 72}, ${tx + 60} ${ty + 72}, ${tx - 1} ${ty + 8}`;
+    return `M ${sx} ${sy + 6} C ${sx - 60} ${sy + 40}, ${tx + 60} ${ty + 40}, ${tx - 1} ${ty + 6}`;
   }
   if (ty < sy - 40) {                                // target on the row above
     const ex = b.x + b.w * 0.7, ey = b.y + b.h + 3;
@@ -341,10 +349,12 @@ function bPath(fromEl, toEl) {
 
 function refPath(labelEl, targetEl) {
   const a = stageRect(labelEl), b = stageRect(targetEl);
-  const sx = a.x + a.w / 2, sy = a.y + a.h;
-  const tx = b.x + b.w / 2, ty = b.y - 4;
+  const below = a.y > b.y + b.h;                     // label parked under the node
+  const sx = a.x + a.w / 2, sy = below ? a.y : a.y + a.h;
+  const tx = b.x + b.w / 2, ty = below ? b.y + b.h + 4 : b.y - 4;
   if (Math.abs(sx - tx) < 8) return `M ${sx} ${sy} L ${tx} ${ty}`;
-  return `M ${sx} ${sy} C ${sx} ${sy + 26}, ${tx} ${ty - 26}, ${tx} ${ty}`;
+  const c = below ? -26 : 26;
+  return `M ${sx} ${sy} C ${sx} ${sy + c}, ${tx} ${ty - c}, ${tx} ${ty}`;
 }
 
 function annoPath(labelEl, targetEl) {
