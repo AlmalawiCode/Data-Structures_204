@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاكي دمج القوائم المرتبطة (Merging Linked Lists)</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  @font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+    font-weight: 400;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+  }
+  @font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+    font-weight: 600;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+  }
+  @font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+    font-weight: 700;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+  }
+  body { font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  /* code, the stage and the list inputs stay left-to-right */
+  .code, .var-panel table, .stage-wrap, .stage,
+  .explain-card .stmt, .field input.list-input { direction: ltr; }
+  .var-panel table { text-align: left; }
+  .field input.list-input { text-align: left; }
+  .explain-card { border-left: none; border-right: 6px solid var(--blue); }
+  /* RTL: keep the teaching-mode help popover on-screen (anchor to the left) */
+  .help-pop { right: auto; left: 0; }
+  .teach-card { border-left: 1px solid #bbf7d0; border-right: 6px solid var(--green); }
+  .explain-card .means, .explain-card .why { line-height: 1.8; }
+  .row-chip { direction: rtl; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="title-block">
+    <h1>دمج قائمتين مرتبطتين <span class="accent">بلغة جافا (Java)</span></h1>
+    <p class="subtitle">محاكاة المراجع (References) خطوة بخطوة &mdash; CPCS&nbsp;204 هياكل البيانات</p>
+  </div>
+  <nav class="page-nav">
+    <a href="../linkedlist/linkedlist-tutorial-ar.html">&rarr; الدرس</a>
+    <a href="../AniLinkedList/index-ar.html">الأحادية</a>
+    <a href="../AniDoublyLinkedList/index-ar.html">المزدوجة</a>
+    <a href="../AniCircularLinkedList/index-ar.html">الدائرية</a>
+    <a href="../index.html">الرئيسية</a>
+    <a href="index.html">English</a>
+  </nav>
+  <div class="size-badge" id="countBadge">
+    القائمة&nbsp;1: <strong id="cnt1">3</strong> &middot;
+    القائمة&nbsp;2: <strong id="cnt2">3</strong> &middot;
+    النتيجة: <strong id="cntR">0</strong>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-op="mergeSorted">دمج قائمتين مرتبتين</button>
+  <button class="tab" data-op="concat">الإلحاق (Concatenate)</button>
+  <button class="tab" data-op="mergeAlternate">الدمج بالتناوب (Zip)</button>
+</nav>
+
+<section class="op-controls">
+  <label class="field f1">القائمة 1
+    <input type="text" id="list1Input" class="list-input" value="10, 30, 50">
+  </label>
+  <label class="field f2">القائمة 2
+    <input type="text" id="list2Input" class="list-input" value="20, 40, 60">
+  </label>
+  <button id="startBtn" class="btn primary">ابدأ المحاكاة</button>
+  <span id="message" class="message"></span>
+  <div class="spacer"></div>
+  <div class="speed-group">
+    <span class="speed-label">السرعة:</span>
+    <button class="speed" data-speed="0.5">0.5&times;</button>
+    <button class="speed active" data-speed="1">1&times;</button>
+    <button class="speed" data-speed="1.5">1.5&times;</button>
+    <button class="speed" data-speed="2">2&times;</button>
+  </div>
+  <div class="teach-wrap">
+    <button id="teachBtn" class="btn toggle" aria-pressed="false"
+      title="وضع الصف: يعرض أسئلة «اسأل الطلاب» مع إخفاء الإجابات">وضع التدريس: مُعطَّل</button>
+    <button id="teachHelpBtn" class="help-btn" aria-label="ما هو وضع التدريس؟" title="ما هو وضع التدريس؟">؟</button>
+    <div id="teachHelp" class="help-pop hidden">
+      <h4>🎓 ما هو وضع التدريس؟</h4>
+      <p><b>وضع التدريس</b> مخصص للصف الدراسي. عندما يكون <b>مُفعَّلًا</b>:</p>
+      <ul>
+        <li>عند الجمل المهمة يظهر سؤال <b>«اسأل الطلاب»</b> &mdash; مثل: <i>«أي عقدة ستُلحق بالقائمة المدموجة تاليًا؟»</i></li>
+        <li>تبقى الإجابة <b>مخفية</b> حتى تضغط <b>اكشف الإجابة</b> &mdash; اسأل طلابك أولًا!</li>
+        <li>أثناء <b>التشغيل</b>، تتوقف المحاكاة <b>تلقائيًا</b> عند كل سؤال.</li>
+      </ul>
+      <p>وعندما يكون <b>مُعطَّلًا</b>، تعمل المحاكاة خطوة بخطوة دون أسئلة.</p>
+    </div>
+  </div>
+</section>
+
+<main class="split">
+
+  <section class="code-pane panel">
+    <h2 id="codeTitle">كود جافا</h2>
+    <pre id="codeView" class="code" aria-label="كود جافا المصدري"></pre>
+    <div class="var-panel">
+      <h3>المتغيرات</h3>
+      <table id="varTable"></table>
+    </div>
+  </section>
+
+  <section class="viz-pane panel">
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <svg id="linkSvg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="ah-link"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+            <marker id="ah-stale"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#cbd5e1"/></marker>
+            <marker id="ah-fresh"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+            <marker id="ah-head1"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+            <marker id="ah-head2"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/></marker>
+            <marker id="ah-dummy"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+            <marker id="ah-tail"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+            <marker id="ah-p"       viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+            <marker id="ah-q"       viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0d9488"/></marker>
+            <marker id="ah-current" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d97706"/></marker>
+            <marker id="ah-pNext"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+            <marker id="ah-qNext"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5eead4"/></marker>
+            <marker id="ah-result"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#be123c"/></marker>
+            <marker id="ah-anno"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+          </defs>
+          <g id="linkLayer"></g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="key"><span class="box"></span> عقدة من القائمة 1</span>
+      <span class="key"><span class="box b"></span> عقدة من القائمة 2</span>
+      <span class="key"><span class="sw"></span> رابط next حي</span>
+      <span class="key"><span class="sw fresh"></span> تغيّر للتو</span>
+      <span class="key"><span class="sw stale"></span> رابط قديم لم يُستبدل بعد</span>
+    </div>
+
+    <div class="explain-card" id="explainCard">
+      <div class="ex-row"><span class="ex-label">الجملة الحالية</span><code class="stmt" id="exStmt">&mdash;</code><span class="ex-status hidden" id="exStatus"></span></div>
+      <div class="ex-row"><span class="ex-label">ماذا تعني</span><span class="means" id="exMeans">اختر عملية ثم اضغط <b>ابدأ المحاكاة</b>.</span></div>
+      <div class="ex-row" id="exWhyRow"><span class="ex-label">لماذا نفعل ذلك</span><span class="why" id="exWhy"></span></div>
+    </div>
+
+    <div class="teach-card hidden" id="teachCard">
+      <div class="teach-head">🎓 اسأل الطلاب</div>
+      <div class="q" id="teachQ"></div>
+      <button id="revealBtn" class="btn">اكشف الإجابة</button>
+      <div class="a hidden" id="teachA"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="transport">
+  <button id="resetBtn" class="btn danger-outline" title="استعادة القائمتين المثاليتين">إعادة ضبط القوائم</button>
+  <button id="randomBtn" class="btn" title="توليد قائمتين عشوائيتين">🎲 قوائم عشوائية</button>
+  <div class="spacer"></div>
+  <button id="prevBtn" class="btn" disabled>&#9197; الخطوة السابقة</button>
+  <button id="playBtn" class="btn primary" disabled>&#9654; تشغيل</button>
+  <button id="nextBtn" class="btn" disabled>الخطوة التالية &#9198;</button>
+  <button id="restartBtn" class="btn" disabled>&#8634; إعادة العملية</button>
+  <div class="spacer"></div>
+  <span class="step-indicator" id="stepIndicator">جاهز</span>
+</footer>
+
+<script src="script-ar.js"></script>
+</body>
+</html>

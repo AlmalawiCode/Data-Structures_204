@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merging Linked Lists — Interactive Java Simulator</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="title-block">
+    <h1>Merging Two Linked Lists <span class="accent">in Java</span></h1>
+    <p class="subtitle">Step-by-step reference animation &mdash; CPCS&nbsp;204 Data Structures</p>
+  </div>
+  <nav class="page-nav">
+    <a href="../linkedlist/linkedlist-tutorial.html">&larr; Tutorial</a>
+    <a href="../AniLinkedList/index.html">Singly</a>
+    <a href="../AniDoublyLinkedList/index.html">Doubly</a>
+    <a href="../AniCircularLinkedList/index.html">Circular</a>
+    <a href="../index.html">Home</a>
+    <a href="index-ar.html">عربي</a>
+  </nav>
+  <div class="size-badge" id="countBadge">
+    List&nbsp;1: <strong id="cnt1">3</strong> &middot;
+    List&nbsp;2: <strong id="cnt2">3</strong> &middot;
+    Result: <strong id="cntR">0</strong>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-op="mergeSorted">Merge Two Sorted Lists</button>
+  <button class="tab" data-op="concat">Concatenate (Append)</button>
+  <button class="tab" data-op="mergeAlternate">Merge Alternately (Zip)</button>
+</nav>
+
+<section class="op-controls">
+  <label class="field f1">List 1
+    <input type="text" id="list1Input" class="list-input" value="10, 30, 50">
+  </label>
+  <label class="field f2">List 2
+    <input type="text" id="list2Input" class="list-input" value="20, 40, 60">
+  </label>
+  <button id="startBtn" class="btn primary">Start Animation</button>
+  <span id="message" class="message"></span>
+  <div class="spacer"></div>
+  <div class="speed-group">
+    <span class="speed-label">Speed:</span>
+    <button class="speed" data-speed="0.5">0.5&times;</button>
+    <button class="speed active" data-speed="1">1&times;</button>
+    <button class="speed" data-speed="1.5">1.5&times;</button>
+    <button class="speed" data-speed="2">2&times;</button>
+  </div>
+  <div class="teach-wrap">
+    <button id="teachBtn" class="btn toggle" aria-pressed="false"
+      title="Classroom mode: shows 'Ask the class' questions with hidden answers">Teaching Mode: Off</button>
+    <button id="teachHelpBtn" class="help-btn" aria-label="What is Teaching Mode?" title="What is Teaching Mode?">?</button>
+    <div id="teachHelp" class="help-pop hidden">
+      <h4>🎓 What is Teaching Mode?</h4>
+      <p><b>Teaching Mode</b> is for the classroom. When it is <b>On</b>:</p>
+      <ul>
+        <li>At key statements an <b>&ldquo;Ask the class&rdquo;</b> question appears &mdash; for example: <i>&ldquo;Which node will be appended to the merged list next?&rdquo;</i></li>
+        <li>The answer stays <b>hidden</b> until you press <b>Reveal Answer</b> &mdash; ask your students first!</li>
+        <li>During <b>Play</b>, the animation <b>pauses automatically</b> at every question.</li>
+      </ul>
+      <p>When it is <b>Off</b>, the animation runs step by step without questions.</p>
+    </div>
+  </div>
+</section>
+
+<main class="split">
+
+  <section class="code-pane panel">
+    <h2 id="codeTitle">Java Code</h2>
+    <pre id="codeView" class="code" aria-label="Java source code"></pre>
+    <div class="var-panel">
+      <h3>Variables</h3>
+      <table id="varTable"></table>
+    </div>
+  </section>
+
+  <section class="viz-pane panel">
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <svg id="linkSvg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="ah-link"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+            <marker id="ah-stale"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#cbd5e1"/></marker>
+            <marker id="ah-fresh"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+            <marker id="ah-head1"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+            <marker id="ah-head2"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/></marker>
+            <marker id="ah-dummy"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+            <marker id="ah-tail"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+            <marker id="ah-p"       viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+            <marker id="ah-q"       viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0d9488"/></marker>
+            <marker id="ah-current" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d97706"/></marker>
+            <marker id="ah-pNext"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+            <marker id="ah-qNext"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5eead4"/></marker>
+            <marker id="ah-result"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#be123c"/></marker>
+            <marker id="ah-anno"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+          </defs>
+          <g id="linkLayer"></g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="key"><span class="box"></span> node from List 1</span>
+      <span class="key"><span class="box b"></span> node from List 2</span>
+      <span class="key"><span class="sw"></span> live next link</span>
+      <span class="key"><span class="sw fresh"></span> just changed</span>
+      <span class="key"><span class="sw stale"></span> old link, not yet overwritten</span>
+    </div>
+
+    <div class="explain-card" id="explainCard">
+      <div class="ex-row"><span class="ex-label">Current statement</span><code class="stmt" id="exStmt">&mdash;</code><span class="ex-status hidden" id="exStatus"></span></div>
+      <div class="ex-row"><span class="ex-label">What it means</span><span class="means" id="exMeans">Choose an operation and press <b>Start Animation</b>.</span></div>
+      <div class="ex-row" id="exWhyRow"><span class="ex-label">Why we do it</span><span class="why" id="exWhy"></span></div>
+    </div>
+
+    <div class="teach-card hidden" id="teachCard">
+      <div class="teach-head">🎓 Ask the class</div>
+      <div class="q" id="teachQ"></div>
+      <button id="revealBtn" class="btn">Reveal Answer</button>
+      <div class="a hidden" id="teachA"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="transport">
+  <button id="resetBtn" class="btn danger-outline" title="Restore the two example lists">Reset Lists</button>
+  <button id="randomBtn" class="btn" title="Generate two random lists">🎲 Random Lists</button>
+  <div class="spacer"></div>
+  <button id="prevBtn" class="btn" disabled>&#9198; Previous Step</button>
+  <button id="playBtn" class="btn primary" disabled>&#9654; Play</button>
+  <button id="nextBtn" class="btn" disabled>Next Step &#9197;</button>
+  <button id="restartBtn" class="btn" disabled>&#8634; Restart Operation</button>
+  <div class="spacer"></div>
+  <span class="step-indicator" id="stepIndicator">Ready</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
