@@ -151,26 +151,28 @@ pre.code.numbered .ln::before{
 code.inl{ background:var(--code-bg); border:1px solid var(--code-rule); border-radius:4px; padding:1px 5px; font-family:'Consolas',monospace; font-size:9.8pt; }
 
 /* ---- linked-list diagram (CSS boxes) ---- */
-.ll{ display:flex; align-items:center; flex-wrap:wrap; gap:0; margin:12px 0; font-family:'Consolas','DejaVu Sans Mono',monospace; }
+.ll{ display:flex; align-items:center; flex-wrap:nowrap; width:max-content; max-width:none;
+     gap:0; margin:12px 0; font-family:'Consolas','DejaVu Sans Mono',monospace;
+     transform-origin:left center; }
 .ll .headlbl{
   display:inline-flex; align-items:center; font-weight:700; color:var(--blue-dark);
   background:var(--blue-tint); border:1.4px solid var(--blue); border-radius:6px;
-  padding:5px 10px; margin-right:2px;
+  padding:4px 7px; margin-right:2px; font-size:10pt;
 }
 .node{ display:flex; border:1.6px solid var(--blue-dark); border-radius:5px; overflow:hidden; background:#fff; }
-.node .cell{ padding:7px 11px; font-weight:700; }
+.node .cell{ padding:5px 5px; font-weight:700; font-size:10.5pt; }
 .node .data{ background:#fff; }
-.node .ptr{ background:var(--blue-tint); color:var(--blue); border-left:1.4px solid var(--blue-dark); font-size:9pt; }
-.node .prev{ background:#f1f5f9; color:#475569; border-right:1.4px solid var(--blue-dark); font-size:9pt; }
-.arrow{ flex:0 0 30px; height:0; border-top:2px solid var(--blue-dark); position:relative; }
+.node .ptr{ background:var(--blue-tint); color:var(--blue); border-left:1.4px solid var(--blue-dark); font-size:8pt; }
+.node .prev{ background:#f1f5f9; color:#475569; border-right:1.4px solid var(--blue-dark); font-size:8pt; }
+.arrow{ flex:0 0 16px; height:0; border-top:2px solid var(--blue-dark); position:relative; }
 .arrow::after{ content:''; position:absolute; right:-1px; top:-5px;
   border-left:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
-.darrow{ flex:0 0 34px; height:0; border-top:2px solid var(--blue-dark); position:relative; }
+.darrow{ flex:0 0 20px; height:0; border-top:2px solid var(--blue-dark); position:relative; }
 .darrow::after{ content:''; position:absolute; right:-1px; top:-5px;
   border-left:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
 .darrow::before{ content:''; position:absolute; left:-1px; top:-5px;
   border-right:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
-.nul{ font-weight:800; color:#475569; padding:6px 4px; }
+.nul{ font-weight:800; color:#475569; padding:6px 2px; font-size:10pt; }
 .curve{ font-weight:700; color:var(--blue-dark); padding:0 6px; font-size:9.5pt; }
 
 /* ---- answer space ---- */
@@ -685,7 +687,30 @@ body.show-answers .answer-key{ display:block; }
     var on = document.body.classList.toggle('show-answers');
     btn.textContent = on ? '🙈 Hide model answers' : '👁 Show model answers';
     btn.classList.toggle('ghost', !on);
+    fitDiagrams();
   });
+
+  /* A linked-list chain must always read as ONE line. The CSS is sized so
+     every chain fits, but if a different print font or zoom makes one wider
+     than the page, shrink that chain to fit rather than wrapping a node onto
+     a second line (which breaks the picture). */
+  function fitDiagrams() {
+    var lls = document.querySelectorAll('.ll');
+    for (var i = 0; i < lls.length; i++) {
+      var ll = lls[i];
+      ll.style.transform = '';
+      var avail = ll.parentElement ? ll.parentElement.clientWidth : 0;
+      if (!avail) continue;                     // hidden (answer key closed)
+      var natural = ll.scrollWidth;
+      if (natural > avail) {
+        ll.style.transform = 'scale(' + (avail / natural).toFixed(4) + ')';
+      }
+    }
+  }
+  window.addEventListener('load', fitDiagrams);
+  window.addEventListener('resize', fitDiagrams);
+  window.addEventListener('beforeprint', fitDiagrams);
+  fitDiagrams();
 </script>
 </body>
 </html>
