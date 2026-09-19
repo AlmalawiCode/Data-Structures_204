@@ -16,9 +16,14 @@
 
 const NODE_W = 108, NODE_H = 112, GAP = 66;
 const PAD_X = 34, ROW_Y = 170, FLOAT_DY = 164;
-const CELL_H = 30;                 // height of the next (top) and prev (bottom) cells
-const NEXT_LANE = CELL_H / 2;      // next arrows leave the middle of the TOP cell
-const PREV_LANE = CELL_H / 2;      // prev arrows leave the middle of the BOTTOM cell
+/* Link arrows are anchored to the real DOM cells, not to fixed offsets:
+   a next arrow starts at the source node's next POINTER and lands on the
+   target's next cell; a prev arrow starts at the prev POINTER and lands on
+   the target's prev cell. See fPath() / bPath(). */
+const nextDot  = el => el.querySelector('.nextf .fval');
+const prevDot  = el => el.querySelector('.prevf .fval');
+const nextCell = el => el.querySelector('.nextf');
+const prevCell = el => el.querySelector('.prevf');
 
 let baseList = null;               // committed list: [{id, data}, …] — ids stay stable across ops
 let speed = 1;
@@ -299,52 +304,51 @@ function stageRect(el) {
 }
 const nodeEl = id => stage.querySelector(`.node[data-id="${id}"]`);
 
-/* forward (next) link: upper lane, leaves the next cell rightward */
+/* forward (next) link — upper lane.
+   Starts ON the source node's next pointer (the dot in the NEXT cell) and
+   lands ON the target node's NEXT cell, never on the middle of the box. */
 function fPath(fromEl, toEl) {
-  const a = stageRect(fromEl), b = stageRect(toEl);
-  const sx = a.x + a.w - 6, sy = a.y + NEXT_LANE;
-  const tx = b.x - 3, ty = b.y + NEXT_LANE;
-  const sameRow = Math.abs(sy - ty) < 8;
-  if (sameRow && tx > sx && tx - sx < GAP + 58) {
+  const a = stageRect(nextDot(fromEl)), b = stageRect(nextCell(toEl));
+  const sx = a.x + a.w + 3, sy = a.y + a.h / 2;
+  const tx = b.x - 4,       ty = b.y + b.h / 2;
+  const sameLane = Math.abs(sy - ty) < 8;
+  if (sameLane && tx > sx && tx - sx < GAP + 70) {
     return `M ${sx} ${sy} L ${tx} ${ty}`;
   }
-  if (sameRow && tx > sx) {                          // skipping node(s): arc above
-    return `M ${sx} ${sy - 6} C ${sx + 60} ${sy - 40}, ${tx - 60} ${ty - 40}, ${tx + 1} ${ty - 6}`;
+  if (sameLane && tx > sx) {                         // skipping node(s): arc above
+    return `M ${sx} ${sy - 5} C ${sx + 60} ${sy - 38}, ${tx - 60} ${ty - 38}, ${tx + 1} ${ty - 5}`;
   }
-  if (ty < sy - 40) {                                // target on the row above
-    const ex = b.x + b.w * 0.3, ey = b.y + b.h + 3;
-    return `M ${sx} ${sy} C ${sx + 55} ${sy}, ${ex} ${ey + 55}, ${ex} ${ey}`;
+  if (sameLane) {                                    // target to the LEFT: arc above, back
+    return `M ${sx} ${sy - 5} C ${sx + 50} ${sy - 44}, ${tx - 50} ${ty - 44}, ${tx + 1} ${ty - 5}`;
   }
-  if (ty > sy + 40) {                                // target on the row below
-    const ex = b.x + b.w * 0.3, ey = b.y - 3;
-    return `M ${sx} ${sy} C ${sx + 55} ${sy}, ${ex} ${ey - 55}, ${ex} ${ey}`;
-  }
-  const dx = Math.max(46, Math.abs(tx - sx) / 2);
-  return `M ${sx} ${sy} C ${sx + dx} ${sy}, ${tx - dx} ${ty}, ${tx} ${ty}`;
+  // another row (a floating new node): rise to the target's lane first, then
+  // run in horizontally so the head still lands square on the NEXT cell
+  const dy = ty - sy, ax = tx - 58;
+  return `M ${sx} ${sy} C ${sx + 34} ${sy + dy * 0.35}, ${ax} ${ty - dy * 0.55}, ${ax} ${ty} L ${tx} ${ty}`;
 }
 
-/* backward (prev) link: lower lane, leaves the prev cell leftward */
+/* backward (prev) link — lower lane.
+   Starts ON the source node's prev pointer (the dot sits on the LEFT of the
+   PREV cell, the side the arrow leaves from) and lands ON the target node's
+   PREV cell. */
 function bPath(fromEl, toEl) {
-  const a = stageRect(fromEl), b = stageRect(toEl);
-  const sx = a.x + 6, sy = a.y + a.h - PREV_LANE;
-  const tx = b.x + b.w + 3, ty = b.y + b.h - PREV_LANE;
-  const sameRow = Math.abs(sy - ty) < 8;
-  if (sameRow && tx < sx && sx - tx < GAP + 58) {
+  const a = stageRect(prevDot(fromEl)), b = stageRect(prevCell(toEl));
+  const sx = a.x - 3,       sy = a.y + a.h / 2;
+  const tx = b.x + b.w + 4, ty = b.y + b.h / 2;
+  const sameLane = Math.abs(sy - ty) < 8;
+  if (sameLane && tx < sx && sx - tx < GAP + 70) {
     return `M ${sx} ${sy} L ${tx} ${ty}`;
   }
-  if (sameRow && tx < sx) {                          // skipping node(s): arc below
-    return `M ${sx} ${sy + 6} C ${sx - 60} ${sy + 40}, ${tx + 60} ${ty + 40}, ${tx - 1} ${ty + 6}`;
+  if (sameLane && tx < sx) {                         // skipping node(s): arc below
+    return `M ${sx} ${sy + 5} C ${sx - 60} ${sy + 38}, ${tx + 60} ${ty + 38}, ${tx - 1} ${ty + 5}`;
   }
-  if (ty < sy - 40) {                                // target on the row above
-    const ex = b.x + b.w * 0.7, ey = b.y + b.h + 3;
-    return `M ${sx} ${sy} C ${sx - 55} ${sy}, ${ex} ${ey + 55}, ${ex} ${ey}`;
+  if (sameLane) {                                    // target to the RIGHT: arc below, back
+    return `M ${sx} ${sy + 5} C ${sx - 50} ${sy + 44}, ${tx + 50} ${ty + 44}, ${tx - 1} ${ty + 5}`;
   }
-  if (ty > sy + 40) {                                // target on the row below
-    const ex = b.x + b.w * 0.7, ey = b.y - 3;
-    return `M ${sx} ${sy} C ${sx - 55} ${sy}, ${ex} ${ey - 55}, ${ex} ${ey}`;
-  }
-  const dx = Math.max(46, Math.abs(tx - sx) / 2);
-  return `M ${sx} ${sy} C ${sx - dx} ${sy}, ${tx + dx} ${ty}, ${tx} ${ty}`;
+  // another row: drop to the target's lane first, then run in horizontally so
+  // the head still lands square on the PREV cell
+  const dy = ty - sy, ax = tx + 58;
+  return `M ${sx} ${sy} C ${sx - 34} ${sy + dy * 0.35}, ${ax} ${ty - dy * 0.55}, ${ax} ${ty} L ${tx} ${ty}`;
 }
 
 function refPath(labelEl, targetEl) {

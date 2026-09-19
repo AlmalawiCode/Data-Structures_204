@@ -326,6 +326,9 @@ body {
   color: #94a3b8;
   border-top: 2px dashed #cbd5e1;
   border-radius: 0 0 9px 9px;
+  /* mirror the cell so the prev POINTER sits on the left — the side its
+     arrow leaves from — exactly as the next pointer sits on the right */
+  flex-direction: row-reverse;
 }
 .node .fname {
   font-size: .62rem;
