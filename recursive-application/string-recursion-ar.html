@@ -551,11 +551,12 @@
         .demo-panels, .stack-box, .stack-label, .stack-frames, .stack-frame, .frame-name,
         .return-panel, .return-entries, .return-entry,
         .bs-array-wrapper, .bs-array, .bs-cell, .bs-value, .bs-index, .bs-ptr,
+        .definition,
         .bs-legend, .bs-leg-item, .bs-log-table,
         [id$="-code-trace"] {
             direction: ltr;
         }
-        pre, .code-container, .code-block, .stack-frame, .return-entry, [id$="-code-trace"] { text-align: left; }
+        pre, .definition, .code-container, .code-block, .stack-frame, .return-entry, [id$="-code-trace"] { text-align: left; }
         code { unicode-bidi: embed; }
         /* Short mixed Arabic/code lines take their base direction from their
            first strong character, so an Arabic phrase reads right-to-left while
@@ -655,8 +656,8 @@
         </div>
 
         <div class="definition">
-            printChars("") &rarr; لا تفعل شيئًا &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(الحالة الأساسية)</span><br>
-            printChars(s)&nbsp; &rarr; اطبع s.charAt(0)، ثم printChars(s.substring(1)) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(الحالة العودية)</span>
+            printChars("") &rarr; do nothing &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
+            printChars(s)&nbsp; &rarr; print s.charAt(0), then printChars(s.substring(1)) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(recursive case)</span>
         </div>
 
         <div class="code-container">
@@ -727,10 +728,10 @@
         </div>
 
         <div class="definition">
-            printReverse("") &rarr; لا تفعل شيئًا &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(الحالة الأساسية)</span><br>
-            printReverse(s)&nbsp; &rarr; printReverse(s.substring(1))، ثم اطبع s.charAt(0) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(الحالة العودية)</span><br>
+            printReverse("") &rarr; do nothing &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
+            printReverse(s)&nbsp; &rarr; printReverse(s.substring(1)), then print s.charAt(0) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(recursive case)</span><br>
             <br>
-            <span style="color:#e65100;">لاحظ الفرق الجوهري: الاستدعاء العودي يأتي قبل الطباعة!</span>
+            <span style="color:#e65100;">Note the crucial difference: the recursive call comes BEFORE the print!</span>
         </div>
 
         <div class="code-container">
@@ -802,8 +803,8 @@
         </div>
 
         <div class="definition">
-            countChar("", ch) = 0 &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(الحالة الأساسية)</span><br>
-            countChar(s, ch)&nbsp; = (s.charAt(0)==ch ? 1 : 0) + countChar(s.substring(1), ch) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(الحالة العودية)</span>
+            countChar("", ch) = 0 &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
+            countChar(s, ch)&nbsp; = (s.charAt(0)==ch ? 1 : 0) + countChar(s.substring(1), ch) &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(recursive case)</span>
         </div>
 
         <div class="code-container">
@@ -874,7 +875,7 @@
         </div>
 
         <div class="definition">
-            replaceChar("", old, new) = "" &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(الحالة الأساسية)</span><br>
+            replaceChar("", old, new) = "" &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
             replaceChar(s, old, new)&nbsp; = (s.charAt(0)==old ? new : s.charAt(0)) + replaceChar(s.substring(1), old, new)
         </div>
 
@@ -946,7 +947,7 @@
         </div>
 
         <div class="definition">
-            removeChar("", ch) = "" &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(الحالة الأساسية)</span><br>
+            removeChar("", ch) = "" &nbsp;&nbsp;&nbsp;<span style="color:#4caf50;">(base case)</span><br>
             removeChar(s, ch)&nbsp; = (s.charAt(0)==ch ? "" : ""+s.charAt(0)) + removeChar(s.substring(1), ch)
         </div>
 
@@ -1019,13 +1020,13 @@
         </div>
 
         <div class="definition">
-            البحث الثنائي في مصفوفة مرتّبة arr[] عن الهدف target:<br>
-            &nbsp;&nbsp;- نحتفظ بمؤشرين: low = 0, high = arr.length - 1<br>
-            &nbsp;&nbsp;- نحسب mid = (low + high) / 2<br>
-            &nbsp;&nbsp;- إذا كان arr[mid] == target: وُجد! نُرجع mid<br>
-            &nbsp;&nbsp;- إذا كان arr[mid] &lt; target: نبحث في النصف الأيمن &rarr; low = mid + 1<br>
-            &nbsp;&nbsp;- إذا كان arr[mid] &gt; target: نبحث في النصف الأيسر &rarr; high = mid - 1<br>
-            &nbsp;&nbsp;- إذا كان low &gt; high: غير موجود &rarr; return -1
+            Binary Search on sorted array arr[], searching for target:<br>
+            &nbsp;&nbsp;- Maintain pointers: low = 0, high = arr.length - 1<br>
+            &nbsp;&nbsp;- Compute mid = (low + high) / 2<br>
+            &nbsp;&nbsp;- If arr[mid] == target: FOUND! Return mid<br>
+            &nbsp;&nbsp;- If arr[mid] &lt; target: search RIGHT half &rarr; low = mid + 1<br>
+            &nbsp;&nbsp;- If arr[mid] &gt; target: search LEFT half &rarr; high = mid - 1<br>
+            &nbsp;&nbsp;- If low &gt; high: NOT FOUND &rarr; return -1
         </div>
 
         <!-- 7.1 Iterative -->
@@ -1478,19 +1479,19 @@ function resetDemo(name) {
 registerDemo('pch', [
     { action:'push', frameText:'main()', frameClass:'main-frame',
       narration:'يبدأ البرنامج. <strong>main()</strong> تستدعي <strong>printChars("JAVA")</strong>.' },
-    { action:'push', frameText:'<div class="frame-name">printChars("JAVA")</div><div class="frame-expr">طباعة \'J\' &rarr; استدعاء("AVA")</div>', frameClass:'depth-1',
-      returnEntry:"طباعة \u2192 'J'",
+    { action:'push', frameText:'<div class="frame-name">printChars("JAVA")</div><div class="frame-expr">print \'J\' &rarr; call("AVA")</div>', frameClass:'depth-1',
+      returnEntry:"print \u2192 'J'",
       narration:'<strong>printChars("JAVA")</strong>: ليست فارغة! نطبع الحرف الأول <strong>\'J\'</strong>، ثم نستدعي printChars("AVA").' },
-    { action:'push', frameText:'<div class="frame-name">printChars("AVA")</div><div class="frame-expr">طباعة \'A\' &rarr; استدعاء("VA")</div>', frameClass:'depth-2',
-      returnEntry:"طباعة \u2192 'A'",
+    { action:'push', frameText:'<div class="frame-name">printChars("AVA")</div><div class="frame-expr">print \'A\' &rarr; call("VA")</div>', frameClass:'depth-2',
+      returnEntry:"print \u2192 'A'",
       narration:'<strong>printChars("AVA")</strong>: ليست فارغة! نطبع الحرف الأول <strong>\'A\'</strong>، ثم نستدعي printChars("VA").' },
-    { action:'push', frameText:'<div class="frame-name">printChars("VA")</div><div class="frame-expr">طباعة \'V\' &rarr; استدعاء("A")</div>', frameClass:'depth-3',
-      returnEntry:"طباعة \u2192 'V'",
+    { action:'push', frameText:'<div class="frame-name">printChars("VA")</div><div class="frame-expr">print \'V\' &rarr; call("A")</div>', frameClass:'depth-3',
+      returnEntry:"print \u2192 'V'",
       narration:'<strong>printChars("VA")</strong>: ليست فارغة! نطبع الحرف الأول <strong>\'V\'</strong>، ثم نستدعي printChars("A").' },
-    { action:'push', frameText:'<div class="frame-name">printChars("A")</div><div class="frame-expr">طباعة \'A\' &rarr; استدعاء("")</div>', frameClass:'depth-4',
-      returnEntry:"طباعة \u2192 'A'",
+    { action:'push', frameText:'<div class="frame-name">printChars("A")</div><div class="frame-expr">print \'A\' &rarr; call("")</div>', frameClass:'depth-4',
+      returnEntry:"print \u2192 'A'",
       narration:'<strong>printChars("A")</strong>: ليست فارغة! نطبع الحرف الأول <strong>\'A\'</strong>، ثم نستدعي printChars("").' },
-    { action:'push', frameText:'<div class="frame-name">printChars("")</div><div class="frame-expr">return (فارغة!)</div>', frameClass:'base-frame',
+    { action:'push', frameText:'<div class="frame-name">printChars("")</div><div class="frame-expr">return (empty!)</div>', frameClass:'base-frame',
       narration:'<strong>printChars("")</strong>: السلسلة فارغة! <strong>الحالة الأساسية!</strong> تعود فورًا. تتوقف العودية هنا.' },
     { action:'pop',
       narration:'<strong>printChars("")</strong> تعود. أنهت printChars("A") استدعاءها العودي &mdash; وقد انتهت الآن.' },
@@ -1500,7 +1501,7 @@ registerDemo('pch', [
       narration:'<strong>printChars("VA")</strong> انتهت تمامًا. تعود إلى printChars("AVA").' },
     { action:'pop',
       narration:'<strong>printChars("AVA")</strong> انتهت تمامًا. تعود إلى printChars("JAVA").' },
-    { action:'pop', returnEntry:'\u2713 الناتج: J  A  V  A', isFinal:true,
+    { action:'pop', returnEntry:'\u2713 Output: J  A  V  A', isFinal:true,
       narration:'<strong>printChars("JAVA")</strong> انتهت تمامًا. تعود إلى main(). طُبعت كل الحروف من اليسار إلى اليمين: <strong>J &rarr; A &rarr; V &rarr; A</strong>' },
     { action:'pop',
       narration:'<strong>main()</strong> تنتهي. الناتج: طُبعت JAVA حرفًا حرفًا من اليسار إلى اليمين.' }
@@ -1510,29 +1511,29 @@ registerDemo('pch', [
 registerDemo('prv', [
     { action:'push', frameText:'main()', frameClass:'main-frame',
       narration:'يبدأ البرنامج. <strong>main()</strong> تستدعي <strong>printReverse("JAVA")</strong>.' },
-    { action:'push', frameText:'<div class="frame-name">printReverse("JAVA")</div><div class="frame-expr">استدعاء("AVA") &rarr; ثم طباعة \'J\'</div>', frameClass:'depth-1',
+    { action:'push', frameText:'<div class="frame-name">printReverse("JAVA")</div><div class="frame-expr">call("AVA") &rarr; then print \'J\'</div>', frameClass:'depth-1',
       narration:'<strong>printReverse("JAVA")</strong>: ليست فارغة! تستدعي أولًا printReverse("AVA") عوديًا. سيُطبع \'J\' لاحقًا، عند العودة.' },
-    { action:'push', frameText:'<div class="frame-name">printReverse("AVA")</div><div class="frame-expr">استدعاء("VA") &rarr; ثم طباعة \'A\'</div>', frameClass:'depth-2',
+    { action:'push', frameText:'<div class="frame-name">printReverse("AVA")</div><div class="frame-expr">call("VA") &rarr; then print \'A\'</div>', frameClass:'depth-2',
       narration:'<strong>printReverse("AVA")</strong>: ليست فارغة! تستدعي أولًا printReverse("VA"). ينتظر \'A\' حتى العودة.' },
-    { action:'push', frameText:'<div class="frame-name">printReverse("VA")</div><div class="frame-expr">استدعاء("A") &rarr; ثم طباعة \'V\'</div>', frameClass:'depth-3',
+    { action:'push', frameText:'<div class="frame-name">printReverse("VA")</div><div class="frame-expr">call("A") &rarr; then print \'V\'</div>', frameClass:'depth-3',
       narration:'<strong>printReverse("VA")</strong>: ليست فارغة! تستدعي أولًا printReverse("A"). ينتظر \'V\' حتى العودة.' },
-    { action:'push', frameText:'<div class="frame-name">printReverse("A")</div><div class="frame-expr">استدعاء("") &rarr; ثم طباعة \'A\'</div>', frameClass:'depth-4',
+    { action:'push', frameText:'<div class="frame-name">printReverse("A")</div><div class="frame-expr">call("") &rarr; then print \'A\'</div>', frameClass:'depth-4',
       narration:'<strong>printReverse("A")</strong>: ليست فارغة! تستدعي أولًا printReverse(""). ينتظر \'A\' حتى العودة.' },
-    { action:'push', frameText:'<div class="frame-name">printReverse("")</div><div class="frame-expr">return (فارغة!)</div>', frameClass:'base-frame',
+    { action:'push', frameText:'<div class="frame-name">printReverse("")</div><div class="frame-expr">return (empty!)</div>', frameClass:'base-frame',
       narration:'<strong>printReverse("")</strong>: سلسلة فارغة! <strong>الحالة الأساسية!</strong> تعود فورًا. الآن يبدأ المكدس بالرجوع!' },
-    { action:'pop', returnEntry:"طباعة \u2192 'A'",
-      topFrameUpdate:'<div class="frame-name">printReverse("A")</div><div class="frame-expr">انتهى الاستدعاء &rarr; طباعة \'A\'</div>',
+    { action:'pop', returnEntry:"print \u2192 'A'",
+      topFrameUpdate:'<div class="frame-name">printReverse("A")</div><div class="frame-expr">call done &rarr; printing \'A\'</div>',
       narration:'<strong>printReverse("")</strong> تعود. الآن تستأنف <strong>printReverse("A")</strong> وتطبع حرفها: <strong>\'A\'</strong>.' },
-    { action:'pop', returnEntry:"طباعة \u2192 'V'",
-      topFrameUpdate:'<div class="frame-name">printReverse("VA")</div><div class="frame-expr">انتهى الاستدعاء &rarr; طباعة \'V\'</div>',
+    { action:'pop', returnEntry:"print \u2192 'V'",
+      topFrameUpdate:'<div class="frame-name">printReverse("VA")</div><div class="frame-expr">call done &rarr; printing \'V\'</div>',
       narration:'<strong>printReverse("A")</strong> انتهت. تستأنف <strong>printReverse("VA")</strong> وتطبع: <strong>\'V\'</strong>.' },
-    { action:'pop', returnEntry:"طباعة \u2192 'A'",
-      topFrameUpdate:'<div class="frame-name">printReverse("AVA")</div><div class="frame-expr">انتهى الاستدعاء &rarr; طباعة \'A\'</div>',
+    { action:'pop', returnEntry:"print \u2192 'A'",
+      topFrameUpdate:'<div class="frame-name">printReverse("AVA")</div><div class="frame-expr">call done &rarr; printing \'A\'</div>',
       narration:'<strong>printReverse("VA")</strong> انتهت. تستأنف <strong>printReverse("AVA")</strong> وتطبع: <strong>\'A\'</strong>.' },
-    { action:'pop', returnEntry:"طباعة \u2192 'J'",
-      topFrameUpdate:'<div class="frame-name">printReverse("JAVA")</div><div class="frame-expr">انتهى الاستدعاء &rarr; طباعة \'J\'</div>',
+    { action:'pop', returnEntry:"print \u2192 'J'",
+      topFrameUpdate:'<div class="frame-name">printReverse("JAVA")</div><div class="frame-expr">call done &rarr; printing \'J\'</div>',
       narration:'<strong>printReverse("AVA")</strong> انتهت. تستأنف <strong>printReverse("JAVA")</strong> وتطبع: <strong>\'J\'</strong>.' },
-    { action:'pop', returnEntry:'\u2713 الناتج: A  V  A  J', isFinal:true,
+    { action:'pop', returnEntry:'\u2713 Output: A  V  A  J', isFinal:true,
       narration:'<strong>printReverse("JAVA")</strong> انتهت. تعود إلى main(). طُبعت الحروف <em>بترتيب معكوس</em>: <strong>A &rarr; V &rarr; A &rarr; J</strong>' },
     { action:'pop',
       narration:'<strong>main()</strong> تنتهي. معكوس "JAVA" هو: AVAJ. لاحظ كيف عمل مكدس الاستدعاءات كمخزن مؤقت فعكس الترتيب!' }
@@ -1550,7 +1551,7 @@ registerDemo('cch', [
       narration:'<strong>countChar("LL")</strong>: الحرف الأول <span dir="ltr">\'L\' == \'L\'</span>! تطابق! يساهم بـ <strong>1</strong>. تستدعي countChar("L",\'L\').' },
     { action:'push', frameText:'<div class="frame-name">cch("L",\'L\')</div><div class="frame-expr">\'L\'==\'L\': 1 + cch("",\'L\')</div>', frameClass:'depth-4',
       narration:'<strong>countChar("L")</strong>: الحرف الأول <span dir="ltr">\'L\' == \'L\'</span>! تطابق! يساهم بـ <strong>1</strong>. تستدعي countChar("",\'L\').' },
-    { action:'push', frameText:'<div class="frame-name">cch("",\'L\')</div><div class="frame-expr">return 0 (فارغة!)</div>', frameClass:'base-frame',
+    { action:'push', frameText:'<div class="frame-name">cch("",\'L\')</div><div class="frame-expr">return 0 (empty!)</div>', frameClass:'base-frame',
       narration:'<strong>countChar("")</strong>: سلسلة فارغة! <strong>الحالة الأساسية!</strong> تُرجع <strong>0</strong>. لم يبقَ حروف للفحص.' },
     { action:'pop', returnEntry:'countChar("") = 0',
       topFrameUpdate:'<div class="frame-name">cch("L",\'L\')</div><div class="frame-expr">1 + <span class="resolved">0</span> = 1</div>',
@@ -1584,7 +1585,7 @@ registerDemo('rpl', [
       narration:'<strong>replaceChar("LO")</strong>: <span dir="ltr">\'L\' == \'L\'</span>! نستبدله بـ \'R\'. تستدعي replaceChar("O")...' },
     { action:'push', frameText:'<div class="frame-name">rpl("O",\'L\',\'R\')</div><div class="frame-expr">\'O\'&ne;\'L\': "O" + rpl("")</div>', frameClass:'depth-5',
       narration:'<strong>replaceChar("O")</strong>: <span dir="ltr">\'O\' &ne; \'L\'</span>. نُبقي \'O\'. تستدعي replaceChar("")...' },
-    { action:'push', frameText:'<div class="frame-name">rpl("",\'L\',\'R\')</div><div class="frame-expr">return "" (فارغة!)</div>', frameClass:'base-frame',
+    { action:'push', frameText:'<div class="frame-name">rpl("",\'L\',\'R\')</div><div class="frame-expr">return "" (empty!)</div>', frameClass:'base-frame',
       narration:'<strong>replaceChar("")</strong>: سلسلة فارغة! <strong>الحالة الأساسية!</strong> تُرجع <strong>""</strong>.' },
     { action:'pop', returnEntry:'replaceChar("") = ""',
       topFrameUpdate:'<div class="frame-name">rpl("O",\'L\',\'R\')</div><div class="frame-expr">"O" + <span class="resolved">""</span> = "O"</div>',
@@ -1621,7 +1622,7 @@ registerDemo('rmc', [
       narration:'<strong>removeChar("LO")</strong>: <span dir="ltr">\'L\' == \'L\'</span>! نحذفه (نساهم بـ ""). تستدعي removeChar("O")...' },
     { action:'push', frameText:'<div class="frame-name">rmc("O",\'L\')</div><div class="frame-expr">\'O\'&ne;\'L\': "O" + rmc("")</div>', frameClass:'depth-5',
       narration:'<strong>removeChar("O")</strong>: <span dir="ltr">\'O\' &ne; \'L\'</span>. نُبقي \'O\'. تستدعي removeChar("")...' },
-    { action:'push', frameText:'<div class="frame-name">rmc("",\'L\')</div><div class="frame-expr">return "" (فارغة!)</div>', frameClass:'base-frame',
+    { action:'push', frameText:'<div class="frame-name">rmc("",\'L\')</div><div class="frame-expr">return "" (empty!)</div>', frameClass:'base-frame',
       narration:'<strong>removeChar("")</strong>: سلسلة فارغة! <strong>الحالة الأساسية!</strong> تُرجع <strong>""</strong>.' },
     { action:'pop', returnEntry:'removeChar("") = ""',
       topFrameUpdate:'<div class="frame-name">rmc("O",\'L\')</div><div class="frame-expr">"O" + <span class="resolved">""</span> = "O"</div>',
@@ -1648,11 +1649,11 @@ registerDemo('rmc', [
 registerDemo('bsr', [
     { action:'push', frameText:'main()', frameClass:'main-frame',
       narration:'يبدأ البرنامج. <strong>main()</strong> تستدعي <strong>binarySearchRec(arr, 0, 6, 16)</strong>. المصفوفة: <span dir="ltr">[2,5,8,12,16,23,38]</span>' },
-    { action:'push', frameText:'<div class="frame-name">bsR(0, 6, 16)</div><div class="frame-expr">mid=3, arr[3]=12 &lt; 16 &rarr; يمين</div>', frameClass:'depth-1',
+    { action:'push', frameText:'<div class="frame-name">bsR(0, 6, 16)</div><div class="frame-expr">mid=3, arr[3]=12 &lt; 16 &rarr; right</div>', frameClass:'depth-1',
       narration:'<strong>bsR(0,6,16)</strong>: <span dir="ltr">low=0, high=6, mid=3</span>. <span dir="ltr">arr[3]=<strong>12</strong></span>. بما أن <span dir="ltr">12 &lt; 16</span>، فالهدف في <em>النصف الأيمن</em>. نستدعي bsR(<strong>4</strong>,6,16).' },
-    { action:'push', frameText:'<div class="frame-name">bsR(4, 6, 16)</div><div class="frame-expr">mid=5, arr[5]=23 &gt; 16 &rarr; يسار</div>', frameClass:'depth-2',
+    { action:'push', frameText:'<div class="frame-name">bsR(4, 6, 16)</div><div class="frame-expr">mid=5, arr[5]=23 &gt; 16 &rarr; left</div>', frameClass:'depth-2',
       narration:'<strong>bsR(4,6,16)</strong>: <span dir="ltr">low=4, high=6, mid=5</span>. <span dir="ltr">arr[5]=<strong>23</strong></span>. بما أن <span dir="ltr">23 &gt; 16</span>، فالهدف في <em>النصف الأيسر</em>. نستدعي bsR(4,<strong>4</strong>,16).' },
-    { action:'push', frameText:'<div class="frame-name">bsR(4, 4, 16)</div><div class="frame-expr">mid=4, arr[4]=16 &rarr; وُجد!</div>', frameClass:'base-frame',
+    { action:'push', frameText:'<div class="frame-name">bsR(4, 4, 16)</div><div class="frame-expr">mid=4, arr[4]=16 &rarr; FOUND!</div>', frameClass:'base-frame',
       narration:'<strong>bsR(4,4,16)</strong>: <span dir="ltr">low=4, high=4, mid=4</span>. <span dir="ltr">arr[4]=<strong>16</strong></span>. <span dir="ltr">16 == 16</span>! <strong>الحالة الأساسية! وُجد!</strong> تُرجع الفهرس <strong>4</strong>.' },
     { action:'pop', returnEntry:'bsR(4,4,16) = 4',
       topFrameUpdate:'<div class="frame-name">bsR(4, 6, 16)</div><div class="frame-expr">return <span class="resolved">4</span></div>',
@@ -1683,7 +1684,7 @@ const bsIterStates = [
       logRow:{step:2, low:4, high:6, mid:5, val:23, cmp:'23 &gt; 16', action:'high = 4'} },
     { low:4, high:4, mid:4, eliminated:[0,1,2,3,5,6], found:-1,
       narration:'<strong>التكرار 3:</strong> <span dir="ltr">low=4, high=4</span>. <span dir="ltr">mid = (4+4)/2 = <strong>4</strong></span>. <span dir="ltr">arr[4] = <strong>16</strong></span>. <span dir="ltr">16 == 16</span>! <strong>وُجد الهدف!</strong> نُرجع الفهرس 4.',
-      logRow:{step:3, low:4, high:4, mid:4, val:16, cmp:'16 == 16', action:'وُجد عند الفهرس 4! \u2713', isFound:true} },
+      logRow:{step:3, low:4, high:4, mid:4, val:16, cmp:'16 == 16', action:'\u2713 وُجد عند الفهرس 4', isFound:true} },
     { low:-1, high:-1, mid:-1, eliminated:[0,1,2,3,5,6], found:4,
       narration:'<strong>اكتمل البحث!</strong> وُجد الهدف <strong>16</strong> عند الفهرس <strong>4</strong>. المجموع: <strong>3 تكرارات</strong> فقط للبحث في 7 عناصر! هذا هو O(log n).' }
 ];
@@ -1755,7 +1756,7 @@ function bsIterRenderArray(state) {
 
         const ptrs = [];
         if (state.found === i) {
-            ptrs.push('وُجد!');
+            ptrs.push('FOUND!');
         } else if (!state.eliminated || !state.eliminated.includes(i)) {
             if (state.low === i) ptrs.push('low');
             if (state.mid === i) ptrs.push('mid');

@@ -904,7 +904,7 @@
                         <div class="demo-output-panel">
                             <h4>المخرجات</h4>
                             <div class="output-console" id="simple-output">
-                                <div class="output-header">--- الطرفية (Console) ---</div>
+                                <div class="output-header">--- Console ---</div>
                             </div>
                         </div>
                     </div>
@@ -948,7 +948,7 @@
                 <div class="demo-area">
                     <h3>معاينة المخرجات</h3>
                     <div class="output-console">
-                        <div class="output-header">--- الطرفية (Console) ---</div>
+                        <div class="output-header">--- Console ---</div>
                         <div class="output-line">Counter: 1</div>
                         <div class="output-line">Counter: 2</div>
                         <div class="output-line">Counter: 3</div>
@@ -1052,7 +1052,7 @@
                         <div class="demo-output-panel">
                             <h4>المخرجات</h4>
                             <div class="output-console" id="counter-output">
-                                <div class="output-header">--- الطرفية (Console) ---</div>
+                                <div class="output-header">--- Console ---</div>
                             </div>
                         </div>
                     </div>
@@ -1142,7 +1142,7 @@
                         <div class="demo-output-panel">
                             <h4>المخرجات</h4>
                             <div class="output-console" id="recursive-output">
-                                <div class="output-header">--- الطرفية (Console) ---</div>
+                                <div class="output-header">--- Console ---</div>
                             </div>
                         </div>
                     </div>
@@ -1199,7 +1199,7 @@
                         <div class="demo-output-panel">
                             <h4>المخرجات</h4>
                             <div class="output-console" id="overflow-output" style="max-height: 200px; overflow-y: auto;">
-                                <div class="output-header">--- الطرفية (Console) ---</div>
+                                <div class="output-header">--- Console ---</div>
                             </div>
                             <div id="overflow-error" style="display:none; margin-top:15px;">
                                 <div class="warning" style="background: #ffebee; border-right-color: #f44336;">
@@ -1543,7 +1543,7 @@
         function resetSimpleAnimation() {
             simpleCurrentStep = 0;
             document.getElementById('simple-stack').innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
-            document.getElementById('simple-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
+            document.getElementById('simple-output').innerHTML = '<div class="output-header">--- Console ---</div>';
             clearHighlights('s', 7);
             setNarration('simple-narration', 'اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.');
             setStep('simple-step', '');
@@ -1658,7 +1658,7 @@
         function resetCounterAnimation() {
             counterCurrentStep = 0;
             document.getElementById('counter-stack').innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
-            document.getElementById('counter-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
+            document.getElementById('counter-output').innerHTML = '<div class="output-header">--- Console ---</div>';
             clearHighlights('c', 7);
             setNarration('counter-narration', 'اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.');
             setStep('counter-step', '');
@@ -1754,7 +1754,7 @@
         function resetRecursiveAnimation() {
             recursiveCurrentStep = 0;
             document.getElementById('recursive-stack').innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
-            document.getElementById('recursive-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
+            document.getElementById('recursive-output').innerHTML = '<div class="output-header">--- Console ---</div>';
             clearHighlights('r', 6);
             setNarration('recursive-narration', 'اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.');
             setStep('recursive-step', '');
@@ -1839,7 +1839,7 @@
             stackEl.innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
             stackEl.style.borderColor = '#667eea';
             stackEl.style.animation = '';
-            document.getElementById('overflow-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
+            document.getElementById('overflow-output').innerHTML = '<div class="output-header">--- Console ---</div>';
             document.getElementById('overflow-error').style.display = 'none';
             setNarration('overflow-narration', 'اضغط "تشغيل" للبدء، ثم انقر "التالي" لترى كيف يملأ كل استدعاء المكدس.');
             setStep('overflow-step', '');
