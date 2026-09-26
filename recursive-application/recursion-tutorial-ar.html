@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recursion Tutorial</title>
+    <title>العودية (Recursion)</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +37,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -137,7 +162,7 @@
         }
 
         .teacher-says::before {
-            content: "Professor: ";
+            content: "المعلم: ";
             font-weight: bold;
             color: #7b1fa2;
         }
@@ -151,7 +176,7 @@
         }
 
         .student-says::before {
-            content: "Student: ";
+            content: "الطالب: ";
             font-weight: bold;
             color: #1565c0;
         }
@@ -669,24 +694,6 @@
             z-index: 1000;
         }
 
-        .lang-switch-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            padding: 10px 22px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .lang-switch-btn:hover { background: #667eea; color: white; }
-
         .back-home-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
@@ -736,18 +743,77 @@
         section {
             animation: fadeInUp 0.5s ease;
         }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .highlight-box  { border-left: none; border-right: 5px solid #667eea; }
+        .definition     { border-left: none; border-right: 5px solid #4caf50; }
+        .important      { border-left: none; border-right: 5px solid #ffc107; }
+        .warning        { border-left: none; border-right: 5px solid #f44336; }
+        .teacher-says   { border-left: none; border-right: 5px solid #9c27b0; }
+        .student-says   { border-left: none; border-right: 5px solid #2196f3; }
+
+        ul, ol { margin-left: 0; margin-right: 30px; }
+        .approach-card ul { margin-right: 0; }
+        .approach-card ul li { padding-left: 0; padding-right: 25px; }
+        .approach-card ul li::before { left: auto; right: 0; }
+
+        /* Code, the call-stack boxes, the code-execution panels and the
+           console always stay left-to-right so frames, arrows and program
+           output read exactly as in the English page. */
+        pre, code, .inline-code, .code-container, .code-header, .code-block,
+        .stack-container, .stack-visual, .stack-box, .stack-box-label,
+        .stack-box-empty, .stack-frame, .stack-pointer, .demo-stack-panel,
+        .output-console, .output-header, .output-line,
+        .memory-diagram, .memory-section, .memory-block,
+        .demo-code-panel > div[style], .exec-line,
+        .approach-card > div[style], svg {
+            direction: ltr;
+        }
+        pre, .code-container, .code-block, .output-console,
+        .demo-code-panel > div[style], .approach-card > div[style] { text-align: left; }
+        code { unicode-bidi: embed; }
+        .stack-box-label { letter-spacing: 0; }
+
+        /* The "what is happening" panel of the five-counter animation is
+           Arabic prose (not code), so it reads right-to-left. */
+        #counter-code-lines, #counter-code-lines .exec-line { direction: rtl; text-align: right; }
+        #counter-code-lines .exec-line {
+            font-family: 'Haradh', 'Courier New', monospace;
+            font-size: 1em;
+        }
+        #counter-code-lines .exec-line.active { border-left: none; border-right: 3px solid #ffd700; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
+        .lang-switch-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .lang-switch-btn:hover { background: #667eea; color: white; }
     </style>
 </head>
 <body>
-    <a href="../index.html" class="back-home-btn">Home</a>
-    <a href="recursion-tutorial-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="../index.html" class="back-home-btn">الرئيسية</a>
+    <a href="recursion-tutorial.html" class="lang-switch-btn">English</a>
     <div class="container">
         <header>
             <div class="header-content">
                 <div class="header-text">
-                    <h1>Recursion</h1>
-                    <p>Data Structures I</p>
-                    <p>Understanding the Recursive Method</p>
+                    <h1>العودية (Recursion)</h1>
+                    <p>هياكل البيانات 1</p>
+                    <p>فهم الدالة العودية (Recursive Method)</p>
                 </div>
             </div>
         </header>
@@ -756,40 +822,40 @@
 
             <!-- ===================== SECTION 1: Introduction ===================== -->
             <section id="introduction">
-                <h2>1. Introduction</h2>
+                <h2>1. مقدمة</h2>
 
                 <div class="teacher-says">
-                    Today, my students, we are going to learn something which is maybe new for you. Something called <strong>Recursion</strong> or the <strong>Recursive Method</strong>. But before we jump into this concept, I think we need to discuss something important first.
+                    اليوم يا طلابي سنتعلم شيئًا قد يكون جديدًا عليكم، شيئًا يُسمّى <strong>العودية (Recursion)</strong> أو <strong>الدالة العودية (Recursive Method)</strong>. لكن قبل أن نقفز إلى هذا المفهوم، أعتقد أننا بحاجة إلى مناقشة أمر مهم أولًا.
                 </div>
 
-                <p>Before we can understand recursion, we need to revisit something fundamental: <strong>how programs actually run in memory</strong>. Once we understand this, recursion will make much more sense.</p>
+                <p>قبل أن نتمكن من فهم العودية، نحتاج إلى مراجعة أمر أساسي: <strong>كيف تعمل البرامج فعليًا في الذاكرة</strong>. وبمجرد أن نفهم ذلك، ستصبح العودية أوضح بكثير.</p>
 
                 <div class="highlight-box">
-                    <strong>What we will cover today:</strong>
+                    <strong>ما سنتناوله اليوم:</strong>
                     <ol>
-                        <li>How programs execute in memory (the Call Stack)</li>
-                        <li>Counting with loops (iterative approach)</li>
-                        <li>Counting without loops (multiple methods)</li>
-                        <li>The idea of a method calling itself</li>
-                        <li>What is Recursion?</li>
-                        <li>Iterative vs. Recursive &mdash; comparison and when to use each</li>
+                        <li>كيف تُنفَّذ البرامج في الذاكرة (مكدس الاستدعاءات Call Stack)</li>
+                        <li>العدّ باستخدام حلقات التكرار (الأسلوب التكراري Iterative)</li>
+                        <li>العدّ بدون حلقات تكرار (دوال متعددة)</li>
+                        <li>فكرة الدالة التي تستدعي نفسها</li>
+                        <li>ما هي العودية (Recursion)؟</li>
+                        <li>التكراري مقابل العودي &mdash; مقارنة ومتى نستخدم كلًّا منهما</li>
                     </ol>
                 </div>
             </section>
 
             <!-- ===================== SECTION 2: How Programs Run in Memory ===================== -->
             <section id="memory">
-                <h2>2. How Programs Run in Memory</h2>
+                <h2>2. كيف تعمل البرامج في الذاكرة</h2>
 
                 <div class="teacher-says">
-                    As we all know, when we write a program and run it, the program is loaded into memory. Let us think about this in Java.
+                    كما نعلم جميعًا، عندما نكتب برنامجًا ونشغّله، يُحمَّل البرنامج إلى الذاكرة. دعونا نفكر في ذلك بلغة Java.
                 </div>
 
-                <p>Consider a simple Java program. We have a <code>main</code> method, and inside it we call another method called <code>printing()</code> that prints <strong>"Welcome to Java"</strong>.</p>
+                <p>لنأخذ برنامج Java بسيطًا. لدينا الدالة (Method) <code>main</code>، وبداخلها نستدعي دالة أخرى تُسمّى <code>printing()</code> تطبع <strong>"Welcome to Java"</strong>.</p>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java - Simple Method Call
+                        Java - استدعاء دالة بسيط
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">MyProgram</span> {
@@ -804,21 +870,21 @@
 }</div>
                 </div>
 
-                <h3>Visualizing the Call Stack</h3>
+                <h3>تصوّر مكدس الاستدعاءات (Call Stack)</h3>
 
                 <div class="teacher-says">
-                    Now, I want you to imagine a rectangle that is open from the top. This represents the <strong>Call Stack</strong> in memory. When <code>main()</code> starts, it goes onto the stack. When <code>main()</code> calls <code>printing()</code>, the <code>printing()</code> method is placed <em>on top</em> of <code>main()</code> in the stack.
+                    الآن أريدكم أن تتخيلوا مستطيلًا مفتوحًا من الأعلى. هذا يمثّل <strong>مكدس الاستدعاءات (Call Stack)</strong> في الذاكرة. عندما تبدأ <code>main()</code> تُوضع في المكدس. وعندما تستدعي <code>main()</code> الدالة <code>printing()</code>، تُوضع الدالة <code>printing()</code> <em>فوق</em> <code>main()</code> في المكدس.
                 </div>
 
                 <div class="important">
-                    <strong>Remember:</strong> The Call Stack follows <strong>Last-In, First-Out (LIFO)</strong> order. The method on top executes first. When it finishes, it is removed (popped) from the stack, and execution returns to the method below it.
+                    <strong>تذكّر:</strong> يتبع مكدس الاستدعاءات ترتيب <strong>الأخير دخولًا هو الأول خروجًا (LIFO)</strong>. الدالة الموجودة في القمة تُنفَّذ أولًا، وعندما تنتهي تُزال (Pop) من المكدس، ويعود التنفيذ إلى الدالة التي تحتها.
                 </div>
 
                 <div class="demo-area">
-                    <h3>Animation: Simple Method Call Stack</h3>
+                    <h3>تحريك: مكدس استدعاء دالة بسيط</h3>
                     <div class="demo-layout">
                         <div class="demo-code-panel">
-                            <h4>Code Execution</h4>
+                            <h4>تنفيذ الكود</h4>
                             <div id="simple-code-lines" style="background: #2d2d2d; padding: 15px; border-radius: 8px; color: #f8f8f2;">
                                 <div class="exec-line" id="s-line-1"><span style="color:#6272a4;">// Program starts</span></div>
                                 <div class="exec-line" id="s-line-2"><span style="color:#ff79c6;">public static void</span> <span style="color:#8be9fd;">main</span>(...) {</div>
@@ -830,43 +896,43 @@
                             </div>
                         </div>
                         <div class="demo-stack-panel">
-                            <div class="stack-box-label">STACK</div>
+                            <div class="stack-box-label">المكدس (STACK)</div>
                             <div class="stack-box" id="simple-stack">
-                                <div class="stack-box-empty">( empty )</div>
+                                <div class="stack-box-empty">( فارغ )</div>
                             </div>
                         </div>
                         <div class="demo-output-panel">
-                            <h4>Output</h4>
+                            <h4>المخرجات</h4>
                             <div class="output-console" id="simple-output">
-                                <div class="output-header">--- Console ---</div>
+                                <div class="output-header">--- الطرفية (Console) ---</div>
                             </div>
                         </div>
                     </div>
-                    <div class="narration" id="simple-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+                    <div class="narration" id="simple-narration">اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.</div>
                     <div class="step-indicator" id="simple-step"></div>
                     <div class="animation-controls">
-                        <button class="btn" id="simple-run-btn" onclick="startSimpleAnimation()">Run</button>
-                        <button class="btn btn-success" id="simple-next-btn" onclick="nextSimpleStep()" style="display:none;">Next</button>
-                        <button class="btn btn-warning" onclick="resetSimpleAnimation()">Reset</button>
+                        <button class="btn" id="simple-run-btn" onclick="startSimpleAnimation()">تشغيل</button>
+                        <button class="btn btn-success" id="simple-next-btn" onclick="nextSimpleStep()" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetSimpleAnimation()">إعادة تعيين</button>
                     </div>
                 </div>
 
                 <div class="highlight-box">
-                    <strong>Key Takeaway:</strong> Every time a method is called, a new <strong>frame</strong> is pushed onto the call stack. When the method finishes, its frame is <strong>popped off</strong>. This is how the computer keeps track of where it is in the program.
+                    <strong>الخلاصة:</strong> في كل مرة تُستدعى فيها دالة، يُدفع <strong>إطار (Frame)</strong> جديد إلى مكدس الاستدعاءات. وعندما تنتهي الدالة، <strong>يُزال إطارها (Pop)</strong> من المكدس. هكذا يتتبّع الحاسوب موضعه في البرنامج.
                 </div>
             </section>
 
             <!-- ===================== SECTION 3: Counting with a Loop ===================== -->
             <section id="loop">
-                <h2>3. Counting with a Loop</h2>
+                <h2>3. العدّ باستخدام حلقة تكرار (Loop)</h2>
 
                 <div class="teacher-says">
-                    Now, let us write a simple program. I want to count from 1 to 5 and print each number. This is very simple &mdash; we use a <strong>for loop</strong>.
+                    الآن، لنكتب برنامجًا بسيطًا. أريد العدّ من 1 إلى 5 وطباعة كل رقم. هذا سهل جدًا &mdash; نستخدم <strong>حلقة for</strong>.
                 </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java - Counting with a For Loop
+                        Java - العدّ باستخدام حلقة for
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">CountLoop</span> {
@@ -880,9 +946,9 @@
                 </div>
 
                 <div class="demo-area">
-                    <h3>Output Preview</h3>
+                    <h3>معاينة المخرجات</h3>
                     <div class="output-console">
-                        <div class="output-header">--- Console ---</div>
+                        <div class="output-header">--- الطرفية (Console) ---</div>
                         <div class="output-line">Counter: 1</div>
                         <div class="output-line">Counter: 2</div>
                         <div class="output-line">Counter: 3</div>
@@ -892,29 +958,29 @@
                 </div>
 
                 <div class="definition">
-                    <strong>Simple and clean!</strong> The <code>for</code> loop repeats the print statement 5 times, incrementing <code>i</code> by 1 each time. This is the <strong>iterative</strong> approach &mdash; using repetition structures like loops.
+                    <strong>بسيط وواضح!</strong> تكرّر حلقة <code>for</code> جملة الطباعة 5 مرات، مع زيادة <code>i</code> بمقدار 1 في كل مرة. هذا هو الأسلوب <strong>التكراري (Iterative)</strong> &mdash; استخدام بنى التكرار مثل الحلقات.
                 </div>
             </section>
 
             <!-- ===================== SECTION 4: Counting WITHOUT a Loop ===================== -->
             <section id="no-loop">
-                <h2>4. What If We Don't Use a Loop?</h2>
+                <h2>4. ماذا لو لم نستخدم حلقة تكرار؟</h2>
 
                 <div class="teacher-says">
-                    OK, my students, you are happy with the loop. That is great! But now imagine... what if I tell you: <strong>do NOT use a loop</strong>. How would you count from 1 to 5?
+                    حسنًا يا طلابي، أنتم راضون عن حلقة التكرار. هذا رائع! لكن تخيّلوا الآن... ماذا لو قلت لكم: <strong>لا تستخدموا حلقة تكرار</strong>. كيف ستعدّون من 1 إلى 5؟
                 </div>
 
                 <div class="student-says">
-                    What can we use instead, Professor?
+                    ماذا يمكننا أن نستخدم بدلًا منها يا دكتور؟
                 </div>
 
                 <div class="teacher-says">
-                    Let me show you. What if I create <strong>five separate counter methods</strong>? Each method is responsible for printing one number and then calling the next method.
+                    دعوني أريكم. ماذا لو أنشأت <strong>خمس دوال عدّاد منفصلة</strong>؟ كل دالة مسؤولة عن طباعة رقم واحد ثم استدعاء الدالة التالية.
                 </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java - Five Separate Counter Methods
+                        Java - خمس دوال عدّاد منفصلة
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">CountNoLoop</span> {
@@ -956,80 +1022,80 @@
 }</div>
                 </div>
 
-                <h3>Let's Visualize the Call Stack!</h3>
+                <h3>لنتصوّر مكدس الاستدعاءات!</h3>
 
                 <div class="teacher-says">
-                    Now let me show you what happens in memory. Watch how each method goes onto the stack as it is called, and how they all come off when they finish.
+                    الآن دعوني أريكم ما يحدث في الذاكرة. راقبوا كيف تدخل كل دالة إلى المكدس عند استدعائها، وكيف تخرج جميعها عندما تنتهي.
                 </div>
 
                 <div class="demo-area">
-                    <h3>Animation: Five Counter Methods on the Stack</h3>
+                    <h3>تحريك: خمس دوال عدّاد على المكدس</h3>
                     <div class="demo-layout">
                         <div class="demo-code-panel">
-                            <h4>What's Happening</h4>
+                            <h4>ما الذي يحدث</h4>
                             <div id="counter-code-lines" style="background: #2d2d2d; padding: 15px; border-radius: 8px; color: #f8f8f2;">
-                                <div class="exec-line" id="c-line-1">main() sets n=0, calls counter1(0)</div>
-                                <div class="exec-line" id="c-line-2">counter1(0): n=1, calls counter2(1)</div>
-                                <div class="exec-line" id="c-line-3">counter2(1): n=2, calls counter3(2)</div>
-                                <div class="exec-line" id="c-line-4">counter3(2): n=3, calls counter4(3)</div>
-                                <div class="exec-line" id="c-line-5">counter4(3): n=4, calls counter5(4)</div>
-                                <div class="exec-line" id="c-line-6">counter5(4): n=5, prints 5 (last one!)</div>
-                                <div class="exec-line" id="c-line-7"><span style="color:#6272a4;">-- Unwinding: each method prints when popped --</span></div>
+                                <div class="exec-line" id="c-line-1"><span dir="ltr">main()</span> تضبط n=0 وتستدعي <span dir="ltr">counter1(0)</span></div>
+                                <div class="exec-line" id="c-line-2"><span dir="ltr">counter1(0)</span>: تصبح n=1 وتستدعي <span dir="ltr">counter2(1)</span></div>
+                                <div class="exec-line" id="c-line-3"><span dir="ltr">counter2(1)</span>: تصبح n=2 وتستدعي <span dir="ltr">counter3(2)</span></div>
+                                <div class="exec-line" id="c-line-4"><span dir="ltr">counter3(2)</span>: تصبح n=3 وتستدعي <span dir="ltr">counter4(3)</span></div>
+                                <div class="exec-line" id="c-line-5"><span dir="ltr">counter4(3)</span>: تصبح n=4 وتستدعي <span dir="ltr">counter5(4)</span></div>
+                                <div class="exec-line" id="c-line-6"><span dir="ltr">counter5(4)</span>: تصبح n=5 وتطبع 5 (الأخيرة!)</div>
+                                <div class="exec-line" id="c-line-7"><span style="color:#6272a4;">-- الانحلال (Unwinding): كل دالة تطبع عند إزالتها من المكدس --</span></div>
                             </div>
                         </div>
                         <div class="demo-stack-panel">
-                            <div class="stack-box-label">STACK</div>
+                            <div class="stack-box-label">المكدس (STACK)</div>
                             <div class="stack-box" id="counter-stack">
-                                <div class="stack-box-empty">( empty )</div>
+                                <div class="stack-box-empty">( فارغ )</div>
                             </div>
                         </div>
                         <div class="demo-output-panel">
-                            <h4>Output</h4>
+                            <h4>المخرجات</h4>
                             <div class="output-console" id="counter-output">
-                                <div class="output-header">--- Console ---</div>
+                                <div class="output-header">--- الطرفية (Console) ---</div>
                             </div>
                         </div>
                     </div>
-                    <div class="narration" id="counter-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+                    <div class="narration" id="counter-narration">اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.</div>
                     <div class="step-indicator" id="counter-step"></div>
                     <div class="animation-controls">
-                        <button class="btn" id="counter-run-btn" onclick="startCounterAnimation()">Run</button>
-                        <button class="btn btn-success" id="counter-next-btn" onclick="nextCounterStep()" style="display:none;">Next</button>
-                        <button class="btn btn-warning" onclick="resetCounterAnimation()">Reset</button>
+                        <button class="btn" id="counter-run-btn" onclick="startCounterAnimation()">تشغيل</button>
+                        <button class="btn btn-success" id="counter-next-btn" onclick="nextCounterStep()" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetCounterAnimation()">إعادة تعيين</button>
                     </div>
                 </div>
 
-                <h3>But What About 100?</h3>
+                <h3>لكن ماذا عن 100؟</h3>
 
                 <div class="teacher-says">
-                    My students, this worked well for 5 numbers. But what if I ask you to count to <strong>100</strong>? That means you need to create <strong>100 separate methods</strong>! counter1(), counter2(), counter3(), ... all the way to counter100(). This is not practical at all!
+                    يا طلابي، نجح هذا جيدًا مع 5 أرقام. لكن ماذا لو طلبت منكم العدّ حتى <strong>100</strong>؟ هذا يعني أنكم بحاجة إلى إنشاء <strong>100 دالة منفصلة</strong>! <code>counter1(), counter2(), counter3(), ...</code> وصولًا إلى <code>counter100()</code>. هذا غير عملي على الإطلاق!
                 </div>
 
                 <div class="warning">
-                    <strong>The Problem:</strong> Creating 100 copies of essentially the same method is:
+                    <strong>المشكلة:</strong> إنشاء 100 نسخة من الدالة نفسها تقريبًا هو أمر:
                     <ul>
-                        <li>Extremely tedious and error-prone</li>
-                        <li>Not scalable &mdash; what if we need 1000?</li>
-                        <li>A violation of good programming principles (DRY - Don't Repeat Yourself)</li>
+                        <li>ممل للغاية وعرضة للأخطاء</li>
+                        <li>غير قابل للتوسع &mdash; ماذا لو احتجنا إلى 1000؟</li>
+                        <li>مخالف لمبادئ البرمجة الجيدة (مبدأ DRY - لا تكرّر نفسك)</li>
                     </ul>
                 </div>
 
                 <div class="student-says">
-                    So Professor, isn't there a way to have <strong>one method</strong> that does the same work?
+                    إذن يا دكتور، ألا توجد طريقة لأن تكون لدينا <strong>دالة واحدة</strong> تقوم بالعمل نفسه؟
                 </div>
             </section>
 
             <!-- ===================== SECTION 5: A Method Calling Itself ===================== -->
             <section id="self-call">
-                <h2>5. One Method That Calls Itself</h2>
+                <h2>5. دالة واحدة تستدعي نفسها</h2>
 
                 <div class="teacher-says">
-                    Excellent question! What if I create only <strong>one version</strong> of the counter method? This single method increases the counter by one and then <strong>calls itself</strong>!
+                    سؤال ممتاز! ماذا لو أنشأت <strong>نسخة واحدة</strong> فقط من دالة العدّاد؟ هذه الدالة الوحيدة تزيد العدّاد بمقدار واحد ثم <strong>تستدعي نفسها</strong>!
                 </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java - A Method That Calls Itself
+                        Java - دالة تستدعي نفسها
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">CountRecursive</span> {
@@ -1047,17 +1113,17 @@
 }</div>
                 </div>
 
-                <h3>Let's See It in Memory!</h3>
+                <h3>لنرَ ذلك في الذاكرة!</h3>
 
                 <div class="teacher-says">
-                    Now, let me show you what happens in the memory. It is very important to see how this works. Watch carefully &mdash; you will notice something similar to our 5 counter methods, but now it is the <strong>same method calling itself</strong> each time!
+                    الآن دعوني أريكم ما يحدث في الذاكرة. من المهم جدًا أن تروا كيف يعمل هذا. راقبوا بعناية &mdash; ستلاحظون شيئًا مشابهًا لدوال العدّاد الخمس، لكن الآن <strong>الدالة نفسها هي التي تستدعي نفسها</strong> في كل مرة!
                 </div>
 
                 <div class="demo-area">
-                    <h3>Animation: Recursive Counter on the Stack</h3>
+                    <h3>تحريك: العدّاد العودي على المكدس</h3>
                     <div class="demo-layout">
                         <div class="demo-code-panel">
-                            <h4>Code (one method!)</h4>
+                            <h4>الكود (دالة واحدة!)</h4>
                             <div style="background: #2d2d2d; padding: 15px; border-radius: 8px; color: #f8f8f2; font-family: 'Courier New', monospace; font-size: 0.85em;">
                                 <div class="exec-line" id="r-line-1"><span style="color:#ff79c6;">public static void</span> <span style="color:#8be9fd;">counter</span>(<span style="color:#ff79c6;">int</span> n) {</div>
                                 <div class="exec-line" id="r-line-2">&nbsp;&nbsp;<span style="color:#ff79c6;">if</span> (n <= <span style="color:#bd93f9;">5</span>) {</div>
@@ -1068,43 +1134,43 @@
                             </div>
                         </div>
                         <div class="demo-stack-panel">
-                            <div class="stack-box-label">STACK</div>
+                            <div class="stack-box-label">المكدس (STACK)</div>
                             <div class="stack-box" id="recursive-stack">
-                                <div class="stack-box-empty">( empty )</div>
+                                <div class="stack-box-empty">( فارغ )</div>
                             </div>
                         </div>
                         <div class="demo-output-panel">
-                            <h4>Output</h4>
+                            <h4>المخرجات</h4>
                             <div class="output-console" id="recursive-output">
-                                <div class="output-header">--- Console ---</div>
+                                <div class="output-header">--- الطرفية (Console) ---</div>
                             </div>
                         </div>
                     </div>
-                    <div class="narration" id="recursive-narration">Press "Run" to start, then click "Next" to go step by step.</div>
+                    <div class="narration" id="recursive-narration">اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.</div>
                     <div class="step-indicator" id="recursive-step"></div>
                     <div class="animation-controls">
-                        <button class="btn" id="recursive-run-btn" onclick="startRecursiveAnimation()">Run</button>
-                        <button class="btn btn-success" id="recursive-next-btn" onclick="nextRecursiveStep()" style="display:none;">Next</button>
-                        <button class="btn btn-warning" onclick="resetRecursiveAnimation()">Reset</button>
+                        <button class="btn" id="recursive-run-btn" onclick="startRecursiveAnimation()">تشغيل</button>
+                        <button class="btn btn-success" id="recursive-next-btn" onclick="nextRecursiveStep()" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetRecursiveAnimation()">إعادة تعيين</button>
                     </div>
                 </div>
 
                 <div class="highlight-box">
-                    <strong>Notice:</strong> The output is <strong>5, 4, 3, 2, 1</strong> (reverse order!) because each method calls itself <em>first</em> and prints <em>after</em> the recursive call returns. The printing happens during the <strong>unwinding phase</strong> when each frame is popped off the stack. We only wrote <strong>one method</strong>, and each call has its own copy of <code>n</code> on the stack.
+                    <strong>لاحظ:</strong> المخرجات هي <strong><span dir="ltr">5, 4, 3, 2, 1</span></strong> (بترتيب عكسي!) لأن كل دالة تستدعي نفسها <em>أولًا</em> ثم تطبع <em>بعد</em> عودة الاستدعاء العودي. تحدث الطباعة أثناء <strong>مرحلة الانحلال (Unwinding)</strong> عندما يُزال كل إطار من المكدس. كتبنا <strong>دالة واحدة</strong> فقط، ولكل استدعاء نسخته الخاصة من <code>n</code> على المكدس.
                 </div>
             </section>
 
             <!-- ===================== SECTION 6: The Danger - No Termination ===================== -->
             <section id="danger">
-                <h2>6. The Danger: No Termination!</h2>
+                <h2>6. الخطر: لا توقّف!</h2>
 
                 <div class="teacher-says">
-                    Yes, my students, this is wonderful! But let me ask you a very important question: what happens if the method calls itself <strong>many, many times without ever stopping</strong>? What if we remove the condition <code>if (n &lt;= 5)</code>?
+                    نعم يا طلابي، هذا رائع! لكن دعوني أسألكم سؤالًا مهمًا جدًا: ماذا يحدث إذا استدعت الدالة نفسها <strong>مرات كثيرة جدًا دون أن تتوقف أبدًا</strong>؟ ماذا لو أزلنا الشرط <code>if (n &lt;= 5)</code>؟
                 </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        Java - Infinite Recursion (DANGER!)
+                        Java - عودية لا نهائية (خطر!)
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">InfiniteRecursion</span> {
@@ -1122,70 +1188,70 @@
                 </div>
 
                 <div class="demo-area">
-                    <h3>Animation: Stack Overflow!</h3>
+                    <h3>تحريك: فيض المكدس (Stack Overflow)!</h3>
                     <div class="demo-layout">
                         <div class="demo-stack-panel" style="flex: 0 0 280px;">
-                            <div class="stack-box-label">STACK</div>
+                            <div class="stack-box-label">المكدس (STACK)</div>
                             <div class="stack-box" id="overflow-stack" style="transition: all 0.5s;">
-                                <div class="stack-box-empty">( empty )</div>
+                                <div class="stack-box-empty">( فارغ )</div>
                             </div>
                         </div>
                         <div class="demo-output-panel">
-                            <h4>Output</h4>
+                            <h4>المخرجات</h4>
                             <div class="output-console" id="overflow-output" style="max-height: 200px; overflow-y: auto;">
-                                <div class="output-header">--- Console ---</div>
+                                <div class="output-header">--- الطرفية (Console) ---</div>
                             </div>
                             <div id="overflow-error" style="display:none; margin-top:15px;">
-                                <div class="warning" style="background: #ffebee; border-left-color: #f44336;">
+                                <div class="warning" style="background: #ffebee; border-right-color: #f44336;">
                                     <strong style="color:#f44336;">Exception in thread "main"<br>java.lang.StackOverflowError</strong>
-                                    <p style="margin-top:10px;">The stack ran out of memory! The program has crashed.</p>
+                                    <p style="margin-top:10px;">نفدت ذاكرة المكدس! لقد انهار البرنامج.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="narration" id="overflow-narration">Press "Run" to start, then click "Next" to see each call fill the stack.</div>
+                    <div class="narration" id="overflow-narration">اضغط "تشغيل" للبدء، ثم انقر "التالي" لترى كيف يملأ كل استدعاء المكدس.</div>
                     <div class="step-indicator" id="overflow-step"></div>
                     <div class="animation-controls">
-                        <button class="btn btn-danger" id="overflow-run-btn" onclick="startOverflowAnimation()">Run (Danger!)</button>
-                        <button class="btn btn-danger" id="overflow-next-btn" onclick="nextOverflowStep()" style="display:none;">Next</button>
-                        <button class="btn btn-warning" onclick="resetOverflowAnimation()">Reset</button>
+                        <button class="btn btn-danger" id="overflow-run-btn" onclick="startOverflowAnimation()">تشغيل (خطر!)</button>
+                        <button class="btn btn-danger" id="overflow-next-btn" onclick="nextOverflowStep()" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetOverflowAnimation()">إعادة تعيين</button>
                     </div>
                 </div>
 
                 <div class="warning">
-                    <strong>Stack Overflow!</strong> Without a stopping condition, the method keeps calling itself infinitely. Each call adds a new frame to the stack. Eventually, the stack runs <strong>out of memory</strong>, and the program <strong>crashes</strong> with a <code>StackOverflowError</code>.
+                    <strong>فيض المكدس (Stack Overflow)!</strong> بدون شرط توقّف، تستمر الدالة في استدعاء نفسها إلى ما لا نهاية. كل استدعاء يضيف إطارًا جديدًا إلى المكدس. وفي النهاية <strong>تنفد ذاكرة</strong> المكدس، و<strong>ينهار</strong> البرنامج بخطأ <code>StackOverflowError</code>.
                 </div>
 
                 <div class="important">
-                    <strong>This is similar to an infinite loop!</strong>
+                    <strong>هذا يشبه الحلقة اللانهائية!</strong>
                     <ul>
-                        <li>An infinite <strong>loop</strong> runs forever but uses the same memory space.</li>
-                        <li>An infinite <strong>recursion</strong> also runs forever, but each call uses <strong>new memory</strong> on the stack &mdash; so it eventually <strong>destroys the stack</strong> and crashes the program!</li>
+                        <li><strong>الحلقة</strong> اللانهائية تعمل إلى الأبد لكنها تستخدم مساحة الذاكرة نفسها.</li>
+                        <li><strong>العودية</strong> اللانهائية تعمل إلى الأبد أيضًا، لكن كل استدعاء يستخدم <strong>ذاكرة جديدة</strong> على المكدس &mdash; لذا فإنها في النهاية <strong>تدمّر المكدس</strong> وتُسقط البرنامج!</li>
                     </ul>
                 </div>
             </section>
 
             <!-- ===================== SECTION 7: What is Recursion? ===================== -->
             <section id="definition">
-                <h2>7. What is Recursion?</h2>
+                <h2>7. ما هي العودية (Recursion)؟</h2>
 
                 <div class="definition">
-                    <strong>Recursion</strong> is a programming technique where a method <strong>calls itself</strong> to solve a problem. Each call works on a smaller version of the same problem until it reaches a <strong>base case</strong> (a condition where the method stops calling itself and returns a result).
+                    <strong>العودية (Recursion)</strong> هي أسلوب برمجي تقوم فيه الدالة <strong>باستدعاء نفسها</strong> لحل مشكلة ما. كل استدعاء يعمل على نسخة أصغر من المشكلة نفسها حتى يصل إلى <strong>الحالة الأساسية (Base Case)</strong> (وهي شرط تتوقف عنده الدالة عن استدعاء نفسها وتُعيد نتيجة).
                 </div>
 
-                <h3>The Two Essential Parts of Recursion</h3>
+                <h3>الجزءان الأساسيان في العودية</h3>
 
                 <div class="approach-cards">
                     <div class="approach-card" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-color: #4caf50;">
-                        <h4 style="color: #2e7d32;">1. Base Case (Stopping Condition)</h4>
-                        <p>This is the condition that <strong>stops</strong> the recursion. Without it, you get infinite recursion and a stack overflow!</p>
+                        <h4 style="color: #2e7d32;">1. الحالة الأساسية (Base Case) - شرط التوقف</h4>
+                        <p>هذا هو الشرط الذي <strong>يوقف</strong> العودية. وبدونه تحصل على عودية لا نهائية وفيض في المكدس!</p>
                         <div style="background: #2d2d2d; padding: 12px; border-radius: 6px; margin-top: 10px;">
                             <code style="color: #f8f8f2; font-size: 0.9em;"><span style="color:#ff79c6;">if</span> (n > <span style="color:#bd93f9;">5</span>) <span style="color:#ff79c6;">return</span>; <span style="color:#6272a4;">// STOP!</span></code>
                         </div>
                     </div>
                     <div class="approach-card" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-color: #ff9800;">
-                        <h4 style="color: #e65100;">2. Recursive Case (Self-Call)</h4>
-                        <p>This is where the method <strong>calls itself</strong> with modified parameters, moving toward the base case.</p>
+                        <h4 style="color: #e65100;">2. الحالة العودية (Recursive Case) - الاستدعاء الذاتي</h4>
+                        <p>هنا تقوم الدالة <strong>باستدعاء نفسها</strong> بمعاملات معدّلة، متجهةً نحو الحالة الأساسية.</p>
                         <div style="background: #2d2d2d; padding: 12px; border-radius: 6px; margin-top: 10px;">
                             <code style="color: #f8f8f2; font-size: 0.9em;"><span style="color:#8be9fd;">counter</span>(n + <span style="color:#bd93f9;">1</span>); <span style="color:#6272a4;">// Call itself</span></code>
                         </div>
@@ -1193,132 +1259,132 @@
                 </div>
 
                 <div class="definition">
-                    <strong>Recursive Method:</strong> A method that calls itself, directly or indirectly, to solve a problem by breaking it into smaller sub-problems of the same type.
+                    <strong>الدالة العودية (Recursive Method):</strong> دالة تستدعي نفسها، بشكل مباشر أو غير مباشر، لحل مشكلة عن طريق تقسيمها إلى مشكلات فرعية أصغر من النوع نفسه.
                 </div>
             </section>
 
             <!-- ===================== SECTION 8: Iterative vs Recursive ===================== -->
             <section id="comparison">
-                <h2>8. Iterative vs. Recursive</h2>
+                <h2>8. التكراري (Iterative) مقابل العودي (Recursive)</h2>
 
                 <div class="teacher-says">
-                    My students, now that we understand recursion, a very important question comes up: <strong>when should we use loops (iterative) and when should we use recursion?</strong> Can we always use either one?
+                    يا طلابي، الآن وقد فهمنا العودية، يبرز سؤال مهم جدًا: <strong>متى نستخدم حلقات التكرار (الأسلوب التكراري) ومتى نستخدم العودية؟</strong> هل يمكننا دائمًا استخدام أي منهما؟
                 </div>
 
                 <div class="student-says">
-                    Doctor, can we use both the iterative process and recursion for the same problem?
+                    يا دكتور، هل يمكننا استخدام الأسلوب التكراري والعودية معًا للمشكلة نفسها؟
                 </div>
 
                 <div class="teacher-says">
-                    <strong>Yes, you can!</strong> Anything that can be solved with iteration can be solved with recursion, and vice versa. But &mdash; and this is a big "but" &mdash; there are important differences.
+                    <strong>نعم، يمكنكم!</strong> كل ما يمكن حله بالتكرار يمكن حله بالعودية، والعكس صحيح. لكن &mdash; وهذه "لكن" كبيرة &mdash; هناك فروق مهمة.
                 </div>
 
-                <h3>Side-by-Side Comparison</h3>
+                <h3>مقارنة جنبًا إلى جنب</h3>
 
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th>Aspect</th>
-                            <th>Iterative (Loops)</th>
-                            <th>Recursive</th>
+                            <th>الجانب</th>
+                            <th>التكراري (حلقات التكرار)</th>
+                            <th>العودي</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>How it repeats</strong></td>
-                            <td>Uses loop statements<br>(for, while, do-while)</td>
-                            <td>Method calls itself</td>
+                            <td><strong>كيف يتكرر</strong></td>
+                            <td>يستخدم جمل التكرار<br>(for, while, do-while)</td>
+                            <td>الدالة تستدعي نفسها</td>
                         </tr>
                         <tr>
-                            <td><strong>Termination</strong></td>
-                            <td>Loop condition becomes false</td>
-                            <td>Base case is reached</td>
+                            <td><strong>الإنهاء</strong></td>
+                            <td>يصبح شرط الحلقة خاطئًا (false)</td>
+                            <td>الوصول إلى الحالة الأساسية</td>
                         </tr>
                         <tr>
-                            <td><strong>Infinite execution</strong></td>
-                            <td>Infinite loop<br>(program hangs)</td>
-                            <td>Stack overflow<br>(program crashes!)</td>
+                            <td><strong>التنفيذ اللانهائي</strong></td>
+                            <td>حلقة لا نهائية<br>(يتجمّد البرنامج)</td>
+                            <td>فيض المكدس<br>(ينهار البرنامج!)</td>
                         </tr>
                         <tr>
-                            <td><strong>Memory usage</strong></td>
-                            <td>Uses the same memory space</td>
-                            <td>Each call uses NEW stack memory</td>
+                            <td><strong>استخدام الذاكرة</strong></td>
+                            <td>يستخدم مساحة الذاكرة نفسها</td>
+                            <td>كل استدعاء يستخدم ذاكرة مكدس جديدة</td>
                         </tr>
                         <tr>
-                            <td><strong>Efficiency</strong></td>
-                            <td>Generally more efficient</td>
-                            <td>More memory-consuming</td>
+                            <td><strong>الكفاءة</strong></td>
+                            <td>أكثر كفاءة عمومًا</td>
+                            <td>أكثر استهلاكًا للذاكرة</td>
                         </tr>
                         <tr>
-                            <td><strong>Code readability</strong></td>
-                            <td>Can be complex for some problems</td>
-                            <td>Elegant for some problems</td>
+                            <td><strong>مقروئية الكود</strong></td>
+                            <td>قد يكون معقدًا لبعض المشكلات</td>
+                            <td>أنيق لبعض المشكلات</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <h3>Which is Better?</h3>
+                <h3>أيهما أفضل؟</h3>
 
                 <div class="student-says">
-                    Doctor, which is better? When should we use iterative or recursion?
+                    يا دكتور، أيهما أفضل؟ متى نستخدم التكرار ومتى نستخدم العودية؟
                 </div>
 
                 <div class="teacher-says">
-                    My students, you must know that recursion is <strong>more memory-consuming</strong>. If you write your code with loops, absolutely it is more efficient than recursion. So why do we even learn recursion?
+                    يا طلابي، يجب أن تعلموا أن العودية <strong>أكثر استهلاكًا للذاكرة</strong>. إذا كتبتم الكود بحلقات التكرار، فهو بلا شك أكثر كفاءة من العودية. إذن لماذا نتعلم العودية أصلًا؟
                 </div>
 
                 <div class="highlight-box">
-                    <strong>Why learn recursion?</strong>
-                    <p>Because there are some problems that are <strong>very challenging to solve with loops</strong> but become <strong>much easier with recursion</strong>.</p>
-                    <p style="margin-top: 15px;">For example:</p>
+                    <strong>لماذا نتعلم العودية؟</strong>
+                    <p>لأن هناك بعض المشكلات التي يكون <strong>حلها بحلقات التكرار صعبًا جدًا</strong> لكنها تصبح <strong>أسهل بكثير مع العودية</strong>.</p>
+                    <p style="margin-top: 15px;">على سبيل المثال:</p>
                     <ul>
-                        <li><strong>Exploring file systems</strong> &mdash; folders inside folders inside folders (arbitrary depth)</li>
-                        <li><strong>Tree data structures</strong> &mdash; traversing nodes with unpredictable depth</li>
-                        <li><strong>Divide and conquer algorithms</strong> &mdash; breaking problems into smaller identical sub-problems</li>
-                        <li><strong>Mathematical definitions</strong> &mdash; factorial, Fibonacci, power functions</li>
+                        <li><strong>استكشاف أنظمة الملفات</strong> &mdash; مجلدات داخل مجلدات داخل مجلدات (بعمق غير محدد)</li>
+                        <li><strong>هياكل بيانات الشجرة (Tree)</strong> &mdash; اجتياز العقد بعمق لا يمكن التنبؤ به</li>
+                        <li><strong>خوارزميات فرّق تسُد (Divide and Conquer)</strong> &mdash; تقسيم المشكلات إلى مشكلات فرعية أصغر متطابقة</li>
+                        <li><strong>التعريفات الرياضية</strong> &mdash; المضروب (Factorial)، فيبوناتشي (Fibonacci)، دوال الأس (Power)</li>
                     </ul>
                 </div>
 
                 <div class="important">
-                    <strong>Important Agreement:</strong>
+                    <strong>اتفاق مهم:</strong>
                     <ul>
-                        <li>Anything that can be solved by <strong>iteration</strong> can also be solved by <strong>recursion</strong>.</li>
-                        <li>Anything that can be solved by <strong>recursion</strong> can also be solved by <strong>iteration</strong>.</li>
-                        <li>But sometimes, as humans and programmers, we <strong>prefer recursion</strong> because it makes certain complex problems much easier to think about and code.</li>
+                        <li>كل ما يمكن حله <strong>بالتكرار</strong> يمكن حله أيضًا <strong>بالعودية</strong>.</li>
+                        <li>كل ما يمكن حله <strong>بالعودية</strong> يمكن حله أيضًا <strong>بالتكرار</strong>.</li>
+                        <li>لكن أحيانًا، بوصفنا بشرًا ومبرمجين، <strong>نفضّل العودية</strong> لأنها تجعل بعض المشكلات المعقدة أسهل بكثير في التفكير والبرمجة.</li>
                     </ul>
                 </div>
 
                 <div class="teacher-says">
-                    In the next study, I will give you some scenarios and problems that will <strong>motivate you</strong> to see why we sometimes strongly prefer the recursive approach. I will show you cases that are very challenging to solve with loops but become elegant with recursion. Stay tuned!
+                    في الدرس القادم، سأقدّم لكم بعض السيناريوهات والمشكلات التي <strong>ستحفّزكم</strong> لتروا لماذا نفضّل أحيانًا الأسلوب العودي بشدة. سأريكم حالات يصعب جدًا حلها بحلقات التكرار لكنها تصبح أنيقة مع العودية. ترقّبوا!
                 </div>
             </section>
 
             <!-- ===================== SECTION 9: Summary ===================== -->
             <section id="summary">
-                <h2>9. Summary</h2>
+                <h2>9. الملخص</h2>
 
-                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-left-color: #764ba2;">
-                    <h3 style="margin-top: 0;">What We Learned Today</h3>
+                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-right-color: #764ba2;">
+                    <h3 style="margin-top: 0;">ما تعلمناه اليوم</h3>
                     <ol>
-                        <li><strong>The Call Stack</strong> &mdash; When a method is called, a frame is pushed onto the stack. When it returns, the frame is popped off.</li>
-                        <li><strong>Iterative approach</strong> &mdash; Using loops (for, while) to repeat a process.</li>
-                        <li><strong>Multiple methods approach</strong> &mdash; Creating many similar methods is impractical and does not scale.</li>
-                        <li><strong>A method can call itself</strong> &mdash; This is the foundation of recursion.</li>
-                        <li><strong>Without a base case</strong> &mdash; Infinite recursion leads to StackOverflowError (the stack memory is exhausted).</li>
-                        <li><strong>Recursion</strong> = Base Case + Recursive Case.</li>
-                        <li><strong>Iteration vs. Recursion</strong> &mdash; Both can solve the same problems. Iteration is more memory-efficient, but recursion can be more natural for complex problems like trees and file systems.</li>
+                        <li><strong>مكدس الاستدعاءات (Call Stack)</strong> &mdash; عند استدعاء دالة، يُدفع إطار إلى المكدس. وعند عودتها، يُزال الإطار.</li>
+                        <li><strong>الأسلوب التكراري</strong> &mdash; استخدام حلقات التكرار (for, while) لتكرار عملية ما.</li>
+                        <li><strong>أسلوب الدوال المتعددة</strong> &mdash; إنشاء دوال متشابهة كثيرة أمر غير عملي وغير قابل للتوسع.</li>
+                        <li><strong>يمكن للدالة أن تستدعي نفسها</strong> &mdash; هذا هو أساس العودية.</li>
+                        <li><strong>بدون حالة أساسية</strong> &mdash; تؤدي العودية اللانهائية إلى خطأ StackOverflowError (تُستنفد ذاكرة المكدس).</li>
+                        <li><strong>العودية</strong> = الحالة الأساسية + الحالة العودية.</li>
+                        <li><strong>التكرار مقابل العودية</strong> &mdash; كلاهما يمكنه حل المشكلات نفسها. التكرار أكثر كفاءة في الذاكرة، لكن العودية قد تكون أكثر طبيعية للمشكلات المعقدة مثل الأشجار وأنظمة الملفات.</li>
                     </ol>
                 </div>
 
                 <div class="teacher-says">
-                    Excellent work today, my students! Make sure you understand the Call Stack and how recursion works in memory. In the next tutorial, I will show you exciting examples where recursion truly shines!
+                    عمل ممتاز اليوم يا طلابي! تأكدوا من فهم مكدس الاستدعاءات وكيف تعمل العودية في الذاكرة. في الدرس القادم سأريكم أمثلة مشوّقة تتألق فيها العودية حقًا!
                 </div>
             </section>
 
         </div>
 
         <div style="text-align: center; padding: 25px 40px; color: #6b7280; font-size: 0.9rem; border-top: 1px solid #e5e7eb; line-height: 1.8;">
-            <div style="margin-top: 8px;">Prepared by Dr. Abdulmohsen Almalawi</div>
+            <div style="margin-top: 8px;">إعداد: د. عبدالمحسن المعلوي (Dr. Abdulmohsen Almalawi)</div>
         </div>
     </div>
 
@@ -1413,8 +1479,8 @@
             resetSimpleAnimation();
             document.getElementById('simple-run-btn').style.display = 'none';
             document.getElementById('simple-next-btn').style.display = '';
-            setNarration('simple-narration', 'Ready! Click <strong>Next</strong> to step through the execution.');
-            setStep('simple-step', 'Step 0 of 6');
+            setNarration('simple-narration', 'جاهز! انقر <strong>التالي</strong> للتقدم خطوة بخطوة في التنفيذ.');
+            setStep('simple-step', 'الخطوة 0 من 6');
         }
 
         async function nextSimpleStep() {
@@ -1424,22 +1490,22 @@
 
             switch (simpleCurrentStep) {
                 case 1:
-                    setNarration('simple-narration', 'The program starts. <strong>main()</strong> is pushed onto the Call Stack.');
-                    setStep('simple-step', 'Step 1 of 6');
+                    setNarration('simple-narration', 'يبدأ البرنامج. تُدفع <strong><span dir="ltr">main()</span></strong> إلى مكدس الاستدعاءات.');
+                    setStep('simple-step', 'الخطوة 1 من 6');
                     highlightLine('s', 2);
                     addStackFrame('simple-stack', 'main()', 'main-frame');
                     break;
                 case 2:
                     markExecuted('s', 2);
-                    setNarration('simple-narration', '<strong>main()</strong> calls <strong>printing()</strong>. A new frame is pushed on top.');
-                    setStep('simple-step', 'Step 2 of 6');
+                    setNarration('simple-narration', 'تستدعي <strong><span dir="ltr">main()</span></strong> الدالة <strong><span dir="ltr">printing()</span></strong>. يُدفع إطار جديد إلى القمة.');
+                    setStep('simple-step', 'الخطوة 2 من 6');
                     highlightLine('s', 3);
                     break;
                 case 3:
                     addStackFrame('simple-stack', 'printing()', 'method-frame');
                     markExecuted('s', 3);
-                    setNarration('simple-narration', '<strong>printing()</strong> is now on top of the stack. It will execute first (LIFO).');
-                    setStep('simple-step', 'Step 3 of 6');
+                    setNarration('simple-narration', '<strong><span dir="ltr">printing()</span></strong> الآن في قمة المكدس. ستُنفَّذ أولًا (LIFO).');
+                    setStep('simple-step', 'الخطوة 3 من 6');
                     highlightLine('s', 5);
                     highlightLine('s', 6);
                     break;
@@ -1447,26 +1513,26 @@
                     markExecuted('s', 5);
                     markExecuted('s', 6);
                     addOutput('simple-output', 'Welcome to Java');
-                    setNarration('simple-narration', '<strong>printing()</strong> executes: prints <em>"Welcome to Java"</em> to the console.');
-                    setStep('simple-step', 'Step 4 of 6');
+                    setNarration('simple-narration', 'تُنفَّذ <strong><span dir="ltr">printing()</span></strong>: تطبع <em>"Welcome to Java"</em> في الطرفية.');
+                    setStep('simple-step', 'الخطوة 4 من 6');
                     break;
                 case 5:
-                    setNarration('simple-narration', '<strong>printing()</strong> finishes. Its frame is <strong>popped off</strong> the stack.');
-                    setStep('simple-step', 'Step 5 of 6');
+                    setNarration('simple-narration', 'تنتهي <strong><span dir="ltr">printing()</span></strong>. <strong>يُزال إطارها (Pop)</strong> من المكدس.');
+                    setStep('simple-step', 'الخطوة 5 من 6');
                     highlightLine('s', 7);
                     await removeTopFrame('simple-stack');
                     break;
                 case 6:
                     markExecuted('s', 7);
                     markExecuted('s', 4);
-                    setNarration('simple-narration', '<strong>main()</strong> has nothing left to do. It is popped off. Program ends.');
-                    setStep('simple-step', 'Step 6 of 6');
+                    setNarration('simple-narration', 'لم يتبقَّ لـ <strong><span dir="ltr">main()</span></strong> شيء لتفعله. تُزال من المكدس. ينتهي البرنامج.');
+                    setStep('simple-step', 'الخطوة 6 من 6');
                     await removeTopFrame('simple-stack');
                     break;
                 default:
-                    setNarration('simple-narration', 'Program finished! The stack is empty.');
-                    setStep('simple-step', 'Complete!');
-                    btn.textContent = 'Done';
+                    setNarration('simple-narration', 'انتهى البرنامج! المكدس فارغ.');
+                    setStep('simple-step', 'اكتمل!');
+                    btn.textContent = 'تم';
                     btn.disabled = true;
                     return;
             }
@@ -1476,15 +1542,15 @@
 
         function resetSimpleAnimation() {
             simpleCurrentStep = 0;
-            document.getElementById('simple-stack').innerHTML = '<div class="stack-box-empty">( empty )</div>';
-            document.getElementById('simple-output').innerHTML = '<div class="output-header">--- Console ---</div>';
+            document.getElementById('simple-stack').innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
+            document.getElementById('simple-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
             clearHighlights('s', 7);
-            setNarration('simple-narration', 'Press "Run" to start, then click "Next" to go step by step.');
+            setNarration('simple-narration', 'اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.');
             setStep('simple-step', '');
             document.getElementById('simple-run-btn').style.display = '';
             const nextBtn = document.getElementById('simple-next-btn');
             nextBtn.style.display = 'none';
-            nextBtn.textContent = 'Next';
+            nextBtn.textContent = 'التالي';
             nextBtn.disabled = false;
         }
 
@@ -1496,8 +1562,8 @@
             resetCounterAnimation();
             document.getElementById('counter-run-btn').style.display = 'none';
             document.getElementById('counter-next-btn').style.display = '';
-            setNarration('counter-narration', 'Ready! Click <strong>Next</strong> to step through. Notice: each method calls the next one <strong>before</strong> printing. Printing happens when the method is <strong>popped</strong> off the stack!');
-            setStep('counter-step', 'Step 0 of 18');
+            setNarration('counter-narration', 'جاهز! انقر <strong>التالي</strong> للتقدم خطوة بخطوة. لاحظ: كل دالة تستدعي التالية <strong>قبل</strong> الطباعة. تحدث الطباعة عندما <strong>تُزال</strong> الدالة من المكدس!');
+            setStep('counter-step', 'الخطوة 0 من 18');
         }
 
         async function nextCounterStep() {
@@ -1519,8 +1585,8 @@
 
             if (counterCurrentStep === 1) {
                 highlightLine('c', 1);
-                setNarration('counter-narration', 'Program starts. <strong>main()</strong> sets <code>n = 0</code> and calls <strong>counter1(0)</strong>.');
-                setStep('counter-step', 'Step 1 of 14');
+                setNarration('counter-narration', 'يبدأ البرنامج. تضبط <strong><span dir="ltr">main()</span></strong> القيمة <code>n = 0</code> وتستدعي <strong><span dir="ltr">counter1(0)</span></strong>.');
+                setStep('counter-step', 'الخطوة 1 من 14');
                 addStackFrame('counter-stack', 'main()  n=0', 'main-frame');
             } else if (counterCurrentStep >= 2 && counterCurrentStep <= 5) {
                 // Push counter1..counter4 (they call next BEFORE printing)
@@ -1529,16 +1595,16 @@
                 highlightLine('c', i + 1);
                 const caller = i === 1 ? 'main()' : 'counter' + (i-1) + '()';
                 setNarration('counter-narration',
-                    '<strong>' + caller + '</strong> calls <strong>counter' + i + '(' + nReceived[i-1] + ')</strong>. Inside: <code>n = ' + nReceived[i-1] + ' + 1 = ' + nAfter[i-1] + '</code>. It calls <strong>counter' + (i+1) + '(' + nAfter[i-1] + ')</strong> <em>before</em> printing.');
-                setStep('counter-step', 'Step ' + counterCurrentStep + ' of 14');
+                    'تستدعي <strong><span dir="ltr">' + caller + '</span></strong> الدالة <strong><span dir="ltr">counter' + i + '(' + nReceived[i-1] + ')</span></strong>. بالداخل: <code>n = ' + nReceived[i-1] + ' + 1 = ' + nAfter[i-1] + '</code>. وهي تستدعي <strong><span dir="ltr">counter' + (i+1) + '(' + nAfter[i-1] + ')</span></strong> <em>قبل</em> الطباعة.');
+                setStep('counter-step', 'الخطوة ' + counterCurrentStep + ' من 14');
                 addStackFrame('counter-stack', 'counter' + i + '()  n=' + nAfter[i-1], frameClasses[i-1]);
             } else if (counterCurrentStep === 6) {
                 // Push counter5 (last one, prints immediately)
                 markExecuted('c', 5);
                 highlightLine('c', 6);
                 setNarration('counter-narration',
-                    '<strong>counter4()</strong> calls <strong>counter5(4)</strong>. Inside: <code>n = 4 + 1 = 5</code>. No more methods to call, so it prints <strong>immediately</strong>!');
-                setStep('counter-step', 'Step 6 of 14');
+                    'تستدعي <strong><span dir="ltr">counter4()</span></strong> الدالة <strong><span dir="ltr">counter5(4)</span></strong>. بالداخل: <code>n = 4 + 1 = 5</code>. لا توجد دوال أخرى لاستدعائها، لذا تطبع <strong>فورًا</strong>!');
+                setStep('counter-step', 'الخطوة 6 من 14');
                 addStackFrame('counter-stack', 'counter5()  n=5', frameClasses[4]);
                 await delay(300);
                 addOutput('counter-output', 'Counter: 5');
@@ -1546,41 +1612,41 @@
                 // Start unwinding
                 markExecuted('c', 6);
                 highlightLine('c', 7);
-                setNarration('counter-narration', '<strong>counter5()</strong> is done. Now the stack <strong>unwinds</strong>! Each method will print <em>as it is popped off</em>.');
-                setStep('counter-step', 'Step 7 of 14');
+                setNarration('counter-narration', 'انتهت <strong><span dir="ltr">counter5()</span></strong>. الآن <strong>ينحلّ</strong> المكدس! ستطبع كل دالة <em>عند إزالتها من المكدس</em>.');
+                setStep('counter-step', 'الخطوة 7 من 14');
             } else if (counterCurrentStep === 8) {
                 // Pop counter5 (it already printed in step 6, just pop it)
                 setNarration('counter-narration',
-                    '<strong>counter5()</strong> is done (it already printed). It is <strong>popped off</strong> the stack.');
-                setStep('counter-step', 'Step 8 of 14');
+                    'انتهت <strong><span dir="ltr">counter5()</span></strong> (لقد طبعت بالفعل). <strong>تُزال (Pop)</strong> من المكدس.');
+                setStep('counter-step', 'الخطوة 8 من 14');
                 await removeTopFrame('counter-stack');
             } else if (counterCurrentStep >= 9 && counterCurrentStep <= 11) {
                 // Pop counter4..counter2, each prints as it is popped
                 const i = 4 - (counterCurrentStep - 9); // 4, 3, 2
                 const printVal = nAfter[i - 1];
                 setNarration('counter-narration',
-                    '<strong>counter' + i + '()</strong> resumes after counter' + (i+1) + '() returned. It now prints: <strong>"Counter: ' + printVal + '"</strong> and is popped off.');
-                setStep('counter-step', 'Step ' + counterCurrentStep + ' of 14');
+                    'تستأنف <strong><span dir="ltr">counter' + i + '()</span></strong> عملها بعد عودة <span dir="ltr">counter' + (i+1) + '()</span>. تطبع الآن: <strong>"Counter: ' + printVal + '"</strong> ثم تُزال من المكدس.');
+                setStep('counter-step', 'الخطوة ' + counterCurrentStep + ' من 14');
                 addOutput('counter-output', 'Counter: ' + printVal);
                 await delay(200);
                 await removeTopFrame('counter-stack');
             } else if (counterCurrentStep === 12) {
                 // Pop counter1, it prints
                 setNarration('counter-narration',
-                    '<strong>counter1()</strong> is popped off the stack. It prints: <strong>"Counter: 1"</strong>.');
-                setStep('counter-step', 'Step 12 of 14');
+                    'تُزال <strong><span dir="ltr">counter1()</span></strong> من المكدس. تطبع: <strong>"Counter: 1"</strong>.');
+                setStep('counter-step', 'الخطوة 12 من 14');
                 await removeTopFrame('counter-stack');
                 addOutput('counter-output', 'Counter: 1');
             } else if (counterCurrentStep === 13) {
                 // Pop main
-                setNarration('counter-narration', '<strong>main()</strong> finishes. Program ends.');
-                setStep('counter-step', 'Step 13 of 14');
+                setNarration('counter-narration', 'تنتهي <strong><span dir="ltr">main()</span></strong>. ينتهي البرنامج.');
+                setStep('counter-step', 'الخطوة 13 من 14');
                 markExecuted('c', 7);
                 await removeTopFrame('counter-stack');
             } else {
-                setNarration('counter-narration', 'Program finished! Notice the output is <strong>5, 4, 3, 2, 1</strong> &mdash; because each method printed <em>after</em> the next one returned (when it was popped off the stack).');
-                setStep('counter-step', 'Complete!');
-                btn.textContent = 'Done';
+                setNarration('counter-narration', 'انتهى البرنامج! لاحظ أن المخرجات هي <strong><span dir="ltr">5, 4, 3, 2, 1</span></strong> &mdash; لأن كل دالة طبعت <em>بعد</em> عودة الدالة التالية (عندما أُزيلت من المكدس).');
+                setStep('counter-step', 'اكتمل!');
+                btn.textContent = 'تم';
                 btn.disabled = true;
                 return;
             }
@@ -1591,15 +1657,15 @@
 
         function resetCounterAnimation() {
             counterCurrentStep = 0;
-            document.getElementById('counter-stack').innerHTML = '<div class="stack-box-empty">( empty )</div>';
-            document.getElementById('counter-output').innerHTML = '<div class="output-header">--- Console ---</div>';
+            document.getElementById('counter-stack').innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
+            document.getElementById('counter-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
             clearHighlights('c', 7);
-            setNarration('counter-narration', 'Press "Run" to start, then click "Next" to go step by step.');
+            setNarration('counter-narration', 'اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.');
             setStep('counter-step', '');
             document.getElementById('counter-run-btn').style.display = '';
             const nextBtn = document.getElementById('counter-next-btn');
             nextBtn.style.display = 'none';
-            nextBtn.textContent = 'Next';
+            nextBtn.textContent = 'التالي';
             nextBtn.disabled = false;
         }
 
@@ -1610,8 +1676,8 @@
             resetRecursiveAnimation();
             document.getElementById('recursive-run-btn').style.display = 'none';
             document.getElementById('recursive-next-btn').style.display = '';
-            setNarration('recursive-narration', 'Ready! Click <strong>Next</strong> to step through the recursive calls.');
-            setStep('recursive-step', 'Step 0 of 14');
+            setNarration('recursive-narration', 'جاهز! انقر <strong>التالي</strong> للتقدم عبر الاستدعاءات العودية خطوة بخطوة.');
+            setStep('recursive-step', 'الخطوة 0 من 14');
         }
 
         async function nextRecursiveStep() {
@@ -1628,8 +1694,8 @@
             // Step 15: done
 
             if (recursiveCurrentStep === 1) {
-                setNarration('recursive-narration', 'Program starts. <strong>main()</strong> calls <strong>counter(1)</strong>.');
-                setStep('recursive-step', 'Step 1 of 14');
+                setNarration('recursive-narration', 'يبدأ البرنامج. تستدعي <strong><span dir="ltr">main()</span></strong> الدالة <strong><span dir="ltr">counter(1)</span></strong>.');
+                setStep('recursive-step', 'الخطوة 1 من 14');
                 addStackFrame('recursive-stack', 'main()', 'main-frame');
             } else if (recursiveCurrentStep >= 2 && recursiveCurrentStep <= 6) {
                 const n = recursiveCurrentStep - 1; // 1..5
@@ -1637,8 +1703,8 @@
                 highlightLine('r', 1);
                 highlightLine('r', 2);
                 setNarration('recursive-narration',
-                    '<strong>counter(' + n + ')</strong> is called. Since ' + n + ' &lt;= 5, it enters the if block and calls <strong>counter(' + (n+1) + ')</strong>.');
-                setStep('recursive-step', 'Step ' + recursiveCurrentStep + ' of 14');
+                    'تُستدعى <strong><span dir="ltr">counter(' + n + ')</span></strong>. بما أن <code>' + n + ' &lt;= 5</code>، تدخل كتلة if وتستدعي <strong><span dir="ltr">counter(' + (n+1) + ')</span></strong>.');
+                setStep('recursive-step', 'الخطوة ' + recursiveCurrentStep + ' من 14');
                 addStackFrame('recursive-stack', 'counter(' + n + ')', 'recursive-frame');
                 await delay(200);
                 clearHighlights('r', 6);
@@ -1648,35 +1714,35 @@
                 highlightLine('r', 1);
                 highlightLine('r', 2);
                 setNarration('recursive-narration',
-                    '<strong>counter(6)</strong> is called. Since 6 &gt; 5, the if condition is <strong>FALSE</strong>. It returns immediately!');
-                setStep('recursive-step', 'Step 7 of 14');
+                    'تُستدعى <strong><span dir="ltr">counter(6)</span></strong>. بما أن <code>6 &gt; 5</code>، فإن شرط if <strong>خاطئ (FALSE)</strong>. تعود فورًا!');
+                setStep('recursive-step', 'الخطوة 7 من 14');
                 addStackFrame('recursive-stack', 'counter(6)', 'main-frame');
             } else if (recursiveCurrentStep === 8) {
                 clearHighlights('r', 6);
                 highlightLine('r', 5);
                 highlightLine('r', 6);
-                setNarration('recursive-narration', '<strong>Base case reached!</strong> counter(6) is popped. Now the stack <strong>unwinds</strong> &mdash; each counter() will print as it is popped!');
-                setStep('recursive-step', 'Step 8 of 14');
+                setNarration('recursive-narration', '<strong>تم الوصول إلى الحالة الأساسية!</strong> تُزال <span dir="ltr">counter(6)</span> من المكدس. الآن <strong>ينحلّ</strong> المكدس &mdash; ستطبع كل <span dir="ltr">counter()</span> عند إزالتها!');
+                setStep('recursive-step', 'الخطوة 8 من 14');
                 await removeTopFrame('recursive-stack');
             } else if (recursiveCurrentStep >= 9 && recursiveCurrentStep <= 13) {
                 const n = 5 - (recursiveCurrentStep - 9); // 5,4,3,2,1
                 clearHighlights('r', 6);
                 highlightLine('r', 3);
                 setNarration('recursive-narration',
-                    '<strong>counter(' + n + ')</strong> resumes after its recursive call returns. It prints <strong>"Counter: ' + n + '"</strong> and is popped off.');
-                setStep('recursive-step', 'Step ' + recursiveCurrentStep + ' of 14');
+                    'تستأنف <strong><span dir="ltr">counter(' + n + ')</span></strong> عملها بعد عودة استدعائها العودي. تطبع <strong>"Counter: ' + n + '"</strong> ثم تُزال من المكدس.');
+                setStep('recursive-step', 'الخطوة ' + recursiveCurrentStep + ' من 14');
                 addOutput('recursive-output', 'Counter: ' + n);
                 await delay(200);
                 await removeTopFrame('recursive-stack');
             } else if (recursiveCurrentStep === 14) {
                 clearHighlights('r', 6);
-                setNarration('recursive-narration', '<strong>main()</strong> finishes. Program ends.');
-                setStep('recursive-step', 'Step 14 of 14');
+                setNarration('recursive-narration', 'تنتهي <strong><span dir="ltr">main()</span></strong>. ينتهي البرنامج.');
+                setStep('recursive-step', 'الخطوة 14 من 14');
                 await removeTopFrame('recursive-stack');
             } else {
-                setNarration('recursive-narration', 'Program finished! One method called itself 5 times. The output is <strong>5, 4, 3, 2, 1</strong> because printing happens during the <strong>unwinding</strong> phase.');
-                setStep('recursive-step', 'Complete!');
-                btn.textContent = 'Done';
+                setNarration('recursive-narration', 'انتهى البرنامج! دالة واحدة استدعت نفسها 5 مرات. المخرجات هي <strong><span dir="ltr">5, 4, 3, 2, 1</span></strong> لأن الطباعة تحدث أثناء مرحلة <strong>الانحلال (Unwinding)</strong>.');
+                setStep('recursive-step', 'اكتمل!');
+                btn.textContent = 'تم';
                 btn.disabled = true;
                 return;
             }
@@ -1687,15 +1753,15 @@
 
         function resetRecursiveAnimation() {
             recursiveCurrentStep = 0;
-            document.getElementById('recursive-stack').innerHTML = '<div class="stack-box-empty">( empty )</div>';
-            document.getElementById('recursive-output').innerHTML = '<div class="output-header">--- Console ---</div>';
+            document.getElementById('recursive-stack').innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
+            document.getElementById('recursive-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
             clearHighlights('r', 6);
-            setNarration('recursive-narration', 'Press "Run" to start, then click "Next" to go step by step.');
+            setNarration('recursive-narration', 'اضغط "تشغيل" للبدء، ثم انقر "التالي" للتقدم خطوة بخطوة.');
             setStep('recursive-step', '');
             document.getElementById('recursive-run-btn').style.display = '';
             const nextBtn = document.getElementById('recursive-next-btn');
             nextBtn.style.display = 'none';
-            nextBtn.textContent = 'Next';
+            nextBtn.textContent = 'التالي';
             nextBtn.disabled = false;
         }
 
@@ -1707,8 +1773,8 @@
             resetOverflowAnimation();
             document.getElementById('overflow-run-btn').style.display = 'none';
             document.getElementById('overflow-next-btn').style.display = '';
-            setNarration('overflow-narration', 'Ready! Click <strong>Next</strong> to see each call pile onto the stack with NO stopping condition!');
-            setStep('overflow-step', 'Step 0');
+            setNarration('overflow-narration', 'جاهز! انقر <strong>التالي</strong> لترى كيف تتكدس الاستدعاءات على المكدس بدون أي شرط توقّف!');
+            setStep('overflow-step', 'الخطوة 0');
         }
 
         async function nextOverflowStep() {
@@ -1720,29 +1786,29 @@
 
             if (overflowCurrentStep === 1) {
                 // Push main
-                setNarration('overflow-narration', 'Program starts. <strong>main()</strong> calls <strong>counter(1)</strong> with <strong>NO stopping condition!</strong>');
-                setStep('overflow-step', 'Frame 1 / ' + (overflowTotalFrames + 1));
+                setNarration('overflow-narration', 'يبدأ البرنامج. تستدعي <strong><span dir="ltr">main()</span></strong> الدالة <strong><span dir="ltr">counter(1)</span></strong> <strong>بدون شرط توقّف!</strong>');
+                setStep('overflow-step', 'الإطار 1 / ' + (overflowTotalFrames + 1));
                 addStackFrame('overflow-stack', 'main()', 'main-frame');
             } else if (overflowCurrentStep >= 2 && overflowCurrentStep <= overflowTotalFrames + 1) {
                 const n = overflowCurrentStep - 1;
                 addStackFrame('overflow-stack', 'counter(' + n + ')', 'overflow-frame');
                 addOutput('overflow-output', 'Counter: ' + n);
-                setStep('overflow-step', 'Frame ' + overflowCurrentStep + ' / ' + (overflowTotalFrames + 1));
+                setStep('overflow-step', 'الإطار ' + overflowCurrentStep + ' / ' + (overflowTotalFrames + 1));
 
                 if (n <= 5) {
                     setNarration('overflow-narration',
-                        '<strong>counter(' + n + ')</strong> calls <strong>counter(' + (n+1) + ')</strong>... The stack keeps growing!');
+                        'تستدعي <strong><span dir="ltr">counter(' + n + ')</span></strong> الدالة <strong><span dir="ltr">counter(' + (n+1) + ')</span></strong>... المكدس يستمر في النمو!');
                 } else if (n <= 10) {
                     setNarration('overflow-narration',
-                        'Still going... <strong>counter(' + n + ')</strong> calls <strong>counter(' + (n+1) + ')</strong>. The stack is getting full!');
+                        'ما زال مستمرًا... تستدعي <strong><span dir="ltr">counter(' + n + ')</span></strong> الدالة <strong><span dir="ltr">counter(' + (n+1) + ')</span></strong>. المكدس يوشك على الامتلاء!');
                 } else {
                     setNarration('overflow-narration',
-                        '<strong style="color:#f44336;">WARNING:</strong> The stack is almost out of memory! counter(' + n + ') keeps calling...');
+                        '<strong style="color:#f44336;">تحذير:</strong> ذاكرة المكدس على وشك النفاد! <span dir="ltr">counter(' + n + ')</span> تستمر في الاستدعاء...');
                 }
             } else if (overflowCurrentStep === overflowTotalFrames + 2) {
                 // Stack full - shake
-                setNarration('overflow-narration', '<strong style="color:#f44336;">The stack is FULL! No more memory available!</strong>');
-                setStep('overflow-step', 'Stack Full!');
+                setNarration('overflow-narration', '<strong style="color:#f44336;">المكدس ممتلئ! لا توجد ذاكرة متاحة بعد الآن!</strong>');
+                setStep('overflow-step', 'المكدس ممتلئ!');
                 stackEl.style.animation = 'shake 0.5s ease';
                 await delay(600);
                 stackEl.style.animation = '';
@@ -1751,14 +1817,14 @@
                 stackEl.style.animation = 'explode 0.8s ease';
                 stackEl.style.borderColor = '#f44336';
                 document.getElementById('overflow-error').style.display = 'block';
-                setNarration('overflow-narration', '<strong style="color:#f44336;">CRASH! java.lang.StackOverflowError</strong> &mdash; The program is terminated.');
-                setStep('overflow-step', 'Stack Overflow!');
+                setNarration('overflow-narration', '<strong style="color:#f44336;">انهيار! java.lang.StackOverflowError</strong> &mdash; تم إنهاء البرنامج.');
+                setStep('overflow-step', 'فيض المكدس!');
                 await delay(500);
                 stackEl.style.animation = '';
                 addOutput('overflow-output', '');
                 addOutput('overflow-output', 'Exception in thread "main"');
                 addOutput('overflow-output', 'java.lang.StackOverflowError');
-                btn.textContent = 'Crashed!';
+                btn.textContent = 'انهار!';
                 btn.disabled = true;
                 return;
             }
@@ -1770,24 +1836,24 @@
         function resetOverflowAnimation() {
             overflowCurrentStep = 0;
             const stackEl = document.getElementById('overflow-stack');
-            stackEl.innerHTML = '<div class="stack-box-empty">( empty )</div>';
+            stackEl.innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
             stackEl.style.borderColor = '#667eea';
             stackEl.style.animation = '';
-            document.getElementById('overflow-output').innerHTML = '<div class="output-header">--- Console ---</div>';
+            document.getElementById('overflow-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
             document.getElementById('overflow-error').style.display = 'none';
-            setNarration('overflow-narration', 'Press "Run" to start, then click "Next" to see each call fill the stack.');
+            setNarration('overflow-narration', 'اضغط "تشغيل" للبدء، ثم انقر "التالي" لترى كيف يملأ كل استدعاء المكدس.');
             setStep('overflow-step', '');
             document.getElementById('overflow-run-btn').style.display = '';
             const nextBtn = document.getElementById('overflow-next-btn');
             nextBtn.style.display = 'none';
-            nextBtn.textContent = 'Next';
+            nextBtn.textContent = 'التالي';
             nextBtn.disabled = false;
         }
     </script>
 
 <footer>
     <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 </body>

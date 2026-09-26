@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recursion Application: Folder Explorer</title>
+    <title>تطبيق على العودية: مستكشف المجلدات</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +37,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -97,7 +122,7 @@
 
         .highlight-box {
             background: #f0f4ff;
-            border-left: 5px solid #667eea;
+            border-right: 5px solid #667eea;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
@@ -105,7 +130,7 @@
 
         .definition {
             background: #e8f5e9;
-            border-left: 5px solid #4caf50;
+            border-right: 5px solid #4caf50;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
@@ -114,7 +139,7 @@
 
         .important {
             background: #fff3cd;
-            border-left: 5px solid #ffc107;
+            border-right: 5px solid #ffc107;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
@@ -122,7 +147,7 @@
 
         .warning {
             background: #ffebee;
-            border-left: 5px solid #f44336;
+            border-right: 5px solid #f44336;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
@@ -130,34 +155,34 @@
 
         .teacher-says {
             background: #f3e5f5;
-            border-left: 5px solid #9c27b0;
+            border-right: 5px solid #9c27b0;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
         }
 
         .teacher-says::before {
-            content: "Professor: ";
+            content: "المعلم: ";
             font-weight: bold;
             color: #7b1fa2;
         }
 
         .student-says {
             background: #e3f2fd;
-            border-left: 5px solid #2196f3;
+            border-right: 5px solid #2196f3;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
         }
 
         .student-says::before {
-            content: "Student: ";
+            content: "الطالب: ";
             font-weight: bold;
             color: #1565c0;
         }
 
         ul, ol {
-            margin-left: 30px;
+            margin-right: 30px;
             margin-top: 10px;
             margin-bottom: 10px;
         }
@@ -596,24 +621,6 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
-        .lang-switch-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            padding: 10px 22px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .lang-switch-btn:hover { background: #667eea; color: white; }
-
         /* Responsive */
         @media (max-width: 768px) {
             .content { padding: 20px; }
@@ -634,18 +641,54 @@
         section {
             animation: fadeInUp 0.5s ease;
         }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        /* Code, the folder-tree diagrams, the console output and the call-stack
+           boxes always stay left-to-right, so indentation, folder order and the
+           printed lines read exactly as in the English page. */
+        pre, code, .inline-code, .code-container, .code-header, .code-block, svg,
+        .folder-tree, .ft-row, .folder-visual, .tree-node,
+        .output-console, .output-line, .output-header,
+        .call-stack-box, .stack-frame {
+            direction: ltr;
+        }
+        pre, .code-container, .code-block, .folder-tree, .folder-visual,
+        .output-console { text-align: left; }
+        code, .inline-code { unicode-bidi: isolate; }
+        .ft-level-tag { direction: rtl; unicode-bidi: isolate; }
+        .call-stack-box-empty { direction: rtl; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
+        .lang-switch-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .lang-switch-btn:hover { background: #667eea; color: white; }
     </style>
 </head>
 <body>
-    <a href="../index.html" class="back-home-btn">Home</a>
-    <a href="recursion-application-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="../index.html" class="back-home-btn">الرئيسية</a>
+    <a href="recursion-application.html" class="lang-switch-btn">English</a>
     <div class="container">
         <header>
             <div class="header-content">
                 <div class="header-text">
-                    <h1>Recursion Application</h1>
-                    <p>Data Structures I</p>
-                    <p>Exploring Folders &mdash; Why Recursion is Powerful</p>
+                    <h1>تطبيق على العودية (Recursion Application)</h1>
+                    <p>هياكل البيانات 1</p>
+                    <p>استكشاف المجلدات &mdash; لماذا العودية قوية</p>
                 </div>
             </div>
         </header>
@@ -654,25 +697,25 @@
 
             <!-- ===================== SECTION 1: Introduction ===================== -->
             <section id="introduction">
-                <h2>1. Introduction</h2>
+                <h2>1. مقدمة</h2>
 
                 <div class="teacher-says">
-                    My students, I promised you in the previous tutorial that I would show you a real example where recursion truly shines. Today, I will show you how recursion can be used to solve a problem in an elegant way. After this, you will understand why we sometimes prefer recursion over loops.
+                    طلابي الأعزاء، وعدتكم في الدرس السابق أن أعرض لكم مثالًا حقيقيًا تتألق فيه العودية (Recursion) فعلًا. اليوم سأريكم كيف يمكن استخدام العودية لحل مشكلة بطريقة أنيقة. وبعد هذا الدرس ستفهمون لماذا نفضّل أحيانًا العودية على الحلقات التكرارية (Loops).
                 </div>
 
-                <p>Imagine you have a folder on your computer. Inside this folder, there are files and <strong>subfolders</strong>. Inside those subfolders, there are more files and more subfolders, and so on. We want to write a Java program that <strong>prints every file and folder</strong> inside a given root folder.</p>
+                <p>تخيّل أن لديك مجلدًا (Folder) على حاسوبك. داخل هذا المجلد توجد ملفات و<strong>مجلدات فرعية (Subfolders)</strong>. وداخل تلك المجلدات الفرعية توجد ملفات أخرى ومجلدات فرعية أخرى، وهكذا. نريد أن نكتب برنامج Java <strong>يطبع كل ملف ومجلد</strong> داخل مجلد جذر (Root) معيّن.</p>
 
                 <div class="highlight-box">
-                    <strong>The Challenge:</strong> The depth of folders is <strong>unknown</strong> and <strong>arbitrary</strong>. A folder might contain 0 subfolders or 10 subfolders, each with their own subfolders. How deep does it go? We don't know!
+                    <strong>التحدي:</strong> عمق المجلدات <strong>غير معروف</strong> و<strong>اعتباطي</strong>. قد يحتوي المجلد على 0 مجلد فرعي أو 10 مجلدات فرعية، ولكل منها مجلداته الفرعية الخاصة. إلى أي عمق يصل؟ لا نعرف!
                 </div>
             </section>
 
             <!-- ===================== SECTION 2: The Folder Structure ===================== -->
             <section id="folder-structure">
-                <h2>2. The Folder Structure</h2>
+                <h2>2. بنية المجلدات</h2>
 
                 <div class="teacher-says">
-                    Let me show you a folder structure as an example. This is a project folder called <strong>MyProject</strong>. Look at how folders are nested inside each other.
+                    دعوني أعرض لكم بنية مجلدات كمثال. هذا مجلد مشروع اسمه <strong>MyProject</strong>. لاحظوا كيف تتداخل المجلدات بعضها داخل بعض.
                 </div>
 
                 <div class="folder-tree">
@@ -680,7 +723,7 @@
                     <div class="ft-row">
                         <span class="ft-icon">📁</span>
                         <span class="ft-name is-folder">MyProject/</span>
-                        <span class="ft-level-tag">Level 0</span>
+                        <span class="ft-level-tag">المستوى 0</span>
                     </div>
                     <!-- Level 1 -->
                     <div class="ft-row">
@@ -688,14 +731,14 @@
                         <span class="ft-branch">├</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">README.txt</span>
-                        <span class="ft-level-tag">Level 1</span>
+                        <span class="ft-level-tag">المستوى 1</span>
                     </div>
                     <div class="ft-row">
                         <span class="ft-indent"></span>
                         <span class="ft-branch">├</span>
                         <span class="ft-icon">📁</span>
                         <span class="ft-name is-folder">src/</span>
-                        <span class="ft-level-tag">Level 1</span>
+                        <span class="ft-level-tag">المستوى 1</span>
                     </div>
                     <!-- Level 2 inside src -->
                     <div class="ft-row">
@@ -703,14 +746,14 @@
                         <span class="ft-branch">├</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">Main.java</span>
-                        <span class="ft-level-tag">Level 2</span>
+                        <span class="ft-level-tag">المستوى 2</span>
                     </div>
                     <div class="ft-row">
                         <span class="ft-indent"></span><span class="ft-indent"></span>
                         <span class="ft-branch">├</span>
                         <span class="ft-icon">📁</span>
                         <span class="ft-name is-folder">utils/</span>
-                        <span class="ft-level-tag">Level 2</span>
+                        <span class="ft-level-tag">المستوى 2</span>
                     </div>
                     <!-- Level 3 inside utils -->
                     <div class="ft-row">
@@ -718,21 +761,21 @@
                         <span class="ft-branch">├</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">Helper.java</span>
-                        <span class="ft-level-tag">Level 3</span>
+                        <span class="ft-level-tag">المستوى 3</span>
                     </div>
                     <div class="ft-row">
                         <span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-indent"></span>
                         <span class="ft-branch">└</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">Config.java</span>
-                        <span class="ft-level-tag">Level 3</span>
+                        <span class="ft-level-tag">المستوى 3</span>
                     </div>
                     <div class="ft-row">
                         <span class="ft-indent"></span><span class="ft-indent"></span>
                         <span class="ft-branch">└</span>
                         <span class="ft-icon">📁</span>
                         <span class="ft-name is-folder">models/</span>
-                        <span class="ft-level-tag">Level 2</span>
+                        <span class="ft-level-tag">المستوى 2</span>
                     </div>
                     <!-- Level 3 inside models -->
                     <div class="ft-row">
@@ -740,14 +783,14 @@
                         <span class="ft-branch">└</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">Student.java</span>
-                        <span class="ft-level-tag">Level 3</span>
+                        <span class="ft-level-tag">المستوى 3</span>
                     </div>
                     <div class="ft-row">
                         <span class="ft-indent"></span>
                         <span class="ft-branch">├</span>
                         <span class="ft-icon">📁</span>
                         <span class="ft-name is-folder">docs/</span>
-                        <span class="ft-level-tag">Level 1</span>
+                        <span class="ft-level-tag">المستوى 1</span>
                     </div>
                     <!-- Level 2 inside docs -->
                     <div class="ft-row">
@@ -755,14 +798,14 @@
                         <span class="ft-branch">├</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">guide.pdf</span>
-                        <span class="ft-level-tag">Level 2</span>
+                        <span class="ft-level-tag">المستوى 2</span>
                     </div>
                     <div class="ft-row">
                         <span class="ft-indent"></span><span class="ft-indent"></span>
                         <span class="ft-branch">└</span>
                         <span class="ft-icon">📁</span>
                         <span class="ft-name is-folder">images/</span>
-                        <span class="ft-level-tag">Level 2</span>
+                        <span class="ft-level-tag">المستوى 2</span>
                     </div>
                     <!-- Level 3 inside images -->
                     <div class="ft-row">
@@ -770,21 +813,21 @@
                         <span class="ft-branch">├</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">logo.png</span>
-                        <span class="ft-level-tag">Level 3</span>
+                        <span class="ft-level-tag">المستوى 3</span>
                     </div>
                     <div class="ft-row">
                         <span class="ft-indent"></span><span class="ft-indent"></span><span class="ft-indent"></span>
                         <span class="ft-branch">└</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">banner.png</span>
-                        <span class="ft-level-tag">Level 3</span>
+                        <span class="ft-level-tag">المستوى 3</span>
                     </div>
                     <div class="ft-row">
                         <span class="ft-indent"></span>
                         <span class="ft-branch">└</span>
                         <span class="ft-icon">📁</span>
                         <span class="ft-name is-folder">data/</span>
-                        <span class="ft-level-tag">Level 1</span>
+                        <span class="ft-level-tag">المستوى 1</span>
                     </div>
                     <!-- Level 2 inside data -->
                     <div class="ft-row">
@@ -792,33 +835,33 @@
                         <span class="ft-branch">└</span>
                         <span class="ft-icon">📄</span>
                         <span class="ft-name is-file">records.csv</span>
-                        <span class="ft-level-tag">Level 2</span>
+                        <span class="ft-level-tag">المستوى 2</span>
                     </div>
                 </div>
 
                 <div class="important">
-                    <strong>Notice the depth:</strong>
+                    <strong>لاحظوا العمق:</strong>
                     <ul>
-                        <li><strong>Level 0:</strong> MyProject (the root)</li>
-                        <li><strong>Level 1:</strong> README.txt, src/, docs/, data/</li>
-                        <li><strong>Level 2:</strong> Main.java, utils/, models/, guide.pdf, images/, records.csv</li>
-                        <li><strong>Level 3:</strong> Helper.java, Config.java, Student.java, logo.png, banner.png</li>
+                        <li><strong>المستوى 0:</strong> MyProject (الجذر)</li>
+                        <li><strong>المستوى 1:</strong> <span dir="ltr">README.txt, src/, docs/, data/</span></li>
+                        <li><strong>المستوى 2:</strong> <span dir="ltr">Main.java, utils/, models/, guide.pdf, images/, records.csv</span></li>
+                        <li><strong>المستوى 3:</strong> <span dir="ltr">Helper.java, Config.java, Student.java, logo.png, banner.png</span></li>
                     </ul>
-                    The depth is <strong>not fixed</strong>! Some branches go 1 level deep, others go 3 levels deep.
+                    العمق <strong>ليس ثابتًا</strong>! بعض الفروع تصل إلى مستوى واحد فقط، وأخرى تصل إلى 3 مستويات.
                 </div>
             </section>
 
             <!-- ===================== SECTION 3: Version 1 ===================== -->
             <section id="version1">
-                <h2>3. Version 1: Print the Root Level Only</h2>
+                <h2>3. النسخة الأولى: طباعة مستوى الجذر فقط</h2>
 
                 <div class="teacher-says">
-                    Let us start simple. I will write a Java program that opens the root folder and prints only the <strong>first level</strong> &mdash; the items directly inside MyProject.
+                    لنبدأ ببساطة. سأكتب برنامج Java يفتح المجلد الجذر ويطبع <strong>المستوى الأول</strong> فقط &mdash; أي العناصر الموجودة مباشرة داخل MyProject.
                 </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        <span class="version-badge">V1</span> Java - Print Root Level Only
+                        <span class="version-badge">V1</span> Java - طباعة مستوى الجذر فقط
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">import</span> java.io.File;
@@ -837,9 +880,9 @@
                 </div>
 
                 <div class="demo-area">
-                    <h3>Output of Version 1</h3>
+                    <h3>ناتج النسخة الأولى</h3>
                     <div class="output-console">
-                        <div class="output-header">--- Console ---</div>
+                        <div class="output-header">--- الطرفية (Console) ---</div>
                         <div class="output-line">README.txt</div>
                         <div class="output-line">src</div>
                         <div class="output-line">docs</div>
@@ -848,25 +891,25 @@
                 </div>
 
                 <div class="student-says">
-                    OK, this prints the first level, but what about the files <em>inside</em> src, docs, and data?
+                    حسنًا، هذا يطبع المستوى الأول، لكن ماذا عن الملفات الموجودة <em>داخل</em> src وdocs وdata؟
                 </div>
 
                 <div class="teacher-says">
-                    Exactly! This only prints what is directly inside MyProject. It does not go deeper. Let us improve it.
+                    بالضبط! هذا يطبع فقط ما يوجد مباشرة داخل MyProject، ولا يتعمق أكثر. دعونا نحسّنه.
                 </div>
             </section>
 
             <!-- ===================== SECTION 4: Version 2 ===================== -->
             <section id="version2">
-                <h2>4. Version 2: Extract a Method</h2>
+                <h2>4. النسخة الثانية: استخراج دالة (Method)</h2>
 
                 <div class="teacher-says">
-                    Let us be smarter. Instead of writing the logic directly in <code>main()</code>, I will create a separate method called <code>printContents()</code>. We pass a folder to this method, and it prints everything inside that folder.
+                    لنكن أذكى. بدلًا من كتابة المنطق مباشرة داخل <code>main()</code>، سأنشئ دالة منفصلة باسم <code>printContents()</code>. نمرر مجلدًا إلى هذه الدالة، فتطبع كل ما بداخل ذلك المجلد.
                 </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        <span class="version-badge">V2</span> Java - Using a Method
+                        <span class="version-badge">V2</span> Java - استخدام دالة
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">import</span> java.io.File;
@@ -889,21 +932,21 @@
                 </div>
 
                 <div class="definition">
-                    <strong>Good!</strong> Now we have a method that takes any folder and prints its contents. The output is the same as Version 1, but the code is better organized. The method is <strong>reusable</strong> &mdash; we can call it with any folder.
+                    <strong>جيد!</strong> أصبح لدينا الآن دالة تأخذ أي مجلد وتطبع محتوياته. الناتج هو نفسه ناتج النسخة الأولى، لكن الشيفرة أصبحت أفضل تنظيمًا. الدالة <strong>قابلة لإعادة الاستخدام</strong> &mdash; يمكننا استدعاؤها مع أي مجلد.
                 </div>
             </section>
 
             <!-- ===================== SECTION 5: Version 3 ===================== -->
             <section id="version3">
-                <h2>5. Version 3: Multiple Copies for Each Level</h2>
+                <h2>5. النسخة الثالثة: نسخ متعددة لكل مستوى</h2>
 
                 <div class="teacher-says">
-                    Now, what if I want to go <strong>deeper</strong>? One idea: I call <code>printContents()</code> for the root, and then I call it again for each subfolder. Let me try to do this manually.
+                    والآن، ماذا لو أردت التعمق <strong>أكثر</strong>؟ فكرة: أستدعي <code>printContents()</code> للجذر، ثم أستدعيها مرة أخرى لكل مجلد فرعي. دعوني أجرّب ذلك يدويًا.
                 </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        <span class="version-badge">V3</span> Java - Manually Calling for Each Level
+                        <span class="version-badge">V3</span> Java - الاستدعاء اليدوي لكل مستوى
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">import</span> java.io.File;
@@ -937,39 +980,39 @@
                 </div>
 
                 <div class="warning">
-                    <strong>The Problem:</strong>
+                    <strong>المشكلة:</strong>
                     <ul>
-                        <li>We had to <strong>manually type every subfolder path</strong>.</li>
-                        <li>We must <strong>know the structure in advance</strong> &mdash; but what if we don't?</li>
-                        <li>What about <strong>Level 3, Level 4, Level 5...</strong>? We have to keep writing more and more calls!</li>
-                        <li>If the folder structure <strong>changes</strong>, our code breaks.</li>
+                        <li>اضطررنا إلى <strong>كتابة مسار كل مجلد فرعي يدويًا</strong>.</li>
+                        <li>يجب أن <strong>نعرف البنية مسبقًا</strong> &mdash; لكن ماذا لو لم نكن نعرفها؟</li>
+                        <li>ماذا عن <strong>المستوى 3 والمستوى 4 والمستوى 5...</strong>؟ علينا أن نستمر في كتابة المزيد والمزيد من الاستدعاءات!</li>
+                        <li>إذا <strong>تغيّرت</strong> بنية المجلدات، تعطّلت شيفرتنا.</li>
                     </ul>
                 </div>
 
                 <div class="student-says">
-                    This is not practical at all! Can we use a loop instead, Professor?
+                    هذا ليس عمليًا على الإطلاق! هل يمكننا استخدام حلقة تكرارية بدلًا من ذلك يا أستاذ؟
                 </div>
 
                 <div class="teacher-says">
-                    Good thinking! But here is the challenge: how do you write a loop when you <strong>don't know how deep the folders go</strong>? Each folder might have subfolders, and those subfolders might have more subfolders. The depth is <strong>arbitrary</strong>. A regular loop cannot easily handle this because you don't know how many levels to iterate.
+                    تفكير جيد! لكن هنا يكمن التحدي: كيف تكتب حلقة تكرارية وأنت <strong>لا تعرف إلى أي عمق تصل المجلدات</strong>؟ قد يحتوي كل مجلد على مجلدات فرعية، وقد تحتوي تلك المجلدات الفرعية على مجلدات فرعية أخرى. العمق <strong>اعتباطي</strong>. لا تستطيع الحلقة العادية التعامل مع هذا بسهولة لأنك لا تعرف عدد المستويات التي يجب التكرار عليها.
                 </div>
 
                 <div class="important">
-                    <strong>The core challenge:</strong> The folder structure has an <strong>arbitrary, unknown depth</strong>. A for loop works when you know how many times to repeat. But here, we don't know!
+                    <strong>جوهر التحدي:</strong> بنية المجلدات ذات <strong>عمق اعتباطي وغير معروف</strong>. تعمل حلقة for عندما تعرف عدد مرات التكرار. أما هنا فلا نعرف!
                 </div>
             </section>
 
             <!-- ===================== SECTION 6: Version 4 - The Recursive Solution ===================== -->
             <section id="version4">
-                <h2>6. Version 4: The Recursive Solution</h2>
+                <h2>6. النسخة الرابعة: الحل العودي</h2>
 
                 <div class="teacher-says">
-                    Now, my students, watch carefully. What if I modify the <code>printContents()</code> method so that when it finds a <strong>subfolder</strong>, it <strong>calls itself</strong> with that subfolder? The method does not need to know how deep the structure goes. It simply says: "If this item is a folder, let me explore it by calling myself again."
+                    والآن يا طلابي، راقبوا بعناية. ماذا لو عدّلت الدالة <code>printContents()</code> بحيث عندما تجد <strong>مجلدًا فرعيًا</strong> فإنها <strong>تستدعي نفسها</strong> مع ذلك المجلد الفرعي؟ لا تحتاج الدالة إلى معرفة عمق البنية. إنها تقول ببساطة: «إذا كان هذا العنصر مجلدًا، فدعني أستكشفه باستدعاء نفسي مرة أخرى».
                 </div>
 
                 <div class="code-container">
                     <div class="code-header" onclick="toggleCode(this)">
-                        <span class="version-badge">V4</span> Java - The Recursive Solution
+                        <span class="version-badge">V4</span> Java - الحل العودي
                         <span class="code-toggle collapsed">&#9660;</span>
                     </div>
                     <div class="code-block collapsed"><span class="keyword">import</span> java.io.File;
@@ -998,27 +1041,27 @@
                 </div>
 
                 <div class="definition">
-                    <strong>That's it!</strong> Just a few lines of code, and the method can explore <strong>any folder structure of any depth</strong>. Let us break it down:
+                    <strong>هذا كل شيء!</strong> بضعة أسطر فقط من الشيفرة، وتستطيع الدالة استكشاف <strong>أي بنية مجلدات بأي عمق</strong>. دعونا نحللها:
                     <ol>
-                        <li>The method receives a <strong>folder</strong>.</li>
-                        <li>It prints the folder name.</li>
-                        <li>It loops through each item inside the folder.</li>
-                        <li>If the item is a <strong>file</strong> &rarr; print it.</li>
-                        <li>If the item is a <strong>folder</strong> &rarr; <strong>call itself</strong> with that folder (recursion!).</li>
+                        <li>تستقبل الدالة <strong>مجلدًا</strong>.</li>
+                        <li>تطبع اسم المجلد.</li>
+                        <li>تمر في حلقة على كل عنصر داخل المجلد.</li>
+                        <li>إذا كان العنصر <strong>ملفًا</strong> &rarr; تطبعه.</li>
+                        <li>إذا كان العنصر <strong>مجلدًا</strong> &rarr; <strong>تستدعي نفسها</strong> مع ذلك المجلد (عودية!).</li>
                     </ol>
                 </div>
 
-                <h3>Let's See It in Action!</h3>
+                <h3>لنشاهدها وهي تعمل!</h3>
 
                 <div class="teacher-says">
-                    Now let me show you step by step how this recursive method explores our entire MyProject folder. Watch the call stack and the output carefully!
+                    دعوني الآن أريكم خطوة بخطوة كيف تستكشف هذه الدالة العودية مجلد MyProject بالكامل. راقبوا مكدس الاستدعاءات (Call Stack) والناتج بعناية!
                 </div>
 
                 <div class="demo-area">
-                    <h3>Animation: Recursive Folder Explorer</h3>
+                    <h3>رسم متحرك: مستكشف المجلدات العودي</h3>
                     <div class="demo-layout">
                         <div class="demo-tree-panel">
-                            <h4>Folder Structure</h4>
+                            <h4>بنية المجلدات</h4>
                             <div class="folder-visual" id="anim-tree">
                                 <div class="tree-node" id="node-root"><span class="tree-icon">📁</span><span class="tree-name folder-name">MyProject</span></div>
                                 <div class="tree-node" id="node-readme"><span class="tree-indent"></span><span class="tree-icon">📄</span><span class="tree-name file-name">README.txt</span></div>
@@ -1039,113 +1082,113 @@
                             </div>
                         </div>
                         <div class="call-stack-panel">
-                            <div class="call-stack-box-label">STACK</div>
+                            <div class="call-stack-box-label">المكدس (Stack)</div>
                             <div class="call-stack-box" id="explore-stack">
-                                <div class="call-stack-box-empty">( empty )</div>
+                                <div class="call-stack-box-empty">( فارغ )</div>
                             </div>
                         </div>
                         <div class="demo-output-panel">
-                            <h4>Output</h4>
+                            <h4>الناتج</h4>
                             <div class="output-console" id="explore-output">
-                                <div class="output-header">--- Console ---</div>
+                                <div class="output-header">--- الطرفية (Console) ---</div>
                             </div>
                         </div>
                     </div>
-                    <div class="narration" id="explore-narration">Press "Run" to start, then click "Next" to step through the recursive folder exploration.</div>
+                    <div class="narration" id="explore-narration">اضغط «تشغيل» للبدء، ثم انقر «التالي» للتنقل خطوة بخطوة عبر الاستكشاف العودي للمجلدات.</div>
                     <div class="step-indicator" id="explore-step"></div>
                     <div class="animation-controls">
-                        <button class="btn" id="explore-run-btn" onclick="startExploreAnimation()">Run</button>
-                        <button class="btn btn-success" id="explore-next-btn" onclick="nextExploreStep()" style="display:none;">Next</button>
-                        <button class="btn btn-warning" onclick="resetExploreAnimation()">Reset</button>
+                        <button class="btn" id="explore-run-btn" onclick="startExploreAnimation()">تشغيل</button>
+                        <button class="btn btn-success" id="explore-next-btn" onclick="nextExploreStep()" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetExploreAnimation()">إعادة تعيين</button>
                     </div>
                 </div>
 
                 <div class="highlight-box">
-                    <strong>Notice:</strong> The method explored the <strong>entire folder tree</strong> automatically! It did not need to know the structure in advance. When it found a subfolder, it simply called itself. When it ran out of items, it returned &mdash; just like a <strong>base case</strong> in recursion.
+                    <strong>لاحظوا:</strong> استكشفت الدالة <strong>شجرة المجلدات بالكامل</strong> تلقائيًا! لم تكن بحاجة إلى معرفة البنية مسبقًا. عندما وجدت مجلدًا فرعيًا، استدعت نفسها ببساطة. وعندما نفدت العناصر، عادت &mdash; تمامًا مثل <strong>الحالة الأساسية (Base Case)</strong> في العودية.
                 </div>
 
                 <div class="important">
-                    <strong>Where is the base case?</strong> The base case is <strong>implicit</strong>: when a folder contains only files (no subfolders), the method processes all files and returns naturally without making any recursive calls. The recursion stops on its own!
+                    <strong>أين الحالة الأساسية؟</strong> الحالة الأساسية هنا <strong>ضمنية</strong>: عندما يحتوي المجلد على ملفات فقط (دون مجلدات فرعية)، تعالج الدالة جميع الملفات وتعود طبيعيًا دون إجراء أي استدعاءات عودية. تتوقف العودية من تلقاء نفسها!
                 </div>
             </section>
 
             <!-- ===================== SECTION 7: Why Recursion Wins Here ===================== -->
             <section id="why-recursion">
-                <h2>7. Why Recursion Wins Here</h2>
+                <h2>7. لماذا تفوز العودية هنا</h2>
 
                 <div class="teacher-says">
-                    My students, now you can see why recursion is so powerful for this kind of problem. Let me summarize why.
+                    طلابي، الآن يمكنكم أن تروا لماذا العودية قوية جدًا لهذا النوع من المشكلات. دعوني ألخّص السبب.
                 </div>
 
-                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-left-color: #764ba2;">
-                    <h3 style="margin-top:0;">Comparing the Approaches</h3>
+                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-right-color: #764ba2;">
+                    <h3 style="margin-top:0;">مقارنة الأساليب</h3>
                     <table style="width:100%; border-collapse:collapse; margin-top:15px;">
                         <thead>
                             <tr style="background:linear-gradient(135deg,#667eea,#764ba2); color:white;">
-                                <th style="padding:12px; text-align:center;">Approach</th>
-                                <th style="padding:12px; text-align:center;">Can handle unknown depth?</th>
-                                <th style="padding:12px; text-align:center;">Lines of code</th>
+                                <th style="padding:12px; text-align:center;">الأسلوب</th>
+                                <th style="padding:12px; text-align:center;">هل يتعامل مع عمق غير معروف؟</th>
+                                <th style="padding:12px; text-align:center;">عدد أسطر الشيفرة</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr style="background:#fff;">
-                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V1:</strong> Root only</td>
-                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#f44336;">No</td>
-                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">~5 lines</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V1:</strong> الجذر فقط</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#f44336;">لا</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">نحو 5 أسطر</td>
                             </tr>
                             <tr style="background:#f8f9ff;">
-                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V2:</strong> Method (one level)</td>
-                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#f44336;">No</td>
-                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">~8 lines</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V2:</strong> دالة (مستوى واحد)</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#f44336;">لا</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">نحو 8 أسطر</td>
                             </tr>
                             <tr style="background:#fff;">
-                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V3:</strong> Manual calls</td>
-                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#ff9800;">Only if you know the structure</td>
-                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">Grows with depth!</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd;"><strong>V3:</strong> استدعاءات يدوية</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center; color:#ff9800;">فقط إذا كنت تعرف البنية</td>
+                                <td style="padding:10px; border-bottom:1px solid #ddd; text-align:center;">يزداد مع العمق!</td>
                             </tr>
                             <tr style="background:#e8f5e9;">
-                                <td style="padding:10px;"><strong>V4:</strong> Recursive</td>
-                                <td style="padding:10px; text-align:center; color:#4caf50; font-weight:bold;">Yes! Any depth!</td>
-                                <td style="padding:10px; text-align:center; font-weight:bold;">~10 lines</td>
+                                <td style="padding:10px;"><strong>V4:</strong> عودي</td>
+                                <td style="padding:10px; text-align:center; color:#4caf50; font-weight:bold;">نعم! بأي عمق!</td>
+                                <td style="padding:10px; text-align:center; font-weight:bold;">نحو 10 أسطر</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="definition">
-                    <strong>Key Insight:</strong> Recursion is a natural fit when the problem has a <strong>self-similar structure</strong> &mdash; when the problem at each level looks the same as the problem at the next level. A folder contains files and subfolders. A subfolder also contains files and subfolders. The structure <strong>repeats itself</strong>. This is exactly what recursion does: it repeats the <strong>same method</strong> on a <strong>smaller version</strong> of the problem.
+                    <strong>الفكرة الجوهرية:</strong> العودية مناسبة طبيعيًا عندما تكون للمشكلة <strong>بنية متشابهة ذاتيًا (Self-similar)</strong> &mdash; أي عندما تبدو المشكلة في كل مستوى مثل المشكلة في المستوى التالي. المجلد يحتوي على ملفات ومجلدات فرعية. والمجلد الفرعي يحتوي أيضًا على ملفات ومجلدات فرعية. البنية <strong>تكرر نفسها</strong>. وهذا بالضبط ما تفعله العودية: تكرر <strong>الدالة نفسها</strong> على <strong>نسخة أصغر</strong> من المشكلة.
                 </div>
 
                 <div class="teacher-says">
-                    Remember: this could be solved with a loop using something called a "stack data structure" manually. But as programmers, the recursive solution is much easier for us to think about, write, and understand. The computer handles the call stack for us automatically!
+                    تذكروا: يمكن حل هذه المشكلة بحلقة تكرارية باستخدام ما يسمى «هيكل بيانات المكدس (Stack)» يدويًا. لكن بالنسبة لنا كمبرمجين، الحل العودي أسهل بكثير في التفكير والكتابة والفهم. فالحاسوب يتولى إدارة مكدس الاستدعاءات نيابة عنا تلقائيًا!
                 </div>
             </section>
 
             <!-- ===================== SECTION 8: Summary ===================== -->
             <section id="summary">
-                <h2>8. Summary</h2>
+                <h2>8. الخلاصة</h2>
 
-                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-left-color: #764ba2;">
-                    <h3 style="margin-top: 0;">What We Learned Today</h3>
+                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-right-color: #764ba2;">
+                    <h3 style="margin-top: 0;">ما تعلمناه اليوم</h3>
                     <ol>
-                        <li><strong>Version 1:</strong> A simple program can only print the first level of a folder.</li>
-                        <li><strong>Version 2:</strong> Extracting a method makes the code reusable, but it still only handles one level.</li>
-                        <li><strong>Version 3:</strong> Manually calling the method for each level is impractical when the depth is unknown.</li>
-                        <li><strong>Version 4 (Recursive):</strong> A method that calls itself when it encounters a subfolder can explore <strong>any depth automatically</strong>.</li>
-                        <li>Recursion is a natural fit for problems with <strong>self-similar structure</strong> (trees, folders, nested data).</li>
-                        <li>The <strong>base case</strong> can be implicit &mdash; when no more recursive calls are made, the recursion stops naturally.</li>
+                        <li><strong>النسخة الأولى:</strong> برنامج بسيط لا يستطيع طباعة سوى المستوى الأول من المجلد.</li>
+                        <li><strong>النسخة الثانية:</strong> استخراج دالة يجعل الشيفرة قابلة لإعادة الاستخدام، لكنها ما زالت تتعامل مع مستوى واحد فقط.</li>
+                        <li><strong>النسخة الثالثة:</strong> استدعاء الدالة يدويًا لكل مستوى غير عملي عندما يكون العمق غير معروف.</li>
+                        <li><strong>النسخة الرابعة (العودية):</strong> الدالة التي تستدعي نفسها عندما تصادف مجلدًا فرعيًا تستطيع استكشاف <strong>أي عمق تلقائيًا</strong>.</li>
+                        <li>العودية مناسبة طبيعيًا للمشكلات ذات <strong>البنية المتشابهة ذاتيًا</strong> (الأشجار، المجلدات، البيانات المتداخلة).</li>
+                        <li>قد تكون <strong>الحالة الأساسية</strong> ضمنية &mdash; عندما لا تُجرى استدعاءات عودية أخرى، تتوقف العودية طبيعيًا.</li>
                     </ol>
                 </div>
 
                 <div class="teacher-says">
-                    Excellent work, my students! Now you can see the true power of recursion. It is not just a theoretical concept &mdash; it is a practical tool that makes complex problems simple and elegant. In future tutorials, we will see more examples like factorial, Fibonacci, and tree traversals!
+                    عمل ممتاز يا طلابي! الآن يمكنكم رؤية القوة الحقيقية للعودية. إنها ليست مجرد مفهوم نظري &mdash; بل أداة عملية تجعل المشكلات المعقدة بسيطة وأنيقة. في الدروس القادمة سنرى المزيد من الأمثلة مثل المضروب (Factorial) وفيبوناتشي (Fibonacci) واجتياز الأشجار (Tree Traversals)!
                 </div>
             </section>
 
         </div>
 
         <div style="text-align: center; padding: 25px 40px; color: #6b7280; font-size: 0.9rem; border-top: 1px solid #e5e7eb; line-height: 1.8;">
-            <div style="margin-top: 8px;">Prepared by Dr. Abdulmohsen Almalawi</div>
+            <div style="margin-top: 8px;">إعداد: د. عبدالمحسن المعلوي (Dr. Abdulmohsen Almalawi)</div>
         </div>
     </div>
 
@@ -1199,7 +1242,7 @@
                     setTimeout(() => {
                         top.remove();
                         if (stack.querySelectorAll('.stack-frame').length === 0) {
-                            stack.innerHTML = '<div class="call-stack-box-empty">( empty )</div>';
+                            stack.innerHTML = '<div class="call-stack-box-empty">( فارغ )</div>';
                         }
                         resolve();
                     }, 400);
@@ -1232,20 +1275,20 @@
             {
                 node: 'node-root', nodeState: 'active',
                 stackAction: 'push', stackText: 'main()', stackClass: 'main-frame',
-                narration: '<strong>main()</strong> starts and calls <strong>explore(MyProject)</strong>.'
+                narration: '<strong dir="ltr">main()</strong> تبدأ وتستدعي <strong dir="ltr">explore(MyProject)</strong>.'
             },
             {
                 node: 'node-root', nodeState: 'active',
                 stackAction: 'push', stackText: 'explore(MyProject)', stackClass: 'depth-0',
                 outputText: '[Folder] MyProject', outputClass: 'folder-out',
-                narration: '<strong>explore(MyProject)</strong> prints "[Folder] MyProject" and starts looping through its items.'
+                narration: '<strong dir="ltr">explore(MyProject)</strong> تطبع <span dir="ltr">"[Folder] MyProject"</span> وتبدأ الحلقة على عناصرها.'
             },
             // README.txt (file)
             {
                 node: 'node-readme', nodeState: 'active',
                 prevNode: 'node-root', prevState: 'highlighted',
                 outputText: '  [File] README.txt', outputClass: 'file-out',
-                narration: 'Found <strong>README.txt</strong> &mdash; it is a file, so just print it.'
+                narration: 'عثرت على <strong dir="ltr">README.txt</strong> &mdash; إنه ملف، لذا تطبعه فقط.'
             },
             // src/ (folder) -> recursive call
             {
@@ -1253,14 +1296,14 @@
                 prevNode: 'node-readme', prevState: 'visited',
                 stackAction: 'push', stackText: 'explore(src)', stackClass: 'depth-1',
                 outputText: '[Folder] src', outputClass: 'folder-out',
-                narration: 'Found <strong>src</strong> &mdash; it is a folder! Call <strong>explore(src)</strong> recursively. New frame pushed!'
+                narration: 'عثرت على <strong dir="ltr">src</strong> &mdash; إنه مجلد! تستدعي <strong dir="ltr">explore(src)</strong> عوديًا. تم دفع إطار (Frame) جديد إلى المكدس!'
             },
             // Main.java
             {
                 node: 'node-main-java', nodeState: 'active',
                 prevNode: 'node-src', prevState: 'highlighted',
                 outputText: '  [File] Main.java', outputClass: 'file-out',
-                narration: 'Inside <strong>src/</strong>: found <strong>Main.java</strong> &mdash; it is a file, print it.'
+                narration: 'داخل <strong dir="ltr">src/</strong>: عثرت على <strong dir="ltr">Main.java</strong> &mdash; إنه ملف، تطبعه.'
             },
             // utils/ -> recursive call
             {
@@ -1268,69 +1311,69 @@
                 prevNode: 'node-main-java', prevState: 'visited',
                 stackAction: 'push', stackText: 'explore(utils)', stackClass: 'depth-2',
                 outputText: '[Folder] utils', outputClass: 'folder-out',
-                narration: 'Found <strong>utils</strong> &mdash; it is a folder! Call <strong>explore(utils)</strong> recursively. Going deeper!'
+                narration: 'عثرت على <strong dir="ltr">utils</strong> &mdash; إنه مجلد! تستدعي <strong dir="ltr">explore(utils)</strong> عوديًا. نتعمق أكثر!'
             },
             // Helper.java
             {
                 node: 'node-helper', nodeState: 'active',
                 prevNode: 'node-utils', prevState: 'highlighted',
                 outputText: '  [File] Helper.java', outputClass: 'file-out',
-                narration: 'Inside <strong>utils/</strong>: found <strong>Helper.java</strong> &mdash; it is a file, print it.'
+                narration: 'داخل <strong dir="ltr">utils/</strong>: عثرت على <strong dir="ltr">Helper.java</strong> &mdash; إنه ملف، تطبعه.'
             },
             // Config.java
             {
                 node: 'node-config', nodeState: 'active',
                 prevNode: 'node-helper', prevState: 'visited',
                 outputText: '  [File] Config.java', outputClass: 'file-out',
-                narration: 'Found <strong>Config.java</strong> &mdash; it is a file, print it.'
+                narration: 'عثرت على <strong dir="ltr">Config.java</strong> &mdash; إنه ملف، تطبعه.'
             },
             // utils done -> pop
             {
                 node: 'node-config', nodeState: 'visited',
                 prevNode: 'node-utils', prevState: 'visited',
                 stackAction: 'pop',
-                narration: '<strong>explore(utils)</strong> is done (no more items). Pop it off the stack. Return to <strong>explore(src)</strong>.'
+                narration: 'انتهت <strong dir="ltr">explore(utils)</strong> (لا مزيد من العناصر). تُسحب من المكدس. نعود إلى <strong dir="ltr">explore(src)</strong>.'
             },
             // models/ -> recursive call
             {
                 node: 'node-models', nodeState: 'active',
                 stackAction: 'push', stackText: 'explore(models)', stackClass: 'depth-2',
                 outputText: '[Folder] models', outputClass: 'folder-out',
-                narration: 'Back in <strong>src/</strong>: found <strong>models</strong> &mdash; it is a folder! Call <strong>explore(models)</strong> recursively.'
+                narration: 'بالعودة إلى <strong dir="ltr">src/</strong>: عثرت على <strong dir="ltr">models</strong> &mdash; إنه مجلد! تستدعي <strong dir="ltr">explore(models)</strong> عوديًا.'
             },
             // Student.java
             {
                 node: 'node-student', nodeState: 'active',
                 prevNode: 'node-models', prevState: 'highlighted',
                 outputText: '  [File] Student.java', outputClass: 'file-out',
-                narration: 'Inside <strong>models/</strong>: found <strong>Student.java</strong> &mdash; it is a file, print it.'
+                narration: 'داخل <strong dir="ltr">models/</strong>: عثرت على <strong dir="ltr">Student.java</strong> &mdash; إنه ملف، تطبعه.'
             },
             // models done -> pop
             {
                 node: 'node-student', nodeState: 'visited',
                 prevNode: 'node-models', prevState: 'visited',
                 stackAction: 'pop',
-                narration: '<strong>explore(models)</strong> is done. Pop it off the stack. Return to <strong>explore(src)</strong>.'
+                narration: 'انتهت <strong dir="ltr">explore(models)</strong>. تُسحب من المكدس. نعود إلى <strong dir="ltr">explore(src)</strong>.'
             },
             // src done -> pop
             {
                 node: 'node-src', nodeState: 'visited',
                 stackAction: 'pop',
-                narration: '<strong>explore(src)</strong> is done (all items processed). Pop it off. Return to <strong>explore(MyProject)</strong>.'
+                narration: 'انتهت <strong dir="ltr">explore(src)</strong> (تمت معالجة جميع العناصر). تُسحب من المكدس. نعود إلى <strong dir="ltr">explore(MyProject)</strong>.'
             },
             // docs/ -> recursive call
             {
                 node: 'node-docs', nodeState: 'active',
                 stackAction: 'push', stackText: 'explore(docs)', stackClass: 'depth-1',
                 outputText: '[Folder] docs', outputClass: 'folder-out',
-                narration: 'Back in <strong>MyProject/</strong>: found <strong>docs</strong> &mdash; it is a folder! Call <strong>explore(docs)</strong> recursively.'
+                narration: 'بالعودة إلى <strong dir="ltr">MyProject/</strong>: عثرت على <strong dir="ltr">docs</strong> &mdash; إنه مجلد! تستدعي <strong dir="ltr">explore(docs)</strong> عوديًا.'
             },
             // guide.pdf
             {
                 node: 'node-guide', nodeState: 'active',
                 prevNode: 'node-docs', prevState: 'highlighted',
                 outputText: '  [File] guide.pdf', outputClass: 'file-out',
-                narration: 'Inside <strong>docs/</strong>: found <strong>guide.pdf</strong> &mdash; it is a file, print it.'
+                narration: 'داخل <strong dir="ltr">docs/</strong>: عثرت على <strong dir="ltr">guide.pdf</strong> &mdash; إنه ملف، تطبعه.'
             },
             // images/ -> recursive call
             {
@@ -1338,66 +1381,66 @@
                 prevNode: 'node-guide', prevState: 'visited',
                 stackAction: 'push', stackText: 'explore(images)', stackClass: 'depth-2',
                 outputText: '[Folder] images', outputClass: 'folder-out',
-                narration: 'Found <strong>images</strong> &mdash; it is a folder! Call <strong>explore(images)</strong> recursively. Going deeper!'
+                narration: 'عثرت على <strong dir="ltr">images</strong> &mdash; إنه مجلد! تستدعي <strong dir="ltr">explore(images)</strong> عوديًا. نتعمق أكثر!'
             },
             // logo.png
             {
                 node: 'node-logo', nodeState: 'active',
                 prevNode: 'node-images', prevState: 'highlighted',
                 outputText: '  [File] logo.png', outputClass: 'file-out',
-                narration: 'Inside <strong>images/</strong>: found <strong>logo.png</strong> &mdash; it is a file, print it.'
+                narration: 'داخل <strong dir="ltr">images/</strong>: عثرت على <strong dir="ltr">logo.png</strong> &mdash; إنه ملف، تطبعه.'
             },
             // banner.png
             {
                 node: 'node-banner', nodeState: 'active',
                 prevNode: 'node-logo', prevState: 'visited',
                 outputText: '  [File] banner.png', outputClass: 'file-out',
-                narration: 'Found <strong>banner.png</strong> &mdash; it is a file, print it.'
+                narration: 'عثرت على <strong dir="ltr">banner.png</strong> &mdash; إنه ملف، تطبعه.'
             },
             // images done -> pop
             {
                 node: 'node-banner', nodeState: 'visited',
                 prevNode: 'node-images', prevState: 'visited',
                 stackAction: 'pop',
-                narration: '<strong>explore(images)</strong> is done. Pop it off the stack. Return to <strong>explore(docs)</strong>.'
+                narration: 'انتهت <strong dir="ltr">explore(images)</strong>. تُسحب من المكدس. نعود إلى <strong dir="ltr">explore(docs)</strong>.'
             },
             // docs done -> pop
             {
                 node: 'node-docs', nodeState: 'visited',
                 stackAction: 'pop',
-                narration: '<strong>explore(docs)</strong> is done. Pop it off. Return to <strong>explore(MyProject)</strong>.'
+                narration: 'انتهت <strong dir="ltr">explore(docs)</strong>. تُسحب من المكدس. نعود إلى <strong dir="ltr">explore(MyProject)</strong>.'
             },
             // data/ -> recursive call
             {
                 node: 'node-data', nodeState: 'active',
                 stackAction: 'push', stackText: 'explore(data)', stackClass: 'depth-1',
                 outputText: '[Folder] data', outputClass: 'folder-out',
-                narration: 'Back in <strong>MyProject/</strong>: found <strong>data</strong> &mdash; it is a folder! Call <strong>explore(data)</strong> recursively.'
+                narration: 'بالعودة إلى <strong dir="ltr">MyProject/</strong>: عثرت على <strong dir="ltr">data</strong> &mdash; إنه مجلد! تستدعي <strong dir="ltr">explore(data)</strong> عوديًا.'
             },
             // records.csv
             {
                 node: 'node-records', nodeState: 'active',
                 prevNode: 'node-data', prevState: 'highlighted',
                 outputText: '  [File] records.csv', outputClass: 'file-out',
-                narration: 'Inside <strong>data/</strong>: found <strong>records.csv</strong> &mdash; it is a file, print it.'
+                narration: 'داخل <strong dir="ltr">data/</strong>: عثرت على <strong dir="ltr">records.csv</strong> &mdash; إنه ملف، تطبعه.'
             },
             // data done -> pop
             {
                 node: 'node-records', nodeState: 'visited',
                 prevNode: 'node-data', prevState: 'visited',
                 stackAction: 'pop',
-                narration: '<strong>explore(data)</strong> is done. Pop it off. Return to <strong>explore(MyProject)</strong>.'
+                narration: 'انتهت <strong dir="ltr">explore(data)</strong>. تُسحب من المكدس. نعود إلى <strong dir="ltr">explore(MyProject)</strong>.'
             },
             // MyProject done -> pop
             {
                 node: 'node-root', nodeState: 'visited',
                 stackAction: 'pop',
-                narration: '<strong>explore(MyProject)</strong> is done &mdash; all items explored! Pop it off.'
+                narration: 'انتهت <strong dir="ltr">explore(MyProject)</strong> &mdash; تم استكشاف جميع العناصر! تُسحب من المكدس.'
             },
             // main done -> pop
             {
                 stackAction: 'pop',
-                narration: '<strong>main()</strong> finishes. Program ends. <strong>Every file and folder was printed!</strong>'
+                narration: 'تنتهي <strong dir="ltr">main()</strong>. ينتهي البرنامج. <strong>تمت طباعة كل ملف ومجلد!</strong>'
             }
         ];
 
@@ -1405,8 +1448,8 @@
             resetExploreAnimation();
             document.getElementById('explore-run-btn').style.display = 'none';
             document.getElementById('explore-next-btn').style.display = '';
-            setNarration('Ready! Click <strong>Next</strong> to step through the recursive folder exploration.');
-            setStep('Step 0 of ' + exploreSteps.length);
+            setNarration('جاهز! انقر <strong>التالي</strong> للتنقل خطوة بخطوة عبر الاستكشاف العودي للمجلدات.');
+            setStep('الخطوة 0 من ' + exploreSteps.length);
         }
 
         async function nextExploreStep() {
@@ -1415,9 +1458,9 @@
             exploreCurrentStep++;
 
             if (exploreCurrentStep > exploreSteps.length) {
-                setNarration('Exploration complete! The recursive method explored the <strong>entire folder tree</strong> with just one simple method that calls itself.');
-                setStep('Complete!');
-                btn.textContent = 'Done';
+                setNarration('اكتمل الاستكشاف! استكشفت الدالة العودية <strong>شجرة المجلدات بالكامل</strong> بدالة واحدة بسيطة تستدعي نفسها.');
+                setStep('اكتمل!');
+                btn.textContent = 'تم';
                 btn.disabled = true;
                 return;
             }
@@ -1448,7 +1491,7 @@
 
             // Narration
             setNarration(step.narration);
-            setStep('Step ' + exploreCurrentStep + ' of ' + exploreSteps.length);
+            setStep('الخطوة ' + exploreCurrentStep + ' من ' + exploreSteps.length);
 
             await delay(200);
             btn.disabled = false;
@@ -1459,24 +1502,24 @@
             // Reset tree nodes
             clearAllNodeStates();
             // Reset stack
-            document.getElementById('explore-stack').innerHTML = '<div class="call-stack-box-empty">( empty )</div>';
+            document.getElementById('explore-stack').innerHTML = '<div class="call-stack-box-empty">( فارغ )</div>';
             // Reset output
-            document.getElementById('explore-output').innerHTML = '<div class="output-header">--- Console ---</div>';
+            document.getElementById('explore-output').innerHTML = '<div class="output-header">--- الطرفية (Console) ---</div>';
             // Reset buttons
             document.getElementById('explore-run-btn').style.display = '';
             const nextBtn = document.getElementById('explore-next-btn');
             nextBtn.style.display = 'none';
-            nextBtn.textContent = 'Next';
+            nextBtn.textContent = 'التالي';
             nextBtn.disabled = false;
             // Reset narration
-            setNarration('Press "Run" to start, then click "Next" to step through the recursive folder exploration.');
+            setNarration('اضغط «تشغيل» للبدء، ثم انقر «التالي» للتنقل خطوة بخطوة عبر الاستكشاف العودي للمجلدات.');
             setStep('');
         }
     </script>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 </body>

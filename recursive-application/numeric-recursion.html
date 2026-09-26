@@ -528,6 +528,24 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
+        .lang-switch-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .lang-switch-btn:hover { background: #667eea; color: white; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .content { padding: 20px; }
@@ -556,6 +574,7 @@
 </head>
 <body>
     <a href="../index.html" class="back-home-btn">Home</a>
+    <a href="numeric-recursion-ar.html" class="lang-switch-btn">عربي</a>
     <div class="container">
         <header>
             <div class="header-content">

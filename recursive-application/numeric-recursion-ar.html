@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>العودية العددية (Numeric Recursion)</title>
+    <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header img { width: 8cm; height: 4cm; object-fit: contain; }
+        header .header-text { text-align: left; }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.2em; opacity: 0.9; }
+
+        .content { padding: 40px; }
+        section { margin-bottom: 50px; animation: fadeInUp 0.5s ease; }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 { color: #764ba2; font-size: 1.5em; margin: 25px 0 15px 0; }
+        h4 { color: #555; font-size: 1.2em; margin: 20px 0 10px 0; }
+        p { margin-bottom: 12px; }
+
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .definition {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .teacher-says {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .teacher-says::before { content: "المعلم: "; font-weight: bold; color: #7b1fa2; }
+
+        .student-says {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .student-says::before { content: "الطالب: "; font-weight: bold; color: #1565c0; }
+
+        ul, ol { margin-left: 30px; margin-top: 10px; margin-bottom: 10px; }
+        li { margin: 8px 0; }
+
+        /* Code Blocks */
+        .code-container { margin: 20px 0; }
+        .code-header {
+            background: #667eea;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.15em;
+            transition: background 0.3s;
+        }
+        .code-header:hover { background: #5568d3; }
+        .code-toggle { font-size: 1.2em; transition: transform 0.3s; }
+        .code-toggle.collapsed { transform: rotate(-90deg); }
+
+        .code-block {
+            background: #000000;
+            color: #f8f8f2;
+            padding: 25px 30px;
+            border-radius: 0 0 8px 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.25em;
+            line-height: 1.8;
+            white-space: pre;
+            max-height: 800px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        .code-block.collapsed { max-height: 0; padding: 0 20px; overflow: hidden; }
+        .code-block .comment { color: #7a8bbf; }
+        .code-block .keyword { color: #ff79c6; font-weight: bold; }
+        .code-block .class-name { color: #50fa7b; font-weight: bold; }
+        .code-block .method { color: #8be9fd; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .number { color: #bd93f9; }
+
+        /* Stack Visualization */
+        .stack-box {
+            width: 300px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: #f9f9f9;
+            position: relative;
+            margin-top: 10px;
+            gap: 4px;
+        }
+
+        .stack-box-label {
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .stack-box-empty {
+            color: #aaa;
+            font-style: italic;
+            font-size: 0.85em;
+            padding: 30px 0;
+        }
+
+        .stack-frame {
+            width: 270px;
+            padding: 10px 8px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85em;
+            animation: pushFrame 0.4s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .stack-frame.main-frame,
+        .stack-frame.depth-1,
+        .stack-frame.depth-2,
+        .stack-frame.depth-3,
+        .stack-frame.depth-4,
+        .stack-frame.depth-5,
+        .stack-frame.depth-6,
+        .stack-frame.base-frame {
+            background: white;
+            border: 2px solid #333;
+            color: #333;
+        }
+
+        .frame-name {
+            font-size: 0.95em;
+            margin-bottom: 2px;
+        }
+        .frame-expr {
+            font-size: 0.8em;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #333;
+        }
+        .frame-expr .resolved {
+            background: #fde68a;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        @keyframes frameUpdate {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+            40% { box-shadow: 0 0 8px 4px rgba(102, 126, 234, 0.4); }
+            100% { box-shadow: none; }
+        }
+
+        @keyframes pushFrame {
+            from { opacity: 0; transform: translateY(-30px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes popFrame {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(-30px) scale(0.8); }
+        }
+
+        /* Animation Controls */
+        .animation-controls { text-align: center; margin: 20px 0; }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+            font-weight: 600;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #1a1a2e; }
+        .btn-warning { background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%); }
+
+        /* Demo Area */
+        .demo-area {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+        .demo-area h3 { text-align: center; margin-bottom: 20px; }
+
+        .demo-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .demo-stack-panel { flex: 0 0 320px; }
+        .demo-return-panel { flex: 0 0 280px; }
+
+        /* Return Values Panel */
+        .return-panel {
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 12px;
+            min-height: 60px;
+            background: #fffbeb;
+            margin-top: 10px;
+        }
+
+        .return-panel-label {
+            text-align: center;
+            font-weight: bold;
+            color: #b45309;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .return-entry {
+            padding: 6px 10px;
+            margin: 4px 0;
+            background: #fef3c7;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #92400e;
+            animation: typeLine 0.3s ease;
+        }
+
+        .return-entry.final {
+            background: #d1fae5;
+            color: #065f46;
+            font-weight: bold;
+            border: 2px solid #10b981;
+        }
+
+        @keyframes typeLine {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Narration Box */
+        .narration {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 18px 24px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.05em;
+            color: #444;
+            min-height: 60px;
+            line-height: 1.7;
+            word-spacing: 0.05em;
+        }
+
+        .code-trace {
+            background: #000000;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 25px 30px;
+            margin: 15px 0;
+            font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+            font-size: 1.1em;
+            line-height: 1.8;
+            white-space: pre;
+            overflow-x: auto;
+            display: none;
+            color: #e0e0e0;
+        }
+
+        .step-indicator {
+            text-align: center;
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .comparison-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .comparison-table th { padding: 15px 20px; text-align: center; font-size: 1.1em; }
+        .comparison-table td { padding: 12px 20px; border-bottom: 1px solid #e0e0e0; text-align: center; }
+        .comparison-table tbody tr:nth-child(even) { background: #f8f9ff; }
+        .comparison-table tbody tr:hover { background: #e8ecff; }
+
+        /* Fibonacci Call Tree */
+        .call-tree-container {
+            background: #f9f9f9;
+            border: 2px solid #9c27b0;
+            border-radius: 12px;
+            padding: 25px 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .tree-visual {
+            display: flex;
+            justify-content: center;
+        }
+        .tree-visual ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 20px 0 0 0;
+            position: relative;
+        }
+        .tree-visual > ul { padding-top: 0; }
+        .tree-visual > ul::before { display: none; }
+        .tree-visual > ul > li::before,
+        .tree-visual > ul > li::after { display: none; }
+
+        /* Vertical line from parent node down to children's horizontal bar */
+        .tree-visual ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid #aaa;
+            width: 0;
+            height: 20px;
+        }
+
+        .tree-visual li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            list-style: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+        }
+        .tree-visual > ul > li { padding-top: 0; }
+
+        /* Horizontal bar segments connecting siblings */
+        .tree-visual li::before,
+        .tree-visual li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 20px;
+        }
+        .tree-visual li::before {
+            right: 50%;
+            border-top: 2px solid #aaa;
+        }
+        .tree-visual li::after {
+            left: 50%;
+            border-top: 2px solid #aaa;
+            border-left: 2px solid #aaa;
+        }
+        .tree-visual li:first-child::before { border-top: none; }
+        .tree-visual li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree-visual li:last-child::after { border-top: none; border-left: 2px solid #aaa; }
+        .tree-visual li:last-child::before { border-right: 2px solid #aaa; border-radius: 0 5px 0 0; }
+        .tree-visual li:only-child::before,
+        .tree-visual li:only-child::after { display: none; }
+        .tree-visual li:only-child { padding-top: 0; }
+
+        .tree-node-box {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 0.85em;
+            white-space: nowrap;
+            background: white;
+        }
+        .tree-node-box.node-call {
+            border: 2px solid #7c3aed;
+            color: #7c3aed;
+        }
+        .tree-node-box.node-base {
+            border: 2px solid #16a34a;
+            color: #16a34a;
+            background: #f0fdf4;
+        }
+        .tree-node-box.node-dup {
+            border: 2px solid #ef4444;
+            color: #ef4444;
+            background: #fef2f2;
+        }
+        .tree-dup-label {
+            display: block;
+            font-size: 0.7em;
+            color: #ef4444;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        /* Animated Tree States */
+        .tree-node-box.node-highlight {
+            box-shadow: 0 0 0 3px #f59e0b, 0 0 15px rgba(245, 158, 11, 0.4);
+            transform: scale(1.08);
+            transition: all 0.3s ease;
+        }
+        .tree-node-box.node-computed {
+            border: 2px solid #2563eb;
+            color: #2563eb;
+            background: #eff6ff;
+        }
+        .node-val {
+            font-weight: bold;
+        }
+
+        /* Back Home Button */
+        .back-home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .back-home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            header h1 { font-size: 1.8em; }
+            h2 { font-size: 1.5em; }
+            .demo-layout { flex-direction: column; align-items: center; }
+            .demo-stack-panel, .demo-return-panel { flex: 1; width: 100%; max-width: 340px; }
+            .stack-box { width: 100%; }
+            .stack-frame { width: calc(100% - 30px); font-size: 0.8em; padding: 6px; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* ── FOOTER ── */
+        footer {
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+        footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
+        footer strong { opacity: 1; }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .highlight-box  { border-left: none; border-right: 5px solid #667eea; }
+        .definition     { border-left: none; border-right: 5px solid #4caf50; }
+        .important      { border-left: none; border-right: 5px solid #ffc107; }
+        .warning        { border-left: none; border-right: 5px solid #f44336; }
+        .teacher-says   { border-left: none; border-right: 5px solid #9c27b0; }
+        .student-says   { border-left: none; border-right: 5px solid #2196f3; }
+        ul, ol { margin-left: 0; margin-right: 30px; }
+
+        /* Code, the call-stack boxes, frames, return panes and the Fibonacci
+           call tree always stay left-to-right, so expressions, frame rows and
+           tree nodes read exactly as in the English page. Only the Arabic
+           narration text around them is RTL. */
+        pre, code, .inline-code, .code-container, .code-header, .code-block,
+        .code-trace, svg,
+        .demo-layout, .stack-box, .stack-frame, .frame-name, .frame-expr,
+        .return-panel, .return-entry,
+        .call-tree-container, .tree-visual, .tree-visual ul, .tree-visual li,
+        .tree-node-box, .node-val {
+            direction: ltr;
+        }
+        pre, .code-container, .code-block, .return-entry { text-align: left; }
+        code { unicode-bidi: isolate; }
+        /* Each line of the trace pane picks its own direction: Arabic prose
+           lines read RTL, Java lines stay LTR. */
+        .code-trace { unicode-bidi: plaintext; text-align: start;
+            font-family: 'Haradh', 'Courier New', Consolas, 'Liberation Mono', monospace; }
+        /* Arabic panel labels: no letter-spacing (it breaks joined letters) */
+        .stack-box-label, .return-panel-label { direction: rtl; letter-spacing: 0; }
+        .stack-box-empty { direction: rtl; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
+        .lang-switch-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .lang-switch-btn:hover { background: #667eea; color: white; }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-home-btn">الرئيسية</a>
+    <a href="numeric-recursion.html" class="lang-switch-btn">English</a>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>العودية العددية (Numeric Recursion)</h1>
+                    <p>هياكل البيانات 1</p>
+                    <p>حل المسائل الرياضية بالعودية</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- ===================== SECTION 1: Introduction ===================== -->
+            <section id="introduction">
+                <h2>1. مقدمة</h2>
+
+                <div class="teacher-says">
+                    مرحبًا بكم مجددًا يا طلابي! في الدروس السابقة تعلمنا ما هي العودية (Recursion) وكيف تعمل في الذاكرة، ورأينا أيضًا كيف تستكشف العودية بنية المجلدات بأناقة. حان الوقت الآن لنرى العودية مطبَّقة على <strong>المسائل الرياضية</strong>.
+                </div>
+
+                <div class="student-says">
+                    مثل المضروب (Factorial) وفيبوناتشي (Fibonacci) يا أستاذ؟
+                </div>
+
+                <div class="teacher-says">
+                    بالضبط! سنعمل اليوم على <strong>سبع</strong> مسائل عودية عددية. في كل مسألة سأعرض لكم كود Java، ثم <strong>نتتبع مكدس الاستدعاءات (Call Stack)</strong> خطوة بخطوة &mdash; نشاهد الإطارات (Frames) وهي تُدفع إلى المكدس وتُخرج منه، ونرى <strong>القيم المعادة (Return Values)</strong> وهي تتراكم أثناء انحلال المكدس.
+                </div>
+
+                <div class="highlight-box">
+                    <strong>ما سنغطيه اليوم:</strong>
+                    <ol>
+                        <li><strong>المضروب (Factorial)</strong> &mdash; <span dir="ltr">n!</span></li>
+                        <li><strong>مجموع أول n عدد صحيح</strong> &mdash; <span dir="ltr">1 + 2 + ... + n</span></li>
+                        <li><strong>القوة (Power)</strong> &mdash; <span dir="ltr">base<sup>exp</sup></span></li>
+                        <li><strong>الأس السريع (Fast Exponentiation)</strong> &mdash; قوة بتعقيد O(log n)</li>
+                        <li><strong>الضرب العودي (Recursive Multiplication)</strong> &mdash; حساب <span dir="ltr">a &times; b</span> بالجمع</li>
+                        <li><strong>فيبوناتشي (Fibonacci)</strong> &mdash; عودية متفرعة</li>
+                        <li><strong>مجموع الأرقام (Sum of Digits)</strong> &mdash; استخراج الأرقام</li>
+                    </ol>
+                </div>
+
+                <div class="important">
+                    <strong>تذكروا الجزأين اللذين لا تخلو منهما أي دالة عودية:</strong>
+                    <ul>
+                        <li><strong>الحالة الأساسية (Base Case)</strong> &mdash; الشرط الذي يوقف العودية</li>
+                        <li><strong>الحالة العودية (Recursive Case)</strong> &mdash; الدالة تستدعي نفسها بمسألة أصغر</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 2: Factorial ===================== -->
+            <section id="factorial">
+                <h2>2. المضروب Factorial(5)</h2>
+
+                <div class="teacher-says">
+                    لنبدأ بالمثال الكلاسيكي: <strong>المضروب (Factorial)</strong>. مضروب العدد n (ويُكتب <span dir="ltr">n!</span>) هو حاصل ضرب جميع الأعداد الصحيحة الموجبة من 1 إلى n. مثلًا: <span dir="ltr" style="white-space:nowrap">5! = 5 &times; 4 &times; 3 &times; 2 &times; 1 = 120</span>.
+                </div>
+
+                <div class="definition">
+                    <strong>التعريف العودي:</strong><br>
+                    fact(0) = 1 &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة الأساسية)</em><br>
+                    fact(n) = n &times; fact(n &minus; 1) &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة العودية، عندما n &gt; 0)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - المضروب العودي
+                        <span class="code-toggle collapsed">&#9660;</span>
+                    </div>
+                    <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">Factorial</span> {
+
+    <span class="keyword">public static int</span> <span class="method">factorial</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;           <span class="comment">// Base case</span>
+        <span class="keyword">return</span> n * <span class="method">factorial</span>(n - <span class="number">1</span>);     <span class="comment">// Recursive case</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">factorial</span>(<span class="number">5</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"5! = "</span> + result);  <span class="comment">// Output: 5! = 120</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>محاكاة تفاعلية: factorial(5)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">مكدس الاستدعاءات</div>
+                            <div class="stack-box" id="fact-stack">
+                                <div class="stack-box-empty">( فارغ )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">القيم المعادة</div>
+                            <div class="return-panel" id="fact-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="fact-code-trace"></div>
+                    <div class="step-indicator" id="fact-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="fact-run-btn" onclick="startDemo('fact')">تشغيل</button>
+                        <button class="btn btn-success" id="fact-next-btn" onclick="nextStep('fact')" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetDemo('fact')">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>الفكرة الأساسية:</strong> كل استدعاء ينتظر عودة الاستدعاء الذي يليه. لا يحدث الضرب إلا في <strong>مرحلة الانحلال (Unwinding)</strong> عندما تُخرج الإطارات من المكدس وتتدفق القيم المعادة إلى الأعلى.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 3: Sum of N Integers ===================== -->
+            <section id="sum">
+                <h2>3. مجموع أول n عدد صحيح &mdash; sum(5)</h2>
+
+                <div class="teacher-says">
+                    لنحسب الآن المجموع <span dir="ltr">1 + 2 + 3 + 4 + 5</span> بالعودية. هذا شبيه جدًا بالمضروب، لكن باستخدام <strong>الجمع</strong> بدل الضرب.
+                </div>
+
+                <div class="definition">
+                    <strong>التعريف العودي:</strong><br>
+                    sum(0) = 0 &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة الأساسية)</em><br>
+                    sum(n) = n + sum(n &minus; 1) &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة العودية، عندما n &gt; 0)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - المجموع العودي
+                        <span class="code-toggle collapsed">&#9660;</span>
+                    </div>
+                    <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">SumOfN</span> {
+
+    <span class="keyword">public static int</span> <span class="method">sum</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;           <span class="comment">// Base case</span>
+        <span class="keyword">return</span> n + <span class="method">sum</span>(n - <span class="number">1</span>);          <span class="comment">// Recursive case</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">sum</span>(<span class="number">5</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"Sum = "</span> + result);  <span class="comment">// Output: Sum = 15</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>محاكاة تفاعلية: sum(5)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">مكدس الاستدعاءات</div>
+                            <div class="stack-box" id="sum-stack">
+                                <div class="stack-box-empty">( فارغ )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">القيم المعادة</div>
+                            <div class="return-panel" id="sum-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="sum-code-trace"></div>
+                    <div class="step-indicator" id="sum-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="sum-run-btn" onclick="startDemo('sum')">تشغيل</button>
+                        <button class="btn btn-success" id="sum-next-btn" onclick="nextStep('sum')" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetDemo('sum')">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div class="important">
+                    <strong>راقبوا القيم المعادة بعناية!</strong> كل إطار يضيف قيمة <code>n</code> الخاصة به إلى النتيجة القادمة من الأسفل. تتراكم القيم: <span dir="ltr">0 &rarr; 1 &rarr; 3 &rarr; 6 &rarr; 10 &rarr; 15</span>.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 4: Power ===================== -->
+            <section id="power">
+                <h2>4. القوة Power(2, 4)</h2>
+
+                <div class="teacher-says">
+                    لنحسب الآن <span dir="ltr">2<sup>4</sup> = 16</span> بالعودية. الفكرة بسيطة: <span dir="ltr">base<sup>exp</sup> = base &times; base<sup>exp&minus;1</sup></span>، و<span dir="ltr">base<sup>0</sup> = 1</span>.
+                </div>
+
+                <div class="definition">
+                    <strong>التعريف العودي:</strong><br>
+                    pow(base, 0) = 1 &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة الأساسية)</em><br>
+                    pow(base, exp) = base &times; pow(base, exp &minus; 1) &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة العودية)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - القوة العودية
+                        <span class="code-toggle collapsed">&#9660;</span>
+                    </div>
+                    <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">Power</span> {
+
+    <span class="keyword">public static int</span> <span class="method">power</span>(<span class="keyword">int</span> base, <span class="keyword">int</span> exp) {
+        <span class="keyword">if</span> (exp == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;              <span class="comment">// Base case</span>
+        <span class="keyword">return</span> base * <span class="method">power</span>(base, exp - <span class="number">1</span>);  <span class="comment">// Recursive case</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">power</span>(<span class="number">2</span>, <span class="number">4</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"2^4 = "</span> + result);  <span class="comment">// Output: 2^4 = 16</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>محاكاة تفاعلية: power(2, 4)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">مكدس الاستدعاءات</div>
+                            <div class="stack-box" id="pow-stack">
+                                <div class="stack-box-empty">( فارغ )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">القيم المعادة</div>
+                            <div class="return-panel" id="pow-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="pow-code-trace"></div>
+                    <div class="step-indicator" id="pow-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="pow-run-btn" onclick="startDemo('pow')">تشغيل</button>
+                        <button class="btn btn-success" id="pow-next-btn" onclick="nextStep('pow')" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetDemo('pow')">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div class="student-says">
+                    يا أستاذ، هذا يحتاج إلى 4 استدعاءات لحساب 2<sup>4</sup>. فماذا عن 2<sup>1000</sup>؟ سيحتاج إلى 1000 استدعاء!
+                </div>
+
+                <div class="teacher-says">
+                    ملاحظة ممتازة! هذا تعقيد O(n) بالنسبة إلى الأس. لكن هناك طريقة أسرع بكثير...
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 5: Fast Exponentiation ===================== -->
+            <section id="fast-power">
+                <h2>5. الأس السريع Fast Exponentiation(2, 10)</h2>
+
+                <div class="teacher-says">
+                    بدل الضرب مرة تلو الأخرى، يمكننا <strong>تنصيف الأس</strong> عندما يكون زوجيًا! إذا أردنا 2<sup>10</sup>، نحسب 2<sup>5</sup> مرة واحدة ثم نربّعه: <span dir="ltr">(2<sup>5</sup>)<sup>2</sup></span>. هذا يقلّل عدد الاستدعاءات العودية من O(n) إلى <strong>O(log n)</strong>!
+                </div>
+
+                <div class="definition">
+                    <strong>خوارزمية القوة السريعة:</strong><br>
+                    fastPow(base, 0) = 1 &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة الأساسية)</em><br>
+                    إذا كان exp <strong>زوجيًا</strong>: <span dir="ltr">half = fastPow(base, exp/2)</span>، ثم نعيد <span dir="ltr">half &times; half</span><br>
+                    إذا كان exp <strong>فرديًا</strong>: نعيد <span dir="ltr">base &times; fastPow(base, exp &minus; 1)</span>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - الأس السريع
+                        <span class="code-toggle collapsed">&#9660;</span>
+                    </div>
+                    <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">FastPower</span> {
+
+    <span class="keyword">public static int</span> <span class="method">fastPow</span>(<span class="keyword">int</span> base, <span class="keyword">int</span> exp) {
+        <span class="keyword">if</span> (exp == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;                  <span class="comment">// Base case</span>
+        <span class="keyword">if</span> (exp % <span class="number">2</span> == <span class="number">0</span>) {                        <span class="comment">// Even exponent</span>
+            <span class="keyword">int</span> half = <span class="method">fastPow</span>(base, exp / <span class="number">2</span>);
+            <span class="keyword">return</span> half * half;                    <span class="comment">// Square the half</span>
+        } <span class="keyword">else</span> {                                    <span class="comment">// Odd exponent</span>
+            <span class="keyword">return</span> base * <span class="method">fastPow</span>(base, exp - <span class="number">1</span>);  <span class="comment">// Reduce to even</span>
+        }
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">fastPow</span>(<span class="number">2</span>, <span class="number">10</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"2^10 = "</span> + result);  <span class="comment">// Output: 2^10 = 1024</span>
+    }
+}</div>
+                </div>
+
+                <h3>لماذا هذا أسرع؟</h3>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>الأس (n)</th>
+                            <th>استدعاءات القوة العادية</th>
+                            <th>استدعاءات القوة السريعة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>4</td><td>4</td><td>3</td></tr>
+                        <tr><td>8</td><td>8</td><td>4</td></tr>
+                        <tr><td>10</td><td>10</td><td><strong>6</strong></td></tr>
+                        <tr><td>16</td><td>16</td><td>5</td></tr>
+                        <tr><td>32</td><td>32</td><td>6</td></tr>
+                        <tr><td>1024</td><td>1024</td><td><strong>11</strong></td></tr>
+                    </tbody>
+                </table>
+
+                <div class="demo-area">
+                    <h3>محاكاة تفاعلية: fastPow(2, 10)</h3>
+                    <p style="text-align:center; color:#666; margin-bottom:15px;"><strong>6 استدعاءات عودية</strong> فقط بدل 10!</p>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">مكدس الاستدعاءات</div>
+                            <div class="stack-box" id="fpow-stack">
+                                <div class="stack-box-empty">( فارغ )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">القيم المعادة</div>
+                            <div class="return-panel" id="fpow-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="fpow-code-trace"></div>
+                    <div class="step-indicator" id="fpow-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="fpow-run-btn" onclick="startDemo('fpow')">تشغيل</button>
+                        <button class="btn btn-success" id="fpow-next-btn" onclick="nextStep('fpow')" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetDemo('fpow')">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>الفكرة الأساسية:</strong> بتنصيف الأس كلما كان زوجيًا، نقلّل العمق من O(n) إلى O(log n). لحساب 2<sup>1024</sup> تحتاج القوة العادية إلى 1024 استدعاء، بينما لا تحتاج القوة السريعة إلا إلى <strong>11</strong>!
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 6: Recursive Multiplication ===================== -->
+            <section id="multiplication">
+                <h2>6. الضرب العودي Multiplication(4, 3)</h2>
+
+                <div class="teacher-says">
+                    ماذا لو قلت لكم: احسبوا <span dir="ltr">4 &times; 3</span> دون استخدام عامل الضرب؟ لا يمكنكم استخدام سوى <strong>الجمع</strong>! الفكرة: <span dir="ltr">4 &times; 3 = 4 + 4 + 4</span>، أي جمع العدد 4 مع نفسه 3 مرات.
+                </div>
+
+                <div class="definition">
+                    <strong>التعريف العودي:</strong><br>
+                    mult(a, 0) = 0 &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة الأساسية: أي عدد مضروب في صفر يساوي صفرًا)</em><br>
+                    mult(a, b) = a + mult(a, b &minus; 1) &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة العودية)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - الضرب العودي
+                        <span class="code-toggle collapsed">&#9660;</span>
+                    </div>
+                    <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">RecursiveMultiply</span> {
+
+    <span class="keyword">public static int</span> <span class="method">multiply</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
+        <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;              <span class="comment">// Base case</span>
+        <span class="keyword">return</span> a + <span class="method">multiply</span>(a, b - <span class="number">1</span>);    <span class="comment">// Recursive case</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">multiply</span>(<span class="number">4</span>, <span class="number">3</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"4 x 3 = "</span> + result);  <span class="comment">// Output: 4 x 3 = 12</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>محاكاة تفاعلية: multiply(4, 3)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">مكدس الاستدعاءات</div>
+                            <div class="stack-box" id="mult-stack">
+                                <div class="stack-box-empty">( فارغ )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">القيم المعادة</div>
+                            <div class="return-panel" id="mult-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="mult-code-trace"></div>
+                    <div class="step-indicator" id="mult-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="mult-run-btn" onclick="startDemo('mult')">تشغيل</button>
+                        <button class="btn btn-success" id="mult-next-btn" onclick="nextStep('mult')" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetDemo('mult')">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>النمط:</strong> لاحظوا كيف يضيف كل إخراج من المكدس 4 إلى النتيجة السابقة: <span dir="ltr">0 &rarr; 4 &rarr; 8 &rarr; 12</span>. نحن نبني حاصل الضرب بالجمع المتكرر!
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 7: Fibonacci ===================== -->
+            <section id="fibonacci">
+                <h2>7. فيبوناتشي Fibonacci(5)</h2>
+
+                <div class="teacher-says">
+                    نصل الآن إلى مسألة مميزة جدًا: <strong>أعداد فيبوناتشي (Fibonacci)</strong>. متتالية فيبوناتشي هي قائمة من الأعداد كل عدد فيها هو <strong>مجموع العددين السابقين له</strong>. وعلى خلاف جميع أمثلتنا السابقة، تقوم دالة فيبوناتشي باستدعاءين عوديين <strong>اثنين</strong>! وهذا يُنشئ <strong>شجرة متفرعة</strong> من الاستدعاءات.
+                </div>
+
+                <div class="definition">
+                    <strong>متتالية فيبوناتشي:</strong> <span dir="ltr">1, 1, 2, 3, 5, 8, 13, 21, ...</span><br>
+                    كل عدد هو مجموع العددين السابقين له.<br><br>
+                    Fib(1) = 1, &nbsp; Fib(2) = 1 &nbsp;&nbsp;&nbsp;&nbsp; <em>(حالتان أساسيتان!)</em><br>
+                    Fib(n) = Fib(n &minus; 1) + Fib(n &minus; 2) &nbsp;&nbsp;&nbsp;&nbsp; <em>(عندما n &ge; 3)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - فيبوناتشي العودي
+                        <span class="code-toggle collapsed">&#9660;</span>
+                    </div>
+                    <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">Fibonacci</span> {
+
+    <span class="keyword">public static int</span> <span class="method">fib</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) <span class="keyword">return</span> <span class="number">1</span>;              <span class="comment">// Base cases: fib(1)=1, fib(2)=1</span>
+        <span class="keyword">return</span> <span class="method">fib</span>(n - <span class="number">1</span>) + <span class="method">fib</span>(n - <span class="number">2</span>);   <span class="comment">// Two recursive calls!</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">fib</span>(<span class="number">5</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"fib(5) = "</span> + result);  <span class="comment">// Output: fib(5) = 5</span>
+    }
+}</div>
+                </div>
+
+                <div class="teacher-says">
+                    لنفهم أولًا كيف تعمل فيبوناتشي برسم <strong>شجرة الاستدعاءات (Call Tree)</strong>. لإيجاد Fib(5) نحتاج إلى Fib(4) وFib(3). ولإيجاد Fib(4) نحتاج إلى Fib(3) وFib(2). نستمر في التفكيك حتى نصل إلى الحالات الأساسية!
+                </div>
+
+                <h3>شجرة استدعاءات تفاعلية: كيف تتجمع القيم</h3>
+
+                <div class="demo-area">
+                    <p style="text-align:center; color:#666; margin-bottom:15px;">اضغط خطوة بخطوة لترى كيف تنتقل قيم فيبوناتشي من الحالات الأساسية صعودًا حتى Fib(5).</p>
+
+                    <div class="call-tree-container" id="fib-tree-box">
+                        <h4 style="text-align: center; color: #7b1fa2; margin-bottom: 10px;">شجرة الاستدعاءات لحساب Fib(5)</h4>
+                        <div class="tree-visual">
+                            <ul>
+                                <li>
+                                    <span class="tree-node-box node-call" id="ft-5">Fib(5)</span>
+                                    <ul>
+                                        <li>
+                                            <span class="tree-node-box node-call" id="ft-4">Fib(4)</span>
+                                            <ul>
+                                                <li>
+                                                    <span class="tree-node-box node-call" id="ft-3b">Fib(3)</span>
+                                                    <ul>
+                                                        <li><span class="tree-node-box node-call" id="ft-2c">Fib(2)</span></li>
+                                                        <li><span class="tree-node-box node-call" id="ft-1b">Fib(1)</span></li>
+                                                    </ul>
+                                                </li>
+                                                <li><span class="tree-node-box node-call" id="ft-2a">Fib(2)</span></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <span class="tree-node-box node-call" id="ft-3a">Fib(3)</span>
+                                            <ul>
+                                                <li><span class="tree-node-box node-call" id="ft-2b">Fib(2)</span></li>
+                                                <li><span class="tree-node-box node-call" id="ft-1a">Fib(1)</span></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="narration" id="fib-tree-narration" style="margin-top: 15px;">
+                        اضغط «ابدأ» لترى كيف نفكك Fib(5) ونحسب الجواب خطوة بخطوة.
+                    </div>
+                    <div class="step-indicator" id="fib-tree-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="fib-tree-run-btn" onclick="startFibTree()">ابدأ</button>
+                        <button class="btn btn-success" id="fib-tree-next-btn" onclick="nextFibTreeStep()" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetFibTree()">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div class="teacher-says">
+                    رائع! الآن ترون كيف تتدفق القيم صعودًا من الحالات الأساسية لتعطينا <strong>Fib(5) = 5</strong>. لكن كيف ينفّذ الحاسوب هذا فعليًا؟ إنه يستخدم <strong>مكدس الاستدعاءات (Call Stack)</strong>! لنشاهد المكدس أثناء العمل.
+                </div>
+
+                <div class="warning">
+                    <strong>لاحظوا:</strong> تُحسب Fib(3) <strong>مرتين</strong>، وتُحسب Fib(2) <strong>ثلاث مرات</strong>. لحساب Fib(5) وحدها نقوم بـ<strong>9 استدعاءات</strong>! وهذا التكرار ينمو أسّيًا &mdash; فحساب Fib(40) يتطلب أكثر من <strong>300 مليون</strong> استدعاء!
+                </div>
+
+                <div class="demo-area">
+                    <h3>محاكاة تفاعلية: Fib(5) &mdash; اجتياز بالعمق أولًا (DFS)</h3>
+                    <p style="text-align:center; color:#666; margin-bottom:15px;">شاهد المكدس وهو ينمو ويتقلص بينما نجتاز شجرة الاستدعاءات بالعمق أولًا.</p>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">مكدس الاستدعاءات</div>
+                            <div class="stack-box" id="fib-stack">
+                                <div class="stack-box-empty">( فارغ )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">القيم المعادة</div>
+                            <div class="return-panel" id="fib-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="fib-code-trace"></div>
+                    <div class="step-indicator" id="fib-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="fib-run-btn" onclick="startDemo('fib')">تشغيل</button>
+                        <button class="btn btn-success" id="fib-next-btn" onclick="nextStep('fib')" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetDemo('fib')">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div class="teacher-says">
+                    يا طلابي، أريدكم أن تلاحظوا أمرًا مهمًا جدًا في هذه المحاكاة. نعم، قامت Fib(5) بـ<strong>9 استدعاءات</strong> في المجموع، وستقوم Fib(10) بـ<strong>109 استدعاءات</strong>، وFib(40) بأكثر من <strong>300 مليون</strong> استدعاء. هذه أعداد ضخمة! لكن انظروا بعناية إلى المكدس &mdash; هل كانت الاستدعاءات التسعة كلها في المكدس <strong>في الوقت نفسه</strong>؟ <strong>لا!</strong>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>ملاحظة أساسية: المكدس لا يحتفظ بجميع الاستدعاءات في آن واحد!</strong>
+                    <p style="margin-top: 10px;">شاهدوا المحاكاة مرة أخرى بعناية. يتعمق المكدس <strong>في الفرع الأيسر أولًا</strong>، وعندما ينتهي استدعاء ما <strong>يُخرج إطاره</strong> من المكدس قبل أن يبدأ الفرع الأيمن أصلًا. أقصى عدد من الإطارات في المكدس في أي لحظة لحساب Fib(5) هو <strong>5</strong> فقط (main + عمق الشجرة)، وليس 9 (مجموع الاستدعاءات).</p>
+                    <p>هذا تمامًا مثل <strong>مستكشف المجلدات</strong> في درسنا السابق &mdash; إذا كان لديكم آلاف الملفات في شجرة مجلدات، فإن الحاسوب لا يحمّلها كلها في الذاكرة دفعة واحدة، بل يتعمق في مجلد واحد، وينهيه، ثم يعود، ثم يدخل المجلد التالي.</p>
+                    <p>لو كانت <strong>جميع</strong> الاستدعاءات مكدسة في الوقت نفسه لكانت العودية غير عملية &mdash; إذ ستفيض الذاكرة فورًا تقريبًا! بدلًا من ذلك، لا يحتفظ المكدس إلا بـ<strong>المسار الحالي من main() نزولًا إلى الاستدعاء النشط</strong>. في Fib(n)، أقصى عمق للمكدس هو <strong>O(n)</strong> فقط، مع أن مجموع عدد الاستدعاءات هو O(2<sup>n</sup>).</p>
+                </div>
+
+                <div class="important">
+                    <strong>التعقيد:</strong> فيبوناتشي العودية الساذجة تعقيدها <strong>O(2<sup>n</sup>)</strong> &mdash; أسّي! والسبب كل تلك الحسابات المكررة. في مقررات لاحقة ستتعلمون تقنيات مثل <strong>التخزين المؤقت للنتائج (Memoization)</strong> و<strong>البرمجة الديناميكية (Dynamic Programming)</strong> لمعالجة ذلك.
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 8: Sum of Digits ===================== -->
+            <section id="digits">
+                <h2>8. مجموع الأرقام Sum of Digits(6573)</h2>
+
+                <div class="teacher-says">
+                    في مسألتنا الأخيرة، لنحسب مجموع أرقام عدد ما. مثلًا: أرقام العدد 6573 هي 6 و5 و7 و3، ومجموعها <span dir="ltr">6 + 5 + 7 + 3 = 21</span>.
+                </div>
+
+                <div class="student-says">
+                    كيف نستخرج الأرقام واحدًا واحدًا بالعودية؟
+                </div>
+
+                <div class="teacher-says">
+                    بعمليتين: <code>n % 10</code> تعطي <strong>الرقم الأخير</strong>، و<code>n / 10</code> تعطي <strong>الأرقام المتبقية</strong>. نستمر في الاستخراج حتى يبقى رقم واحد (n &lt; 10).
+                </div>
+
+                <div class="definition">
+                    <strong>التعريف العودي:</strong><br>
+                    sumDigits(n) = n &nbsp;&nbsp;&nbsp;&nbsp; <em>إذا كان n &lt; 10 (رقم واحد &mdash; الحالة الأساسية)</em><br>
+                    sumDigits(n) = (n % 10) + sumDigits(n / 10) &nbsp;&nbsp;&nbsp;&nbsp; <em>(الحالة العودية)</em>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header" onclick="toggleCode(this)">
+                        Java - مجموع الأرقام
+                        <span class="code-toggle collapsed">&#9660;</span>
+                    </div>
+                    <div class="code-block collapsed"><span class="keyword">public class</span> <span class="class-name">SumOfDigits</span> {
+
+    <span class="keyword">public static int</span> <span class="method">sumDigits</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">if</span> (n &lt; <span class="number">10</span>) <span class="keyword">return</span> n;                    <span class="comment">// Base case: single digit</span>
+        <span class="keyword">return</span> (n % <span class="number">10</span>) + <span class="method">sumDigits</span>(n / <span class="number">10</span>);    <span class="comment">// Last digit + rest</span>
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="class-name">String</span>[] args) {
+        <span class="keyword">int</span> result = <span class="method">sumDigits</span>(<span class="number">6573</span>);
+        <span class="class-name">System</span>.out.<span class="method">println</span>(<span class="string">"Sum = "</span> + result);  <span class="comment">// Output: Sum = 21</span>
+    }
+}</div>
+                </div>
+
+                <div class="demo-area">
+                    <h3>محاكاة تفاعلية: sumDigits(6573)</h3>
+                    <div class="demo-layout">
+                        <div class="demo-stack-panel">
+                            <div class="stack-box-label">مكدس الاستدعاءات</div>
+                            <div class="stack-box" id="dig-stack">
+                                <div class="stack-box-empty">( فارغ )</div>
+                            </div>
+                        </div>
+                        <div class="demo-return-panel">
+                            <div class="return-panel-label">القيم المعادة</div>
+                            <div class="return-panel" id="dig-returns"></div>
+                        </div>
+                    </div>
+                    <div class="code-trace" id="dig-code-trace"></div>
+                    <div class="step-indicator" id="dig-step"></div>
+                    <div class="animation-controls">
+                        <button class="btn" id="dig-run-btn" onclick="startDemo('dig')">تشغيل</button>
+                        <button class="btn btn-success" id="dig-next-btn" onclick="nextStep('dig')" style="display:none;">التالي</button>
+                        <button class="btn btn-warning" onclick="resetDemo('dig')">إعادة تعيين</button>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>جميل!</strong> تقشّر العودية الأرقام من اليمين إلى اليسار (<span dir="ltr">6573 &rarr; 657 &rarr; 65 &rarr; 6</span>)، ثم تجمعها مجددًا أثناء الانحلال (<span dir="ltr">6 &rarr; 11 &rarr; 18 &rarr; 21</span>).
+                </div>
+            </section>
+
+            <!-- ===================== SECTION 9: Summary ===================== -->
+            <section id="summary">
+                <h2>9. الخلاصة</h2>
+
+                <div class="teacher-says">
+                    عمل ممتاز اليوم يا طلابي! لنراجع المسائل السبع جنبًا إلى جنب.
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>المسألة</th>
+                            <th>الحالة الأساسية</th>
+                            <th>الصيغة العودية</th>
+                            <th>التعقيد</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>المضروب</strong></td>
+                            <td>fact(0) = 1</td>
+                            <td>n &times; fact(n&minus;1)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>المجموع</strong></td>
+                            <td>sum(0) = 0</td>
+                            <td>n + sum(n&minus;1)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>القوة</strong></td>
+                            <td>pow(b,0) = 1</td>
+                            <td>b &times; pow(b, n&minus;1)</td>
+                            <td>O(n)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>القوة السريعة</strong></td>
+                            <td>fPow(b,0) = 1</td>
+                            <td>half&sup2; أو <span dir="ltr">b &times; fPow</span></td>
+                            <td><strong>O(log n)</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>الضرب</strong></td>
+                            <td>mult(a,0) = 0</td>
+                            <td>a + mult(a, b&minus;1)</td>
+                            <td>O(b)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>فيبوناتشي</strong></td>
+                            <td>Fib(1)=1, Fib(2)=1</td>
+                            <td>fib(n&minus;1) + fib(n&minus;2)</td>
+                            <td><strong>O(2<sup>n</sup>)</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>مجموع الأرقام</strong></td>
+                            <td>n &lt; 10 &rarr; n</td>
+                            <td>(n%10) + sumDig(n/10)</td>
+                            <td>O(digits)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box" style="background: linear-gradient(135deg, #667eea15, #764ba215); border-right-color: #764ba2;">
+                    <h3 style="margin-top: 0;">الخلاصات الرئيسية</h3>
+                    <ol>
+                        <li><strong>كل مسألة عودية</strong> لها حالة أساسية وحالة عودية.</li>
+                        <li><strong>العودية الخطية (Linear Recursion)</strong> (المضروب، المجموع، القوة، الضرب، الأرقام) تقوم باستدعاء واحد في كل خطوة &mdash; فينمو المكدس خطيًا.</li>
+                        <li><strong>العودية المتفرعة (Branching Recursion)</strong> (فيبوناتشي) تقوم باستدعاءات متعددة &mdash; وقد يؤدي ذلك إلى زمن أسّي.</li>
+                        <li><strong>الأس السريع</strong> يبين كيف يمكن لبنية عودية ذكية أن تقلّل O(n) إلى O(log n).</li>
+                        <li><strong>القيم المعادة</strong> تتدفق إلى الأعلى أثناء مرحلة الانحلال &mdash; وهنا يحدث الحساب الفعلي!</li>
+                    </ol>
+                </div>
+
+                <div class="teacher-says">
+                    في الدرس القادم سنستكشف <strong>العودية على السلاسل النصية (String Recursion)</strong> &mdash; عكس السلاسل، وعدّ الأحرف، وغير ذلك. الأنماط نفسها التي تعلمتموها اليوم ستنطبق هناك أيضًا. واصلوا التدريب!
+                </div>
+            </section>
+
+        </div>
+
+        <div style="text-align: center; padding: 25px 40px; color: #6b7280; font-size: 0.9rem; border-top: 1px solid #e5e7eb; line-height: 1.8;">
+            <div style="margin-top: 8px;">إعداد: د. عبدالمحسن المعلوي (Dr. Abdulmohsen Almalawi)</div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== Code Toggle ====================
+        function toggleCode(header) {
+            const codeBlock = header.nextElementSibling;
+            const toggle = header.querySelector('.code-toggle');
+            codeBlock.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+
+        // ==================== Helper Functions ====================
+        function addStackFrame(stackId, html, frameClass) {
+            const stack = document.getElementById(stackId);
+            const empty = stack.querySelector('.stack-box-empty');
+            if (empty) empty.remove();
+            const frame = document.createElement('div');
+            frame.className = 'stack-frame ' + frameClass;
+            frame.innerHTML = html;
+            stack.insertBefore(frame, stack.firstChild);
+            return frame;
+        }
+
+        function removeTopFrame(stackId) {
+            const stack = document.getElementById(stackId);
+            const frames = stack.querySelectorAll('.stack-frame');
+            if (frames.length > 0) {
+                const top = frames[0];
+                top.style.animation = 'popFrame 0.4s ease forwards';
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        top.remove();
+                        if (stack.querySelectorAll('.stack-frame').length === 0) {
+                            stack.innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
+                        }
+                        resolve();
+                    }, 400);
+                });
+            }
+            return Promise.resolve();
+        }
+
+        function updateTopFrame(stackId, newHtml) {
+            const stack = document.getElementById(stackId);
+            const frames = stack.querySelectorAll('.stack-frame');
+            if (frames.length > 0) {
+                frames[0].innerHTML = newHtml;
+                frames[0].style.animation = 'none';
+                frames[0].offsetHeight;
+                frames[0].style.animation = 'frameUpdate 0.5s ease';
+            }
+        }
+
+        function addReturnEntry(panelId, text, isFinal) {
+            const panel = document.getElementById(panelId);
+            const entry = document.createElement('div');
+            entry.className = 'return-entry' + (isFinal ? ' final' : '');
+            entry.textContent = text;
+            panel.appendChild(entry);
+        }
+
+        function setNarration(id, html) {
+            var el = document.getElementById(id);
+            if (el) el.innerHTML = html;
+        }
+
+        function setStep(id, text) {
+            document.getElementById(id).textContent = text;
+        }
+
+        // ==================== Generic Demo Engine ====================
+        const demos = {};
+
+        function registerDemo(name, steps) {
+            demos[name] = { steps: steps, currentStep: 0 };
+        }
+
+        function startDemo(name) {
+            resetDemo(name);
+            demos[name].currentStep = 0;
+            document.getElementById(name + '-run-btn').style.display = 'none';
+            document.getElementById(name + '-next-btn').style.display = '';
+            var traceEl = document.getElementById(name + '-code-trace');
+            if (traceEl && codeTraces[name] && codeTraces[name][0]) {
+                traceEl.style.display = 'block';
+                traceEl.textContent = codeTraces[name][0];
+            }
+            setNarration(name + '-narration', 'جاهز! اضغط <strong>التالي</strong> للتنقل خطوة بخطوة في التنفيذ.');
+            setStep(name + '-step', 'الخطوة 0 من ' + demos[name].steps.length);
+        }
+
+        async function nextStep(name) {
+            const demo = demos[name];
+            const btn = document.getElementById(name + '-next-btn');
+            btn.disabled = true;
+            demo.currentStep++;
+
+            if (demo.currentStep > demo.steps.length) {
+                btn.textContent = 'تم';
+                btn.disabled = true;
+                return;
+            }
+
+            const s = demo.steps[demo.currentStep - 1];
+
+            if (s.action === 'push') {
+                addStackFrame(name + '-stack', s.frameText, s.frameClass);
+            } else if (s.action === 'pop') {
+                await removeTopFrame(name + '-stack');
+                if (s.returnEntry) {
+                    addReturnEntry(name + '-returns', s.returnEntry, s.isFinal || false);
+                }
+                if (s.topFrameUpdate) {
+                    updateTopFrame(name + '-stack', s.topFrameUpdate);
+                }
+            }
+
+            setNarration(name + '-narration', s.narration);
+            var traceEl = document.getElementById(name + '-code-trace');
+            if (traceEl && codeTraces[name] && codeTraces[name][demo.currentStep]) {
+                traceEl.style.display = 'block';
+                traceEl.textContent = codeTraces[name][demo.currentStep];
+            }
+            setStep(name + '-step', 'الخطوة ' + demo.currentStep + ' من ' + demo.steps.length);
+
+            setTimeout(() => { btn.disabled = false; }, 450);
+        }
+
+        function resetDemo(name) {
+            demos[name].currentStep = 0;
+            document.getElementById(name + '-stack').innerHTML = '<div class="stack-box-empty">( فارغ )</div>';
+            document.getElementById(name + '-returns').innerHTML = '';
+            var traceEl = document.getElementById(name + '-code-trace');
+            if (traceEl) { traceEl.style.display = 'none'; traceEl.textContent = ''; }
+            setNarration(name + '-narration', 'اضغط «تشغيل» للبدء، ثم اضغط «التالي» للتقدم خطوة بخطوة.');
+            setStep(name + '-step', '');
+            document.getElementById(name + '-run-btn').style.display = '';
+            const btn = document.getElementById(name + '-next-btn');
+            btn.style.display = 'none';
+            btn.textContent = 'التالي';
+            btn.disabled = false;
+        }
+
+        // ==================== Code Trace Data ====================
+        var codeTraces = {
+            fact: [
+                // [0] shown at startDemo: preview of step 1
+                'ستستدعي main() الدالة factorial(5)\n\n  int result = factorial(5);\n\nاضغط «التالي» لبدء التنفيذ.',
+                // [1] after push main: preview of push fact(5)
+                'سيتم استدعاء factorial(5) حيث n = 5\n\n  if (n == 0) return 1;        // 5 == 0? لا\n  return n * factorial(n-1);   // ستحسب \u200e5 * factorial(4)\n\nاضغط «التالي» لترى factorial(5) تدخل المكدس.',
+                // [2] after push fact(5): preview of push fact(4)
+                'سيتم استدعاء factorial(4) حيث n = 4\n\n  if (n == 0) return 1;        // 4 == 0? لا\n  return n * factorial(n-1);   // ستحسب \u200e4 * factorial(3)\n\nاضغط «التالي» لترى factorial(4) تدخل المكدس.',
+                // [3] after push fact(4): preview of push fact(3)
+                'سيتم استدعاء factorial(3) حيث n = 3\n\n  if (n == 0) return 1;        // 3 == 0? لا\n  return n * factorial(n-1);   // ستحسب \u200e3 * factorial(2)\n\nاضغط «التالي» لترى factorial(3) تدخل المكدس.',
+                // [4] after push fact(3): preview of push fact(2)
+                'سيتم استدعاء factorial(2) حيث n = 2\n\n  if (n == 0) return 1;        // 2 == 0? لا\n  return n * factorial(n-1);   // ستحسب \u200e2 * factorial(1)\n\nاضغط «التالي» لترى factorial(2) تدخل المكدس.',
+                // [5] after push fact(2): preview of push fact(1)
+                'سيتم استدعاء factorial(1) حيث n = 1\n\n  if (n == 0) return 1;        // 1 == 0? لا\n  return n * factorial(n-1);   // ستحسب \u200e1 * factorial(0)\n\nاضغط «التالي» لترى factorial(1) تدخل المكدس.',
+                // [6] after push fact(1): preview of push fact(0)
+                'سيتم استدعاء factorial(0) حيث n = 0\n\n  if (n == 0) return 1;        // 0 == 0? نعم! الحالة الأساسية\n                               // ستعيد 1\n\nاضغط «التالي» لترى factorial(0) تدخل المكدس.',
+                // [7] after push fact(0): preview of pop fact(0)
+                'وصلت factorial(0) إلى الحالة الأساسية وستعيد 1.\nتنتظر factorial(1) هذه القيمة.\n\n  return 1 * factorial(0);     // 1 * 1 = 1\n\nاضغط «التالي» لترى factorial(0) تخرج من المكدس.',
+                // [8] after pop fact(0): preview of pop fact(1)
+                'حسبت factorial(1) القيمة \u200e1 * 1 = 1 وستعيد 1.\nتنتظر factorial(2) هذه القيمة.\n\n  return 2 * factorial(1);     // 2 * 1 = 2\n\nاضغط «التالي» لترى factorial(1) تخرج من المكدس.',
+                // [9] after pop fact(1): preview of pop fact(2)
+                'حسبت factorial(2) القيمة \u200e2 * 1 = 2 وستعيد 2.\nتنتظر factorial(3) هذه القيمة.\n\n  return 3 * factorial(2);     // 3 * 2 = 6\n\nاضغط «التالي» لترى factorial(2) تخرج من المكدس.',
+                // [10] after pop fact(2): preview of pop fact(3)
+                'حسبت factorial(3) القيمة \u200e3 * 2 = 6 وستعيد 6.\nتنتظر factorial(4) هذه القيمة.\n\n  return 4 * factorial(3);     // 4 * 6 = 24\n\nاضغط «التالي» لترى factorial(3) تخرج من المكدس.',
+                // [11] after pop fact(3): preview of pop fact(4)
+                'حسبت factorial(4) القيمة \u200e4 * 6 = 24 وستعيد 24.\nتنتظر factorial(5) هذه القيمة.\n\n  return 5 * factorial(4);     // 5 * 24 = 120\n\nاضغط «التالي» لترى factorial(4) تخرج من المكدس.',
+                // [12] after pop fact(4): preview of pop fact(5)
+                'حسبت factorial(5) القيمة \u200e5 * 24 = 120 وستعيد 120 إلى main().\n\n  int result = factorial(5);   // result = 120\n\nاضغط «التالي» لترى factorial(5) تخرج من المكدس.',
+                // [13] after pop fact(5): preview of pop main
+                'أعادت factorial(5) القيمة 120 إلى main().\n\nالجواب النهائي: \u200e5! = 5 \u00d7 4 \u00d7 3 \u00d7 2 \u00d7 1 = 120\n\nاضغط «التالي» لإكمال البرنامج.',
+                // [14] after pop main: summary
+                'اكتمل البرنامج!\n\nانحلّت العودية بدءًا من الحالة الأساسية:\n  factorial(0) = 1\n  factorial(1) = 1 \u00d7 1 = 1\n  factorial(2) = 2 \u00d7 1 = 2\n  factorial(3) = 3 \u00d7 2 = 6\n  factorial(4) = 4 \u00d7 6 = 24\n  factorial(5) = 5 \u00d7 24 = 120'
+            ],
+            sum: [
+                'ستستدعي main() الدالة sum(5)\n\n  int result = sum(5);\n\nاضغط «التالي» لبدء التنفيذ.',
+                'سيتم استدعاء sum(5) حيث n = 5\n\n  if (n == 0) return 0;        // 5 == 0? لا\n  return n + sum(n-1);         // ستحسب \u200e5 + sum(4)\n\nاضغط «التالي» لترى sum(5) تدخل المكدس.',
+                'سيتم استدعاء sum(4) حيث n = 4\n\n  if (n == 0) return 0;        // 4 == 0? لا\n  return n + sum(n-1);         // ستحسب \u200e4 + sum(3)\n\nاضغط «التالي» لترى sum(4) تدخل المكدس.',
+                'سيتم استدعاء sum(3) حيث n = 3\n\n  if (n == 0) return 0;        // 3 == 0? لا\n  return n + sum(n-1);         // ستحسب \u200e3 + sum(2)\n\nاضغط «التالي» لترى sum(3) تدخل المكدس.',
+                'سيتم استدعاء sum(2) حيث n = 2\n\n  if (n == 0) return 0;        // 2 == 0? لا\n  return n + sum(n-1);         // ستحسب \u200e2 + sum(1)\n\nاضغط «التالي» لترى sum(2) تدخل المكدس.',
+                'سيتم استدعاء sum(1) حيث n = 1\n\n  if (n == 0) return 0;        // 1 == 0? لا\n  return n + sum(n-1);         // ستحسب \u200e1 + sum(0)\n\nاضغط «التالي» لترى sum(1) تدخل المكدس.',
+                'سيتم استدعاء sum(0) حيث n = 0\n\n  if (n == 0) return 0;        // 0 == 0? نعم! الحالة الأساسية\n                               // ستعيد 0\n\nاضغط «التالي» لترى sum(0) تدخل المكدس.',
+                'وصلت sum(0) إلى الحالة الأساسية وستعيد 0.\nتنتظر sum(1) هذه القيمة.\n\n  return 1 + sum(0);           // 1 + 0 = 1\n\nاضغط «التالي» لترى sum(0) تخرج من المكدس.',
+                'حسبت sum(1) القيمة \u200e1 + 0 = 1 وستعيد 1.\nتنتظر sum(2) هذه القيمة.\n\n  return 2 + sum(1);           // 2 + 1 = 3\n\nاضغط «التالي» لترى sum(1) تخرج من المكدس.',
+                'حسبت sum(2) القيمة \u200e2 + 1 = 3 وستعيد 3.\nتنتظر sum(3) هذه القيمة.\n\n  return 3 + sum(2);           // 3 + 3 = 6\n\nاضغط «التالي» لترى sum(2) تخرج من المكدس.',
+                'حسبت sum(3) القيمة \u200e3 + 3 = 6 وستعيد 6.\nتنتظر sum(4) هذه القيمة.\n\n  return 4 + sum(3);           // 4 + 6 = 10\n\nاضغط «التالي» لترى sum(3) تخرج من المكدس.',
+                'حسبت sum(4) القيمة \u200e4 + 6 = 10 وستعيد 10.\nتنتظر sum(5) هذه القيمة.\n\n  return 5 + sum(4);           // 5 + 10 = 15\n\nاضغط «التالي» لترى sum(4) تخرج من المكدس.',
+                'حسبت sum(5) القيمة \u200e5 + 10 = 15 وستعيد 15 إلى main().\n\n  int result = sum(5);         // result = 15\n\nاضغط «التالي» لترى sum(5) تخرج من المكدس.',
+                'أعادت sum(5) القيمة 15 إلى main().\n\nالجواب النهائي: \u200e1 + 2 + 3 + 4 + 5 = 15\n\nاضغط «التالي» لإكمال البرنامج.',
+                'اكتمل البرنامج!\n\nانحلّت العودية بدءًا من الحالة الأساسية:\n  sum(0) = 0\n  sum(1) = 1 + 0 = 1\n  sum(2) = 2 + 1 = 3\n  sum(3) = 3 + 3 = 6\n  sum(4) = 4 + 6 = 10\n  sum(5) = 5 + 10 = 15'
+            ],
+            pow: [
+                'ستستدعي main() الدالة power(2, 4)\n\n  int result = power(2, 4);\n\nاضغط «التالي» لبدء التنفيذ.',
+                'سيتم استدعاء power(2, 4) حيث base = 2, exp = 4\n\n  if (exp == 0) return 1;            // 4 == 0? لا\n  return base * power(base, exp-1);  // ستحسب \u200e2 * power(2, 3)\n\nاضغط «التالي» لترى power(2, 4) تدخل المكدس.',
+                'سيتم استدعاء power(2, 3) حيث base = 2, exp = 3\n\n  if (exp == 0) return 1;            // 3 == 0? لا\n  return base * power(base, exp-1);  // ستحسب \u200e2 * power(2, 2)\n\nاضغط «التالي» لترى power(2, 3) تدخل المكدس.',
+                'سيتم استدعاء power(2, 2) حيث base = 2, exp = 2\n\n  if (exp == 0) return 1;            // 2 == 0? لا\n  return base * power(base, exp-1);  // ستحسب \u200e2 * power(2, 1)\n\nاضغط «التالي» لترى power(2, 2) تدخل المكدس.',
+                'سيتم استدعاء power(2, 1) حيث base = 2, exp = 1\n\n  if (exp == 0) return 1;            // 1 == 0? لا\n  return base * power(base, exp-1);  // ستحسب \u200e2 * power(2, 0)\n\nاضغط «التالي» لترى power(2, 1) تدخل المكدس.',
+                'سيتم استدعاء power(2, 0) حيث base = 2, exp = 0\n\n  if (exp == 0) return 1;            // 0 == 0? نعم! الحالة الأساسية\n                                     // ستعيد 1\n\nاضغط «التالي» لترى power(2, 0) تدخل المكدس.',
+                'وصلت power(2, 0) إلى الحالة الأساسية وستعيد 1.\nتنتظر power(2, 1) هذه القيمة.\n\n  return 2 * power(2, 0);            // 2 * 1 = 2\n\nاضغط «التالي» لترى power(2, 0) تخرج من المكدس.',
+                'حسبت power(2, 1) القيمة \u200e2 * 1 = 2 وستعيد 2.\nتنتظر power(2, 2) هذه القيمة.\n\n  return 2 * power(2, 1);            // 2 * 2 = 4\n\nاضغط «التالي» لترى power(2, 1) تخرج من المكدس.',
+                'حسبت power(2, 2) القيمة \u200e2 * 2 = 4 وستعيد 4.\nتنتظر power(2, 3) هذه القيمة.\n\n  return 2 * power(2, 2);            // 2 * 4 = 8\n\nاضغط «التالي» لترى power(2, 2) تخرج من المكدس.',
+                'حسبت power(2, 3) القيمة \u200e2 * 4 = 8 وستعيد 8.\nتنتظر power(2, 4) هذه القيمة.\n\n  return 2 * power(2, 3);            // 2 * 8 = 16\n\nاضغط «التالي» لترى power(2, 3) تخرج من المكدس.',
+                'حسبت power(2, 4) القيمة \u200e2 * 8 = 16 وستعيد 16 إلى main().\n\n  int result = power(2, 4);          // result = 16\n\nاضغط «التالي» لترى power(2, 4) تخرج من المكدس.',
+                'أعادت power(2, 4) القيمة 16 إلى main().\n\nالجواب النهائي: \u200e2^4 = 16\n\nاضغط «التالي» لإكمال البرنامج.',
+                'اكتمل البرنامج!\n\nانحلّت العودية بدءًا من الحالة الأساسية:\n  power(2, 0) = 1\n  power(2, 1) = 2 * 1 = 2\n  power(2, 2) = 2 * 2 = 4\n  power(2, 3) = 2 * 4 = 8\n  power(2, 4) = 2 * 8 = 16'
+            ],
+            fpow: [
+                'ستستدعي main() الدالة fastPow(2, 10)\n\n  int result = fastPow(2, 10);\n\nاضغط «التالي» لبدء التنفيذ.',
+                'سيتم استدعاء fastPow(2, 10) حيث base = 2, exp = 10\n\n  if (exp == 0) return 1;              // 10 == 0? لا\n  if (exp % 2 == 0) {                  // 10 زوجي\n      int half = fastPow(base, exp/2);  // half = fastPow(2, 5)\n      return half * half;\n  }\n\nاضغط «التالي» لترى fastPow(2, 10) تدخل المكدس.',
+                'سيتم استدعاء fastPow(2, 5) حيث base = 2, exp = 5\n\n  if (exp == 0) return 1;              // 5 == 0? لا\n  if (exp % 2 == 0) ...                // 5 فردي\n  else {\n      return base * fastPow(base, exp-1); // 2 * fastPow(2, 4)\n  }\n\nاضغط «التالي» لترى fastPow(2, 5) تدخل المكدس.',
+                'سيتم استدعاء fastPow(2, 4) حيث base = 2, exp = 4\n\n  if (exp == 0) return 1;              // 4 == 0? لا\n  if (exp % 2 == 0) {                  // 4 زوجي\n      int half = fastPow(base, exp/2);  // half = fastPow(2, 2)\n      return half * half;\n  }\n\nاضغط «التالي» لترى fastPow(2, 4) تدخل المكدس.',
+                'سيتم استدعاء fastPow(2, 2) حيث base = 2, exp = 2\n\n  if (exp == 0) return 1;              // 2 == 0? لا\n  if (exp % 2 == 0) {                  // 2 زوجي\n      int half = fastPow(base, exp/2);  // half = fastPow(2, 1)\n      return half * half;\n  }\n\nاضغط «التالي» لترى fastPow(2, 2) تدخل المكدس.',
+                'سيتم استدعاء fastPow(2, 1) حيث base = 2, exp = 1\n\n  if (exp == 0) return 1;              // 1 == 0? لا\n  if (exp % 2 == 0) ...                // 1 فردي\n  else {\n      return base * fastPow(base, exp-1); // 2 * fastPow(2, 0)\n  }\n\nاضغط «التالي» لترى fastPow(2, 1) تدخل المكدس.',
+                'سيتم استدعاء fastPow(2, 0) حيث base = 2, exp = 0\n\n  if (exp == 0) return 1;              // 0 == 0? نعم! الحالة الأساسية\n                                       // ستعيد 1\n\nاضغط «التالي» لترى fastPow(2, 0) تدخل المكدس.',
+                'وصلت fastPow(2, 0) إلى الحالة الأساسية وستعيد 1.\nتنتظر fastPow(2, 1) هذه القيمة.\n\n  return 2 * fastPow(2, 0);            // 2 * 1 = 2\n\nاضغط «التالي» لترى fastPow(2, 0) تخرج من المكدس.',
+                'حسبت fastPow(2, 1) القيمة \u200e2 * 1 = 2 وستعيد 2.\nتنتظر fastPow(2, 2): half = 2\n\n  return half * half;                  // 2 * 2 = 4\n\nاضغط «التالي» لترى fastPow(2, 1) تخرج من المكدس.',
+                'حسبت fastPow(2, 2) القيمة \u200e2 * 2 = 4 وستعيد 4.\nتنتظر fastPow(2, 4): half = 4\n\n  return half * half;                  // 4 * 4 = 16\n\nاضغط «التالي» لترى fastPow(2, 2) تخرج من المكدس.',
+                'حسبت fastPow(2, 4) القيمة \u200e4 * 4 = 16 وستعيد 16.\nتنتظر fastPow(2, 5) هذه القيمة.\n\n  return 2 * fastPow(2, 4);            // 2 * 16 = 32\n\nاضغط «التالي» لترى fastPow(2, 4) تخرج من المكدس.',
+                'حسبت fastPow(2, 5) القيمة \u200e2 * 16 = 32 وستعيد 32.\nتنتظر fastPow(2, 10): half = 32\n\n  return half * half;                  // 32 * 32 = 1024\n\nاضغط «التالي» لترى fastPow(2, 5) تخرج من المكدس.',
+                'حسبت fastPow(2, 10) القيمة \u200e32 * 32 = 1024 وستعيد 1024 إلى main().\n\n  int result = fastPow(2, 10);         // result = 1024\n\nاضغط «التالي» لترى fastPow(2, 10) تخرج من المكدس.',
+                'أعادت fastPow(2, 10) القيمة 1024 إلى main().\n\nالجواب النهائي: \u200e2^10 = 1024 (6 استدعاءات عودية فقط!)\n\nاضغط «التالي» لإكمال البرنامج.',
+                'اكتمل البرنامج!\n\nانحلّت العودية بدءًا من الحالة الأساسية:\n  fastPow(2, 0) = 1\n  fastPow(2, 1) = 2 * 1 = 2\n  fastPow(2, 2) = 2 * 2 = 4        (half * half)\n  fastPow(2, 4) = 4 * 4 = 16       (half * half)\n  fastPow(2, 5) = 2 * 16 = 32\n  fastPow(2, 10) = 32 * 32 = 1024   (half * half)'
+            ],
+            mult: [
+                'ستستدعي main() الدالة multiply(4, 3)\n\n  int result = multiply(4, 3);\n\nاضغط «التالي» لبدء التنفيذ.',
+                'سيتم استدعاء multiply(4, 3) حيث a = 4, b = 3\n\n  if (b == 0) return 0;            // 3 == 0? لا\n  return a + multiply(a, b-1);     // ستحسب \u200e4 + multiply(4, 2)\n\nاضغط «التالي» لترى multiply(4, 3) تدخل المكدس.',
+                'سيتم استدعاء multiply(4, 2) حيث a = 4, b = 2\n\n  if (b == 0) return 0;            // 2 == 0? لا\n  return a + multiply(a, b-1);     // ستحسب \u200e4 + multiply(4, 1)\n\nاضغط «التالي» لترى multiply(4, 2) تدخل المكدس.',
+                'سيتم استدعاء multiply(4, 1) حيث a = 4, b = 1\n\n  if (b == 0) return 0;            // 1 == 0? لا\n  return a + multiply(a, b-1);     // ستحسب \u200e4 + multiply(4, 0)\n\nاضغط «التالي» لترى multiply(4, 1) تدخل المكدس.',
+                'سيتم استدعاء multiply(4, 0) حيث a = 4, b = 0\n\n  if (b == 0) return 0;            // 0 == 0? نعم! الحالة الأساسية\n                                   // ستعيد 0\n\nاضغط «التالي» لترى multiply(4, 0) تدخل المكدس.',
+                'وصلت multiply(4, 0) إلى الحالة الأساسية وستعيد 0.\nتنتظر multiply(4, 1) هذه القيمة.\n\n  return 4 + multiply(4, 0);       // 4 + 0 = 4\n\nاضغط «التالي» لترى multiply(4, 0) تخرج من المكدس.',
+                'حسبت multiply(4, 1) القيمة \u200e4 + 0 = 4 وستعيد 4.\nتنتظر multiply(4, 2) هذه القيمة.\n\n  return 4 + multiply(4, 1);       // 4 + 4 = 8\n\nاضغط «التالي» لترى multiply(4, 1) تخرج من المكدس.',
+                'حسبت multiply(4, 2) القيمة \u200e4 + 4 = 8 وستعيد 8.\nتنتظر multiply(4, 3) هذه القيمة.\n\n  return 4 + multiply(4, 2);       // 4 + 8 = 12\n\nاضغط «التالي» لترى multiply(4, 2) تخرج من المكدس.',
+                'حسبت multiply(4, 3) القيمة \u200e4 + 8 = 12 وستعيد 12 إلى main().\n\n  int result = multiply(4, 3);     // result = 12\n\nاضغط «التالي» لترى multiply(4, 3) تخرج من المكدس.',
+                'أعادت multiply(4, 3) القيمة 12 إلى main().\n\nالجواب النهائي: \u200e4 \u00d7 3 = 4 + 4 + 4 = 12\n\nاضغط «التالي» لإكمال البرنامج.',
+                'اكتمل البرنامج!\n\nانحلّت العودية بدءًا من الحالة الأساسية:\n  multiply(4, 0) = 0\n  multiply(4, 1) = 4 + 0 = 4\n  multiply(4, 2) = 4 + 4 = 8\n  multiply(4, 3) = 4 + 8 = 12'
+            ],
+            fib: [
+                'ستستدعي main() الدالة fib(5)\n\n  int result = fib(5);\n\nاضغط «التالي» لبدء التنفيذ.',
+                'سيتم استدعاء fib(5) حيث n = 5\n\n  if (n <= 2) return 1;            // 5 <= 2? لا\n  return fib(n-1) + fib(n-2);      // ستحسب \u200efib(4) + fib(3)\n                                   // الفرع الأيسر أولًا: fib(4)\n\nاضغط «التالي» لترى fib(5) تدخل المكدس.',
+                'سيتم استدعاء fib(4) حيث n = 4\n\n  if (n <= 2) return 1;            // 4 <= 2? لا\n  return fib(n-1) + fib(n-2);      // ستحسب \u200efib(3) + fib(2)\n                                   // الفرع الأيسر أولًا: fib(3)\n\nاضغط «التالي» لترى fib(4) تدخل المكدس.',
+                'سيتم استدعاء fib(3) حيث n = 3\n\n  if (n <= 2) return 1;            // 3 <= 2? لا\n  return fib(n-1) + fib(n-2);      // ستحسب \u200efib(2) + fib(1)\n                                   // الفرع الأيسر أولًا: fib(2)\n\nاضغط «التالي» لترى fib(3) تدخل المكدس.',
+                'سيتم استدعاء fib(2) حيث n = 2\n\n  if (n <= 2) return 1;            // 2 <= 2? نعم! الحالة الأساسية\n                                   // ستعيد 1\n\nاضغط «التالي» لترى fib(2) تدخل المكدس.',
+                'وصلت fib(2) إلى الحالة الأساسية وستعيد 1.\nاستلمت fib(3) قيمة الفرع الأيسر.\nالآن تحتاج fib(3) إلى الفرع الأيمن: fib(1).\n\nاضغط «التالي» لترى fib(2) تخرج من المكدس.',
+                'سيتم استدعاء fib(1) حيث n = 1\n\n  if (n <= 2) return 1;            // 1 <= 2? نعم! الحالة الأساسية\n                                   // ستعيد 1\n\nاضغط «التالي» لترى fib(1) تدخل المكدس.',
+                'وصلت fib(1) إلى الحالة الأساسية وستعيد 1.\nالآن لدى fib(3) القيمتان: fib(2)=1, fib(1)=1\n\n  return fib(2) + fib(1);          // 1 + 1 = 2\n\nاضغط «التالي» لترى fib(1) تخرج من المكدس.',
+                'حسبت fib(3) القيمة \u200e1 + 1 = 2 وستعيد 2.\nاستلمت fib(4) قيمة الفرع الأيسر.\nالآن تحتاج fib(4) إلى الفرع الأيمن: fib(2).\n\nاضغط «التالي» لترى fib(3) تخرج من المكدس.',
+                'سيتم استدعاء fib(2) حيث n = 2\n\n  if (n <= 2) return 1;            // 2 <= 2? نعم! الحالة الأساسية\n                                   // ستعيد 1\n\nاضغط «التالي» لترى fib(2) تدخل المكدس.',
+                'وصلت fib(2) إلى الحالة الأساسية وستعيد 1.\nالآن لدى fib(4) القيمتان: fib(3)=2, fib(2)=1\n\n  return fib(3) + fib(2);          // 2 + 1 = 3\n\nاضغط «التالي» لترى fib(2) تخرج من المكدس.',
+                'حسبت fib(4) القيمة \u200e2 + 1 = 3 وستعيد 3.\nاستلمت fib(5) قيمة الفرع الأيسر.\nالآن تحتاج fib(5) إلى الفرع الأيمن: fib(3).\n\nاضغط «التالي» لترى fib(4) تخرج من المكدس.',
+                'سيتم استدعاء fib(3) مرة أخرى حيث n = 3\n(هذا تكرار! سبق أن حسبنا fib(3) = 2)\n\n  if (n <= 2) return 1;            // 3 <= 2? لا\n  return fib(n-1) + fib(n-2);      // fib(2) + fib(1)\n\nاضغط «التالي» لترى fib(3) تدخل المكدس.',
+                'سيتم استدعاء fib(2) حيث n = 2\n\n  if (n <= 2) return 1;            // 2 <= 2? نعم! الحالة الأساسية\n                                   // ستعيد 1\n\nاضغط «التالي» لترى fib(2) تدخل المكدس.',
+                'وصلت fib(2) إلى الحالة الأساسية وستعيد 1.\nتحتاج fib(3) إلى الفرع الأيمن: fib(1).\n\nاضغط «التالي» لترى fib(2) تخرج من المكدس.',
+                'سيتم استدعاء fib(1) حيث n = 1\n\n  if (n <= 2) return 1;            // 1 <= 2? نعم! الحالة الأساسية\n                                   // ستعيد 1\n\nاضغط «التالي» لترى fib(1) تدخل المكدس.',
+                'وصلت fib(1) إلى الحالة الأساسية وستعيد 1.\nالآن لدى fib(3) القيمتان: fib(2)=1, fib(1)=1\n\n  return fib(2) + fib(1);          // 1 + 1 = 2\n\nاضغط «التالي» لترى fib(1) تخرج من المكدس.',
+                'حسبت fib(3) القيمة \u200e1 + 1 = 2 (النتيجة نفسها كما سبق!).\nالآن لدى fib(5) القيمتان: fib(4)=3, fib(3)=2\n\n  return fib(4) + fib(3);          // 3 + 2 = 5\n\nاضغط «التالي» لترى fib(3) تخرج من المكدس.',
+                'حسبت fib(5) القيمة \u200e3 + 2 = 5 وستعيد 5 إلى main().\n\n  int result = fib(5);             // result = 5\n\nاضغط «التالي» لترى fib(5) تخرج من المكدس.',
+                'أعادت fib(5) القيمة 5 إلى main().\n\nالجواب النهائي: \u200efib(5) = 5\n9 استدعاءات في المجموع، كثير منها مكرر!\n\nاضغط «التالي» لإكمال البرنامج.',
+                'اكتمل البرنامج!\n\nمتتالية فيبوناتشي: \u200e1, 1, 2, 3, 5\n  Fib(1) = 1\n  Fib(2) = 1\n  Fib(3) = Fib(2) + Fib(1) = 1 + 1 = 2\n  Fib(4) = Fib(3) + Fib(2) = 2 + 1 = 3\n  Fib(5) = Fib(4) + Fib(3) = 3 + 2 = 5\n\n9 استدعاءات لحساب fib(5) بسبب الحسابات المكررة!'
+            ],
+            dig: [
+                'ستستدعي main() الدالة sumDigits(6573)\n\n  int result = sumDigits(6573);\n\nاضغط «التالي» لبدء التنفيذ.',
+                'سيتم استدعاء sumDigits(6573) حيث n = 6573\n\n  if (n < 10) return n;              // 6573 < 10? لا\n  return (n%10) + sumDigits(n/10);   // الرقم الأخير: \u200e6573%10 = 3\n                                     // ستحسب \u200e3 + sumDigits(657)\n\nاضغط «التالي» لترى sumDigits(6573) تدخل المكدس.',
+                'سيتم استدعاء sumDigits(657) حيث n = 657\n\n  if (n < 10) return n;              // 657 < 10? لا\n  return (n%10) + sumDigits(n/10);   // الرقم الأخير: \u200e657%10 = 7\n                                     // ستحسب \u200e7 + sumDigits(65)\n\nاضغط «التالي» لترى sumDigits(657) تدخل المكدس.',
+                'سيتم استدعاء sumDigits(65) حيث n = 65\n\n  if (n < 10) return n;              // 65 < 10? لا\n  return (n%10) + sumDigits(n/10);   // الرقم الأخير: \u200e65%10 = 5\n                                     // ستحسب \u200e5 + sumDigits(6)\n\nاضغط «التالي» لترى sumDigits(65) تدخل المكدس.',
+                'سيتم استدعاء sumDigits(6) حيث n = 6\n\n  if (n < 10) return n;              // 6 < 10? نعم! الحالة الأساسية\n                                     // رقم واحد، ستعيد 6\n\nاضغط «التالي» لترى sumDigits(6) تدخل المكدس.',
+                'وصلت sumDigits(6) إلى الحالة الأساسية وستعيد 6.\nتنتظر sumDigits(65) هذه القيمة.\n\n  return (65%10) + sumDigits(6);     // 5 + 6 = 11\n\nاضغط «التالي» لترى sumDigits(6) تخرج من المكدس.',
+                'حسبت sumDigits(65) القيمة \u200e5 + 6 = 11 وستعيد 11.\nتنتظر sumDigits(657) هذه القيمة.\n\n  return (657%10) + sumDigits(65);   // 7 + 11 = 18\n\nاضغط «التالي» لترى sumDigits(65) تخرج من المكدس.',
+                'حسبت sumDigits(657) القيمة \u200e7 + 11 = 18 وستعيد 18.\nتنتظر sumDigits(6573) هذه القيمة.\n\n  return (6573%10) + sumDigits(657); // 3 + 18 = 21\n\nاضغط «التالي» لترى sumDigits(657) تخرج من المكدس.',
+                'حسبت sumDigits(6573) القيمة \u200e3 + 18 = 21 وستعيد 21 إلى main().\n\n  int result = sumDigits(6573);     // result = 21\n\nاضغط «التالي» لترى sumDigits(6573) تخرج من المكدس.',
+                'أعادت sumDigits(6573) القيمة 21 إلى main().\n\nالجواب النهائي: \u200e6 + 5 + 7 + 3 = 21\n\nاضغط «التالي» لإكمال البرنامج.',
+                'اكتمل البرنامج!\n\nانحلّت العودية بدءًا من الحالة الأساسية:\n  sumDigits(6) = 6\n  sumDigits(65) = 5 + 6 = 11\n  sumDigits(657) = 7 + 11 = 18\n  sumDigits(6573) = 3 + 18 = 21'
+            ]
+        };
+
+        // ==================== Demo 1: Factorial(5) ====================
+        registerDemo('fact', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'يبدأ البرنامج. تستدعي <strong>main()</strong> الدالة <strong>factorial(5)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">fact(5)</div><div class="frame-expr">5 \u00d7 fact(5-1)</div>', frameClass: 'depth-1',
+              narration: '<strong>fact(5)</strong>: هل 5 == 0؟ لا! يجب حساب <code>5 \u00d7 fact(5-1)</code>. جارٍ استدعاء fact(4)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(4)</div><div class="frame-expr">4 \u00d7 fact(4-1)</div>', frameClass: 'depth-2',
+              narration: '<strong>fact(4)</strong>: هل 4 == 0؟ لا! يجب حساب <code>4 \u00d7 fact(4-1)</code>. جارٍ استدعاء fact(3)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(3)</div><div class="frame-expr">3 \u00d7 fact(3-1)</div>', frameClass: 'depth-3',
+              narration: '<strong>fact(3)</strong>: هل 3 == 0؟ لا! يجب حساب <code>3 \u00d7 fact(3-1)</code>. جارٍ استدعاء fact(2)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(2)</div><div class="frame-expr">2 \u00d7 fact(2-1)</div>', frameClass: 'depth-4',
+              narration: '<strong>fact(2)</strong>: هل 2 == 0؟ لا! يجب حساب <code>2 \u00d7 fact(2-1)</code>. جارٍ استدعاء fact(1)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(1)</div><div class="frame-expr">1 \u00d7 fact(1-1)</div>', frameClass: 'depth-5',
+              narration: '<strong>fact(1)</strong>: هل 1 == 0؟ لا! يجب حساب <code>1 \u00d7 fact(1-1)</code>. جارٍ استدعاء fact(0)...' },
+            { action: 'push', frameText: '<div class="frame-name">fact(0)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fact(0)</strong>: هل 0 == 0؟ <strong>نعم! الحالة الأساسية!</strong> تعيد 1.' },
+            { action: 'pop', returnEntry: 'fact(0) = 1',
+              topFrameUpdate: '<div class="frame-name">fact(1)</div><div class="frame-expr">1 \u00d7 <span class="resolved">1</span> = 1</div>',
+              narration: '<strong>fact(0)</strong> تعيد <strong>1</strong>. تحل هذه القيمة محل <code>fact(1-1)</code> في fact(1). الآن <span dir="ltr">1 \u00d7 1 = <strong>1</strong></span>.' },
+            { action: 'pop', returnEntry: 'fact(1) = 1 \u00d7 1 = 1',
+              topFrameUpdate: '<div class="frame-name">fact(2)</div><div class="frame-expr">2 \u00d7 <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>fact(1)</strong> تعيد <strong>1</strong>. تحل هذه القيمة محل <code>fact(2-1)</code> في fact(2). الآن <span dir="ltr">2 \u00d7 1 = <strong>2</strong></span>.' },
+            { action: 'pop', returnEntry: 'fact(2) = 2 \u00d7 1 = 2',
+              topFrameUpdate: '<div class="frame-name">fact(3)</div><div class="frame-expr">3 \u00d7 <span class="resolved">2</span> = 6</div>',
+              narration: '<strong>fact(2)</strong> تعيد <strong>2</strong>. تحل هذه القيمة محل <code>fact(3-1)</code> في fact(3). الآن <span dir="ltr">3 \u00d7 2 = <strong>6</strong></span>.' },
+            { action: 'pop', returnEntry: 'fact(3) = 3 \u00d7 2 = 6',
+              topFrameUpdate: '<div class="frame-name">fact(4)</div><div class="frame-expr">4 \u00d7 <span class="resolved">6</span> = 24</div>',
+              narration: '<strong>fact(3)</strong> تعيد <strong>6</strong>. تحل هذه القيمة محل <code>fact(4-1)</code> في fact(4). الآن <span dir="ltr">4 \u00d7 6 = <strong>24</strong></span>.' },
+            { action: 'pop', returnEntry: 'fact(4) = 4 \u00d7 6 = 24',
+              topFrameUpdate: '<div class="frame-name">fact(5)</div><div class="frame-expr">5 \u00d7 <span class="resolved">24</span> = 120</div>',
+              narration: '<strong>fact(4)</strong> تعيد <strong>24</strong>. تحل هذه القيمة محل <code>fact(5-1)</code> في fact(5). الآن <span dir="ltr">5 \u00d7 24 = <strong>120</strong></span>.' },
+            { action: 'pop', returnEntry: 'fact(5) = 5 \u00d7 24 = 120', isFinal: true,
+              narration: '<strong>fact(5)</strong> تعيد <strong>120</strong> إلى main(). الجواب النهائي: <strong><span dir="ltr">5! = 120</span></strong>' },
+            { action: 'pop',
+              narration: 'تستلم <strong>main()</strong> القيمة 120. ينتهي البرنامج. <strong><span dir="ltr">5! = 120</span></strong>' }
+        ]);
+
+        // ==================== Demo 2: Sum(5) ====================
+        registerDemo('sum', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'يبدأ البرنامج. تستدعي <strong>main()</strong> الدالة <strong>sum(5)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">sum(5)</div><div class="frame-expr">5 + sum(5-1)</div>', frameClass: 'depth-1',
+              narration: '<strong>sum(5)</strong>: هل 5 == 0؟ لا! يجب حساب <code>5 + sum(5-1)</code>. جارٍ استدعاء sum(4)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(4)</div><div class="frame-expr">4 + sum(4-1)</div>', frameClass: 'depth-2',
+              narration: '<strong>sum(4)</strong>: هل 4 == 0؟ لا! يجب حساب <code>4 + sum(4-1)</code>. جارٍ استدعاء sum(3)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(3)</div><div class="frame-expr">3 + sum(3-1)</div>', frameClass: 'depth-3',
+              narration: '<strong>sum(3)</strong>: هل 3 == 0؟ لا! يجب حساب <code>3 + sum(3-1)</code>. جارٍ استدعاء sum(2)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(2)</div><div class="frame-expr">2 + sum(2-1)</div>', frameClass: 'depth-4',
+              narration: '<strong>sum(2)</strong>: هل 2 == 0؟ لا! يجب حساب <code>2 + sum(2-1)</code>. جارٍ استدعاء sum(1)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(1)</div><div class="frame-expr">1 + sum(1-1)</div>', frameClass: 'depth-5',
+              narration: '<strong>sum(1)</strong>: هل 1 == 0؟ لا! يجب حساب <code>1 + sum(1-1)</code>. جارٍ استدعاء sum(0)...' },
+            { action: 'push', frameText: '<div class="frame-name">sum(0)</div><div class="frame-expr">return 0</div>', frameClass: 'base-frame',
+              narration: '<strong>sum(0)</strong>: هل 0 == 0؟ <strong>نعم! الحالة الأساسية!</strong> تعيد 0.' },
+            { action: 'pop', returnEntry: 'sum(0) = 0',
+              topFrameUpdate: '<div class="frame-name">sum(1)</div><div class="frame-expr">1 + <span class="resolved">0</span> = 1</div>',
+              narration: '<strong>sum(0)</strong> تعيد <strong>0</strong>. تحل هذه القيمة محل <code>sum(1-1)</code> في sum(1). الآن <span dir="ltr">1 + 0 = <strong>1</strong></span>.' },
+            { action: 'pop', returnEntry: 'sum(1) = 1 + 0 = 1',
+              topFrameUpdate: '<div class="frame-name">sum(2)</div><div class="frame-expr">2 + <span class="resolved">1</span> = 3</div>',
+              narration: '<strong>sum(1)</strong> تعيد <strong>1</strong>. تحل هذه القيمة محل <code>sum(2-1)</code> في sum(2). الآن <span dir="ltr">2 + 1 = <strong>3</strong></span>.' },
+            { action: 'pop', returnEntry: 'sum(2) = 2 + 1 = 3',
+              topFrameUpdate: '<div class="frame-name">sum(3)</div><div class="frame-expr">3 + <span class="resolved">3</span> = 6</div>',
+              narration: '<strong>sum(2)</strong> تعيد <strong>3</strong>. تحل هذه القيمة محل <code>sum(3-1)</code> في sum(3). الآن <span dir="ltr">3 + 3 = <strong>6</strong></span>.' },
+            { action: 'pop', returnEntry: 'sum(3) = 3 + 3 = 6',
+              topFrameUpdate: '<div class="frame-name">sum(4)</div><div class="frame-expr">4 + <span class="resolved">6</span> = 10</div>',
+              narration: '<strong>sum(3)</strong> تعيد <strong>6</strong>. تحل هذه القيمة محل <code>sum(4-1)</code> في sum(4). الآن <span dir="ltr">4 + 6 = <strong>10</strong></span>.' },
+            { action: 'pop', returnEntry: 'sum(4) = 4 + 6 = 10',
+              topFrameUpdate: '<div class="frame-name">sum(5)</div><div class="frame-expr">5 + <span class="resolved">10</span> = 15</div>',
+              narration: '<strong>sum(4)</strong> تعيد <strong>10</strong>. تحل هذه القيمة محل <code>sum(5-1)</code> في sum(5). الآن <span dir="ltr">5 + 10 = <strong>15</strong></span>.' },
+            { action: 'pop', returnEntry: 'sum(5) = 5 + 10 = 15', isFinal: true,
+              narration: '<strong>sum(5)</strong> تعيد <strong>15</strong> إلى main(). الجواب النهائي: <strong><span dir="ltr">1+2+3+4+5 = 15</span></strong>' },
+            { action: 'pop',
+              narration: 'تستلم <strong>main()</strong> القيمة 15. ينتهي البرنامج. <strong><span dir="ltr">1+2+3+4+5 = 15</span></strong>' }
+        ]);
+
+        // ==================== Demo 3: Power(2,4) ====================
+        registerDemo('pow', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'يبدأ البرنامج. تستدعي <strong>main()</strong> الدالة <strong>power(2, 4)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,4)</div><div class="frame-expr">2 \u00d7 pow(2, 4-1)</div>', frameClass: 'depth-1',
+              narration: '<strong>pow(2,4)</strong>: هل exp == 0؟ لا! يجب حساب <code>2 \u00d7 pow(2, 4-1)</code>. جارٍ استدعاء pow(2,3)...' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,3)</div><div class="frame-expr">2 \u00d7 pow(2, 3-1)</div>', frameClass: 'depth-2',
+              narration: '<strong>pow(2,3)</strong>: هل exp == 0؟ لا! يجب حساب <code>2 \u00d7 pow(2, 3-1)</code>. جارٍ استدعاء pow(2,2)...' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,2)</div><div class="frame-expr">2 \u00d7 pow(2, 2-1)</div>', frameClass: 'depth-3',
+              narration: '<strong>pow(2,2)</strong>: هل exp == 0؟ لا! يجب حساب <code>2 \u00d7 pow(2, 2-1)</code>. جارٍ استدعاء pow(2,1)...' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,1)</div><div class="frame-expr">2 \u00d7 pow(2, 1-1)</div>', frameClass: 'depth-4',
+              narration: '<strong>pow(2,1)</strong>: هل exp == 0؟ لا! يجب حساب <code>2 \u00d7 pow(2, 1-1)</code>. جارٍ استدعاء pow(2,0)...' },
+            { action: 'push', frameText: '<div class="frame-name">pow(2,0)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>pow(2,0)</strong>: هل exp == 0؟ <strong>نعم! الحالة الأساسية!</strong> تعيد 1.' },
+            { action: 'pop', returnEntry: 'pow(2,0) = 1',
+              topFrameUpdate: '<div class="frame-name">pow(2,1)</div><div class="frame-expr">2 \u00d7 <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>pow(2,0)</strong> تعيد <strong>1</strong>. تحل محل <code>pow(2, 1-1)</code> في pow(2,1). الآن <span dir="ltr">2 \u00d7 1 = <strong>2</strong></span>.' },
+            { action: 'pop', returnEntry: 'pow(2,1) = 2 \u00d7 1 = 2',
+              topFrameUpdate: '<div class="frame-name">pow(2,2)</div><div class="frame-expr">2 \u00d7 <span class="resolved">2</span> = 4</div>',
+              narration: '<strong>pow(2,1)</strong> تعيد <strong>2</strong>. تحل محل <code>pow(2, 2-1)</code> في pow(2,2). الآن <span dir="ltr">2 \u00d7 2 = <strong>4</strong></span>.' },
+            { action: 'pop', returnEntry: 'pow(2,2) = 2 \u00d7 2 = 4',
+              topFrameUpdate: '<div class="frame-name">pow(2,3)</div><div class="frame-expr">2 \u00d7 <span class="resolved">4</span> = 8</div>',
+              narration: '<strong>pow(2,2)</strong> تعيد <strong>4</strong>. تحل محل <code>pow(2, 3-1)</code> في pow(2,3). الآن <span dir="ltr">2 \u00d7 4 = <strong>8</strong></span>.' },
+            { action: 'pop', returnEntry: 'pow(2,3) = 2 \u00d7 4 = 8',
+              topFrameUpdate: '<div class="frame-name">pow(2,4)</div><div class="frame-expr">2 \u00d7 <span class="resolved">8</span> = 16</div>',
+              narration: '<strong>pow(2,3)</strong> تعيد <strong>8</strong>. تحل محل <code>pow(2, 4-1)</code> في pow(2,4). الآن <span dir="ltr">2 \u00d7 8 = <strong>16</strong></span>.' },
+            { action: 'pop', returnEntry: 'pow(2,4) = 2 \u00d7 8 = 16', isFinal: true,
+              narration: '<strong>pow(2,4)</strong> تعيد <strong>16</strong> إلى main(). الجواب النهائي: <strong><span dir="ltr">2\u2074 = 16</span></strong>' },
+            { action: 'pop',
+              narration: 'تستلم <strong>main()</strong> القيمة 16. ينتهي البرنامج. <strong><span dir="ltr">2\u2074 = 16</span></strong>' }
+        ]);
+
+        // ==================== Demo 4: Fast Power(2,10) ====================
+        registerDemo('fpow', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'يبدأ البرنامج. تستدعي <strong>main()</strong> الدالة <strong>fastPow(2, 10)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,10)</div><div class="frame-expr">fPow(2,5)\u00b2</div>', frameClass: 'depth-1',
+              narration: '<strong>fPow(2,10)</strong>: 10 <em>زوجي</em>. نحسب <span dir="ltr">half = fPow(2, 5)</span>، ثم نعيد half\u00b2. جارٍ استدعاء fPow(2,5)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,5)</div><div class="frame-expr">2 \u00d7 fPow(2,4)</div>', frameClass: 'depth-2',
+              narration: '<strong>fPow(2,5)</strong>: 5 <em>فردي</em>. نحسب <span dir="ltr">2 \u00d7 fPow(2, 4)</span>. جارٍ استدعاء fPow(2,4)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,4)</div><div class="frame-expr">fPow(2,2)\u00b2</div>', frameClass: 'depth-3',
+              narration: '<strong>fPow(2,4)</strong>: 4 <em>زوجي</em>. نحسب <span dir="ltr">half = fPow(2, 2)</span>، ثم نعيد half\u00b2. جارٍ استدعاء fPow(2,2)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,2)</div><div class="frame-expr">fPow(2,1)\u00b2</div>', frameClass: 'depth-4',
+              narration: '<strong>fPow(2,2)</strong>: 2 <em>زوجي</em>. نحسب <span dir="ltr">half = fPow(2, 1)</span>، ثم نعيد half\u00b2. جارٍ استدعاء fPow(2,1)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,1)</div><div class="frame-expr">2 \u00d7 fPow(2,0)</div>', frameClass: 'depth-5',
+              narration: '<strong>fPow(2,1)</strong>: 1 <em>فردي</em>. نحسب <span dir="ltr">2 \u00d7 fPow(2, 0)</span>. جارٍ استدعاء fPow(2,0)...' },
+            { action: 'push', frameText: '<div class="frame-name">fPow(2,0)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fPow(2,0)</strong>: exp == 0! <strong>الحالة الأساسية!</strong> تعيد 1.' },
+            { action: 'pop', returnEntry: 'fPow(2,0) = 1',
+              topFrameUpdate: '<div class="frame-name">fPow(2,1)</div><div class="frame-expr">2 \u00d7 <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>fPow(2,0)</strong> تعيد <strong>1</strong>. <span dir="ltr">fPow(2,1) = 2 \u00d7 1 = <strong>2</strong></span>.' },
+            { action: 'pop', returnEntry: 'fPow(2,1) = 2 \u00d7 1 = 2',
+              topFrameUpdate: '<div class="frame-name">fPow(2,2)</div><div class="frame-expr"><span class="resolved">2</span>\u00b2 = 4</div>',
+              narration: '<strong>fPow(2,1)</strong> تعيد <strong>2</strong>. fPow(2,2): <span dir="ltr">half=2, half\u00b2 = 2\u00d72 = <strong>4</strong></span>.' },
+            { action: 'pop', returnEntry: 'fPow(2,2) = 2\u00b2 = 4',
+              topFrameUpdate: '<div class="frame-name">fPow(2,4)</div><div class="frame-expr"><span class="resolved">4</span>\u00b2 = 16</div>',
+              narration: '<strong>fPow(2,2)</strong> تعيد <strong>4</strong>. fPow(2,4): <span dir="ltr">half=4, half\u00b2 = 4\u00d74 = <strong>16</strong></span>.' },
+            { action: 'pop', returnEntry: 'fPow(2,4) = 4\u00b2 = 16',
+              topFrameUpdate: '<div class="frame-name">fPow(2,5)</div><div class="frame-expr">2 \u00d7 <span class="resolved">16</span> = 32</div>',
+              narration: '<strong>fPow(2,4)</strong> تعيد <strong>16</strong>. <span dir="ltr">fPow(2,5) = 2 \u00d7 16 = <strong>32</strong></span>.' },
+            { action: 'pop', returnEntry: 'fPow(2,5) = 2 \u00d7 16 = 32',
+              topFrameUpdate: '<div class="frame-name">fPow(2,10)</div><div class="frame-expr"><span class="resolved">32</span>\u00b2 = 1024</div>',
+              narration: '<strong>fPow(2,5)</strong> تعيد <strong>32</strong>. fPow(2,10): <span dir="ltr">half=32, 32\u00b2 = <strong>1024</strong></span>. 6 استدعاءات فقط!' },
+            { action: 'pop', returnEntry: 'fPow(2,10) = 32\u00b2 = 1024', isFinal: true,
+              narration: '<strong>fPow(2,10)</strong> تعيد <strong>1024</strong> إلى main(). الجواب النهائي!' },
+            { action: 'pop',
+              narration: 'تستلم <strong>main()</strong> القيمة 1024. <strong><span dir="ltr">2\u00b9\u2070 = 1024</span></strong> بست استدعاءات عودية فقط!' }
+        ]);
+
+        // ==================== Demo 5: Multiply(4,3) ====================
+        registerDemo('mult', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'يبدأ البرنامج. تستدعي <strong>main()</strong> الدالة <strong>multiply(4, 3)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">mult(4,3)</div><div class="frame-expr">4 + mult(4, 3-1)</div>', frameClass: 'depth-1',
+              narration: '<strong>mult(4,3)</strong>: هل b == 0؟ لا! يجب حساب <code>4 + mult(4, 3-1)</code>. جارٍ استدعاء mult(4,2)...' },
+            { action: 'push', frameText: '<div class="frame-name">mult(4,2)</div><div class="frame-expr">4 + mult(4, 2-1)</div>', frameClass: 'depth-2',
+              narration: '<strong>mult(4,2)</strong>: هل b == 0؟ لا! يجب حساب <code>4 + mult(4, 2-1)</code>. جارٍ استدعاء mult(4,1)...' },
+            { action: 'push', frameText: '<div class="frame-name">mult(4,1)</div><div class="frame-expr">4 + mult(4, 1-1)</div>', frameClass: 'depth-3',
+              narration: '<strong>mult(4,1)</strong>: هل b == 0؟ لا! يجب حساب <code>4 + mult(4, 1-1)</code>. جارٍ استدعاء mult(4,0)...' },
+            { action: 'push', frameText: '<div class="frame-name">mult(4,0)</div><div class="frame-expr">return 0</div>', frameClass: 'base-frame',
+              narration: '<strong>mult(4,0)</strong>: هل b == 0؟ <strong>نعم! الحالة الأساسية!</strong> تعيد 0.' },
+            { action: 'pop', returnEntry: 'mult(4,0) = 0',
+              topFrameUpdate: '<div class="frame-name">mult(4,1)</div><div class="frame-expr">4 + <span class="resolved">0</span> = 4</div>',
+              narration: '<strong>mult(4,0)</strong> تعيد <strong>0</strong>. تحل محل <code>mult(4, 1-1)</code> في mult(4,1). الآن <span dir="ltr">4 + 0 = <strong>4</strong></span>.' },
+            { action: 'pop', returnEntry: 'mult(4,1) = 4 + 0 = 4',
+              topFrameUpdate: '<div class="frame-name">mult(4,2)</div><div class="frame-expr">4 + <span class="resolved">4</span> = 8</div>',
+              narration: '<strong>mult(4,1)</strong> تعيد <strong>4</strong>. تحل محل <code>mult(4, 2-1)</code> في mult(4,2). الآن <span dir="ltr">4 + 4 = <strong>8</strong></span>.' },
+            { action: 'pop', returnEntry: 'mult(4,2) = 4 + 4 = 8',
+              topFrameUpdate: '<div class="frame-name">mult(4,3)</div><div class="frame-expr">4 + <span class="resolved">8</span> = 12</div>',
+              narration: '<strong>mult(4,2)</strong> تعيد <strong>8</strong>. تحل محل <code>mult(4, 3-1)</code> في mult(4,3). الآن <span dir="ltr">4 + 8 = <strong>12</strong></span>.' },
+            { action: 'pop', returnEntry: 'mult(4,3) = 4 + 8 = 12', isFinal: true,
+              narration: '<strong>mult(4,3)</strong> تعيد <strong>12</strong> إلى main(). الجواب النهائي: <strong><span dir="ltr">4 \u00d7 3 = 12</span></strong>' },
+            { action: 'pop',
+              narration: 'تستلم <strong>main()</strong> القيمة 12. ينتهي البرنامج. <strong><span dir="ltr">4 \u00d7 3 = 12</span></strong>' }
+        ]);
+
+        // ==================== Demo 6: Fibonacci(5) ====================
+        registerDemo('fib', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'يبدأ البرنامج. تستدعي <strong>main()</strong> الدالة <strong>fib(5)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">fib(5)</div><div class="frame-expr">fib(4) + fib(3)</div>', frameClass: 'depth-1',
+              narration: '<strong>fib(5)</strong>: <span dir="ltr">5 &ge; 3</span>، إذن نحسب <code>fib(4) + fib(3)</code>. تستدعي <strong>fib(4)</strong> أولًا (الفرع الأيسر).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(4)</div><div class="frame-expr">fib(3) + fib(2)</div>', frameClass: 'depth-2',
+              narration: '<strong>fib(4)</strong>: <span dir="ltr">4 &ge; 3</span>، إذن نحسب <code>fib(3) + fib(2)</code>. تستدعي <strong>fib(3)</strong> أولًا (الفرع الأيسر).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(3)</div><div class="frame-expr">fib(2) + fib(1)</div>', frameClass: 'depth-3',
+              narration: '<strong>fib(3)</strong>: <span dir="ltr">3 &ge; 3</span>، إذن نحسب <code>fib(2) + fib(1)</code>. تستدعي <strong>fib(2)</strong> أولًا (الفرع الأيسر).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(2)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(2)</strong>: <span dir="ltr">2 &le; 2</span>. <strong>الحالة الأساسية!</strong> تعيد 1.' },
+            { action: 'pop', returnEntry: 'fib(2) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(3)</div><div class="frame-expr"><span class="resolved">1</span> + fib(1)</div>',
+              narration: '<strong>fib(2)</strong> تعيد <strong>1</strong>. تحل محل fib(2) في fib(3). الآن تحتاج fib(3) إلى <strong>fib(1)</strong> (الفرع الأيمن).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(1)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(1)</strong>: <span dir="ltr">1 &le; 2</span>. <strong>الحالة الأساسية!</strong> تعيد 1.' },
+            { action: 'pop', returnEntry: 'fib(1) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(3)</div><div class="frame-expr"><span class="resolved">1</span> + <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>fib(1)</strong> تعيد <strong>1</strong>. الآن لدى fib(3) القيمتان: <span dir="ltr">1 + 1 = <strong>2</strong></span>.' },
+            { action: 'pop', returnEntry: 'fib(3) = 1 + 1 = 2',
+              topFrameUpdate: '<div class="frame-name">fib(4)</div><div class="frame-expr"><span class="resolved">2</span> + fib(2)</div>',
+              narration: '<strong>fib(3)</strong> تعيد <strong>2</strong>. تحل محل fib(3) في fib(4). الآن تحتاج fib(4) إلى <strong>fib(2)</strong> (الفرع الأيمن).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(2)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(2)</strong>: الحالة الأساسية مرة أخرى! تعيد 1.' },
+            { action: 'pop', returnEntry: 'fib(2) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(4)</div><div class="frame-expr"><span class="resolved">2</span> + <span class="resolved">1</span> = 3</div>',
+              narration: '<strong>fib(2)</strong> تعيد <strong>1</strong>. الآن لدى fib(4) القيمتان: <span dir="ltr">2 + 1 = <strong>3</strong></span>.' },
+            { action: 'pop', returnEntry: 'fib(4) = 2 + 1 = 3',
+              topFrameUpdate: '<div class="frame-name">fib(5)</div><div class="frame-expr"><span class="resolved">3</span> + fib(3)</div>',
+              narration: '<strong>fib(4)</strong> تعيد <strong>3</strong>. تحل محل fib(4) في fib(5). الآن تحتاج fib(5) إلى <strong>fib(3)</strong> (الفرع الأيمن).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(3)</div><div class="frame-expr">fib(2) + fib(1)</div>', frameClass: 'depth-3',
+              narration: '<strong>fib(3)</strong> تُستدعى <strong>مرة أخرى</strong>! سبق أن حسبنا أن قيمتها = 2. هذا عمل مكرر!' },
+            { action: 'push', frameText: '<div class="frame-name">fib(2)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(2)</strong>: الحالة الأساسية. تعيد 1. (حُسبت من قبل أيضًا!)' },
+            { action: 'pop', returnEntry: 'fib(2) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(3)</div><div class="frame-expr"><span class="resolved">1</span> + fib(1)</div>',
+              narration: '<strong>fib(2)</strong> تعيد <strong>1</strong>. تحتاج fib(3) الآن إلى <strong>fib(1)</strong> (الفرع الأيمن).' },
+            { action: 'push', frameText: '<div class="frame-name">fib(1)</div><div class="frame-expr">return 1</div>', frameClass: 'base-frame',
+              narration: '<strong>fib(1)</strong>: الحالة الأساسية. تعيد 1. (حساب مكرر!)' },
+            { action: 'pop', returnEntry: 'fib(1) = 1',
+              topFrameUpdate: '<div class="frame-name">fib(3)</div><div class="frame-expr"><span class="resolved">1</span> + <span class="resolved">1</span> = 2</div>',
+              narration: '<strong>fib(1)</strong> تعيد <strong>1</strong>. <span dir="ltr">fib(3) = 1 + 1 = <strong>2</strong></span> (النتيجة نفسها كما سبق!).' },
+            { action: 'pop', returnEntry: 'fib(3) = 1 + 1 = 2',
+              topFrameUpdate: '<div class="frame-name">fib(5)</div><div class="frame-expr"><span class="resolved">3</span> + <span class="resolved">2</span> = 5</div>',
+              narration: '<strong>fib(3)</strong> تعيد <strong>2</strong>. الآن لدى fib(5) القيمتان: <span dir="ltr">3 + 2 = <strong>5</strong></span>. الجواب النهائي!' },
+            { action: 'pop', returnEntry: 'fib(5) = 3 + 2 = 5', isFinal: true,
+              narration: '<strong>fib(5)</strong> تعيد <strong>5</strong> إلى main(). الجواب النهائي: <strong><span dir="ltr">fib(5) = 5</span></strong>' },
+            { action: 'pop',
+              narration: 'انتهى! <strong>9 استدعاءات</strong> لحساب fib(5). كثير منها كان مكررًا. هذا تعقيد O(2\u207f)!' }
+        ]);
+
+        // ==================== Demo 7: Sum of Digits(6573) ====================
+        registerDemo('dig', [
+            { action: 'push', frameText: 'main()', frameClass: 'main-frame',
+              narration: 'يبدأ البرنامج. تستدعي <strong>main()</strong> الدالة <strong>sumDigits(6573)</strong>.' },
+            { action: 'push', frameText: '<div class="frame-name">sumDig(6573)</div><div class="frame-expr">3 + sumDig(657)</div>', frameClass: 'depth-1',
+              narration: '<strong>sumDig(6573)</strong>: <span dir="ltr">6573 \u2265 10</span>. الرقم الأخير <span dir="ltr">= 6573%10 = <strong>3</strong></span>. نحسب <span dir="ltr">3 + sumDig(657)</span>.' },
+            { action: 'push', frameText: '<div class="frame-name">sumDig(657)</div><div class="frame-expr">7 + sumDig(65)</div>', frameClass: 'depth-2',
+              narration: '<strong>sumDig(657)</strong>: <span dir="ltr">657 \u2265 10</span>. الرقم الأخير <span dir="ltr">= 657%10 = <strong>7</strong></span>. نحسب <span dir="ltr">7 + sumDig(65)</span>.' },
+            { action: 'push', frameText: '<div class="frame-name">sumDig(65)</div><div class="frame-expr">5 + sumDig(6)</div>', frameClass: 'depth-3',
+              narration: '<strong>sumDig(65)</strong>: <span dir="ltr">65 \u2265 10</span>. الرقم الأخير <span dir="ltr">= 65%10 = <strong>5</strong></span>. نحسب <span dir="ltr">5 + sumDig(6)</span>.' },
+            { action: 'push', frameText: '<div class="frame-name">sumDig(6)</div><div class="frame-expr">return 6</div>', frameClass: 'base-frame',
+              narration: '<strong>sumDig(6)</strong>: <span dir="ltr">6 < 10</span>. <strong>الحالة الأساسية!</strong> رقم واحد. تعيد 6.' },
+            { action: 'pop', returnEntry: 'sumDig(6) = 6',
+              topFrameUpdate: '<div class="frame-name">sumDig(65)</div><div class="frame-expr">5 + <span class="resolved">6</span> = 11</div>',
+              narration: '<strong>sumDig(6)</strong> تعيد <strong>6</strong>. تحل محل sumDig(6) في sumDig(65). الآن <span dir="ltr">5 + 6 = <strong>11</strong></span>.' },
+            { action: 'pop', returnEntry: 'sumDig(65) = 5 + 6 = 11',
+              topFrameUpdate: '<div class="frame-name">sumDig(657)</div><div class="frame-expr">7 + <span class="resolved">11</span> = 18</div>',
+              narration: '<strong>sumDig(65)</strong> تعيد <strong>11</strong>. تحل محل sumDig(65) في sumDig(657). الآن <span dir="ltr">7 + 11 = <strong>18</strong></span>.' },
+            { action: 'pop', returnEntry: 'sumDig(657) = 7 + 11 = 18',
+              topFrameUpdate: '<div class="frame-name">sumDig(6573)</div><div class="frame-expr">3 + <span class="resolved">18</span> = 21</div>',
+              narration: '<strong>sumDig(657)</strong> تعيد <strong>18</strong>. تحل محل sumDig(657) في sumDig(6573). الآن <span dir="ltr">3 + 18 = <strong>21</strong></span>.' },
+            { action: 'pop', returnEntry: 'sumDig(6573) = 3 + 18 = 21', isFinal: true,
+              narration: '<strong>sumDig(6573)</strong> تعيد <strong>21</strong> إلى main(). الجواب النهائي: <strong><span dir="ltr">6+5+7+3 = 21</span></strong>' },
+            { action: 'pop',
+              narration: 'تستلم <strong>main()</strong> القيمة 21. <strong><span dir="ltr">6 + 5 + 7 + 3 = 21</span></strong>' }
+        ]);
+
+        // ==================== Fibonacci Tree Animation ====================
+        var fibTreeStep = -1;
+        var fibTreeNodeIds = ['ft-5', 'ft-4', 'ft-3a', 'ft-3b', 'ft-2a', 'ft-2b', 'ft-1a', 'ft-2c', 'ft-1b'];
+
+        var fibTreeSteps = [
+            {
+                narration: 'نريد إيجاد <strong>Fib(5)</strong>. بما أن <span dir="ltr">5 &ge; 3</span>، نستخدم الصيغة: <strong>Fib(5) = Fib(4) + Fib(3)</strong>. علينا إيجاد كليهما!',
+                highlight: ['ft-5']
+            },
+            {
+                narration: 'لإيجاد <strong>Fib(4)</strong> نحتاج إلى Fib(3) + Fib(2). ولإيجاد <strong>Fib(3)</strong> على اليمين نحتاج إلى Fib(2) + Fib(1). نستمر في التوسيع!',
+                highlight: ['ft-4', 'ft-3a']
+            },
+            {
+                narration: 'كذلك تتوسع <strong>Fib(3)</strong> اليسرى (تحت Fib(4)) إلى Fib(2) + Fib(1). الآن يمكننا رؤية جميع <strong>الحالات الأساسية</strong> في أوراق الشجرة!',
+                highlight: ['ft-3b']
+            },
+            {
+                narration: 'جميع الأوراق حالات أساسية! <strong>Fib(1) = 1</strong> و<strong>Fib(2) = 1</strong>. هذه قيم نعرفها مباشرة &mdash; لا حاجة إلى مزيد من العودية.',
+                highlight: ['ft-2c', 'ft-1b', 'ft-2a', 'ft-2b', 'ft-1a'],
+                values: { 'ft-2c': ' = 1', 'ft-1b': ' = 1', 'ft-2a': ' = 1', 'ft-2b': ' = 1', 'ft-1a': ' = 1' },
+                makeBase: ['ft-2c', 'ft-1b', 'ft-2a', 'ft-2b', 'ft-1a']
+            },
+            {
+                narration: 'الآن نحسب صعودًا! على اليسار: <strong>Fib(3) = Fib(2) + Fib(1) = 1 + 1 = 2</strong>',
+                highlight: ['ft-3b'],
+                values: { 'ft-3b': ' = 2' },
+                makeComputed: ['ft-3b']
+            },
+            {
+                narration: '<strong>Fib(4) = Fib(3) + Fib(2) = 2 + 1 = 3</strong>',
+                highlight: ['ft-4'],
+                values: { 'ft-4': ' = 3' },
+                makeComputed: ['ft-4']
+            },
+            {
+                narration: 'الفرع الأيمن: <strong>Fib(3) = Fib(2) + Fib(1) = 1 + 1 = 2</strong>',
+                highlight: ['ft-3a'],
+                values: { 'ft-3a': ' = 2' },
+                makeComputed: ['ft-3a']
+            },
+            {
+                narration: 'أخيرًا! <strong>Fib(5) = Fib(4) + Fib(3) = 3 + 2 = 5</strong>. الجواب هو <strong>5</strong>!',
+                highlight: ['ft-5'],
+                values: { 'ft-5': ' = 5' },
+                makeComputed: ['ft-5']
+            }
+        ];
+
+        function startFibTree() {
+            resetFibTree();
+            document.getElementById('fib-tree-run-btn').style.display = 'none';
+            document.getElementById('fib-tree-next-btn').style.display = '';
+            nextFibTreeStep();
+        }
+
+        function nextFibTreeStep() {
+            fibTreeStep++;
+            if (fibTreeStep >= fibTreeSteps.length) {
+                document.getElementById('fib-tree-next-btn').textContent = 'تم';
+                document.getElementById('fib-tree-next-btn').disabled = true;
+                return;
+            }
+
+            var step = fibTreeSteps[fibTreeStep];
+
+            // Remove highlight from all nodes
+            fibTreeNodeIds.forEach(function(id) {
+                document.getElementById(id).classList.remove('node-highlight');
+            });
+
+            // Highlight current step's nodes
+            step.highlight.forEach(function(id) {
+                document.getElementById(id).classList.add('node-highlight');
+            });
+
+            // Set base case styling
+            if (step.makeBase) {
+                step.makeBase.forEach(function(id) {
+                    var node = document.getElementById(id);
+                    node.classList.add('node-base');
+                    node.classList.remove('node-call');
+                });
+            }
+
+            // Set computed styling
+            if (step.makeComputed) {
+                step.makeComputed.forEach(function(id) {
+                    var node = document.getElementById(id);
+                    node.classList.add('node-computed');
+                    node.classList.remove('node-call');
+                });
+            }
+
+            // Set values
+            if (step.values) {
+                Object.keys(step.values).forEach(function(id) {
+                    var node = document.getElementById(id);
+                    var valSpan = node.querySelector('.node-val');
+                    if (!valSpan) {
+                        valSpan = document.createElement('span');
+                        valSpan.className = 'node-val';
+                        node.appendChild(valSpan);
+                    }
+                    valSpan.textContent = step.values[id];
+                });
+            }
+
+            // Update narration
+            document.getElementById('fib-tree-narration').innerHTML = step.narration;
+            document.getElementById('fib-tree-step').textContent = 'الخطوة ' + (fibTreeStep + 1) + ' من ' + fibTreeSteps.length;
+
+            // Update button on last step
+            if (fibTreeStep >= fibTreeSteps.length - 1) {
+                document.getElementById('fib-tree-next-btn').textContent = 'تم';
+                document.getElementById('fib-tree-next-btn').disabled = true;
+            }
+        }
+
+        function resetFibTree() {
+            fibTreeStep = -1;
+
+            // Reset all nodes
+            fibTreeNodeIds.forEach(function(id) {
+                var node = document.getElementById(id);
+                node.classList.remove('node-highlight', 'node-base', 'node-computed');
+                node.classList.add('node-call');
+                var valSpan = node.querySelector('.node-val');
+                if (valSpan) valSpan.remove();
+            });
+
+            document.getElementById('fib-tree-narration').innerHTML = 'اضغط «ابدأ» لترى كيف نفكك Fib(5) ونحسب الجواب خطوة بخطوة.';
+            document.getElementById('fib-tree-step').textContent = '';
+            document.getElementById('fib-tree-run-btn').style.display = '';
+            var btn = document.getElementById('fib-tree-next-btn');
+            btn.style.display = 'none';
+            btn.textContent = 'التالي';
+            btn.disabled = false;
+        }
+    </script>
+
+<footer>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
+</footer>
+
+</body>
+</html>
