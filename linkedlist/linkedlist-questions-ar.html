@@ -1,14 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linked List Questions</title>
+    <title>أسئلة القوائم المرتبطة</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -187,7 +211,7 @@
             font-weight: bold;
             font-size: 0.9em;
             margin-bottom: 8px;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Haradh', 'Segoe UI', sans-serif;
         }
 
         .head-label, .tail-label {
@@ -442,6 +466,30 @@
             .score-bar { flex-direction: column; }
             .ll-visual { font-size: 0.8em; }
         }
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .q-difficulty   { margin-left: 0; margin-right: 10px; }
+        .solution-content {
+            border-left: none;
+            border-right: 5px solid #27ae60;
+            border-radius: 8px 0 0 8px;
+        }
+        .mcq-option     { text-align: right; }
+        .mcq-feedback.correct { border-left: none; border-right: 5px solid #27ae60; }
+        .mcq-feedback.wrong   { border-left: none; border-right: 5px solid #e74c3c; }
+        .back-to-top    { right: auto; left: 30px; }
+
+        /* Code and linked-list diagrams always stay left-to-right,
+           so node chains and arrows read head -> next -> null. */
+        pre, code, .code-container pre, .ll-visual, svg {
+            direction: ltr;
+        }
+        pre { text-align: left; }
+        code { unicode-bidi: isolate; }
+        .ll-visual .visual-desc { direction: rtl; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -462,12 +510,12 @@
     </style>
 </head>
 <body>
-<a href="linkedlist-questions-ar.html" class="lang-switch-btn">عربي</a>
+<a href="linkedlist-questions.html" class="lang-switch-btn">English</a>
 
 <div class="container">
     <header>
-        <h1>Linked List Question Bank</h1>
-        <p>Data Structures | 18 Coding + 20 MCQ Questions</p>
+        <h1>بنك أسئلة القوائم المرتبطة (Linked Lists)</h1>
+        <p>هياكل البيانات | 18 سؤالاً برمجياً + 20 سؤال اختيار من متعدد</p>
     </header>
 
     <div class="content">
@@ -475,40 +523,40 @@
         <!-- Score Tracker -->
         <div class="score-bar">
             <div class="score-item">
-                <div class="label">MCQ Score</div>
+                <div class="label">نتيجة الاختيار من متعدد</div>
                 <div class="value"><span id="mcq-correct" class="correct">0</span> / <span id="mcq-total">20</span></div>
             </div>
             <div class="score-item">
-                <div class="label">Answered</div>
+                <div class="label">تمت الإجابة</div>
                 <div class="value" id="mcq-answered">0</div>
             </div>
             <div class="score-item">
-                <div class="label">Progress</div>
+                <div class="label">التقدم</div>
                 <div class="progress-container">
                     <div class="progress-fill" id="progress-bar"></div>
                 </div>
             </div>
             <div class="score-item">
-                <button class="tab-btn" onclick="resetAll()">Reset All</button>
+                <button class="tab-btn" onclick="resetAll()">إعادة تعيين الكل</button>
             </div>
         </div>
 
         <!-- Tab Navigation -->
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="showTab('coding')">Coding Questions (20)</button>
-            <button class="tab-btn" onclick="showTab('mcq')">MCQ Questions (20)</button>
+            <button class="tab-btn active" onclick="showTab('coding')">الأسئلة البرمجية (20)</button>
+            <button class="tab-btn" onclick="showTab('mcq')">أسئلة الاختيار من متعدد (20)</button>
         </div>
 
         <!-- ===================== CODING QUESTIONS ===================== -->
         <div id="coding-tab" class="tab-content active">
-            <h2 class="section-header">Coding Questions</h2>
-            <p class="section-desc">Each question includes a visual diagram. Click "Show Solution" to reveal the answer with explanation.</p>
+            <h2 class="section-header">الأسئلة البرمجية</h2>
+            <p class="section-desc">يتضمن كل سؤال مخططاً توضيحياً. اضغط «عرض الحل» لإظهار الإجابة مع الشرح.</p>
 
             <!-- Q1 -->
             <div class="coding-question">
-                <span class="q-number">Q1</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">Traverse and Print a Singly Linked List</div>
-                <div class="q-description">Write a method <code>void printList(Node head)</code> that prints all elements of a singly linked list separated by <code> -> </code>.</div>
+                <span class="q-number">س1</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">اجتياز (Traversal) قائمة مرتبطة أحادية (Singly Linked List) وطباعتها</div>
+                <div class="q-description">اكتب دالة <code>void printList(Node head)</code> تطبع جميع عناصر قائمة مرتبطة أحادية مفصولةً بـ <code> -> </code>.</div>
                 <div class="ll-visual">
                     <span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
@@ -519,11 +567,11 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <div class="q-description">Expected Output: <code>10 -> 20 -> 30 -> null</code></div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="q-description">المخرج المتوقع: <code>10 -> 20 -> 30 -> null</code></div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public void</span> <span class="type">printList</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public void</span> <span class="type">printList</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
         System.out.print(current.data + <span class="string">" -> "</span>);
@@ -531,15 +579,15 @@
     }
     System.out.println(<span class="string">"null"</span>);
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> We use a <code>current</code> pointer starting at <code>head</code>. We traverse by moving <code>current = current.next</code> until we reach <code>null</code>. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> نستخدم مرجعاً (Pointer) باسم <code>current</code> يبدأ من <code>head</code>. نجتاز القائمة بتحريك <code>current = current.next</code> حتى نصل إلى <code>null</code>. التعقيد الزمني (Time Complexity): O(n)، التعقيد المكاني (Space Complexity): O(1).</div>
                 </div>
             </div>
 
             <!-- Q2 -->
             <div class="coding-question">
-                <span class="q-number">Q2</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">Count Nodes in a Linked List</div>
-                <div class="q-description">Write a method <code>int countNodes(Node head)</code> that returns the total number of nodes.</div>
+                <span class="q-number">س2</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">عدّ العقد (Nodes) في قائمة مرتبطة</div>
+                <div class="q-description">اكتب دالة <code>int countNodes(Node head)</code> تُرجع العدد الكلي للعقد.</div>
                 <div class="ll-visual">
                     <span class="head-label">head</span>
                     <span class="node"><span class="node-data">5</span><span class="node-next">next</span></span>
@@ -552,11 +600,11 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <div class="q-description">Expected Output: <code>4</code></div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="q-description">المخرج المتوقع: <code>4</code></div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public int</span> <span class="type">countNodes</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public int</span> <span class="type">countNodes</span>(<span class="type">Node</span> head) {
     <span class="keyword">int</span> count = <span class="number">0</span>;
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
@@ -565,17 +613,17 @@
     }
     <span class="keyword">return</span> count;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Initialize a counter to 0. Traverse the list, incrementing the counter at each node. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> نهيّئ عدّاداً بالقيمة 0. نجتاز القائمة ونزيد العدّاد عند كل عقدة. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q3 -->
             <div class="coding-question">
-                <span class="q-number">Q3</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">Insert at the Beginning</div>
-                <div class="q-description">Write a method <code>Node insertAtHead(Node head, int data)</code> that inserts a new node at the beginning of the list.</div>
+                <span class="q-number">س3</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">الإدراج في البداية</div>
+                <div class="q-description">اكتب دالة <code>Node insertAtHead(Node head, int data)</code> تُدرج عقدة جديدة في بداية القائمة.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
@@ -583,7 +631,7 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After inserting 10:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد إدراج 10:</div><span class="head-label">head</span>
                     <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -592,26 +640,26 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtHead</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtHead</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
     <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
     newNode.next = head;
     head = newNode;
     <span class="keyword">return</span> head;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Create a new node, point its <code>next</code> to the current head, then update head to the new node. Time: O(1), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> أنشئ عقدة جديدة، واجعل <code>next</code> الخاص بها يشير إلى رأس القائمة (Head) الحالي، ثم حدّث head ليصبح العقدة الجديدة. الزمن: O(1)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q4 -->
             <div class="coding-question">
-                <span class="q-number">Q4</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">Insert at the End</div>
-                <div class="q-description">Write a method <code>Node insertAtEnd(Node head, int data)</code> that inserts a new node at the end of the list.</div>
+                <span class="q-number">س4</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">الإدراج في النهاية</div>
+                <div class="q-description">اكتب دالة <code>Node insertAtEnd(Node head, int data)</code> تُدرج عقدة جديدة في نهاية القائمة.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -619,7 +667,7 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After inserting 30:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد إدراج 30:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -628,10 +676,10 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
     <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return</span> newNode;
     <span class="type">Node</span> current = head;
@@ -641,15 +689,15 @@
     current.next = newNode;
     <span class="keyword">return</span> head;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Traverse to the last node (where <code>next == null</code>), then set its <code>next</code> to the new node. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> اجتز القائمة حتى آخر عقدة (حيث <code>next == null</code>)، ثم اجعل <code>next</code> الخاص بها يشير إلى العقدة الجديدة. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q5 -->
             <div class="coding-question">
-                <span class="q-number">Q5</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">Search for a Value</div>
-                <div class="q-description">Write a method <code>boolean search(Node head, int target)</code> that returns <code>true</code> if the target value exists in the list.</div>
+                <span class="q-number">س5</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">البحث عن قيمة</div>
+                <div class="q-description">اكتب دالة <code>boolean search(Node head, int target)</code> تُرجع <code>true</code> إذا كانت القيمة المستهدفة موجودة في القائمة.</div>
                 <div class="ll-visual">
                     <span class="head-label">head</span>
                     <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
@@ -662,11 +710,11 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <div class="q-description">Search for <code>15</code> &rarr; returns <code>true</code></div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <div class="q-description">البحث عن <code>15</code> &larr; تُرجع <code>true</code></div>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public boolean</span> <span class="type">search</span>(<span class="type">Node</span> head, <span class="keyword">int</span> target) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public boolean</span> <span class="type">search</span>(<span class="type">Node</span> head, <span class="keyword">int</span> target) {
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
         <span class="keyword">if</span> (current.data == target) <span class="keyword">return true</span>;
@@ -674,18 +722,18 @@
     }
     <span class="keyword">return false</span>;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Linear search through each node comparing <code>data</code> with <code>target</code>. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> بحث خطي (Linear Search) عبر كل عقدة بمقارنة <code>data</code> مع <code>target</code>. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q6 -->
             <div class="coding-question">
-                <span class="q-number">Q6</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">Delete the First Node</div>
-                <div class="q-description">Write a method <code>Node deleteFirst(Node head)</code> that removes the first node and returns the new head.</div>
+                <span class="q-number">س6</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">حذف العقدة الأولى</div>
+                <div class="q-description">اكتب دالة <code>Node deleteFirst(Node head)</code> تحذف العقدة الأولى وتُرجع رأس القائمة الجديد.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
-                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">10</span><span class="node-next">del</span></span>
+                    <div class="visual-desc">قبل:</div><span class="head-label">head</span>
+                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">10</span><span class="node-next">حذف</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
@@ -694,51 +742,51 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteFirst</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteFirst</span>(<span class="type">Node</span> head) {
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
     <span class="keyword">return</span> head.next;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Simply return <code>head.next</code>. The old head node becomes eligible for garbage collection. Time: O(1), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> ببساطة أرجِع <code>head.next</code>. تصبح عقدة الرأس القديمة مؤهلة لجمع المهملات (Garbage Collection). الزمن: O(1)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q7 -->
             <div class="coding-question">
-                <span class="q-number">Q7</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Delete the Last Node</div>
-                <div class="q-description">Write a method <code>Node deleteLast(Node head)</code> that removes the last node from the list.</div>
+                <span class="q-number">س7</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">حذف العقدة الأخيرة</div>
+                <div class="q-description">اكتب دالة <code>Node deleteLast(Node head)</code> تحذف العقدة الأخيرة من القائمة.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
-                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">30</span><span class="node-next">del</span></span>
+                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">30</span><span class="node-next">حذف</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteLast</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteLast</span>(<span class="type">Node</span> head) {
     <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>) <span class="keyword">return null</span>;
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current.next.next != <span class="keyword">null</span>) {
@@ -747,37 +795,37 @@
     current.next = <span class="keyword">null</span>;
     <span class="keyword">return</span> head;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Traverse until <code>current.next.next == null</code> (second-to-last node), then set <code>current.next = null</code>. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> اجتز القائمة حتى <code>current.next.next == null</code> (العقدة قبل الأخيرة)، ثم اجعل <code>current.next = null</code>. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q8 -->
             <div class="coding-question">
-                <span class="q-number">Q8</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Delete a Node by Value</div>
-                <div class="q-description">Write a method <code>Node deleteByValue(Node head, int value)</code> that deletes the first occurrence of the given value.</div>
+                <span class="q-number">س8</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">حذف عقدة حسب قيمتها</div>
+                <div class="q-description">اكتب دالة <code>Node deleteByValue(Node head, int value)</code> تحذف أول ظهور للقيمة المعطاة.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before (delete 20):</div><span class="head-label">head</span>
+                    <div class="visual-desc">قبل (حذف 20):</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
-                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">20</span><span class="node-next">del</span></span>
+                    <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">20</span><span class="node-next">حذف</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteByValue</span>(<span class="type">Node</span> head, <span class="keyword">int</span> value) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteByValue</span>(<span class="type">Node</span> head, <span class="keyword">int</span> value) {
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
     <span class="keyword">if</span> (head.data == value) <span class="keyword">return</span> head.next;
     <span class="type">Node</span> current = head;
@@ -790,17 +838,17 @@
     }
     <span class="keyword">return</span> head;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Check if head has the value first. Then traverse looking at <code>current.next.data</code>. When found, skip over it by setting <code>current.next = current.next.next</code>. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> تحقق أولاً مما إذا كان head يحمل القيمة. ثم اجتز القائمة مع فحص <code>current.next.data</code>. عند العثور عليها، تخطَّها بجعل <code>current.next = current.next.next</code>. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q9 -->
             <div class="coding-question">
-                <span class="q-number">Q9</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Insert at a Given Position</div>
-                <div class="q-description">Write a method <code>Node insertAtPosition(Node head, int data, int position)</code> that inserts a node at the given position (0-indexed).</div>
+                <span class="q-number">س9</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">الإدراج في موضع محدد</div>
+                <div class="q-description">اكتب دالة <code>Node insertAtPosition(Node head, int data, int position)</code> تُدرج عقدة في الموضع المعطى (الفهرسة تبدأ من 0).</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -810,21 +858,21 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After inserting 25 at position 2:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد إدراج 25 في الموضع 2:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
-                    <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">25</span><span class="node-next">new</span></span>
+                    <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">25</span><span class="node-next">جديد</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtPosition</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data, <span class="keyword">int</span> pos) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtPosition</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data, <span class="keyword">int</span> pos) {
     <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
     <span class="keyword">if</span> (pos == <span class="number">0</span>) {
         newNode.next = head;
@@ -839,17 +887,17 @@
     current.next = newNode;
     <span class="keyword">return</span> head;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Navigate to position-1, then insert by adjusting pointers. Handle the special case of inserting at position 0 (new head). Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> انتقل إلى الموضع <code>position-1</code>، ثم أدرج العقدة بتعديل المراجع. عالج الحالة الخاصة للإدراج في الموضع 0 (رأس جديد). الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q10 -->
             <div class="coding-question">
-                <span class="q-number">Q10</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Reverse a Linked List</div>
-                <div class="q-description">Write a method <code>Node reverse(Node head)</code> that reverses the list in-place.</div>
+                <span class="q-number">س10</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">عكس قائمة مرتبطة</div>
+                <div class="q-description">اكتب دالة <code>Node reverse(Node head)</code> تعكس القائمة في مكانها (In-place).</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
@@ -861,7 +909,7 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
@@ -872,10 +920,10 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">reverse</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">reverse</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> prev = <span class="keyword">null</span>;
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
@@ -886,22 +934,22 @@
     }
     <span class="keyword">return</span> prev;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Use three pointers: <code>prev</code>, <code>current</code>, and <code>nextTemp</code>. At each step, reverse the link direction. When done, <code>prev</code> is the new head. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> استخدم ثلاثة مراجع: <code>prev</code> و<code>current</code> و<code>nextTemp</code>. في كل خطوة، اعكس اتجاه الرابط. عند الانتهاء، يكون <code>prev</code> هو رأس القائمة الجديد. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q11 -->
             <div class="coding-question">
-                <span class="q-number">Q11</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Find the Middle Node</div>
-                <div class="q-description">Write a method <code>Node findMiddle(Node head)</code> that returns the middle node using the slow/fast pointer technique.</div>
+                <span class="q-number">س11</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">إيجاد العقدة الوسطى</div>
+                <div class="q-description">اكتب دالة <code>Node findMiddle(Node head)</code> تُرجع العقدة الوسطى باستخدام تقنية المرجعين البطيء والسريع (Slow/Fast Pointers).</div>
                 <div class="ll-visual">
                     <span class="head-label">head</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
-                    <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">3</span><span class="node-next">mid</span></span>
+                    <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">3</span><span class="node-next">الوسط</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
@@ -909,10 +957,10 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">findMiddle</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">findMiddle</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> slow = head;
     <span class="type">Node</span> fast = head;
     <span class="keyword">while</span> (fast != <span class="keyword">null</span> && fast.next != <span class="keyword">null</span>) {
@@ -921,15 +969,15 @@
     }
     <span class="keyword">return</span> slow;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> <code>slow</code> moves one step, <code>fast</code> moves two steps. When <code>fast</code> reaches the end, <code>slow</code> is at the middle. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> يتحرك <code>slow</code> خطوة واحدة، ويتحرك <code>fast</code> خطوتين. عندما يصل <code>fast</code> إلى النهاية، يكون <code>slow</code> في المنتصف. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q12 -->
             <div class="coding-question">
-                <span class="q-number">Q12</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Detect a Cycle (Floyd's Algorithm)</div>
-                <div class="q-description">Write a method <code>boolean hasCycle(Node head)</code> that detects if the linked list has a cycle.</div>
+                <span class="q-number">س12</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">اكتشاف الدورة (Cycle) (خوارزمية فلويد - Floyd's Algorithm)</div>
+                <div class="q-description">اكتب دالة <code>boolean hasCycle(Node head)</code> تكتشف ما إذا كانت القائمة المرتبطة تحتوي على دورة.</div>
                 <div class="ll-visual">
                     <span class="head-label">head</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -939,12 +987,12 @@
                     <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">3</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
-                    <span class="arrow" style="color: #e74c3c;">&#8630; back to 3</span>
+                    <span class="arrow" style="color: #e74c3c;">&#8630; عودة إلى 3</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public boolean</span> <span class="type">hasCycle</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public boolean</span> <span class="type">hasCycle</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> slow = head;
     <span class="type">Node</span> fast = head;
     <span class="keyword">while</span> (fast != <span class="keyword">null</span> && fast.next != <span class="keyword">null</span>) {
@@ -954,33 +1002,33 @@
     }
     <span class="keyword">return false</span>;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Floyd's cycle detection: slow pointer moves 1 step, fast moves 2 steps. If they meet, there's a cycle. If fast reaches null, no cycle. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> اكتشاف الدورة بطريقة فلويد: يتحرك المرجع البطيء خطوة واحدة، ويتحرك السريع خطوتين. إذا التقيا فهناك دورة. وإذا وصل السريع إلى <code>null</code> فلا توجد دورة. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q13 -->
             <div class="coding-question">
-                <span class="q-number">Q13</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Find the Nth Node from the End</div>
-                <div class="q-description">Write a method <code>Node nthFromEnd(Node head, int n)</code> that returns the nth node from the end.</div>
+                <span class="q-number">س13</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">إيجاد العقدة رقم n من النهاية</div>
+                <div class="q-description">اكتب دالة <code>Node nthFromEnd(Node head, int n)</code> تُرجع العقدة رقم n من النهاية.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Find 2nd from end:</div><span class="head-label">head</span>
+                    <div class="visual-desc">إيجاد العقدة الثانية من النهاية:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
-                    <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">40</span><span class="node-next">ans</span></span>
+                    <span class="node" style="border-color: #e74c3c;"><span class="node-data" style="background: #e74c3c;">40</span><span class="node-next">الناتج</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">50</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">nthFromEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> n) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">nthFromEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> n) {
     <span class="type">Node</span> fast = head;
     <span class="type">Node</span> slow = head;
     <span class="comment">// Move fast n steps ahead</span>
@@ -995,17 +1043,17 @@
     }
     <span class="keyword">return</span> slow;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Move the fast pointer n steps ahead first. Then move both pointers one step at a time. When fast reaches the end, slow is at the nth node from the end. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> حرّك المرجع السريع n خطوات إلى الأمام أولاً. ثم حرّك المرجعين خطوة واحدة في كل مرة. عندما يصل السريع إلى النهاية، يكون البطيء عند العقدة رقم n من النهاية. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q14 -->
             <div class="coding-question">
-                <span class="q-number">Q14</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Remove Duplicates from Sorted List</div>
-                <div class="q-description">Write a method <code>Node removeDuplicates(Node head)</code> that removes duplicate values from a sorted linked list.</div>
+                <span class="q-number">س14</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">إزالة التكرارات من قائمة مرتبة</div>
+                <div class="q-description">اكتب دالة <code>Node removeDuplicates(Node head)</code> تزيل القيم المكررة من قائمة مرتبطة مرتبة.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -1019,7 +1067,7 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
@@ -1028,10 +1076,10 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">removeDuplicates</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">removeDuplicates</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current != <span class="keyword">null</span> && current.next != <span class="keyword">null</span>) {
         <span class="keyword">if</span> (current.data == current.next.data) {
@@ -1042,15 +1090,15 @@
     }
     <span class="keyword">return</span> head;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Since the list is sorted, duplicates are adjacent. If current and next have the same value, skip the next node. Otherwise, advance. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> بما أن القائمة مرتبة، فإن القيم المكررة تكون متجاورة. إذا كان لـ <code>current</code> و<code>next</code> القيمة نفسها، فتخطَّ العقدة التالية. وإلا فتقدّم. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q15 -->
             <div class="coding-question">
-                <span class="q-number">Q15</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Merge Two Sorted Lists</div>
-                <div class="q-description">Write a method <code>Node mergeSorted(Node l1, Node l2)</code> that merges two sorted linked lists into one sorted list.</div>
+                <span class="q-number">س15</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">دمج قائمتين مرتبتين</div>
+                <div class="q-description">اكتب دالة <code>Node mergeSorted(Node l1, Node l2)</code> تدمج قائمتين مرتبطتين مرتبتين في قائمة واحدة مرتبة.</div>
                 <div class="ll-visual">
                     <span class="head-label">L1</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -1072,7 +1120,7 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <span class="head-label">Merged</span>
+                    <span class="head-label">المدمجة</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
@@ -1087,10 +1135,10 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">mergeSorted</span>(<span class="type">Node</span> l1, <span class="type">Node</span> l2) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">mergeSorted</span>(<span class="type">Node</span> l1, <span class="type">Node</span> l2) {
     <span class="type">Node</span> dummy = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">0</span>);
     <span class="type">Node</span> tail = dummy;
     <span class="keyword">while</span> (l1 != <span class="keyword">null</span> && l2 != <span class="keyword">null</span>) {
@@ -1106,17 +1154,17 @@
     tail.next = (l1 != <span class="keyword">null</span>) ? l1 : l2;
     <span class="keyword">return</span> dummy.next;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Use a dummy node to simplify edge cases. Compare heads of both lists, attach the smaller one, and advance. Attach remaining nodes at the end. Time: O(n+m), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> استخدم عقدة وهمية (Dummy Node) لتبسيط الحالات الحدية. قارن رأسي القائمتين، وأرفق الأصغر منهما، ثم تقدّم. في النهاية أرفق العقد المتبقية. الزمن: O(n+m)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q16 -->
             <div class="coding-question">
-                <span class="q-number">Q16</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Check if a Linked List is a Palindrome</div>
-                <div class="q-description">Write a method <code>boolean isPalindrome(Node head)</code> that checks if the list reads the same forwards and backwards.</div>
+                <span class="q-number">س16</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">التحقق مما إذا كانت القائمة المرتبطة متناظرة (Palindrome)</div>
+                <div class="q-description">اكتب دالة <code>boolean isPalindrome(Node head)</code> تتحقق مما إذا كانت القائمة تُقرأ بالشكل نفسه من الأمام ومن الخلف.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Palindrome:</div><span class="head-label">head</span>
+                    <div class="visual-desc">قائمة متناظرة:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
@@ -1129,10 +1177,10 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public boolean</span> <span class="type">isPalindrome</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public boolean</span> <span class="type">isPalindrome</span>(<span class="type">Node</span> head) {
     <span class="comment">// Step 1: Find the middle</span>
     <span class="type">Node</span> slow = head, fast = head;
     <span class="keyword">while</span> (fast != <span class="keyword">null</span> && fast.next != <span class="keyword">null</span>) {
@@ -1156,17 +1204,17 @@
     }
     <span class="keyword">return true</span>;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Find the middle, reverse the second half, then compare both halves element by element. Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> أوجد المنتصف، واعكس النصف الثاني، ثم قارن النصفين عنصراً بعنصر. الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q17 -->
             <div class="coding-question">
-                <span class="q-number">Q17</span><span class="q-difficulty hard">Hard</span>
-                <div class="q-title">Swap Nodes in Pairs</div>
-                <div class="q-description">Write a method <code>Node swapPairs(Node head)</code> that swaps every two adjacent nodes.</div>
+                <span class="q-number">س17</span><span class="q-difficulty hard">صعب</span>
+                <div class="q-title">تبديل العقد في أزواج</div>
+                <div class="q-description">اكتب دالة <code>Node swapPairs(Node head)</code> تبدّل كل عقدتين متجاورتين.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                    <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
@@ -1178,7 +1226,7 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">After:</div><span class="head-label">head</span>
+                    <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                     <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">2</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
                     <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -1189,10 +1237,10 @@
                     <span class="arrow">&#8594;</span>
                     <span class="null-box">null</span>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">swapPairs</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">swapPairs</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> dummy = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">0</span>);
     dummy.next = head;
     <span class="type">Node</span> prev = dummy;
@@ -1206,17 +1254,17 @@
     }
     <span class="keyword">return</span> dummy.next;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Use a dummy node. For each pair, rearrange pointers: prev -> second -> first -> rest. Then advance prev to first (which is now the second in the pair). Time: O(n), Space: O(1).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> استخدم عقدة وهمية. لكل زوج، أعد ترتيب المراجع: <code>prev -> second -> first -> rest</code>. ثم انقل <code>prev</code> إلى <code>first</code> (التي أصبحت الآن الثانية في الزوج). الزمن: O(n)، المساحة: O(1).</div>
                 </div>
             </div>
 
             <!-- Q19 -->
             <div class="coding-question">
-                <span class="q-number">Q19</span><span class="q-difficulty hard">Hard</span>
-                <div class="q-title">Convert Singly Linked List to Doubly Linked List</div>
-                <div class="q-description">Assuming you have a <strong>Singly Linked List</strong> with a pointer <code>head</code>, write a method that converts it into a <strong>Doubly Linked List</strong> with a pointer <code>dHead</code>. Each node in the new list should have both <code>next</code> and <code>prev</code> pointers.</div>
+                <span class="q-number">س19</span><span class="q-difficulty hard">صعب</span>
+                <div class="q-title">تحويل قائمة مرتبطة أحادية إلى قائمة مرتبطة مزدوجة</div>
+                <div class="q-description">بافتراض أن لديك <strong>قائمة مرتبطة أحادية</strong> لها المرجع <code>head</code>، اكتب دالة تحوّلها إلى <strong>قائمة مرتبطة مزدوجة (Doubly Linked List)</strong> لها المرجع <code>dHead</code>. يجب أن تحتوي كل عقدة في القائمة الجديدة على المرجعين <code>next</code> و<code>prev</code> معاً.</div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Assuming you have this SLL with pointer <code>head</code>:</div>
+                    <div class="visual-desc">بافتراض أن لديك هذه القائمة الأحادية (SLL) ذات المرجع <code>head</code>:</div>
                     <span class="head-label">head</span>
                     <span class="node"><span class="node-data">A</span><span class="node-next">next</span></span>
                     <span class="arrow">&#8594;</span>
@@ -1227,7 +1275,7 @@
                     <span class="null-box">null</span>
                 </div>
                 <div class="ll-visual">
-                    <div class="visual-desc">Convert it to this DLL with pointer <code>dHead</code>:</div>
+                    <div class="visual-desc">حوّلها إلى هذه القائمة المزدوجة (DLL) ذات المرجع <code>dHead</code>:</div>
                     <div style="text-align: center; overflow-x: auto; padding: 10px 0;">
                         <svg width="680" height="220" viewBox="0 0 680 220" style="max-width: 100%;">
                             <defs>
@@ -1271,8 +1319,8 @@
                             <!-- Bidirectional arrows A <-> B -->
                             <line x1="200" y1="47" x2="270" y2="47" stroke="#4caf50" stroke-width="3" marker-end="url(#ah-greenQ)"/>
                             <line x1="270" y1="128" x2="200" y2="128" stroke="#f44336" stroke-width="3" marker-end="url(#ah-redQ)"/>
-                            <text x="235" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
-                            <text x="235" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+                            <text x="235" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">للأمام</text>
+                            <text x="235" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">للخلف</text>
 
                             <!-- Node B -->
                             <g transform="translate(280, 30)">
@@ -1287,8 +1335,8 @@
                             <!-- Bidirectional arrows B <-> C -->
                             <line x1="360" y1="47" x2="430" y2="47" stroke="#4caf50" stroke-width="3" marker-end="url(#ah-greenQ)"/>
                             <line x1="430" y1="128" x2="360" y2="128" stroke="#f44336" stroke-width="3" marker-end="url(#ah-redQ)"/>
-                            <text x="395" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
-                            <text x="395" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+                            <text x="395" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">للأمام</text>
+                            <text x="395" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">للخلف</text>
 
                             <!-- Node C -->
                             <g transform="translate(440, 30)">
@@ -1318,18 +1366,18 @@
 
                             <!-- Legend -->
                             <rect x="200" y="185" width="12" height="12" fill="#4caf50" rx="2"/>
-                            <text x="217" y="195" fill="#333" font-size="10">Next</text>
+                            <text x="217" y="195" fill="#333" font-size="10">التالي</text>
                             <rect x="260" y="185" width="12" height="12" fill="#667eea" rx="2"/>
-                            <text x="277" y="195" fill="#333" font-size="10">Data</text>
+                            <text x="277" y="195" fill="#333" font-size="10">البيانات</text>
                             <rect x="320" y="185" width="12" height="12" fill="#f44336" rx="2"/>
-                            <text x="337" y="195" fill="#333" font-size="10">Prev</text>
+                            <text x="337" y="195" fill="#333" font-size="10">السابق</text>
                         </svg>
                     </div>
                 </div>
-                <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
                 <div class="solution-content">
-                    <h4>Solution:</h4>
-                    <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">DNode</span> <span class="type">convertToDoubly</span>(<span class="type">Node</span> head) {
+                    <h4>الحل:</h4>
+                    <div class="code-container"><div class="code-header">كود الحل</div><pre><span class="keyword">public</span> <span class="type">DNode</span> <span class="type">convertToDoubly</span>(<span class="type">Node</span> head) {
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
     <span class="type">DNode</span> dHead = <span class="keyword">new</span> <span class="type">DNode</span>(head.data);
     <span class="type">DNode</span> dCurrent = dHead;
@@ -1343,7 +1391,7 @@
     }
     <span class="keyword">return</span> dHead;
 }</pre></div>
-                    <div class="solution-explanation"><strong>Explanation:</strong> Create a new doubly linked node for each singly linked node. Set both <code>next</code> and <code>prev</code> pointers as you traverse. Time: O(n), Space: O(n).</div>
+                    <div class="solution-explanation"><strong>الشرح:</strong> أنشئ عقدة مزدوجة جديدة لكل عقدة أحادية. اضبط المرجعين <code>next</code> و<code>prev</code> أثناء الاجتياز. الزمن: O(n)، المساحة: O(n).</div>
                 </div>
             </div>
 
@@ -1351,268 +1399,268 @@
 
         <!-- ===================== MCQ QUESTIONS ===================== -->
         <div id="mcq-tab" class="tab-content">
-            <h2 class="section-header">Multiple Choice Questions</h2>
-            <p class="section-desc">Select the best answer. You'll get immediate feedback with explanations.</p>
+            <h2 class="section-header">أسئلة الاختيار من متعدد</h2>
+            <p class="section-desc">اختر أفضل إجابة. ستحصل على تغذية راجعة فورية مع الشرح.</p>
 
             <!-- MCQ 1 -->
             <div class="mcq-question" id="mcq-1">
-                <span class="q-number">MCQ 1</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">What is the time complexity of inserting a node at the beginning of a singly linked list?</div>
+                <span class="q-number">سؤال اختيار 1</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">ما التعقيد الزمني (Time Complexity) لإدراج عقدة في بداية قائمة مرتبطة أحادية؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">A) O(1)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) O(n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(log n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(n log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">أ) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) O(log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) O(n log n)</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-1"></div>
             </div>
 
             <!-- MCQ 2 -->
             <div class="mcq-question" id="mcq-2">
-                <span class="q-number">MCQ 2</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">What does a node in a singly linked list contain?</div>
+                <span class="q-number">سؤال اختيار 2</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">مِمَّ تتكون العقدة في القائمة المرتبطة الأحادية؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) Only data</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) Data and a reference to the next node</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) Data, next, and previous references</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) An index and data</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) البيانات فقط</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) البيانات ومرجع (Reference) إلى العقدة التالية</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) البيانات ومرجعا التالي والسابق</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) فهرس (Index) وبيانات</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-2"></div>
             </div>
 
             <!-- MCQ 3 -->
             <div class="mcq-question" id="mcq-3">
-                <span class="q-number">MCQ 3</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">What is the value of <code>head.next.next.data</code> in the list: 5 -> 10 -> 15 -> 20 -> null?</div>
+                <span class="q-number">سؤال اختيار 3</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">ما قيمة <code>head.next.next.data</code> في القائمة: <code>5 -> 10 -> 15 -> 20 -> null</code>؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) 5</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) 10</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) 15</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) 20</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) 5</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) 10</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ج) 15</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) 20</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-3"></div>
             </div>
 
             <!-- MCQ 4 -->
             <div class="mcq-question" id="mcq-4">
-                <span class="q-number">MCQ 4</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">Which of the following is NOT an advantage of linked lists over arrays?</div>
+                <span class="q-number">سؤال اختيار 4</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">أيٌّ مما يلي <strong>ليس</strong> ميزة للقوائم المرتبطة مقارنةً بالمصفوفات (Arrays)؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) Dynamic size</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) Easy insertion/deletion</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) Random access of elements</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) No memory waste from pre-allocation</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) الحجم الديناميكي</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) سهولة الإدراج/الحذف</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ج) الوصول العشوائي (Random Access) إلى العناصر</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) عدم هدر الذاكرة بسبب الحجز المسبق</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-4"></div>
             </div>
 
             <!-- MCQ 5 -->
             <div class="mcq-question" id="mcq-5">
-                <span class="q-number">MCQ 5</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">What happens when you set <code>head = head.next</code>?</div>
+                <span class="q-number">سؤال اختيار 5</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">ماذا يحدث عندما تنفّذ <code>head = head.next</code>؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) The last node is removed</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) The first node is effectively removed</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) A new node is added</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) The list is reversed</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) تُحذف العقدة الأخيرة</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) تُحذف العقدة الأولى فعلياً</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) تُضاف عقدة جديدة</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) تُعكس القائمة</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-5"></div>
             </div>
 
             <!-- MCQ 6 -->
             <div class="mcq-question" id="mcq-6">
-                <span class="q-number">MCQ 6</span><span class="q-difficulty easy">Easy</span>
-                <div class="q-title">In a singly linked list, which pointer does the last node's <code>next</code> field point to?</div>
+                <span class="q-number">سؤال اختيار 6</span><span class="q-difficulty easy">سهل</span>
+                <div class="q-title">في القائمة المرتبطة الأحادية، إلى أين يشير الحقل <code>next</code> في العقدة الأخيرة؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">A) null</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) head</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) itself</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) the previous node</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">أ) null</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) head</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) إلى نفسها</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) العقدة السابقة</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-6"></div>
             </div>
 
             <!-- MCQ 7 -->
             <div class="mcq-question" id="mcq-7">
-                <span class="q-number">MCQ 7</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">What is the time complexity of searching for an element in a singly linked list?</div>
+                <span class="q-number">سؤال اختيار 7</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">ما التعقيد الزمني للبحث عن عنصر في قائمة مرتبطة أحادية؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) O(n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(log n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(n^2)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) O(log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) O(n^2)</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-7"></div>
             </div>
 
             <!-- MCQ 8 -->
             <div class="mcq-question" id="mcq-8">
-                <span class="q-number">MCQ 8</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">What differentiates a doubly linked list from a singly linked list?</div>
+                <span class="q-number">سؤال اختيار 8</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">ما الذي يميّز القائمة المرتبطة المزدوجة (Doubly Linked List) عن القائمة المرتبطة الأحادية؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) It has two data fields</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) Each node has both a next and a prev pointer</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) It can only store integers</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) It always forms a cycle</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) تحتوي على حقلَي بيانات</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) كل عقدة لها مرجعان: <code>next</code> و<code>prev</code></button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) لا تخزّن إلا أعداداً صحيحة</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) تشكّل دائماً دورة</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-8"></div>
             </div>
 
             <!-- MCQ 9 -->
             <div class="mcq-question" id="mcq-9">
-                <span class="q-number">MCQ 9</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">In a circular linked list, the last node's <code>next</code> pointer points to:</div>
+                <span class="q-number">سؤال اختيار 9</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">في القائمة المرتبطة الدائرية (Circular Linked List)، يشير المرجع <code>next</code> في العقدة الأخيرة إلى:</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) null</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) the head node</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) itself</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) the second node</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) null</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) عقدة الرأس (head)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) إلى نفسها</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) العقدة الثانية</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-9"></div>
             </div>
 
             <!-- MCQ 10 -->
             <div class="mcq-question" id="mcq-10">
-                <span class="q-number">MCQ 10</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Floyd's cycle detection algorithm uses which technique?</div>
+                <span class="q-number">سؤال اختيار 10</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">ما التقنية التي تستخدمها خوارزمية فلويد (Floyd) لاكتشاف الدورة؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) Binary search</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) Hash table</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) Two pointers (slow and fast)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) Recursion</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) البحث الثنائي (Binary Search)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) جدول التجزئة (Hash Table)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ج) مرجعان (بطيء وسريع)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) الاستدعاء الذاتي (Recursion)</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-10"></div>
             </div>
 
             <!-- MCQ 11 -->
             <div class="mcq-question" id="mcq-11">
-                <span class="q-number">MCQ 11</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">What is the time complexity of deleting a node from the END of a singly linked list (without a tail pointer)?</div>
+                <span class="q-number">سؤال اختيار 11</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">ما التعقيد الزمني لحذف عقدة من <strong>نهاية</strong> قائمة مرتبطة أحادية (دون مرجع ذيل القائمة (Tail))؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) O(n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(log n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(n^2)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) O(log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) O(n^2)</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-11"></div>
             </div>
 
             <!-- MCQ 12 -->
             <div class="mcq-question" id="mcq-12">
-                <span class="q-number">MCQ 12</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">What is the output of the following code?<br>
+                <span class="q-number">سؤال اختيار 12</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">ما مخرج الكود التالي؟<br>
                 <code>Node current = head; // head -> 1 -> 2 -> 3 -> null</code><br>
                 <code>while(current.next != null) { current = current.next; }</code><br>
                 <code>System.out.println(current.data);</code></div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) 1</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) 2</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) 3</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) NullPointerException</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) 1</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) 2</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ج) 3</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) NullPointerException</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-12"></div>
             </div>
 
             <!-- MCQ 13 -->
             <div class="mcq-question" id="mcq-13">
-                <span class="q-number">MCQ 13</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">To reverse a singly linked list, how many pointers are typically used?</div>
+                <span class="q-number">سؤال اختيار 13</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">لعكس قائمة مرتبطة أحادية، كم مرجعاً يُستخدم عادةً؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) 1</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) 2</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) 3 (prev, current, next)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) 4</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) 1</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) 2</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ج) 3 (<code>prev</code> و<code>current</code> و<code>next</code>)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) 4</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-13"></div>
             </div>
 
             <!-- MCQ 14 -->
             <div class="mcq-question" id="mcq-14">
-                <span class="q-number">MCQ 14</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">Which data structure can be efficiently implemented using a linked list where insertion and deletion happen at the same end?</div>
+                <span class="q-number">سؤال اختيار 14</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">أيّ هياكل البيانات التالية يمكن تنفيذه بكفاءة باستخدام قائمة مرتبطة بحيث يتم الإدراج والحذف من الطرف نفسه؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">A) Stack</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) Binary Tree</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) Hash Table</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) Graph</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">أ) المكدس (Stack)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) الشجرة الثنائية (Binary Tree)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) جدول التجزئة</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) الرسم البياني (Graph)</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-14"></div>
             </div>
 
             <!-- MCQ 15 -->
             <div class="mcq-question" id="mcq-15">
-                <span class="q-number">MCQ 15</span><span class="q-difficulty medium">Medium</span>
-                <div class="q-title">What is the space complexity of a singly linked list with n nodes?</div>
+                <span class="q-number">سؤال اختيار 15</span><span class="q-difficulty medium">متوسط</span>
+                <div class="q-title">ما التعقيد المكاني (Space Complexity) لقائمة مرتبطة أحادية تحتوي على n عقدة؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) O(n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(n^2)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) O(n^2)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) O(log n)</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-15"></div>
             </div>
 
             <!-- MCQ 16 -->
             <div class="mcq-question" id="mcq-16">
-                <span class="q-number">MCQ 16</span><span class="q-difficulty hard">Hard</span>
-                <div class="q-title">What is the advantage of a doubly linked list over a singly linked list for deletion?</div>
+                <span class="q-number">سؤال اختيار 16</span><span class="q-difficulty hard">صعب</span>
+                <div class="q-title">ما ميزة القائمة المرتبطة المزدوجة على الأحادية فيما يخص الحذف؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) It uses less memory</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) You can delete a node in O(1) if you have a pointer to it</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) It supports random access</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) It is always faster than arrays</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) تستهلك ذاكرة أقل</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) يمكنك حذف عقدة في O(1) إذا كان لديك مرجع إليها</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) تدعم الوصول العشوائي</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) هي دائماً أسرع من المصفوفات</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-16"></div>
             </div>
 
             <!-- MCQ 17 -->
             <div class="mcq-question" id="mcq-17">
-                <span class="q-number">MCQ 17</span><span class="q-difficulty hard">Hard</span>
-                <div class="q-title">Given a linked list: 10 -> 20 -> 30 -> 40 -> null. After executing <code>head.next.next = head.next.next.next</code>, what is the list?</div>
+                <span class="q-number">سؤال اختيار 17</span><span class="q-difficulty hard">صعب</span>
+                <div class="q-title">لديك القائمة المرتبطة: <code>10 -> 20 -> 30 -> 40 -> null</code>. بعد تنفيذ <code>head.next.next = head.next.next.next</code>، كيف تصبح القائمة؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) 10 -> 20 -> 40 -> 30 -> null</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) 10 -> 20 -> 40 -> null</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) 10 -> 30 -> 40 -> null</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) 10 -> 20 -> 30 -> null</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) <bdi dir="ltr">10 -> 20 -> 40 -> 30 -> null</bdi></button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) <bdi dir="ltr">10 -> 20 -> 40 -> null</bdi></button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) <bdi dir="ltr">10 -> 30 -> 40 -> null</bdi></button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) <bdi dir="ltr">10 -> 20 -> 30 -> null</bdi></button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-17"></div>
             </div>
 
             <!-- MCQ 18 -->
             <div class="mcq-question" id="mcq-18">
-                <span class="q-number">MCQ 18</span><span class="q-difficulty hard">Hard</span>
-                <div class="q-title">Why is the "dummy node" technique useful when manipulating linked lists?</div>
+                <span class="q-number">سؤال اختيار 18</span><span class="q-difficulty hard">صعب</span>
+                <div class="q-title">لماذا تُعد تقنية «العقدة الوهمية (Dummy Node)» مفيدة عند التعامل مع القوائم المرتبطة؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) It reduces time complexity</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) It uses less memory</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) It eliminates special handling of the head node</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) It makes the list sorted</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) تقلل التعقيد الزمني</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) تستهلك ذاكرة أقل</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ج) تُلغي الحاجة إلى معالجة خاصة لعقدة الرأس</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) تجعل القائمة مرتبة</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-18"></div>
             </div>
 
             <!-- MCQ 19 -->
             <div class="mcq-question" id="mcq-19">
-                <span class="q-number">MCQ 19</span><span class="q-difficulty hard">Hard</span>
-                <div class="q-title">What is the time complexity of finding the middle element using the slow/fast pointer technique?</div>
+                <span class="q-number">سؤال اختيار 19</span><span class="q-difficulty hard">صعب</span>
+                <div class="q-title">ما التعقيد الزمني لإيجاد العنصر الأوسط باستخدام تقنية المرجعين البطيء والسريع؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) O(1)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">B) O(n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">C) O(n/2) which is different from O(n)</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) O(log n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) O(1)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ب) O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ج) O(n/2) وهو يختلف عن O(n)</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) O(log n)</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-19"></div>
             </div>
 
             <!-- MCQ 20 -->
             <div class="mcq-question" id="mcq-20">
-                <span class="q-number">MCQ 20</span><span class="q-difficulty hard">Hard</span>
-                <div class="q-title">In Java's <code>LinkedList</code> class, which interfaces does it implement?</div>
+                <span class="q-number">سؤال اختيار 20</span><span class="q-difficulty hard">صعب</span>
+                <div class="q-title">ما الواجهات (Interfaces) التي يطبّقها الصنف <code>LinkedList</code> في Java؟</div>
                 <div class="mcq-options">
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">A) List only</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">B) Queue only</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, true)">C) List, Deque, and Queue</button>
-                    <button class="mcq-option" onclick="checkMCQ(this, false)">D) Set and Map</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">أ) List فقط</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">ب) Queue فقط</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, true)">ج) List وDeque وQueue</button>
+                    <button class="mcq-option" onclick="checkMCQ(this, false)">د) Set وMap</button>
                 </div>
                 <div class="mcq-feedback" id="fb-mcq-20"></div>
             </div>
@@ -1627,26 +1675,26 @@
 <script>
     // ============ MCQ explanations ============
     const mcqExplanations = {
-        1: { correct: "Inserting at the head is O(1) because you only update the head pointer - no traversal needed.", wrong: "Inserting at the beginning requires no traversal. We just create a new node, point it to the current head, and update head. This is O(1)." },
-        2: { correct: "A singly linked list node contains data and a reference (pointer) to the next node.", wrong: "A singly linked list node has exactly two parts: the data and a reference to the next node. A doubly linked list node also has a prev pointer." },
-        3: { correct: "head.data = 5, head.next.data = 10, head.next.next.data = 15. We follow two next pointers from head.", wrong: "Start from head (5), follow next to get 10, follow next again to get 15. head.next.next.data = 15." },
-        4: { correct: "Linked lists do NOT support random access. To access element at index i, you must traverse from the head. Arrays support O(1) random access.", wrong: "Random access (accessing by index in O(1)) is NOT possible with linked lists. You must traverse from the head, making it O(n)." },
-        5: { correct: "Setting head = head.next makes head point to the second node, effectively removing the first node from the list.", wrong: "head = head.next moves the head pointer forward, so the old first node is no longer accessible through head, effectively removing it." },
-        6: { correct: "In a singly linked list (non-circular), the last node's next pointer is null, indicating the end of the list.", wrong: "The last node's next field is null in a standard singly linked list. This is how we know we've reached the end during traversal." },
-        7: { correct: "Searching requires traversing the list node by node. In the worst case, the element is at the end or not present, giving O(n).", wrong: "Since linked lists don't support random access, we must check each node sequentially. Worst case is O(n)." },
-        8: { correct: "A doubly linked list has both next and prev pointers, allowing traversal in both directions.", wrong: "The key difference is that each node in a DLL has both a next pointer and a prev pointer, enabling bidirectional traversal." },
-        9: { correct: "In a circular linked list, the last node's next points back to the head, forming a circle.", wrong: "A circular linked list forms a cycle where the last node points back to the head node, not to null." },
-        10: { correct: "Floyd's algorithm uses two pointers: slow (moves 1 step) and fast (moves 2 steps). If they meet, there's a cycle.", wrong: "Floyd's Tortoise and Hare algorithm uses two pointers moving at different speeds to detect cycles." },
-        11: { correct: "Without a tail pointer, you must traverse to the second-to-last node to delete the last one, which takes O(n).", wrong: "Deleting the last node requires finding the second-to-last node (to set its next to null), which requires traversing the entire list: O(n)." },
-        12: { correct: "The loop stops when current.next is null, meaning current is the last node with data = 3.", wrong: "The condition current.next != null stops at the last node (not past it). So current ends at the node with data = 3." },
-        13: { correct: "The iterative reversal uses three pointers: prev (initially null), current (starts at head), and nextTemp (saves the next node before re-linking).", wrong: "The standard iterative approach needs 3 pointers: prev, current, and a temporary next pointer to avoid losing the reference." },
-        14: { correct: "A stack uses LIFO (Last-In-First-Out). Using a linked list, push and pop at the head gives O(1) for both operations.", wrong: "A stack needs insertion and deletion at the same end (top). A linked list head serves perfectly as the stack top with O(1) push/pop." },
-        15: { correct: "Each of the n nodes takes constant space, so total space is O(n).", wrong: "A linked list with n nodes uses O(n) space - each node stores data and a pointer." },
-        16: { correct: "In a DLL, if you have a pointer to a node, you can access its predecessor via prev, so you can unlink it in O(1). In a SLL, you'd need to traverse to find the predecessor.", wrong: "With a DLL, having a direct pointer to a node lets you access both neighbors (prev and next), enabling O(1) deletion without traversal." },
-        17: { correct: "head.next is node 20. head.next.next was node 30. Setting it to head.next.next.next (node 40) skips node 30. Result: 10 -> 20 -> 40 -> null.", wrong: "head.next.next points to the node after 20, which is 30. We reassign it to 30's next (which is 40), effectively skipping node 30." },
-        18: { correct: "A dummy node (sentinel) before the real head means you never have to handle the head as a special case for insertions/deletions.", wrong: "The dummy node simplifies code by ensuring there's always a node before the first real element, eliminating edge cases for head modifications." },
-        19: { correct: "O(n) - the slow pointer visits n/2 nodes, but O(n/2) = O(n) in Big-O notation.", wrong: "Even though slow only moves n/2 steps, in Big-O notation constants are dropped: O(n/2) = O(n). The technique is a single pass through the list." },
-        20: { correct: "Java's LinkedList implements List, Deque, and Queue interfaces, making it usable as a list, double-ended queue, or queue.", wrong: "Java's LinkedList is versatile - it implements List (indexed access), Queue (FIFO), and Deque (double-ended queue) interfaces." }
+        1: { correct: "إدراج عقدة في رأس القائمة يستغرق O(1) لأنك تحدّث المرجع <code>head</code> فقط - دون حاجة إلى اجتياز.", wrong: "الإدراج في البداية لا يتطلب أي اجتياز. ننشئ عقدة جديدة، ونجعلها تشير إلى الرأس الحالي، ثم نحدّث <code>head</code>. وهذا O(1)." },
+        2: { correct: "تحتوي عقدة القائمة المرتبطة الأحادية على البيانات ومرجع (مؤشر) إلى العقدة التالية.", wrong: "عقدة القائمة المرتبطة الأحادية لها جزءان بالضبط: البيانات ومرجع إلى العقدة التالية. أما عقدة القائمة المرتبطة المزدوجة فتحتوي أيضاً على المرجع <code>prev</code>." },
+        3: { correct: "<code>head.data = 5</code>، <code>head.next.data = 10</code>، <code>head.next.next.data = 15</code>. نتبع مرجعَي <code>next</code> انطلاقاً من <code>head</code>.", wrong: "ابدأ من <code>head</code> (5)، واتبع <code>next</code> لتصل إلى 10، ثم اتبع <code>next</code> مرة أخرى لتصل إلى 15. إذن <code>head.next.next.data = 15</code>." },
+        4: { correct: "القوائم المرتبطة <strong>لا</strong> تدعم الوصول العشوائي. للوصول إلى العنصر عند الفهرس i يجب الاجتياز من الرأس. أما المصفوفات فتدعم الوصول العشوائي في O(1).", wrong: "الوصول العشوائي (الوصول بالفهرس في O(1)) <strong>غير</strong> ممكن في القوائم المرتبطة. يجب الاجتياز من الرأس، مما يجعله O(n)." },
+        5: { correct: "تنفيذ <code>head = head.next</code> يجعل <code>head</code> يشير إلى العقدة الثانية، فتُحذف العقدة الأولى من القائمة فعلياً.", wrong: "<code>head = head.next</code> يحرّك المرجع <code>head</code> إلى الأمام، فلا تعود العقدة الأولى القديمة قابلة للوصول عبر <code>head</code>، أي تُحذف فعلياً." },
+        6: { correct: "في القائمة المرتبطة الأحادية (غير الدائرية)، يكون المرجع <code>next</code> في العقدة الأخيرة <code>null</code>، دلالةً على نهاية القائمة.", wrong: "الحقل <code>next</code> في العقدة الأخيرة يساوي <code>null</code> في القائمة المرتبطة الأحادية القياسية. وبهذا نعرف أننا وصلنا إلى النهاية أثناء الاجتياز." },
+        7: { correct: "يتطلب البحث اجتياز القائمة عقدةً عقدة. في أسوأ حالة (Worst Case) يكون العنصر في النهاية أو غير موجود، فيكون التعقيد O(n).", wrong: "بما أن القوائم المرتبطة لا تدعم الوصول العشوائي، يجب فحص كل عقدة بالتسلسل. أسوأ حالة هي O(n)." },
+        8: { correct: "القائمة المرتبطة المزدوجة لها المرجعان <code>next</code> و<code>prev</code>، مما يسمح بالاجتياز في الاتجاهين.", wrong: "الفرق الأساسي أن كل عقدة في القائمة المزدوجة (DLL) لها مرجع <code>next</code> ومرجع <code>prev</code>، مما يتيح الاجتياز في الاتجاهين." },
+        9: { correct: "في القائمة المرتبطة الدائرية، يشير <code>next</code> في العقدة الأخيرة إلى الرأس، فتتشكل دائرة.", wrong: "تشكّل القائمة المرتبطة الدائرية دورةً تشير فيها العقدة الأخيرة إلى عقدة الرأس، لا إلى <code>null</code>." },
+        10: { correct: "تستخدم خوارزمية فلويد مرجعين: بطيء (يتحرك خطوة واحدة) وسريع (يتحرك خطوتين). إذا التقيا فهناك دورة.", wrong: "تستخدم خوارزمية فلويد «السلحفاة والأرنب» (Tortoise and Hare) مرجعين يتحركان بسرعتين مختلفتين لاكتشاف الدورات." },
+        11: { correct: "دون مرجع للذيل، يجب الاجتياز حتى العقدة قبل الأخيرة لحذف الأخيرة، وهذا يستغرق O(n).", wrong: "حذف العقدة الأخيرة يتطلب إيجاد العقدة قبل الأخيرة (لجعل <code>next</code> فيها <code>null</code>)، مما يتطلب اجتياز القائمة كاملة: O(n)." },
+        12: { correct: "تتوقف الحلقة عندما يكون <code>current.next</code> مساوياً لـ <code>null</code>، أي أن <code>current</code> هي العقدة الأخيرة وبياناتها 3.", wrong: "الشرط <code>current.next != null</code> يتوقف عند العقدة الأخيرة (لا بعدها). لذا ينتهي <code>current</code> عند العقدة التي بياناتها 3." },
+        13: { correct: "يستخدم العكس التكراري ثلاثة مراجع: <code>prev</code> (قيمته الابتدائية <code>null</code>)، و<code>current</code> (يبدأ من <code>head</code>)، و<code>nextTemp</code> (يحفظ العقدة التالية قبل إعادة الربط).", wrong: "يحتاج الأسلوب التكراري القياسي إلى 3 مراجع: <code>prev</code> و<code>current</code> ومرجع <code>next</code> مؤقت لتجنّب فقدان المرجع." },
+        14: { correct: "يعمل المكدس وفق مبدأ LIFO (آخر من يدخل أول من يخرج). وباستخدام قائمة مرتبطة، يكون الدفع (Push) والسحب (Pop) عند الرأس O(1) لكلتا العمليتين.", wrong: "يحتاج المكدس إلى الإدراج والحذف من الطرف نفسه (القمة). ورأس القائمة المرتبطة يؤدي دور قمة المكدس تماماً مع دفع/سحب في O(1)." },
+        15: { correct: "كل عقدة من العقد الـ n تشغل مساحة ثابتة، لذا فالمساحة الكلية O(n).", wrong: "القائمة المرتبطة ذات n عقدة تستخدم مساحة O(n) - فكل عقدة تخزّن البيانات ومرجعاً." },
+        16: { correct: "في القائمة المزدوجة، إذا كان لديك مرجع إلى عقدة، يمكنك الوصول إلى سابقتها عبر <code>prev</code>، فتفصلها في O(1). أما في القائمة الأحادية (SLL) فستحتاج إلى الاجتياز لإيجاد السابقة.", wrong: "في القائمة المزدوجة، يتيح لك امتلاك مرجع مباشر إلى عقدة الوصول إلى جارتيها (<code>prev</code> و<code>next</code>)، مما يمكّن من الحذف في O(1) دون اجتياز." },
+        17: { correct: "<code>head.next</code> هي العقدة 20. وكانت <code>head.next.next</code> هي العقدة 30. جعلها تساوي <code>head.next.next.next</code> (العقدة 40) يتخطى العقدة 30. النتيجة: <bdi dir=\"ltr\">10 -> 20 -> 40 -> null</bdi>.", wrong: "<code>head.next.next</code> يشير إلى العقدة بعد 20، وهي 30. نعيد تعيينه إلى <code>next</code> الخاص بـ 30 (وهو 40)، فنتخطى العقدة 30 فعلياً." },
+        18: { correct: "وجود عقدة وهمية (حارسة - Sentinel) قبل الرأس الحقيقي يعني أنك لن تحتاج أبداً إلى معالجة الرأس كحالة خاصة عند الإدراج/الحذف.", wrong: "تبسّط العقدة الوهمية الكود بضمان وجود عقدة دائماً قبل أول عنصر حقيقي، مما يلغي الحالات الحدية المتعلقة بتعديل الرأس." },
+        19: { correct: "O(n) - المرجع البطيء يزور n/2 عقدة، لكن O(n/2) = O(n) في ترميز O الكبير (Big-O Notation).", wrong: "مع أن البطيء يتحرك n/2 خطوة فقط، ففي ترميز O الكبير تُهمل الثوابت: O(n/2) = O(n). وهذه التقنية مرور واحد عبر القائمة." },
+        20: { correct: "يطبّق الصنف <code>LinkedList</code> في Java الواجهات List وDeque وQueue، مما يجعله قابلاً للاستخدام كقائمة، أو طابور مزدوج الطرفين، أو طابور (Queue).", wrong: "الصنف <code>LinkedList</code> في Java متعدد الاستخدامات - فهو يطبّق الواجهات List (الوصول بالفهرس)، وQueue (FIFO)، وDeque (طابور مزدوج الطرفين)." }
     };
 
     // ============ Score tracking ============
@@ -1673,11 +1721,11 @@
             mcqCorrectCount++;
             button.classList.add('selected-correct');
             feedbackDiv.className = 'mcq-feedback correct';
-            feedbackDiv.innerHTML = '<strong>Correct!</strong>' + mcqExplanations[questionNum].correct;
+            feedbackDiv.innerHTML = '<strong>إجابة صحيحة!</strong>' + mcqExplanations[questionNum].correct;
         } else {
             button.classList.add('selected-wrong');
             feedbackDiv.className = 'mcq-feedback wrong';
-            feedbackDiv.innerHTML = '<strong>Incorrect.</strong>' + mcqExplanations[questionNum].wrong;
+            feedbackDiv.innerHTML = '<strong>إجابة خاطئة.</strong>' + mcqExplanations[questionNum].wrong;
             // Highlight the correct answer
             options.forEach(opt => {
                 if (opt.getAttribute('onclick').includes('true')) {
@@ -1696,10 +1744,10 @@
         const content = btn.nextElementSibling;
         if (content.classList.contains('visible')) {
             content.classList.remove('visible');
-            btn.textContent = 'Show Solution';
+            btn.textContent = 'عرض الحل';
         } else {
             content.classList.add('visible');
-            btn.textContent = 'Hide Solution';
+            btn.textContent = 'إخفاء الحل';
         }
     }
 
@@ -1734,7 +1782,7 @@
             s.classList.remove('visible');
         });
         document.querySelectorAll('.solution-toggle').forEach(b => {
-            b.textContent = 'Show Solution';
+            b.textContent = 'عرض الحل';
         });
     }
 
@@ -1746,8 +1794,8 @@
 </script>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 </body>
