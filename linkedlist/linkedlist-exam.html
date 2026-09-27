@@ -232,9 +232,29 @@ body.show-answers .answer-key{ display:block; }
   .sheet + .sheet{ page-break-before:always; }
   .card{ box-shadow:none; }
 }
+
+/* ---- language switch (placed below the fixed toolbar) ---- */
+.lang-switch-btn {
+  position: fixed;
+  top: 76px;
+  right: 20px;
+  background: white;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  padding: 8px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+  transition: all 0.3s;
+  z-index: 1000;
+}
+.lang-switch-btn:hover { background: #2563eb; color: white; }
+@media print{ .lang-switch-btn{ display:none !important; } }
 </style>
 </head>
 <body>
+<a href="linkedlist-exam-ar.html" class="lang-switch-btn">عربي</a>
 
 <!-- ===== screen toolbar ===== -->
 <div class="toolbar">
