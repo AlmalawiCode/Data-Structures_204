@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Hash Table Techniques - Rehashing, Bucket Hashing & Separate Chaining</title>
+    <title>تقنيات جدول التجزئة المتقدمة - إعادة التجزئة والتجزئة بالدلاء والسلاسل المنفصلة</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         :root {
             --primary-color: #7c3aed;
             --primary-light: #8b5cf6;
@@ -27,7 +52,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
@@ -890,6 +915,8 @@
         }
         footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
         footer strong { opacity: 1; }
+
+        /* ---------- Language switch ---------- */
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -905,95 +932,126 @@
             transition: all 0.3s;
             z-index: 1000;
         }
-
         .lang-switch-btn:hover { background: #667eea; color: white; }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
+        .explanation-box {
+            border-left: none;
+            border-right: 4px solid var(--primary-color);
+            border-radius: 10px 0 0 10px;
+        }
+        .explanation-box ul { margin-left: 0; margin-right: 1.5rem; }
+        .info-box ul { margin-right: 1.5rem; }
+
+        .step-panel { border-left: none; border-right: 4px solid var(--primary-color); }
+        .info-box.tip     { border-left: none; border-right: 4px solid var(--success-color); }
+        .info-box.warning { border-left: none; border-right: 4px solid var(--accent-color); }
+        .info-box.danger  { border-left: none; border-right: 4px solid var(--danger-color); }
+
+        /* Code, formulas and data-structure diagrams stay left-to-right,
+           so indices 0..n-1, key sequences and chains keep their order. */
+        code, .hash-table-visual, .bucket-2d-table, .overflow-2d-table,
+        .chain-container, .queue-items, .load-factor-display .value,
+        .control-group input[type="text"], .control-group input[type="number"] {
+            direction: ltr;
+        }
+        .calculation[dir="ltr"] { text-align: left; }
+
+        /* In RTL the old table sits on the right and the arrow points left
+           towards the new table; on narrow screens it must point down. */
+        @media (max-width: 768px) {
+            .rehash-arrow { transform: rotate(-90deg); }
+        }
     </style>
 </head>
 <body>
-    <a href="hashTable-advanced-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="hashTable-advanced.html" class="lang-switch-btn">English</a>
     <header>
-        <a href="index.html" class="back-link">← Back to Home</a>
-        <h1>Advanced Hash Table Techniques</h1>
-        <p>Rehashing, Bucket Hashing & Separate Chaining with Animations</p>
+        <a href="index-ar.html" class="back-link">→ العودة إلى الرئيسية</a>
+        <h1>تقنيات جدول التجزئة المتقدمة</h1>
+        <p>إعادة التجزئة، والتجزئة بالدلاء، والسلاسل المنفصلة مع رسوم متحركة</p>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('rehash')">Rehashing</button>
-        <button class="tab-btn" onclick="showTab('bucket')">Bucket Hashing</button>
-        <button class="tab-btn" onclick="showTab('chaining')">Separate Chaining</button>
+        <button class="tab-btn active" onclick="showTab('rehash')">إعادة التجزئة</button>
+        <button class="tab-btn" onclick="showTab('bucket')">التجزئة بالدلاء</button>
+        <button class="tab-btn" onclick="showTab('chaining')">السلاسل المنفصلة</button>
     </div>
 
     <main>
         <!-- Rehashing Simulator -->
         <div id="rehash-simulator" class="simulator active">
             <div class="simulator-card">
-                <h2 class="simulator-title">🔄 Rehashing (Restructuring) Simulator</h2>
+                <h2 class="simulator-title">🔄 محاكي إعادة التجزئة (إعادة الهيكلة)</h2>
 
                 <div class="explanation-box">
-                    <h3>What is Rehashing?</h3>
-                    <p>When a hash table becomes too full, performance degrades. <strong>Rehashing</strong> (also called restructuring) creates a new, larger table and re-inserts all elements.</p>
+                    <h3>ما هي إعادة التجزئة؟</h3>
+                    <p>عندما يمتلئ جدول التجزئة (Hash Table) أكثر من اللازم، يتراجع أداؤه. تقوم <strong>إعادة التجزئة (Rehashing)</strong>، وتُسمّى أيضًا إعادة الهيكلة (Restructuring)، بإنشاء جدول جديد أكبر ثم إعادة إدخال جميع العناصر فيه.</p>
                     <ul>
-                        <li><strong>Load Factor (α)</strong> = Number of elements / Table size</li>
-                        <li>When α exceeds a threshold (typically 0.7), we rehash</li>
-                        <li>New table size is usually <strong>2 × old size</strong> (next prime)</li>
-                        <li>All elements are re-hashed with the new table size</li>
+                        <li><strong>معامل التحميل (Load Factor) (α)</strong> = عدد العناصر / حجم الجدول</li>
+                        <li>عندما يتجاوز α حدًّا معيّنًا (عادةً 0.7)، نُعيد التجزئة</li>
+                        <li>يكون حجم الجدول الجديد عادةً <strong><span dir="ltr">2 ×</span> الحجم القديم</strong> (العدد الأولي التالي)</li>
+                        <li>تُعاد تجزئة جميع العناصر باستخدام حجم الجدول الجديد</li>
                     </ul>
                 </div>
 
                 <div class="controls">
                     <div class="control-group">
-                        <label for="rehash-table-size">Initial Table Size (m):</label>
+                        <label for="rehash-table-size">حجم الجدول الابتدائي (m):</label>
                         <input type="number" id="rehash-table-size" value="7" min="5" max="11">
                     </div>
                     <div class="control-group">
-                        <label for="rehash-threshold">Load Factor Threshold:</label>
+                        <label for="rehash-threshold">حدّ معامل التحميل:</label>
                         <input type="number" id="rehash-threshold" value="0.7" min="0.5" max="0.9" step="0.1">
                     </div>
                     <div class="control-group">
-                        <label for="rehash-keys">Keys to Insert:</label>
-                        <input type="text" id="rehash-keys" value="10, 22, 31, 4, 15, 28, 17" placeholder="e.g., 10, 22, 31, 4, 15">
+                        <label for="rehash-keys">المفاتيح المراد إدخالها:</label>
+                        <input type="text" id="rehash-keys" value="10, 22, 31, 4, 15, 28, 17" placeholder="مثال: 10, 22, 31, 4, 15">
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-primary" onclick="rehashSimulator.initialize()">🔄 Initialize</button>
-                    <button class="btn btn-success" onclick="rehashSimulator.nextStep()" id="rehash-next-btn" disabled>▶️ Next Step</button>
-                    <button class="btn btn-warning" onclick="rehashSimulator.insertNext()" id="rehash-insert-btn" disabled>➕ Insert Next Key</button>
-                    <button class="btn btn-danger" onclick="rehashSimulator.reset()">🗑️ Reset</button>
+                    <button class="btn btn-primary" onclick="rehashSimulator.initialize()">🔄 تهيئة</button>
+                    <button class="btn btn-success" onclick="rehashSimulator.nextStep()" id="rehash-next-btn" disabled>▶️ الخطوة التالية</button>
+                    <button class="btn btn-warning" onclick="rehashSimulator.insertNext()" id="rehash-insert-btn" disabled>➕ أدخل المفتاح التالي</button>
+                    <button class="btn btn-danger" onclick="rehashSimulator.reset()">🗑️ إعادة ضبط</button>
                 </div>
 
                 <div class="queue-panel">
-                    <h4>Keys to Insert:</h4>
+                    <h4>المفاتيح المراد إدخالها:</h4>
                     <div class="queue-items" id="rehash-queue-items"></div>
                 </div>
 
                 <div class="load-factor-display" id="rehash-load-factor">
-                    <div>Load Factor (α) = n / m</div>
+                    <div>معامل التحميل (α) = <span dir="ltr">n / m</span></div>
                     <div class="value" id="rehash-load-value">0 / 7 = 0.00</div>
-                    <div><small>Threshold: 0.7</small></div>
+                    <div><small>الحدّ: 0.7</small></div>
                 </div>
 
                 <div class="rehash-container" id="rehash-tables">
                     <div class="rehash-table" id="rehash-old-table-container" style="display: none;">
-                        <h4 id="rehash-old-title">Old Table (m = 7)</h4>
+                        <h4 id="rehash-old-title">الجدول القديم (m = 7)</h4>
                         <div class="hash-table-visual" id="rehash-old-table"></div>
                     </div>
-                    <div class="rehash-arrow" id="rehash-arrow" style="display: none;">➡️</div>
+                    <div class="rehash-arrow" id="rehash-arrow" style="display: none;">⬅️</div>
                     <div class="rehash-table" id="rehash-current-table">
-                        <h4 id="rehash-current-title">Current Table (m = 7)</h4>
+                        <h4 id="rehash-current-title">الجدول الحالي (m = 7)</h4>
                         <div class="hash-table-visual" id="rehash-table"></div>
                     </div>
                 </div>
 
                 <div class="step-panel">
-                    <h4>📝 Current Step</h4>
+                    <h4>📝 الخطوة الحالية</h4>
                     <div class="step-content" id="rehash-step-content">
-                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                        اضغط «تهيئة» للبدء، ثم «أدخل المفتاح التالي» لبدء الإدخال.
                     </div>
                 </div>
 
                 <div class="history-panel">
-                    <h4>📜 History Log</h4>
+                    <h4>📜 سجلّ العمليات</h4>
                     <div id="rehash-history"></div>
                 </div>
             </div>
@@ -1002,109 +1060,109 @@
         <!-- Bucket Hashing Simulator -->
         <div id="bucket-simulator" class="simulator">
             <div class="simulator-card">
-                <h2 class="simulator-title">🪣 Bucket Hashing Simulator</h2>
+                <h2 class="simulator-title">🪣 محاكي التجزئة بالدلاء</h2>
 
                 <div class="explanation-box">
-                    <h3>What is Bucket Hashing?</h3>
-                    <p>In <strong>Bucket Hashing</strong>, the hash table is divided into <strong>buckets</strong>, each containing multiple slots.</p>
+                    <h3>ما هي التجزئة بالدلاء؟</h3>
+                    <p>في <strong>التجزئة بالدلاء (Bucket Hashing)</strong>، يُقسَم جدول التجزئة إلى <strong>دلاء (Buckets)</strong>، يحتوي كلٌّ منها على عدة خانات (Slots).</p>
                     <ul>
-                        <li>Each bucket can hold <strong>B elements</strong> (bucket size)</li>
-                        <li>Hash function determines which bucket to use: <code>bucket = k mod numBuckets</code></li>
-                        <li>Within a bucket, we search linearly for an empty slot (0 → 1 → 2 ...)</li>
-                        <li>If bucket is full, element goes to <strong>overflow area</strong></li>
+                        <li>يستطيع كل دلو أن يحمل <strong><span dir="ltr">B</span> من العناصر</strong> (حجم الدلو)</li>
+                        <li>تحدّد دالة التجزئة (Hash Function) الدلو المستخدَم: <code>bucket = k mod numBuckets</code></li>
+                        <li>داخل الدلو، نبحث خطيًّا عن خانة فارغة (<span dir="ltr">0 → 1 → 2 ...</span>)</li>
+                        <li>إذا كان الدلو ممتلئًا، يذهب العنصر إلى <strong>منطقة الفائض (Overflow Area)</strong></li>
                     </ul>
                 </div>
 
                 <div class="info-box danger" style="margin-bottom: 1rem;">
-                    <div class="info-box-title">⚠️ Why Do We Need an Overflow Area?</div>
-                    <p style="margin-bottom: 0.75rem;"><strong>Problem:</strong> What happens when a bucket is completely full but we need to insert another element that hashes to the same bucket?</p>
-                    <p style="margin-bottom: 0.75rem;"><strong>Example:</strong> If bucket 3 has 3 slots and already contains [8, 3, 18], and we want to insert 38:</p>
-                    <ul style="margin-left: 1.5rem; margin-bottom: 0.75rem;">
-                        <li>h(38) = 38 mod 5 = <strong>3</strong> → Bucket 3</li>
-                        <li>But Bucket 3 is <strong>FULL!</strong> (all 3 slots occupied)</li>
-                        <li>We <strong>cannot</strong> put 38 in another bucket (that would break the hash function!)</li>
-                        <li>Solution: Store 38 in a separate <strong>Overflow Area</strong></li>
+                    <div class="info-box-title">⚠️ لماذا نحتاج إلى منطقة فائض؟</div>
+                    <p style="margin-bottom: 0.75rem;"><strong>المشكلة:</strong> ماذا يحدث عندما يكون الدلو ممتلئًا تمامًا ونحتاج إلى إدخال عنصر آخر تُعطي تجزئته الدلو نفسه؟</p>
+                    <p style="margin-bottom: 0.75rem;"><strong>مثال:</strong> إذا كان الدلو 3 يتكوّن من 3 خانات ويحتوي مسبقًا على <span dir="ltr">[8, 3, 18]</span>، وأردنا إدخال 38:</p>
+                    <ul style="margin-right: 1.5rem; margin-bottom: 0.75rem;">
+                        <li><span dir="ltr">h(38) = 38 mod 5 = <strong>3</strong></span> ← الدلو 3</li>
+                        <li>لكن الدلو 3 <strong>ممتلئ!</strong> (جميع خاناته الثلاث مشغولة)</li>
+                        <li><strong>لا يمكننا</strong> وضع 38 في دلو آخر (فذلك يُفسد دالة التجزئة!)</li>
+                        <li>الحل: نخزّن 38 في <strong>منطقة فائض</strong> منفصلة</li>
                     </ul>
-                    <p><strong>The Overflow Area</strong> is a backup storage for elements when their designated bucket has no space. It's searched <strong>after</strong> checking the main bucket during lookups.</p>
+                    <p><strong>منطقة الفائض</strong> هي مساحة تخزين احتياطية للعناصر عندما لا يتبقّى مكان في الدلو المخصّص لها. ويُبحث فيها <strong>بعد</strong> فحص الدلو الرئيسي أثناء عمليات البحث.</p>
                 </div>
 
                 <div class="info-box tip" style="margin-bottom: 1rem;">
-                    <div class="info-box-title">📦 Data Structure Used</div>
-                    <p style="margin-bottom: 0.75rem;">Bucket Hashing uses a <strong>2D Array (Array of Arrays)</strong>:</p>
-                    <div style="background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; font-family: 'Consolas', monospace; margin: 0.5rem 0;">
-                        <span style="color: #93c5fd;">// Java Declaration</span><br>
+                    <div class="info-box-title">📦 هيكل البيانات المستخدَم</div>
+                    <p style="margin-bottom: 0.75rem;">تستخدم التجزئة بالدلاء <strong>مصفوفة ثنائية الأبعاد (2D Array) (مصفوفة من المصفوفات)</strong>:</p>
+                    <div style="background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; font-family: 'Consolas', monospace; margin: 0.5rem 0; direction: ltr; text-align: left;">
+                        <span style="color: #93c5fd;">// تعريف في Java</span><br>
                         <span style="color: #f472b6;">int</span>[][] buckets = <span style="color: #f472b6;">new int</span>[numBuckets][bucketSize];<br>
-                        <span style="color: #f472b6;">int</span>[] overflow = <span style="color: #f472b6;">new int</span>[overflowSize]; <span style="color: #93c5fd;">// For overflow</span><br><br>
-                        <span style="color: #93c5fd;">// 2D Array Representation:</span><br>
-                        <span style="color: #4ade80;">Bucket\Slot</span>   <span style="color: #fde68a;">0</span>    <span style="color: #fde68a;">1</span>    <span style="color: #fde68a;">2</span>    <span style="color: #93c5fd;">← Slot indices (horizontal)</span><br>
+                        <span style="color: #f472b6;">int</span>[] overflow = <span style="color: #f472b6;">new int</span>[overflowSize]; <span style="color: #93c5fd;">// للفائض</span><br><br>
+                        <span style="color: #93c5fd;">// تمثيل المصفوفة ثنائية الأبعاد:</span><br>
+                        <span style="color: #4ade80;">Bucket\Slot</span>   <span style="color: #fde68a;">0</span>    <span style="color: #fde68a;">1</span>    <span style="color: #fde68a;">2</span>    <span style="color: #93c5fd;">← فهارس الخانات (أفقيًّا)</span><br>
                         <span style="color: #a78bfa;">    0</span>        16   11    —<br>
                         <span style="color: #a78bfa;">    1</span>         —    —    —<br>
                         <span style="color: #a78bfa;">    2</span>        32    —    —<br>
-                        <span style="color: #a78bfa;">    3</span>         8    3   18   <span style="color: #fca5a5;">← FULL!</span><br>
+                        <span style="color: #a78bfa;">    3</span>         8    3   18   <span style="color: #fca5a5;">← ممتلئ!</span><br>
                         <span style="color: #a78bfa;">    4</span>        24    —    —<br>
                         <span style="color: #93c5fd;">    ↑</span><br>
-                        <span style="color: #93c5fd;">Bucket indices (vertical)</span><br><br>
-                        <span style="color: #fca5a5;">// Overflow 1D Array:</span><br>
+                        <span style="color: #93c5fd;">فهارس الدلاء (رأسيًّا)</span><br><br>
+                        <span style="color: #fca5a5;">// مصفوفة الفائض أحادية البعد:</span><br>
                         <span style="color: #fca5a5;">Index:</span>  <span style="color: #fde68a;">0</span>    <span style="color: #fde68a;">1</span><br>
                         <span style="color: #fca5a5;">Value:</span> 38   23
                     </div>
-                    <p style="margin-top: 0.75rem;"><strong>Overflow Area:</strong> A separate <strong>1D Array</strong> that stores elements sequentially when their target bucket is completely full.</p>
+                    <p style="margin-top: 0.75rem;"><strong>منطقة الفائض:</strong> <strong>مصفوفة أحادية البعد (1D Array)</strong> منفصلة تُخزَّن فيها العناصر بالتتابع عندما يكون دلوها المستهدَف ممتلئًا تمامًا.</p>
                 </div>
 
                 <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Formula</div>
-                    <p><strong>Bucket Index = h(k) = k mod (Number of Buckets)</strong></p>
-                    <p>Within the bucket, insert in the first empty slot (linear search within bucket).</p>
+                    <div class="info-box-title">⚠️ الصيغة</div>
+                    <p><strong>فهرس الدلو = <span dir="ltr">h(k) = k mod</span> (عدد الدلاء)</strong></p>
+                    <p>داخل الدلو، أدخِل العنصر في أول خانة فارغة (بحث خطي داخل الدلو).</p>
                 </div>
 
                 <div class="controls">
                     <div class="control-group">
-                        <label for="bucket-num-buckets">Number of Buckets:</label>
+                        <label for="bucket-num-buckets">عدد الدلاء:</label>
                         <input type="number" id="bucket-num-buckets" value="5" min="3" max="8">
                     </div>
                     <div class="control-group">
-                        <label for="bucket-size">Slots per Bucket:</label>
+                        <label for="bucket-size">عدد الخانات في كل دلو:</label>
                         <input type="number" id="bucket-size" value="3" min="2" max="5">
                     </div>
                     <div class="control-group">
-                        <label for="bucket-keys">Keys to Insert:</label>
-                        <input type="text" id="bucket-keys" value="16, 8, 24, 32, 3, 18, 11, 23, 38" placeholder="e.g., 16, 8, 24, 32">
+                        <label for="bucket-keys">المفاتيح المراد إدخالها:</label>
+                        <input type="text" id="bucket-keys" value="16, 8, 24, 32, 3, 18, 11, 23, 38" placeholder="مثال: 16, 8, 24, 32">
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-primary" onclick="bucketSimulator.initialize()">🔄 Initialize</button>
-                    <button class="btn btn-success" onclick="bucketSimulator.nextStep()" id="bucket-next-btn" disabled>▶️ Next Step</button>
-                    <button class="btn btn-warning" onclick="bucketSimulator.insertNext()" id="bucket-insert-btn" disabled>➕ Insert Next Key</button>
-                    <button class="btn btn-danger" onclick="bucketSimulator.reset()">🗑️ Reset</button>
+                    <button class="btn btn-primary" onclick="bucketSimulator.initialize()">🔄 تهيئة</button>
+                    <button class="btn btn-success" onclick="bucketSimulator.nextStep()" id="bucket-next-btn" disabled>▶️ الخطوة التالية</button>
+                    <button class="btn btn-warning" onclick="bucketSimulator.insertNext()" id="bucket-insert-btn" disabled>➕ أدخل المفتاح التالي</button>
+                    <button class="btn btn-danger" onclick="bucketSimulator.reset()">🗑️ إعادة ضبط</button>
                 </div>
 
                 <div class="queue-panel">
-                    <h4>Keys to Insert:</h4>
+                    <h4>المفاتيح المراد إدخالها:</h4>
                     <div class="queue-items" id="bucket-queue-items"></div>
                 </div>
 
                 <div class="bucket-and-overflow-container">
                     <div class="bucket-section">
-                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem; text-align: center;">📦 Buckets (2D Array)</h4>
+                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem; text-align: center;">📦 الدلاء (مصفوفة ثنائية الأبعاد)</h4>
                         <div class="bucket-container" id="bucket-table"></div>
                     </div>
 
                     <div class="overflow-section" id="bucket-overflow">
-                        <h4 style="color: var(--danger-color); margin-bottom: 0.5rem; text-align: center;">⚠️ Overflow (1D Array)</h4>
+                        <h4 style="color: var(--danger-color); margin-bottom: 0.5rem; text-align: center;">⚠️ الفائض (مصفوفة أحادية البعد)</h4>
                         <div id="bucket-overflow-items"></div>
                     </div>
                 </div>
 
                 <div class="step-panel">
-                    <h4>📝 Current Step</h4>
+                    <h4>📝 الخطوة الحالية</h4>
                     <div class="step-content" id="bucket-step-content">
-                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                        اضغط «تهيئة» للبدء، ثم «أدخل المفتاح التالي» لبدء الإدخال.
                     </div>
                 </div>
 
                 <div class="history-panel">
-                    <h4>📜 History Log</h4>
+                    <h4>📜 سجلّ العمليات</h4>
                     <div id="bucket-history"></div>
                 </div>
             </div>
@@ -1113,81 +1171,81 @@
         <!-- Separate Chaining Simulator -->
         <div id="chaining-simulator" class="simulator">
             <div class="simulator-card">
-                <h2 class="simulator-title">🔗 Separate Chaining Simulator</h2>
+                <h2 class="simulator-title">🔗 محاكي السلاسل المنفصلة</h2>
 
                 <div class="explanation-box">
-                    <h3>What is Separate Chaining?</h3>
-                    <p>In <strong>Separate Chaining</strong>, each table slot contains a <strong>linked list</strong> (chain) of elements.</p>
+                    <h3>ما هي السلاسل المنفصلة؟</h3>
+                    <p>في <strong>السلاسل المنفصلة (Separate Chaining)</strong>، تحتوي كل خانة في الجدول على <strong>قائمة مرتبطة (Linked List)</strong> (سلسلة) من العناصر.</p>
                     <ul>
-                        <li>Hash function determines which chain to use</li>
-                        <li>Colliding elements are added to the <strong>same chain</strong></li>
-                        <li>No overflow problem - chains can grow as needed</li>
-                        <li>Search requires traversing the chain at that index</li>
+                        <li>تحدّد دالة التجزئة السلسلة التي تُستخدَم</li>
+                        <li>تُضاف العناصر المتصادمة إلى <strong>السلسلة نفسها</strong></li>
+                        <li>لا توجد مشكلة فائض؛ إذ يمكن للسلاسل أن تنمو حسب الحاجة</li>
+                        <li>يتطلّب البحث اجتياز (Traversal) السلسلة الموجودة عند ذلك الفهرس</li>
                     </ul>
                 </div>
 
                 <div class="info-box tip" style="margin-bottom: 1rem;">
-                    <div class="info-box-title">📦 Data Structure Used</div>
-                    <p style="margin-bottom: 0.75rem;">Separate Chaining uses an <strong>Array of Linked Lists</strong>:</p>
-                    <div style="background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; font-family: 'Consolas', monospace; margin: 0.5rem 0;">
-                        <span style="color: #93c5fd;">// Java Declaration</span><br>
+                    <div class="info-box-title">📦 هيكل البيانات المستخدَم</div>
+                    <p style="margin-bottom: 0.75rem;">تستخدم السلاسل المنفصلة <strong>مصفوفة من القوائم المرتبطة</strong>:</p>
+                    <div style="background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; font-family: 'Consolas', monospace; margin: 0.5rem 0; direction: ltr; text-align: left;">
+                        <span style="color: #93c5fd;">// تعريف في Java</span><br>
                         <span style="color: #f472b6;">LinkedList</span>&lt;<span style="color: #f472b6;">Integer</span>&gt;[] chains = <span style="color: #f472b6;">new LinkedList</span>[tableSize];<br><br>
-                        <span style="color: #93c5fd;">// Example: table size = 7</span><br>
+                        <span style="color: #93c5fd;">// مثال: حجم الجدول = 7</span><br>
                         chains[0] → NULL<br>
-                        chains[1] → [22] → [15] → NULL <span style="color: #4ade80;">← 2 collisions</span><br>
+                        chains[1] → [22] → [15] → NULL <span style="color: #4ade80;">← تصادمان</span><br>
                         chains[2] → NULL<br>
-                        chains[3] → [10] → [31] → [17] → NULL <span style="color: #4ade80;">← 3 elements</span><br>
+                        chains[3] → [10] → [31] → [17] → NULL <span style="color: #4ade80;">← 3 عناصر</span><br>
                         chains[4] → [4] → NULL<br>
                         chains[5] → NULL<br>
                         chains[6] → [28] → NULL
                     </div>
-                    <p style="margin-top: 0.75rem;"><strong>Each index</strong> points to a <strong>Linked List</strong> that can grow dynamically as needed!</p>
+                    <p style="margin-top: 0.75rem;"><strong>كل فهرس</strong> يشير إلى <strong>قائمة مرتبطة</strong> يمكنها أن تنمو ديناميكيًّا حسب الحاجة!</p>
                 </div>
 
                 <div class="info-box tip">
-                    <div class="info-box-title">✅ Advantages</div>
+                    <div class="info-box-title">✅ المزايا</div>
                     <ul>
-                        <li>Simple collision handling - just add to chain</li>
-                        <li>Table never becomes "full"</li>
-                        <li>Deletion is easy - just remove from linked list</li>
-                        <li>Performance degrades gracefully with more collisions</li>
+                        <li>معالجة بسيطة للتصادم (Collision)؛ يكفي الإضافة إلى السلسلة</li>
+                        <li>لا يصبح الجدول «ممتلئًا» أبدًا</li>
+                        <li>الحذف سهل؛ يكفي الإزالة من القائمة المرتبطة</li>
+                        <li>يتراجع الأداء تدريجيًّا وبسلاسة مع ازدياد التصادمات</li>
                     </ul>
                 </div>
 
                 <div class="controls">
                     <div class="control-group">
-                        <label for="chaining-table-size">Table Size (m):</label>
+                        <label for="chaining-table-size">حجم الجدول (m):</label>
                         <input type="number" id="chaining-table-size" value="7" min="5" max="11">
                     </div>
                     <div class="control-group">
-                        <label for="chaining-keys">Keys to Insert:</label>
-                        <input type="text" id="chaining-keys" value="10, 22, 31, 4, 15, 28, 17, 88, 59" placeholder="e.g., 10, 22, 31, 4, 15">
+                        <label for="chaining-keys">المفاتيح المراد إدخالها:</label>
+                        <input type="text" id="chaining-keys" value="10, 22, 31, 4, 15, 28, 17, 88, 59" placeholder="مثال: 10, 22, 31, 4, 15">
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-primary" onclick="chainingSimulator.initialize()">🔄 Initialize</button>
-                    <button class="btn btn-success" onclick="chainingSimulator.nextStep()" id="chaining-next-btn" disabled>▶️ Next Step</button>
-                    <button class="btn btn-warning" onclick="chainingSimulator.insertNext()" id="chaining-insert-btn" disabled>➕ Insert Next Key</button>
-                    <button class="btn btn-danger" onclick="chainingSimulator.reset()">🗑️ Reset</button>
+                    <button class="btn btn-primary" onclick="chainingSimulator.initialize()">🔄 تهيئة</button>
+                    <button class="btn btn-success" onclick="chainingSimulator.nextStep()" id="chaining-next-btn" disabled>▶️ الخطوة التالية</button>
+                    <button class="btn btn-warning" onclick="chainingSimulator.insertNext()" id="chaining-insert-btn" disabled>➕ أدخل المفتاح التالي</button>
+                    <button class="btn btn-danger" onclick="chainingSimulator.reset()">🗑️ إعادة ضبط</button>
                 </div>
 
                 <div class="queue-panel">
-                    <h4>Keys to Insert:</h4>
+                    <h4>المفاتيح المراد إدخالها:</h4>
                     <div class="queue-items" id="chaining-queue-items"></div>
                 </div>
 
                 <div class="chain-container" id="chaining-table"></div>
 
                 <div class="step-panel">
-                    <h4>📝 Current Step</h4>
+                    <h4>📝 الخطوة الحالية</h4>
                     <div class="step-content" id="chaining-step-content">
-                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                        اضغط «تهيئة» للبدء، ثم «أدخل المفتاح التالي» لبدء الإدخال.
                     </div>
                 </div>
 
                 <div class="history-panel">
-                    <h4>📜 History Log</h4>
+                    <h4>📜 سجلّ العمليات</h4>
                     <div id="chaining-history"></div>
                 </div>
             </div>
@@ -1195,6 +1253,10 @@
     </main>
 
     <script>
+        // Wraps a left-to-right fragment (formula, arrow sequence, array ref)
+        // in Unicode isolates so it is not reordered inside Arabic text.
+        const LTR = s => '\u2066' + s + '\u2069';
+
         // Tab switching
         function showTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -1253,8 +1315,8 @@
                 document.getElementById('rehash-next-btn').disabled = true;
                 document.getElementById('rehash-insert-btn').disabled = this.keys.length === 0;
 
-                this.updateStepPanel('Ready! Click "Insert Next Key" to start inserting keys.');
-                this.addHistory('Table initialized with size m = ' + this.tableSize);
+                this.updateStepPanel('جاهز! اضغط «أدخل المفتاح التالي» لبدء إدخال المفاتيح.');
+                this.addHistory('تمت تهيئة الجدول بالحجم ' + LTR('m = ' + this.tableSize));
             },
 
             renderTable() {
@@ -1274,7 +1336,7 @@
                 }
 
                 document.getElementById('rehash-current-title').textContent =
-                    this.isRehashing ? `New Table (m = ${this.newTableSize})` : `Current Table (m = ${this.tableSize})`;
+                    this.isRehashing ? `الجدول الجديد (m = ${this.newTableSize})` : `الجدول الحالي (m = ${this.tableSize})`;
             },
 
             renderOldTable() {
@@ -1295,7 +1357,7 @@
                     container.appendChild(cell);
                 }
 
-                document.getElementById('rehash-old-title').textContent = `Old Table (m = ${this.oldTableSize})`;
+                document.getElementById('rehash-old-title').textContent = `الجدول القديم (m = ${this.oldTableSize})`;
             },
 
             renderQueue() {
@@ -1369,7 +1431,7 @@
                 }
 
                 if (this.currentKeyIndex >= this.keys.length - 1 && !this.isInserting) {
-                    this.updateStepPanel('All keys have been inserted!');
+                    this.updateStepPanel('تم إدخال جميع المفاتيح!');
                     document.getElementById('rehash-insert-btn').disabled = true;
                     return;
                 }
@@ -1386,14 +1448,14 @@
 
                     const h = this.currentKey % this.tableSize;
                     this.updateStepPanel(`
-                        <strong>Inserting key: ${this.currentKey}</strong>
-                        <div class="calculation">
+                        <strong>إدخال المفتاح: ${this.currentKey}</strong>
+                        <div class="calculation" dir="ltr">
                             h(${this.currentKey}) = ${this.currentKey} mod ${this.tableSize} = <strong>${h}</strong>
                         </div>
-                        <p>Click "Next Step" to check index ${h}.</p>
+                        <p>اضغط «الخطوة التالية» لفحص الفهرس ${h}.</p>
                     `);
 
-                    this.addHistory(`Starting insertion of key ${this.currentKey}, h(k) = ${h}`);
+                    this.addHistory(`بدء إدخال المفتاح ${this.currentKey}، ${LTR('h(k) = ' + h)}`);
                 }
             },
 
@@ -1423,21 +1485,21 @@
                         const loadFactor = this.elementCount / this.tableSize;
 
                         this.updateStepPanel(`
-                            <strong>Probe ${i}: Index ${index}</strong>
-                            <div class="calculation">
+                            <strong>الفحص ${i}: الفهرس ${index}</strong>
+                            <div class="calculation" dir="ltr">
                                 index = (${key % this.tableSize} + ${i}) mod ${this.tableSize} = ${index}
                             </div>
-                            <span class="result success">✅ Key ${key} inserted at index ${index}!</span>
+                            <span class="result success">✅ أُدرج المفتاح ${key} في الفهرس ${index}!</span>
                             ${loadFactor >= this.threshold ? `
                                 <div style="margin-top: 1rem;">
-                                    <span class="result warning">⚠️ Load factor (${loadFactor.toFixed(2)}) exceeded threshold (${this.threshold})!</span>
-                                    <p style="margin-top: 0.5rem;"><strong>Rehashing needed!</strong> New size = 2 × ${this.tableSize} = ${this.tableSize * 2} → next prime = ${this.getNextPrime(this.tableSize * 2)}</p>
-                                    <p>Click "Next Step" to start rehashing.</p>
+                                    <span class="result warning">⚠️ تجاوز معامل التحميل (${loadFactor.toFixed(2)}) الحدَّ (${this.threshold})!</span>
+                                    <p style="margin-top: 0.5rem;"><strong>يلزم إعادة التجزئة!</strong> الحجم الجديد = <span dir="ltr">2 × ${this.tableSize} = ${this.tableSize * 2}</span> ← العدد الأولي التالي = ${this.getNextPrime(this.tableSize * 2)}</p>
+                                    <p>اضغط «الخطوة التالية» لبدء إعادة التجزئة.</p>
                                 </div>
                             ` : ''}
                         `);
 
-                        this.addHistory(`Key ${key} inserted at index ${index}`, 'success');
+                        this.addHistory(`أُدرج المفتاح ${key} في الفهرس ${index}`, 'success');
 
                         if (loadFactor >= this.threshold) {
                             // Prepare for rehashing
@@ -1450,7 +1512,7 @@
                             this.elementsToRehash = this.oldTable.filter(x => x !== null);
                             this.currentRehashIndex = 0;
                             this.currentRehashProbe = 0;
-                            this.addHistory(`Load factor ${loadFactor.toFixed(2)} >= ${this.threshold}. Rehashing: ${this.oldTableSize} → ${this.newTableSize}!`, 'warning');
+                            this.addHistory(`معامل التحميل ${LTR(loadFactor.toFixed(2) + ' >= ' + this.threshold)}. إعادة التجزئة: ${LTR(this.oldTableSize + ' → ' + this.newTableSize)}!`, 'warning');
                         } else {
                             this.isInserting = false;
                             document.getElementById('rehash-next-btn').disabled = true;
@@ -1461,15 +1523,15 @@
                         this.highlightCell(index, 'collision');
 
                         this.updateStepPanel(`
-                            <strong>Probe ${i}: Index ${index}</strong>
-                            <div class="calculation">
+                            <strong>الفحص ${i}: الفهرس ${index}</strong>
+                            <div class="calculation" dir="ltr">
                                 index = (${key % this.tableSize} + ${i}) mod ${this.tableSize} = ${index}
                             </div>
-                            <span class="result collision">❌ COLLISION! Index ${index} contains ${this.table[index]}</span>
-                            <p style="margin-top: 0.5rem;">Click "Next Step" to try next index...</p>
+                            <span class="result collision">❌ تصادم! الفهرس ${index} يحتوي على ${this.table[index]}</span>
+                            <p style="margin-top: 0.5rem;">اضغط «الخطوة التالية» لتجربة الفهرس التالي...</p>
                         `);
 
-                        this.addHistory(`Probe ${i}: Index ${index} occupied - collision!`, 'collision');
+                        this.addHistory(`الفحص ${i}: الفهرس ${index} مشغول - تصادم!`, 'collision');
                         this.currentProbeStep++;
                     }
                 }, 300);
@@ -1488,13 +1550,13 @@
                     this.renderOldTable();
 
                     this.updateStepPanel(`
-                        <strong>🔄 REHASHING - Creating new table</strong>
+                        <strong>🔄 إعادة التجزئة - إنشاء جدول جديد</strong>
                         <div class="calculation">
-                            Old size: ${this.oldTableSize}<br>
-                            New size: 2 × ${this.oldTableSize} = ${this.oldTableSize * 2} → next prime = <strong>${this.newTableSize}</strong>
+                            الحجم القديم: ${this.oldTableSize}<br>
+                            الحجم الجديد: <span dir="ltr">2 × ${this.oldTableSize} = ${this.oldTableSize * 2}</span> ← العدد الأولي التالي = <strong>${this.newTableSize}</strong>
                         </div>
-                        <p>Elements to rehash: <strong>${this.elementsToRehash.join(', ')}</strong></p>
-                        <p>Click "Next Step" to rehash each element with the new table size.</p>
+                        <p>العناصر المراد إعادة تجزئتها: <strong dir="ltr">${this.elementsToRehash.join(', ')}</strong></p>
+                        <p>اضغط «الخطوة التالية» لإعادة تجزئة كل عنصر باستخدام حجم الجدول الجديد.</p>
                     `);
 
                     this.rehashStep = 1;
@@ -1522,16 +1584,16 @@
                             this.renderOldTable();
 
                             this.updateStepPanel(`
-                                <strong>🔄 Rehashing key: ${key}</strong>
+                                <strong>🔄 إعادة تجزئة المفتاح: ${key}</strong>
                                 <div class="calculation">
-                                    h(${key}) = ${key} mod ${this.newTableSize} = <strong>${key % this.newTableSize}</strong>
-                                    ${probe > 0 ? `<br>Probe ${probe}: (${key % this.newTableSize} + ${probe}) mod ${this.newTableSize} = ${newIndex}` : ''}
+                                    <span dir="ltr">h(${key}) = ${key} mod ${this.newTableSize} = <strong>${key % this.newTableSize}</strong></span>
+                                    ${probe > 0 ? `<br>الفحص ${probe}: <span dir="ltr">(${key % this.newTableSize} + ${probe}) mod ${this.newTableSize} = ${newIndex}</span>` : ''}
                                 </div>
-                                <span class="result success">✅ Key ${key} rehashed to index ${newIndex}!</span>
-                                <p style="margin-top: 0.5rem;">Remaining: ${this.elementsToRehash.slice(this.currentRehashIndex + 1).join(', ') || 'None'}</p>
+                                <span class="result success">✅ أُعيدت تجزئة المفتاح ${key} إلى الفهرس ${newIndex}!</span>
+                                <p style="margin-top: 0.5rem;">المتبقّي: <span dir="ltr">${this.elementsToRehash.slice(this.currentRehashIndex + 1).join(', ') || 'لا شيء'}</span></p>
                             `);
 
-                            this.addHistory(`Rehashed key ${key} to index ${newIndex} in new table`, 'success');
+                            this.addHistory(`أُعيدت تجزئة المفتاح ${key} إلى الفهرس ${newIndex} في الجدول الجديد`, 'success');
 
                             this.currentRehashIndex++;
                             this.currentRehashProbe = 0;
@@ -1545,13 +1607,13 @@
                             this.highlightCell(newIndex, 'collision');
 
                             this.updateStepPanel(`
-                                <strong>🔄 Rehashing key: ${key}</strong>
+                                <strong>🔄 إعادة تجزئة المفتاح: ${key}</strong>
                                 <div class="calculation">
-                                    h(${key}) = ${key} mod ${this.newTableSize} = ${key % this.newTableSize}<br>
-                                    Probe ${probe}: (${key % this.newTableSize} + ${probe}) mod ${this.newTableSize} = ${newIndex}
+                                    <span dir="ltr">h(${key}) = ${key} mod ${this.newTableSize} = ${key % this.newTableSize}</span><br>
+                                    الفحص ${probe}: <span dir="ltr">(${key % this.newTableSize} + ${probe}) mod ${this.newTableSize} = ${newIndex}</span>
                                 </div>
-                                <span class="result collision">❌ Index ${newIndex} occupied by ${this.newTable[newIndex]}</span>
-                                <p style="margin-top: 0.5rem;">Click "Next Step" to try next position...</p>
+                                <span class="result collision">❌ الفهرس ${newIndex} مشغول بالقيمة ${this.newTable[newIndex]}</span>
+                                <p style="margin-top: 0.5rem;">اضغط «الخطوة التالية» لتجربة الموضع التالي...</p>
                             `);
 
                             this.currentRehashProbe++;
@@ -1569,23 +1631,23 @@
                 this.updateLoadFactor();
 
                 this.updateStepPanel(`
-                    <strong>✅ REHASHING COMPLETE!</strong>
+                    <strong>✅ اكتملت إعادة التجزئة!</strong>
                     <div class="calculation">
-                        Old table size: ${this.oldTableSize}<br>
-                        New table size: <strong>${this.newTableSize}</strong><br>
-                        All ${this.elementsToRehash.length} elements successfully rehashed!
+                        حجم الجدول القديم: ${this.oldTableSize}<br>
+                        حجم الجدول الجديد: <strong>${this.newTableSize}</strong><br>
+                        أُعيدت تجزئة جميع العناصر (${this.elementsToRehash.length}) بنجاح!
                     </div>
-                    <span class="result success">Table has been doubled and all elements rehashed!</span>
-                    <p style="margin-top: 0.5rem;">New load factor: ${(this.elementCount / this.newTableSize).toFixed(2)}</p>
+                    <span class="result success">تمت مضاعفة حجم الجدول وإعادة تجزئة جميع العناصر!</span>
+                    <p style="margin-top: 0.5rem;">معامل التحميل الجديد: ${(this.elementCount / this.newTableSize).toFixed(2)}</p>
                 `);
 
-                this.addHistory(`Rehashing complete! New table size: ${this.newTableSize}`, 'success');
+                this.addHistory(`اكتملت إعادة التجزئة! حجم الجدول الجديد: ${this.newTableSize}`, 'success');
 
                 // Hide old table after a delay
                 setTimeout(() => {
                     document.getElementById('rehash-old-table-container').style.display = 'none';
                     document.getElementById('rehash-arrow').style.display = 'none';
-                    document.getElementById('rehash-current-title').textContent = `Current Table (m = ${this.tableSize})`;
+                    document.getElementById('rehash-current-title').textContent = `الجدول الحالي (m = ${this.tableSize})`;
                 }, 2000);
 
                 document.getElementById('rehash-next-btn').disabled = true;
@@ -1620,7 +1682,7 @@
                 this.clearHistory();
                 document.getElementById('rehash-next-btn').disabled = true;
                 document.getElementById('rehash-insert-btn').disabled = true;
-                this.updateStepPanel('Click "Initialize" to start.');
+                this.updateStepPanel('اضغط «تهيئة» للبدء.');
             }
         };
 
@@ -1664,8 +1726,8 @@
                 document.getElementById('bucket-next-btn').disabled = true;
                 document.getElementById('bucket-insert-btn').disabled = this.keys.length === 0;
 
-                this.updateStepPanel('Ready! Click "Insert Next Key" to start inserting keys.');
-                this.addHistory(`Initialized ${this.numBuckets} buckets × ${this.bucketSize} slots = ${this.numBuckets * this.bucketSize} total capacity`);
+                this.updateStepPanel('جاهز! اضغط «أدخل المفتاح التالي» لبدء إدخال المفاتيح.');
+                this.addHistory(`تمت التهيئة: ${this.numBuckets} دلاء × ${this.bucketSize} خانات = ${this.numBuckets * this.bucketSize} سعة إجمالية`);
             },
 
             renderTable() {
@@ -1677,7 +1739,7 @@
 
                 // Header row with slot indices (0, 1, 2, ...)
                 tableHTML += '<tr>';
-                tableHTML += '<th class="corner">Bucket \\ Slot</th>';
+                tableHTML += '<th class="corner">الدلو \\ الخانة</th>';
                 for (let s = 0; s < this.bucketSize; s++) {
                     tableHTML += `<th>${s}</th>`;
                 }
@@ -1778,7 +1840,7 @@
 
             insertNext() {
                 if (this.currentKeyIndex >= this.keys.length - 1 && !this.isInserting) {
-                    this.updateStepPanel('All keys have been inserted!');
+                    this.updateStepPanel('تم إدخال جميع المفاتيح!');
                     document.getElementById('bucket-insert-btn').disabled = true;
                     return;
                 }
@@ -1795,14 +1857,14 @@
                     document.getElementById('bucket-insert-btn').disabled = true;
 
                     this.updateStepPanel(`
-                        <strong>Inserting key: ${this.currentKey}</strong>
+                        <strong>إدخال المفتاح: ${this.currentKey}</strong>
                         <div class="calculation">
-                            Bucket = h(${this.currentKey}) = ${this.currentKey} mod ${this.numBuckets} = <strong>${this.currentBucket}</strong>
+                            الدلو = <span dir="ltr">h(${this.currentKey}) = ${this.currentKey} mod ${this.numBuckets} = <strong>${this.currentBucket}</strong></span>
                         </div>
-                        <p>Click "Next Step" to check slot 0 in Bucket ${this.currentBucket}.</p>
+                        <p>اضغط «الخطوة التالية» لفحص الخانة 0 في الدلو ${this.currentBucket}.</p>
                     `);
 
-                    this.addHistory(`Inserting key ${this.currentKey} → Bucket ${this.currentBucket}`);
+                    this.addHistory(`إدخال المفتاح ${this.currentKey} ← الدلو ${this.currentBucket}`);
                 }
             },
 
@@ -1826,16 +1888,16 @@
                         }
 
                         this.updateStepPanel(`
-                            <strong>🚫 Bucket ${bucket} is COMPLETELY FULL!</strong>
+                            <strong>🚫 الدلو ${bucket} ممتلئ تمامًا!</strong>
                             <div class="calculation">
-                                All ${this.bucketSize} slots in Bucket ${bucket} are occupied.<br>
-                                Slots checked: 0, 1, 2 → All FULL!
+                                جميع الخانات (${this.bucketSize}) في الدلو ${bucket} مشغولة.<br>
+                                الخانات التي فُحصت: <span dir="ltr">0, 1, 2</span> ← جميعها ممتلئة!
                             </div>
-                            <span class="result warning">⚠️ Cannot insert in Bucket ${bucket}!</span>
-                            <p style="margin-top: 0.5rem;">Click "Next Step" to move key ${key} to <strong>Overflow Area</strong>...</p>
+                            <span class="result warning">⚠️ لا يمكن الإدخال في الدلو ${bucket}!</span>
+                            <p style="margin-top: 0.5rem;">اضغط «الخطوة التالية» لنقل المفتاح ${key} إلى <strong>منطقة الفائض</strong>...</p>
                         `);
 
-                        this.addHistory(`Bucket ${bucket} is FULL - all ${this.bucketSize} slots occupied!`, 'warning');
+                        this.addHistory(`الدلو ${bucket} ممتلئ - جميع الخانات (${this.bucketSize}) مشغولة!`, 'warning');
                         return;
                     }
 
@@ -1856,17 +1918,17 @@
                     }
 
                     this.updateStepPanel(`
-                        <strong>📥 Inserting into Overflow Area</strong>
+                        <strong>📥 الإدخال في منطقة الفائض</strong>
                         <div class="calculation">
-                            Key ${key} → Overflow[${this.overflow.length - 1}]
+                            المفتاح ${key} ← <span dir="ltr">Overflow[${this.overflow.length - 1}]</span>
                         </div>
-                        <span class="result success">✅ Key ${key} stored in Overflow Area at index ${this.overflow.length - 1}!</span>
+                        <span class="result success">✅ خُزِّن المفتاح ${key} في منطقة الفائض عند الفهرس ${this.overflow.length - 1}!</span>
                         <p style="margin-top: 0.5rem; color: var(--text-muted);">
-                            <em>Note: During search, we first check Bucket ${bucket}, then search the Overflow Area.</em>
+                            <em>ملاحظة: أثناء البحث، نفحص الدلو ${bucket} أولًا، ثم نبحث في منطقة الفائض.</em>
                         </p>
                     `);
 
-                    this.addHistory(`Key ${key} → Overflow[${this.overflow.length - 1}] (Bucket ${bucket} was full)`, 'success');
+                    this.addHistory(`المفتاح ${key} ← ${LTR('Overflow[' + (this.overflow.length - 1) + ']')} (كان الدلو ${bucket} ممتلئًا)`, 'success');
 
                     this.isInserting = false;
                     this.goingToOverflow = false;
@@ -1885,14 +1947,14 @@
                         this.highlightSlot(bucket, slot, 'success');
 
                         this.updateStepPanel(`
-                            <strong>Checking Bucket ${bucket}, Slot ${slot}</strong>
+                            <strong>فحص الدلو ${bucket}، الخانة ${slot}</strong>
                             <div class="calculation">
-                                buckets[${bucket}][${slot}] = empty
+                                <span dir="ltr">buckets[${bucket}][${slot}]</span> = فارغة
                             </div>
-                            <span class="result success">✅ Slot is empty! Key ${key} inserted at buckets[${bucket}][${slot}]!</span>
+                            <span class="result success">✅ الخانة فارغة! أُدرج المفتاح ${key} في <span dir="ltr">buckets[${bucket}][${slot}]</span>!</span>
                         `);
 
-                        this.addHistory(`Key ${key} inserted at buckets[${bucket}][${slot}]`, 'success');
+                        this.addHistory(`أُدرج المفتاح ${key} في ${LTR(`buckets[${bucket}][${slot}]`)}`, 'success');
 
                         this.isInserting = false;
                         document.getElementById('bucket-next-btn').disabled = true;
@@ -1902,17 +1964,17 @@
                         this.highlightSlot(bucket, slot, 'collision');
 
                         this.updateStepPanel(`
-                            <strong>Checking Bucket ${bucket}, Slot ${slot}</strong>
+                            <strong>فحص الدلو ${bucket}، الخانة ${slot}</strong>
                             <div class="calculation">
-                                buckets[${bucket}][${slot}] = ${this.buckets[bucket][slot]} (occupied!)
+                                <span dir="ltr">buckets[${bucket}][${slot}] = ${this.buckets[bucket][slot]}</span> (مشغولة!)
                             </div>
-                            <span class="result collision">❌ Slot occupied by ${this.buckets[bucket][slot]}</span>
+                            <span class="result collision">❌ الخانة مشغولة بالقيمة ${this.buckets[bucket][slot]}</span>
                             <p style="margin-top: 0.5rem;">${slot + 1 < this.bucketSize
-                                ? `Click "Next Step" to try slot ${slot + 1}...`
-                                : `Click "Next Step" - No more slots in bucket!`}</p>
+                                ? `اضغط «الخطوة التالية» لتجربة الخانة ${slot + 1}...`
+                                : `اضغط «الخطوة التالية» - لا توجد خانات أخرى في الدلو!`}</p>
                         `);
 
-                        this.addHistory(`buckets[${bucket}][${slot}] occupied by ${this.buckets[bucket][slot]}`, 'collision');
+                        this.addHistory(`${LTR(`buckets[${bucket}][${slot}]`)} مشغولة بالقيمة ${this.buckets[bucket][slot]}`, 'collision');
                         this.currentSlotIndex++;
                     }
                 }, 300);
@@ -1930,7 +1992,7 @@
                 this.clearHistory();
                 document.getElementById('bucket-next-btn').disabled = true;
                 document.getElementById('bucket-insert-btn').disabled = true;
-                this.updateStepPanel('Click "Initialize" to start.');
+                this.updateStepPanel('اضغط «تهيئة» للبدء.');
             }
         };
 
@@ -1964,8 +2026,8 @@
                 document.getElementById('chaining-next-btn').disabled = true;
                 document.getElementById('chaining-insert-btn').disabled = this.keys.length === 0;
 
-                this.updateStepPanel('Ready! Click "Insert Next Key" to start inserting keys.');
-                this.addHistory(`Initialized table with ${this.tableSize} chains`);
+                this.updateStepPanel('جاهز! اضغط «أدخل المفتاح التالي» لبدء إدخال المفاتيح.');
+                this.addHistory(`تمت تهيئة الجدول بعدد ${this.tableSize} من السلاسل`);
             },
 
             renderTable() {
@@ -2059,7 +2121,7 @@
 
             insertNext() {
                 if (this.currentKeyIndex >= this.keys.length - 1 && !this.isInserting) {
-                    this.updateStepPanel('All keys have been inserted!');
+                    this.updateStepPanel('تم إدخال جميع المفاتيح!');
                     document.getElementById('chaining-insert-btn').disabled = true;
                     return;
                 }
@@ -2076,14 +2138,14 @@
                     document.getElementById('chaining-insert-btn').disabled = true;
 
                     this.updateStepPanel(`
-                        <strong>Inserting key: ${this.currentKey}</strong>
+                        <strong>إدخال المفتاح: ${this.currentKey}</strong>
                         <div class="calculation">
-                            Chain Index = h(${this.currentKey}) = ${this.currentKey} mod ${this.tableSize} = <strong>${chainIndex}</strong>
+                            فهرس السلسلة = <span dir="ltr">h(${this.currentKey}) = ${this.currentKey} mod ${this.tableSize} = <strong>${chainIndex}</strong></span>
                         </div>
-                        <p>Click "Next Step" to add to chain ${chainIndex}.</p>
+                        <p>اضغط «الخطوة التالية» للإضافة إلى السلسلة ${chainIndex}.</p>
                     `);
 
-                    this.addHistory(`Inserting key ${this.currentKey} → Chain ${chainIndex}`);
+                    this.addHistory(`إدخال المفتاح ${this.currentKey} ← السلسلة ${chainIndex}`);
                 }
             },
 
@@ -2105,15 +2167,15 @@
                     const chainLength = this.chains[chainIndex].length;
 
                     this.updateStepPanel(`
-                        <strong>Adding to Chain ${chainIndex}</strong>
+                        <strong>الإضافة إلى السلسلة ${chainIndex}</strong>
                         <div class="calculation">
-                            Key ${key} added to chain at index ${chainIndex}
+                            أُضيف المفتاح ${key} إلى السلسلة عند الفهرس ${chainIndex}
                         </div>
-                        <span class="result success">✅ Key ${key} inserted! Chain length: ${chainLength}</span>
-                        ${chainLength > 1 ? `<p style="margin-top: 0.5rem; color: var(--accent-color);">📝 Note: This is collision #${chainLength - 1} in this chain!</p>` : ''}
+                        <span class="result success">✅ أُدرج المفتاح ${key}! طول السلسلة: ${chainLength}</span>
+                        ${chainLength > 1 ? `<p style="margin-top: 0.5rem; color: var(--accent-color);">📝 ملاحظة: هذا هو التصادم رقم ${chainLength - 1} في هذه السلسلة!</p>` : ''}
                     `);
 
-                    this.addHistory(`Key ${key} added to Chain ${chainIndex} (length: ${chainLength})`, 'success');
+                    this.addHistory(`أُضيف المفتاح ${key} إلى السلسلة ${chainIndex} (الطول: ${chainLength})`, 'success');
 
                     this.isInserting = false;
                     document.getElementById('chaining-next-btn').disabled = true;
@@ -2130,14 +2192,14 @@
                 this.clearHistory();
                 document.getElementById('chaining-next-btn').disabled = true;
                 document.getElementById('chaining-insert-btn').disabled = true;
-                this.updateStepPanel('Click "Initialize" to start.');
+                this.updateStepPanel('اضغط «تهيئة» للبدء.');
             }
         };
     </script>
 
     <footer>
-        <p><strong>Data Structures I</strong></p>
-        <p>Prepared by Dr. Almalawi</p>
+        <p><strong>هياكل البيانات 1</strong></p>
+        <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
     </footer>
 </body>
 </html>
