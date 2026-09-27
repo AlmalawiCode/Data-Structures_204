@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arrays & Searching</title>
+    <title>المصفوفات والبحث</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +36,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
@@ -50,24 +74,6 @@
             color: white;
             transform: translateY(-2px);
         }
-
-        .lang-switch-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            padding: 10px 22px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .lang-switch-btn:hover { background: #667eea; color: white; }
 
         header {
             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
@@ -755,35 +761,77 @@
                 flex-direction: column;
             }
         }
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .reminder-box   { border-left: none; border-right: 5px solid #f59e0b; }
+        .definition-box { border-left: none; border-right: 5px solid #0ea5e9; }
+        .important-box  { border-left: none; border-right: 5px solid #ec4899; }
+        .success-box    { border-left: none; border-right: 5px solid #10b981; }
+        .question-box   { border-left: none; border-right: 5px solid #8b5cf6; }
+        .warning-box    { border-left: none; border-right: 5px solid #ef4444; }
+        .derivation-step { border-left: none; border-right: 5px solid #22c55e; }
+        .operation-table th,
+        .operation-table td { text-align: right; }
+        ul, ol { padding-left: 0; padding-right: 1.5em; }
+
+        /* Code, formulas and array diagrams always stay left-to-right,
+           so index 0 is on the left exactly as in the code. */
+        pre, code, .inline-code, .code-container, .code-header,
+        .array-visual, .names-array, .math-formula, .formula,
+        .derivation-step-formula {
+            direction: ltr;
+        }
+        .code-header { text-align: right; direction: rtl; }
+        pre, .code-container { text-align: left; }
+        .inline-code { unicode-bidi: embed; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
+        .lang-switch-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .lang-switch-btn:hover { background: #667eea; color: white; }
     </style>
 </head>
 <body>
-    <a href="../index.html" class="back-home-btn">Home</a>
-    <a href="index-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="../index.html" class="back-home-btn">الرئيسية</a>
+    <a href="index.html" class="lang-switch-btn">English</a>
 
     <div class="container">
         <header>
-            <h1>Arrays & Searching</h1>
-            <p>Data Structures I</p>
-            <p>Linear Search vs Binary Search</p>
+            <h1>المصفوفات والبحث</h1>
+            <p>هياكل البيانات 1</p>
+            <p>البحث الخطي (Linear Search) مقابل البحث الثنائي (Binary Search)</p>
         </header>
 
         <div class="content">
 
             <!-- Part 1: Arrays Reminder -->
             <section id="arrays-reminder">
-                <h2>Part 1: Arrays - A Quick Reminder</h2>
+                <h2>الجزء 1: المصفوفات (Arrays) - تذكير سريع</h2>
 
                 <div class="reminder-box">
-                    <h4>You Should Already Know This!</h4>
-                    <p>Arrays are fundamental data structures that you learned in your programming courses. Let's quickly review what makes arrays special and understand their limitations.</p>
+                    <h4>يُفترض أنك تعرف هذا مسبقًا!</h4>
+                    <p>المصفوفات هياكل بيانات أساسية تعلّمتها في مقررات البرمجة. لنراجع سريعًا ما الذي يميّز المصفوفات ولنفهم حدودها.</p>
                 </div>
 
-                <h3>What is an Array?</h3>
-                <p>An array is a collection of elements stored in <strong>contiguous (consecutive) memory locations</strong>. Each element can be accessed directly using its <strong>index</strong>.</p>
+                <h3>ما هي المصفوفة؟</h3>
+                <p>المصفوفة مجموعة من العناصر المخزّنة في <strong>مواقع ذاكرة متجاورة (Contiguous) أي متتالية</strong>. ويمكن الوصول إلى كل عنصر مباشرةً باستخدام <strong>فهرسه (Index)</strong>.</p>
 
                 <div class="array-container">
-                    <h4 style="text-align: center; color: #4f46e5; margin-bottom: 20px;">Example: Array of 10 Random Values</h4>
+                    <h4 style="text-align: center; color: #4f46e5; margin-bottom: 20px;">مثال: مصفوفة من 10 قيم عشوائية</h4>
                     <div class="array-visual" style="margin-bottom: 40px;">
                         <div class="array-cell">
                             <span class="memory-address">1000</span>
@@ -837,33 +885,33 @@
                         </div>
                     </div>
                     <p style="text-align: center; color: #666;">
-                        <strong>Size:</strong> 10 | <strong>Used:</strong> 8 (indices 0-7) | <strong>Empty:</strong> 2 (indices 8-9)
+                        <strong>الحجم:</strong> 10 | <strong>المستخدم:</strong> 8 (الفهارس <span dir="ltr">0-7</span>) | <strong>الفارغ:</strong> 2 (الفهارس <span dir="ltr">8-9</span>)
                     </p>
                 </div>
 
                 <div class="definition-box">
-                    <h4>Key Properties of Arrays</h4>
+                    <h4>الخصائص الرئيسية للمصفوفات</h4>
                     <ul>
-                        <li><strong>Contiguous Memory:</strong> Elements are stored one after another in memory</li>
-                        <li><strong>Fixed Size:</strong> Once created, the size cannot change</li>
-                        <li><strong>Direct Access:</strong> Any element can be accessed instantly using its index</li>
-                        <li><strong>Same Type:</strong> All elements must be of the same data type</li>
+                        <li><strong>ذاكرة متجاورة (Contiguous Memory):</strong> تُخزَّن العناصر واحدًا تلو الآخر في الذاكرة</li>
+                        <li><strong>حجم ثابت (Fixed Size):</strong> بمجرد إنشائها لا يمكن تغيير حجمها</li>
+                        <li><strong>وصول مباشر (Direct Access):</strong> يمكن الوصول إلى أي عنصر فورًا باستخدام فهرسه</li>
+                        <li><strong>النوع نفسه (Same Type):</strong> يجب أن تكون جميع العناصر من نوع البيانات نفسه</li>
                     </ul>
                 </div>
 
-                <h3>Array Operations - How Fast Are They?</h3>
+                <h3>عمليات المصفوفة - ما مدى سرعتها؟</h3>
 
                 <div class="question-box">
-                    <h4>Think About This...</h4>
-                    <p>If we want to add a new item to our array, how fast can we do it? Does it matter WHERE we add it?</p>
+                    <h4>فكّر في هذا...</h4>
+                    <p>إذا أردنا إضافة عنصر جديد إلى مصفوفتنا، فما مدى السرعة التي يمكننا بها ذلك؟ وهل يهمّ المكان الذي نضيفه فيه؟</p>
                 </div>
 
                 <!-- Add at End -->
-                <h4>1. Adding at the End</h4>
-                <p>If the array is not full, adding at the end is <strong>super fast</strong>!</p>
+                <h4>1. الإضافة في النهاية</h4>
+                <p>إذا لم تكن المصفوفة ممتلئة، فإن الإضافة في النهاية <strong>سريعة جدًا</strong>!</p>
 
                 <div class="array-container">
-                    <p><strong>Before:</strong> Array has 8 elements, we want to add <span style="color: #10b981; font-weight: bold;">99</span></p>
+                    <p><strong>قبل:</strong> تحتوي المصفوفة على 8 عناصر، ونريد إضافة <span style="color: #10b981; font-weight: bold;">99</span></p>
                     <div class="array-visual" style="margin-bottom: 40px;">
                         <div class="array-cell"><span class="value">42</span><span class="index">0</span></div>
                         <div class="array-cell"><span class="value">17</span><span class="index">1</span></div>
@@ -876,17 +924,17 @@
                         <div class="array-cell new-item"><span class="value">99</span><span class="index">8</span></div>
                         <div class="array-cell empty"><span class="value">-</span><span class="index">9</span></div>
                     </div>
-                    <p style="text-align: center;"><strong>Action:</strong> Just jump to index 8 and put the value. <span class="complexity-o1">O(1)</span> - Done!</p>
+                    <p style="text-align: center;"><strong>الإجراء:</strong> ننتقل مباشرةً إلى الفهرس 8 ونضع القيمة. <span class="complexity-o1" dir="ltr">O(1)</span> - انتهى!</p>
                 </div>
 
                 <!-- Add at Beginning -->
-                <h4>2. Adding at the Beginning</h4>
-                <p>This is <strong>challenging</strong>! We need to shift ALL existing elements to make room.</p>
+                <h4>2. الإضافة في البداية</h4>
+                <p>هذا <strong>أصعب</strong>! نحتاج إلى إزاحة (Shift) <strong>جميع</strong> العناصر الموجودة لإفساح المجال.</p>
 
                 <div class="array-container">
-                    <p><strong>Goal:</strong> Add <span style="color: #10b981; font-weight: bold;">5</span> at the beginning</p>
+                    <p><strong>الهدف:</strong> إضافة <span style="color: #10b981; font-weight: bold;">5</span> في البداية</p>
 
-                    <p><strong>Step 1:</strong> Shift all elements to the right</p>
+                    <p><strong>الخطوة 1:</strong> إزاحة جميع العناصر إلى اليمين</p>
                     <div class="array-visual" style="margin-bottom: 30px;">
                         <div class="array-cell empty"><span class="value">?</span><span class="index">0</span></div>
                         <div class="array-cell shifting"><span class="value">42</span><span class="index">1</span></div>
@@ -899,9 +947,9 @@
                         <div class="array-cell shifting"><span class="value">74</span><span class="index">8</span></div>
                         <div class="array-cell empty"><span class="value">-</span><span class="index">9</span></div>
                     </div>
-                    <p style="text-align: center; color: #f59e0b;">Each shift is O(1), but we do n shifts = <span class="complexity-on">O(n)</span></p>
+                    <p style="text-align: center; color: #f59e0b;">كل إزاحة تستغرق <span dir="ltr">O(1)</span>، لكننا نُجري n إزاحة = <span class="complexity-on" dir="ltr">O(n)</span></p>
 
-                    <p><strong>Step 2:</strong> Insert the new value at index 0</p>
+                    <p><strong>الخطوة 2:</strong> إدراج القيمة الجديدة في الفهرس 0</p>
                     <div class="array-visual" style="margin-bottom: 30px;">
                         <div class="array-cell new-item"><span class="value">5</span><span class="index">0</span></div>
                         <div class="array-cell"><span class="value">42</span><span class="index">1</span></div>
@@ -917,51 +965,51 @@
                 </div>
 
                 <!-- Summary Table -->
-                <h3>Summary: Array Operations Time Complexity</h3>
+                <h3>ملخص: التعقيد الزمني (Time Complexity) لعمليات المصفوفة</h3>
 
                 <table class="operation-table">
                     <thead>
                         <tr>
-                            <th>Operation</th>
-                            <th>Time Complexity</th>
-                            <th>Why?</th>
+                            <th>العملية</th>
+                            <th>التعقيد الزمني</th>
+                            <th>لماذا؟</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>Add at End</strong></td>
+                            <td><strong>الإضافة في النهاية</strong></td>
                             <td><span class="complexity-o1">O(1)</span></td>
-                            <td>Jump directly to the position, no shifting needed</td>
+                            <td>الانتقال مباشرةً إلى الموضع، دون حاجة إلى إزاحة</td>
                         </tr>
                         <tr>
-                            <td><strong>Add at Beginning</strong></td>
+                            <td><strong>الإضافة في البداية</strong></td>
                             <td><span class="complexity-on">O(n)</span></td>
-                            <td>Must shift ALL n elements to the right</td>
+                            <td>يجب إزاحة <strong>جميع</strong> العناصر الـ n إلى اليمين</td>
                         </tr>
                         <tr>
-                            <td><strong>Add in Middle</strong></td>
+                            <td><strong>الإضافة في المنتصف</strong></td>
                             <td><span class="complexity-on">O(n)</span></td>
-                            <td>Must shift elements after the insertion point</td>
+                            <td>يجب إزاحة العناصر الواقعة بعد نقطة الإدراج</td>
                         </tr>
                         <tr>
-                            <td><strong>Delete from End</strong></td>
+                            <td><strong>الحذف من النهاية</strong></td>
                             <td><span class="complexity-o1">O(1)</span></td>
-                            <td>Just remove, no shifting needed</td>
+                            <td>مجرد إزالة، دون حاجة إلى إزاحة</td>
                         </tr>
                         <tr>
-                            <td><strong>Delete from Beginning</strong></td>
+                            <td><strong>الحذف من البداية</strong></td>
                             <td><span class="complexity-on">O(n)</span></td>
-                            <td>Must shift ALL elements to the left</td>
+                            <td>يجب إزاحة <strong>جميع</strong> العناصر إلى اليسار</td>
                         </tr>
                         <tr>
-                            <td><strong>Delete from Middle</strong></td>
+                            <td><strong>الحذف من المنتصف</strong></td>
                             <td><span class="complexity-on">O(n)</span></td>
-                            <td>Must shift elements to fill the gap</td>
+                            <td>يجب إزاحة العناصر لملء الفراغ</td>
                         </tr>
                         <tr>
-                            <td><strong>Access by Index</strong></td>
+                            <td><strong>الوصول عبر الفهرس</strong></td>
                             <td><span class="complexity-o1">O(1)</span></td>
-                            <td>Direct access using address calculation</td>
+                            <td>وصول مباشر باستخدام حساب العنوان</td>
                         </tr>
                     </tbody>
                 </table>
@@ -969,68 +1017,68 @@
 
             <!-- Part 2: What is O(1)? -->
             <section id="big-o">
-                <h2>Part 2: What Does O(1) Mean?</h2>
+                <h2>الجزء 2: ماذا يعني <span dir="ltr">O(1)</span>؟</h2>
 
                 <div class="question-box">
-                    <h4>You might be wondering...</h4>
-                    <p>We keep saying O(1) and O(n), but what do these actually mean?</p>
+                    <h4>ربما تتساءل...</h4>
+                    <p>نكرّر قول <span dir="ltr">O(1)</span> و<span dir="ltr">O(n)</span>، لكن ماذا يعنيان فعلًا؟</p>
                 </div>
 
                 <div class="definition-box">
-                    <h4>Big O Notation - Simple Explanation</h4>
-                    <p><strong>Big O notation</strong> describes how the time (or space) an algorithm needs grows as the input size increases.</p>
+                    <h4>ترميز O الكبير (Big O Notation) - شرح مبسّط</h4>
+                    <p>يصف <strong>ترميز O الكبير</strong> كيف ينمو الزمن (أو المساحة) الذي تحتاجه الخوارزمية مع ازدياد حجم المدخلات.</p>
                     <ul>
-                        <li><strong>O(1) - Constant Time:</strong> The operation takes the same amount of time regardless of how much data you have. It's the <strong>fastest possible</strong>!</li>
-                        <li><strong>O(n) - Linear Time:</strong> The time grows proportionally with the data size. Double the data = double the time.</li>
-                        <li><strong>O(log<sub>2</sub>n) - Logarithmic Time:</strong> The time grows very slowly even as data increases dramatically. Very efficient!</li>
+                        <li><strong><span dir="ltr">O(1)</span> - زمن ثابت (Constant Time):</strong> تستغرق العملية المقدار نفسه من الزمن بغضّ النظر عن كمية البيانات لديك. إنه <strong>الأسرع على الإطلاق</strong>!</li>
+                        <li><strong><span dir="ltr">O(n)</span> - زمن خطي (Linear Time):</strong> ينمو الزمن بالتناسب مع حجم البيانات. ضعف البيانات = ضعف الزمن.</li>
+                        <li><strong><span dir="ltr">O(log<sub>2</sub>n)</span> - زمن لوغاريتمي (Logarithmic Time):</strong> ينمو الزمن ببطء شديد حتى مع ازدياد البيانات بشكل هائل. فعّال جدًا!</li>
                     </ul>
                 </div>
 
-                <h3>Visualizing O(1) - Constant Time</h3>
+                <h3>تصوّر <span dir="ltr">O(1)</span> - الزمن الثابت</h3>
 
                 <div class="formula-box">
-                    <h4>O(1) = "One Operation"</h4>
-                    <p>No matter if you have 10 items or 10 million items, O(1) takes the same time.</p>
+                    <h4><span dir="ltr">O(1)</span> = «عملية واحدة»</h4>
+                    <p>سواء كان لديك 10 عناصر أو 10 ملايين عنصر، فإن <span dir="ltr">O(1)</span> يستغرق الزمن نفسه.</p>
                     <div class="comparison-visual">
                         <div class="comparison-item">
-                            <div class="label">10 items</div>
-                            <div class="value" style="color: #10b981;">1 step</div>
+                            <div class="label">10 عناصر</div>
+                            <div class="value" style="color: #10b981;">خطوة واحدة</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="label">1,000 items</div>
-                            <div class="value" style="color: #10b981;">1 step</div>
+                            <div class="label">1,000 عنصر</div>
+                            <div class="value" style="color: #10b981;">خطوة واحدة</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="label">1,000,000 items</div>
-                            <div class="value" style="color: #10b981;">1 step</div>
+                            <div class="label">1,000,000 عنصر</div>
+                            <div class="value" style="color: #10b981;">خطوة واحدة</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="success-box">
-                    <h4>Why is Array Access O(1)?</h4>
-                    <p>Because of the address calculation formula:</p>
+                    <h4>لماذا يكون الوصول إلى المصفوفة <span dir="ltr">O(1)</span>؟</h4>
+                    <p>بسبب صيغة حساب العنوان:</p>
                     <p style="text-align: center; font-size: 1.2em; margin: 15px 0;">
-                        <strong>Element Address = Base Address + (Index × Element Size)</strong>
+                        <strong>عنوان العنصر = العنوان الأساسي + (الفهرس × حجم العنصر)</strong>
                     </p>
-                    <p>The CPU can calculate this instantly, regardless of array size!</p>
+                    <p>يستطيع المعالج (CPU) حساب ذلك فورًا، بغضّ النظر عن حجم المصفوفة!</p>
                 </div>
             </section>
 
             <!-- Part 3: Linear Search -->
             <section id="linear-search">
-                <h2>Part 3: Linear Search</h2>
+                <h2>الجزء 3: البحث الخطي</h2>
 
                 <div class="definition-box">
-                    <h4>What is Linear Search?</h4>
-                    <p><strong>Linear Search</strong> is the simplest search algorithm. You start from the beginning and check each element one by one until you find what you're looking for.</p>
+                    <h4>ما هو البحث الخطي؟</h4>
+                    <p><strong>البحث الخطي (Linear Search)</strong> هو أبسط خوارزميات البحث. تبدأ من البداية وتفحص كل عنصر واحدًا تلو الآخر حتى تجد ما تبحث عنه.</p>
                 </div>
 
-                <h3>When to Use Linear Search?</h3>
-                <p>Linear search works on <strong>any array</strong> - sorted or unsorted. It's simple but can be slow for large datasets.</p>
+                <h3>متى نستخدم البحث الخطي؟</h3>
+                <p>يعمل البحث الخطي على <strong>أي مصفوفة</strong> - مرتبة أو غير مرتبة. إنه بسيط لكنه قد يكون بطيئًا مع مجموعات البيانات الكبيرة.</p>
 
                 <div class="array-container">
-                    <h4 style="text-align: center; color: #4f46e5; margin-bottom: 20px;">Example: Search for value 56 in this unsorted array</h4>
+                    <h4 style="text-align: center; color: #4f46e5; margin-bottom: 20px;">مثال: البحث عن القيمة 56 في هذه المصفوفة غير المرتبة</h4>
                     <div class="array-visual" style="margin-bottom: 40px;">
                         <div class="array-cell"><span class="value">42</span><span class="index">0</span></div>
                         <div class="array-cell"><span class="value">17</span><span class="index">1</span></div>
@@ -1043,59 +1091,59 @@
                     </div>
                 </div>
 
-                <h3>Step-by-Step Linear Search</h3>
+                <h3>البحث الخطي خطوة بخطوة</h3>
 
                 <div class="step-container">
-                    <div class="step-header">Searching for: 56</div>
+                    <div class="step-header">البحث عن: 56</div>
                     <div class="step-content">
-                        <p><strong>Step 1:</strong> Check index 0 → 42 ≠ 56 ❌</p>
-                        <p><strong>Step 2:</strong> Check index 1 → 17 ≠ 56 ❌</p>
-                        <p><strong>Step 3:</strong> Check index 2 → 85 ≠ 56 ❌</p>
-                        <p><strong>Step 4:</strong> Check index 3 → 33 ≠ 56 ❌</p>
-                        <p><strong>Step 5:</strong> Check index 4 → 91 ≠ 56 ❌</p>
-                        <p><strong>Step 6:</strong> Check index 5 → 56 = 56 ✅ <strong style="color: #10b981;">FOUND at index 5!</strong></p>
+                        <p><strong>الخطوة 1:</strong> افحص الفهرس 0 ← <span dir="ltr">42 ≠ 56</span> ❌</p>
+                        <p><strong>الخطوة 2:</strong> افحص الفهرس 1 ← <span dir="ltr">17 ≠ 56</span> ❌</p>
+                        <p><strong>الخطوة 3:</strong> افحص الفهرس 2 ← <span dir="ltr">85 ≠ 56</span> ❌</p>
+                        <p><strong>الخطوة 4:</strong> افحص الفهرس 3 ← <span dir="ltr">33 ≠ 56</span> ❌</p>
+                        <p><strong>الخطوة 5:</strong> افحص الفهرس 4 ← <span dir="ltr">91 ≠ 56</span> ❌</p>
+                        <p><strong>الخطوة 6:</strong> افحص الفهرس 5 ← <span dir="ltr">56 = 56</span> ✅ <strong style="color: #10b981;">وُجدت في الفهرس 5!</strong></p>
                     </div>
                 </div>
 
-                <h3>Time Complexity Analysis</h3>
+                <h3>تحليل التعقيد الزمني</h3>
 
                 <div class="important-box">
-                    <h4>Worst Case Scenario</h4>
-                    <p>In algorithm analysis, we <strong>always consider the worst case</strong>. For linear search, the worst case is when the target element is at the <strong>very end</strong> of the array (or not present at all).</p>
+                    <h4>سيناريو أسوأ حالة (Worst Case)</h4>
+                    <p>في تحليل الخوارزميات، <strong>نأخذ دائمًا أسوأ حالة في الحسبان</strong>. بالنسبة للبحث الخطي، تكون أسوأ حالة عندما يكون العنصر المطلوب في <strong>آخر</strong> المصفوفة تمامًا (أو غير موجود أصلًا).</p>
                     <p style="text-align: center; margin-top: 15px;">
-                        <span class="complexity-on" style="font-size: 1.3em;">Linear Search = O(n)</span>
+                        <span class="complexity-on" style="font-size: 1.3em;">البحث الخطي = <span dir="ltr">O(n)</span></span>
                     </p>
                 </div>
 
-                <h3>Why is it Called "Linear"?</h3>
+                <h3>لماذا يُسمّى «خطيًا»؟</h3>
 
                 <div class="formula-box">
-                    <h4>Time Grows Linearly with Data Size</h4>
+                    <h4>ينمو الزمن خطيًا مع حجم البيانات</h4>
                     <div class="comparison-visual">
                         <div class="comparison-item">
-                            <div class="label">10 items</div>
-                            <div class="value" style="color: #ef4444;">~1 sec</div>
+                            <div class="label">10 عناصر</div>
+                            <div class="value" style="color: #ef4444;">~1 ث</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="label">20 items</div>
-                            <div class="value" style="color: #ef4444;">~2 sec</div>
+                            <div class="label">20 عنصرًا</div>
+                            <div class="value" style="color: #ef4444;">~2 ث</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="label">30 items</div>
-                            <div class="value" style="color: #ef4444;">~3 sec</div>
+                            <div class="label">30 عنصرًا</div>
+                            <div class="value" style="color: #ef4444;">~3 ث</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="label">100 items</div>
-                            <div class="value" style="color: #ef4444;">~10 sec</div>
+                            <div class="label">100 عنصر</div>
+                            <div class="value" style="color: #ef4444;">~10 ث</div>
                         </div>
                     </div>
-                    <p style="margin-top: 20px;">If you double the data, you double the search time. This is <strong>linear growth</strong>.</p>
+                    <p style="margin-top: 20px;">إذا ضاعفت البيانات، يتضاعف زمن البحث. هذا هو <strong>النمو الخطي</strong>.</p>
                 </div>
 
-                <h3>Linear Search Code</h3>
+                <h3>شيفرة البحث الخطي</h3>
 
                 <div class="code-container">
-                    <div class="code-header">Linear Search - Java Implementation</div>
+                    <div class="code-header">البحث الخطي - تنفيذ بلغة Java</div>
                     <pre><span class="comment">/**
  * Linear Search Algorithm
  * Searches for a target value in an array by checking each element one by one.
@@ -1126,58 +1174,58 @@
 
             <!-- Part 4: Binary Search -->
             <section id="binary-search">
-                <h2>Part 4: Binary Search - The Fast Way!</h2>
+                <h2>الجزء 4: البحث الثنائي - الطريقة السريعة!</h2>
 
                 <div class="question-box">
-                    <h4>Can We Do Better Than Linear Search?</h4>
-                    <p>Yes! But there's a requirement: <strong>the data must be sorted</strong>.</p>
+                    <h4>هل يمكننا أن نتفوّق على البحث الخطي؟</h4>
+                    <p>نعم! لكن هناك شرط: <strong>يجب أن تكون البيانات مرتبة (Sorted)</strong>.</p>
                 </div>
 
                 <div class="definition-box">
-                    <h4>What is Binary Search?</h4>
-                    <p><strong>Binary Search</strong> is a divide-and-conquer algorithm. Instead of checking every element, it:</p>
+                    <h4>ما هو البحث الثنائي؟</h4>
+                    <p><strong>البحث الثنائي (Binary Search)</strong> خوارزمية من نوع فرّق تسُد (Divide and Conquer). فبدلًا من فحص كل عنصر، فإنها:</p>
                     <ol>
-                        <li>Looks at the <strong>middle</strong> element</li>
-                        <li>If the target is smaller, search the <strong>left half</strong></li>
-                        <li>If the target is larger, search the <strong>right half</strong></li>
-                        <li>Repeat until found (or not found)</li>
+                        <li>تنظر إلى العنصر <strong>الأوسط</strong></li>
+                        <li>إذا كان الهدف أصغر، تبحث في <strong>النصف الأيسر</strong></li>
+                        <li>إذا كان الهدف أكبر، تبحث في <strong>النصف الأيمن</strong></li>
+                        <li>تكرّر ذلك حتى تجده (أو يتبيّن أنه غير موجود)</li>
                     </ol>
                 </div>
 
                 <div class="important-box">
-                    <h4>Key Requirement</h4>
-                    <p><strong>Binary Search ONLY works on SORTED data!</strong> If your data is not sorted, you must either:</p>
+                    <h4>الشرط الأساسي</h4>
+                    <p><strong>البحث الثنائي يعمل <u>فقط</u> على البيانات المرتبة!</strong> إذا لم تكن بياناتك مرتبة، فعليك إمّا:</p>
                     <ul>
-                        <li>Sort it first (which has its own cost), or</li>
-                        <li>Use Linear Search instead</li>
+                        <li>أن ترتّبها أولًا (وللفرز كلفته الخاصة)، أو</li>
+                        <li>أن تستخدم البحث الخطي بدلًا منه</li>
                     </ul>
                 </div>
 
-                <h3>The Power of Binary Search</h3>
+                <h3>قوة البحث الثنائي</h3>
 
                 <div class="success-box">
-                    <h4>Each comparison eliminates HALF the data!</h4>
+                    <h4>كل مقارنة تستبعد <u>نصف</u> البيانات!</h4>
                     <div class="comparison-visual">
                         <div class="comparison-item">
-                            <div class="label">1,000 items</div>
-                            <div class="value" style="color: #0ea5e9;">~10 steps</div>
+                            <div class="label">1,000 عنصر</div>
+                            <div class="value" style="color: #0ea5e9;">~10 خطوات</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="label">1,000,000 items</div>
-                            <div class="value" style="color: #0ea5e9;">~20 steps</div>
+                            <div class="label">1,000,000 عنصر</div>
+                            <div class="value" style="color: #0ea5e9;">~20 خطوة</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="label">1,000,000,000 items</div>
-                            <div class="value" style="color: #0ea5e9;">~30 steps</div>
+                            <div class="label">1,000,000,000 عنصر</div>
+                            <div class="value" style="color: #0ea5e9;">~30 خطوة</div>
                         </div>
                     </div>
-                    <p style="margin-top: 20px; text-align: center;"><strong>WOW!</strong> Search 1 billion items in just 30 comparisons!</p>
+                    <p style="margin-top: 20px; text-align: center;"><strong>مذهل!</strong> البحث في مليار عنصر بـ 30 مقارنة فقط!</p>
                 </div>
 
-                <h3>Binary Search Code</h3>
+                <h3>شيفرة البحث الثنائي</h3>
 
                 <div class="code-container">
-                    <div class="code-header">Binary Search - Java Implementation</div>
+                    <div class="code-header">البحث الثنائي - تنفيذ بلغة Java</div>
                     <pre><span class="comment">/**
  * Binary Search Algorithm
  * Searches for a target value in a SORTED array using divide-and-conquer.
@@ -1223,37 +1271,37 @@
                 </div>
 
                 <div class="reminder-box">
-                    <h4>Remember These Rules:</h4>
+                    <h4>تذكّر هذه القواعد:</h4>
                     <ul>
-                        <li>If target <strong>&gt;</strong> mid value → search <strong>right</strong> (set low = mid + 1)</li>
-                        <li>If target <strong>&lt;</strong> mid value → search <strong>left</strong> (set high = mid - 1)</li>
-                        <li>If target <strong>=</strong> mid value → <strong>FOUND!</strong></li>
-                        <li>If low <strong>&gt;</strong> high → <strong>NOT FOUND</strong></li>
+                        <li>إذا كان الهدف <strong>&gt;</strong> قيمة <code>mid</code> ← ابحث في <strong>اليمين</strong> (اجعل <code>low = mid + 1</code>)</li>
+                        <li>إذا كان الهدف <strong>&lt;</strong> قيمة <code>mid</code> ← ابحث في <strong>اليسار</strong> (اجعل <code>high = mid - 1</code>)</li>
+                        <li>إذا كان الهدف <strong>=</strong> قيمة <code>mid</code> ← <strong>وُجد!</strong></li>
+                        <li>إذا كان <code>low</code> <strong>&gt;</strong> <code>high</code> ← <strong>غير موجود</strong></li>
                     </ul>
                 </div>
             </section>
 
             <!-- Part 5: Understanding O(log₂n) -->
             <section id="log-n">
-                <h2>Part 5: Understanding O(log<sub>2</sub>n)</h2>
+                <h2>الجزء 5: فهم <span dir="ltr">O(log<sub>2</sub>n)</span></h2>
 
                 <div class="question-box">
-                    <h4>Where Does log<sub>2</sub>n Come From?</h4>
-                    <p>Let's understand mathematically why binary search has time complexity O(log<sub>2</sub>n). The base is 2 because we divide by 2 (binary = two parts) at each step!</p>
+                    <h4>من أين يأتي <span dir="ltr">log<sub>2</sub>n</span>؟</h4>
+                    <p>لنفهم رياضيًا لماذا يكون التعقيد الزمني للبحث الثنائي <span dir="ltr">O(log<sub>2</sub>n)</span>. الأساس هو 2 لأننا نقسم على 2 (ثنائي = جزآن) في كل خطوة!</p>
                 </div>
 
-                <h3>The Halving Process - Visualized</h3>
+                <h3>عملية التنصيف - بصريًا</h3>
 
-                <p>In binary search, we <strong>halve</strong> the search space with each comparison. Let's trace this step by step:</p>
+                <p>في البحث الثنائي، <strong>ننصّف</strong> مساحة البحث مع كل مقارنة. لنتتبّع ذلك خطوة بخطوة:</p>
 
                 <div class="halving-container">
-                    <h4 style="text-align: center; color: #0369a1; margin-bottom: 25px; font-size: 1.3em;">How Binary Search Reduces the Problem Size</h4>
+                    <h4 style="text-align: center; color: #0369a1; margin-bottom: 25px; font-size: 1.3em;">كيف يقلّص البحث الثنائي حجم المسألة</h4>
 
                     <div class="halving-step">
-                        <div class="halving-step-number">Start</div>
+                        <div class="halving-step-number">البداية</div>
                         <div class="halving-step-content">
-                            <div class="halving-step-formula">n items</div>
-                            <div class="halving-step-description">We begin with n elements to search through</div>
+                            <div class="halving-step-formula"><span dir="ltr">n</span> عنصر</div>
+                            <div class="halving-step-description">نبدأ بـ n عنصر للبحث فيها</div>
                             <div class="halving-visual-bar" style="width: 100%;"></div>
                         </div>
                     </div>
@@ -1261,8 +1309,8 @@
                     <div class="halving-step">
                         <div class="halving-step-number">1</div>
                         <div class="halving-step-content">
-                            <div class="halving-step-formula">n / 2 items</div>
-                            <div class="halving-step-description">After 1st comparison, we eliminate half. Only n/2 remains.</div>
+                            <div class="halving-step-formula"><span dir="ltr">n / 2</span> عنصر</div>
+                            <div class="halving-step-description">بعد المقارنة الأولى نستبعد النصف. يتبقى <span dir="ltr">n/2</span> فقط.</div>
                             <div class="halving-visual-bar" style="width: 50%;"></div>
                         </div>
                     </div>
@@ -1270,8 +1318,8 @@
                     <div class="halving-step">
                         <div class="halving-step-number">2</div>
                         <div class="halving-step-content">
-                            <div class="halving-step-formula">n / 4 = n / 2<sup>2</sup> items</div>
-                            <div class="halving-step-description">After 2nd comparison, we halve again. Only n/4 remains.</div>
+                            <div class="halving-step-formula"><span dir="ltr">n / 4 = n / 2<sup>2</sup></span> عنصر</div>
+                            <div class="halving-step-description">بعد المقارنة الثانية ننصّف مجددًا. يتبقى <span dir="ltr">n/4</span> فقط.</div>
                             <div class="halving-visual-bar" style="width: 25%;"></div>
                         </div>
                     </div>
@@ -1279,8 +1327,8 @@
                     <div class="halving-step">
                         <div class="halving-step-number">3</div>
                         <div class="halving-step-content">
-                            <div class="halving-step-formula">n / 8 = n / 2<sup>3</sup> items</div>
-                            <div class="halving-step-description">After 3rd comparison, only n/8 remains.</div>
+                            <div class="halving-step-formula"><span dir="ltr">n / 8 = n / 2<sup>3</sup></span> عنصر</div>
+                            <div class="halving-step-description">بعد المقارنة الثالثة يتبقى <span dir="ltr">n/8</span> فقط.</div>
                             <div class="halving-visual-bar" style="width: 12.5%;"></div>
                         </div>
                     </div>
@@ -1288,8 +1336,8 @@
                     <div class="halving-step">
                         <div class="halving-step-number">4</div>
                         <div class="halving-step-content">
-                            <div class="halving-step-formula">n / 16 = n / 2<sup>4</sup> items</div>
-                            <div class="halving-step-description">After 4th comparison, only n/16 remains.</div>
+                            <div class="halving-step-formula"><span dir="ltr">n / 16 = n / 2<sup>4</sup></span> عنصر</div>
+                            <div class="halving-step-description">بعد المقارنة الرابعة يتبقى <span dir="ltr">n/16</span> فقط.</div>
                             <div class="halving-visual-bar" style="width: 6.25%;"></div>
                         </div>
                     </div>
@@ -1297,33 +1345,33 @@
                     <div class="halving-step" style="background: linear-gradient(135deg, #e0f2fe, #bae6fd);">
                         <div class="halving-step-number" style="background: linear-gradient(135deg, #0369a1, #075985);">k</div>
                         <div class="halving-step-content">
-                            <div class="halving-step-formula" style="font-size: 1.6em;">n / 2<sup>k</sup> items</div>
-                            <div class="halving-step-description"><strong>General Pattern:</strong> After k comparisons, we have n / 2<sup>k</sup> items remaining!</div>
+                            <div class="halving-step-formula" style="font-size: 1.6em;"><span dir="ltr">n / 2<sup>k</sup></span> عنصر</div>
+                            <div class="halving-step-description"><strong>النمط العام:</strong> بعد k مقارنة، يتبقى لدينا <span dir="ltr">n / 2<sup>k</sup></span> عنصر!</div>
                         </div>
                     </div>
                 </div>
 
-                <h3>When Do We Stop?</h3>
+                <h3>متى نتوقف؟</h3>
 
                 <div class="math-box">
-                    <h4>The search ends when only 1 item remains:</h4>
+                    <h4>ينتهي البحث عندما يتبقى عنصر واحد فقط:</h4>
                     <div class="math-formula" style="font-size: 2em;">
                         n / 2<sup>k</sup> = 1
                     </div>
-                    <p style="margin-top: 15px;">Now we need to solve for <strong>k</strong> (the number of steps).</p>
+                    <p style="margin-top: 15px;">نحتاج الآن إلى إيجاد قيمة <strong>k</strong> (عدد الخطوات).</p>
                 </div>
 
-                <h3>Mathematical Derivation: Solving for k</h3>
+                <h3>الاشتقاق الرياضي: إيجاد k</h3>
 
                 <div class="math-derivation">
-                    <div class="derivation-title">Step-by-Step Derivation of k = log<sub>2</sub>(n)</div>
+                    <div class="derivation-title">اشتقاق <span dir="ltr">k = log<sub>2</sub>(n)</span> خطوة بخطوة</div>
 
                     <div class="derivation-step">
                         <div class="derivation-step-number">1</div>
                         <div class="derivation-step-content">
                             <div class="derivation-step-formula">n / 2<sup>k</sup> = 1</div>
                             <div class="derivation-step-explanation">
-                                <strong>Starting equation:</strong> After k steps, we have 1 item left.
+                                <strong>المعادلة الابتدائية:</strong> بعد k خطوة، يتبقى لدينا عنصر واحد.
                             </div>
                         </div>
                     </div>
@@ -1333,10 +1381,10 @@
                         <div class="derivation-step-content">
                             <div class="derivation-step-formula">2<sup>k</sup> · (n / 2<sup>k</sup>) = 1 · 2<sup>k</sup></div>
                             <div class="derivation-step-explanation">
-                                <strong>Multiply both sides by 2<sup>k</sup>:</strong> We multiply both the left and right sides by 2<sup>k</sup> to eliminate the denominator.
+                                <strong>اضرب الطرفين في <span dir="ltr">2<sup>k</sup></span>:</strong> نضرب الطرفين الأيسر والأيمن في <span dir="ltr">2<sup>k</sup></span> للتخلّص من المقام.
                             </div>
                             <div class="math-rule-box">
-                                <strong>Algebraic Rule:</strong> If we multiply both sides of an equation by the same value, the equation remains balanced.
+                                <strong>قاعدة جبرية:</strong> إذا ضربنا طرفي المعادلة في القيمة نفسها، تبقى المعادلة متوازنة.
                             </div>
                         </div>
                     </div>
@@ -1346,10 +1394,10 @@
                         <div class="derivation-step-content">
                             <div class="derivation-step-formula">n = 2<sup>k</sup></div>
                             <div class="derivation-step-explanation">
-                                <strong>Simplify:</strong> On the left, 2<sup>k</sup> cancels with 2<sup>k</sup> in the denominator, leaving n. On the right, 1 · 2<sup>k</sup> = 2<sup>k</sup>.
+                                <strong>بسّط:</strong> في الطرف الأيسر، يُختصر <span dir="ltr">2<sup>k</sup></span> مع <span dir="ltr">2<sup>k</sup></span> في المقام، فيتبقى n. وفي الطرف الأيمن، <span dir="ltr">1 · 2<sup>k</sup> = 2<sup>k</sup></span>.
                             </div>
                             <div class="math-rule-box">
-                                <strong>Cancellation Rule:</strong> (a/b) × b = a (the b's cancel out)
+                                <strong>قاعدة الاختصار:</strong> <span dir="ltr">(a/b) × b = a</span> (يُختصر b)
                             </div>
                         </div>
                     </div>
@@ -1359,11 +1407,11 @@
                         <div class="derivation-step-content">
                             <div class="derivation-step-formula">log<sub>2</sub>(n) = log<sub>2</sub>(2<sup>k</sup>)</div>
                             <div class="derivation-step-explanation">
-                                <strong>Take log base 2 of both sides:</strong> We use log base 2 because we are dividing by 2 (binary).
+                                <strong>خذ اللوغاريتم للأساس 2 للطرفين:</strong> نستخدم اللوغاريتم للأساس 2 لأننا نقسم على 2 (ثنائي).
                             </div>
                             <div class="math-rule-box">
-                                <strong>Logarithm Definition:</strong> If b<sup>x</sup> = y, then log<sub>b</sub>(y) = x<br>
-                                In other words: "log base b of y asks: what power do we raise b to get y?"
+                                <strong>تعريف اللوغاريتم (Logarithm):</strong> إذا كان <span dir="ltr">b<sup>x</sup> = y</span>، فإن <span dir="ltr">log<sub>b</sub>(y) = x</span><br>
+                                بعبارة أخرى: «لوغاريتم y للأساس b يسأل: إلى أي أسّ نرفع b لنحصل على y؟»
                             </div>
                         </div>
                     </div>
@@ -1373,11 +1421,11 @@
                         <div class="derivation-step-content">
                             <div class="derivation-step-formula">log<sub>2</sub>(n) = k × log<sub>2</sub>(2)</div>
                             <div class="derivation-step-explanation">
-                                <strong>Apply the Power Rule of Logarithms:</strong> The exponent k comes down as a multiplier.
+                                <strong>طبّق قاعدة القوة للوغاريتمات:</strong> ينزل الأسّ k ليصبح معاملًا مضروبًا.
                             </div>
                             <div class="math-rule-box">
-                                <strong>Power Rule:</strong> log<sub>b</sub>(x<sup>k</sup>) = k × log<sub>b</sub>(x)<br>
-                                This rule says: "the log of a power equals the exponent times the log of the base"
+                                <strong>قاعدة القوة (Power Rule):</strong> <span dir="ltr">log<sub>b</sub>(x<sup>k</sup>) = k × log<sub>b</sub>(x)</span><br>
+                                تنص هذه القاعدة على أن: «لوغاريتم القوة يساوي الأسّ مضروبًا في لوغاريتم الأساس»
                             </div>
                         </div>
                     </div>
@@ -1387,58 +1435,58 @@
                         <div class="derivation-step-content">
                             <div class="derivation-step-formula">log<sub>2</sub>(n) = k × 1</div>
                             <div class="derivation-step-explanation">
-                                <strong>Simplify log<sub>2</sub>(2):</strong> Log base 2 of 2 equals 1.
+                                <strong>بسّط <span dir="ltr">log<sub>2</sub>(2)</span>:</strong> لوغاريتم 2 للأساس 2 يساوي 1.
                             </div>
                             <div class="math-rule-box">
-                                <strong>Identity Rule:</strong> log<sub>b</sub>(b) = 1<br>
-                                Why? Because b<sup>1</sup> = b. So "what power of b gives b?" The answer is 1.
+                                <strong>قاعدة المطابقة (Identity Rule):</strong> <span dir="ltr">log<sub>b</sub>(b) = 1</span><br>
+                                لماذا؟ لأن <span dir="ltr">b<sup>1</sup> = b</span>. إذن «أي قوة للعدد b تعطي b؟» الإجابة هي 1.
                             </div>
                         </div>
                     </div>
 
-                    <div class="derivation-step" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0); border-left-color: #16a34a;">
+                    <div class="derivation-step" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0); border-right-color: #16a34a;">
                         <div class="derivation-step-number" style="background: #16a34a;">7</div>
                         <div class="derivation-step-content">
                             <div class="derivation-step-formula" style="font-size: 1.8em; color: #166534;">k = log<sub>2</sub>(n)</div>
                             <div class="derivation-step-explanation">
-                                <strong>Final Result:</strong> The number of steps k equals log base 2 of n!
+                                <strong>النتيجة النهائية:</strong> عدد الخطوات k يساوي لوغاريتم n للأساس 2!
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="key-point-box">
-                    <div class="key-point-title">KEY POINT</div>
-                    <p style="font-size: 1.2em;">The number of steps <strong>k</strong> required to reduce <strong>n</strong> items to 1 by repeatedly halving is:</p>
-                    <p style="text-align: center; font-size: 2em; color: #dc2626; margin: 20px 0; font-family: 'Times New Roman', serif;">
+                    <div class="key-point-title">نقطة جوهرية</div>
+                    <p style="font-size: 1.2em;">عدد الخطوات <strong>k</strong> اللازمة لتقليص <strong>n</strong> عنصر إلى عنصر واحد بالتنصيف المتكرر هو:</p>
+                    <p style="text-align: center; font-size: 2em; color: #dc2626; margin: 20px 0; font-family: 'Times New Roman', serif;" dir="ltr">
                         k = log<sub>2</sub>(n)
                     </p>
-                    <p>Therefore, <strong>Binary Search runs in O(log<sub>2</sub>n) time</strong>.</p>
-                    <p style="margin-top: 15px; color: #666;"><em>Note: In Big O notation, we often write O(log n) without the base because changing the base only changes the constant factor, not the growth rate. However, for binary search, the base is specifically 2 because we divide by 2!</em></p>
+                    <p>لذلك، <strong>يعمل البحث الثنائي في زمن <span dir="ltr">O(log<sub>2</sub>n)</span></strong>.</p>
+                    <p style="margin-top: 15px; color: #666;"><em>ملاحظة: في ترميز O الكبير، نكتب غالبًا <span dir="ltr">O(log n)</span> دون الأساس، لأن تغيير الأساس لا يغيّر إلا المعامل الثابت وليس معدل النمو. لكن في البحث الثنائي، الأساس هو 2 تحديدًا لأننا نقسم على 2!</em></p>
                 </div>
 
-                <h3>Why Base 2? Because It's BINARY!</h3>
+                <h3>لماذا الأساس 2؟ لأنه <u>ثنائي</u>!</h3>
 
                 <div class="definition-box">
-                    <h4>The Connection to "Binary"</h4>
-                    <p>The word <strong>"binary"</strong> means <strong>two</strong>. In binary search:</p>
+                    <h4>العلاقة بكلمة «ثنائي» (Binary)</h4>
+                    <p>كلمة <strong>«ثنائي»</strong> تعني <strong>اثنين</strong>. في البحث الثنائي:</p>
                     <ul>
-                        <li>We divide the array into <strong>2 parts</strong></li>
-                        <li>We keep <strong>1 part</strong> and discard <strong>1 part</strong></li>
-                        <li>We divide by <strong>2</strong> at each step</li>
+                        <li>نقسم المصفوفة إلى <strong>جزأين</strong></li>
+                        <li>نحتفظ <strong>بجزء واحد</strong> ونستبعد <strong>جزءًا واحدًا</strong></li>
+                        <li>نقسم على <strong>2</strong> في كل خطوة</li>
                     </ul>
-                    <p>This is why the logarithm has base <strong>2</strong> - because we're doing <strong>binary</strong> (two-way) division!</p>
+                    <p>لهذا يكون أساس اللوغاريتم <strong>2</strong> - لأننا نُجري قسمة <strong>ثنائية</strong> (إلى اتجاهين)!</p>
                 </div>
 
-                <h3>Practical Examples: How Many Steps?</h3>
+                <h3>أمثلة عملية: كم عدد الخطوات؟</h3>
 
                 <table class="operation-table">
                     <thead>
                         <tr>
-                            <th>Number of Items (n)</th>
-                            <th>Linear Search (n steps)</th>
-                            <th>Binary Search (log<sub>2</sub>n steps)</th>
-                            <th>Calculation</th>
+                            <th>عدد العناصر (n)</th>
+                            <th>البحث الخطي (n خطوة)</th>
+                            <th>البحث الثنائي (<span dir="ltr">log<sub>2</sub>n</span> خطوة)</th>
+                            <th>الحساب</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1476,35 +1524,35 @@
                 </table>
 
                 <div class="success-box">
-                    <h4>Amazing Efficiency!</h4>
-                    <p>To search through <strong>1 billion items</strong>:</p>
+                    <h4>كفاءة مذهلة!</h4>
+                    <p>للبحث في <strong>مليار عنصر</strong>:</p>
                     <ul>
-                        <li><strong>Linear Search:</strong> Up to 1,000,000,000 comparisons!</li>
-                        <li><strong>Binary Search:</strong> Only about 30 comparisons!</li>
+                        <li><strong>البحث الخطي:</strong> ما يصل إلى 1,000,000,000 مقارنة!</li>
+                        <li><strong>البحث الثنائي:</strong> نحو 30 مقارنة فقط!</li>
                     </ul>
-                    <p>That's the power of O(log<sub>2</sub>n)!</p>
+                    <p>هذه هي قوة <span dir="ltr">O(log<sub>2</sub>n)</span>!</p>
                 </div>
 
                 <div class="important-box">
-                    <h4>The Trade-Off</h4>
-                    <p>Binary search is much faster, BUT:</p>
+                    <h4>المقايضة (Trade-Off)</h4>
+                    <p>البحث الثنائي أسرع بكثير، <strong>لكن</strong>:</p>
                     <ul>
-                        <li>Data must be <strong>sorted first</strong></li>
-                        <li>Sorting takes time (usually O(n log n))</li>
-                        <li>Worth it if you search many times on the same data</li>
+                        <li>يجب أن تكون البيانات <strong>مرتبة أولًا</strong></li>
+                        <li>الفرز (Sorting) يستغرق وقتًا (عادةً <span dir="ltr">O(n log n)</span>)</li>
+                        <li>يستحق ذلك إذا كنت ستبحث مرات عديدة في البيانات نفسها</li>
                     </ul>
                 </div>
             </section>
 
             <!-- Part 6: Exercises -->
             <section id="exercises">
-                <h2>Part 6: Practice Exercises</h2>
+                <h2>الجزء 6: تمارين تطبيقية</h2>
 
                 <!-- Exercise 1 -->
                 <div class="exercise-box">
-                    <div class="exercise-header">Exercise 1: Binary Search - Finding a Number</div>
+                    <div class="exercise-header">التمرين 1: البحث الثنائي - إيجاد عدد</div>
 
-                    <p>Perform binary search to find the value <strong>3</strong> in the following sorted array:</p>
+                    <p>نفّذ البحث الثنائي لإيجاد القيمة <strong>3</strong> في المصفوفة المرتبة التالية:</p>
 
                     <div class="array-container">
                         <div class="array-visual" style="margin-bottom: 40px; font-size: 0.85em;">
@@ -1527,84 +1575,84 @@
                         </div>
                     </div>
 
-                    <p><strong>Question:</strong> Fill in the values for low, high, mid, and value at each step.</p>
+                    <p><strong>السؤال:</strong> املأ قيم <code>low</code> و<code>high</code> و<code>mid</code> والقيمة (value) في كل خطوة.</p>
 
-                    <button class="solution-toggle" onclick="toggleSolution('solution1')">Show Solution</button>
+                    <button class="solution-toggle" onclick="toggleSolution('solution1')">عرض الحل</button>
 
                     <div id="solution1" class="solution-content">
-                        <h4>Solution:</h4>
+                        <h4>الحل:</h4>
 
                         <table class="summary-table">
                             <thead>
                                 <tr>
-                                    <th>Step</th>
+                                    <th>الخطوة</th>
                                     <th>low</th>
                                     <th>high</th>
                                     <th>mid</th>
-                                    <th>value at mid</th>
-                                    <th>Action</th>
+                                    <th>القيمة عند mid</th>
+                                    <th>الإجراء</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Initial</td>
+                                    <td>البداية</td>
                                     <td>0</td>
                                     <td>15</td>
                                     <td>7</td>
                                     <td>15</td>
-                                    <td>3 < 15, go left (high = 6)</td>
+                                    <td><span dir="ltr">3 &lt; 15</span>، اتجه يسارًا (<span dir="ltr">high = 6</span>)</td>
                                 </tr>
                                 <tr>
-                                    <td>After 1st</td>
+                                    <td>بعد الأولى</td>
                                     <td>0</td>
                                     <td>6</td>
                                     <td>3</td>
                                     <td>7</td>
-                                    <td>3 < 7, go left (high = 2)</td>
+                                    <td><span dir="ltr">3 &lt; 7</span>، اتجه يسارًا (<span dir="ltr">high = 2</span>)</td>
                                 </tr>
                                 <tr>
-                                    <td>After 2nd</td>
+                                    <td>بعد الثانية</td>
                                     <td>0</td>
                                     <td>2</td>
                                     <td>1</td>
                                     <td>3</td>
-                                    <td style="color: #10b981; font-weight: bold;">FOUND at index 1!</td>
+                                    <td style="color: #10b981; font-weight: bold;">وُجد في الفهرس 1!</td>
                                 </tr>
                             </tbody>
                         </table>
 
                         <div class="step-container">
-                            <div class="step-header">Step-by-Step Explanation</div>
+                            <div class="step-header">الشرح خطوة بخطوة</div>
                             <div class="step-content">
-                                <p><strong>Initial:</strong> low=0, high=15, mid = floor((0+15)/2) = 7</p>
-                                <p>Value at index 7 is <strong>15</strong>. Since 3 < 15, search left half (high = mid - 1 = 6)</p>
+                                <p><strong>البداية:</strong> <span dir="ltr">low=0, high=15, mid = floor((0+15)/2) = 7</span></p>
+                                <p>القيمة في الفهرس 7 هي <strong>15</strong>. بما أن <span dir="ltr">3 &lt; 15</span>، نبحث في النصف الأيسر (<span dir="ltr">high = mid - 1 = 6</span>)</p>
 
-                                <p style="margin-top: 15px;"><strong>After 1st:</strong> low=0, high=6, mid = floor((0+6)/2) = 3</p>
-                                <p>Value at index 3 is <strong>7</strong>. Since 3 < 7, search left half (high = mid - 1 = 2)</p>
+                                <p style="margin-top: 15px;"><strong>بعد المقارنة الأولى:</strong> <span dir="ltr">low=0, high=6, mid = floor((0+6)/2) = 3</span></p>
+                                <p>القيمة في الفهرس 3 هي <strong>7</strong>. بما أن <span dir="ltr">3 &lt; 7</span>، نبحث في النصف الأيسر (<span dir="ltr">high = mid - 1 = 2</span>)</p>
 
-                                <p style="margin-top: 15px;"><strong>After 2nd:</strong> low=0, high=2, mid = floor((0+2)/2) = 1</p>
-                                <p>Value at index 1 is <strong>3</strong>. <span style="color: #10b981; font-weight: bold;">FOUND!</span> Return index 1.</p>
+                                <p style="margin-top: 15px;"><strong>بعد المقارنة الثانية:</strong> <span dir="ltr">low=0, high=2, mid = floor((0+2)/2) = 1</span></p>
+                                <p>القيمة في الفهرس 1 هي <strong>3</strong>. <span style="color: #10b981; font-weight: bold;">وُجدت!</span> نُعيد الفهرس 1.</p>
                             </div>
                         </div>
 
                         <div class="success-box">
-                            <p><strong>Result:</strong> Found value 3 at index 1 in only <strong>3 comparisons</strong>!</p>
-                            <p>Note: log<sub>2</sub>(16) = 4, so worst case would be 4 comparisons. We found it in 3!</p>
+                            <p><strong>النتيجة:</strong> وُجدت القيمة 3 في الفهرس 1 بـ <strong>3 مقارنات</strong> فقط!</p>
+                            <p>ملاحظة: <span dir="ltr">log<sub>2</sub>(16) = 4</span>، لذا فأسوأ حالة ستكون 4 مقارنات. وجدناها في 3!</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Exercise 2 -->
                 <div class="exercise-box">
-                    <div class="exercise-header">Exercise 2: Binary Search - Element Not Found</div>
+                    <div class="exercise-header">التمرين 2: البحث الثنائي - عنصر غير موجود</div>
 
-                    <p>Perform binary search to find <strong>"Salma"</strong> in this sorted array of names:</p>
+                    <p>نفّذ البحث الثنائي لإيجاد <strong>"Salma"</strong> (سلمى) في هذه المصفوفة المرتبة من الأسماء:</p>
 
                     <div class="array-container">
-                        <table class="summary-table" style="margin: 20px auto;">
+                        <table class="summary-table names-array" style="margin: 20px auto;">
                             <thead>
                                 <tr>
-                                    <th>Index</th>
+                                    <th>الفهرس</th>
                                     <th>0</th>
                                     <th>1</th>
                                     <th>2</th>
@@ -1620,7 +1668,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><strong>Value</strong></td>
+                                    <td><strong>القيمة</strong></td>
                                     <td>Ahmed</td>
                                     <td>Ali</td>
                                     <td>Fatima</td>
@@ -1637,65 +1685,65 @@
                         </table>
                     </div>
 
-                    <p><strong>Note:</strong> "Salma" does NOT exist in this array. What happens?</p>
+                    <p><strong>ملاحظة:</strong> الاسم "Salma" <strong>غير موجود</strong> في هذه المصفوفة. ماذا يحدث؟</p>
 
-                    <button class="solution-toggle" onclick="toggleSolution('solution2')">Show Solution</button>
+                    <button class="solution-toggle" onclick="toggleSolution('solution2')">عرض الحل</button>
 
                     <div id="solution2" class="solution-content">
-                        <h4>Solution:</h4>
+                        <h4>الحل:</h4>
 
                         <table class="summary-table">
                             <thead>
                                 <tr>
-                                    <th>Step</th>
+                                    <th>الخطوة</th>
                                     <th>low</th>
                                     <th>high</th>
                                     <th>mid</th>
-                                    <th>value at mid</th>
-                                    <th>Comparison & Action</th>
+                                    <th>القيمة عند mid</th>
+                                    <th>المقارنة والإجراء</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Initial</td>
+                                    <td>البداية</td>
                                     <td>0</td>
                                     <td>10</td>
                                     <td>5</td>
                                     <td>Lina</td>
-                                    <td>"Salma" > "Lina", go right (low = 6)</td>
+                                    <td><span dir="ltr">"Salma" &gt; "Lina"</span>، اتجه يمينًا (<span dir="ltr">low = 6</span>)</td>
                                 </tr>
                                 <tr>
-                                    <td>After 1st</td>
+                                    <td>بعد الأولى</td>
                                     <td>6</td>
                                     <td>10</td>
                                     <td>8</td>
                                     <td>Saeed</td>
-                                    <td>"Salma" > "Saeed", go right (low = 9)</td>
+                                    <td><span dir="ltr">"Salma" &gt; "Saeed"</span>، اتجه يمينًا (<span dir="ltr">low = 9</span>)</td>
                                 </tr>
                                 <tr>
-                                    <td>After 2nd</td>
+                                    <td>بعد الثانية</td>
                                     <td>9</td>
                                     <td>10</td>
                                     <td>9</td>
                                     <td>Youssef</td>
-                                    <td>"Salma" < "Youssef", go left (high = 8)</td>
+                                    <td><span dir="ltr">"Salma" &lt; "Youssef"</span>، اتجه يسارًا (<span dir="ltr">high = 8</span>)</td>
                                 </tr>
                                 <tr>
-                                    <td>After 3rd</td>
+                                    <td>بعد الثالثة</td>
                                     <td>9</td>
                                     <td>8</td>
                                     <td>-</td>
                                     <td>-</td>
-                                    <td style="color: #ef4444; font-weight: bold;">low > high, NOT FOUND!</td>
+                                    <td style="color: #ef4444; font-weight: bold;"><span dir="ltr">low &gt; high</span>، غير موجود!</td>
                                 </tr>
                             </tbody>
                         </table>
 
                         <div class="warning-box">
-                            <h4>Conclusion</h4>
-                            <p>When <strong>low > high</strong>, it means we've exhausted all possibilities and the element is <strong>NOT in the array</strong>.</p>
-                            <p>The algorithm correctly concludes that "Salma" does not exist after only <strong>3 comparisons</strong>!</p>
-                            <p>Note: log<sub>2</sub>(11) ≈ 3.46, so we need at most 4 comparisons for an array of 11 elements.</p>
+                            <h4>الخلاصة</h4>
+                            <p>عندما يكون <strong><span dir="ltr">low &gt; high</span></strong>، فهذا يعني أننا استنفدنا جميع الاحتمالات وأن العنصر <strong>غير موجود في المصفوفة</strong>.</p>
+                            <p>تستنتج الخوارزمية بشكل صحيح أن "Salma" غير موجودة بعد <strong>3 مقارنات</strong> فقط!</p>
+                            <p>ملاحظة: <span dir="ltr">log<sub>2</sub>(11) ≈ 3.46</span>، لذا نحتاج إلى 4 مقارنات على الأكثر لمصفوفة من 11 عنصرًا.</p>
                         </div>
                     </div>
                 </div>
@@ -1703,55 +1751,55 @@
 
             <!-- Summary -->
             <section id="summary">
-                <h2>Summary</h2>
+                <h2>الملخص</h2>
 
                 <div class="success-box">
-                    <h4>What We Learned</h4>
+                    <h4>ما تعلّمناه</h4>
                     <table class="operation-table">
                         <thead>
                             <tr>
-                                <th>Topic</th>
-                                <th>Key Points</th>
+                                <th>الموضوع</th>
+                                <th>النقاط الرئيسية</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>Arrays</strong></td>
-                                <td>Contiguous memory, fixed size, O(1) access, O(n) insert/delete at beginning</td>
+                                <td><strong>المصفوفات</strong></td>
+                                <td>ذاكرة متجاورة، حجم ثابت، وصول في <span dir="ltr">O(1)</span>، إدراج/حذف في البداية في <span dir="ltr">O(n)</span></td>
                             </tr>
                             <tr>
-                                <td><strong>O(1)</strong></td>
-                                <td>Constant time - fastest possible, independent of data size</td>
+                                <td><strong dir="ltr">O(1)</strong></td>
+                                <td>زمن ثابت - الأسرع على الإطلاق، مستقل عن حجم البيانات</td>
                             </tr>
                             <tr>
-                                <td><strong>Linear Search</strong></td>
-                                <td>Check one by one, works on any array, O(n) time</td>
+                                <td><strong>البحث الخطي</strong></td>
+                                <td>فحص العناصر واحدًا تلو الآخر، يعمل على أي مصفوفة، زمن <span dir="ltr">O(n)</span></td>
                             </tr>
                             <tr>
-                                <td><strong>Binary Search</strong></td>
-                                <td>Divide and conquer, requires sorted data, O(log<sub>2</sub>n) time</td>
+                                <td><strong>البحث الثنائي</strong></td>
+                                <td>فرّق تسُد، يتطلب بيانات مرتبة، زمن <span dir="ltr">O(log<sub>2</sub>n)</span></td>
                             </tr>
                             <tr>
-                                <td><strong>O(log<sub>2</sub>n)</strong></td>
-                                <td>Each step halves the problem. Derived from: n/2<sup>k</sup> = 1 → k = log<sub>2</sub>(n)</td>
+                                <td><strong dir="ltr">O(log<sub>2</sub>n)</strong></td>
+                                <td>كل خطوة تنصّف المسألة. مشتق من: <span dir="ltr">n/2<sup>k</sup> = 1 → k = log<sub>2</sub>(n)</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="formula-box">
-                    <h4>Linear vs Binary Search</h4>
+                    <h4>البحث الخطي مقابل البحث الثنائي</h4>
                     <div class="comparison-visual">
                         <div class="comparison-item" style="border: 3px solid #ef4444;">
-                            <div class="label">Linear Search</div>
+                            <div class="label">البحث الخطي</div>
                             <div class="value" style="color: #ef4444;">O(n)</div>
-                            <p style="font-size: 0.9em; color: #666;">Works on any array</p>
+                            <p style="font-size: 0.9em; color: #666;">يعمل على أي مصفوفة</p>
                         </div>
-                        <div class="vs-circle">VS</div>
+                        <div class="vs-circle">مقابل</div>
                         <div class="comparison-item" style="border: 3px solid #10b981;">
-                            <div class="label">Binary Search</div>
+                            <div class="label">البحث الثنائي</div>
                             <div class="value" style="color: #10b981;">O(log<sub>2</sub>n)</div>
-                            <p style="font-size: 0.9em; color: #666;">Requires sorted array</p>
+                            <p style="font-size: 0.9em; color: #666;">يتطلب مصفوفة مرتبة</p>
                         </div>
                     </div>
                 </div>
@@ -1760,8 +1808,8 @@
         </div>
 
         <footer>
-            <p><strong>Data Structures I</strong></p>
-            <p>Prepared by Dr. Almalawi</p>
+            <p><strong>هياكل البيانات 1</strong></p>
+            <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
         </footer>
     </div>
 
@@ -1772,10 +1820,10 @@
 
             if (solution.classList.contains('show')) {
                 solution.classList.remove('show');
-                button.textContent = 'Show Solution';
+                button.textContent = 'عرض الحل';
             } else {
                 solution.classList.add('show');
-                button.textContent = 'Hide Solution';
+                button.textContent = 'إخفاء الحل';
             }
         }
     </script>
