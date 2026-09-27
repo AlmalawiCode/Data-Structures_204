@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linked List Coding Questions 11-17 &amp; 19</title>
+    <title>أسئلة برمجية في القوائم المرتبطة 11-17 و19</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -195,7 +220,7 @@
             font-weight: bold;
             font-size: 0.9em;
             margin-bottom: 8px;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Haradh', 'Segoe UI', sans-serif;
         }
 
         .head-label {
@@ -406,6 +431,35 @@
             pre { font-size: 0.8em; padding: 15px; }
         }
 
+        /* ---------- RTL (Arabic) overrides ---------- */
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+        .q-difficulty { margin-left: 0; margin-right: 10px; }
+        .solution-content {
+            border-left: none;
+            border-right: 5px solid #27ae60;
+            border-radius: 8px 0 0 8px;
+        }
+        .back-to-top { right: auto; left: 30px; }
+
+        /* Code and linked-list diagrams always stay left-to-right,
+           so node chains and arrows read the same as the code. */
+        pre, code, .method-signature, .ll-visual, svg {
+            direction: ltr;
+        }
+        pre, .method-signature { text-align: left; }
+        code { unicode-bidi: embed; }
+        /* Arabic captions inside the (LTR) diagrams */
+        .ll-visual-label, .visual-desc, .ar-caption {
+            direction: rtl;
+            text-align: right;
+        }
+        .ar-caption { display: inline-block; text-align: center; }
+        .ll-visual-label, .ar-caption, .cycle-label, svg text {
+            font-family: 'Haradh', 'Segoe UI', Tahoma, sans-serif;
+        }
+        .code-header { text-align: right; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -425,40 +479,40 @@
     </style>
 </head>
 <body>
-    <a href="linkedlist-coding-q11-20-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="linkedlist-coding-q11-20.html" class="lang-switch-btn">English</a>
 
 <div class="container">
     <header>
-        <h1>Linked List Coding Questions</h1>
-        <p>Data Structures | Questions 11-17 &amp; 19: Intermediate &amp; Advanced</p>
+        <h1>أسئلة برمجية في القوائم المرتبطة</h1>
+        <p>هياكل البيانات | الأسئلة 11-17 و19: مستوى متوسط ومتقدم</p>
     </header>
 
     <div class="content">
 
         <!-- Navigation Links -->
         <div class="nav-links">
-            <a href="linkedlist-coding-q1-10.html">&larr; Questions 1-10</a>
-            <a href="linkedlist-questions.html">MCQ Questions</a>
-            <a href="linkedlist-tutorial.html">Tutorial</a>
-            <a href="linkedlist-types-tutorial.html">Types Tutorial</a>
+            <a href="linkedlist-coding-q1-10-ar.html">&rarr; الأسئلة 1-10</a>
+            <a href="linkedlist-questions-ar.html">أسئلة الاختيار من متعدد</a>
+            <a href="linkedlist-tutorial-ar.html">الدرس التعليمي</a>
+            <a href="linkedlist-types-tutorial-ar.html">درس أنواع القوائم المرتبطة</a>
         </div>
 
         <!-- ==================== Q11 ==================== -->
         <div class="coding-question" id="q11">
-            <span class="q-number">Q11</span>
-            <span class="q-difficulty medium">Medium</span>
-            <h3 class="q-title">Find the Middle Node</h3>
+            <span class="q-number">السؤال 11</span>
+            <span class="q-difficulty medium">متوسط</span>
+            <h3 class="q-title">إيجاد العقدة الوسطى</h3>
             <p class="q-description">
-                Write a method that finds and returns the middle node of a singly linked list using the
-                <strong>slow and fast pointer technique</strong> (also known as the tortoise and hare approach).
-                If the list has an even number of nodes, return the second middle node.
+                اكتب دالة (method) تجد العقدة (node) الوسطى في قائمة مرتبطة أحادية (singly linked list) وتعيدها، باستخدام
+                <strong>تقنية المؤشر البطيء والمؤشر السريع (slow and fast pointer technique)</strong> (وتُعرف أيضًا بطريقة السلحفاة والأرنب (tortoise and hare)).
+                إذا كان عدد العقد في القائمة زوجيًا، فأعد العقدة الوسطى الثانية.
             </p>
             <div class="method-signature">
                 <span class="type">Node</span> <span class="keyword">findMiddle</span>(<span class="type">Node</span> head)
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">Example: Find the middle node</span>
+                <span class="ll-visual-label">مثال: إيجاد العقدة الوسطى</span>
                 <span class="head-label">head</span>
                 <span class="arrow">&#8595;</span>
                 <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -473,19 +527,19 @@
                 <span class="arrow">&#8594;</span>
                 <span class="null-box">null</span>
                 <br><br>
-                <span style="color: #e74c3c; font-weight: bold;">&#9650; Middle Node (returned)</span>
+                <span class="ar-caption" style="color: #e74c3c; font-weight: bold;">&#9650; العقدة الوسطى (القيمة المُعادة)</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution('sol11')">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution('sol11')">عرض الحل</button>
             <div class="solution-content" id="sol11">
-                <h4>Solution: Slow &amp; Fast Pointer Technique</h4>
+                <h4>الحل: تقنية المؤشر البطيء والمؤشر السريع</h4>
                 <p class="solution-explanation">
-                    Use two pointers: <strong>slow</strong> moves one step at a time, and <strong>fast</strong> moves
-                    two steps at a time. When the fast pointer reaches the end of the list (or null),
-                    the slow pointer will be exactly at the middle node. This works because fast traverses
-                    at double the speed, so when it finishes, slow has covered exactly half the distance.
+                    استخدم مؤشرين (pointers): المؤشر <strong>slow</strong> يتقدم خطوة واحدة في كل مرة، والمؤشر <strong>fast</strong> يتقدم
+                    خطوتين في كل مرة. عندما يصل المؤشر السريع إلى نهاية القائمة (أو إلى null)،
+                    يكون المؤشر البطيء عند العقدة الوسطى تمامًا. تنجح هذه الطريقة لأن fast يجتاز القائمة
+                    بضعف السرعة، فعندما ينتهي يكون slow قد قطع نصف المسافة بالضبط.
                 </p>
-                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">findMiddle</span>(<span class="type">Node</span> head) {
+                <div class="code-container"><div class="code-header">شيفرة الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">findMiddle</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> slow = head;
     <span class="type">Node</span> fast = head;
     <span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) {
@@ -495,35 +549,35 @@
     <span class="keyword">return</span> slow;
 }</pre></div>
                 <p class="solution-explanation">
-                    <strong>Trace through the example [1, 2, 3, 4, 5]:</strong><br>
-                    Step 0: slow = 1, fast = 1<br>
-                    Step 1: slow = 2, fast = 3<br>
-                    Step 2: slow = 3, fast = 5<br>
-                    Now fast.next == null, so loop ends. slow points to node 3 (the middle).
+                    <strong>تتبّع المثال [1, 2, 3, 4, 5]:</strong><br>
+                    الخطوة 0: <code>slow = 1, fast = 1</code><br>
+                    الخطوة 1: <code>slow = 2, fast = 3</code><br>
+                    الخطوة 2: <code>slow = 3, fast = 5</code><br>
+                    الآن <code>fast.next == null</code>، لذا تنتهي الحلقة. يشير slow إلى العقدة 3 (العقدة الوسطى).
                 </p>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) - single pass through the list<br>
-                    <strong>Space Complexity:</strong> O(1) - only two pointer variables used
+                    <strong>التعقيد الزمني (Time Complexity):</strong> O(n) - مرور واحد على القائمة<br>
+                    <strong>التعقيد المكاني (Space Complexity):</strong> O(1) - نستخدم متغيرَي مؤشر فقط
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q12 ==================== -->
         <div class="coding-question" id="q12">
-            <span class="q-number">Q12</span>
-            <span class="q-difficulty medium">Medium</span>
-            <h3 class="q-title">Detect a Cycle (Floyd's Algorithm)</h3>
+            <span class="q-number">السؤال 12</span>
+            <span class="q-difficulty medium">متوسط</span>
+            <h3 class="q-title">اكتشاف الدورة (خوارزمية فلويد)</h3>
             <p class="q-description">
-                Write a method that detects whether a singly linked list contains a cycle using
-                <strong>Floyd's Cycle Detection Algorithm</strong>. A cycle exists if a node's next pointer
-                points back to a previous node in the list, creating an infinite loop.
+                اكتب دالة تكتشف ما إذا كانت القائمة المرتبطة الأحادية تحتوي على دورة (cycle) باستخدام
+                <strong>خوارزمية فلويد لاكتشاف الدورات (Floyd's Cycle Detection Algorithm)</strong>. توجد الدورة إذا كان المؤشر next لإحدى العقد
+                يشير عائدًا إلى عقدة سابقة في القائمة، مما يُنشئ حلقة لا نهائية.
             </p>
             <div class="method-signature">
                 <span class="keyword">boolean</span> <span class="keyword">hasCycle</span>(<span class="type">Node</span> head)
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">Example: Linked list with a cycle (node 4 points back to node 3)</span>
+                <span class="ll-visual-label">مثال: قائمة مرتبطة فيها دورة (العقدة 4 تشير عائدةً إلى العقدة 3)</span>
                 <span class="head-label">head</span>
                 <span class="arrow">&#8595;</span>
                 <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -534,19 +588,19 @@
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
                 <span class="cycle-arrow">&#8629;</span>
-                <span class="cycle-label">back to node 3</span>
+                <span class="cycle-label">عودة إلى العقدة 3</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution('sol12')">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution('sol12')">عرض الحل</button>
             <div class="solution-content" id="sol12">
-                <h4>Solution: Floyd's Cycle Detection (Tortoise &amp; Hare)</h4>
+                <h4>الحل: خوارزمية فلويد لاكتشاف الدورات (السلحفاة والأرنب)</h4>
                 <p class="solution-explanation">
-                    Use two pointers moving at different speeds. The <strong>slow</strong> pointer moves one node at a time,
-                    while the <strong>fast</strong> pointer moves two nodes at a time. If there is a cycle, the fast pointer
-                    will eventually "lap" the slow pointer and they will meet at the same node. If there is no cycle,
-                    the fast pointer will reach null.
+                    استخدم مؤشرين يتحركان بسرعتين مختلفتين. المؤشر <strong>slow</strong> يتقدم عقدة واحدة في كل مرة،
+                    بينما يتقدم المؤشر <strong>fast</strong> عقدتين في كل مرة. إذا وُجدت دورة، فإن المؤشر السريع
+                    سيلحق بالمؤشر البطيء في النهاية "ويسبقه بلفة" فيلتقيان عند العقدة نفسها. وإذا لم توجد دورة،
+                    فسيصل المؤشر السريع إلى null.
                 </p>
-                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="keyword">hasCycle</span>(<span class="type">Node</span> head) {
+                <div class="code-container"><div class="code-header">شيفرة الحل</div><pre><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="keyword">hasCycle</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> slow = head, fast = head;
     <span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) {
         slow = slow.next;
@@ -556,33 +610,33 @@
     <span class="keyword">return</span> <span class="keyword">false</span>;
 }</pre></div>
                 <p class="solution-explanation">
-                    <strong>Why it works:</strong> Think of two runners on a circular track. The faster runner will
-                    always catch up to the slower one. In each iteration, the gap between them decreases by one node.
-                    Eventually they must meet if a cycle exists. If there is no cycle, the fast pointer safely reaches
-                    null and we return false.
+                    <strong>لماذا تنجح؟</strong> تخيّل عدّاءَين على مضمار دائري؛ العدّاء الأسرع سيلحق
+                    دائمًا بالأبطأ. في كل تكرار تقل المسافة بينهما بمقدار عقدة واحدة،
+                    فلا بد أن يلتقيا في النهاية إذا وُجدت دورة. وإذا لم توجد دورة، يصل المؤشر السريع بأمان إلى
+                    null ونعيد false.
                 </p>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) - in the worst case, fast traverses the cycle at most twice<br>
-                    <strong>Space Complexity:</strong> O(1) - only two pointer variables used
+                    <strong>التعقيد الزمني:</strong> O(n) - في أسوأ حالة (worst case) يجتاز fast الدورة مرتين على الأكثر<br>
+                    <strong>التعقيد المكاني (Space Complexity):</strong> O(1) - نستخدم متغيرَي مؤشر فقط
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q13 ==================== -->
         <div class="coding-question" id="q13">
-            <span class="q-number">Q13</span>
-            <span class="q-difficulty medium">Medium</span>
-            <h3 class="q-title">Find the Nth Node from the End</h3>
+            <span class="q-number">السؤال 13</span>
+            <span class="q-difficulty medium">متوسط</span>
+            <h3 class="q-title">إيجاد العقدة رقم N من النهاية</h3>
             <p class="q-description">
-                Write a method that returns the Nth node from the end of a singly linked list in a
-                <strong>single pass</strong>. For example, if n = 2, return the 2nd node from the end.
+                اكتب دالة تعيد العقدة رقم N من نهاية قائمة مرتبطة أحادية في
+                <strong>مرور واحد (single pass)</strong>. على سبيل المثال، إذا كانت <code>n = 2</code>، فأعد العقدة الثانية من النهاية.
             </p>
             <div class="method-signature">
                 <span class="type">Node</span> <span class="keyword">nthFromEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> n)
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">Example: Find the 2nd node from the end (n = 2)</span>
+                <span class="ll-visual-label">مثال: إيجاد العقدة الثانية من النهاية (n = 2)</span>
                 <span class="head-label">head</span>
                 <span class="arrow">&#8595;</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
@@ -597,19 +651,19 @@
                 <span class="arrow">&#8594;</span>
                 <span class="null-box">null</span>
                 <br><br>
-                <span style="color: #e74c3c; font-weight: bold;">&#9650; 2nd from end (Answer: 40)</span>
+                <span class="ar-caption" style="color: #e74c3c; font-weight: bold;">&#9650; الثانية من النهاية (الإجابة: 40)</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution('sol13')">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution('sol13')">عرض الحل</button>
             <div class="solution-content" id="sol13">
-                <h4>Solution: Two-Pointer Gap Technique</h4>
+                <h4>الحل: تقنية المؤشرين مع فجوة ثابتة</h4>
                 <p class="solution-explanation">
-                    Use two pointers with a gap of <strong>n</strong> nodes between them. First, move the <strong>fast</strong>
-                    pointer n steps ahead. Then move both pointers one step at a time. When fast reaches null,
-                    slow will be at the nth node from the end. The key insight is that the gap between the two
-                    pointers is always exactly n nodes.
+                    استخدم مؤشرين بينهما فجوة مقدارها <strong>n</strong> من العقد. أولًا، حرّك المؤشر <strong>fast</strong>
+                    n خطوات إلى الأمام. ثم حرّك المؤشرين معًا خطوة واحدة في كل مرة. عندما يصل fast إلى null،
+                    يكون slow عند العقدة رقم n من النهاية. الفكرة الأساسية أن الفجوة بين
+                    المؤشرين تبقى دائمًا n عقدة بالضبط.
                 </p>
-                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">nthFromEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> n) {
+                <div class="code-container"><div class="code-header">شيفرة الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">nthFromEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> n) {
     <span class="type">Node</span> fast = head;
     <span class="type">Node</span> slow = head;
 
@@ -628,35 +682,35 @@
     <span class="keyword">return</span> slow;
 }</pre></div>
                 <p class="solution-explanation">
-                    <strong>Trace for n = 2 on [10, 20, 30, 40, 50]:</strong><br>
-                    After moving fast 2 steps: fast = 30, slow = 10<br>
-                    Step 1: fast = 40, slow = 20<br>
-                    Step 2: fast = 50, slow = 30<br>
-                    Step 3: fast = null, slow = 40<br>
-                    Result: slow points to 40, which is the 2nd node from the end.
+                    <strong>التتبّع عند n = 2 على القائمة [10, 20, 30, 40, 50]:</strong><br>
+                    بعد تحريك fast خطوتين: <code>fast = 30, slow = 10</code><br>
+                    الخطوة 1: <code>fast = 40, slow = 20</code><br>
+                    الخطوة 2: <code>fast = 50, slow = 30</code><br>
+                    الخطوة 3: <code>fast = null, slow = 40</code><br>
+                    النتيجة: يشير slow إلى 40، وهي العقدة الثانية من النهاية.
                 </p>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) - single pass through the list<br>
-                    <strong>Space Complexity:</strong> O(1) - only two pointer variables used
+                    <strong>التعقيد الزمني (Time Complexity):</strong> O(n) - مرور واحد على القائمة<br>
+                    <strong>التعقيد المكاني (Space Complexity):</strong> O(1) - نستخدم متغيرَي مؤشر فقط
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q14 ==================== -->
         <div class="coding-question" id="q14">
-            <span class="q-number">Q14</span>
-            <span class="q-difficulty medium">Medium</span>
-            <h3 class="q-title">Remove Duplicates from Sorted List</h3>
+            <span class="q-number">السؤال 14</span>
+            <span class="q-difficulty medium">متوسط</span>
+            <h3 class="q-title">حذف التكرارات من قائمة مرتبة</h3>
             <p class="q-description">
-                Write a method that removes all duplicate values from a <strong>sorted</strong> singly linked list,
-                so that each element appears only once. The list should remain sorted after removal.
+                اكتب دالة تحذف جميع القيم المكررة (duplicates) من قائمة مرتبطة أحادية <strong>مرتبة (sorted)</strong>،
+                بحيث يظهر كل عنصر مرة واحدة فقط. ويجب أن تبقى القائمة مرتبة بعد الحذف.
             </p>
             <div class="method-signature">
                 <span class="type">Node</span> <span class="keyword">removeDuplicates</span>(<span class="type">Node</span> head)
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">Before: Sorted list with duplicates</span>
+                <span class="ll-visual-label">قبل: قائمة مرتبة تحتوي على تكرارات</span>
                 <span class="head-label">head</span>
                 <span class="arrow">&#8595;</span>
                 <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -673,7 +727,7 @@
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">After: Duplicates removed</span>
+                <span class="ll-visual-label">بعد: حذف التكرارات</span>
                 <span class="head-label">head</span>
                 <span class="arrow">&#8595;</span>
                 <span class="node green"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -685,15 +739,15 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution('sol14')">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution('sol14')">عرض الحل</button>
             <div class="solution-content" id="sol14">
-                <h4>Solution: Skip Duplicate Nodes</h4>
+                <h4>الحل: تخطّي العقد المكررة</h4>
                 <p class="solution-explanation">
-                    Since the list is sorted, all duplicates are adjacent. Traverse the list and for each node,
-                    compare its value with the next node's value. If they are equal, skip the next node by updating
-                    the current node's next pointer. Otherwise, move to the next node.
+                    بما أن القائمة مرتبة، فإن جميع التكرارات تكون متجاورة. اجتز (traverse) القائمة، ولكل عقدة
+                    قارن قيمتها بقيمة العقدة التالية. إذا تساوتا، فتخطَّ العقدة التالية بتحديث
+                    المؤشر next للعقدة الحالية. وإلا فانتقل إلى العقدة التالية.
                 </p>
-                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">removeDuplicates</span>(<span class="type">Node</span> head) {
+                <div class="code-container"><div class="code-header">شيفرة الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">removeDuplicates</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current != <span class="keyword">null</span> &amp;&amp; current.next != <span class="keyword">null</span>) {
         <span class="keyword">if</span> (current.data == current.next.data) {
@@ -707,32 +761,32 @@
     <span class="keyword">return</span> head;
 }</pre></div>
                 <p class="solution-explanation">
-                    <strong>Key insight:</strong> When we find a duplicate, we do NOT advance the current pointer.
-                    This is because there may be more than two consecutive duplicates (e.g., 1 &rarr; 1 &rarr; 1).
-                    We only advance when current.data differs from current.next.data.
+                    <strong>الفكرة الأساسية:</strong> عندما نجد تكرارًا، <strong>لا</strong> نُقدّم المؤشر current.
+                    والسبب أنه قد يوجد أكثر من تكرارين متتاليين (مثل <span dir="ltr">1 &rarr; 1 &rarr; 1</span>).
+                    ولا نتقدم إلا عندما تختلف <code>current.data</code> عن <code>current.next.data</code>.
                 </p>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) - single pass through the list<br>
-                    <strong>Space Complexity:</strong> O(1) - in-place modification, no extra space
+                    <strong>التعقيد الزمني (Time Complexity):</strong> O(n) - مرور واحد على القائمة<br>
+                    <strong>التعقيد المكاني:</strong> O(1) - تعديل في المكان دون مساحة إضافية
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q15 ==================== -->
         <div class="coding-question" id="q15">
-            <span class="q-number">Q15</span>
-            <span class="q-difficulty medium">Medium</span>
-            <h3 class="q-title">Merge Two Sorted Lists</h3>
+            <span class="q-number">السؤال 15</span>
+            <span class="q-difficulty medium">متوسط</span>
+            <h3 class="q-title">دمج قائمتين مرتبتين</h3>
             <p class="q-description">
-                Write a method that merges two sorted singly linked lists into a single sorted linked list.
-                The merged list should be made by splicing together the nodes of the two input lists.
+                اكتب دالة تدمج (merge) قائمتين مرتبطتين أحاديتين مرتبتين في قائمة مرتبطة واحدة مرتبة.
+                ويجب أن تُبنى القائمة المدمجة بوصل عقد القائمتين المُدخلتين معًا.
             </p>
             <div class="method-signature">
                 <span class="type">Node</span> <span class="keyword">mergeSorted</span>(<span class="type">Node</span> l1, <span class="type">Node</span> l2)
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">List 1 (sorted):</span>
+                <span class="ll-visual-label">القائمة 1 (مرتبة):</span>
                 <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
@@ -743,7 +797,7 @@
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">List 2 (sorted):</span>
+                <span class="ll-visual-label">القائمة 2 (مرتبة):</span>
                 <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
@@ -754,7 +808,7 @@
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">Merged result (sorted):</span>
+                <span class="ll-visual-label">النتيجة بعد الدمج (مرتبة):</span>
                 <span class="node green"><span class="node-data">1</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node green"><span class="node-data">2</span><span class="node-next">next</span></span>
@@ -770,16 +824,16 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution('sol15')">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution('sol15')">عرض الحل</button>
             <div class="solution-content" id="sol15">
-                <h4>Solution: Dummy Node Technique</h4>
+                <h4>الحل: تقنية العقدة الوهمية</h4>
                 <p class="solution-explanation">
-                    Create a <strong>dummy node</strong> to simplify edge cases (avoids special handling for the head).
-                    Use a tail pointer to build the merged list. Compare the heads of both lists, attach the smaller
-                    one to tail, and advance that list's pointer. Continue until one list is exhausted, then attach
-                    the remaining list.
+                    أنشئ <strong>عقدة وهمية (dummy node)</strong> لتبسيط الحالات الطرفية (edge cases) (فهي تُغنينا عن معالجة خاصة لرأس القائمة (head)).
+                    استخدم مؤشر ذيل (tail) لبناء القائمة المدمجة. قارن بين رأسَي القائمتين، وألحق الأصغر منهما
+                    بالذيل، ثم قدّم مؤشر تلك القائمة. استمر حتى تنفد إحدى القائمتين، ثم ألحق
+                    ما تبقّى من القائمة الأخرى.
                 </p>
-                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">mergeSorted</span>(<span class="type">Node</span> l1, <span class="type">Node</span> l2) {
+                <div class="code-container"><div class="code-header">شيفرة الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">mergeSorted</span>(<span class="type">Node</span> l1, <span class="type">Node</span> l2) {
     <span class="comment">// Dummy node acts as a placeholder for the result head</span>
     <span class="type">Node</span> dummy = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">0</span>);
     <span class="type">Node</span> tail = dummy;
@@ -801,32 +855,32 @@
     <span class="keyword">return</span> dummy.next;
 }</pre></div>
                 <p class="solution-explanation">
-                    <strong>Why use a dummy node?</strong> Without it, you need extra logic to determine which node
-                    becomes the head of the merged list. The dummy node provides a consistent starting point.
-                    We return dummy.next to skip the placeholder and get the actual merged list head.
+                    <strong>لماذا نستخدم عقدة وهمية؟</strong> بدونها تحتاج إلى منطق إضافي لتحديد العقدة التي
+                    ستصبح رأس القائمة المدمجة. توفّر العقدة الوهمية نقطة بداية ثابتة.
+                    ونعيد <code>dummy.next</code> لتخطّي العقدة الوهمية والحصول على الرأس الفعلي للقائمة المدمجة.
                 </p>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n + m) - where n and m are the lengths of the two lists<br>
-                    <strong>Space Complexity:</strong> O(1) - we reuse existing nodes, no new nodes created
+                    <strong>التعقيد الزمني:</strong> O(n + m) - حيث n و m طولا القائمتين<br>
+                    <strong>التعقيد المكاني:</strong> O(1) - نعيد استخدام العقد الموجودة ولا ننشئ عقدًا جديدة
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q16 ==================== -->
         <div class="coding-question" id="q16">
-            <span class="q-number">Q16</span>
-            <span class="q-difficulty medium">Medium</span>
-            <h3 class="q-title">Check if a Linked List is a Palindrome</h3>
+            <span class="q-number">السؤال 16</span>
+            <span class="q-difficulty medium">متوسط</span>
+            <h3 class="q-title">التحقق مما إذا كانت القائمة المرتبطة متناظرة (Palindrome)</h3>
             <p class="q-description">
-                Write a method that checks whether a singly linked list reads the same forward and backward
-                (i.e., it is a <strong>palindrome</strong>). Solve it in O(n) time and O(1) space.
+                اكتب دالة تتحقق مما إذا كانت القائمة المرتبطة الأحادية تُقرأ بالشكل نفسه من الأمام ومن الخلف
+                (أي أنها <strong>متناظرة (palindrome)</strong>). حُلّها بزمن O(n) ومساحة O(1).
             </p>
             <div class="method-signature">
                 <span class="keyword">boolean</span> <span class="keyword">isPalindrome</span>(<span class="type">Node</span> head)
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">Example: Palindrome list (reads same forwards and backwards)</span>
+                <span class="ll-visual-label">مثال: قائمة متناظرة (تُقرأ بالشكل نفسه من الأمام ومن الخلف)</span>
                 <span class="head-label">head</span>
                 <span class="arrow">&#8595;</span>
                 <span class="node green"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -841,19 +895,19 @@
                 <span class="arrow">&#8594;</span>
                 <span class="null-box">null</span>
                 <br><br>
-                <span style="color: #27ae60; font-weight: bold;">Palindrome: 1 &rarr; 2 &rarr; 3 &rarr; 2 &rarr; 1</span>
+                <span style="color: #27ae60; font-weight: bold;"><span class="ar-caption">متناظرة:</span> 1 &rarr; 2 &rarr; 3 &rarr; 2 &rarr; 1</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution('sol16')">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution('sol16')">عرض الحل</button>
             <div class="solution-content" id="sol16">
-                <h4>Solution: Find Middle, Reverse Second Half, Compare</h4>
+                <h4>الحل: إيجاد المنتصف، ثم عكس النصف الثاني، ثم المقارنة</h4>
                 <p class="solution-explanation">
-                    This solution combines three linked list techniques:<br>
-                    <strong>1.</strong> Find the middle node using slow/fast pointers.<br>
-                    <strong>2.</strong> Reverse the second half of the list in-place.<br>
-                    <strong>3.</strong> Compare the first half with the reversed second half node by node.
+                    يجمع هذا الحل بين ثلاث تقنيات للقوائم المرتبطة:<br>
+                    <strong>1.</strong> إيجاد العقدة الوسطى باستخدام المؤشرين slow/fast.<br>
+                    <strong>2.</strong> عكس النصف الثاني من القائمة في مكانه (in-place).<br>
+                    <strong>3.</strong> مقارنة النصف الأول بالنصف الثاني المعكوس عقدةً بعقدة.
                 </p>
-                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="keyword">isPalindrome</span>(<span class="type">Node</span> head) {
+                <div class="code-container"><div class="code-header">شيفرة الحل</div><pre><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="keyword">isPalindrome</span>(<span class="type">Node</span> head) {
     <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;
 
     <span class="comment">// Step 1: Find the middle</span>
@@ -885,34 +939,34 @@
     <span class="keyword">return</span> <span class="keyword">true</span>;
 }</pre></div>
                 <p class="solution-explanation">
-                    <strong>For the list [1, 2, 3, 2, 1]:</strong><br>
-                    Middle = node 3. Reversed second half = [1, 2, 3].<br>
-                    Compare: 1==1, 2==2, 3==3 &mdash; all match, so it is a palindrome.<br>
-                    Note: This modifies the original list. In production code, you may want to restore
-                    the list by reversing the second half again after comparison.
+                    <strong>للقائمة [1, 2, 3, 2, 1]:</strong><br>
+                    المنتصف = العقدة 3. النصف الثاني بعد العكس = [1, 2, 3].<br>
+                    المقارنة: <span dir="ltr">1==1, 2==2, 3==3</span> &mdash; جميعها متطابقة، إذن القائمة متناظرة.<br>
+                    ملاحظة: هذا الحل يعدّل القائمة الأصلية. في الشيفرة الإنتاجية قد ترغب في استعادة
+                    القائمة بعكس النصف الثاني مرة أخرى بعد المقارنة.
                 </p>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) - three passes (find middle, reverse, compare)<br>
-                    <strong>Space Complexity:</strong> O(1) - reversal is done in-place
+                    <strong>التعقيد الزمني:</strong> O(n) - ثلاثة مرورات (إيجاد المنتصف، العكس، المقارنة)<br>
+                    <strong>التعقيد المكاني:</strong> O(1) - يتم العكس في المكان
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q17 ==================== -->
         <div class="coding-question" id="q17">
-            <span class="q-number">Q17</span>
-            <span class="q-difficulty hard">Hard</span>
-            <h3 class="q-title">Swap Nodes in Pairs</h3>
+            <span class="q-number">السؤال 17</span>
+            <span class="q-difficulty hard">صعب</span>
+            <h3 class="q-title">تبديل العقد في أزواج</h3>
             <p class="q-description">
-                Write a method that swaps every two adjacent nodes in a singly linked list and returns the
-                new head. You must swap the <strong>actual nodes</strong>, not just their values.
+                اكتب دالة تبدّل كل عقدتين متجاورتين في قائمة مرتبطة أحادية، وتعيد
+                الرأس الجديد. يجب أن تبدّل <strong>العقد نفسها</strong>، لا قيمها فقط.
             </p>
             <div class="method-signature">
                 <span class="type">Node</span> <span class="keyword">swapPairs</span>(<span class="type">Node</span> head)
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">Before: Original list</span>
+                <span class="ll-visual-label">قبل: القائمة الأصلية</span>
                 <span class="head-label">head</span>
                 <span class="arrow">&#8595;</span>
                 <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
@@ -927,7 +981,7 @@
             </div>
 
             <div class="ll-visual">
-                <span class="ll-visual-label">After: Nodes swapped in pairs</span>
+                <span class="ll-visual-label">بعد: تبديل العقد في أزواج</span>
                 <span class="head-label">head</span>
                 <span class="arrow">&#8595;</span>
                 <span class="node green"><span class="node-data">2</span><span class="node-next">next</span></span>
@@ -941,16 +995,16 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution('sol17')">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution('sol17')">عرض الحل</button>
             <div class="solution-content" id="sol17">
-                <h4>Solution: Iterative Pair Swapping with Dummy Node</h4>
+                <h4>الحل: تبديل الأزواج تكراريًا باستخدام عقدة وهمية</h4>
                 <p class="solution-explanation">
-                    Use a <strong>dummy node</strong> before the head to simplify pointer manipulation.
-                    For each pair of nodes (first and second), rearrange the pointers so that
-                    prev &rarr; second &rarr; first &rarr; rest. Then advance prev to the first node
-                    (which is now after second) and continue with the next pair.
+                    استخدم <strong>عقدة وهمية</strong> قبل الرأس لتبسيط التعامل مع المؤشرات.
+                    لكل زوج من العقد (first و second)، أعد ترتيب المؤشرات بحيث يصبح
+                    <span dir="ltr">prev &rarr; second &rarr; first &rarr; rest</span>. ثم قدّم prev إلى العقدة first
+                    (التي أصبحت الآن بعد second) وتابع مع الزوج التالي.
                 </p>
-                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">swapPairs</span>(<span class="type">Node</span> head) {
+                <div class="code-container"><div class="code-header">شيفرة الحل</div><pre><span class="keyword">public</span> <span class="type">Node</span> <span class="keyword">swapPairs</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> dummy = <span class="keyword">new</span> <span class="type">Node</span>(<span class="number">0</span>);
     dummy.next = head;
     <span class="type">Node</span> prev = dummy;
@@ -971,37 +1025,37 @@
     <span class="keyword">return</span> dummy.next;
 }</pre></div>
                 <p class="solution-explanation">
-                    <strong>Pointer rearrangement for each pair:</strong><br>
-                    Given: prev &rarr; first &rarr; second &rarr; rest<br>
-                    Step 1: first.next = rest (first now points past second)<br>
-                    Step 2: second.next = first (second now points to first)<br>
-                    Step 3: prev.next = second (prev now points to second)<br>
-                    Result: prev &rarr; second &rarr; first &rarr; rest
+                    <strong>إعادة ترتيب المؤشرات لكل زوج:</strong><br>
+                    المُعطى: <span dir="ltr">prev &rarr; first &rarr; second &rarr; rest</span><br>
+                    الخطوة 1: <code>first.next = rest</code> (أصبح first يشير إلى ما بعد second)<br>
+                    الخطوة 2: <code>second.next = first</code> (أصبح second يشير إلى first)<br>
+                    الخطوة 3: <code>prev.next = second</code> (أصبح prev يشير إلى second)<br>
+                    النتيجة: <span dir="ltr">prev &rarr; second &rarr; first &rarr; rest</span>
                 </p>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) - we visit each node exactly once<br>
-                    <strong>Space Complexity:</strong> O(1) - only pointer variables, no extra data structures
+                    <strong>التعقيد الزمني:</strong> O(n) - نزور كل عقدة مرة واحدة بالضبط<br>
+                    <strong>التعقيد المكاني:</strong> O(1) - متغيرات مؤشرات فقط، دون هياكل بيانات إضافية
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q19 ==================== -->
         <div class="coding-question" id="q19">
-            <span class="q-number">Q19</span>
-            <span class="q-difficulty hard">Hard</span>
-            <h3 class="q-title">Convert Singly Linked List to Doubly Linked List</h3>
+            <span class="q-number">السؤال 19</span>
+            <span class="q-difficulty hard">صعب</span>
+            <h3 class="q-title">تحويل قائمة مرتبطة أحادية إلى قائمة مرتبطة مزدوجة</h3>
             <p class="q-description">
-                Assuming you have a <strong>Singly Linked List</strong> with a pointer <code>head</code>,
-                write a method that converts it into a <strong>Doubly Linked List</strong> with a pointer <code>dHead</code>.
-                Each node in the new list should have both <strong>next</strong> and <strong>prev</strong> pointers.
-                Use a separate <code>DNode</code> class with data, next, and prev fields.
+                بافتراض أن لديك <strong>قائمة مرتبطة أحادية (Singly Linked List)</strong> بمؤشر <code>head</code>،
+                اكتب دالة تحوّلها إلى <strong>قائمة مرتبطة مزدوجة (Doubly Linked List)</strong> بمؤشر <code>dHead</code>.
+                يجب أن تحتوي كل عقدة في القائمة الجديدة على المؤشرين <strong>next</strong> و<strong>prev</strong> معًا.
+                استخدم صنفًا (class) مستقلًا باسم <code>DNode</code> يحتوي على الحقول data و next و prev.
             </p>
             <div class="method-signature">
                 <span class="type">DNode</span> <span class="keyword">convertToDoubly</span>(<span class="type">Node</span> head)
             </div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Assuming you have this SLL with pointer <code>head</code>:</div>
+                <div class="visual-desc">بافتراض أن لديك هذه القائمة الأحادية (SLL) بالمؤشر <code>head</code>:</div>
                 <span class="head-label">head</span>
                 <span class="node"><span class="node-data">A</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
@@ -1013,7 +1067,7 @@
             </div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Convert it to this DLL with pointer <code>dHead</code>:</div>
+                <div class="visual-desc">حوّلها إلى هذه القائمة المزدوجة (DLL) بالمؤشر <code>dHead</code>:</div>
                 <div style="text-align: center; overflow-x: auto; padding: 10px 0;">
                     <svg width="680" height="220" viewBox="0 0 680 220" style="max-width: 100%;">
                         <defs>
@@ -1058,8 +1112,8 @@
                         <!-- Bidirectional arrows A <-> B -->
                         <line x1="200" y1="47" x2="270" y2="47" stroke="#4caf50" stroke-width="3" marker-end="url(#ah-green19)"/>
                         <line x1="270" y1="128" x2="200" y2="128" stroke="#f44336" stroke-width="3" marker-end="url(#ah-red19)"/>
-                        <text x="235" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
-                        <text x="235" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+                        <text x="235" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">للأمام</text>
+                        <text x="235" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">للخلف</text>
 
                         <!-- Node B -->
                         <g transform="translate(280, 30)">
@@ -1074,8 +1128,8 @@
                         <!-- Bidirectional arrows B <-> C -->
                         <line x1="360" y1="47" x2="430" y2="47" stroke="#4caf50" stroke-width="3" marker-end="url(#ah-green19)"/>
                         <line x1="430" y1="128" x2="360" y2="128" stroke="#f44336" stroke-width="3" marker-end="url(#ah-red19)"/>
-                        <text x="395" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">forward</text>
-                        <text x="395" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">backward</text>
+                        <text x="395" y="38" text-anchor="middle" fill="#4caf50" font-weight="bold" font-size="9">للأمام</text>
+                        <text x="395" y="150" text-anchor="middle" fill="#f44336" font-weight="bold" font-size="9">للخلف</text>
 
                         <!-- Node C -->
                         <g transform="translate(440, 30)">
@@ -1105,25 +1159,25 @@
 
                         <!-- Legend -->
                         <rect x="200" y="185" width="12" height="12" fill="#4caf50" rx="2"/>
-                        <text x="217" y="195" fill="#333" font-size="10">Next</text>
+                        <text x="217" y="195" fill="#333" font-size="10">التالي</text>
                         <rect x="260" y="185" width="12" height="12" fill="#667eea" rx="2"/>
-                        <text x="277" y="195" fill="#333" font-size="10">Data</text>
+                        <text x="277" y="195" fill="#333" font-size="10">البيانات</text>
                         <rect x="320" y="185" width="12" height="12" fill="#f44336" rx="2"/>
-                        <text x="337" y="195" fill="#333" font-size="10">Prev</text>
+                        <text x="337" y="195" fill="#333" font-size="10">السابق</text>
                     </svg>
                 </div>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution('sol19')">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution('sol19')">عرض الحل</button>
             <div class="solution-content" id="sol19">
-                <h4>Solution: Create New DNodes with Both Pointers</h4>
+                <h4>الحل: إنشاء عقد DNode جديدة بكلا المؤشرين</h4>
                 <p class="solution-explanation">
-                    Traverse the singly linked list. For each node, create a new <code>DNode</code> with the same data.
-                    Set the new node's <strong>prev</strong> pointer to the previously created DNode, and set the
-                    previous DNode's <strong>next</strong> pointer to the new node. Keep track of the head of
-                    the doubly linked list to return it.
+                    اجتز القائمة المرتبطة الأحادية. لكل عقدة، أنشئ عقدة <code>DNode</code> جديدة بالبيانات نفسها.
+                    اجعل المؤشر <strong>prev</strong> للعقدة الجديدة يشير إلى عقدة DNode التي أُنشئت قبلها، واجعل
+                    المؤشر <strong>next</strong> لعقدة DNode السابقة يشير إلى العقدة الجديدة. واحتفظ برأس
+                    القائمة المرتبطة المزدوجة لإعادته.
                 </p>
-                <div class="code-container"><div class="code-header">Solution Code</div><pre><span class="comment">// Doubly linked list node class</span>
+                <div class="code-container"><div class="code-header">شيفرة الحل</div><pre><span class="comment">// Doubly linked list node class</span>
 <span class="keyword">class</span> <span class="type">DNode</span> {
     <span class="keyword">int</span> data;
     <span class="type">DNode</span> next;
@@ -1160,15 +1214,15 @@
     <span class="keyword">return</span> dHead;
 }</pre></div>
                 <p class="solution-explanation">
-                    <strong>Step-by-step for [A, B, C]:</strong><br>
-                    1. Create DNode(A), set as dHead. dCurrent = DNode(A).<br>
-                    2. Create DNode(B). Set DNode(A).next = DNode(B), DNode(B).prev = DNode(A).<br>
-                    3. Create DNode(C). Set DNode(B).next = DNode(C), DNode(C).prev = DNode(B).<br>
-                    Result: null &larr; A &harr; B &harr; C &rarr; null
+                    <strong>خطوة بخطوة للقائمة [A, B, C]:</strong><br>
+                    1. أنشئ <code>DNode(A)</code> واجعلها dHead. <code>dCurrent = DNode(A)</code>.<br>
+                    2. أنشئ <code>DNode(B)</code>. اجعل <code>DNode(A).next = DNode(B)</code>، و<code>DNode(B).prev = DNode(A)</code>.<br>
+                    3. أنشئ <code>DNode(C)</code>. اجعل <code>DNode(B).next = DNode(C)</code>، و<code>DNode(C).prev = DNode(B)</code>.<br>
+                    النتيجة: <span dir="ltr">null &larr; A &harr; B &harr; C &rarr; null</span>
                 </p>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) - single traversal of the singly linked list<br>
-                    <strong>Space Complexity:</strong> O(n) - creating n new DNode objects
+                    <strong>التعقيد الزمني:</strong> O(n) - اجتياز واحد للقائمة المرتبطة الأحادية<br>
+                    <strong>التعقيد المكاني:</strong> O(n) - إنشاء n كائنًا جديدًا من نوع DNode
                 </div>
             </div>
         </div>
@@ -1176,13 +1230,13 @@
     </div><!-- end .content -->
 
     <footer>
-        <p><strong>Data Structures I</strong></p>
-        <p>Prepared by Dr. Almalawi</p>
+        <p><strong>هياكل البيانات 1</strong></p>
+        <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
     </footer>
 </div>
 
 <!-- Back to Top Button -->
-<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">&#8679;</button>
+<button class="back-to-top" id="backToTop" title="العودة إلى الأعلى" aria-label="العودة إلى الأعلى" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">&#8679;</button>
 
 <script>
     // Toggle solution visibility
@@ -1191,10 +1245,10 @@
         var btn = el.previousElementSibling;
         if (el.classList.contains('visible')) {
             el.classList.remove('visible');
-            btn.textContent = 'Show Solution';
+            btn.textContent = 'عرض الحل';
         } else {
             el.classList.add('visible');
-            btn.textContent = 'Hide Solution';
+            btn.textContent = 'إخفاء الحل';
         }
     }
 

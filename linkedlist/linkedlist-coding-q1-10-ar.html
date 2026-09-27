@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linked List Coding Questions 1-10</title>
+    <title>أسئلة برمجية في القوائم المرتبطة 1-10</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -196,7 +221,7 @@
             font-weight: bold;
             font-size: 0.9em;
             margin-bottom: 8px;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Haradh', 'Segoe UI', sans-serif;
         }
 
         .head-label {
@@ -358,6 +383,27 @@
             .section-header { font-size: 1.5em; }
             .q-title { font-size: 1.1em; }
         }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .q-difficulty { margin-left: 0; margin-right: 10px; }
+        .solution-content {
+            border-left: none;
+            border-right: 5px solid #27ae60;
+            border-radius: 8px 0 0 8px;
+        }
+        .back-to-top { right: auto; left: 30px; }
+
+        /* Code and linked-list diagrams always stay left-to-right
+           (head -> next -> null), not reversed by the RTL page. */
+        pre, code, .ll-visual { direction: ltr; }
+        pre { text-align: left; }
+        code { unicode-bidi: embed; }
+        .ll-visual .visual-desc { direction: rtl; }
+        .code-header { direction: rtl; text-align: right; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -373,35 +419,34 @@
             transition: all 0.3s;
             z-index: 1000;
         }
-
         .lang-switch-btn:hover { background: #667eea; color: white; }
     </style>
 </head>
 <body>
-    <a href="linkedlist-coding-q1-10-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="linkedlist-coding-q1-10.html" class="lang-switch-btn">English</a>
 
 <div class="container">
     <header>
-        <h1>Linked List Coding Questions</h1>
-        <p>Data Structures | Questions 1-10</p>
+        <h1>أسئلة برمجية في القوائم المرتبطة</h1>
+        <p>هياكل البيانات | الأسئلة 1-10</p>
     </header>
 
     <div class="content">
 
         <!-- Navigation Links -->
         <div class="nav-links">
-            <a href="linkedlist-questions.html">&larr; Back to Questions Hub</a>
-            <a href="linkedlist-coding-q11-20.html">Next: Questions 11-20 &rarr;</a>
+            <a href="linkedlist-questions-ar.html">&rarr; العودة إلى صفحة الأسئلة</a>
+            <a href="linkedlist-coding-q11-20-ar.html">التالي: الأسئلة 11-20 &larr;</a>
         </div>
 
-        <h2 class="section-header">Coding Questions 1-10</h2>
-        <p class="section-desc">Practice fundamental linked list operations. Each question includes a visual diagram and a hidden solution with Java code and explanation. Click "Show Solution" to reveal the answer.</p>
+        <h2 class="section-header">الأسئلة البرمجية 1-10</h2>
+        <p class="section-desc">تدرّب على العمليات الأساسية في القائمة المرتبطة (Linked List). يتضمن كل سؤال رسمًا توضيحيًا وحلًا مخفيًا مع شيفرة بلغة Java وشرح لها. انقر على «عرض الحل» لإظهار الإجابة.</p>
 
         <!-- ==================== Q1 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q1</span><span class="q-difficulty easy">Easy</span>
-            <div class="q-title">Traverse and Print a Singly Linked List</div>
-            <div class="q-description">Write a method <code>void printList(Node head)</code> that prints all elements of a singly linked list separated by <code> -> </code>, ending with <code>null</code>.</div>
+            <span class="q-number">س1</span><span class="q-difficulty easy">سهل</span>
+            <div class="q-title">اجتياز (Traversal) قائمة مرتبطة أحادية (Singly Linked List) وطباعتها</div>
+            <div class="q-description">اكتب دالة <code>void printList(Node head)</code> تطبع جميع عناصر القائمة المرتبطة الأحادية مفصولةً بـ <code> -> </code>، وتنتهي بـ <code>null</code>.</div>
 
             <div class="ll-visual">
                 <span class="head-label">head</span>
@@ -414,13 +459,13 @@
                 <span class="null-box">null</span>
             </div>
 
-            <div class="q-description">Expected Output: <code>10 -> 20 -> 30 -> null</code></div>
+            <div class="q-description">المخرجات المتوقعة: <code>10 -> 20 -> 30 -> null</code></div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">printList() Method</div>
+                    <div class="code-header">الدالة <code>printList()</code></div>
                     <pre><span class="keyword">public void</span> <span class="type">printList</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
@@ -431,20 +476,20 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> We use a <code>current</code> pointer initialized to <code>head</code>. In each iteration of the while loop, we print the current node's data followed by <code>" -> "</code>, then advance the pointer with <code>current = current.next</code>. When <code>current</code> becomes <code>null</code>, we exit the loop and print <code>"null"</code> to indicate the end of the list.
+                    <strong>الشرح:</strong> نستخدم مرجعًا (Pointer) باسم <code>current</code> يبدأ من <code>head</code>. في كل تكرار لحلقة while نطبع بيانات العقدة (Node) الحالية متبوعةً بـ <code>" -> "</code>، ثم نحرّك المرجع بالتعليمة <code>current = current.next</code>. وعندما يصبح <code>current</code> مساويًا لـ <code>null</code> نخرج من الحلقة ونطبع <code>"null"</code> للدلالة على نهاية القائمة.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) &mdash; we visit each node exactly once.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only one pointer variable is used.
+                    <strong>التعقيد الزمني (Time Complexity):</strong> O(n) &mdash; نزور كل عقدة مرة واحدة بالضبط.<br>
+                    <strong>التعقيد المكاني (Space Complexity):</strong> O(1) &mdash; نستخدم متغير مرجع واحدًا فقط.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q2 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q2</span><span class="q-difficulty easy">Easy</span>
-            <div class="q-title">Count Nodes in a Linked List</div>
-            <div class="q-description">Write a method <code>int countNodes(Node head)</code> that returns the total number of nodes in the list.</div>
+            <span class="q-number">س2</span><span class="q-difficulty easy">سهل</span>
+            <div class="q-title">عدّ العقد في قائمة مرتبطة</div>
+            <div class="q-description">اكتب دالة <code>int countNodes(Node head)</code> تُرجع العدد الكلي للعقد في القائمة.</div>
 
             <div class="ll-visual">
                 <span class="head-label">head</span>
@@ -459,13 +504,13 @@
                 <span class="null-box">null</span>
             </div>
 
-            <div class="q-description">Expected Output: <code>4</code></div>
+            <div class="q-description">المخرجات المتوقعة: <code>4</code></div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">countNodes() Method</div>
+                    <div class="code-header">الدالة <code>countNodes()</code></div>
                     <pre><span class="keyword">public int</span> <span class="type">countNodes</span>(<span class="type">Node</span> head) {
     <span class="keyword">int</span> count = <span class="number">0</span>;
     <span class="type">Node</span> current = head;
@@ -477,23 +522,23 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> Initialize a <code>count</code> variable to 0. Traverse the list using a <code>current</code> pointer, incrementing <code>count</code> at each node. When <code>current</code> reaches <code>null</code>, <code>count</code> holds the total number of nodes.
+                    <strong>الشرح:</strong> نهيّئ متغيرًا <code>count</code> بالقيمة 0. نجتاز القائمة باستخدام المرجع <code>current</code> ونزيد <code>count</code> عند كل عقدة. وعندما يصل <code>current</code> إلى <code>null</code> يكون <code>count</code> محتويًا على العدد الكلي للعقد.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) &mdash; we traverse the entire list once.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only a counter and a pointer are used.
+                    <strong>التعقيد الزمني:</strong> O(n) &mdash; نجتاز القائمة كاملةً مرة واحدة.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; نستخدم عدّادًا ومرجعًا فقط.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q3 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q3</span><span class="q-difficulty easy">Easy</span>
-            <div class="q-title">Insert at the Beginning</div>
-            <div class="q-description">Write a method <code>Node insertAtHead(Node head, int data)</code> that inserts a new node at the beginning of the list and returns the new head.</div>
+            <span class="q-number">س3</span><span class="q-difficulty easy">سهل</span>
+            <div class="q-title">الإدراج في البداية</div>
+            <div class="q-description">اكتب دالة <code>Node insertAtHead(Node head, int data)</code> تُدرج عقدة جديدة في بداية القائمة وتُرجع رأس القائمة (Head) الجديد.</div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
@@ -501,7 +546,7 @@
                 <span class="null-box">null</span>
             </div>
             <div class="ll-visual">
-                <div class="visual-desc">After inserting 10:</div><span class="head-label">head</span>
+                <div class="visual-desc">بعد إدراج 10:</div><span class="head-label">head</span>
                 <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -511,11 +556,11 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">insertAtHead() Method</div>
+                    <div class="code-header">الدالة <code>insertAtHead()</code></div>
                     <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtHead</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
     <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
     newNode.next = head;
@@ -523,23 +568,23 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> Create a new node with the given data. Set the new node's <code>next</code> pointer to the current <code>head</code>. Return the new node as the new head of the list. This works even if <code>head</code> is <code>null</code> (empty list).
+                    <strong>الشرح:</strong> ننشئ عقدة جديدة بالبيانات المعطاة، ونجعل المرجع <code>next</code> للعقدة الجديدة يشير إلى <code>head</code> الحالي، ثم نُرجع العقدة الجديدة بوصفها رأس القائمة الجديد. ويعمل ذلك حتى لو كان <code>head</code> مساويًا لـ <code>null</code> (قائمة فارغة).
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(1) &mdash; no traversal needed.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only one new node is created.
+                    <strong>التعقيد الزمني:</strong> O(1) &mdash; لا حاجة إلى الاجتياز.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; تُنشأ عقدة جديدة واحدة فقط.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q4 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q4</span><span class="q-difficulty easy">Easy</span>
-            <div class="q-title">Insert at the End</div>
-            <div class="q-description">Write a method <code>Node insertAtEnd(Node head, int data)</code> that inserts a new node at the end of the list and returns the head.</div>
+            <span class="q-number">س4</span><span class="q-difficulty easy">سهل</span>
+            <div class="q-title">الإدراج في النهاية</div>
+            <div class="q-description">اكتب دالة <code>Node insertAtEnd(Node head, int data)</code> تُدرج عقدة جديدة في نهاية القائمة وتُرجع رأس القائمة.</div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -547,7 +592,7 @@
                 <span class="null-box">null</span>
             </div>
             <div class="ll-visual">
-                <div class="visual-desc">After inserting 30:</div><span class="head-label">head</span>
+                <div class="visual-desc">بعد إدراج 30:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -557,11 +602,11 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">insertAtEnd() Method</div>
+                    <div class="code-header">الدالة <code>insertAtEnd()</code></div>
                     <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtEnd</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data) {
     <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return</span> newNode;
@@ -574,23 +619,23 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> Create a new node. If the list is empty (<code>head == null</code>), return the new node as the head. Otherwise, traverse to the last node (where <code>current.next == null</code>) and set its <code>next</code> pointer to the new node.
+                    <strong>الشرح:</strong> ننشئ عقدة جديدة. إذا كانت القائمة فارغة (<code>head == null</code>) نُرجع العقدة الجديدة بوصفها رأس القائمة. وإلا نجتاز القائمة حتى آخر عقدة (حيث <code>current.next == null</code>) ونجعل مرجعها <code>next</code> يشير إلى العقدة الجديدة.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) &mdash; we must traverse to the end of the list.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only one new node and one pointer are used.
+                    <strong>التعقيد الزمني:</strong> O(n) &mdash; يجب أن نجتاز القائمة حتى نهايتها.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; نستخدم عقدة جديدة واحدة ومرجعًا واحدًا فقط.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q5 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q5</span><span class="q-difficulty easy">Easy</span>
-            <div class="q-title">Search for a Value</div>
-            <div class="q-description">Write a method <code>boolean search(Node head, int target)</code> that returns <code>true</code> if the target value exists in the list, <code>false</code> otherwise.</div>
+            <span class="q-number">س5</span><span class="q-difficulty easy">سهل</span>
+            <div class="q-title">البحث عن قيمة</div>
+            <div class="q-description">اكتب دالة <code>boolean search(Node head, int target)</code> تُرجع <code>true</code> إذا كانت القيمة المطلوبة موجودة في القائمة، و<code>false</code> خلاف ذلك.</div>
 
             <div class="ll-visual">
-                <span class="head-label">head (searching for 15)</span>
+                <span class="head-label">head (البحث عن 15)</span>
                 <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">8</span><span class="node-next">next</span></span>
@@ -602,13 +647,13 @@
                 <span class="null-box">null</span>
             </div>
 
-            <div class="q-description">Search for <code>15</code> &rarr; returns <code>true</code></div>
+            <div class="q-description">البحث عن <code>15</code> &larr; يُرجع <code>true</code></div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">search() Method</div>
+                    <div class="code-header">الدالة <code>search()</code></div>
                     <pre><span class="keyword">public boolean</span> <span class="type">search</span>(<span class="type">Node</span> head, <span class="keyword">int</span> target) {
     <span class="type">Node</span> current = head;
     <span class="keyword">while</span> (current != <span class="keyword">null</span>) {
@@ -621,24 +666,24 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> Perform a linear search by traversing each node and comparing <code>current.data</code> with <code>target</code>. If a match is found, return <code>true</code> immediately. If we reach the end of the list without finding the target, return <code>false</code>.
+                    <strong>الشرح:</strong> ننفّذ بحثًا خطيًا (Linear Search) باجتياز كل عقدة ومقارنة <code>current.data</code> بـ <code>target</code>. إذا وُجد تطابق نُرجع <code>true</code> فورًا. وإذا وصلنا إلى نهاية القائمة دون العثور على القيمة المطلوبة نُرجع <code>false</code>.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) &mdash; worst case, we check every node.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only one pointer variable is used.
+                    <strong>التعقيد الزمني:</strong> O(n) &mdash; في أسوأ حالة (Worst Case) نفحص كل العقد.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; نستخدم متغير مرجع واحدًا فقط.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q6 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q6</span><span class="q-difficulty easy">Easy</span>
-            <div class="q-title">Delete the First Node</div>
-            <div class="q-description">Write a method <code>Node deleteFirst(Node head)</code> that removes the first node from the list and returns the new head.</div>
+            <span class="q-number">س6</span><span class="q-difficulty easy">سهل</span>
+            <div class="q-title">حذف العقدة الأولى</div>
+            <div class="q-description">اكتب دالة <code>Node deleteFirst(Node head)</code> تحذف العقدة الأولى من القائمة وتُرجع رأس القائمة الجديد.</div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Before:</div><span class="head-label">head</span>
-                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">10</span><span class="node-next">del</span></span>
+                <div class="visual-desc">قبل:</div><span class="head-label">head</span>
+                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">10</span><span class="node-next">حذف</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
@@ -647,7 +692,7 @@
                 <span class="null-box">null</span>
             </div>
             <div class="ll-visual">
-                <div class="visual-desc">After:</div><span class="head-label">head</span>
+                <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
@@ -655,44 +700,44 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">deleteFirst() Method</div>
+                    <div class="code-header">الدالة <code>deleteFirst()</code></div>
                     <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteFirst</span>(<span class="type">Node</span> head) {
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
     <span class="keyword">return</span> head.next;
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> Simply return <code>head.next</code>, which becomes the new head. The old head node is no longer referenced and becomes eligible for garbage collection in Java. We handle the edge case of an empty list by checking if <code>head</code> is <code>null</code>.
+                    <strong>الشرح:</strong> نُرجع ببساطة <code>head.next</code> الذي يصبح رأس القائمة الجديد. لم تعد عقدة الرأس القديمة مُشارًا إليها بأي مرجع، فتصبح مؤهلة لجمع المهملات (Garbage Collection) في Java. ونعالج الحالة الحدّية للقائمة الفارغة بالتحقق مما إذا كان <code>head</code> مساويًا لـ <code>null</code>.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(1) &mdash; no traversal needed.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; no extra space used.
+                    <strong>التعقيد الزمني:</strong> O(1) &mdash; لا حاجة إلى الاجتياز.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; لا نستخدم مساحة إضافية.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q7 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q7</span><span class="q-difficulty medium">Medium</span>
-            <div class="q-title">Delete the Last Node</div>
-            <div class="q-description">Write a method <code>Node deleteLast(Node head)</code> that removes the last node from the list and returns the head.</div>
+            <span class="q-number">س7</span><span class="q-difficulty medium">متوسط</span>
+            <div class="q-title">حذف العقدة الأخيرة</div>
+            <div class="q-description">اكتب دالة <code>Node deleteLast(Node head)</code> تحذف العقدة الأخيرة من القائمة وتُرجع رأس القائمة.</div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
-                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">30</span><span class="node-next">del</span></span>
+                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">30</span><span class="node-next">حذف</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="null-box">null</span>
             </div>
             <div class="ll-visual">
-                <div class="visual-desc">After:</div><span class="head-label">head</span>
+                <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -700,11 +745,11 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">deleteLast() Method</div>
+                    <div class="code-header">الدالة <code>deleteLast()</code></div>
                     <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteLast</span>(<span class="type">Node</span> head) {
     <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>) {
         <span class="keyword">return null</span>;
@@ -718,33 +763,33 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> We need to reach the second-to-last node so we can set its <code>next</code> to <code>null</code>. We traverse using the condition <code>current.next.next != null</code> to stop one node before the last. Edge cases: if the list is empty or has only one node, return <code>null</code>.
+                    <strong>الشرح:</strong> نحتاج إلى الوصول إلى العقدة قبل الأخيرة لنجعل <code>next</code> الخاص بها مساويًا لـ <code>null</code>. نجتاز القائمة باستخدام الشرط <code>current.next.next != null</code> لنتوقف قبل العقدة الأخيرة بعقدة واحدة. الحالات الحدّية: إذا كانت القائمة فارغة أو تحتوي على عقدة واحدة فقط نُرجع <code>null</code>.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) &mdash; we traverse nearly the entire list.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only one pointer variable is used.
+                    <strong>التعقيد الزمني:</strong> O(n) &mdash; نجتاز القائمة كلها تقريبًا.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; نستخدم متغير مرجع واحدًا فقط.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q8 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q8</span><span class="q-difficulty medium">Medium</span>
-            <div class="q-title">Delete a Node by Value</div>
-            <div class="q-description">Write a method <code>Node deleteByValue(Node head, int value)</code> that deletes the first occurrence of the given value from the list.</div>
+            <span class="q-number">س8</span><span class="q-difficulty medium">متوسط</span>
+            <div class="q-title">حذف عقدة حسب قيمتها</div>
+            <div class="q-description">اكتب دالة <code>Node deleteByValue(Node head, int value)</code> تحذف أول ظهور للقيمة المعطاة من القائمة.</div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Delete 20:</div><span class="head-label">head</span>
+                <div class="visual-desc">حذف 20:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
-                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">20</span><span class="node-next">del</span></span>
+                <span class="node" style="border-color: #e74c3c; opacity: 0.6;"><span class="node-data" style="background: #e74c3c;">20</span><span class="node-next">حذف</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="null-box">null</span>
             </div>
             <div class="ll-visual">
-                <div class="visual-desc">After:</div><span class="head-label">head</span>
+                <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
@@ -752,11 +797,11 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">deleteByValue() Method</div>
+                    <div class="code-header">الدالة <code>deleteByValue()</code></div>
                     <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">deleteByValue</span>(<span class="type">Node</span> head, <span class="keyword">int</span> value) {
     <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return null</span>;
     <span class="comment">// If the head node holds the value to delete</span>
@@ -773,23 +818,23 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> First, check if the head itself contains the value; if so, return <code>head.next</code>. Otherwise, traverse the list looking at <code>current.next.data</code>. When found, skip over the target node by setting <code>current.next = current.next.next</code>. If the value is not in the list, the original head is returned unchanged.
+                    <strong>الشرح:</strong> أولًا نتحقق مما إذا كان الرأس نفسه يحتوي على القيمة؛ فإن كان كذلك نُرجع <code>head.next</code>. وإلا نجتاز القائمة ونفحص <code>current.next.data</code>. وعند العثور على القيمة نتخطى العقدة المطلوبة بالتعليمة <code>current.next = current.next.next</code>. وإذا لم تكن القيمة موجودة في القائمة يُرجَع الرأس الأصلي دون تغيير.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) &mdash; worst case, the value is at the end or not present.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only one pointer variable is used.
+                    <strong>التعقيد الزمني:</strong> O(n) &mdash; في أسوأ حالة تكون القيمة في النهاية أو غير موجودة.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; نستخدم متغير مرجع واحدًا فقط.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q9 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q9</span><span class="q-difficulty medium">Medium</span>
-            <div class="q-title">Insert at a Given Position</div>
-            <div class="q-description">Write a method <code>Node insertAtPosition(Node head, int data, int position)</code> that inserts a new node at the given position (0-indexed).</div>
+            <span class="q-number">س9</span><span class="q-difficulty medium">متوسط</span>
+            <div class="q-title">الإدراج في موضع محدد</div>
+            <div class="q-description">اكتب دالة <code>Node insertAtPosition(Node head, int data, int position)</code> تُدرج عقدة جديدة في الموضع المعطى (يبدأ الفهرس (Index) من 0).</div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
@@ -799,23 +844,23 @@
                 <span class="null-box">null</span>
             </div>
             <div class="ll-visual">
-                <div class="visual-desc">After inserting 25 at position 2:</div><span class="head-label">head</span>
+                <div class="visual-desc">بعد إدراج 25 في الموضع 2:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">10</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">20</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
-                <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">25</span><span class="node-next">new</span></span>
+                <span class="node" style="border-color: #27ae60;"><span class="node-data" style="background: linear-gradient(135deg, #27ae60, #2e7d32);">25</span><span class="node-next">جديد</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">30</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">insertAtPosition() Method</div>
+                    <div class="code-header">الدالة <code>insertAtPosition()</code></div>
                     <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">insertAtPosition</span>(<span class="type">Node</span> head, <span class="keyword">int</span> data, <span class="keyword">int</span> position) {
     <span class="type">Node</span> newNode = <span class="keyword">new</span> <span class="type">Node</span>(data);
     <span class="comment">// Insert at the beginning</span>
@@ -834,23 +879,23 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> If <code>position</code> is 0, insert at the head. Otherwise, navigate to the node at index <code>position - 1</code>. Then insert the new node by pointing <code>newNode.next</code> to <code>current.next</code>, and updating <code>current.next</code> to point to <code>newNode</code>. We also handle the case where the position exceeds the list length.
+                    <strong>الشرح:</strong> إذا كان <code>position</code> يساوي 0 نُدرج في الرأس. وإلا ننتقل إلى العقدة ذات الفهرس <code>position - 1</code>، ثم نُدرج العقدة الجديدة بجعل <code>newNode.next</code> يشير إلى <code>current.next</code>، وتحديث <code>current.next</code> ليشير إلى <code>newNode</code>. ونعالج أيضًا الحالة التي يتجاوز فيها الموضع طول القائمة.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) &mdash; we may traverse up to n nodes to reach the position.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only one new node and one pointer are used.
+                    <strong>التعقيد الزمني:</strong> O(n) &mdash; قد نجتاز ما يصل إلى n عقدة للوصول إلى الموضع.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; نستخدم عقدة جديدة واحدة ومرجعًا واحدًا فقط.
                 </div>
             </div>
         </div>
 
         <!-- ==================== Q10 ==================== -->
         <div class="coding-question">
-            <span class="q-number">Q10</span><span class="q-difficulty medium">Medium</span>
-            <div class="q-title">Reverse a Linked List</div>
-            <div class="q-description">Write a method <code>Node reverse(Node head)</code> that reverses the linked list in-place and returns the new head.</div>
+            <span class="q-number">س10</span><span class="q-difficulty medium">متوسط</span>
+            <div class="q-title">عكس قائمة مرتبطة</div>
+            <div class="q-description">اكتب دالة <code>Node reverse(Node head)</code> تعكس القائمة المرتبطة في مكانها (In-place) وتُرجع رأس القائمة الجديد.</div>
 
             <div class="ll-visual">
-                <div class="visual-desc">Before:</div><span class="head-label">head</span>
+                <div class="visual-desc">قبل:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">1</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">2</span><span class="node-next">next</span></span>
@@ -862,7 +907,7 @@
                 <span class="null-box">null</span>
             </div>
             <div class="ll-visual">
-                <div class="visual-desc">After:</div><span class="head-label">head</span>
+                <div class="visual-desc">بعد:</div><span class="head-label">head</span>
                 <span class="node"><span class="node-data">4</span><span class="node-next">next</span></span>
                 <span class="arrow">&#8594;</span>
                 <span class="node"><span class="node-data">3</span><span class="node-next">next</span></span>
@@ -874,11 +919,11 @@
                 <span class="null-box">null</span>
             </div>
 
-            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+            <button class="solution-toggle" onclick="toggleSolution(this)">عرض الحل</button>
             <div class="solution-content">
-                <h4>Solution:</h4>
+                <h4>الحل:</h4>
                 <div class="code-container">
-                    <div class="code-header">reverse() Method</div>
+                    <div class="code-header">الدالة <code>reverse()</code></div>
                     <pre><span class="keyword">public</span> <span class="type">Node</span> <span class="type">reverse</span>(<span class="type">Node</span> head) {
     <span class="type">Node</span> prev = <span class="keyword">null</span>;
     <span class="type">Node</span> current = head;
@@ -892,19 +937,19 @@
 }</pre>
                 </div>
                 <div class="solution-explanation">
-                    <strong>Explanation:</strong> Use three pointers: <code>prev</code> (starts at <code>null</code>), <code>current</code> (starts at <code>head</code>), and <code>nextTemp</code> (to save the next node before we overwrite the link). In each iteration: (1) save <code>current.next</code> in <code>nextTemp</code>, (2) reverse the link by pointing <code>current.next</code> to <code>prev</code>, (3) advance <code>prev</code> and <code>current</code> one step forward. When <code>current</code> becomes <code>null</code>, <code>prev</code> points to the new head of the reversed list.
+                    <strong>الشرح:</strong> نستخدم ثلاثة مراجع: <code>prev</code> (يبدأ من <code>null</code>)، و<code>current</code> (يبدأ من <code>head</code>)، و<code>nextTemp</code> (لحفظ العقدة التالية قبل أن نستبدل الرابط). في كل تكرار: (1) نحفظ <code>current.next</code> في <code>nextTemp</code>، (2) نعكس الرابط بجعل <code>current.next</code> يشير إلى <code>prev</code>، (3) نحرّك <code>prev</code> و<code>current</code> خطوة واحدة إلى الأمام. وعندما يصبح <code>current</code> مساويًا لـ <code>null</code> يشير <code>prev</code> إلى رأس القائمة المعكوسة الجديد.
                 </div>
                 <div class="complexity-info">
-                    <strong>Time Complexity:</strong> O(n) &mdash; we visit each node exactly once.<br>
-                    <strong>Space Complexity:</strong> O(1) &mdash; only three pointer variables are used (in-place reversal).
+                    <strong>التعقيد الزمني:</strong> O(n) &mdash; نزور كل عقدة مرة واحدة بالضبط.<br>
+                    <strong>التعقيد المكاني:</strong> O(1) &mdash; نستخدم ثلاثة متغيرات مرجعية فقط (عكس في المكان).
                 </div>
             </div>
         </div>
 
         <!-- Bottom Navigation -->
         <div class="nav-links" style="margin-top: 40px;">
-            <a href="linkedlist-questions.html">&larr; Back to Questions Hub</a>
-            <a href="linkedlist-coding-q11-20.html">Next: Questions 11-20 &rarr;</a>
+            <a href="linkedlist-questions-ar.html">&rarr; العودة إلى صفحة الأسئلة</a>
+            <a href="linkedlist-coding-q11-20-ar.html">التالي: الأسئلة 11-20 &larr;</a>
         </div>
 
     </div><!-- end .content -->
@@ -912,8 +957,8 @@
     </div><!-- end .container -->
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 <!-- Back to Top Button -->
@@ -925,10 +970,10 @@
         var content = button.nextElementSibling;
         if (content.classList.contains('visible')) {
             content.classList.remove('visible');
-            button.textContent = 'Show Solution';
+            button.textContent = 'عرض الحل';
         } else {
             content.classList.add('visible');
-            button.textContent = 'Hide Solution';
+            button.textContent = 'إخفاء الحل';
         }
     }
 

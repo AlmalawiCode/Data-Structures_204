@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Queue Data Structure - Complete Tutorial</title>
+    <title>هيكل بيانات الطابور</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
@@ -409,22 +434,6 @@
         }
         .back-home-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(17,153,142,0.6); }
 
-        .lang-switch-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: #11998e;
-            border: 2px solid #11998e;
-            padding: 10px 22px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.25);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-        .lang-switch-btn:hover { background: #11998e; color: white; }
 
         /* Animation helpers */
         @keyframes enqueueAnim {
@@ -497,18 +506,69 @@
             .queue-cell { width: 50px; height: 50px; font-size: 0.9em; }
             .pointer-cell { width: 50px; }
         }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        header .header-text { text-align: right; }
+        .highlight-box { border-left: none; border-right: 5px solid #11998e; }
+        .definition    { border-left: none; border-right: 5px solid #4caf50; }
+        .important     { border-left: none; border-right: 5px solid #ffc107; }
+        .warning-box   { border-left: none; border-right: 5px solid #f44336; }
+        ul, ol { margin-left: 0; margin-right: 30px; }
+        th, td { text-align: right; }
+        .algorithm-steps ol { padding-left: 0; padding-right: 0; margin-right: 0; }
+        .algorithm-steps ol > li { padding: 15px 60px 15px 15px; }
+        .algorithm-steps ol > li::before { left: auto; right: 15px; }
+
+        /* Code and data-structure diagrams always stay left-to-right,
+           so queue cells, indices and pointers read FRONT → REAR as in the code. */
+        pre, code, .code-block, .operation, .operations-box,
+        .queue-display, .queue-cells-row, .pointer-row, svg {
+            direction: ltr;
+        }
+        .code-block { text-align: left; }
+        code { unicode-bidi: isolate; }
+        .implementation-box code { text-align: left; }
+        td[dir="ltr"] { text-align: right; }
+        .queue-status { direction: rtl; }
+
+        /* Mixed Arabic/formula output: each line picks its own direction. */
+        .msg-log, .shift-step, #circ-formula {
+            unicode-bidi: plaintext;
+            text-align: start;
+        }
+        .msg-log, .shift-step { font-family: 'Haradh', 'Courier New', monospace; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
+        .lang-switch-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #11998e;
+            border: 2px solid #11998e;
+            padding: 10px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.25);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .lang-switch-btn:hover { background: #11998e; color: white; }
     </style>
 </head>
 <body>
-<a href="../index.html" class="back-home-btn">&#127968; Home</a>
-<a href="queue-tutorial-ar.html" class="lang-switch-btn">عربي</a>
+<a href="../index.html" class="back-home-btn">&#127968; الرئيسية</a>
+<a href="queue-tutorial.html" class="lang-switch-btn">English</a>
 <div class="container">
     <header>
         <div class="header-content">
             <div class="header-text">
-                <h1>&#128101; Queue Data Structure</h1>
-                <p class="course-code">Data Structures I</p>
-                <p>A Complete Tutorial with Interactive Simulations</p>
+                <h1>&#128101; هيكل بيانات الطابور (Queue)</h1>
+                <p class="course-code">هياكل البيانات 1</p>
+                <p>درس شامل مع محاكاة تفاعلية</p>
             </div>
         </div>
     </header>
@@ -519,59 +579,59 @@
         <!--  SECTION 1 — INTRODUCTION                                    -->
         <!-- ============================================================ -->
         <section id="introduction">
-            <h2>1. What is a Queue?</h2>
+            <h2>1. ما هو الطابور؟</h2>
 
             <div class="definition">
-                <strong>Definition:</strong> A <strong>Queue</strong> is a linear data structure that stores elements in a sequential manner where insertion happens at one end called the <strong>REAR</strong> and deletion happens at the other end called the <strong>FRONT</strong>. It follows the <strong>FIFO (First In, First Out)</strong> principle — the first element added is the first one removed.
+                <strong>التعريف:</strong> <strong>الطابور (Queue)</strong> هيكل بيانات خطي (Linear Data Structure) يخزّن العناصر بشكل تسلسلي، بحيث تتم الإضافة عند أحد طرفيه ويُسمّى <strong>المؤخرة (REAR)</strong>، ويتم الحذف عند الطرف الآخر ويُسمّى <strong>المقدمة (FRONT)</strong>. ويتّبع الطابور مبدأ <strong>FIFO (الداخل أولًا يخرج أولًا - First In, First Out)</strong> — أي أن أول عنصر يُضاف هو أول عنصر يُحذف.
             </div>
 
-            <h3>Queue in the Family of Data Structures</h3>
+            <h3>موقع الطابور بين هياكل البيانات</h3>
             <div class="highlight-box">
-                <p>Data structures are divided into two broad categories:</p>
+                <p>تنقسم هياكل البيانات إلى فئتين رئيسيتين:</p>
                 <ul>
-                    <li><strong>Physical Data Structures</strong> — structures that actually exist in memory and have a direct hardware representation. Examples: <strong>Arrays</strong> and <strong>Linked Lists</strong>.</li>
-                    <li><strong>Logical Data Structures</strong> — structures that define a <em>logical behavior</em> for organizing and accessing data. They <strong>cannot be built without</strong> a physical data structure underneath them. Examples: <strong>Stack</strong>, <strong>Queue</strong>, <strong>Tree</strong>, and <strong>Graph</strong>.</li>
+                    <li><strong>هياكل البيانات الفيزيائية (Physical Data Structures)</strong> — هياكل موجودة فعليًا في الذاكرة ولها تمثيل مباشر على مستوى العتاد. أمثلة: <strong>المصفوفات (Arrays)</strong> و<strong>القوائم المرتبطة (Linked Lists)</strong>.</li>
+                    <li><strong>هياكل البيانات المنطقية (Logical Data Structures)</strong> — هياكل تُعرّف <em>سلوكًا منطقيًا</em> لتنظيم البيانات والوصول إليها. و<strong>لا يمكن بناؤها دون</strong> هيكل بيانات فيزيائي تحتها. أمثلة: <strong>المكدس (Stack)</strong> و<strong>الطابور</strong> و<strong>الشجرة (Tree)</strong> و<strong>المخطط (Graph)</strong>.</li>
                 </ul>
                 <br>
-                <p><strong>Queue is a Logical Data Structure</strong> — it describes a concept (FIFO access policy), but to actually store data it must be implemented on top of an <em>Array</em> or a <em>Linked List</em>.</p>
+                <p><strong>الطابور هيكل بيانات منطقي</strong> — فهو يصف مفهومًا (سياسة الوصول FIFO)، لكن لكي يخزّن البيانات فعليًا يجب تنفيذه فوق <em>مصفوفة</em> أو <em>قائمة مرتبطة</em>.</p>
             </div>
 
-            <h3>Real-World Examples of Queues</h3>
+            <h3>أمثلة واقعية على الطوابير</h3>
             <div class="examples-grid">
                 <div class="example-card">
-                    <h4>&#128101; Supermarket Checkout</h4>
-                    <p>Customers line up at the checkout. The first customer to join the line is the first to be served.</p>
+                    <h4>&#128101; صندوق الدفع في السوبرماركت</h4>
+                    <p>يصطف الزبائن عند صندوق الدفع، وأول زبون ينضم إلى الصف هو أول من تتم خدمته.</p>
                 </div>
                 <div class="example-card">
-                    <h4>&#9992;&#65039; Airport Check-In</h4>
-                    <p>Passengers queue at the check-in counter. First to arrive, first to check in.</p>
+                    <h4>&#9992;&#65039; تسجيل الوصول في المطار</h4>
+                    <p>يصطف المسافرون عند منضدة تسجيل الوصول؛ من يصل أولًا يُسجَّل أولًا.</p>
                 </div>
                 <div class="example-card">
-                    <h4>&#128200; Print Queue</h4>
-                    <p>Documents sent to a printer are printed in the order they were submitted — first submitted, first printed.</p>
+                    <h4>&#128200; طابور الطباعة</h4>
+                    <p>تُطبع المستندات المرسلة إلى الطابعة بترتيب إرسالها — ما يُرسَل أولًا يُطبع أولًا.</p>
                 </div>
                 <div class="example-card">
-                    <h4>&#128241; Call Center</h4>
-                    <p>Incoming calls are placed in a queue. The first caller is connected to an agent first.</p>
+                    <h4>&#128241; مركز الاتصال</h4>
+                    <p>توضع المكالمات الواردة في طابور، وأول متصل يُحوَّل إلى الموظف أولًا.</p>
                 </div>
             </div>
 
-            <h3>Key Characteristics of a Queue</h3>
+            <h3>الخصائص الأساسية للطابور</h3>
             <ul>
-                <li><strong>Linear Data Structure:</strong> Elements are arranged in a sequential order</li>
-                <li><strong>Two-End Access:</strong> Addition at the REAR, removal at the FRONT</li>
-                <li><strong>FIFO Policy:</strong> First In, First Out — the element that waited the longest is served first</li>
-                <li><strong>Two Pointers:</strong> <code>front</code> tracks the first element, <code>rear</code> tracks the last element</li>
+                <li><strong>هيكل بيانات خطي:</strong> تُرتَّب العناصر ترتيبًا تسلسليًا</li>
+                <li><strong>الوصول من طرفين:</strong> الإضافة عند المؤخرة (REAR)، والحذف من المقدمة (FRONT)</li>
+                <li><strong>سياسة FIFO:</strong> الداخل أولًا يخرج أولًا — العنصر الذي انتظر أطول مدة يُخدَم أولًا</li>
+                <li><strong>مؤشّران (Pointers):</strong> يتتبّع <code>front</code> العنصر الأول، ويتتبّع <code>rear</code> العنصر الأخير</li>
             </ul>
 
-            <h3>Queue vs. Stack — The Key Difference</h3>
+            <h3>الطابور مقابل المكدس — الفرق الجوهري</h3>
             <div class="important">
-                <p>Both Stack and Queue are <strong>linear, logical data structures</strong>. The critical difference is their <strong>access policy</strong>:</p>
+                <p>كلٌّ من المكدس والطابور <strong>هيكل بيانات خطي ومنطقي</strong>. والفرق الحاسم بينهما هو <strong>سياسة الوصول (Access Policy)</strong>:</p>
                 <ul>
-                    <li><strong>Stack</strong> → <strong>LIFO</strong> (Last In, First Out) — one end (TOP)</li>
-                    <li><strong>Queue</strong> → <strong>FIFO</strong> (First In, First Out) — two ends (FRONT and REAR)</li>
+                    <li><strong>المكدس</strong> ← <strong>LIFO</strong> (الداخل أخيرًا يخرج أولًا - Last In, First Out) — طرف واحد (القمة TOP)</li>
+                    <li><strong>الطابور</strong> ← <strong>FIFO</strong> (الداخل أولًا يخرج أولًا) — طرفان (المقدمة FRONT والمؤخرة REAR)</li>
                 </ul>
-                <p>Think of it this way: a stack is like a pile of plates (you take from the top), while a queue is like a line of people (the first person in line leaves first).</p>
+                <p>فكّر في الأمر هكذا: المكدس يشبه كومة من الأطباق (تأخذ من الأعلى)، بينما الطابور يشبه صفًّا من الناس (أول شخص في الصف يغادر أولًا).</p>
             </div>
         </section>
 
@@ -579,16 +639,16 @@
         <!--  SECTION 2 — ADT                                             -->
         <!-- ============================================================ -->
         <section id="adt">
-            <h2>2. Queue as an Abstract Data Type (ADT)</h2>
+            <h2>2. الطابور بوصفه نوعًا مجردًا للبيانات (ADT)</h2>
 
             <div class="important">
-                <h3>Why is Queue an Abstract Data Type?</h3>
-                <p>A Queue is an <strong>Abstract Data Type (ADT)</strong> because it <em>defines the behavior</em> through a set of operations without specifying <em>how</em> those operations are implemented internally. The user of the queue sees only the interface: <em>enqueue here, dequeue from there</em> — they do not need to know whether an array or a linked list is used underneath.</p>
+                <h3>لماذا يُعدّ الطابور نوعًا مجردًا للبيانات؟</h3>
+                <p>الطابور <strong>نوع مجرد للبيانات (Abstract Data Type - ADT)</strong> لأنه <em>يُعرّف السلوك</em> من خلال مجموعة من العمليات دون أن يحدّد <em>كيف</em> تُنفَّذ هذه العمليات داخليًا. فمستخدم الطابور لا يرى إلا الواجهة (Interface): <em>أدخِل من هنا، وأخرِج من هناك</em> — ولا يحتاج إلى معرفة ما إذا كانت مصفوفة أو قائمة مرتبطة هي المستخدمة في الأسفل.</p>
             </div>
 
             <div class="adt-diagram">
                 <div class="adt-operations">
-                    <h4>&#128221; Queue Operations (Abstract Interface)</h4>
+                    <h4>&#128221; عمليات الطابور (الواجهة المجردة)</h4>
                     <div class="operations-box">
                         <span class="operation">enqueue()</span>
                         <span class="operation">dequeue()</span>
@@ -601,33 +661,33 @@
                 <div class="adt-arrow">&#8595;</div>
                 <div class="adt-implementations">
                     <div class="implementation-box">
-                        <h4>&#128290; Array Implementation</h4>
-                        <p>Fixed-size contiguous memory. Three strategies: unrealistic, realistic (shifting), circular.</p>
+                        <h4>&#128290; التنفيذ باستخدام المصفوفة</h4>
+                        <p>ذاكرة متجاورة ثابتة الحجم. ثلاث استراتيجيات: غير واقعية، وواقعية (بالإزاحة)، ودائرية.</p>
                         <code>rear = (rear + 1) % size</code>
                     </div>
-                    <div class="adt-or">OR</div>
+                    <div class="adt-or">أو</div>
                     <div class="implementation-box">
-                        <h4>&#128279; Linked List Implementation</h4>
-                        <p>Dynamic memory allocation. Always fits the data; no wasted space.</p>
+                        <h4>&#128279; التنفيذ باستخدام القائمة المرتبطة</h4>
+                        <p>تخصيص ديناميكي للذاكرة (Dynamic Memory Allocation). يناسب حجم البيانات دائمًا؛ لا مساحة مهدرة.</p>
                         <code>tail.next = newNode</code>
                     </div>
                 </div>
             </div>
 
-            <h3>Logical vs. Physical — Summary</h3>
+            <h3>المنطقي مقابل الفيزيائي — خلاصة</h3>
             <div class="highlight-box">
                 <ul>
-                    <li>Queue <strong>cannot exist alone in memory</strong> — it is a logical concept.</li>
-                    <li>It must be <strong>implemented on top of a physical structure</strong> (Array or Linked List).</li>
-                    <li>The <strong>behavior (FIFO)</strong> stays the same no matter which physical structure you choose.</li>
-                    <li>This separation between behavior and implementation is what makes Queue an <strong>ADT</strong>.</li>
+                    <li>الطابور <strong>لا يمكن أن يوجد وحده في الذاكرة</strong> — فهو مفهوم منطقي.</li>
+                    <li>يجب <strong>تنفيذه فوق هيكل فيزيائي</strong> (مصفوفة أو قائمة مرتبطة).</li>
+                    <li>يبقى <strong>السلوك (FIFO)</strong> نفسه أيًّا كان الهيكل الفيزيائي الذي تختاره.</li>
+                    <li>هذا الفصل بين السلوك والتنفيذ هو ما يجعل الطابور <strong>نوعًا مجردًا للبيانات (ADT)</strong>.</li>
                 </ul>
             </div>
 
-            <h3>Access Policy: FIFO</h3>
+            <h3>سياسة الوصول: FIFO</h3>
             <div class="definition">
-                <strong>FIFO = First In, First Out</strong><br><br>
-                The element that was inserted <em>first</em> is the one that gets removed <em>first</em>. This is the fundamental rule (access policy) of every queue, regardless of how it is implemented.
+                <strong>FIFO = الداخل أولًا يخرج أولًا (First In, First Out)</strong><br><br>
+                العنصر الذي أُدخل <em>أولًا</em> هو الذي يُحذف <em>أولًا</em>. وهذه هي القاعدة الأساسية (سياسة الوصول) لكل طابور، بغض النظر عن طريقة تنفيذه.
             </div>
         </section>
 
@@ -635,112 +695,112 @@
         <!--  SECTION 3 — OPERATIONS                                      -->
         <!-- ============================================================ -->
         <section id="operations">
-            <h2>3. Queue Operations</h2>
+            <h2>3. عمليات الطابور</h2>
 
-            <p>The six fundamental operations of a queue are:</p>
+            <p>العمليات الأساسية الست للطابور هي:</p>
 
-            <h3>3.1 enqueue(element) — Add to Rear</h3>
+            <h3>3.1 <span dir="ltr">enqueue(element)</span> — الإضافة إلى المؤخرة</h3>
             <div class="highlight-box">
-                <p><strong>Purpose:</strong> Adds an element to the <strong>REAR</strong> of the queue</p>
-                <p><strong>Analogous to:</strong> <code>push()</code> in a Stack</p>
-                <p><strong>Time Complexity:</strong> O(1) for unrealistic and circular; O(n) for shifting (realistic)</p>
+                <p><strong>الغرض:</strong> إضافة عنصر إلى <strong>مؤخرة (REAR)</strong> الطابور — أي الإدخال في الطابور (Enqueue)</p>
+                <p><strong>تناظر:</strong> العملية <code>push()</code> في المكدس</p>
+                <p><strong>التعقيد الزمني (Time Complexity):</strong> <span dir="ltr">O(1)</span> في الطريقتين غير الواقعية والدائرية؛ و <span dir="ltr">O(n)</span> في طريقة الإزاحة (الواقعية)</p>
             </div>
             <div class="algorithm-steps">
-                <h4>Algorithm — enqueue(element)</h4>
+                <h4>الخوارزمية — <span dir="ltr">enqueue(element)</span></h4>
                 <ol>
-                    <li>Check if the queue is <strong>full</strong>. If full → report overflow error and stop.</li>
-                    <li>Advance the <strong>rear</strong> pointer: <code>rear = rear + 1</code> (or <code>rear = (rear+1) % SIZE</code> for circular)</li>
-                    <li>Store the element at the new rear position: <code>queue[rear] = element</code></li>
-                    <li>If this is the <strong>first element</strong> being added (front was −1), also set <code>front = 0</code></li>
+                    <li>تحقّق مما إذا كان الطابور <strong>ممتلئًا</strong>. إذا كان ممتلئًا ← أبلِغ عن خطأ الفيض (Overflow) وتوقّف.</li>
+                    <li>قدِّم مؤشر <strong>المؤخرة rear</strong>: <code>rear = rear + 1</code> (أو <code>rear = (rear+1) % SIZE</code> في الطابور الدائري)</li>
+                    <li>خزّن العنصر في موقع المؤخرة الجديد: <code>queue[rear] = element</code></li>
+                    <li>إذا كان هذا <strong>أول عنصر</strong> يُضاف (كانت قيمة front تساوي <span dir="ltr">−1</span>)، فاجعل أيضًا <code>front = 0</code></li>
                 </ol>
             </div>
 
-            <h3>3.2 dequeue() — Remove from Front</h3>
+            <h3>3.2 <span dir="ltr">dequeue()</span> — الحذف من المقدمة</h3>
             <div class="highlight-box">
-                <p><strong>Purpose:</strong> Removes and returns the element at the <strong>FRONT</strong> of the queue</p>
-                <p><strong>Analogous to:</strong> <code>pop()</code> in a Stack</p>
-                <p><strong>Time Complexity:</strong> O(1) for unrealistic and circular; O(n) for shifting</p>
+                <p><strong>الغرض:</strong> حذف العنصر الموجود في <strong>مقدمة (FRONT)</strong> الطابور وإرجاعه — أي الإخراج من الطابور (Dequeue)</p>
+                <p><strong>تناظر:</strong> العملية <code>pop()</code> في المكدس</p>
+                <p><strong>التعقيد الزمني:</strong> <span dir="ltr">O(1)</span> في الطريقتين غير الواقعية والدائرية؛ و <span dir="ltr">O(n)</span> في طريقة الإزاحة</p>
             </div>
             <div class="algorithm-steps">
-                <h4>Algorithm — dequeue()</h4>
+                <h4>الخوارزمية — <span dir="ltr">dequeue()</span></h4>
                 <ol>
-                    <li>Check if the queue is <strong>empty</strong>. If empty → report underflow error and stop.</li>
-                    <li>Save the element at the front: <code>temp = queue[front]</code></li>
-                    <li>Advance the <strong>front</strong> pointer: <code>front = front + 1</code> (or <code>front = (front+1) % SIZE</code> for circular)</li>
-                    <li>If <code>front &gt; rear</code>, the queue is now empty — reset both pointers to −1</li>
-                    <li>Return <code>temp</code></li>
+                    <li>تحقّق مما إذا كان الطابور <strong>فارغًا</strong>. إذا كان فارغًا ← أبلِغ عن خطأ النقص (Underflow) وتوقّف.</li>
+                    <li>احفظ العنصر الموجود في المقدمة: <code>temp = queue[front]</code></li>
+                    <li>قدِّم مؤشر <strong>المقدمة front</strong>: <code>front = front + 1</code> (أو <code>front = (front+1) % SIZE</code> في الطابور الدائري)</li>
+                    <li>إذا كان <code>front &gt; rear</code> فقد أصبح الطابور فارغًا — أعِد ضبط المؤشرين كليهما إلى <span dir="ltr">−1</span></li>
+                    <li>أرجِع <code>temp</code></li>
                 </ol>
             </div>
 
-            <h3>3.3 peek() — Inspect Front</h3>
+            <h3>3.3 <span dir="ltr">peek()</span> — الاطّلاع على المقدمة</h3>
             <div class="highlight-box">
-                <p><strong>Purpose:</strong> Returns the element at the front <em>without removing it</em></p>
-                <p><strong>Analogous to:</strong> <code>top()</code> in a Stack</p>
-                <p><strong>Time Complexity:</strong> O(1)</p>
+                <p><strong>الغرض:</strong> إرجاع العنصر الموجود في المقدمة <em>دون حذفه</em></p>
+                <p><strong>تناظر:</strong> العملية <code>top()</code> في المكدس</p>
+                <p><strong>التعقيد الزمني:</strong> <span dir="ltr">O(1)</span></p>
             </div>
 
-            <h3>3.4 isEmpty()</h3>
+            <h3>3.4 <span dir="ltr">isEmpty()</span></h3>
             <div class="highlight-box">
-                <p><strong>Purpose:</strong> Returns <code>true</code> if the queue has no elements</p>
-                <p><strong>Condition:</strong> <code>front == -1</code> (or <code>front &gt; rear</code> in the linear case)</p>
+                <p><strong>الغرض:</strong> تُرجع <code>true</code> إذا لم يكن في الطابور أي عنصر</p>
+                <p><strong>الشرط:</strong> <code>front == -1</code> (أو <code>front &gt; rear</code> في الحالة الخطية)</p>
             </div>
 
-            <h3>3.5 isFull()</h3>
+            <h3>3.5 <span dir="ltr">isFull()</span></h3>
             <div class="highlight-box">
-                <p><strong>Purpose:</strong> Returns <code>true</code> if the queue cannot hold more elements</p>
-                <p><strong>Condition:</strong> <code>rear == SIZE - 1</code> for unrealistic/realistic; <code>(rear + 1) % SIZE == front</code> for circular</p>
+                <p><strong>الغرض:</strong> تُرجع <code>true</code> إذا كان الطابور لا يتسع لمزيد من العناصر</p>
+                <p><strong>الشرط:</strong> <code>rear == SIZE - 1</code> في الطريقتين غير الواقعية/الواقعية؛ و <code>(rear + 1) % SIZE == front</code> في الدائرية</p>
             </div>
 
-            <h3>3.6 clear()</h3>
+            <h3>3.6 <span dir="ltr">clear()</span></h3>
             <div class="highlight-box">
-                <p><strong>Purpose:</strong> Empties the queue by resetting both pointers</p>
-                <p><strong>Action:</strong> <code>front = rear = -1</code></p>
+                <p><strong>الغرض:</strong> تفريغ الطابور بإعادة ضبط المؤشرين كليهما</p>
+                <p><strong>الإجراء:</strong> <code>front = rear = -1</code></p>
             </div>
 
             <!-- Operations Summary Table -->
             <div class="table-container">
                 <table>
                     <tr>
-                        <th>Operation</th>
-                        <th>Description</th>
-                        <th>Array (Circular)</th>
-                        <th>Linked List</th>
+                        <th>العملية</th>
+                        <th>الوصف</th>
+                        <th>مصفوفة (دائرية)</th>
+                        <th>قائمة مرتبطة</th>
                     </tr>
                     <tr>
-                        <td><strong>enqueue(e)</strong></td>
-                        <td>Add <em>e</em> at rear</td>
-                        <td>queue[(rear+1)%N] = e</td>
-                        <td>tail.next = newNode</td>
+                        <td dir="ltr"><strong>enqueue(e)</strong></td>
+                        <td>إضافة <em>e</em> عند المؤخرة</td>
+                        <td dir="ltr">queue[(rear+1)%N] = e</td>
+                        <td dir="ltr">tail.next = newNode</td>
                     </tr>
                     <tr>
-                        <td><strong>dequeue()</strong></td>
-                        <td>Remove & return front</td>
-                        <td>return queue[(front+1)%N]</td>
-                        <td>remove head node</td>
+                        <td dir="ltr"><strong>dequeue()</strong></td>
+                        <td>حذف عنصر المقدمة وإرجاعه</td>
+                        <td dir="ltr">return queue[(front+1)%N]</td>
+                        <td>حذف عقدة الرأس (head)</td>
                     </tr>
                     <tr>
-                        <td><strong>peek()</strong></td>
-                        <td>View front element</td>
-                        <td>return queue[front]</td>
-                        <td>return head.data</td>
+                        <td dir="ltr"><strong>peek()</strong></td>
+                        <td>عرض عنصر المقدمة</td>
+                        <td dir="ltr">return queue[front]</td>
+                        <td dir="ltr">return head.data</td>
                     </tr>
                     <tr>
-                        <td><strong>isEmpty()</strong></td>
-                        <td>Is queue empty?</td>
-                        <td>front == -1</td>
-                        <td>head == null</td>
+                        <td dir="ltr"><strong>isEmpty()</strong></td>
+                        <td>هل الطابور فارغ؟</td>
+                        <td dir="ltr">front == -1</td>
+                        <td dir="ltr">head == null</td>
                     </tr>
                     <tr>
-                        <td><strong>isFull()</strong></td>
-                        <td>Is queue full?</td>
-                        <td>(rear+1)%N == front</td>
-                        <td>N/A (dynamic)</td>
+                        <td dir="ltr"><strong>isFull()</strong></td>
+                        <td>هل الطابور ممتلئ؟</td>
+                        <td dir="ltr">(rear+1)%N == front</td>
+                        <td>لا ينطبق (ديناميكي)</td>
                     </tr>
                     <tr>
-                        <td><strong>clear()</strong></td>
-                        <td>Empty the queue</td>
-                        <td>front = rear = -1</td>
-                        <td>head = tail = null</td>
+                        <td dir="ltr"><strong>clear()</strong></td>
+                        <td>تفريغ الطابور</td>
+                        <td dir="ltr">front = rear = -1</td>
+                        <td dir="ltr">head = tail = null</td>
                     </tr>
                 </table>
             </div>
@@ -750,167 +810,167 @@
         <!--  SECTION 4 — ARRAY IMPLEMENTATION                           -->
         <!-- ============================================================ -->
         <section id="array-impl">
-            <h2>4. Array-Based Implementation</h2>
+            <h2>4. التنفيذ باستخدام المصفوفة</h2>
 
-            <p>Since a Queue is a logical data structure, it must be implemented using a physical structure. Let us start with an <strong>Array</strong>. We use an array of fixed size (e.g., 5 elements) and maintain two integer pointers:</p>
+            <p>بما أن الطابور هيكل بيانات منطقي، فيجب تنفيذه باستخدام هيكل فيزيائي. لنبدأ بـ<strong>المصفوفة (Array)</strong>. نستخدم مصفوفة ثابتة الحجم (مثلًا 5 عناصر) ونحتفظ بمؤشرين من نوع عدد صحيح:</p>
             <ul>
-                <li><strong>front</strong> — index of the first (oldest) element; starts at −1</li>
-                <li><strong>rear</strong> — index of the last (newest) element; starts at −1</li>
+                <li><strong>front</strong> — فهرس (Index) العنصر الأول (الأقدم)؛ يبدأ من <span dir="ltr">−1</span></li>
+                <li><strong>rear</strong> — فهرس العنصر الأخير (الأحدث)؛ يبدأ من <span dir="ltr">−1</span></li>
             </ul>
-            <p>When both are −1, the queue is <strong>empty</strong>.</p>
+            <p>عندما تكون قيمة كليهما <span dir="ltr">−1</span> يكون الطابور <strong>فارغًا</strong>.</p>
 
             <div class="important">
-                <p>There are <strong>three strategies</strong> for array-based queue implementation. Each has different trade-offs:</p>
+                <p>توجد <strong>ثلاث استراتيجيات</strong> لتنفيذ الطابور باستخدام المصفوفة، ولكلٍّ منها مزايا وعيوب مختلفة:</p>
                 <ol>
-                    <li><strong>Unrealistic</strong> — simple but wastes space</li>
-                    <li><strong>Realistic (Shifting)</strong> — uses all space but slow</li>
-                    <li><strong>Circular</strong> — best of both worlds using modulo arithmetic &#10003;</li>
+                    <li><strong>غير الواقعية (Unrealistic)</strong> — بسيطة لكنها تُهدر المساحة</li>
+                    <li><strong>الواقعية (بالإزاحة - Shifting)</strong> — تستخدم كل المساحة لكنها بطيئة</li>
+                    <li><strong>الدائرية (Circular)</strong> — تجمع أفضل ما في الطريقتين باستخدام حساب باقي القسمة (Modulo) &#10003;</li>
                 </ol>
             </div>
 
             <!-- ---- 4.1 UNREALISTIC ---- -->
-            <h3>4.1 Strategy 1 — Unrealistic (Simple Linear)</h3>
+            <h3>4.1 الاستراتيجية 1 — غير الواقعية (الخطية البسيطة)</h3>
 
             <div class="highlight-box">
-                <p>In this strategy, we simply advance <strong>both</strong> pointers as elements are added and removed. We never shift elements back. The pointer only moves forward — it never goes back to the start.</p>
+                <p>في هذه الاستراتيجية نقدّم <strong>كلا</strong> المؤشرين ببساطة كلما أُضيفت العناصر أو حُذفت، ولا نزيح العناصر إلى الخلف أبدًا. فالمؤشر يتحرك إلى الأمام فقط — ولا يعود إلى البداية أبدًا.</p>
             </div>
 
-            <h4>How it works</h4>
+            <h4>كيف تعمل</h4>
             <ul>
-                <li>Initially: <code>front = rear = −1</code></li>
-                <li><strong>enqueue</strong>: increment <code>rear</code>, place element at <code>queue[rear]</code></li>
-                <li><strong>dequeue</strong>: save <code>queue[front]</code>, increment <code>front</code></li>
+                <li>في البداية: <code>front = rear = −1</code></li>
+                <li><strong>enqueue</strong>: زِد <code>rear</code> بمقدار واحد، وضع العنصر في <code>queue[rear]</code></li>
+                <li><strong>dequeue</strong>: احفظ <code>queue[front]</code>، ثم زِد <code>front</code> بمقدار واحد</li>
                 <li><strong>isFull</strong>: <code>rear == SIZE − 1</code></li>
             </ul>
 
-            <h4>The Problem — Why It Is Called "Unrealistic"</h4>
+            <h4>المشكلة — لماذا تُسمّى «غير واقعية»</h4>
             <div class="warning-box">
-                <p>Imagine a queue of size 5. You enqueue 5 elements (indices 0–4). Now the queue is full (<code>rear = 4</code>). You dequeue 3 elements (<code>front = 3</code>). Logically, 3 slots are now free (indices 0, 1, 2). But the condition <code>rear == SIZE − 1</code> is still <code>true</code>, so the queue reports <strong>FULL</strong> even though 3 positions are available!</p>
-                <p>This wasted space can never be reclaimed. The queue will refuse new insertions even though it has free spots. This is why this strategy is called <strong>unrealistic</strong> — it is not practical for real use.</p>
+                <p>تخيّل طابورًا حجمه 5. أدخلتَ 5 عناصر (الفهارس <span dir="ltr">0–4</span>)، فأصبح الطابور ممتلئًا (<code>rear = 4</code>). ثم أخرجتَ 3 عناصر (<code>front = 3</code>). منطقيًا أصبحت هناك 3 خانات فارغة (الفهارس 0 و1 و2). لكن الشرط <code>rear == SIZE − 1</code> ما زال <code>true</code>، لذا يُبلغ الطابور بأنه <strong>ممتلئ</strong> رغم توفّر 3 مواقع!</p>
+                <p>هذه المساحة المهدرة لا يمكن استعادتها أبدًا؛ إذ سيرفض الطابور أي إدخال جديد رغم وجود أماكن فارغة. ولهذا تُسمّى هذه الاستراتيجية <strong>غير واقعية</strong> — فهي غير عملية للاستخدام الحقيقي.</p>
             </div>
 
             <!-- Interactive: Unrealistic -->
             <div class="interactive-demo">
-                <h3 style="text-align:center; color:#c62828;">&#9888;&#65039; Interactive Demo — Unrealistic Queue</h3>
-                <p style="text-align:center; color:#666;">Queue size = 5. Enqueue and dequeue elements, then observe the wasted space problem.</p>
+                <h3 style="text-align:center; color:#c62828;">&#9888;&#65039; عرض تفاعلي — الطابور غير الواقعي</h3>
+                <p style="text-align:center; color:#666;">حجم الطابور = 5. أدخِل عناصر وأخرِجها، ثم لاحظ مشكلة المساحة المهدرة.</p>
                 <div class="demo-controls">
-                    <input type="number" id="unreal-val" placeholder="Value" min="1" max="99">
-                    <button class="btn" onclick="unrealEnqueue()">Enqueue</button>
-                    <button class="btn btn-danger" onclick="unrealDequeue()">Dequeue</button>
-                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="unrealReset()">Reset</button>
+                    <input type="number" id="unreal-val" placeholder="القيمة" min="1" max="99">
+                    <button class="btn" onclick="unrealEnqueue()">إدخال (Enqueue)</button>
+                    <button class="btn btn-danger" onclick="unrealDequeue()">إخراج (Dequeue)</button>
+                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="unrealReset()">إعادة تعيين</button>
                 </div>
                 <div class="queue-display">
                     <div class="queue-cells-row" id="unreal-cells"></div>
                     <div class="pointer-row" id="unreal-ptrs"></div>
                     <div class="queue-status">
-                        <div class="status-badge">front: <span id="unreal-front">-1</span></div>
-                        <div class="status-badge">rear: <span id="unreal-rear">-1</span></div>
-                        <div class="status-badge">size: <span id="unreal-size">5</span></div>
+                        <div class="status-badge">المقدمة (front): <span id="unreal-front">-1</span></div>
+                        <div class="status-badge">المؤخرة (rear): <span id="unreal-rear">-1</span></div>
+                        <div class="status-badge">الحجم (size): <span id="unreal-size">5</span></div>
                     </div>
                 </div>
-                <div class="msg-log" id="unreal-msg">Queue is empty. Start by enqueueing a value.</div>
+                <div class="msg-log" id="unreal-msg">الطابور فارغ. ابدأ بإدخال قيمة.</div>
             </div>
 
             <!-- ---- 4.2 REALISTIC ---- -->
-            <h3>4.2 Strategy 2 — Realistic (Shifting)</h3>
+            <h3>4.2 الاستراتيجية 2 — الواقعية (بالإزاحة)</h3>
 
             <div class="highlight-box">
-                <p>A student observes the problem above and suggests: <em>"Why don't we shift all elements toward index 0 after each dequeue?"</em> This is the <strong>shifting strategy</strong>. After removing the front element, every remaining element shifts one position to the left, and <code>front</code> always stays at 0.</p>
+                <p>يلاحظ أحد الطلاب المشكلة السابقة فيقترح: <em>«لماذا لا نزيح جميع العناصر نحو الفهرس 0 بعد كل عملية إخراج؟»</em> هذه هي <strong>استراتيجية الإزاحة (Shifting)</strong>. فبعد حذف عنصر المقدمة يُزاح كل عنصر متبقٍّ موقعًا واحدًا إلى اليسار (نحو الفهرس 0)، ويبقى <code>front</code> دائمًا عند 0.</p>
             </div>
 
-            <h4>How Shifting Works</h4>
+            <h4>كيف تعمل الإزاحة</h4>
             <ul>
-                <li><code>front</code> is always 0</li>
-                <li><strong>dequeue</strong>: remove <code>queue[0]</code>, shift all elements left (<code>queue[i] = queue[i+1]</code>), decrement <code>rear</code></li>
-                <li>No space is ever wasted — all free positions are always at the right end</li>
+                <li>قيمة <code>front</code> دائمًا 0</li>
+                <li><strong>dequeue</strong>: احذف <code>queue[0]</code>، وأزِح جميع العناصر إلى اليسار (<code>queue[i] = queue[i+1]</code>)، ثم أنقِص <code>rear</code> بمقدار واحد</li>
+                <li>لا تُهدر أي مساحة أبدًا — فجميع المواقع الفارغة تكون دائمًا في الطرف الأيمن (نهاية المصفوفة)</li>
             </ul>
 
-            <h4>The Trade-Off — Why Shifting Hurts Performance</h4>
+            <h4>الثمن — لماذا تضرّ الإزاحة بالأداء</h4>
             <div class="warning-box">
-                <p>Every dequeue operation requires shifting <em>all remaining elements</em> one position to the left. If there are <strong>n</strong> elements in the queue, that is <strong>O(n)</strong> work per dequeue — not O(1). This can be very slow for large queues. The enqueue is still O(1), but dequeue is <strong>O(n)</strong>.</p>
+                <p>تتطلب كل عملية إخراج إزاحة <em>جميع العناصر المتبقية</em> موقعًا واحدًا إلى اليسار. فإذا كان في الطابور <strong>n</strong> عنصرًا، فهذا يعني عملًا بمقدار <strong><span dir="ltr">O(n)</span></strong> لكل عملية إخراج — وليس <span dir="ltr">O(1)</span>. وقد يكون ذلك بطيئًا جدًا في الطوابير الكبيرة. تبقى عملية الإدخال <span dir="ltr">O(1)</span>، لكن الإخراج يصبح <strong><span dir="ltr">O(n)</span></strong>.</p>
             </div>
 
             <!-- Interactive: Realistic (Shifting) -->
             <div class="interactive-demo">
-                <h3 style="text-align:center; color:#e65100;">&#128260; Interactive Demo — Realistic Queue (Shifting)</h3>
-                <p style="text-align:center; color:#666;">Queue size = 5. Watch how shifting works after each dequeue.</p>
+                <h3 style="text-align:center; color:#e65100;">&#128260; عرض تفاعلي — الطابور الواقعي (بالإزاحة)</h3>
+                <p style="text-align:center; color:#666;">حجم الطابور = 5. شاهد كيف تعمل الإزاحة بعد كل عملية إخراج.</p>
                 <div class="demo-controls">
-                    <input type="number" id="real-val" placeholder="Value" min="1" max="99">
-                    <button class="btn" onclick="realEnqueue()">Enqueue</button>
-                    <button class="btn btn-danger" onclick="realDequeue()">Dequeue</button>
-                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="realReset()">Reset</button>
+                    <input type="number" id="real-val" placeholder="القيمة" min="1" max="99">
+                    <button class="btn" onclick="realEnqueue()">إدخال (Enqueue)</button>
+                    <button class="btn btn-danger" onclick="realDequeue()">إخراج (Dequeue)</button>
+                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="realReset()">إعادة تعيين</button>
                 </div>
                 <div class="queue-display">
                     <div class="queue-cells-row" id="real-cells"></div>
                     <div class="pointer-row" id="real-ptrs"></div>
                     <div class="queue-status">
-                        <div class="status-badge">front: <span id="real-front">0</span></div>
-                        <div class="status-badge">rear: <span id="real-rear">-1</span></div>
-                        <div class="status-badge">size: <span id="real-size">5</span></div>
+                        <div class="status-badge">المقدمة (front): <span id="real-front">0</span></div>
+                        <div class="status-badge">المؤخرة (rear): <span id="real-rear">-1</span></div>
+                        <div class="status-badge">الحجم (size): <span id="real-size">5</span></div>
                     </div>
                 </div>
                 <div id="shift-steps" style="margin-top:10px;"></div>
-                <div class="msg-log" id="real-msg">Queue is empty. Start by enqueueing a value.</div>
+                <div class="msg-log" id="real-msg">الطابور فارغ. ابدأ بإدخال قيمة.</div>
             </div>
 
             <!-- ---- 4.3 CIRCULAR ---- -->
-            <h3>4.3 Strategy 3 — Circular Queue (Best Solution)</h3>
+            <h3>4.3 الاستراتيجية 3 — الطابور الدائري (الحل الأفضل)</h3>
 
             <div class="definition">
-                <strong>Circular Queue</strong>: Instead of moving forward in a straight line, the array is treated as a <strong>circle</strong>. When <code>rear</code> reaches the last index, it wraps around to index 0 using the <strong>modulo operator (%)</strong>. This eliminates wasted space <em>and</em> keeps all operations at O(1).
+                <strong>الطابور الدائري (Circular Queue)</strong>: بدلًا من التحرك إلى الأمام في خط مستقيم، تُعامَل المصفوفة على أنها <strong>دائرة</strong> — أي مصفوفة دائرية (Circular Array). فعندما يصل <code>rear</code> إلى الفهرس الأخير يلتفّ عائدًا إلى الفهرس 0 باستخدام <strong>عامل باقي القسمة (%)</strong>. وهذا يقضي على المساحة المهدرة <em>ويُبقي</em> جميع العمليات بتعقيد <span dir="ltr">O(1)</span>.
             </div>
 
-            <h4>The Key Formula — Modulo Arithmetic</h4>
+            <h4>الصيغة الأساسية — حساب باقي القسمة</h4>
             <div class="highlight-box">
                 <ul>
-                    <li><strong>Enqueue:</strong> <code>rear = (rear + 1) % SIZE</code></li>
-                    <li><strong>Dequeue:</strong> <code>front = (front + 1) % SIZE</code></li>
-                    <li><strong>isEmpty:</strong> <code>front == -1</code> (or use a count variable)</li>
+                    <li><strong>الإدخال (Enqueue):</strong> <code>rear = (rear + 1) % SIZE</code></li>
+                    <li><strong>الإخراج (Dequeue):</strong> <code>front = (front + 1) % SIZE</code></li>
+                    <li><strong>isEmpty:</strong> <code>front == -1</code> (أو استخدم متغيّر عدّاد count)</li>
                     <li><strong>isFull:</strong> <code>(rear + 1) % SIZE == front</code></li>
                 </ul>
-                <p>The modulo operator makes the index <em>wrap around</em>. If <code>SIZE = 5</code> and <code>rear = 4</code>, then <code>(4 + 1) % 5 = 0</code> — rear jumps back to the start!</p>
+                <p>يجعل عامل باقي القسمة الفهرس <em>يلتفّ</em> إلى البداية. فإذا كان <code>SIZE = 5</code> و <code>rear = 4</code>، فإن <code>(4 + 1) % 5 = 0</code> — أي يقفز rear عائدًا إلى البداية!</p>
             </div>
 
-            <h4>Important Cases in Circular Queue</h4>
+            <h4>حالات مهمة في الطابور الدائري</h4>
             <div class="table-container">
                 <table>
                     <tr>
-                        <th>Situation</th>
-                        <th>Condition</th>
-                        <th>Meaning</th>
+                        <th>الحالة</th>
+                        <th>الشرط</th>
+                        <th>المعنى</th>
                     </tr>
                     <tr>
-                        <td>Empty queue</td>
+                        <td>طابور فارغ</td>
                         <td><code>front == -1</code></td>
-                        <td>No elements; both pointers reset to −1</td>
+                        <td>لا توجد عناصر؛ يُعاد ضبط المؤشرين إلى <span dir="ltr">−1</span></td>
                     </tr>
                     <tr>
-                        <td>Full queue</td>
+                        <td>طابور ممتلئ</td>
                         <td><code>(rear + 1) % SIZE == front</code></td>
-                        <td>One slot is always kept empty as a sentinel to distinguish full from empty</td>
+                        <td>تُترك خانة واحدة فارغة دائمًا كخانة حارسة (Sentinel) للتمييز بين الامتلاء والفراغ</td>
                     </tr>
                     <tr>
-                        <td>One element</td>
+                        <td>عنصر واحد</td>
                         <td><code>front == rear</code></td>
-                        <td>front and rear point to the same slot</td>
+                        <td>يشير front و rear إلى الخانة نفسها</td>
                     </tr>
                     <tr>
-                        <td>Wrap-around</td>
+                        <td>الالتفاف (Wrap-around)</td>
                         <td><code>rear = (rear+1) % SIZE</code></td>
-                        <td>rear wraps from last index back to 0</td>
+                        <td>يلتفّ rear من الفهرس الأخير عائدًا إلى 0</td>
                     </tr>
                 </table>
             </div>
 
             <!-- Interactive: Circular Queue -->
             <div class="interactive-demo">
-                <h3 style="text-align:center; color:#2e7d32;">&#9654; Interactive Demo — Circular Queue</h3>
-                <p style="text-align:center; color:#666;">Queue size = 5. Watch the pointers wrap around the circle. Blue = FRONT, Orange = REAR.</p>
+                <h3 style="text-align:center; color:#2e7d32;">&#9654; عرض تفاعلي — الطابور الدائري</h3>
+                <p style="text-align:center; color:#666;">حجم الطابور = 5. شاهد المؤشرين وهما يلتفّان حول الدائرة. الأزرق = المقدمة (FRONT)، والبرتقالي = المؤخرة (REAR).</p>
                 <div class="demo-controls">
-                    <input type="number" id="circ-val" placeholder="Value" min="1" max="99">
-                    <button class="btn" onclick="circEnqueue()">Enqueue</button>
-                    <button class="btn btn-danger" onclick="circDequeue()">Dequeue</button>
-                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="circReset()">Reset</button>
+                    <input type="number" id="circ-val" placeholder="القيمة" min="1" max="99">
+                    <button class="btn" onclick="circEnqueue()">إدخال (Enqueue)</button>
+                    <button class="btn btn-danger" onclick="circDequeue()">إخراج (Dequeue)</button>
+                    <button class="btn" style="background:linear-gradient(135deg,#555,#888);" onclick="circReset()">إعادة تعيين</button>
                 </div>
 
                 <!-- SVG Circular Visualization -->
@@ -919,37 +979,37 @@
                         <!-- Cells drawn by JS -->
                     </svg>
                     <div class="queue-status">
-                        <div class="status-badge">front: <span id="circ-front">-1</span></div>
-                        <div class="status-badge">rear: <span id="circ-rear">-1</span></div>
-                        <div class="status-badge">count: <span id="circ-count">0</span></div>
+                        <div class="status-badge">المقدمة (front): <span id="circ-front">-1</span></div>
+                        <div class="status-badge">المؤخرة (rear): <span id="circ-rear">-1</span></div>
+                        <div class="status-badge">العدد (count): <span id="circ-count">0</span></div>
                     </div>
                 </div>
-                <div class="msg-log" id="circ-msg">Circular queue is empty. Start enqueueing values.</div>
+                <div class="msg-log" id="circ-msg">الطابور الدائري فارغ. ابدأ بإدخال القيم.</div>
 
                 <!-- Step-by-step formula display -->
-                <div id="circ-formula" style="background:#e8faf5; border:2px solid #11998e; border-radius:8px; padding:15px; margin-top:15px; font-family:'Courier New',monospace; font-size:1.05em; display:none;"></div>
+                <div id="circ-formula" style="background:#e8faf5; border:2px solid #11998e; border-radius:8px; padding:15px; margin-top:15px; font-family:'Haradh','Courier New',monospace; font-size:1.05em; display:none;"></div>
             </div>
 
             <!-- Comparison of three strategies -->
-            <h3>Comparison of the Three Strategies</h3>
+            <h3>مقارنة بين الاستراتيجيات الثلاث</h3>
             <div class="compare-grid">
                 <div class="compare-card unrealistic">
-                    <h4>&#10060; Unrealistic</h4>
-                    <p><strong>enqueue:</strong> O(1)</p>
-                    <p><strong>dequeue:</strong> O(1)</p>
-                    <p><strong>Problem:</strong> Space is wasted — positions freed by dequeue can never be reused.</p>
+                    <h4>&#10060; غير الواقعية</h4>
+                    <p><strong>enqueue:</strong> <span dir="ltr">O(1)</span></p>
+                    <p><strong>dequeue:</strong> <span dir="ltr">O(1)</span></p>
+                    <p><strong>المشكلة:</strong> تُهدر المساحة — فالمواقع التي تتحرر بالإخراج لا يمكن إعادة استخدامها أبدًا.</p>
                 </div>
                 <div class="compare-card realistic">
-                    <h4>&#9888;&#65039; Realistic (Shifting)</h4>
-                    <p><strong>enqueue:</strong> O(1)</p>
-                    <p><strong>dequeue:</strong> O(n) — shift all elements!</p>
-                    <p><strong>Problem:</strong> No wasted space, but slow dequeue for large queues.</p>
+                    <h4>&#9888;&#65039; الواقعية (بالإزاحة)</h4>
+                    <p><strong>enqueue:</strong> <span dir="ltr">O(1)</span></p>
+                    <p><strong>dequeue:</strong> <span dir="ltr">O(n)</span> — إزاحة جميع العناصر!</p>
+                    <p><strong>المشكلة:</strong> لا مساحة مهدرة، لكن الإخراج بطيء في الطوابير الكبيرة.</p>
                 </div>
                 <div class="compare-card circular">
-                    <h4>&#10003; Circular (Best)</h4>
-                    <p><strong>enqueue:</strong> O(1)</p>
-                    <p><strong>dequeue:</strong> O(1)</p>
-                    <p><strong>Advantage:</strong> Wraps around with modulo — no wasted space, no shifting needed!</p>
+                    <h4>&#10003; الدائرية (الأفضل)</h4>
+                    <p><strong>enqueue:</strong> <span dir="ltr">O(1)</span></p>
+                    <p><strong>dequeue:</strong> <span dir="ltr">O(1)</span></p>
+                    <p><strong>الميزة:</strong> تلتفّ باستخدام باقي القسمة — لا مساحة مهدرة ولا حاجة إلى الإزاحة!</p>
                 </div>
             </div>
         </section>
@@ -958,12 +1018,12 @@
         <!--  SECTION 5 — JAVA CODE                                      -->
         <!-- ============================================================ -->
         <section id="code">
-            <h2>5. Java Implementation</h2>
+            <h2>5. التنفيذ بلغة Java</h2>
 
-            <h3>5.1 Circular Queue Using Array</h3>
+            <h3>5.1 الطابور الدائري باستخدام المصفوفة</h3>
             <div class="code-container">
                 <div class="code-header" onclick="toggleCode(this)">
-                    <span>&#9654; CircularQueue.java — Array-based Circular Queue</span>
+                    <span>&#9654; <span dir="ltr">CircularQueue.java</span> — طابور دائري قائم على المصفوفة</span>
                     <span class="code-toggle">&#9660;</span>
                 </div>
                 <div class="code-block"><span class="keyword">public class</span> <span class="class-name">CircularQueue</span> {
@@ -1045,10 +1105,10 @@
 }</div>
             </div>
 
-            <h3>5.2 Queue Using Linked List</h3>
+            <h3>5.2 الطابور باستخدام القائمة المرتبطة</h3>
             <div class="code-container">
                 <div class="code-header" onclick="toggleCode(this)">
-                    <span>&#9654; LinkedQueue.java — Linked List-based Queue</span>
+                    <span>&#9654; <span dir="ltr">LinkedQueue.java</span> — طابور قائم على القائمة المرتبطة</span>
                     <span class="code-toggle">&#9660;</span>
                 </div>
                 <div class="code-block"><span class="comment">// Node class</span>
@@ -1102,8 +1162,8 @@
             </div>
 
             <div class="highlight-box">
-                <h4>Why Linked List Implementation is Easy</h4>
-                <p>With a linked list, there is no concept of "full" — the list grows dynamically as needed. There is no wasted space, no wrap-around logic, and no shifting. The trade-off is additional memory overhead per node (the <code>next</code> pointer). For most practical purposes, the <strong>circular array</strong> or <strong>linked list</strong> implementations are both excellent choices.</p>
+                <h4>لماذا يُعدّ التنفيذ بالقائمة المرتبطة سهلًا</h4>
+                <p>مع القائمة المرتبطة لا يوجد مفهوم «الامتلاء» — إذ تنمو القائمة ديناميكيًا حسب الحاجة. فلا مساحة مهدرة، ولا منطق للالتفاف، ولا إزاحة. والثمن هو ذاكرة إضافية لكل عقدة (Node) (المرجع <code>next</code>). وفي معظم الأغراض العملية يُعدّ كلٌّ من التنفيذ بـ<strong>المصفوفة الدائرية</strong> والتنفيذ بـ<strong>القائمة المرتبطة</strong> خيارًا ممتازًا.</p>
             </div>
         </section>
 
@@ -1111,64 +1171,64 @@
         <!--  SECTION 6 — COMPLEXITY SUMMARY                             -->
         <!-- ============================================================ -->
         <section id="complexity">
-            <h2>6. Time Complexity Summary</h2>
+            <h2>6. ملخص التعقيد الزمني</h2>
             <div class="table-container">
                 <table>
                     <tr>
-                        <th>Operation</th>
-                        <th>Unrealistic Array</th>
-                        <th>Shifting Array</th>
-                        <th>Circular Array</th>
-                        <th>Linked List</th>
+                        <th>العملية</th>
+                        <th>مصفوفة غير واقعية</th>
+                        <th>مصفوفة بالإزاحة</th>
+                        <th>مصفوفة دائرية</th>
+                        <th>قائمة مرتبطة</th>
                     </tr>
                     <tr>
                         <td><strong>enqueue</strong></td>
-                        <td>O(1)</td>
-                        <td>O(1)</td>
-                        <td><strong>O(1)</strong></td>
-                        <td><strong>O(1)</strong></td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><strong><span dir="ltr">O(1)</span></strong></td>
+                        <td><strong><span dir="ltr">O(1)</span></strong></td>
                     </tr>
                     <tr>
                         <td><strong>dequeue</strong></td>
-                        <td>O(1)</td>
-                        <td><span style="color:#c62828"><strong>O(n)</strong></span></td>
-                        <td><strong>O(1)</strong></td>
-                        <td><strong>O(1)</strong></td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><span style="color:#c62828"><strong><span dir="ltr">O(n)</span></strong></span></td>
+                        <td><strong><span dir="ltr">O(1)</span></strong></td>
+                        <td><strong><span dir="ltr">O(1)</span></strong></td>
                     </tr>
                     <tr>
                         <td><strong>peek</strong></td>
-                        <td>O(1)</td>
-                        <td>O(1)</td>
-                        <td>O(1)</td>
-                        <td>O(1)</td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><span dir="ltr">O(1)</span></td>
                     </tr>
                     <tr>
-                        <td><strong>isEmpty / isFull</strong></td>
-                        <td>O(1)</td>
-                        <td>O(1)</td>
-                        <td>O(1)</td>
-                        <td>O(1)</td>
+                        <td dir="ltr"><strong>isEmpty / isFull</strong></td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><span dir="ltr">O(1)</span></td>
+                        <td><span dir="ltr">O(1)</span></td>
                     </tr>
                     <tr>
-                        <td><strong>Space wasted?</strong></td>
-                        <td><span style="color:#c62828">Yes</span></td>
-                        <td>No</td>
-                        <td>No</td>
-                        <td>No</td>
+                        <td><strong>هل تُهدر مساحة؟</strong></td>
+                        <td><span style="color:#c62828">نعم</span></td>
+                        <td>لا</td>
+                        <td>لا</td>
+                        <td>لا</td>
                     </tr>
                 </table>
             </div>
 
             <div class="definition">
-                <strong>Conclusion:</strong> The <strong>Circular Array</strong> and <strong>Linked List</strong> implementations are the preferred choices in practice — both achieve O(1) for all core operations with no wasted space.
+                <strong>الخلاصة:</strong> التنفيذ بـ<strong>المصفوفة الدائرية</strong> والتنفيذ بـ<strong>القائمة المرتبطة</strong> هما الخياران المفضّلان عمليًا — فكلاهما يحقق <span dir="ltr">O(1)</span> لجميع العمليات الأساسية دون أي مساحة مهدرة.
             </div>
         </section>
 
     </div><!-- /content -->
 
     <footer>
-        <p><strong>Data Structures I</strong></p>
-        <p>Prepared by Dr. Almalawi</p>
+        <p><strong>هياكل البيانات 1</strong></p>
+        <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
     </footer>
 </div><!-- /container -->
 
@@ -1235,25 +1295,25 @@ function unrealRender() {
 
 function unrealEnqueue() {
     const val = parseInt(document.getElementById('unreal-val').value);
-    if (isNaN(val)) { setMsg('unreal-msg', 'Please enter a numeric value.'); return; }
+    if (isNaN(val)) { setMsg('unreal-msg', 'الرجاء إدخال قيمة عددية.'); return; }
     if (uRear === USIZE - 1) {
         setMsg('unreal-msg',
-            '&#10060; OVERFLOW! rear == ' + uRear + ' == SIZE−1. Queue is FULL.\n' +
-            'Even though indices 0–' + (uFront - 1) + ' are free, we cannot use them!\n' +
-            'This is the unrealistic problem — space is wasted forever.');
+            '&#10060; فيض (OVERFLOW)! <bdi>rear == ' + uRear + ' == SIZE−1</bdi>. الطابور ممتلئ.\n' +
+            'رغم أن الفهارس <bdi>0–' + (uFront - 1) + '</bdi> فارغة، لا يمكننا استخدامها!\n' +
+            'هذه هي مشكلة الطريقة غير الواقعية — المساحة تُهدر إلى الأبد.');
         return;
     }
     uRear++;
     if (uFront === -1) uFront = 0;
     uQueue[uRear] = val;
     unrealRender();
-    setMsg('unreal-msg', '✔ Enqueued ' + val + ' at index ' + uRear + '. rear = ' + uRear);
+    setMsg('unreal-msg', '✔ تم إدخال ' + val + ' في الفهرس ' + uRear + '. <bdi>rear = ' + uRear + '</bdi>');
     document.getElementById('unreal-val').value = '';
 }
 
 function unrealDequeue() {
     if (uFront === -1 || uFront > uRear) {
-        setMsg('unreal-msg', '&#10060; UNDERFLOW! Queue is empty. front > rear.');
+        setMsg('unreal-msg', '&#10060; نقص (UNDERFLOW)! الطابور فارغ. <bdi>front > rear</bdi>.');
         return;
     }
     const removed = uQueue[uFront];
@@ -1262,15 +1322,15 @@ function unrealDequeue() {
     uFront++;
     if (uFront > uRear) { uFront = -1; uRear = -1; }
     unrealRender();
-    setMsg('unreal-msg', '✔ Dequeued ' + removed + ' from index ' + oldFront + '. front = ' + uFront +
-        (uFront > 0 ? '\n⚠ Indices 0–' + (uFront - 1) + ' are now wasted — unreachable!' : ''));
+    setMsg('unreal-msg', '✔ تم إخراج ' + removed + ' من الفهرس ' + oldFront + '. <bdi>front = ' + uFront + '</bdi>' +
+        (uFront > 0 ? '\n⚠ الفهارس <bdi>0–' + (uFront - 1) + '</bdi> أصبحت الآن مهدرة — لا يمكن الوصول إليها!' : ''));
 }
 
 function unrealReset() {
     uQueue = new Array(USIZE).fill(null);
     uFront = -1; uRear = -1;
     unrealRender();
-    setMsg('unreal-msg', 'Queue reset. Both pointers at −1.');
+    setMsg('unreal-msg', 'أُعيد تعيين الطابور. كلا المؤشرين عند <span dir="ltr">−1</span>.');
 }
 
 unrealRender();
@@ -1324,21 +1384,21 @@ function realRender() {
 
 function realEnqueue() {
     const val = parseInt(document.getElementById('real-val').value);
-    if (isNaN(val)) { setMsg('real-msg', 'Please enter a numeric value.'); return; }
+    if (isNaN(val)) { setMsg('real-msg', 'الرجاء إدخال قيمة عددية.'); return; }
     if (rQueue.length >= RSIZE) {
-        setMsg('real-msg', '&#10060; OVERFLOW! Queue is full (rear = ' + (rQueue.length - 1) + ').');
+        setMsg('real-msg', '&#10060; فيض (OVERFLOW)! الطابور ممتلئ (<bdi>rear = ' + (rQueue.length - 1) + '</bdi>).');
         return;
     }
     rQueue.push(val);
     realRender();
     document.getElementById('shift-steps').innerHTML = '';
-    setMsg('real-msg', '✔ Enqueued ' + val + ' at index ' + (rQueue.length - 1));
+    setMsg('real-msg', '✔ تم إدخال ' + val + ' في الفهرس ' + (rQueue.length - 1));
     document.getElementById('real-val').value = '';
 }
 
 function realDequeue() {
     if (rQueue.length === 0) {
-        setMsg('real-msg', '&#10060; UNDERFLOW! Queue is empty.');
+        setMsg('real-msg', '&#10060; نقص (UNDERFLOW)! الطابور فارغ.');
         return;
     }
     const removed = rQueue[0];
@@ -1347,12 +1407,12 @@ function realDequeue() {
 
     // Show shifting steps
     const stepsDiv = document.getElementById('shift-steps');
-    stepsDiv.innerHTML = '<p style="font-weight:bold;color:#e65100;margin-bottom:8px;">Shifting elements after dequeue:</p>';
+    stepsDiv.innerHTML = '<p style="font-weight:bold;color:#e65100;margin-bottom:8px;">إزاحة العناصر بعد الإخراج:</p>';
     for (let i = 0; i < oldQueue.length; i++) {
         const s = document.createElement('div');
         s.className = 'shift-step' + (i === 0 ? ' highlight' : '');
         if (i === 0) {
-            s.textContent = `Removed queue[0] = ${removed}`;
+            s.textContent = `تم حذف \u2066queue[0] = ${removed}\u2069`;
         } else {
             s.textContent = `queue[${i-1}] = queue[${i}]  →  ${oldQueue[i]}`;
         }
@@ -1361,19 +1421,19 @@ function realDequeue() {
     if (rQueue.length > 0) {
         const s = document.createElement('div');
         s.className = 'shift-step';
-        s.textContent = `rear is now ${rQueue.length - 1}. Shifted ${rQueue.length} element(s) — O(n) cost!`;
+        s.textContent = `أصبح rear الآن ${rQueue.length - 1}. تمت إزاحة ${rQueue.length} عنصر/عناصر — بتكلفة O(n)!`;
         stepsDiv.appendChild(s);
     }
 
     realRender();
-    setMsg('real-msg', '✔ Dequeued ' + removed + '. All elements shifted left. rear = ' + (rQueue.length - 1) + '. Cost: O(' + (oldQueue.length - 1) + ') shifts!');
+    setMsg('real-msg', '✔ تم إخراج ' + removed + '. أُزيحت جميع العناصر إلى اليسار. <bdi>rear = ' + (rQueue.length - 1) + '</bdi>. التكلفة: <bdi>O(' + (oldQueue.length - 1) + ')</bdi> عمليات إزاحة!');
 }
 
 function realReset() {
     rQueue = [];
     realRender();
     document.getElementById('shift-steps').innerHTML = '';
-    setMsg('real-msg', 'Queue reset.');
+    setMsg('real-msg', 'أُعيد تعيين الطابور.');
 }
 
 realRender();
@@ -1460,12 +1520,12 @@ function circRender() {
     const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     title.setAttribute('x', CX); title.setAttribute('y', CY - 12);
     title.setAttribute('text-anchor', 'middle'); title.setAttribute('font-size', '13');
-    title.setAttribute('fill', '#555'); title.textContent = 'Circular';
+    title.setAttribute('fill', '#555'); title.textContent = 'الطابور';
     svg.appendChild(title);
     const title2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     title2.setAttribute('x', CX); title2.setAttribute('y', CY + 8);
     title2.setAttribute('text-anchor', 'middle'); title2.setAttribute('font-size', '13');
-    title2.setAttribute('fill', '#555'); title2.textContent = 'Queue';
+    title2.setAttribute('fill', '#555'); title2.textContent = 'الدائري';
     svg.appendChild(title2);
     const title3 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     title3.setAttribute('x', CX); title3.setAttribute('y', CY + 26);
@@ -1513,9 +1573,9 @@ function circRender() {
 
 function circEnqueue() {
     const val = parseInt(document.getElementById('circ-val').value);
-    if (isNaN(val)) { setMsg('circ-msg', 'Please enter a numeric value.'); return; }
+    if (isNaN(val)) { setMsg('circ-msg', 'الرجاء إدخال قيمة عددية.'); return; }
     if (cCount === CSIZE) {
-        setMsg('circ-msg', '&#10060; OVERFLOW! Queue is full — all ' + CSIZE + ' slots are occupied.');
+        setMsg('circ-msg', '&#10060; فيض (OVERFLOW)! الطابور ممتلئ — جميع الخانات الـ' + CSIZE + ' مشغولة.');
         return;
     }
     const oldRear = cRear;
@@ -1532,13 +1592,13 @@ function circEnqueue() {
         `queue[${cRear}] = ${val}`;
 
     circRender();
-    setMsg('circ-msg', '✔ Enqueued ' + val + ' → rear moved to index ' + cRear + ' using modulo.');
+    setMsg('circ-msg', '✔ تم إدخال ' + val + ' ← انتقل rear إلى الفهرس ' + cRear + ' باستخدام باقي القسمة.');
     document.getElementById('circ-val').value = '';
 }
 
 function circDequeue() {
     if (cCount === 0) {
-        setMsg('circ-msg', '&#10060; UNDERFLOW! Queue is empty.');
+        setMsg('circ-msg', '&#10060; نقص (UNDERFLOW)! الطابور فارغ.');
         return;
     }
     const removed = cQueue[cFront];
@@ -1555,11 +1615,11 @@ function circDequeue() {
     formula.style.display = 'block';
     formula.innerHTML =
         `<strong>dequeue()</strong><br>` +
-        `Removed queue[${oldFront}] = ${removed}<br>` +
+        `تم حذف <bdi>queue[${oldFront}] = ${removed}</bdi><br>` +
         `new front = (old front + 1) % SIZE = (${oldFront} + 1) % ${CSIZE} = <strong style="color:#1565c0">${cFront}</strong>`;
 
     circRender();
-    setMsg('circ-msg', '✔ Dequeued ' + removed + ' from index ' + oldFront + ' → front moved to ' + cFront + ' using modulo.');
+    setMsg('circ-msg', '✔ تم إخراج ' + removed + ' من الفهرس ' + oldFront + ' ← انتقل front إلى ' + cFront + ' باستخدام باقي القسمة.');
 }
 
 function circReset() {
@@ -1567,7 +1627,7 @@ function circReset() {
     cFront = -1; cRear = -1; cCount = 0;
     document.getElementById('circ-formula').style.display = 'none';
     circRender();
-    setMsg('circ-msg', 'Circular queue reset.');
+    setMsg('circ-msg', 'أُعيد تعيين الطابور الدائري.');
 }
 
 circRender();
