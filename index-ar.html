@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Structures I</title>
+    <title>هياكل البيانات 1 (Data Structures I)</title>
     <style>
         /* Arabic face — the unicode-range keeps Latin text on Segoe UI */
         @font-face {
@@ -38,8 +38,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
             color: var(--dark-color);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
@@ -422,22 +422,30 @@
                 border-top: 1px solid rgba(255, 255, 255, 0.18);
             }
         }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .module-number { right: auto; left: 15px; }
+        .ai-notice { text-align: right; }
+        .ai-notice .col + .col { border-left: none; border-right: 1px solid #fcd34d; }
+        .header-links a.lang-switch { font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .ai-notice .col[lang="en"] { direction: ltr; text-align: left; }
+        .stat-number { direction: ltr; unicode-bidi: isolate; }
     </style>
 </head>
 <body>
     <!-- AI-assisted content notice (English + Arabic) -->
     <div class="ai-notice">
-        <div class="col" lang="en">
-            <h4>⚠️ AI-Assisted Content</h4>
-            <p>Created with the assistance of AI. Content should be independently verified.
-               The author assumes no liability for errors, omissions, or outcomes resulting
-               from its use.</p>
-        </div>
         <div class="col" lang="ar" dir="rtl">
             <h4>⚠️ محتوى مُعَدّ بمساعدة الذكاء الاصطناعي</h4>
             <p>أُعِدَّ هذا المحتوى بمساعدة الذكاء الاصطناعي (AI)، ويجب التحقق من صحته بصورة
                مستقلة. ولا يتحمل المؤلف أي مسؤولية عن الأخطاء أو السهو أو أي نتائج تترتب على
                استخدامه.</p>
+        </div>
+        <div class="col" lang="en">
+            <h4>⚠️ AI-Assisted Content</h4>
+            <p>Created with the assistance of AI. Content should be independently verified.
+               The author assumes no liability for errors, omissions, or outcomes resulting
+               from its use.</p>
         </div>
     </div>
 
@@ -446,41 +454,40 @@
         <div class="logo">
             <div class="logo-icon">DS</div>
             <div>
-                <div class="logo-text">Data Structures</div>
+                <div class="logo-text">هياكل البيانات</div>
             </div>
         </div>
         <nav class="header-links">
-            <a href="#arrays">Arrays</a>
-            <a href="#linkedlists">Linked Lists</a>
-            <a href="#recursion">Recursion</a>
-            <a href="#stackqueue">Stack & Queue</a>
-            <a href="#trees">Trees</a>
-            <a href="#sorting">Sorting</a>
-            <a href="#graphs">Graphs</a>
-            <a href="#practice">Practice</a>
-            <a href="index-ar.html" class="lang-switch" lang="ar">عربي</a>
+            <a href="#arrays">المصفوفات</a>
+            <a href="#linkedlists">القوائم المرتبطة</a>
+            <a href="#recursion">الاستدعاء الذاتي</a>
+            <a href="#stackqueue">المكدس والطابور</a>
+            <a href="#trees">الأشجار</a>
+            <a href="#sorting">الفرز</a>
+            <a href="#graphs">المخططات</a>
+            <a href="#practice">التدريب</a>
+            <a href="index.html" class="lang-switch" lang="en">English</a>
         </nav>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1>Data Structures - I</h1>
+        <h1>هياكل البيانات 1</h1>
         <p class="description">
-            Master fundamental data structures and algorithms. From arrays and linked lists
-            to trees, graphs, and hash tables - build the foundation for efficient programming.
+            أتقن هياكل البيانات والخوارزميات الأساسية: من المصفوفات والقوائم المرتبطة إلى الأشجار والمخططات وجداول التجزئة، وابنِ الأساس للبرمجة الفعّالة.
         </p>
         <div class="hero-stats">
             <div class="stat-box">
                 <div class="stat-number">10</div>
-                <div class="stat-label">Topics</div>
+                <div class="stat-label">موضوعات</div>
             </div>
             <div class="stat-box">
                 <div class="stat-number">15+</div>
-                <div class="stat-label">Modules</div>
+                <div class="stat-label">وحدات</div>
             </div>
             <div class="stat-box">
                 <div class="stat-number">50+</div>
-                <div class="stat-label">Examples</div>
+                <div class="stat-label">مثال</div>
             </div>
         </div>
     </section>
@@ -492,29 +499,29 @@
         <section class="part-section" id="arrays">
             <div class="part-header">
                 <div class="part-number">1</div>
-                <h2 class="part-title">Arrays & Searching</h2>
+                <h2 class="part-title">المصفوفات والبحث</h2>
             </div>
             <div class="modules-grid">
-                <a href="Arrays_Searching/index.html" class="module-card">
+                <a href="Arrays_Searching/index-ar.html" class="module-card">
                     <div class="module-header arrays">
-                        <span class="module-number">Module 1</span>
+                        <span class="module-number">الوحدة 1</span>
                         <div class="module-icon">🔍</div>
-                        <div class="module-title">Arrays & Searching</div>
-                        <div class="module-subtitle">Linear & Binary Search</div>
+                        <div class="module-title">المصفوفات والبحث</div>
+                        <div class="module-subtitle">البحث الخطي والثنائي</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Array Operations & O(1) vs O(n)</li>
-                            <li>Linear Search Algorithm</li>
-                            <li>Binary Search Algorithm</li>
-                            <li>Understanding O(log n)</li>
+                            <li>عمليات المصفوفة وO(1) مقابل O(n)</li>
+                            <li>خوارزمية البحث الخطي</li>
+                            <li>خوارزمية البحث الثنائي</li>
+                            <li>فهم O(log n)</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -525,173 +532,173 @@
         <section class="part-section" id="linkedlists">
             <div class="part-header">
                 <div class="part-number">2</div>
-                <h2 class="part-title">Linked Lists</h2>
+                <h2 class="part-title">القوائم المرتبطة</h2>
             </div>
             <div class="modules-grid">
-                <a href="linkedlist/linkedlist-tutorial.html" class="module-card">
+                <a href="linkedlist/linkedlist-tutorial-ar.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Module 2</span>
+                        <span class="module-number">الوحدة 2</span>
                         <div class="module-icon">🔗</div>
-                        <div class="module-title">Linked List Basics</div>
-                        <div class="module-subtitle">Introduction & Operations</div>
+                        <div class="module-title">أساسيات القوائم المرتبطة</div>
+                        <div class="module-subtitle">مقدمة وعمليات</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Why Linked Lists Exist</li>
-                            <li>Node Class & Structure</li>
-                            <li>Traversal & Access</li>
-                            <li>Insertion & Deletion</li>
+                            <li>لماذا وُجدت القوائم المرتبطة</li>
+                            <li>صنف العقدة (Node) وبنيتها</li>
+                            <li>الاجتياز والوصول</li>
+                            <li>الإدراج والحذف</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="AniLinkedList/index.html" class="module-card">
+                <a href="AniLinkedList/index-ar.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Simulator</span>
+                        <span class="module-number">محاكي</span>
                         <div class="module-icon">🎬</div>
-                        <div class="module-title">Operations Simulator</div>
-                        <div class="module-subtitle">Animated Java Execution</div>
+                        <div class="module-title">محاكي العمليات</div>
+                        <div class="module-subtitle">تنفيذ Java متحرك</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Add First / Last / at Position</li>
-                            <li>Delete First / Last / at Position</li>
-                            <li>Statement-by-Statement Animation</li>
-                            <li>Teaching Mode with Class Questions</li>
+                            <li>إضافة في البداية / النهاية / موضع محدد</li>
+                            <li>حذف من البداية / النهاية / موضع محدد</li>
+                            <li>تحريك تعليمة بتعليمة</li>
+                            <li>وضع التدريس مع أسئلة للصف</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="AniDoublyLinkedList/index.html" class="module-card">
+                <a href="AniDoublyLinkedList/index-ar.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Simulator</span>
+                        <span class="module-number">محاكي</span>
                         <div class="module-icon">⇄</div>
-                        <div class="module-title">Doubly List Simulator</div>
-                        <div class="module-subtitle">prev &amp; next Animated</div>
+                        <div class="module-title">محاكي القائمة المزدوجة</div>
+                        <div class="module-subtitle">تحريك prev و next</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Nodes with prev | data | next</li>
-                            <li>head &amp; tail References</li>
-                            <li>O(1) addLast / deleteLast via tail</li>
-                            <li>Four-Link Insertion Step by Step</li>
+                            <li>عقد بالحقول prev | data | next</li>
+                            <li>المرجعان head و tail</li>
+                            <li>addLast و deleteLast بتعقيد O(1) عبر tail</li>
+                            <li>الإدراج بأربعة روابط خطوة بخطوة</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="AniCircularLinkedList/index.html" class="module-card">
+                <a href="AniCircularLinkedList/index-ar.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Simulator</span>
+                        <span class="module-number">محاكي</span>
                         <div class="module-icon">↺</div>
-                        <div class="module-title">Circular List Simulator</div>
-                        <div class="module-subtitle">tail.next → head Animated</div>
+                        <div class="module-title">محاكي القائمة الدائرية</div>
+                        <div class="module-subtitle">تحريك tail.next ← head</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Wrap-Around Link Kept Closed</li>
-                            <li>Self-Loop Single Node</li>
-                            <li>No null — Loop Guard vs tail</li>
-                            <li>All Six Operations Step by Step</li>
+                            <li>إبقاء رابط الالتفاف مغلقًا</li>
+                            <li>عقدة واحدة تشير إلى نفسها</li>
+                            <li>لا وجود لـ null: شرط التوقف مقابل tail</li>
+                            <li>العمليات الست خطوة بخطوة</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="AniMergeLinkedList/index.html" class="module-card">
+                <a href="AniMergeLinkedList/index-ar.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Simulator</span>
+                        <span class="module-number">محاكي</span>
                         <div class="module-icon">🔗</div>
-                        <div class="module-title">Merging Lists Simulator</div>
-                        <div class="module-subtitle">Two Lists &rarr; One List</div>
+                        <div class="module-title">محاكي دمج القوائم</div>
+                        <div class="module-subtitle">قائمتان ← قائمة واحدة</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Merge Two Sorted Lists (dummy node)</li>
-                            <li>Concatenate &mdash; append list 2 to list 1</li>
-                            <li>Merge Alternately (zip) with pNext / qNext</li>
-                            <li>Nodes colour-coded by source list</li>
+                            <li>دمج قائمتين مرتبتين (عقدة وهمية dummy)</li>
+                            <li>الوصل: إلحاق القائمة 2 بالقائمة 1</li>
+                            <li>الدمج بالتناوب (zip) باستخدام pNext و qNext</li>
+                            <li>عقد ملوّنة حسب القائمة المصدر</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">&rarr;</span>
+                            <span class="module-arrow">&larr;</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="linkedlist/linkedlist-types-tutorial.html" class="module-card">
+                <a href="linkedlist/linkedlist-types-tutorial-ar.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Module 3</span>
+                        <span class="module-number">الوحدة 3</span>
                         <div class="module-icon">🔄</div>
-                        <div class="module-title">Types of Linked Lists</div>
-                        <div class="module-subtitle">Circular & Doubly Linked</div>
+                        <div class="module-title">أنواع القوائم المرتبطة</div>
+                        <div class="module-subtitle">الدائرية والمزدوجة</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Circular Linked List</li>
-                            <li>Doubly Linked List</li>
-                            <li>Circular Doubly Linked List</li>
-                            <li>Use Cases & Comparison</li>
+                            <li>القائمة المرتبطة الدائرية</li>
+                            <li>القائمة المرتبطة المزدوجة</li>
+                            <li>القائمة المرتبطة المزدوجة الدائرية</li>
+                            <li>حالات الاستخدام والمقارنة</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="linkedlist/linkedlist-exam.html" class="module-card">
+                <a href="linkedlist/linkedlist-exam-ar.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Practice Exam</span>
+                        <span class="module-number">اختبار تدريبي</span>
                         <div class="module-icon">📝</div>
-                        <div class="module-title">Linked List Exam</div>
-                        <div class="module-subtitle">Printable A4 · exam style</div>
+                        <div class="module-title">اختبار القوائم المرتبطة</div>
+                        <div class="module-subtitle">قابل للطباعة A4 · بأسلوب الاختبار</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>10 exam-style questions · 80 marks</li>
-                            <li>Tracing, coding & recursion</li>
-                            <li>Singly, Doubly & Circular</li>
-                            <li>Model answers toggle · Print to PDF</li>
+                            <li>10 أسئلة بأسلوب الاختبار · 80 درجة</li>
+                            <li>التتبع والبرمجة والاستدعاء الذاتي</li>
+                            <li>الأحادية والمزدوجة والدائرية</li>
+                            <li>إظهار الإجابات النموذجية · الطباعة إلى PDF</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -702,101 +709,101 @@
         <section class="part-section" id="recursion">
             <div class="part-header">
                 <div class="part-number">3</div>
-                <h2 class="part-title">Recursion</h2>
+                <h2 class="part-title">الاستدعاء الذاتي</h2>
             </div>
             <div class="modules-grid">
-                <a href="recursive-application/recursion-tutorial.html" class="module-card">
+                <a href="recursive-application/recursion-tutorial-ar.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Module 4</span>
+                        <span class="module-number">الوحدة 4</span>
                         <div class="module-icon">🔄</div>
-                        <div class="module-title">Introduction to Recursion</div>
-                        <div class="module-subtitle">The Recursive Method</div>
+                        <div class="module-title">مقدمة في الاستدعاء الذاتي</div>
+                        <div class="module-subtitle">الدالة ذاتية الاستدعاء</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Call Stack & Memory</li>
-                            <li>From Loops to Recursion</li>
-                            <li>Base Case & Stack Overflow</li>
-                            <li>Iterative vs Recursive</li>
+                            <li>مكدس الاستدعاءات والذاكرة</li>
+                            <li>من الحلقات إلى الاستدعاء الذاتي</li>
+                            <li>الحالة الأساسية وطفح المكدس (Stack Overflow)</li>
+                            <li>التكراري مقابل الذاتي</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="recursive-application/recursion-application.html" class="module-card">
+                <a href="recursive-application/recursion-application-ar.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Module 5</span>
+                        <span class="module-number">الوحدة 5</span>
                         <div class="module-icon">📁</div>
-                        <div class="module-title">Recursion Application</div>
-                        <div class="module-subtitle">Folder Explorer</div>
+                        <div class="module-title">تطبيق الاستدعاء الذاتي</div>
+                        <div class="module-subtitle">مستكشف المجلدات</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Exploring Folders Recursively</li>
-                            <li>From Simple to Recursive</li>
-                            <li>Self-Similar Structures</li>
-                            <li>Why Recursion Wins</li>
+                            <li>استكشاف المجلدات بالاستدعاء الذاتي</li>
+                            <li>من البسيط إلى الذاتي</li>
+                            <li>البنى المتشابهة ذاتيًا</li>
+                            <li>لماذا يتفوّق الاستدعاء الذاتي</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="recursive-application/numeric-recursion.html" class="module-card">
+                <a href="recursive-application/numeric-recursion-ar.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Module 6</span>
+                        <span class="module-number">الوحدة 6</span>
                         <div class="module-icon">🔢</div>
-                        <div class="module-title">Numeric Recursion</div>
-                        <div class="module-subtitle">Mathematical Problems</div>
+                        <div class="module-title">الاستدعاء الذاتي العددي</div>
+                        <div class="module-subtitle">مسائل رياضية</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Factorial & Fibonacci</li>
-                            <li>Power & Multiplication</li>
-                            <li>Fast Exponentiation</li>
-                            <li>Sum of Digits</li>
+                            <li>المضروب وفيبوناتشي</li>
+                            <li>الأُس والضرب</li>
+                            <li>الرفع السريع للأُس</li>
+                            <li>مجموع الأرقام</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="recursive-application/string-recursion.html" class="module-card">
+                <a href="recursive-application/string-recursion-ar.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Module 7</span>
+                        <span class="module-number">الوحدة 7</span>
                         <div class="module-icon">📝</div>
-                        <div class="module-title">String Recursion</div>
-                        <div class="module-subtitle">String & Binary Search</div>
+                        <div class="module-title">الاستدعاء الذاتي على النصوص</div>
+                        <div class="module-subtitle">النصوص والبحث الثنائي</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Print & Reverse Characters</li>
-                            <li>Count & Replace Characters</li>
-                            <li>Remove Character Recursively</li>
-                            <li>Iterative & Recursive Binary Search</li>
+                            <li>طباعة الأحرف وعكسها</li>
+                            <li>عدّ الأحرف واستبدالها</li>
+                            <li>حذف حرف بالاستدعاء الذاتي</li>
+                            <li>البحث الثنائي التكراري والذاتي</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -807,53 +814,53 @@
         <section class="part-section" id="algorithm">
             <div class="part-header">
                 <div class="part-number">4</div>
-                <h2 class="part-title">Algorithm Analysis</h2>
+                <h2 class="part-title">تحليل الخوارزميات</h2>
             </div>
             <div class="modules-grid">
-                <a href="algorithm-analysis/algorithm-analysis-motivation.html" class="module-card">
+                <a href="algorithm-analysis/algorithm-analysis-motivation-ar.html" class="module-card">
                     <div class="module-header algorithm">
-                        <span class="module-number">Module 8</span>
+                        <span class="module-number">الوحدة 8</span>
                         <div class="module-icon">📐</div>
-                        <div class="module-title">Algorithm Analysis</div>
-                        <div class="module-subtitle">Foundations &amp; Complexity Theory</div>
+                        <div class="module-title">تحليل الخوارزميات</div>
+                        <div class="module-subtitle">الأسس ونظرية التعقيد</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Motivation &amp; Problem Statement</li>
-                            <li>Asymptotic Complexity Classes</li>
-                            <li>Growth Rate Comparison</li>
-                            <li>Big O — Formal Introduction</li>
+                            <li>الدافع وصياغة المسألة</li>
+                            <li>فئات التعقيد التقاربي</li>
+                            <li>مقارنة معدلات النمو</li>
+                            <li>ترميز O الكبير: مقدمة رسمية</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="algorithm-analysis/algorithm-analysis-interactive.html" class="module-card">
+                <a href="algorithm-analysis/algorithm-analysis-interactive-ar.html" class="module-card">
                     <div class="module-header algorithm">
-                        <span class="module-number">Module 8 — Lab</span>
+                        <span class="module-number">الوحدة 8: المعمل</span>
                         <div class="module-icon">🔬</div>
-                        <div class="module-title">Complexity Analysis</div>
-                        <div class="module-subtitle">Deriving Big O from Code</div>
+                        <div class="module-title">تحليل التعقيد</div>
+                        <div class="module-subtitle">استنتاج O الكبير من الكود</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Java Code → Polynomial Equation</li>
-                            <li>Polynomial → Big O Notation</li>
-                            <li>Execution Time Calculations</li>
-                            <li>Worked Examples &amp; Exercises</li>
+                            <li>كود Java ← معادلة كثيرة حدود</li>
+                            <li>كثيرة الحدود ← ترميز O الكبير</li>
+                            <li>حساب زمن التنفيذ</li>
+                            <li>أمثلة محلولة وتمارين</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -864,53 +871,53 @@
         <section class="part-section" id="stackqueue">
             <div class="part-header">
                 <div class="part-number">5</div>
-                <h2 class="part-title">Stack & Queue</h2>
+                <h2 class="part-title">المكدس والطابور</h2>
             </div>
             <div class="modules-grid">
-                <a href="stack/stack-tutorial.html" class="module-card">
+                <a href="stack/stack-tutorial-ar.html" class="module-card">
                     <div class="module-header stack">
-                        <span class="module-number">Module 9</span>
+                        <span class="module-number">الوحدة 9</span>
                         <div class="module-icon">📚</div>
-                        <div class="module-title">Stack</div>
-                        <div class="module-subtitle">LIFO Data Structure</div>
+                        <div class="module-title">المكدس</div>
+                        <div class="module-subtitle">هيكل بيانات LIFO</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Stack Operations (Push, Pop)</li>
-                            <li>Infix, Postfix & Prefix</li>
-                            <li>Expression Evaluation</li>
-                            <li>Array & Linked Implementation</li>
+                            <li>عمليات المكدس (الدفع Push والسحب Pop)</li>
+                            <li>الترميز الوسطي واللاحق والسابق</li>
+                            <li>تقييم التعابير</li>
+                            <li>التنفيذ بالمصفوفة وبالقائمة المرتبطة</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="queue/queue-tutorial.html" class="module-card">
+                <a href="queue/queue-tutorial-ar.html" class="module-card">
                     <div class="module-header queue">
-                        <span class="module-number">Module 10</span>
+                        <span class="module-number">الوحدة 10</span>
                         <div class="module-icon">&#128101;</div>
-                        <div class="module-title">Queue</div>
-                        <div class="module-subtitle">FIFO Data Structure</div>
+                        <div class="module-title">الطابور</div>
+                        <div class="module-subtitle">هيكل بيانات FIFO</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Queue Operations (Enqueue, Dequeue)</li>
-                            <li>Unrealistic, Shifting & Circular Array</li>
-                            <li>Linked List Implementation</li>
-                            <li>Interactive Simulations</li>
+                            <li>عمليات الطابور (الإدخال Enqueue والإخراج Dequeue)</li>
+                            <li>المصفوفة غير الواقعية والمُزاحة والدائرية</li>
+                            <li>التنفيذ بالقائمة المرتبطة</li>
+                            <li>محاكيات تفاعلية</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -921,29 +928,29 @@
         <section class="part-section" id="trees">
             <div class="part-header">
                 <div class="part-number">6</div>
-                <h2 class="part-title">Trees</h2>
+                <h2 class="part-title">الأشجار</h2>
             </div>
             <div class="modules-grid">
-                <a href="tree/tree-tutorial.html" class="module-card">
+                <a href="tree/tree-tutorial-ar.html" class="module-card">
                     <div class="module-header tree">
-                        <span class="module-number">Module 11</span>
+                        <span class="module-number">الوحدة 11</span>
                         <div class="module-icon">🌳</div>
-                        <div class="module-title">Binary Tree</div>
-                        <div class="module-subtitle">Tree Fundamentals &amp; Traversal</div>
+                        <div class="module-title">الشجرة الثنائية</div>
+                        <div class="module-subtitle">أساسيات الأشجار واجتيازها</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Tree Terminology &amp; Family Analogy</li>
-                            <li>Height, Depth &amp; Levels</li>
-                            <li>Full &amp; Complete Binary Trees</li>
-                            <li>Pre, In, Post-Order &amp; BFS Traversal</li>
+                            <li>مصطلحات الشجرة وتشبيه العائلة</li>
+                            <li>الارتفاع والعمق والمستويات</li>
+                            <li>الأشجار الثنائية الممتلئة والكاملة</li>
+                            <li>الاجتياز القبلي والوسطي والبعدي و BFS</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -954,29 +961,29 @@
         <section class="part-section" id="sorting">
             <div class="part-header">
                 <div class="part-number">7</div>
-                <h2 class="part-title">Sorting Algorithms</h2>
+                <h2 class="part-title">خوارزميات الفرز</h2>
             </div>
             <div class="modules-grid">
-                <a href="sorting/index.html" class="module-card">
+                <a href="sorting/index-ar.html" class="module-card">
                     <div class="module-header sorting">
-                        <span class="module-number">Modules 12 &amp; 13</span>
+                        <span class="module-number">الوحدتان 12 و 13</span>
                         <div class="module-icon">📊</div>
-                        <div class="module-title">Sorting Algorithms</div>
-                        <div class="module-subtitle">O(n²) &amp; O(n log n)</div>
+                        <div class="module-title">خوارزميات الفرز</div>
+                        <div class="module-subtitle">O(n²) و O(n log n)</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Selection · Insertion · Bubble Sort</li>
-                            <li>Quick Sort &amp; Merge Sort</li>
-                            <li>Interactive Simulations</li>
-                            <li>Drag-and-Drop Practice</li>
+                            <li>الفرز بالاختيار · بالإدراج · الفقاعي</li>
+                            <li>الفرز السريع والفرز بالدمج</li>
+                            <li>محاكيات تفاعلية</li>
+                            <li>تدريب بالسحب والإفلات</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -987,29 +994,29 @@
         <section class="part-section" id="heap">
             <div class="part-header">
                 <div class="part-number">8</div>
-                <h2 class="part-title">Heap</h2>
+                <h2 class="part-title">الكومة</h2>
             </div>
             <div class="modules-grid">
-                <a href="heap/heap-tutorial.html" class="module-card">
+                <a href="heap/heap-tutorial-ar.html" class="module-card">
                     <div class="module-header heap">
-                        <span class="module-number">Module 14</span>
+                        <span class="module-number">الوحدة 14</span>
                         <div class="module-icon">🏔️</div>
-                        <div class="module-title">Heap Data Structure</div>
-                        <div class="module-subtitle">Priority-Based Structure</div>
+                        <div class="module-title">هيكل بيانات الكومة</div>
+                        <div class="module-subtitle">بنية قائمة على الأولوية</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Min Heap & Max Heap</li>
-                            <li>Add, Delete, Build Heap</li>
-                            <li>Priority Queues</li>
-                            <li>Heap Sort</li>
+                            <li>الكومة الصغرى والكومة الكبرى</li>
+                            <li>الإضافة والحذف وبناء الكومة</li>
+                            <li>طوابير الأولوية</li>
+                            <li>الفرز بالكومة</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -1020,52 +1027,52 @@
         <section class="part-section" id="graphs">
             <div class="part-header">
                 <div class="part-number">9</div>
-                <h2 class="part-title">Graphs</h2>
+                <h2 class="part-title">المخططات</h2>
             </div>
             <div class="modules-grid">
-                <a href="graph/graph-tutorial.html" class="module-card">
+                <a href="graph/graph-tutorial-ar.html" class="module-card">
                     <div class="module-header graph">
-                        <span class="module-number">Module 15</span>
+                        <span class="module-number">الوحدة 15</span>
                         <div class="module-icon">🕸️</div>
-                        <div class="module-title">Graph Foundations</div>
-                        <div class="module-subtitle">Definition, Types & Representation</div>
+                        <div class="module-title">أسس المخططات</div>
+                        <div class="module-subtitle">التعريف والأنواع والتمثيل</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>What is a Graph? G = (V, E)</li>
-                            <li>Types: Directed, Weighted, DAG</li>
-                            <li>Terminology: degree, path, cycle</li>
-                            <li>Adjacency Matrix & List</li>
+                            <li>ما المخطط؟ G = (V, E)</li>
+                            <li>الأنواع: موجّه، موزون، DAG</li>
+                            <li>المصطلحات: الدرجة، المسار، الدورة</li>
+                            <li>مصفوفة الجوار وقائمة الجوار</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
-                <a href="graph/graph-traversal.html" class="module-card">
+                <a href="graph/graph-traversal-ar.html" class="module-card">
                     <div class="module-header graph">
-                        <span class="module-number">Module 16</span>
+                        <span class="module-number">الوحدة 16</span>
                         <div class="module-icon">🔍</div>
-                        <div class="module-title">Graph Traversal</div>
-                        <div class="module-subtitle">DFS & BFS Simulator + Practice</div>
+                        <div class="module-title">اجتياز المخططات</div>
+                        <div class="module-subtitle">محاكي DFS و BFS مع تدريب</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Depth First Search (DFS) — Stack</li>
-                            <li>Breadth First Search (BFS) — Queue</li>
-                            <li>Step-by-step animation</li>
-                            <li>Interactive practice problems</li>
+                            <li>البحث بالعمق أولًا (DFS): مكدس</li>
+                            <li>البحث بالعرض أولًا (BFS): طابور</li>
+                            <li>تحريك خطوة بخطوة</li>
+                            <li>مسائل تدريبية تفاعلية</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -1076,29 +1083,29 @@
         <section class="part-section" id="hash">
             <div class="part-header">
                 <div class="part-number">10</div>
-                <h2 class="part-title">Hash Tables</h2>
+                <h2 class="part-title">جداول التجزئة</h2>
             </div>
             <div class="modules-grid">
-                <a href="hashTable/index.html" class="module-card">
+                <a href="hashTable/index-ar.html" class="module-card">
                     <div class="module-header hash">
-                        <span class="module-number">Module 16</span>
+                        <span class="module-number">الوحدة 16</span>
                         <div class="module-icon">#️⃣</div>
-                        <div class="module-title">Hash Tables</div>
-                        <div class="module-subtitle">Hash Functions & Collision</div>
+                        <div class="module-title">جداول التجزئة</div>
+                        <div class="module-subtitle">دوال التجزئة والتصادم</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Hash Functions</li>
-                            <li>Linear & Quadratic Probing</li>
-                            <li>Double Hashing</li>
-                            <li>Separate Chaining</li>
+                            <li>دوال التجزئة</li>
+                            <li>الاستكشاف الخطي والتربيعي</li>
+                            <li>التجزئة المزدوجة</li>
+                            <li>السلاسل المنفصلة</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -1109,125 +1116,125 @@
         <section class="part-section" id="practice">
             <div class="part-header">
                 <div class="part-number practice">★</div>
-                <h2 class="part-title">Practice & Questions</h2>
+                <h2 class="part-title">التدريب والأسئلة</h2>
             </div>
             <div class="modules-grid">
-                <a href="CPCS204_Comprehensive_QuestionBank.html" class="module-card">
+                <a href="CPCS204_Comprehensive_QuestionBank-ar.html" class="module-card">
                     <div class="module-header algorithm">
-                        <span class="module-number">Practice Final</span>
+                        <span class="module-number">اختبار نهائي تدريبي</span>
                         <div class="module-icon">📘</div>
-                        <div class="module-title">Comprehensive Question Bank</div>
-                        <div class="module-subtitle">All Topics &amp; Practice Final</div>
+                        <div class="module-title">بنك الأسئلة الشامل</div>
+                        <div class="module-subtitle">جميع الموضوعات واختبار نهائي تدريبي</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Algorithm Analysis &amp; Big-O</li>
-                            <li>Recursion, Lists, Stacks &amp; Queues</li>
-                            <li>Trees, Heaps, Graphs &amp; Hashing</li>
-                            <li>Sorting Algorithms</li>
+                            <li>تحليل الخوارزميات و O الكبير</li>
+                            <li>الاستدعاء الذاتي والقوائم والمكدسات والطوابير</li>
+                            <li>الأشجار والكومات والمخططات والتجزئة</li>
+                            <li>خوارزميات الفرز</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="linkedlist/linkedlist-questions.html" class="module-card">
+                <a href="linkedlist/linkedlist-questions-ar.html" class="module-card">
                     <div class="module-header linkedlist">
-                        <span class="module-number">Practice</span>
+                        <span class="module-number">التدريب</span>
                         <div class="module-icon">❓</div>
-                        <div class="module-title">Linked List Questions</div>
-                        <div class="module-subtitle">Coding & MCQ Practice</div>
+                        <div class="module-title">أسئلة القوائم المرتبطة</div>
+                        <div class="module-subtitle">تدريب برمجي واختيار من متعدد</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>18 Coding Questions (Visual)</li>
-                            <li>20 MCQ Questions (Interactive)</li>
-                            <li>Click-to-Reveal Solutions</li>
-                            <li>Score Tracking & Feedback</li>
+                            <li>18 سؤالًا برمجيًا (مرئي)</li>
+                            <li>20 سؤال اختيار من متعدد (تفاعلي)</li>
+                            <li>حلول تظهر بالنقر</li>
+                            <li>تتبع الدرجة والتغذية الراجعة</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="questions/recursion-questions.html" class="module-card">
+                <a href="questions/recursion-questions-ar.html" class="module-card">
                     <div class="module-header recursion">
-                        <span class="module-number">Practice</span>
+                        <span class="module-number">التدريب</span>
                         <div class="module-icon">&#10068;</div>
-                        <div class="module-title">Recursion Questions</div>
-                        <div class="module-subtitle">Trace & Practice</div>
+                        <div class="module-title">أسئلة الاستدعاء الذاتي</div>
+                        <div class="module-subtitle">تتبع وتدريب</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>6 Tracing Questions (Easy to Hard)</li>
-                            <li>Digit Processing & Branching</li>
-                            <li>Click-to-Reveal Solutions</li>
-                            <li>Call Tree Diagrams</li>
+                            <li>6 أسئلة تتبع (من السهل إلى الصعب)</li>
+                            <li>معالجة الأرقام والتفرع</li>
+                            <li>حلول تظهر بالنقر</li>
+                            <li>مخططات شجرة الاستدعاءات</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">&rarr;</span>
+                            <span class="module-arrow">&larr;</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="questions/pharmacy_dfs_question.html" class="module-card">
+                <a href="questions/pharmacy_dfs_question-ar.html" class="module-card">
                     <div class="module-header graph">
-                        <span class="module-number">Practice</span>
+                        <span class="module-number">التدريب</span>
                         <div class="module-icon">💊</div>
-                        <div class="module-title">Pharmacy Network DFS</div>
-                        <div class="module-subtitle">Weighted Graph Problem</div>
+                        <div class="module-title">شبكة الصيدليات بـ DFS</div>
+                        <div class="module-subtitle">مسألة مخطط موزون</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>Weighted Undirected Graph</li>
-                            <li>DFS with Priority</li>
-                            <li>Highest Congestion First</li>
-                            <li>Step-by-Step Solution</li>
+                            <li>مخطط موزون غير موجّه</li>
+                            <li>DFS مع أولوية</li>
+                            <li>الأعلى ازدحامًا أولًا</li>
+                            <li>حل خطوة بخطوة</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
 
-                <a href="questions/double_hashing_question.html" class="module-card">
+                <a href="questions/double_hashing_question-ar.html" class="module-card">
                     <div class="module-header hash">
-                        <span class="module-number">Practice</span>
+                        <span class="module-number">التدريب</span>
                         <div class="module-icon">🔢</div>
-                        <div class="module-title">Double Hashing Practice</div>
-                        <div class="module-subtitle">Collision Resolution</div>
+                        <div class="module-title">تدريب على التجزئة المزدوجة</div>
+                        <div class="module-subtitle">حل التصادمات</div>
                     </div>
                     <div class="module-body">
                         <ul class="module-topics">
-                            <li>h₁(k) and h₂(k) Functions</li>
-                            <li>Insert Keys Step-by-Step</li>
-                            <li>Collision Handling</li>
-                            <li>Complete Solution</li>
+                            <li>الدالتان h₁(k) و h₂(k)</li>
+                            <li>إدراج المفاتيح خطوة بخطوة</li>
+                            <li>معالجة التصادم</li>
+                            <li>الحل الكامل</li>
                         </ul>
                         <div class="module-footer">
                             <span class="module-status ready">
                                 <span class="status-dot ready"></span>
-                                Ready
+                                جاهز
                             </span>
-                            <span class="module-arrow">→</span>
+                            <span class="module-arrow">←</span>
                         </div>
                     </div>
                 </a>
@@ -1237,8 +1244,8 @@
     </main>
 
     <footer>
-        <p><strong>Data Structures I</strong></p>
-        <p>Prepared by Dr. Almalawi</p>
+        <p><strong>هياكل البيانات 1</strong></p>
+        <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
     </footer>
 </body>
 </html>
