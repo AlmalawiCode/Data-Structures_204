@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Sort Partition</title>
+    <title>تقسيم الفرز السريع</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +37,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: #f8fafc;
@@ -585,6 +610,39 @@
         footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
         footer strong { opacity: 1; }
 
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .definition { border-left: none; border-right: 5px solid #4caf50; }
+        .important  { border-left: none; border-right: 5px solid #ffc107; }
+
+        /* Numbered algorithm steps: badge moves to the right side */
+        .algorithm-steps ol { padding-left: 0; padding-right: 0; }
+        .algorithm-steps ol > li { padding: 15px 60px 15px 15px; }
+        .algorithm-steps ol > li::before { left: auto; right: 15px; }
+
+        /* Legend chips: colour accent on the right */
+        .zl-chip { border-left: none; border-right: 3px solid; }
+        .zl-outer { border-color: #f59e0b; }
+        .zl-i     { border-color: #60a5fa; }
+        .zl-j     { border-color: #22c55e; }
+
+        .speed-control label { margin-right: 0; margin-left: 10px; }
+
+        /* Java code, variables and the array visualisation always stay
+           left-to-right so indices read 0..n from left to right and the
+           i/j pointers move exactly as in the English page. */
+        pre, code, #codeDisplay, .code-line, .variables-display #variablesDisplay,
+        .variable-item, .array-container, .array-element, .pointer, .array-index,
+        #arrayInput, #arraySize, #maxValue, #pivotIndex, svg {
+            direction: ltr;
+        }
+        #codeDisplay, .code-line { text-align: left; }
+        #variablesDisplay { text-align: right; }
+        code { unicode-bidi: embed; }
+        #arrayInput { text-align: left; }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -600,88 +658,87 @@
             transition: all 0.3s;
             z-index: 1000;
         }
-
         .lang-switch-btn:hover { background: #667eea; color: white; }
     </style>
 </head>
 <body>
-    <a href="quicksort-simulation-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="quicksort-simulation.html" class="lang-switch-btn">English</a>
     <div class="container">
         <header style="background:linear-gradient(135deg,#0d9488,#14b8a6,#06b6d4);color:white;padding:20px 30px;text-align:center;position:relative;">
-            <a href="index.html" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);color:white;text-decoration:none;font-size:0.85em;font-weight:600;padding:6px 14px;border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;">← Sorting Hub</a>
-            <h1 style="font-size:1.6em;margin:0;">Quick Sort — Partition Simulation</h1>
-            <p style="margin:4px 0 0;opacity:0.9;font-size:0.95em;">Data Structures I</p>
+            <a href="index-ar.html" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);color:white;text-decoration:none;font-size:0.85em;font-weight:600;padding:6px 14px;border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;">العودة إلى الفرز ←</a>
+            <h1 style="font-size:1.6em;margin:0;">الفرز السريع (Quick Sort) — محاكاة التقسيم (Partition)</h1>
+            <p style="margin:4px 0 0;opacity:0.9;font-size:0.95em;">هياكل البيانات 1</p>
         </header>
 
         <div class="content">
             <!-- Introduction -->
             <section id="introduction">
-                <h2>1. Introduction</h2>
+                <h2>1. مقدمة</h2>
                 <div class="definition">
-                    <strong>Partition Algorithm:</strong> The partition method is the core operation of Quick Sort. It rearranges an array such that all elements less than or equal to the pivot are placed to its left, and all elements greater than the pivot are placed to its right. The pivot element ends up in its final sorted position.
+                    <strong>خوارزمية التقسيم (Partition Algorithm):</strong> دالة التقسيم هي العملية الجوهرية في الفرز السريع. فهي تعيد ترتيب المصفوفة (Array) بحيث توضع جميع العناصر (Elements) الأصغر من المحور (Pivot) أو المساوية له على يساره، وجميع العناصر الأكبر من المحور على يمينه. وينتهي عنصر المحور في موضعه النهائي الصحيح بعد الفرز.
                 </div>
 
                 <div class="important">
-                    <strong>Key Concept:</strong> This implementation uses two pointers (i and j) that move towards each other, swapping elements when they find values that are on the wrong side of the pivot.
+                    <strong>مفهوم أساسي:</strong> يستخدم هذا التنفيذ مؤشرين (Pointers) هما (i و j) يتحركان باتجاه بعضهما، ويُبدّلان (Swap) العناصر عندما يجدان قيمًا موجودة في الجانب الخاطئ من المحور.
                 </div>
             </section>
 
             <!-- Algorithm Steps -->
             <section id="algorithm">
-                <h2>2. Algorithm Steps</h2>
+                <h2>2. خطوات الخوارزمية</h2>
                 <div class="algorithm-steps">
-                    <h4>Partition Algorithm Process</h4>
+                    <h4>مراحل خوارزمية التقسيم</h4>
                     <ol>
-                        <li><strong>Select pivot:</strong> User chooses which element to use as the pivot</li>
-                        <li><strong>Set pivot value:</strong> <code>pivot = A[p]</code> where <code>p</code> is the selected pivot index</li>
-                        <li><strong>Initialize pointers:</strong> <code>i = l - 1</code> and <code>j = h + 1</code> (start outside bounds)</li>
-                        <li><strong>Do-while for i:</strong> Increment <code>i</code> first, then check if <code>A[i] &lt;= pivot</code>. Continue until we find <code>A[i] &gt; pivot</code></li>
-                        <li><strong>Do-while for j:</strong> Decrement <code>j</code> first, then check if <code>A[j] &gt; pivot</code>. Continue until we find <code>A[j] &lt;= pivot</code></li>
-                        <li><strong>Swap if needed:</strong> If <code>i &lt; j</code>, swap <code>A[i]</code> and <code>A[j]</code></li>
-                        <li><strong>Repeat:</strong> Steps 4-6 until <code>i &gt;= j</code></li>
-                        <li><strong>Final swap:</strong> Swap pivot <code>A[p]</code> with <code>A[j]</code> to place pivot in correct position</li>
-                        <li><strong>Return:</strong> <code>j</code> as the partition index</li>
+                        <li><strong>اختيار المحور:</strong> يختار المستخدم العنصر الذي سيُستخدم محورًا</li>
+                        <li><strong>تعيين قيمة المحور:</strong> <code>pivot = A[p]</code> حيث <code>p</code> هو فهرس (Index) المحور المختار</li>
+                        <li><strong>تهيئة المؤشرات:</strong> <code>i = l - 1</code> و <code>j = h + 1</code> (يبدآن خارج حدود المصفوفة)</li>
+                        <li><strong>حلقة do-while للمؤشر i:</strong> نزيد <code>i</code> أولًا، ثم نتحقق هل <code>A[i] &lt;= pivot</code>. ونستمر حتى نجد <code>A[i] &gt; pivot</code></li>
+                        <li><strong>حلقة do-while للمؤشر j:</strong> نُنقص <code>j</code> أولًا، ثم نتحقق هل <code>A[j] &gt; pivot</code>. ونستمر حتى نجد <code>A[j] &lt;= pivot</code></li>
+                        <li><strong>التبديل عند الحاجة:</strong> إذا كان <code>i &lt; j</code>، نبدّل <code>A[i]</code> و <code>A[j]</code></li>
+                        <li><strong>التكرار:</strong> نكرر الخطوات <span dir="ltr">4-6</span> حتى يصبح <code>i &gt;= j</code></li>
+                        <li><strong>التبديل الأخير:</strong> نبدّل المحور <code>A[p]</code> مع <code>A[j]</code> لوضع المحور في موضعه الصحيح</li>
+                        <li><strong>الإرجاع:</strong> نُرجع <code>j</code> بوصفه فهرس التقسيم</li>
                     </ol>
                 </div>
             </section>
 
             <!-- Interactive Animation -->
             <section id="visualization">
-                <h2>3. Interactive Visualization</h2>
+                <h2>3. العرض المرئي التفاعلي</h2>
 
                 <div class="animation-container">
-                    <h3 style="text-align: center; color: #0d9488; margin-bottom: 20px;">Partition Animation</h3>
+                    <h3 style="text-align: center; color: #0d9488; margin-bottom: 20px;">محاكاة عملية التقسيم بالحركة</h3>
 
                     <!-- Input Controls -->
                     <div class="input-controls">
-                        <h4 style="color: #0d9488; margin-bottom: 15px;">Array Input</h4>
+                        <h4 style="color: #0d9488; margin-bottom: 15px;">إدخال المصفوفة</h4>
 
                         <div class="input-group">
-                            <label>Enter Array Values (comma-separated):</label>
-                            <input type="text" id="arrayInput" placeholder="e.g., 5, 3, 6, 9, 2, 4, 7, 8" value="5, 3, 6, 9, 2, 4, 7, 8">
+                            <label>أدخل قيم المصفوفة (مفصولة بفواصل):</label>
+                            <input type="text" id="arrayInput" placeholder="مثال: 5, 3, 6, 9, 2, 4, 7, 8" value="5, 3, 6, 9, 2, 4, 7, 8">
                         </div>
 
                         <div class="button-group">
-                            <button class="btn" onclick="loadCustomArray()">Load Custom Array</button>
-                            <button class="btn btn-secondary" onclick="generateRandomArray()">Generate Random Array</button>
+                            <button class="btn" onclick="loadCustomArray()">تحميل المصفوفة المُدخلة</button>
+                            <button class="btn btn-secondary" onclick="generateRandomArray()">توليد مصفوفة عشوائية</button>
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
                             <div class="input-group">
-                                <label>Array Size (for random):</label>
+                                <label>حجم المصفوفة (للتوليد العشوائي):</label>
                                 <input type="number" id="arraySize" min="5" max="15" value="8">
                             </div>
                             <div class="input-group">
-                                <label>Max Value (for random):</label>
+                                <label>القيمة القصوى (للتوليد العشوائي):</label>
                                 <input type="number" id="maxValue" min="10" max="100" value="20">
                             </div>
                         </div>
 
                         <div class="input-group" style="margin-top: 20px;">
-                            <label>Select Pivot Index (which element to use as pivot):</label>
+                            <label>اختر فهرس المحور (العنصر الذي سيُستخدم محورًا):</label>
                             <input type="number" id="pivotIndex" min="0" value="0">
                             <p style="font-size: 0.9em; color: #666; margin-top: 5px;">
-                                The selected element will remain in its original position during partitioning.
+                                سيبقى العنصر المختار في موضعه الأصلي أثناء التقسيم.
                             </p>
                         </div>
                     </div>
@@ -691,11 +748,11 @@
                     <div class="split-view">
                         <!-- Code Panel -->
                         <div class="code-panel">
-                            <h4>Java Code</h4>
+                            <h4>شيفرة Java</h4>
                             <div class="zone-legend">
-                                <span class="zl-chip zl-outer">Outer while loop</span>
-                                <span class="zl-chip zl-i">i do-while →</span>
-                                <span class="zl-chip zl-j">j do-while ←</span>
+                                <span class="zl-chip zl-outer">حلقة while الخارجية</span>
+                                <span class="zl-chip zl-i">حلقة do-while للمؤشر i →</span>
+                                <span class="zl-chip zl-j">حلقة do-while للمؤشر j ←</span>
                             </div>
                             <div id="codeDisplay"></div>
                         </div>
@@ -704,7 +761,7 @@
                         <div class="animation-panel">
                             <!-- Variables Display -->
                             <div class="variables-display">
-                                <h4>Current Variables</h4>
+                                <h4>المتغيرات الحالية</h4>
                                 <div id="variablesDisplay">
                                     <div class="variable-item">
                                         <span class="var-name">pivot:</span>
@@ -731,7 +788,7 @@
 
                             <!-- Step Description -->
                             <div class="step-description" id="stepDescription">
-                                Click "Next Step" to begin
+                                اضغط «الخطوة التالية» للبدء
                             </div>
 
                             <!-- Array Visualization -->
@@ -739,8 +796,8 @@
 
                             <!-- Animation Controls -->
                             <div class="animation-controls">
-                                <button class="btn btn-secondary" id="stepBtn" onclick="nextStep()">Next Step</button>
-                                <button class="btn btn-warning" onclick="resetAnimation()">Reset</button>
+                                <button class="btn btn-secondary" id="stepBtn" onclick="nextStep()">الخطوة التالية</button>
+                                <button class="btn btn-warning" onclick="resetAnimation()">إعادة الضبط</button>
                             </div>
                         </div>
                     </div>
@@ -887,7 +944,7 @@
             const arr = input.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n)); // split on commas, trim whitespace, parse integers, remove NaN entries
 
             if (arr.length < 2) {           // need at least 2 elements to partition
-                alert('Please enter at least 2 numbers');
+                alert('الرجاء إدخال عددين على الأقل');
                 return;
             }
 
@@ -959,7 +1016,7 @@
                 if (index === pivotIndex && pivotIndex >= 0 && !showFinal) {
                     const pointerPivot = document.createElement('div');
                     pointerPivot.className = 'pointer pointer-pivot'; // gold pill, positioned higher (top:-60px)
-                    pointerPivot.textContent = 'pivot';
+                    pointerPivot.textContent = 'المحور';
                     element.appendChild(pointerPivot);
                 }
 
@@ -1011,7 +1068,7 @@
                 i: -1, j: -1,
                 pivot: -1,
                 l: l, h: h,
-                description: `Initial array. Parameter: l=${l}, h=${h}, p=${selectedPivotIndex}`,
+                description: `المصفوفة الابتدائية. المعاملات: \u2066l=${l}, h=${h}, p=${selectedPivotIndex}\u2069`,
                 codeLine: 3,                // method signature line
                 pivotIndex: -1,
                 showPointers: false
@@ -1026,7 +1083,7 @@
                 i: -1, j: -1,
                 pivot: pivot,
                 l: l, h: h,
-                description: `Set pivot = A[${selectedPivotIndex}] = ${pivot}`,
+                description: `نعيّن قيمة المحور: \u2066pivot = A[${selectedPivotIndex}] = ${pivot}\u2069`,
                 codeLine: 5,                // int pivot = A[p]
                 pivotIndex: selectedPivotIndex,
                 showPointers: false
@@ -1039,7 +1096,7 @@
                 i: i, j: -1,
                 pivot: pivot,
                 l: l, h: h,
-                description: `Initialize i = ${l} - 1 = ${i}`,
+                description: `تهيئة المؤشر i: \u2066i = ${l} - 1 = ${i}\u2069`,
                 codeLine: 6,                // int i = l - 1
                 pivotIndex: selectedPivotIndex,
                 showPointers: false
@@ -1052,7 +1109,7 @@
                 i: i, j: j,
                 pivot: pivot,
                 l: l, h: h,
-                description: `Initialize j = ${h} + 1 = ${j} (beyond array bounds, will decrement first in do-while)`,
+                description: `تهيئة المؤشر j: \u2066j = ${h} + 1 = ${j}\u2069 (خارج حدود المصفوفة، وسيُنقَص أولًا داخل حلقة do-while)`,
                 codeLine: 7,                // int j = h + 1
                 pivotIndex: selectedPivotIndex,
                 showPointers: false
@@ -1075,7 +1132,7 @@
                             array: [...array],
                             i: i, j: j,
                             pivot: pivot, l: l, h: h,
-                            description: `Increment i to ${i}. Check if A[${i}] = ${array[i]} <= pivot (${pivot})`,
+                            description: `نزيد i إلى ${i}. نتحقق هل \u2066A[${i}] = ${array[i]} <= pivot (${pivot})\u2069`,
                             codeLine: 13,              // i++ line
                             pivotIndex: currentPivotIndex,
                             showPointers: true
@@ -1086,7 +1143,7 @@
                             array: [...array],
                             i: i, j: j,
                             pivot: pivot, l: l, h: h,
-                            description: `A[${i}] = ${array[i]} <= ${pivot}, continue incrementing i`,
+                            description: `\u2066A[${i}] = ${array[i]} <= ${pivot}\u2069، نستمر في زيادة i`,
                             codeLine: 14,              // } while (A[i] <= pivot) line
                             pivotIndex: currentPivotIndex,
                             showPointers: true
@@ -1099,7 +1156,7 @@
                     array: [...array],
                     i: i, j: j,
                     pivot: pivot, l: l, h: h,
-                    description: `Found A[${i}] = ${array[i]} > pivot (${pivot}). Stop incrementing i.`,
+                    description: `وجدنا \u2066A[${i}] = ${array[i]} > pivot (${pivot})\u2069. نتوقف عن زيادة i.`,
                     codeLine: 14,              // } while condition
                     pivotIndex: currentPivotIndex,
                     showPointers: true
@@ -1114,7 +1171,7 @@
                             array: [...array],
                             i: i, j: j,
                             pivot: pivot, l: l, h: h,
-                            description: `Decrement j to ${j}. Check if A[${j}] = ${array[j]} > pivot (${pivot})`,
+                            description: `نُنقص j إلى ${j}. نتحقق هل \u2066A[${j}] = ${array[j]} > pivot (${pivot})\u2069`,
                             codeLine: 20,              // j-- line
                             pivotIndex: currentPivotIndex,
                             showPointers: true
@@ -1125,7 +1182,7 @@
                             array: [...array],
                             i: i, j: j,
                             pivot: pivot, l: l, h: h,
-                            description: `A[${j}] = ${array[j]} > ${pivot}, continue decrementing j`,
+                            description: `\u2066A[${j}] = ${array[j]} > ${pivot}\u2069، نستمر في إنقاص j`,
                             codeLine: 21,              // } while (A[j] > pivot) line
                             pivotIndex: currentPivotIndex,
                             showPointers: true
@@ -1138,7 +1195,7 @@
                     array: [...array],
                     i: i, j: j,
                     pivot: pivot, l: l, h: h,
-                    description: `Found A[${j}] = ${array[j]} <= pivot (${pivot}). Stop decrementing j.`,
+                    description: `وجدنا \u2066A[${j}] = ${array[j]} <= pivot (${pivot})\u2069. نتوقف عن إنقاص j.`,
                     codeLine: 21,              // } while condition
                     pivotIndex: currentPivotIndex,
                     showPointers: true
@@ -1151,7 +1208,7 @@
                         array: [...array],
                         i: i, j: j,
                         pivot: pivot, l: l, h: h,
-                        description: `i (${i}) < j (${j}), so swap A[${i}] = ${array[i]} with A[${j}] = ${array[j]}`,
+                        description: `\u2066i (${i}) < j (${j})\u2069، لذا نبدّل \u2066A[${i}] = ${array[i]}\u2069 مع \u2066A[${j}] = ${array[j]}\u2069`,
                         codeLine: 26,          // if (i < j) { line
                         pivotIndex: currentPivotIndex,
                         showPointers: true
@@ -1169,7 +1226,7 @@
                         array: [...array],
                         i: i, j: j,
                         pivot: pivot, l: l, h: h,
-                        description: `After swap: A[${i}] = ${array[i]}, A[${j}] = ${array[j]}`,
+                        description: `بعد التبديل: \u2066A[${i}] = ${array[i]}, A[${j}] = ${array[j]}\u2069`,
                         codeLine: 27,          // swap(A, i, j) line
                         pivotIndex: currentPivotIndex,
                         swapped: true,
@@ -1181,7 +1238,7 @@
                         array: [...array],
                         i: i, j: j,
                         pivot: pivot, l: l, h: h,
-                        description: `i (${i}) >= j (${j}), exit while loop`,
+                        description: `\u2066i (${i}) >= j (${j})\u2069، نخرج من حلقة while`,
                         codeLine: 9,           // while (i < j) line
                         pivotIndex: currentPivotIndex,
                         showPointers: true
@@ -1194,7 +1251,7 @@
                 array: [...array],
                 i: i, j: j,
                 pivot: pivot, l: l, h: h,
-                description: `Swap pivot A[${currentPivotIndex}] = ${array[currentPivotIndex]} with A[${j}] = ${array[j]} to place pivot in correct position`,
+                description: `نبدّل المحور \u2066A[${currentPivotIndex}] = ${array[currentPivotIndex]}\u2069 مع \u2066A[${j}] = ${array[j]}\u2069 لوضع المحور في موضعه الصحيح`,
                 codeLine: 33,          // swap(A, p, j) line
                 pivotIndex: currentPivotIndex,
                 showPointers: true
@@ -1207,7 +1264,7 @@
                 array: [...array],
                 i: i, j: j,
                 pivot: pivot, l: l, h: h,
-                description: `Partition complete! Pivot ${pivot} is now at index ${j}. Return ${j}.`,
+                description: `اكتمل التقسيم! أصبح المحور ${pivot} الآن عند الفهرس ${j}. نُرجع ${j}.`,
                 codeLine: 34,          // return j line
                 pivotIndex: j,
                 final: true
@@ -1297,7 +1354,7 @@
 
                 updateVariables();                                                                   // reflect reset values in the variable panel
                 renderArray(-1, -1, -1, false);                                                      // draw the array without any highlights or colours
-                document.getElementById('stepDescription').textContent = 'Click "Next Step" to begin'; // reset the description text
+                document.getElementById('stepDescription').textContent = 'اضغط «الخطوة التالية» للبدء'; // reset the description text
                 highlightCodeLine(-1);                                                               // remove all code highlights
             }
 
@@ -1314,8 +1371,8 @@
         };
     </script>
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 </body>
 </html>

@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Merge Sort – Binary Tree Simulation</title>
+<title>الفرز بالدمج (Merge Sort) – محاكاة الشجرة الثنائية</title>
 <style>
+@font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+    font-weight: 400;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+    font-weight: 600;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+    font-weight: 700;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+    font-weight: 800;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
-    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    font-family:'Haradh','Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
     background:linear-gradient(135deg,#0d9488 0%,#14b8a6 50%,#06b6d4 100%);
     min-height:100vh; padding:20px; color:#334155;
 }
@@ -151,40 +175,53 @@ footer {
 footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
 footer strong { opacity: 1; }
 
-        .lang-switch-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            padding: 10px 22px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
+/* ---------- RTL (Arabic) overrides ---------- */
+.code-panel{border-right:none; border-left:2px solid #1e293b;}
+/* Code, the recursion tree, the merge arrays and the numeric input stay
+   left-to-right so arrays read index 0..n from left to right as in English. */
+.code-lines, .code-lines li, .tree-area, #treeSvg, svg,
+.merge-arrays, .array-cells, .cell, .ptr, .input-bar input{direction:ltr;}
+.code-lines, .input-bar input{text-align:left;}
+.code-panel h3{letter-spacing:0; text-align:right;}
+.merge-detail h4, .array-label{letter-spacing:0;}
+.merge-detail h4, .merge-arrays > span{direction:rtl; text-align:right;}
+.merge-arrays{justify-content:flex-end;}
+body{line-height:1.6;}
+header h1{line-height:1.6;}
 
-        .lang-switch-btn:hover { background: #667eea; color: white; }
+.lang-switch-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+    padding: 10px 22px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+    transition: all 0.3s;
+    z-index: 1000;
+}
+.lang-switch-btn:hover { background: #667eea; color: white; }
 </style>
 </head>
 <body>
-<a href="mergesort-simulation-ar.html" class="lang-switch-btn">عربي</a>
+<a href="mergesort-simulation.html" class="lang-switch-btn">English</a>
 <div class="container">
 <header>
-    <a href="index.html" class="back-link">← Sorting Hub</a>
-    <h1>Merge Sort — Binary Tree Simulation</h1>
-    <p>Watch the recursive divide &amp; conquer unfold as a binary tree</p>
+    <a href="index-ar.html" class="back-link">→ العودة إلى صفحة الفرز</a>
+    <h1>الفرز بالدمج (Merge Sort) — محاكاة الشجرة الثنائية (Binary Tree)</h1>
+    <p>شاهد استراتيجية فرّق تَسُد (Divide &amp; Conquer) القائمة على العودية (Recursion) وهي تتكشّف في صورة شجرة ثنائية</p>
 </header>
 
 <!-- Input bar -->
 <div class="input-bar">
-    <label>Array:</label>
-    <input type="text" id="arrayInput" value="38, 27, 43, 3, 9, 82, 10" placeholder="e.g. 5, 3, 8, 1, 9, 2">
-    <button class="btn btn-teal" onclick="buildSimulation()">▶ Build</button>
-    <button class="btn btn-teal" onclick="randomArray()">↺ Random</button>
+    <label>المصفوفة (Array):</label>
+    <input type="text" id="arrayInput" value="38, 27, 43, 3, 9, 82, 10" placeholder="مثال: 5, 3, 8, 1, 9, 2">
+    <button class="btn btn-teal" onclick="buildSimulation()">▶ بناء</button>
+    <button class="btn btn-teal" onclick="randomArray()">↺ عشوائي</button>
 </div>
 
 <!-- Main layout -->
@@ -192,7 +229,7 @@ footer strong { opacity: 1; }
 
     <!-- Java code panel -->
     <div class="code-panel">
-        <h3>Java Code</h3>
+        <h3>كود Java</h3>
         <ul class="code-lines" id="codeLines">
             <li data-line="1">void mergeSort(</li>
             <li data-line="2">  int[] a, int l, int r) {</li>
@@ -230,29 +267,29 @@ footer strong { opacity: 1; }
     <!-- Visual panel -->
     <div class="vis-panel">
         <div class="step-info">
-            <span class="step-counter" id="stepCounter">Step 0 / 0</span>
-            <span class="step-desc" id="stepDesc">Enter an array and click Build to start.</span>
+            <span class="step-counter" id="stepCounter">الخطوة 0 / 0</span>
+            <span class="step-desc" id="stepDesc">أدخل مصفوفة ثم انقر «بناء» للبدء.</span>
         </div>
         <div class="nav-bar">
-            <button class="btn btn-nav" id="btnPrev" onclick="prevStep()" disabled>◀ Prev</button>
-            <button class="btn btn-nav" id="btnNext" onclick="nextStep()" disabled>Next ▶</button>
+            <button class="btn btn-nav" id="btnPrev" onclick="prevStep()" disabled>▶ السابق</button>
+            <button class="btn btn-nav" id="btnNext" onclick="nextStep()" disabled>التالي ◀</button>
             <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
         </div>
         <div class="tree-area">
             <svg id="treeSvg" width="700" height="400"></svg>
         </div>
         <div class="merge-detail">
-            <h4 id="mergeDetailTitle">Merge Detail</h4>
+            <h4 id="mergeDetailTitle">تفاصيل الدمج</h4>
             <div class="merge-arrays" id="mergeArrays">
-                <span style="color:#94a3b8;font-size:0.9em;">Merge step details appear here.</span>
+                <span style="color:#94a3b8;font-size:0.9em;">تظهر هنا تفاصيل خطوة الدمج (Merge).</span>
             </div>
         </div>
         <div class="legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9;border-color:#94a3b8;"></div>Pending</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#fef3c7;border-color:#f59e0b;"></div>Dividing</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#dbeafe;border-color:#3b82f6;"></div>Merging</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#dcfce7;border-color:#22c55e;"></div>Sorted</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#fce7f3;border-color:#ec4899;"></div>Active Node</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9;border-color:#94a3b8;"></div>قيد الانتظار</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fef3c7;border-color:#f59e0b;"></div>قيد التقسيم</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#dbeafe;border-color:#3b82f6;"></div>قيد الدمج</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#dcfce7;border-color:#22c55e;"></div>مُرتَّبة</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#fce7f3;border-color:#ec4899;"></div>العقدة النشطة (Active Node)</div>
         </div>
     </div>
 </div>
@@ -347,25 +384,25 @@ function generateSteps() {
         const node = nodes[id];
         if (l >= r) {
             nState[id] = 'sorted';
-            snap(`Base: [${work[l]}] — single element, already sorted`, 3, id, null);
+            snap(`الحالة الأساسية (Base Case): ⁦[${work[l]}]⁩ — عنصر واحد، فهو مرتّب أصلًا`, 3, id, null);
             return;
         }
 
         nState[id] = 'dividing';
         const m = (l + r) >> 1;
-        snap(`Divide [${work.slice(l,r+1)}] at mid=${m} → [${work.slice(l,m+1)}] | [${work.slice(m+1,r+1)}]`, 5, id, null);
+        snap(`قسّم ⁦[${work.slice(l,r+1)}]⁩ عند ⁦mid=${m}⁩ ← ⁦[${work.slice(l,m+1)}] | [${work.slice(m+1,r+1)}]⁩`, 5, id, null);
 
-        snap(`Call mergeSort on LEFT [${work.slice(l,m+1)}]`, 6, id, null);
+        snap(`استدعِ mergeSort على النصف الأيسر ⁦[${work.slice(l,m+1)}]⁩`, 6, id, null);
         ms(node.leftChild,  l,   m);
 
-        snap(`Call mergeSort on RIGHT [${work.slice(m+1,r+1)}]`, 7, id, null);
+        snap(`استدعِ mergeSort على النصف الأيمن ⁦[${work.slice(m+1,r+1)}]⁩`, 7, id, null);
         ms(node.rightChild, m+1, r);
 
         // --- MERGE ---
         nState[id] = 'merging';
         const L = work.slice(l, m+1);
         const R = work.slice(m+1, r+1);
-        snap(`merge([${L}], [${R}]) — compare and interleave`, 8, id, null);
+        snap(`⁦merge([${L}], [${R}])⁩ — قارن العناصر وادمجها بالتناوب`, 8, id, null);
 
         const Lc = [...L], Rc = [...R];
         let i=0, j=0, k=l;
@@ -377,8 +414,8 @@ function generateSteps() {
             res[k - l]  = val;
             snap(
                 fromL
-                    ? `L[${i}]=${Lc[i]} ≤ R[${j}]=${Rc[j]}  →  place ${val} from Left`
-                    : `L[${i}]=${Lc[i]} > R[${j}]=${Rc[j]}  →  place ${val} from Right`,
+                    ? `⁦L[${i}]=${Lc[i]} ≤ R[${j}]=${Rc[j]}⁩  ←  ضع ${val} من المصفوفة اليسرى L`
+                    : `⁦L[${i}]=${Lc[i]} > R[${j}]=${Rc[j]}⁩  ←  ضع ${val} من المصفوفة اليمنى R`,
                 fromL ? 22 : 24, id,
                 { L:Lc, R:Rc, result:[...res], iPtr:i, jPtr:j, kIdx:k-l }
             );
@@ -387,25 +424,25 @@ function generateSteps() {
         }
         while (i < Lc.length) {
             res[k-l] = Lc[i];
-            snap(`Copy remaining Left[${i}]=${Lc[i]}`, 27, id,
+            snap(`انسخ العنصر المتبقي من اليسرى ⁦L[${i}]=${Lc[i]}⁩`, 27, id,
                  { L:Lc, R:Rc, result:[...res], iPtr:i, jPtr:j, kIdx:k-l });
             work[k++] = Lc[i++];
         }
         while (j < Rc.length) {
             res[k-l] = Rc[j];
-            snap(`Copy remaining Right[${j}]=${Rc[j]}`, 29, id,
+            snap(`انسخ العنصر المتبقي من اليمنى ⁦R[${j}]=${Rc[j]}⁩`, 29, id,
                  { L:Lc, R:Rc, result:[...res], iPtr:i, jPtr:j, kIdx:k-l });
             work[k++] = Rc[j++];
         }
 
         nState[id] = 'sorted';
-        snap(`Merged → [${work.slice(l,r+1)}]`, 8, id,
+        snap(`تم الدمج ← ⁦[${work.slice(l,r+1)}]⁩`, 8, id,
              { L:Lc, R:Rc, result:work.slice(l,r+1), iPtr:-1, jPtr:-1, kIdx:-1 });
     }
 
-    snap('Click Next ▶ to start Merge Sort', 1, null, null);
+    snap('انقر «التالي ◀» لبدء الفرز بالدمج', 1, null, null);
     ms(0, 0, origArr.length - 1);
-    snap(`Merge Sort complete!  Sorted: [${work}]`, 9, 0, null);
+    snap(`اكتمل الفرز بالدمج!  المصفوفة المرتّبة: ⁦[${work}]⁩`, 9, 0, null);
     return list;
 }
 
@@ -498,12 +535,12 @@ function renderMergeDetail(step) {
     const title = document.getElementById('mergeDetailTitle');
     const box   = document.getElementById('mergeArrays');
     if (!step.mergeDetail) {
-        title.textContent = 'Merge Detail';
-        box.innerHTML = '<span style="color:#94a3b8;font-size:0.88em;">Merge step details appear here.</span>';
+        title.textContent = 'تفاصيل الدمج';
+        box.innerHTML = '<span style="color:#94a3b8;font-size:0.88em;">تظهر هنا تفاصيل خطوة الدمج (Merge).</span>';
         return;
     }
     const {L, R, result, iPtr, jPtr, kIdx} = step.mergeDetail;
-    title.textContent = `Merging:  Left [${L}]  +  Right [${R}]`;
+    title.textContent = `الدمج:  اليسرى ⁦[${L}]⁩  +  اليمنى ⁦[${R}]⁩`;
 
     const mkCells = (arr, baseClass, ptr, ptrChar) => {
         let h = '<div class="array-cells">';
@@ -519,11 +556,11 @@ function renderMergeDetail(step) {
     };
 
     box.innerHTML =
-        `<div class="array-group"><div class="array-label">Left (L)</div>${mkCells(L,'c-left',iPtr,'i')}</div>` +
+        `<div class="array-group"><div class="array-label">اليسرى (L)</div>${mkCells(L,'c-left',iPtr,'i')}</div>` +
         `<div style="align-self:center;font-size:1.3em;color:#14b8a6;padding-top:10px;">+</div>` +
-        `<div class="array-group"><div class="array-label">Right (R)</div>${mkCells(R,'c-right',jPtr,'j')}</div>` +
+        `<div class="array-group"><div class="array-label">اليمنى (R)</div>${mkCells(R,'c-right',jPtr,'j')}</div>` +
         `<div style="align-self:center;font-size:1.3em;color:#14b8a6;padding-top:10px;">→</div>` +
-        `<div class="array-group"><div class="array-label">Result</div>${mkCells(result,'c-result',kIdx,'k')}</div>`;
+        `<div class="array-group"><div class="array-label">النتيجة</div>${mkCells(result,'c-result',kIdx,'k')}</div>`;
 }
 
 // ═══════════════════════════════════════════
@@ -551,7 +588,7 @@ function applyStep(idx) {
     renderMergeDetail(step);
     highlightCode(step.line);
 
-    document.getElementById('stepCounter').textContent = `Step ${idx+1} / ${steps.length}`;
+    document.getElementById('stepCounter').textContent = `الخطوة ⁦${idx+1} / ${steps.length}⁩`;
     document.getElementById('stepDesc').textContent    = step.desc;
 
     const pct = steps.length > 1 ? (idx / (steps.length-1)) * 100 : 0;
@@ -575,8 +612,8 @@ document.addEventListener('keydown', e => {
 function buildSimulation() {
     const raw = document.getElementById('arrayInput').value;
     const parsed = raw.split(/[,\s]+/).map(Number).filter(x => !isNaN(x));
-    if (parsed.length < 2)  { alert('Please enter at least 2 numbers.'); return; }
-    if (parsed.length > 12) { alert('Please use at most 12 numbers for a clear tree.'); return; }
+    if (parsed.length < 2)  { alert('الرجاء إدخال رقمين على الأقل.'); return; }
+    if (parsed.length > 12) { alert('الرجاء استخدام 12 رقمًا على الأكثر لتبقى الشجرة واضحة.'); return; }
 
     origArr = parsed;
     nodes = [];
@@ -611,8 +648,8 @@ function randomArray() {
 window.addEventListener('load', buildSimulation);
 </script>
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 </body>
 </html>

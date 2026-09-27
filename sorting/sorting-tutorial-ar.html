@@ -1,15 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorting Algorithms</title>
+    <title>خوارزميات الفرز (Sorting Algorithms)</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true, theme:'base', securityLevel:'loose'});</script>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         *{margin:0;padding:0;box-sizing:border-box;}
         body{
-            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+            font-family:'Haradh','Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
             background:linear-gradient(135deg,#0d9488 0%,#14b8a6 50%,#06b6d4 100%);
             min-height:100vh; padding:20px; line-height:1.6; color:#334155;
         }
@@ -170,13 +195,13 @@
             position:relative;
         }
         .sort-divider::before{
-            content:'sorted ←';
+            content:'مرتّب ←';
             position:absolute; top:-22px; right:8px;
             font-size:0.72em; font-weight:700; color:#0d9488;
             white-space:nowrap;
         }
         .sort-divider::after{
-            content:'→ unsorted';
+            content:'→ غير مرتّب';
             position:absolute; top:-22px; left:8px;
             font-size:0.72em; font-weight:700; color:#64748b;
             white-space:nowrap;
@@ -321,6 +346,33 @@
         footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
         footer strong { opacity: 1; }
 
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .box { border-left: none; border-right: 5px solid; }
+        .box-teal{border-color:#14b8a6;}
+        .box-yellow{border-color:#eab308;}
+        .box-green{border-color:#22c55e;}
+        .box-purple{border-color:#a855f7;}
+        .box-blue{border-color:#3b82f6;}
+        .box-red{border-color:#f43f5e;}
+        ul, ol { margin: 10px 28px 14px 0; }
+
+        /* Code, arrays, index rows, formula tables and the comparison
+           bars always stay left-to-right, so index 0..n reads left to right
+           exactly as in the English page and in the Java code. */
+        pre, code, .code-block, .array-display, .array-element, .ba-array,
+        .scenario-array, .bar-row, .math-box table, .frac, canvas, svg, .mermaid {
+            direction: ltr;
+        }
+        pre, .code-block { text-align: left; }
+        code { unicode-bidi: embed; }
+        .sim-stat span { direction: ltr; unicode-bidi: isolate; }
+        .bar-label { font-size: 0.9em; }
+        .ba-label { letter-spacing: 0; }
+        .code-toggle.collapsed { transform: rotate(90deg); }
+
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -341,64 +393,64 @@
     </style>
 </head>
 <body>
-<a href="sorting-tutorial-ar.html" class="lang-switch-btn">عربي</a>
+<a href="sorting-tutorial.html" class="lang-switch-btn">English</a>
 <div class="container">
 
 <!-- ══════════════════════════ HEADER ══════════════════════════ -->
 <header>
-    <a href="index.html" class="back-link">← Sorting Hub</a>
-    <h1>Quadratic Sorting Algorithms</h1>
-    <p>Data Structures I</p>
+    <a href="index-ar.html" class="back-link">→ العودة إلى صفحة الفرز</a>
+    <h1>خوارزميات الفرز التربيعية (Quadratic Sorting Algorithms)</h1>
+    <p>هياكل البيانات 1</p>
     <div class="header-badges">
-        <span class="badge">Module 12</span>
-        <span class="badge">Quadratic Sorting — O(n²)</span>
-        <span class="badge">Selection · Insertion · Bubble</span>
+        <span class="badge">الوحدة 12</span>
+        <span class="badge">الفرز التربيعي — <span dir="ltr">O(n²)</span></span>
+        <span class="badge">الاختيار · الإدراج · الفقاعي</span>
     </div>
 </header>
 
 <!-- ══════════════════════════ NAV ══════════════════════════ -->
 <nav class="section-nav">
-    <a href="#selection">1 · Selection Sort</a>
-    <a href="#insertion">2 · Insertion Sort</a>
-    <a href="#bubble">3 · Bubble Sort</a>
-    <a href="#comparison">4 · Comparison &amp; Insight</a>
+    <a href="#selection">1 · الفرز بالاختيار</a>
+    <a href="#insertion">2 · الفرز بالإدراج</a>
+    <a href="#bubble">3 · الفرز الفقاعي</a>
+    <a href="#comparison">4 · المقارنة والاستنتاج</a>
 </nav>
 
 <div class="content">
 
 <!-- ══════════════════════════ SECTION 1: SELECTION SORT ══════════════════════════ -->
 <section id="selection">
-    <h2>1 · Selection Sort</h2>
+    <h2>1 · الفرز بالاختيار (Selection Sort)</h2>
 
     <div class="box box-green">
-        <strong>Core Idea:</strong> Divide the array into a <em>sorted part</em> (on the left) and
-        an <em>unsorted part</em> (on the right). In each pass, find the minimum (or maximum)
-        element in the unsorted part and move it to the boundary.
+        <strong>الفكرة الأساسية:</strong> نقسم المصفوفة (Array) إلى <em>جزء مرتّب</em> (على اليسار) و
+        <em>جزء غير مرتّب</em> (على اليمين). في كل تمريرة (Pass)، نبحث عن أصغر (أو أكبر)
+        عنصر (Element) في الجزء غير المرتّب وننقله إلى الحد الفاصل بين الجزأين.
     </div>
 
-    <h3>How It Works (Ascending)</h3>
+    <h3>كيف تعمل (ترتيب تصاعدي)</h3>
     <ol>
-        <li>Assume the first element of the unsorted part is the minimum.</li>
-        <li>Scan the rest of the unsorted part, updating the minimum if a smaller element is found.</li>
-        <li>After the scan, swap the found minimum with the element at the boundary.</li>
-        <li>Move the boundary one step to the right. Repeat until the entire array is sorted.</li>
+        <li>نفترض أن العنصر الأول في الجزء غير المرتّب هو الأصغر.</li>
+        <li>نفحص بقية الجزء غير المرتّب، ونحدّث الأصغر كلما وجدنا عنصرًا أصغر منه.</li>
+        <li>بعد انتهاء الفحص، نبدّل (Swap) الأصغر الذي وجدناه مع العنصر الموجود عند الحد الفاصل.</li>
+        <li>نحرّك الحد الفاصل خطوة واحدة إلى اليمين، ونكرر حتى تصبح المصفوفة كلها مرتّبة.</li>
     </ol>
 
 
-    <h3>Algorithm Analysis — Why O(n²)?</h3>
-    <p>Selection sort uses two nested loops. Let us count exactly how many comparisons it makes:</p>
+    <h3>تحليل الخوارزمية — لماذا <span dir="ltr">O(n²)</span>؟</h3>
+    <p>يستخدم الفرز بالاختيار حلقتين متداخلتين (Nested Loops). لنحسب بالضبط عدد المقارنات (Comparisons) التي يجريها:</p>
 
     <div class="math-box">
 
         <!-- Step 1 -->
-        <p class="math-step"><strong>Step 1 — Count comparisons per pass:</strong></p>
-        <p class="math-formula">T(n) = n + (n−1) + (n−2) + (n−3) + … + 3 + 2 + 1</p>
-        <p class="math-step">Pass 1 scans n elements &nbsp;|&nbsp; Pass 2 scans n−1 &nbsp;|&nbsp; … &nbsp;|&nbsp; Pass n scans 1</p>
+        <p class="math-step"><strong>الخطوة 1 — عدّ المقارنات في كل تمريرة:</strong></p>
+        <p class="math-formula" dir="ltr">T(n) = n + (n−1) + (n−2) + (n−3) + … + 3 + 2 + 1</p>
+        <p class="math-step">التمريرة 1 تفحص n عنصرًا &nbsp;|&nbsp; التمريرة 2 تفحص <span dir="ltr">n−1</span> &nbsp;|&nbsp; … &nbsp;|&nbsp; التمريرة n تفحص عنصرًا واحدًا</p>
 
         <hr style="margin:18px 0;border-color:#c4b5fd;">
 
         <!-- Gauss column-pair visual -->
-        <p class="math-step" style="margin-bottom:10px;">Write the sum forward and backward, then add column by column — each pair sums to <strong>(n+1)</strong>, and there are <strong>n</strong> pairs:</p>
+        <p class="math-step" style="margin-bottom:10px;">اكتب المجموع مرة بالترتيب ومرة بالعكس، ثم اجمع عمودًا عمودًا — مجموع كل زوج يساوي <strong dir="ltr">(n+1)</strong>، وعدد الأزواج <strong>n</strong>:</p>
         <div style="background:#f3e8ff;border:2px solid #a855f7;border-radius:10px;padding:18px 14px;overflow-x:auto;margin:8px 0 16px;">
             <table style="margin:0 auto;border-collapse:collapse;font-family:'Courier New',monospace;font-size:1em;color:#4c1d95;">
                 <tr>
@@ -448,20 +500,20 @@
                 </tr>
             </table>
             <p style="text-align:center;margin:12px 0 0;font-family:'Times New Roman',serif;font-style:italic;color:#6d28d9;font-weight:700;font-size:1.1em;">
-                2 · T(n) = n &times; (n+1) &nbsp;&nbsp; ← &nbsp; n pairs, each equal to (n+1)
+                <span dir="ltr">2 · T(n) = n &times; (n+1)</span> &nbsp;&nbsp; → &nbsp; n من الأزواج، كلٌّ منها يساوي <span dir="ltr">(n+1)</span>
             </p>
         </div>
 
         <!-- Step 2 -->
-        <p class="math-step"><strong>Step 2 — Divide both sides by 2:</strong></p>
-        <p class="math-formula" style="font-size:1.35em;margin:14px 0;">
+        <p class="math-step"><strong>الخطوة 2 — نقسم الطرفين على 2:</strong></p>
+        <p class="math-formula" dir="ltr" style="font-size:1.35em;margin:14px 0;">
             T(n) &nbsp;=&nbsp;
             <span class="frac"><span class="num">n &thinsp;(n+1)</span><span class="den">2</span></span>
         </p>
 
         <!-- Step 3 -->
-        <p class="math-step"><strong>Step 3 — Expand the numerator (two terms):</strong></p>
-        <p class="math-formula" style="font-size:1.35em;margin:14px 0;">
+        <p class="math-step"><strong>الخطوة 3 — نفك البسط (إلى حدّين):</strong></p>
+        <p class="math-formula" dir="ltr" style="font-size:1.35em;margin:14px 0;">
             T(n) &nbsp;=&nbsp;
             <span class="frac"><span class="num">n² + n</span><span class="den">2</span></span>
             &nbsp;=&nbsp;
@@ -469,16 +521,16 @@
             &nbsp;+&nbsp;
             <span class="frac"><span class="num">1</span><span class="den">2</span></span>n
         </p>
-        <p class="math-step">The dominant term is <strong>½n²</strong>; the lower-order term <strong>½n</strong> is negligible for large n.</p>
+        <p class="math-step">الحد المهيمن هو <strong dir="ltr">½n²</strong>؛ أما الحد الأدنى رتبةً <strong dir="ltr">½n</strong> فيمكن إهماله عندما تكون n كبيرة.</p>
 
         <!-- Result -->
-        <p class="math-formula" style="margin-top:18px;font-size:1.55em;">∴ &nbsp; T(n) ∈ O(n²)</p>
-        <p class="math-step">Drop the constant ½ and the lower-order term ½n. Only n² matters.</p>
+        <p class="math-formula" dir="ltr" style="margin-top:18px;font-size:1.55em;">∴ &nbsp; T(n) ∈ O(n²)</p>
+        <p class="math-step">نحذف الثابت ½ والحد الأدنى رتبةً <span dir="ltr">½n</span>. لا يهمّنا إلا <span dir="ltr">n²</span>.</p>
 
         <hr style="margin:20px 0;border-color:#c4b5fd;">
 
         <!-- Concrete example n = 6 -->
-        <p class="math-step"><strong>Concrete example — n = 6:</strong></p>
+        <p class="math-step"><strong>مثال عملي — <span dir="ltr">n = 6</span>:</strong></p>
         <div style="background:#f3e8ff;border:2px solid #a855f7;border-radius:10px;padding:16px 14px;overflow-x:auto;margin:10px 0;">
             <table style="margin:0 auto;border-collapse:collapse;font-family:'Courier New',monospace;font-size:1em;color:#4c1d95;">
                 <tr>
@@ -527,46 +579,46 @@
                     <td style="padding:6px 10px;text-align:center;background:#ede9fe;border-radius:4px;">7</td>
                 </tr>
             </table>
-            <p style="text-align:center;margin:12px 0 4px;font-family:'Times New Roman',serif;font-style:italic;color:#6d28d9;font-weight:700;font-size:1.1em;">
+            <p dir="ltr" style="text-align:center;margin:12px 0 4px;font-family:'Times New Roman',serif;font-style:italic;color:#6d28d9;font-weight:700;font-size:1.1em;">
                 2 · T(6) = 6 &times; 7 = 42
             </p>
             <p style="text-align:center;margin:6px 0 0;font-family:'Times New Roman',serif;font-style:italic;color:#6d28d9;font-size:1.2em;">
-                T(6) &nbsp;=&nbsp;
+                <span dir="ltr">T(6) &nbsp;=&nbsp;
                 <span class="frac" style="font-size:1em;"><span class="num">42</span><span class="den">2</span></span>
-                &nbsp;=&nbsp; <strong style="font-size:1.15em;">21</strong> comparisons &nbsp;✓
+                &nbsp;=&nbsp; <strong style="font-size:1.15em;">21</strong></span> مقارنة &nbsp;✓
             </p>
         </div>
         <p class="math-step" style="text-align:center;">
-            Verify: &nbsp;
-            <span class="frac" style="font-size:1.05em;"><span class="num">n(n+1)</span><span class="den">2</span></span>
+            تحقّق: &nbsp;
+            <span dir="ltr"><span class="frac" style="font-size:1.05em;"><span class="num">n(n+1)</span><span class="den">2</span></span>
             &nbsp;=&nbsp;
             <span class="frac" style="font-size:1.05em;"><span class="num">6 &times; 7</span><span class="den">2</span></span>
             &nbsp;=&nbsp;
             <span class="frac" style="font-size:1.05em;"><span class="num">42</span><span class="den">2</span></span>
-            &nbsp;=&nbsp; <strong>21</strong> &nbsp;✓
+            &nbsp;=&nbsp; <strong>21</strong></span> &nbsp;✓
         </p>
 
-        <div class="box box-yellow" style="text-align:left;margin-top:16px;">
-            <strong>Important:</strong> Selection sort <em>always</em> makes exactly n(n+1)/2 comparisons,
-            regardless of whether the array is already sorted or completely reversed.
-            The number of <em>swaps</em> may vary (0 to n−1), but comparisons never do.
+        <div class="box box-yellow" style="text-align:right;margin-top:16px;">
+            <strong>مهم:</strong> يجري الفرز بالاختيار <em>دائمًا</em> عددًا ثابتًا من المقارنات يساوي <span dir="ltr">n(n+1)/2</span> بالضبط،
+            سواء كانت المصفوفة مرتّبة مسبقًا أو معكوسة تمامًا.
+            قد يتغير عدد <em>التبديلات</em> (من 0 إلى <span dir="ltr">n−1</span>)، أما عدد المقارنات فلا يتغير أبدًا.
         </div>
     </div>
 
     <div class="box box-red" style="margin-top:20px;">
-        <strong>Selection Sort — Characteristics:</strong>
+        <strong>الفرز بالاختيار — الخصائص:</strong>
         <ul style="margin-top:8px;">
-            <li>Always performs the same number of comparisons regardless of input order</li>
-            <li><strong>Not Adaptive</strong> — does not benefit from partially sorted data</li>
-            <li>Time Complexity: <strong>O(n²) in all cases</strong> (best, average, and worst)</li>
-            <li>The number of swaps varies (0 to n−1), but comparisons are always exactly n(n−1)/2</li>
+            <li>ينفّذ دائمًا العدد نفسه من المقارنات بغض النظر عن ترتيب المدخلات</li>
+            <li><strong>غير تكيّفي (Not Adaptive)</strong> — لا يستفيد من البيانات المرتّبة جزئيًا</li>
+            <li>التعقيد الزمني (Time Complexity): <strong><span dir="ltr">O(n²)</span> في جميع الحالات</strong> (أفضل حالة ومتوسط حالة وأسوأ حالة)</li>
+            <li>يتغير عدد التبديلات (من 0 إلى <span dir="ltr">n−1</span>)، لكن عدد المقارنات دائمًا <span dir="ltr">n(n−1)/2</span> بالضبط</li>
         </ul>
     </div>
 
-    <h3>Java Implementation</h3>
+    <h3>التنفيذ بلغة Java</h3>
     <div class="code-container">
         <div class="code-header" onclick="toggleCode('sel-code')">
-            <span>Selection Sort — Java</span><span class="code-toggle" id="sel-code-toggle">▼</span>
+            <span>الفرز بالاختيار — Java</span><span class="code-toggle" id="sel-code-toggle">▼</span>
         </div>
         <pre class="code-block" id="sel-code"><span class="kw">public static void</span> selectionSort(<span class="kw">int</span>[] arr) {
     <span class="kw">int</span> n = arr.length;
@@ -586,87 +638,87 @@
 }</pre>
     </div>
 
-    <h3>Step-by-Step Simulation</h3>
-    <p>Use the <strong>Next</strong> button to walk through each comparison and swap one step at a time.
-       Toggle between ascending and descending order.</p>
+    <h3>محاكاة خطوة بخطوة</h3>
+    <p>استخدم زر <strong>التالي</strong> للمرور على كل مقارنة وكل تبديل خطوةً خطوة.
+       ويمكنك التبديل بين الترتيب التصاعدي والتنازلي.</p>
 
     <div class="sim-container" id="sim-selection">
         <div class="sim-header">
-            <span class="sim-title">Selection Sort Simulation</span>
-            <button class="btn btn-toggle" id="dir-selection" onclick="selSim.toggleDir()">Ascending ↑</button>
+            <span class="sim-title">محاكاة الفرز بالاختيار</span>
+            <button class="btn btn-toggle" id="dir-selection" onclick="selSim.toggleDir()">تصاعدي ↑</button>
         </div>
         <div class="legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#e0e7ff;border-color:#6366f1;"></div><span>Start of unsorted part</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>Comparing</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#bfdbfe;border-color:#3b82f6;"></div><span>Current min / max</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>Swapping</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>Sorted</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#e0e7ff;border-color:#6366f1;"></div><span>بداية الجزء غير المرتّب</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>قيد المقارنة</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#bfdbfe;border-color:#3b82f6;"></div><span>الأصغر / الأكبر الحالي</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>قيد التبديل</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>مرتّب</span></div>
         </div>
         <div class="array-display" id="arr-selection"></div>
         <div class="sim-progress"><div class="sim-progress-fill" id="prog-selection" style="width:0%"></div></div>
-        <div class="sim-message" id="msg-selection">Press Next to begin.</div>
+        <div class="sim-message" id="msg-selection">اضغط التالي للبدء.</div>
         <div class="sim-stats">
-            <div class="sim-stat">Comparisons: <span id="cmp-selection">0</span></div>
-            <div class="sim-stat">Swaps: <span id="swp-selection">0</span></div>
-            <div class="sim-stat">Step: <span id="stp-selection">1 / ?</span></div>
+            <div class="sim-stat">المقارنات: <span id="cmp-selection">0</span></div>
+            <div class="sim-stat">التبديلات: <span id="swp-selection">0</span></div>
+            <div class="sim-stat">الخطوة: <span id="stp-selection">1 / ?</span></div>
         </div>
         <div class="sim-controls">
-            <button class="btn btn-secondary" id="prev-selection" onclick="selSim.prev()" disabled>◀ Prev</button>
-            <button class="btn btn-primary"   id="next-selection" onclick="selSim.next()">Next ▶</button>
-            <button class="btn btn-reset"     onclick="selSim.reset()">↺ Reset</button>
+            <button class="btn btn-secondary" id="prev-selection" onclick="selSim.prev()" disabled>▶ السابق</button>
+            <button class="btn btn-primary"   id="next-selection" onclick="selSim.next()">التالي ◀</button>
+            <button class="btn btn-reset"     onclick="selSim.reset()">↺ إعادة ضبط</button>
         </div>
     </div>
 </section>
 
 <!-- ══════════════════════════ SECTION 4: INSERTION SORT ══════════════════════════ -->
 <section id="insertion">
-    <h2>2 · Insertion Sort</h2>
+    <h2>2 · الفرز بالإدراج (Insertion Sort)</h2>
 
     <div class="box box-blue">
-        <strong>Core Idea:</strong> Like sorting a hand of playing cards.
-        Start with one card (trivially sorted). Pick the next card and insert it into
-        the correct position among the already-sorted cards. Repeat.
+        <strong>الفكرة الأساسية:</strong> تشبه ترتيب أوراق اللعب في يدك.
+        نبدأ بورقة واحدة (مرتّبة بطبيعتها). نأخذ الورقة التالية وندرجها في
+        موضعها الصحيح بين الأوراق المرتّبة مسبقًا. ثم نكرر.
     </div>
 
-    <h3>How It Works (Ascending)</h3>
+    <h3>كيف تعمل (ترتيب تصاعدي)</h3>
     <ol>
-        <li>The first element alone forms a <em>sorted sub-array</em> of size 1 — trivially sorted!</li>
-        <li>Take the next element (the <em>key</em>) from the unsorted part.</li>
-        <li>Compare the key with elements in the sorted part, scanning <em>right to left</em>.</li>
-        <li>Shift each element that is greater than the key one position to the right.</li>
-        <li>Drop the key into the gap created. The sorted sub-array grows by one.</li>
-        <li>Repeat from step 2 until all elements have been inserted.</li>
+        <li>العنصر الأول وحده يشكّل <em>مصفوفة جزئية (Subarray) مرتّبة</em> حجمها 1 — وهي مرتّبة بطبيعتها!</li>
+        <li>نأخذ العنصر التالي (ويُسمّى <em>المفتاح (key)</em>) من الجزء غير المرتّب.</li>
+        <li>نقارن المفتاح بعناصر الجزء المرتّب، ماسحين <em>من اليمين إلى اليسار</em>.</li>
+        <li>نزيح كل عنصر أكبر من المفتاح موضعًا واحدًا إلى اليمين.</li>
+        <li>نضع المفتاح في الفراغ الناتج، فتكبر المصفوفة الجزئية المرتّبة بمقدار عنصر واحد.</li>
+        <li>نكرر من الخطوة 2 حتى يتم إدراج جميع العناصر.</li>
     </ol>
 
 
-    <h3>Algorithm Analysis</h3>
+    <h3>تحليل الخوارزمية</h3>
     <div class="math-box">
-        <p class="math-formula">Best Case (already sorted): O(n)</p>
-        <p class="math-step">Each key is already in place → inner loop runs 0 times → only n−1 comparisons total</p>
-        <p class="math-formula" style="margin-top:14px;">Worst Case (reverse sorted): O(n²)</p>
-        <p class="math-step">T(n) = 1 + 2 + 3 + … + (n−1) = n(n−1)/2 — same as selection sort</p>
-        <p class="math-formula" style="margin-top:14px;">Average Case: O(n²)</p>
-        <div class="box box-green" style="text-align:left;margin-top:12px;">
-            <strong>Key insight:</strong> Insertion sort can <em>stop early</em>
-            (break out of the inner loop) as soon as it finds the correct position.
-            This makes it much faster than Selection Sort when the data is <em>nearly sorted</em>!
+        <p class="math-formula">أفضل حالة (Best Case) (مصفوفة مرتّبة مسبقًا): <span dir="ltr">O(n)</span></p>
+        <p class="math-step">كل مفتاح في مكانه أصلًا ← الحلقة الداخلية تُنفَّذ 0 مرة ← المجموع <span dir="ltr">n−1</span> مقارنة فقط</p>
+        <p class="math-formula" style="margin-top:14px;">أسوأ حالة (Worst Case) (مصفوفة مرتّبة عكسيًا): <span dir="ltr">O(n²)</span></p>
+        <p class="math-step"><span dir="ltr">T(n) = 1 + 2 + 3 + … + (n−1) = n(n−1)/2</span> — مثل الفرز بالاختيار تمامًا</p>
+        <p class="math-formula" style="margin-top:14px;">متوسط الحالة (Average Case): <span dir="ltr">O(n²)</span></p>
+        <div class="box box-green" style="text-align:right;margin-top:12px;">
+            <strong>ملاحظة جوهرية:</strong> يستطيع الفرز بالإدراج <em>التوقف مبكرًا</em>
+            (الخروج من الحلقة الداخلية) بمجرد أن يجد الموضع الصحيح.
+            وهذا يجعله أسرع بكثير من الفرز بالاختيار عندما تكون البيانات <em>شبه مرتّبة</em>!
         </div>
     </div>
 
     <div class="box box-teal" style="margin-top:20px;">
-        <strong>Insertion Sort — Characteristics:</strong>
+        <strong>الفرز بالإدراج — الخصائص:</strong>
         <ul style="margin-top:8px;">
-            <li><strong>Naturally Adaptive</strong> — no extra optimization flag needed; the inner loop stops as soon as the position is found</li>
-            <li>Best Case: <strong>O(n)</strong> — already sorted; each element needs only 1 comparison</li>
-            <li>Worst Case: <strong>O(n²)</strong> — reverse sorted data</li>
-            <li>Highly efficient for small arrays or nearly sorted data; often outperforms both Selection Sort and Bubble Sort in practice</li>
+            <li><strong>تكيّفي بطبيعته (Naturally Adaptive)</strong> — لا يحتاج إلى أي علَم (flag) تحسين إضافي؛ فالحلقة الداخلية تتوقف فور العثور على الموضع</li>
+            <li>أفضل حالة: <strong dir="ltr">O(n)</strong> — المصفوفة مرتّبة مسبقًا؛ كل عنصر يحتاج إلى مقارنة واحدة فقط</li>
+            <li>أسوأ حالة: <strong dir="ltr">O(n²)</strong> — بيانات مرتّبة عكسيًا</li>
+            <li>عالي الكفاءة مع المصفوفات الصغيرة أو البيانات شبه المرتّبة؛ وغالبًا ما يتفوق عمليًا على كلٍّ من الفرز بالاختيار والفرز الفقاعي (Bubble Sort)</li>
         </ul>
     </div>
 
-    <h3>Java Implementation</h3>
+    <h3>التنفيذ بلغة Java</h3>
     <div class="code-container">
         <div class="code-header" onclick="toggleCode('ins-code')">
-            <span>Insertion Sort — Java</span><span class="code-toggle" id="ins-code-toggle">▼</span>
+            <span>الفرز بالإدراج — Java</span><span class="code-toggle" id="ins-code-toggle">▼</span>
         </div>
         <pre class="code-block" id="ins-code"><span class="kw">public static void</span> insertionSort(<span class="kw">int</span>[] arr) {
     <span class="kw">int</span> n = arr.length;
@@ -683,42 +735,42 @@
 }</pre>
     </div>
 
-    <h3>Step-by-Step Simulation</h3>
+    <h3>محاكاة خطوة بخطوة</h3>
     <p>
-        One array is shown. The <strong>teal vertical line</strong> divides it:
-        everything to the <span style="color:#22c55e;font-weight:bold;">left</span> is <em>assumed sorted</em>,
-        everything to the <span style="color:#64748b;font-weight:bold;">right</span> is unsorted.
-        The <span style="color:#ec4899;font-weight:bold;">pink lifted</span> element (first right of the line) is the key —
-        it is compared with sorted elements, shifted right to make room, then inserted.
-        The line then moves one step right.
+        تُعرض مصفوفة واحدة، ويقسمها <strong>الخط العمودي الفيروزي</strong>:
+        كل ما على <span style="color:#22c55e;font-weight:bold;">يساره</span> <em>يُفترض أنه مرتّب</em>،
+        وكل ما على <span style="color:#64748b;font-weight:bold;">يمينه</span> غير مرتّب.
+        العنصر <span style="color:#ec4899;font-weight:bold;">الوردي المرفوع</span> (الأول على يمين الخط) هو المفتاح —
+        يُقارَن بالعناصر المرتّبة، وتُزاح العناصر إلى اليمين لإفساح المجال له، ثم يُدرَج.
+        بعد ذلك يتحرك الخط خطوة واحدة إلى اليمين.
     </p>
 
     <div class="sim-container" id="sim-insertion">
         <div class="sim-header">
-            <span class="sim-title">Insertion Sort Simulation</span>
-            <button class="btn btn-toggle" id="dir-insertion" onclick="insSim.toggleDir()">Ascending ↑</button>
+            <span class="sim-title">محاكاة الفرز بالإدراج</span>
+            <button class="btn btn-toggle" id="dir-insertion" onclick="insSim.toggleDir()">تصاعدي ↑</button>
         </div>
         <div class="legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>Sorted (left of line)</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#fce7f3;border-color:#ec4899;"></div><span>Key (being inserted)</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>Comparing</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>Swapping pair</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#4ade80;border-color:#16a34a;"></div><span>Reached correct position → line moves</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>مرتّب (يسار الخط)</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fce7f3;border-color:#ec4899;"></div><span>المفتاح (قيد الإدراج)</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>قيد المقارنة</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>زوج قيد التبديل</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#4ade80;border-color:#16a34a;"></div><span>وصل إلى موضعه الصحيح ← يتحرك الخط</span></div>
         </div>
 
         <div class="array-display" id="arr-insertion" style="padding-top:28px;"></div>
 
         <div class="sim-progress"><div class="sim-progress-fill" id="prog-insertion" style="width:0%"></div></div>
-        <div class="sim-message" id="msg-insertion">Press Next to begin.</div>
+        <div class="sim-message" id="msg-insertion">اضغط التالي للبدء.</div>
         <div class="sim-stats">
-            <div class="sim-stat">Comparisons: <span id="cmp-insertion">0</span></div>
-            <div class="sim-stat">Swaps: <span id="swp-insertion">0</span></div>
-            <div class="sim-stat">Step: <span id="stp-insertion">1 / ?</span></div>
+            <div class="sim-stat">المقارنات: <span id="cmp-insertion">0</span></div>
+            <div class="sim-stat">التبديلات: <span id="swp-insertion">0</span></div>
+            <div class="sim-stat">الخطوة: <span id="stp-insertion">1 / ?</span></div>
         </div>
         <div class="sim-controls">
-            <button class="btn btn-secondary" id="prev-insertion" onclick="insSim.prev()" disabled>◀ Prev</button>
-            <button class="btn btn-primary"   id="next-insertion" onclick="insSim.next()">Next ▶</button>
-            <button class="btn btn-reset"     onclick="insSim.reset()">↺ Reset</button>
+            <button class="btn btn-secondary" id="prev-insertion" onclick="insSim.prev()" disabled>▶ السابق</button>
+            <button class="btn btn-primary"   id="next-insertion" onclick="insSim.next()">التالي ◀</button>
+            <button class="btn btn-reset"     onclick="insSim.reset()">↺ إعادة ضبط</button>
         </div>
     </div>
 </section>
@@ -726,49 +778,49 @@
     <!-- ══ OBSERVATION BOX ══ -->
     <div style="margin-top:30px;border:3px solid #22c55e;border-radius:14px;overflow:hidden;">
         <div style="background:#16a34a;color:white;padding:14px 22px;font-size:1.05em;font-weight:700;">
-            📌 Important Observation for Students
+            📌 ملاحظة مهمة للطلاب
         </div>
         <div style="background:#f0fdf4;padding:22px 26px;">
             <p style="margin-bottom:14px;">
-                Try pressing <strong>Next</strong> when the key is <strong>82</strong>
-                (the last element in our array).
-                Notice that only <strong>one comparison</strong> is made, and the line immediately
-                moves right — no swap at all.
+                جرّب الضغط على <strong>التالي</strong> عندما يكون المفتاح هو <strong>82</strong>
+                (العنصر الأخير في مصفوفتنا).
+                لاحظ أنه تُجرى <strong>مقارنة واحدة فقط</strong>، ثم يتحرك الخط مباشرة
+                إلى اليمين — دون أي تبديل.
             </p>
-            <p style="margin-bottom:14px;"><strong>Why?</strong> Because everything to the left of the
-                divider line is <em>guaranteed to be sorted</em>.
-                The last element in the sorted portion is the largest among them.
-                So if the key is already larger than that element, it must be larger than
-                <em>all</em> sorted elements — no further comparisons are needed.
+            <p style="margin-bottom:14px;"><strong>لماذا؟</strong> لأن كل ما على يسار
+                الخط الفاصل <em>مرتّب بشكل مضمون</em>.
+                والعنصر الأخير في الجزء المرتّب هو أكبر عناصره.
+                فإذا كان المفتاح أكبر من هذا العنصر، فلا بد أنه أكبر من
+                <em>جميع</em> العناصر المرتّبة — ولا حاجة إلى مقارنات إضافية.
             </p>
             <div style="background:white;border:2px solid #86efac;border-radius:10px;padding:16px;margin-top:8px;">
                 <table style="width:100%;border-collapse:collapse;font-size:0.95em;">
                     <tr>
-                        <th style="text-align:left;padding:8px 12px;background:#dcfce7;border-radius:6px;">Data Condition</th>
-                        <th style="text-align:center;padding:8px 12px;background:#dcfce7;">Comparisons per key</th>
-                        <th style="text-align:center;padding:8px 12px;background:#dcfce7;">Total comparisons</th>
+                        <th style="text-align:right;padding:8px 12px;background:#dcfce7;border-radius:6px;">حالة البيانات</th>
+                        <th style="text-align:center;padding:8px 12px;background:#dcfce7;">المقارنات لكل مفتاح</th>
+                        <th style="text-align:center;padding:8px 12px;background:#dcfce7;">إجمالي المقارنات</th>
                     </tr>
                     <tr>
-                        <td style="padding:8px 12px;">Fully sorted — every key is already in place</td>
-                        <td style="text-align:center;padding:8px 12px;color:#16a34a;font-weight:700;">1 each</td>
-                        <td style="text-align:center;padding:8px 12px;color:#16a34a;font-weight:700;">n − 1  →  O(n)</td>
+                        <td style="padding:8px 12px;">مرتّبة كليًا — كل مفتاح في مكانه أصلًا</td>
+                        <td style="text-align:center;padding:8px 12px;color:#16a34a;font-weight:700;">1 لكل مفتاح</td>
+                        <td style="text-align:center;padding:8px 12px;color:#16a34a;font-weight:700;"><span dir="ltr">n − 1  →  O(n)</span></td>
                     </tr>
                     <tr style="background:#f9fafb;">
-                        <td style="padding:8px 12px;">Nearly sorted — most keys need few steps</td>
-                        <td style="text-align:center;padding:8px 12px;color:#0891b2;font-weight:700;">1 – 3 each</td>
-                        <td style="text-align:center;padding:8px 12px;color:#0891b2;font-weight:700;">Close to O(n)</td>
+                        <td style="padding:8px 12px;">شبه مرتّبة — معظم المفاتيح تحتاج إلى خطوات قليلة</td>
+                        <td style="text-align:center;padding:8px 12px;color:#0891b2;font-weight:700;"><span dir="ltr">1 – 3</span> لكل مفتاح</td>
+                        <td style="text-align:center;padding:8px 12px;color:#0891b2;font-weight:700;">قريب من <span dir="ltr">O(n)</span></td>
                     </tr>
                     <tr>
-                        <td style="padding:8px 12px;">Reverse sorted — every key walks to position 0</td>
-                        <td style="text-align:center;padding:8px 12px;color:#dc2626;font-weight:700;">i each</td>
-                        <td style="text-align:center;padding:8px 12px;color:#dc2626;font-weight:700;">n(n−1)/2  →  O(n²)</td>
+                        <td style="padding:8px 12px;">مرتّبة عكسيًا — كل مفتاح يمشي حتى الموضع 0</td>
+                        <td style="text-align:center;padding:8px 12px;color:#dc2626;font-weight:700;">i لكل مفتاح</td>
+                        <td style="text-align:center;padding:8px 12px;color:#dc2626;font-weight:700;"><span dir="ltr">n(n−1)/2  →  O(n²)</span></td>
                     </tr>
                 </table>
             </div>
             <p style="margin-top:14px;margin-bottom:0;font-weight:600;color:#065f46;">
-                Conclusion: Selection Sort always makes exactly n(n−1)/2 comparisons no matter what
-                the data looks like. Insertion Sort adapts — on nearly-sorted data it can be
-                dramatically faster. This is its greatest strength.
+                الخلاصة: يجري الفرز بالاختيار دائمًا <span dir="ltr">n(n−1)/2</span> مقارنة بالضبط أيًّا كان
+                شكل البيانات. أما الفرز بالإدراج فيتكيّف — ففي البيانات شبه المرتّبة قد يكون
+                أسرع بفارق كبير. وهذه هي أعظم نقاط قوته.
             </p>
         </div>
     </div>
@@ -776,74 +828,74 @@
 
 <!-- ══════════════════════════ SECTION 5: BUBBLE SORT ══════════════════════════ -->
 <section id="bubble">
-    <h2>3 · Bubble Sort</h2>
+    <h2>3 · الفرز الفقاعي (Bubble Sort)</h2>
 
     <div class="box box-red">
-        <strong>Core Idea:</strong> Compare adjacent pairs and swap them if they are in the wrong order.
-        After each pass, the largest unsorted element has "bubbled up" to its correct position at the end.
+        <strong>الفكرة الأساسية:</strong> نقارن كل زوج من العناصر المتجاورة ونبدّلهما إن كانا بترتيب خاطئ.
+        بعد كل تمريرة، يكون أكبر عنصر غير مرتّب قد "طفا" إلى موضعه الصحيح في النهاية.
     </div>
 
-    <h3>Part A — Basic Bubble Sort</h3>
-    <p>In its basic form, Bubble Sort runs all n−1 passes regardless of input order:</p>
+    <h3>الجزء أ — الفرز الفقاعي الأساسي</h3>
+    <p>في صورته الأساسية، ينفّذ الفرز الفقاعي جميع التمريرات الـ <span dir="ltr">n−1</span> بغض النظر عن ترتيب المدخلات:</p>
     <ol>
-        <li>Start at the beginning of the array.</li>
-        <li>Compare each adjacent pair (arr[j], arr[j+1]). If arr[j] > arr[j+1], swap them.</li>
-        <li>After one full pass, the largest element has "bubbled" to the last position — correctly placed.</li>
-        <li>Repeat for all n−1 passes — <strong>always runs every pass</strong>, even if the array is already sorted.</li>
+        <li>نبدأ من أول المصفوفة.</li>
+        <li>نقارن كل زوج متجاور <span dir="ltr">(arr[j], arr[j+1])</span>. إذا كان <span dir="ltr">arr[j] &gt; arr[j+1]</span> نبدّلهما.</li>
+        <li>بعد تمريرة كاملة واحدة، يكون أكبر عنصر قد "طفا" إلى الموضع الأخير — أي في مكانه الصحيح.</li>
+        <li>نكرر لجميع التمريرات الـ <span dir="ltr">n−1</span> — <strong>ينفّذ كل التمريرات دائمًا</strong>، حتى لو كانت المصفوفة مرتّبة مسبقًا.</li>
     </ol>
 
     <div class="box box-red">
-        <strong>Basic Bubble Sort — Characteristics:</strong>
+        <strong>الفرز الفقاعي الأساسي — الخصائص:</strong>
         <ul style="margin-top:8px;">
-            <li>Time Complexity: <strong>O(n²) in all cases</strong> — always runs all n−1 passes</li>
-            <li><strong>Not Adaptive</strong> — cannot detect if the array is already sorted</li>
-            <li>Identical to Selection Sort in performance: both always make exactly n(n−1)/2 comparisons</li>
+            <li>التعقيد الزمني: <strong><span dir="ltr">O(n²)</span> في جميع الحالات</strong> — ينفّذ دائمًا جميع التمريرات الـ <span dir="ltr">n−1</span></li>
+            <li><strong>غير تكيّفي</strong> — لا يستطيع اكتشاف أن المصفوفة مرتّبة مسبقًا</li>
+            <li>مطابق للفرز بالاختيار في الأداء: كلاهما يجري دائمًا <span dir="ltr">n(n−1)/2</span> مقارنة بالضبط</li>
         </ul>
     </div>
 
-    <h3>Part B — Optimized Bubble Sort (Early Exit)</h3>
-    <p>A single <strong>boolean flag</strong> (<code>swapped</code>) transforms Bubble Sort into an adaptive algorithm — this is considered a "smart optimization":</p>
+    <h3>الجزء ب — الفرز الفقاعي المحسَّن (الخروج المبكر)</h3>
+    <p>علَمٌ واحد <strong>من النوع المنطقي (boolean flag)</strong> (<code>swapped</code>) يحوّل الفرز الفقاعي إلى خوارزمية تكيّفية — ويُعدّ هذا "تحسينًا ذكيًا":</p>
     <ol>
-        <li>At the start of each pass, set <code>swapped = false</code>.</li>
-        <li>If any swap occurs during the pass, set <code>swapped = true</code>.</li>
-        <li>After the pass: <strong>if <code>swapped == false</code></strong>, no elements were out of order → the array is already sorted → <strong>stop immediately</strong>.</li>
+        <li>في بداية كل تمريرة، نضبط <code>swapped = false</code>.</li>
+        <li>إذا حدث أي تبديل أثناء التمريرة، نضبط <code>swapped = true</code>.</li>
+        <li>بعد التمريرة: <strong>إذا كان <code>swapped == false</code></strong>، فلا توجد عناصر في غير ترتيبها ← المصفوفة مرتّبة مسبقًا ← <strong>نتوقف فورًا</strong>.</li>
     </ol>
 
     <div class="box box-green">
-        <strong>Optimized Bubble Sort — Characteristics:</strong>
+        <strong>الفرز الفقاعي المحسَّن — الخصائص:</strong>
         <ul style="margin-top:8px;">
-            <li><strong>Adaptive: YES</strong> — the "no swaps" check detects sorted data and exits early</li>
-            <li>Best Case: <strong>O(n)</strong> — already sorted data triggers early exit after just one pass</li>
-            <li>Worst Case: <strong>O(n²)</strong> — reverse sorted data (same as basic version)</li>
+            <li><strong>تكيّفي: نعم</strong> — فحص "عدم وجود تبديلات" يكتشف البيانات المرتّبة ويخرج مبكرًا</li>
+            <li>أفضل حالة: <strong dir="ltr">O(n)</strong> — البيانات المرتّبة مسبقًا تؤدي إلى الخروج المبكر بعد تمريرة واحدة فقط</li>
+            <li>أسوأ حالة: <strong dir="ltr">O(n²)</strong> — بيانات مرتّبة عكسيًا (مثل النسخة الأساسية)</li>
         </ul>
     </div>
 
 
     <div class="box box-yellow" style="margin-bottom:20px;">
-        <strong>Why is it called "Bubble Sort"?</strong><br>
-        Watch the simulation: in each pass, the largest remaining element "bubbles up" to the right end,
-        like a bubble rising through water — it keeps swapping with its right neighbour until it reaches
-        the surface (its correct position).
+        <strong>لماذا يُسمّى "الفرز الفقاعي"؟</strong><br>
+        راقب المحاكاة: في كل تمريرة، "يطفو" أكبر عنصر متبقٍّ إلى الطرف الأيمن،
+        كفقاعة تصعد عبر الماء — فهو يستمر في التبديل مع جاره الأيمن حتى يصل إلى
+        السطح (موضعه الصحيح).
     </div>
 
-    <h3>Algorithm Analysis</h3>
+    <h3>تحليل الخوارزمية</h3>
     <div class="math-box">
-        <p class="math-formula">Worst Case: O(n²)</p>
-        <p class="math-step">Reverse-sorted input — every pair needs swapping every pass</p>
-        <p class="math-step">T(n) = (n−1) + (n−2) + … + 1 = n(n−1)/2</p>
-        <p class="math-formula" style="margin-top:14px;">Best Case (with early-exit optimisation): O(n)</p>
-        <p class="math-step">Already sorted — first pass finds no swaps → stops immediately after n−1 comparisons</p>
+        <p class="math-formula">أسوأ حالة: <span dir="ltr">O(n²)</span></p>
+        <p class="math-step">مدخلات مرتّبة عكسيًا — كل زوج يحتاج إلى تبديل في كل تمريرة</p>
+        <p class="math-step" dir="ltr">T(n) = (n−1) + (n−2) + … + 1 = n(n−1)/2</p>
+        <p class="math-formula" style="margin-top:14px;">أفضل حالة (مع تحسين الخروج المبكر): <span dir="ltr">O(n)</span></p>
+        <p class="math-step">مرتّبة مسبقًا — التمريرة الأولى لا تجد أي تبديل ← يتوقف فورًا بعد <span dir="ltr">n−1</span> مقارنة</p>
     </div>
 
     <div class="box box-yellow" style="margin-top:0;">
-        <strong>Optimized Bubble Sort:</strong> There is a well-known variant that adds a <em>swapped</em> flag — if a full pass completes with no swaps, the array is already sorted and the algorithm terminates immediately, giving <strong>O(n)</strong> in the best case.
-        If you would like to explore this further, search <em>"optimized bubble sort"</em> online.
+        <strong>الفرز الفقاعي المحسَّن:</strong> توجد نسخة معروفة تضيف علَم <em>swapped</em> — فإذا اكتملت تمريرة كاملة دون أي تبديل، تكون المصفوفة مرتّبة مسبقًا وتنتهي الخوارزمية فورًا، مما يعطي <strong dir="ltr">O(n)</strong> في أفضل حالة.
+        وإذا أردت التعمق أكثر، فابحث على الإنترنت عن <em dir="ltr">"optimized bubble sort"</em>.
     </div>
 
-    <h3>Java Implementation</h3>
+    <h3>التنفيذ بلغة Java</h3>
     <div class="code-container">
         <div class="code-header" onclick="toggleCode('bub-code')">
-            <span>Bubble Sort — Java (with early-exit optimisation)</span><span class="code-toggle" id="bub-code-toggle">▼</span>
+            <span>الفرز الفقاعي — Java (مع تحسين الخروج المبكر)</span><span class="code-toggle" id="bub-code-toggle">▼</span>
         </div>
         <pre class="code-block" id="bub-code"><span class="kw">public static void</span> bubbleSort(<span class="kw">int</span>[] arr) {
     <span class="kw">int</span> n = arr.length;
@@ -862,156 +914,156 @@
 }</pre>
     </div>
 
-    <h3>Step-by-Step Simulation</h3>
-    <p>Watch adjacent pairs being compared. When a <span style="color:#ef4444;font-weight:bold;">red</span> pair
-       is swapped, the larger element moves right. After each pass, one more element reaches its final
-       <span style="color:#22c55e;font-weight:bold;">green</span> position.
-       <strong>Watch the step counter</strong> — if the array gets sorted before all passes finish,
-       bubble sort will announce early exit and stop, making it more efficient than selection sort
-       on this data.</p>
+    <h3>محاكاة خطوة بخطوة</h3>
+    <p>راقب الأزواج المتجاورة وهي تُقارَن. عندما يُبدَّل زوج <span style="color:#ef4444;font-weight:bold;">أحمر</span>،
+       ينتقل العنصر الأكبر إلى اليمين. وبعد كل تمريرة، يصل عنصر إضافي إلى موضعه النهائي
+       <span style="color:#22c55e;font-weight:bold;">الأخضر</span>.
+       <strong>راقب عدّاد الخطوات</strong> — إذا أصبحت المصفوفة مرتّبة قبل انتهاء جميع التمريرات،
+       فسيعلن الفرز الفقاعي الخروج المبكر ويتوقف، مما يجعله أكفأ من الفرز بالاختيار
+       على هذه البيانات.</p>
 
     <div class="sim-container" id="sim-bubble">
         <div class="sim-header">
-            <span class="sim-title">Bubble Sort Simulation</span>
-            <button class="btn btn-toggle" id="dir-bubble" onclick="bubSim.toggleDir()">Ascending ↑</button>
+            <span class="sim-title">محاكاة الفرز الفقاعي</span>
+            <button class="btn btn-toggle" id="dir-bubble" onclick="bubSim.toggleDir()">تصاعدي ↑</button>
         </div>
         <div class="legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>Comparing adjacent pair</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>Swapping</span></div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>Correctly placed (sorted)</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fde68a;border-color:#f59e0b;"></div><span>مقارنة زوج متجاور</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#fecaca;border-color:#ef4444;"></div><span>قيد التبديل</span></div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#bbf7d0;border-color:#22c55e;"></div><span>في مكانه الصحيح (مرتّب)</span></div>
         </div>
         <div class="array-display" id="arr-bubble"></div>
         <div class="sim-progress"><div class="sim-progress-fill" id="prog-bubble" style="width:0%"></div></div>
-        <div class="sim-message" id="msg-bubble">Press Next to begin.</div>
+        <div class="sim-message" id="msg-bubble">اضغط التالي للبدء.</div>
         <div class="sim-stats">
-            <div class="sim-stat">Comparisons: <span id="cmp-bubble">0</span></div>
-            <div class="sim-stat">Swaps: <span id="swp-bubble">0</span></div>
-            <div class="sim-stat">Step: <span id="stp-bubble">1 / ?</span></div>
+            <div class="sim-stat">المقارنات: <span id="cmp-bubble">0</span></div>
+            <div class="sim-stat">التبديلات: <span id="swp-bubble">0</span></div>
+            <div class="sim-stat">الخطوة: <span id="stp-bubble">1 / ?</span></div>
         </div>
         <div class="sim-controls">
-            <button class="btn btn-secondary" id="prev-bubble" onclick="bubSim.prev()" disabled>◀ Prev</button>
-            <button class="btn btn-primary"   id="next-bubble" onclick="bubSim.next()">Next ▶</button>
-            <button class="btn btn-reset"     onclick="bubSim.reset()">↺ Reset</button>
+            <button class="btn btn-secondary" id="prev-bubble" onclick="bubSim.prev()" disabled>▶ السابق</button>
+            <button class="btn btn-primary"   id="next-bubble" onclick="bubSim.next()">التالي ◀</button>
+            <button class="btn btn-reset"     onclick="bubSim.reset()">↺ إعادة ضبط</button>
         </div>
     </div>
 </section>
 
 <!-- ══════════════════════════ SECTION 6: COMPARISON ══════════════════════════ -->
 <section id="comparison">
-    <h2>4 · Insertion Sort vs Selection Sort — Does Data Matter?</h2>
+    <h2>4 · الفرز بالإدراج مقابل الفرز بالاختيار — هل تؤثر البيانات؟</h2>
 
     <div class="box box-teal">
-        <strong>A student asks:</strong> "Professor, if both Selection Sort and Insertion Sort are O(n²),
-        which one is actually faster?"<br><br>
-        <strong>Professor replies:</strong> "Excellent question! They have the same worst-case complexity,
-        but in practice Insertion Sort can be <em>much faster</em> when the data is nearly sorted.
-        Let me show you why."
+        <strong>يسأل طالب:</strong> "يا أستاذ، إذا كان كلٌّ من الفرز بالاختيار والفرز بالإدراج <span dir="ltr">O(n²)</span>،
+        فأيهما أسرع فعليًا؟"<br><br>
+        <strong>يجيب الأستاذ:</strong> "سؤال ممتاز! لهما التعقيد نفسه في أسوأ حالة،
+        لكن عمليًا قد يكون الفرز بالإدراج <em>أسرع بكثير</em> عندما تكون البيانات شبه مرتّبة.
+        دعني أريك السبب."
     </div>
 
-    <h3>The Key Difference</h3>
+    <h3>الفرق الجوهري</h3>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;">
         <div class="box box-blue" style="margin:0;">
-            <h4 style="margin-top:0;color:#1e40af;">Selection Sort</h4>
+            <h4 style="margin-top:0;color:#1e40af;">الفرز بالاختيار</h4>
             <p style="margin:0;font-size:0.95em;">
-                <strong>Always</strong> scans the entire remaining unsorted part to find the minimum.<br>
-                Number of comparisons = n(n−1)/2, <em>regardless of the input.</em>
+                يفحص <strong>دائمًا</strong> كامل الجزء غير المرتّب المتبقي ليجد الأصغر.<br>
+                عدد المقارنات = <span dir="ltr">n(n−1)/2</span>، <em>بغض النظر عن المدخلات.</em>
             </p>
         </div>
         <div class="box box-green" style="margin:0;">
-            <h4 style="margin-top:0;color:#065f46;">Insertion Sort</h4>
+            <h4 style="margin-top:0;color:#065f46;">الفرز بالإدراج</h4>
             <p style="margin:0;font-size:0.95em;">
-                Can <strong>stop early</strong> once the correct insertion position is found.<br>
-                For nearly-sorted data, almost every key stops after just 1–2 comparisons!
+                يستطيع <strong>التوقف مبكرًا</strong> بمجرد العثور على موضع الإدراج الصحيح.<br>
+                في البيانات شبه المرتّبة، يتوقف كل مفتاح تقريبًا بعد <span dir="ltr">1–2</span> مقارنة فقط!
             </p>
         </div>
     </div>
 
-    <h3>Comparison on 5 Different Datasets (8 elements, ascending)</h3>
+    <h3>مقارنة على 5 مجموعات بيانات مختلفة (8 عناصر، ترتيب تصاعدي)</h3>
 
     <div style="border:3px solid #f43f5e;border-radius:12px;overflow:hidden;margin-bottom:20px;">
         <div style="background:#f43f5e;color:white;padding:12px 20px;font-weight:700;">
-            ⚠️ Important Note Before You Read the Table
+            ⚠️ ملاحظة مهمة قبل قراءة الجدول
         </div>
         <div style="background:#fff1f2;padding:18px 22px;">
             <p style="margin-bottom:10px;">
-                <strong>Basic Bubble Sort (no early-exit check)</strong> always makes exactly
-                <strong>n(n−1)/2 = 28 comparisons</strong> for n=8, regardless of the data —
-                <em>identical to Selection Sort</em>. It has no way to detect that the array is already sorted.
+                <strong>الفرز الفقاعي الأساسي (دون فحص الخروج المبكر)</strong> يجري دائمًا
+                <strong><span dir="ltr">n(n−1)/2 = 28</span> مقارنة</strong> بالضبط عندما <span dir="ltr">n=8</span>، بغض النظر عن البيانات —
+                <em>مطابقًا للفرز بالاختيار</em>. فلا سبيل له لاكتشاف أن المصفوفة مرتّبة مسبقًا.
             </p>
             <p style="margin-bottom:0;">
-                The table below uses <strong>Optimized Bubble Sort</strong> — the version with the
-                early-exit check (<code>if no swaps in a pass → stop</code>).
-                This is the version taught in this chapter and shown in the simulation above.
-                The difference only matters when data is <em>nearly or fully sorted</em>.
+                يستخدم الجدول أدناه <strong>الفرز الفقاعي المحسَّن</strong> — النسخة التي تتضمن
+                فحص الخروج المبكر (<code>if no swaps in a pass → stop</code>).
+                وهي النسخة التي يشرحها هذا الفصل وتظهر في المحاكاة أعلاه.
+                ولا يظهر الفرق إلا عندما تكون البيانات <em>شبه مرتّبة أو مرتّبة كليًا</em>.
             </p>
         </div>
     </div>
 
-    <p>Click the button below to run all three algorithms on each dataset and count the comparisons.</p>
+    <p>اضغط الزر أدناه لتشغيل الخوارزميات الثلاث على كل مجموعة بيانات وعدّ المقارنات.</p>
     <div style="text-align:center;margin:16px 0;">
         <button class="btn btn-primary" onclick="runComparison()" style="font-size:1.05em;padding:12px 30px;">
-            ▶ Run Comparison
+            ▶ تشغيل المقارنة
         </button>
     </div>
     <div class="scenario-grid" id="scenario-grid"></div>
 
     <div class="box box-purple" id="comparison-insight" style="display:none;">
-        <strong>What did we observe?</strong>
+        <strong>ماذا لاحظنا؟</strong>
         <ul id="insight-list"></ul>
     </div>
 
-    <h3>Final Insight — Key Differences at a Glance</h3>
+    <h3>الاستنتاج النهائي — الفروق الجوهرية في لمحة</h3>
     <div style="overflow-x:auto;margin:20px 0;">
         <table style="width:100%;border-collapse:collapse;font-size:0.95em;text-align:center;">
             <thead>
                 <tr style="background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;">
-                    <th style="padding:12px 16px;text-align:left;border-radius:8px 0 0 0;">Algorithm</th>
-                    <th style="padding:12px 16px;">Best Case</th>
-                    <th style="padding:12px 16px;">Worst Case</th>
-                    <th style="padding:12px 16px;">Adaptive?</th>
-                    <th style="padding:12px 16px;border-radius:0 8px 0 0;">Key Note</th>
+                    <th style="padding:12px 16px;text-align:right;border-radius:0 8px 0 0;">الخوارزمية</th>
+                    <th style="padding:12px 16px;">أفضل حالة</th>
+                    <th style="padding:12px 16px;">أسوأ حالة</th>
+                    <th style="padding:12px 16px;">تكيّفي؟</th>
+                    <th style="padding:12px 16px;border-radius:8px 0 0 0;">ملاحظة أساسية</th>
                 </tr>
             </thead>
             <tbody>
                 <tr style="background:#fff1f2;">
-                    <td style="padding:12px 16px;font-weight:700;text-align:left;color:#9f1239;">Selection Sort</td>
-                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
-                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
-                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">✗ No</td>
-                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">Simple but always the same — input-insensitive</td>
+                    <td style="padding:12px 16px;font-weight:700;text-align:right;color:#9f1239;">الفرز بالاختيار</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;" dir="ltr">O(n²)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;" dir="ltr">O(n²)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">✗ لا</td>
+                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">بسيط لكنه ثابت دائمًا — لا يتأثر بالمدخلات</td>
                 </tr>
                 <tr style="background:#fff7ed;">
-                    <td style="padding:12px 16px;font-weight:700;text-align:left;color:#9a3412;">Bubble Sort (Basic)</td>
-                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
-                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
-                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">✗ No</td>
-                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">Identical to Selection Sort — no way to stop early</td>
+                    <td style="padding:12px 16px;font-weight:700;text-align:right;color:#9a3412;">الفرز الفقاعي (الأساسي)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;" dir="ltr">O(n²)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;" dir="ltr">O(n²)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">✗ لا</td>
+                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">مطابق للفرز بالاختيار — لا سبيل للتوقف مبكرًا</td>
                 </tr>
                 <tr style="background:#f0fdf4;">
-                    <td style="padding:12px 16px;font-weight:700;text-align:left;color:#065f46;">Bubble Sort (Optimized)</td>
-                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">O(n)</td>
-                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
-                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">✓ Yes</td>
-                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">Becomes "smart" using the <code>swapped</code> flag</td>
+                    <td style="padding:12px 16px;font-weight:700;text-align:right;color:#065f46;">الفرز الفقاعي (المحسَّن)</td>
+                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;" dir="ltr">O(n)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;" dir="ltr">O(n²)</td>
+                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">✓ نعم</td>
+                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">يصبح "ذكيًا" باستخدام العلَم <code>swapped</code></td>
                 </tr>
                 <tr style="background:#eff6ff;">
-                    <td style="padding:12px 16px;font-weight:700;text-align:left;color:#1e40af;">Insertion Sort</td>
-                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">O(n)</td>
-                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;">O(n²)</td>
-                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">✓ Yes</td>
-                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">Naturally efficient — adaptive without any extra flag</td>
+                    <td style="padding:12px 16px;font-weight:700;text-align:right;color:#1e40af;">الفرز بالإدراج</td>
+                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;" dir="ltr">O(n)</td>
+                    <td style="padding:12px 16px;color:#dc2626;font-weight:700;" dir="ltr">O(n²)</td>
+                    <td style="padding:12px 16px;color:#16a34a;font-weight:700;">✓ نعم</td>
+                    <td style="padding:12px 16px;font-size:0.9em;color:#64748b;">كفء بطبيعته — تكيّفي دون أي علَم إضافي</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <div class="box box-yellow">
-        <strong>The Bottom Line:</strong>
+        <strong>الخلاصة:</strong>
         <ul style="margin-top:8px;">
-            <li><strong>Selection Sort</strong> — Simple but never adaptive. Always O(n²).</li>
-            <li><strong>Bubble Sort (Basic)</strong> — Equivalent to Selection Sort. Always O(n²).</li>
-            <li><strong>Bubble Sort (Optimized)</strong> — Becomes adaptive with the <code>swapped</code> flag. Best case O(n).</li>
-            <li><strong>Insertion Sort</strong> — Naturally adaptive without any extra trick. Best case O(n). Often the best choice among these three for real-world data.</li>
+            <li><strong>الفرز بالاختيار</strong> — بسيط لكنه ليس تكيّفيًا أبدًا. دائمًا <span dir="ltr">O(n²)</span>.</li>
+            <li><strong>الفرز الفقاعي (الأساسي)</strong> — مكافئ للفرز بالاختيار. دائمًا <span dir="ltr">O(n²)</span>.</li>
+            <li><strong>الفرز الفقاعي (المحسَّن)</strong> — يصبح تكيّفيًا بفضل العلَم <code>swapped</code>. أفضل حالة <span dir="ltr">O(n)</span>.</li>
+            <li><strong>الفرز بالإدراج</strong> — تكيّفي بطبيعته دون أي حيلة إضافية. أفضل حالة <span dir="ltr">O(n)</span>. وغالبًا ما يكون الخيار الأفضل بين هذه الثلاث للبيانات الواقعية.</li>
         </ul>
     </div>
 </section>
@@ -1063,9 +1115,9 @@ function drawComplexityGraph() {
 
     // axis labels
     ctx.fillStyle = '#94a3b8'; ctx.font = '12px Segoe UI'; ctx.textAlign='center';
-    ctx.fillText('n  (array size)', pad.l + gW/2, H-6);
+    ctx.fillText('n  (حجم المصفوفة)', pad.l + gW/2, H-6);
     ctx.save(); ctx.translate(14, pad.t + gH/2);
-    ctx.rotate(-Math.PI/2); ctx.fillText('Operations', 0, 0); ctx.restore();
+    ctx.rotate(-Math.PI/2); ctx.fillText('العمليات', 0, 0); ctx.restore();
 
     // O(n) line
     ctx.beginPath(); ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2.5;
@@ -1087,9 +1139,9 @@ function drawComplexityGraph() {
 
     // legend
     const legends = [
-        { color:'#f87171', label:'O(n²) — Quadratic (Selection/Insertion/Bubble)' },
-        { color:'#60a5fa', label:'O(n log n) — Logarithmic (Quick/Merge Sort)' },
-        { color:'#4ade80', label:'O(n) — Linear (ideal)' },
+        { color:'#f87171', label:'O(n²) — تربيعي (الاختيار/الإدراج/الفقاعي)' },
+        { color:'#60a5fa', label:'O(n log n) — لوغاريتمي (الفرز السريع/الفرز بالدمج)' },
+        { color:'#4ade80', label:'O(n) — خطي (مثالي)' },
     ];
     ctx.font = '12px Segoe UI'; ctx.textAlign='left';
     legends.forEach((l,i) => {
@@ -1123,7 +1175,7 @@ class SortSim {
     toggleDir() {
         this.asc = !this.asc;
         const btn = document.getElementById('dir-' + this.id);
-        if (btn) btn.textContent = this.asc ? 'Ascending ↑' : 'Descending ↓';
+        if (btn) btn.textContent = this.asc ? 'تصاعدي ↑' : 'تنازلي ↓';
         this.init();
     }
     render() {
@@ -1168,25 +1220,25 @@ function selectionSteps(arr, asc) {
         steps.push({ array:[...a], colors:[...colors], message:msg, comparisons:cmp, swaps:swp });
     }
 
-    snap([...col], `Array has ${n} elements. Selection Sort will find the ${asc?'minimum':'maximum'} each pass and place it at the front.`);
+    snap([...col], `تحتوي المصفوفة على ${n} عناصر. سيبحث الفرز بالاختيار في كل تمريرة عن ${asc?'الأصغر':'الأكبر'} ويضعه في المقدمة.`);
 
     for (let i = 0; i < n-1; i++) {
         for (let k=0;k<i;k++) col[k]='sorted';
         for (let k=i;k<n;k++) col[k]='';
         let ext = i;
         col[i] = 'start-pos';
-        snap([...col], `Pass ${i+1}: Starting at index [${i}] = ${a[i]}. Assume this is the ${asc?'minimum':'maximum'} of the unsorted part.`);
+        snap([...col], `التمريرة ${i+1}: نبدأ من الفهرس \u2066[${i}] = ${a[i]}\u2069. نفترض أنه ${asc?'الأصغر':'الأكبر'} في الجزء غير المرتّب.`);
 
         for (let j=i+1; j<n; j++) {
             col[j] = 'comparing';
             cmp++;
             const better = asc ? a[j] < a[ext] : a[j] > a[ext];
-            snap([...col], `Compare a[${j}]=${a[j]} with current ${asc?'min':'max'} a[${ext}]=${a[ext]}. ${better ? '→ New '+( asc?'minimum':'maximum')+'!' : '→ No change.'} (Comparisons: ${cmp})`);
+            snap([...col], `نقارن \u2066a[${j}]=${a[j]}\u2069 مع ${asc?'الأصغر':'الأكبر'} الحالي \u2066a[${ext}]=${a[ext]}\u2069. ${better ? '← '+( asc?'أصغر':'أكبر')+' جديد!' : '← لا تغيير.'} (المقارنات: ${cmp})`);
             if (better) {
                 col[ext] = ext < i ? 'sorted' : '';
                 ext = j;
                 col[j] = 'extreme';
-                snap([...col], `New ${asc?'minimum':'maximum'} found: a[${j}] = ${a[j]}`);
+                snap([...col], `وجدنا ${asc?'أصغر':'أكبر'} جديدًا: \u2066a[${j}] = ${a[j]}\u2069`);
             } else {
                 col[j] = '';
             }
@@ -1194,21 +1246,21 @@ function selectionSteps(arr, asc) {
 
         if (ext !== i) {
             col[i] = 'swapping'; col[ext] = 'swapping';
-            snap([...col], `${asc?'Minimum':'Maximum'} found at index [${ext}] = ${a[ext]}. Swapping with index [${i}] = ${a[i]}.`);
+            snap([...col], `وُجد ${asc?'الأصغر':'الأكبر'} عند الفهرس \u2066[${ext}] = ${a[ext]}\u2069. نبدّله مع الفهرس \u2066[${i}] = ${a[i]}\u2069.`);
             [a[i], a[ext]] = [a[ext], a[i]];
             swp++;
             for (let k=0;k<=i;k++) col[k]=(k===i?'just-sorted':'sorted');
             col[ext] = '';
-            snap([...col], `Swap done! a[${i}] = ${a[i]} is now in its correct position. (Swaps: ${swp})`);
+            snap([...col], `تم التبديل! أصبح \u2066a[${i}] = ${a[i]}\u2069 الآن في موضعه الصحيح. (التبديلات: ${swp})`);
             col[i] = 'sorted';
         } else {
             col[i] = 'sorted';
-            snap([...col], `a[${i}] = ${a[i]} is already the ${asc?'minimum':'maximum'} of the unsorted part. No swap needed.`);
+            snap([...col], `\u2066a[${i}] = ${a[i]}\u2069 هو أصلًا ${asc?'الأصغر':'الأكبر'} في الجزء غير المرتّب. لا حاجة إلى تبديل.`);
         }
         for (let k=i+1;k<n;k++) if(col[k]!=='sorted') col[k]='';
     }
     col[n-1]='sorted';
-    snap([...col], `Sorting complete! Array is in ${asc?'ascending':'descending'} order. Total: ${cmp} comparisons, ${swp} swaps.`);
+    snap([...col], `اكتمل الفرز! المصفوفة الآن مرتّبة ${asc?'تصاعديًا':'تنازليًا'}. الإجمالي: ${cmp} مقارنة، ${swp} تبديل.`);
     return steps;
 }
 
@@ -1234,16 +1286,16 @@ function insertionSteps(arr, asc) {
     }
 
     // ── Initial state ──────────────────────────────────────────────────────
-    snap(0, `Array: [${a.join(', ')}]. We will place the divider after the first element.`);
+    snap(0, `المصفوفة: \u2066[${a.join(', ')}]\u2069. سنضع الخط الفاصل بعد العنصر الأول.`);
 
     col[0] = 'sorted';
-    snap(1, `Divider placed after a[0] = ${a[0]}. A single element is always sorted! ✓`);
+    snap(1, `وُضع الخط الفاصل بعد \u2066a[0] = ${a[0]}\u2069. العنصر الواحد مرتّب دائمًا! ✓`);
 
     // ── Insert elements 1 … n-1 ───────────────────────────────────────────
     for (let i = 1; i < n; i++) {
 
         col[i] = 'key';
-        snap(i, `Key = a[${i}] = ${a[i]}. It will walk left, swapping with each larger element until it reaches its correct position.`);
+        snap(i, `المفتاح = \u2066a[${i}] = ${a[i]}\u2069. سيمشي نحو اليسار، متبادلًا مع كل عنصر أكبر منه حتى يصل إلى موضعه الصحيح.`);
 
         let j = i;
         while (j > 0) {
@@ -1251,10 +1303,10 @@ function insertionSteps(arr, asc) {
             cmp++;
             const mustSwap = asc ? a[j - 1] > a[j] : a[j - 1] < a[j];
 
-            snap(i, `Compare a[${j-1}] = ${a[j-1]}  with  key a[${j}] = ${a[j]}.  ` +
+            snap(i, `نقارن \u2066a[${j-1}] = ${a[j-1]}\u2069  مع  المفتاح \u2066a[${j}] = ${a[j]}\u2069.  ` +
                 (mustSwap
-                    ? `${a[j-1]} > ${a[j]}  →  swap!  (Comparisons: ${cmp})`
-                    : `${a[j-1]} ≤ ${a[j]}  →  correct position found.  (Comparisons: ${cmp})`));
+                    ? `\u2066${a[j-1]} > ${a[j]}\u2069  ←  نبدّل!  (المقارنات: ${cmp})`
+                    : `\u2066${a[j-1]} ≤ ${a[j]}\u2069  ←  وجدنا الموضع الصحيح.  (المقارنات: ${cmp})`));
 
             if (mustSwap) {
                 const keyVal  = a[j];
@@ -1263,7 +1315,7 @@ function insertionSteps(arr, asc) {
                 col[j]     = 'swapping';
                 [a[j - 1], a[j]] = [a[j], a[j - 1]];
                 swp++;
-                snap(i, `Swap: ${leftVal} ↔ ${keyVal}.  Key ${keyVal} moves left to position [${j-1}].  (Swaps: ${swp})`);
+                snap(i, `تبديل: \u2066${leftVal} ↔ ${keyVal}\u2069.  ينتقل المفتاح ${keyVal} يسارًا إلى الموضع \u2066[${j-1}]\u2069.  (التبديلات: ${swp})`);
                 col[j]     = 'sorted';   // element that got displaced is now sorted here
                 col[j - 1] = 'key';      // key moved one step left
                 j--;
@@ -1276,12 +1328,12 @@ function insertionSteps(arr, asc) {
         // Key has reached its final position
         col[j] = 'just-sorted';
         for (let k = 0; k < j; k++) col[k] = 'sorted';
-        snap(i + 1, `✓  a[${j}] = ${a[j]} is now in the correct position. Line moves right.  Sorted: [${a.slice(0, i + 1).join(', ')}]`);
+        snap(i + 1, `✓  أصبح \u2066a[${j}] = ${a[j]}\u2069 الآن في الموضع الصحيح. يتحرك الخط إلى اليمين.  المرتّب: \u2066[${a.slice(0, i + 1).join(', ')}]\u2069`);
         for (let k = 0; k <= i; k++) col[k] = 'sorted';
         for (let k = i + 1; k < n; k++) col[k] = '';
     }
 
-    snap(n, `Sorting complete!  [${a.join(', ')}].  Total: ${cmp} comparisons, ${swp} swaps.`);
+    snap(n, `اكتمل الفرز!  \u2066[${a.join(', ')}]\u2069.  الإجمالي: ${cmp} مقارنة، ${swp} تبديل.`);
     return steps;
 }
 
@@ -1296,22 +1348,22 @@ function bubbleSteps(arr, asc) {
         steps.push({ array:[...a], colors:[...colors], message:msg, comparisons:cmp, swaps:swp });
     }
 
-    snap([...col], `Start: Bubble Sort compares adjacent pairs. After each pass, the largest unsorted element "bubbles" to the end.`);
+    snap([...col], `البداية: يقارن الفرز الفقاعي الأزواج المتجاورة. بعد كل تمريرة، "يطفو" أكبر عنصر غير مرتّب إلى النهاية.`);
 
     for (let pass=0; pass<n-1; pass++) {
         for (let k=n-1-pass+1;k<n;k++) col[k]='sorted';
         for (let k=0;k<n-1-pass+1;k++) if(col[k]!=='sorted') col[k]='';
         let swapped = false;
-        snap([...col], `Pass ${pass+1}: Scanning from index 0 to ${n-2-pass}.`);
+        snap([...col], `التمريرة ${pass+1}: نمسح من الفهرس 0 إلى ${n-2-pass}.`);
 
         for (let j=0; j<n-1-pass; j++) {
             col[j]='comparing'; col[j+1]='comparing';
             cmp++;
             const doSwap = asc ? a[j] > a[j+1] : a[j] < a[j+1];
-            snap([...col], `Compare a[${j}]=${a[j]} and a[${j+1}]=${a[j+1]}. ${doSwap ? '→ Out of order — swap!' : '→ In order — keep.'} (Comparisons: ${cmp})`);
+            snap([...col], `نقارن \u2066a[${j}]=${a[j]}\u2069 و \u2066a[${j+1}]=${a[j+1]}\u2069. ${doSwap ? '← بترتيب خاطئ — نبدّل!' : '← بالترتيب الصحيح — نُبقيهما.'} (المقارنات: ${cmp})`);
             if (doSwap) {
                 col[j]='swapping'; col[j+1]='swapping';
-                snap([...col], `Swapping a[${j}]=${a[j]} ↔ a[${j+1}]=${a[j+1]}. (Swaps: ${swp+1})`);
+                snap([...col], `نبدّل \u2066a[${j}]=${a[j]} ↔ a[${j+1}]=${a[j+1]}\u2069. (التبديلات: ${swp+1})`);
                 [a[j], a[j+1]] = [a[j+1], a[j]];
                 swp++; swapped = true;
                 col[j]=''; col[j+1]='';
@@ -1321,28 +1373,28 @@ function bubbleSteps(arr, asc) {
         }
 
         col[n-1-pass]='just-sorted';
-        snap([...col], `End of Pass ${pass+1}: a[${n-1-pass}] = ${a[n-1-pass]} is in its final position.`);
+        snap([...col], `نهاية التمريرة ${pass+1}: \u2066a[${n-1-pass}] = ${a[n-1-pass]}\u2069 في موضعه النهائي.`);
         col[n-1-pass]='sorted';
 
         if (!swapped) {
             for (let k=0;k<n;k++) col[k]='sorted';
-            snap([...col], `No swaps in Pass ${pass+1}! Array is already sorted — early exit. Total: ${cmp} comparisons.`);
+            snap([...col], `لا تبديلات في التمريرة ${pass+1}! المصفوفة مرتّبة مسبقًا — خروج مبكر. الإجمالي: ${cmp} مقارنة.`);
             return steps;
         }
     }
 
     col[0]='sorted';
-    snap([...col], `Sorting complete! Array in ${asc?'ascending':'descending'} order. Total: ${cmp} comparisons, ${swp} swaps.`);
+    snap([...col], `اكتمل الفرز! المصفوفة مرتّبة ${asc?'تصاعديًا':'تنازليًا'}. الإجمالي: ${cmp} مقارنة، ${swp} تبديل.`);
     return steps;
 }
 
 // ─── Comparison Section ────────────────────────────────────────────────────
 const SCENARIOS = [
-    { label:'Reverse Sorted (worst case)',  arr:[82,74,56,43,38,27,9,3],  pct:'0% sorted' },
-    { label:'Random',                       arr:[38,27,43,3,9,82,56,74],  pct:'random' },
-    { label:'Partially Sorted (~50%)',      arr:[3,9,27,38,82,74,56,43],  pct:'~50% sorted' },
-    { label:'Nearly Sorted (1 pair swapped)', arr:[3,9,27,38,43,56,82,74], pct:'~88% sorted' },
-    { label:'Fully Sorted (best case)',     arr:[3,9,27,38,43,56,74,82],  pct:'100% sorted' },
+    { label:'مرتّبة عكسيًا (أسوأ حالة)',  arr:[82,74,56,43,38,27,9,3],  pct:'مرتّبة بنسبة 0%' },
+    { label:'عشوائية',                       arr:[38,27,43,3,9,82,56,74],  pct:'عشوائية' },
+    { label:'مرتّبة جزئيًا (~50%)',      arr:[3,9,27,38,82,74,56,43],  pct:'مرتّبة بنسبة ~50%' },
+    { label:'شبه مرتّبة (زوج واحد مبدَّل)', arr:[3,9,27,38,43,56,82,74], pct:'مرتّبة بنسبة ~88%' },
+    { label:'مرتّبة كليًا (أفضل حالة)',     arr:[3,9,27,38,43,56,74,82],  pct:'مرتّبة بنسبة 100%' },
 ];
 
 function countSel(arr) {
@@ -1389,19 +1441,19 @@ function runComparison() {
             <div class="scenario-array">${arrHtml}</div>
         </div>
         <div class="bar-row">
-            <div class="bar-label">Selection Sort</div>
-            <div class="bar-track"><div class="bar-fill bar-selection" style="width:${(sel.c/maxCmp*100)}%">${sel.c} cmps</div></div>
-            ${sel.c===minC ? '<span class="winner-badge">Best ✓</span>' : ''}
+            <div class="bar-label">الفرز بالاختيار</div>
+            <div class="bar-track"><div class="bar-fill bar-selection" style="width:${(sel.c/maxCmp*100)}%">\u2067${sel.c} مقارنة\u2069</div></div>
+            ${sel.c===minC ? '<span class="winner-badge">الأفضل ✓</span>' : ''}
         </div>
         <div class="bar-row">
-            <div class="bar-label">Insertion Sort</div>
-            <div class="bar-track"><div class="bar-fill bar-insertion" style="width:${(ins.c/maxCmp*100)}%">${ins.c} cmps</div></div>
-            ${ins.c===minC ? '<span class="winner-badge">Best ✓</span>' : ''}
+            <div class="bar-label">الفرز بالإدراج</div>
+            <div class="bar-track"><div class="bar-fill bar-insertion" style="width:${(ins.c/maxCmp*100)}%">\u2067${ins.c} مقارنة\u2069</div></div>
+            ${ins.c===minC ? '<span class="winner-badge">الأفضل ✓</span>' : ''}
         </div>
         <div class="bar-row">
-            <div class="bar-label">Bubble Sort*</div>
-            <div class="bar-track"><div class="bar-fill bar-bubble" style="width:${(bub.c/maxCmp*100)}%">${bub.c} cmps</div></div>
-            ${bub.c===minC ? '<span class="winner-badge">Best ✓</span>' : ''}
+            <div class="bar-label">الفرز الفقاعي*</div>
+            <div class="bar-track"><div class="bar-fill bar-bubble" style="width:${(bub.c/maxCmp*100)}%">\u2067${bub.c} مقارنة\u2069</div></div>
+            ${bub.c===minC ? '<span class="winner-badge">الأفضل ✓</span>' : ''}
         </div>`;
         grid.appendChild(div);
     });
@@ -1410,12 +1462,12 @@ function runComparison() {
     const list    = document.getElementById('insight-list');
     insight.style.display = 'block';
     list.innerHTML = `
-        <li><strong>Selection Sort</strong> always makes exactly <strong>${countSel([3,9,27,38,43,56,74,82]).c}</strong> comparisons for n=8 — no matter the order of the data. It is completely <em>input-insensitive</em>.</li>
-        <li><strong>Insertion Sort</strong> is <em>input-sensitive</em>: it stops comparing as soon as the key finds its position. The more sorted the data, the fewer comparisons needed.</li>
-        <li>Even for <strong>random data</strong>, Insertion Sort makes only <strong>${countIns([38,27,43,3,9,82,56,74]).c}</strong> comparisons — that is <em>half</em> of Selection Sort's ${countSel([38,27,43,3,9,82,56,74]).c}. This is because on average the inner loop runs only halfway before stopping.</li>
-        <li>For <strong>fully sorted data</strong>, Insertion Sort makes only <strong>${countIns([3,9,27,38,43,56,74,82]).c}</strong> comparisons (one per element) vs Selection Sort's fixed <strong>${countSel([3,9,27,38,43,56,74,82]).c}</strong>.</li>
-        <li><strong>Bubble Sort</strong> also benefits from nearly-sorted data via early exit, but not as much as Insertion Sort — even on random data Bubble makes ${countBub([38,27,43,3,9,82,56,74]).c} comparisons vs Insertion's ${countIns([38,27,43,3,9,82,56,74]).c}.</li>
-        <li><strong>Conclusion:</strong> Insertion Sort ≤ Bubble Sort ≤ Selection Sort in comparisons for all cases. Use Insertion Sort for small or nearly-sorted arrays. For large data, prefer O(n log n) algorithms such as Quick Sort or Merge Sort.</li>
+        <li><strong>الفرز بالاختيار</strong> يجري دائمًا <strong>${countSel([3,9,27,38,43,56,74,82]).c}</strong> مقارنة بالضبط عندما <span dir="ltr">n=8</span> — أيًّا كان ترتيب البيانات. فهو <em>لا يتأثر بالمدخلات</em> إطلاقًا.</li>
+        <li><strong>الفرز بالإدراج</strong> <em>يتأثر بالمدخلات</em>: فهو يتوقف عن المقارنة بمجرد أن يجد المفتاح موضعه. وكلما كانت البيانات أكثر ترتيبًا، قلّت المقارنات المطلوبة.</li>
+        <li>حتى مع <strong>البيانات العشوائية</strong>، لا يجري الفرز بالإدراج إلا <strong>${countIns([38,27,43,3,9,82,56,74]).c}</strong> مقارنة — أي <em>نصف</em> مقارنات الفرز بالاختيار البالغة ${countSel([38,27,43,3,9,82,56,74]).c}. والسبب أن الحلقة الداخلية في المتوسط لا تقطع إلا نصف المسافة قبل أن تتوقف.</li>
+        <li>مع <strong>البيانات المرتّبة كليًا</strong>، لا يجري الفرز بالإدراج إلا <strong>${countIns([3,9,27,38,43,56,74,82]).c}</strong> مقارنة (واحدة لكل عنصر) مقابل <strong>${countSel([3,9,27,38,43,56,74,82]).c}</strong> مقارنة ثابتة للفرز بالاختيار.</li>
+        <li><strong>الفرز الفقاعي</strong> يستفيد هو الآخر من البيانات شبه المرتّبة عبر الخروج المبكر، لكن ليس بقدر الفرز بالإدراج — فحتى مع البيانات العشوائية يجري الفقاعي ${countBub([38,27,43,3,9,82,56,74]).c} مقارنة مقابل ${countIns([38,27,43,3,9,82,56,74]).c} للإدراج.</li>
+        <li><strong>الخلاصة:</strong> من حيث عدد المقارنات في جميع الحالات: الفرز بالإدراج ≤ الفرز الفقاعي ≤ الفرز بالاختيار. استخدم الفرز بالإدراج مع المصفوفات الصغيرة أو شبه المرتّبة. أما مع البيانات الكبيرة، ففضّل خوارزميات <span dir="ltr">O(n log n)</span> مثل الفرز السريع (Quick Sort) أو الفرز بالدمج (Merge Sort).</li>
     `;
 }
 
@@ -1439,7 +1491,7 @@ class InsertionSortSim {
     toggleDir() {
         this.asc = !this.asc;
         const btn = document.getElementById('dir-insertion');
-        if (btn) btn.textContent = this.asc ? 'Ascending ↑' : 'Descending ↓';
+        if (btn) btn.textContent = this.asc ? 'تصاعدي ↑' : 'تنازلي ↓';
         this.init();
     }
     render() {
@@ -1496,8 +1548,8 @@ window.addEventListener('load', () => {
 });
 </script>
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 </body>
 </html>
