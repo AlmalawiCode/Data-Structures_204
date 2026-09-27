@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hash Tables - Data Structures</title>
+    <title>جداول التجزئة - هياكل البيانات</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         :root {
             --primary-color: #7c3aed;
             --primary-light: #8b5cf6;
@@ -25,7 +50,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
@@ -323,113 +348,123 @@
         }
 
         .lang-switch-btn:hover { background: #667eea; color: white; }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+        .topics-list li { padding-left: 0; padding-right: 1.5rem; }
+        .topics-list li::before { left: auto; right: 0; }
+        .topics-list span[dir="ltr"] { white-space: nowrap; }
+        @media (max-width: 768px) {
+            .path-arrow { transform: rotate(-90deg); }
+        }
     </style>
 </head>
 <body>
-    <a href="index-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="index.html" class="lang-switch-btn">English</a>
     <header>
-        <a href="../index.html" style="color: white; text-decoration: none; opacity: 0.8; font-size: 0.95rem; display: inline-block; margin-bottom: 1rem;">← Back to Home</a>
-        <h1>Hash Tables</h1>
-        <p>Complete Interactive Learning Guide</p>
-        <div class="course-badge">Data Structures</div>
+        <a href="../index.html" style="color: white; text-decoration: none; opacity: 0.8; font-size: 0.95rem; display: inline-block; margin-bottom: 1rem;">→ العودة إلى الرئيسية</a>
+        <h1>جداول التجزئة (Hash Tables)</h1>
+        <p>دليل تعليمي تفاعلي شامل</p>
+        <div class="course-badge">هياكل البيانات</div>
     </header>
 
     <main>
         <div class="intro">
-            <h2>Welcome to Hash Tables!</h2>
-            <p>Learn how hash tables work through interactive tutorials and animations. Start with the basics, then explore collision resolution techniques and advanced concepts.</p>
+            <h2>مرحبًا بك في جداول التجزئة!</h2>
+            <p>تعلّم كيف تعمل جداول التجزئة من خلال دروس ورسوم متحركة تفاعلية. ابدأ بالأساسيات، ثم استكشف تقنيات حل التصادم (Collision Resolution) والمفاهيم المتقدمة.</p>
         </div>
 
         <div class="cards-grid">
-            <!-- Card 1: Tutorial -->
-            <a href="hashTable.html" class="card">
+            <!-- البطاقة 1: الدرس -->
+            <a href="hashTable-ar.html" class="card">
                 <div class="card-header">
                     <div class="card-icon">📖</div>
-                    <h3>Hash Table Tutorial</h3>
-                    <p>Learn the fundamentals with Ahmed & Omar</p>
+                    <h3>درس جدول التجزئة</h3>
+                    <p>تعلّم الأساسيات مع أحمد وعمر</p>
                 </div>
                 <div class="card-body">
-                    <h4>Topics Covered:</h4>
+                    <h4>الموضوعات المشمولة:</h4>
                     <ul class="topics-list">
-                        <li>Why we need Hash Tables</li>
-                        <li>Hash Functions (h(k) = k mod m)</li>
-                        <li>Collisions and why they happen</li>
-                        <li>Open Addressing basics</li>
-                        <li>Linear & Quadratic Probing theory</li>
-                        <li>Double Hashing concepts</li>
+                        <li>لماذا نحتاج إلى جداول التجزئة</li>
+                        <li>دوال التجزئة (Hash Functions): <span dir="ltr">h(k) = k mod m</span></li>
+                        <li>التصادمات (Collisions) وسبب حدوثها</li>
+                        <li>أساسيات العنونة المفتوحة (Open Addressing)</li>
+                        <li>نظرية الاستكشاف الخطي (Linear Probing) والاستكشاف التربيعي (Quadratic Probing)</li>
+                        <li>مفاهيم التجزئة المزدوجة (Double Hashing)</li>
                     </ul>
-                    <div class="card-btn">Start Learning →</div>
+                    <div class="card-btn">ابدأ التعلّم ←</div>
                 </div>
             </a>
 
-            <!-- Card 2: Interactive Probing -->
-            <a href="hashTable-interactive.html" class="card">
+            <!-- البطاقة 2: الاستكشاف التفاعلي -->
+            <a href="hashTable-interactive-ar.html" class="card">
                 <div class="card-header">
                     <div class="card-icon">🎮</div>
-                    <h3>Probing Simulator</h3>
-                    <p>Interactive step-by-step animations</p>
+                    <h3>محاكي الاستكشاف</h3>
+                    <p>رسوم متحركة تفاعلية خطوة بخطوة</p>
                 </div>
                 <div class="card-body">
-                    <h4>Practice With:</h4>
+                    <h4>تدرّب باستخدام:</h4>
                     <ul class="topics-list">
-                        <li>Linear Probing simulator</li>
-                        <li>Quadratic Probing simulator</li>
-                        <li>Double Hashing simulator</li>
-                        <li>Custom hash functions</li>
-                        <li>Step-by-step collision resolution</li>
-                        <li>Visual probe sequences</li>
+                        <li>محاكي الاستكشاف الخطي</li>
+                        <li>محاكي الاستكشاف التربيعي</li>
+                        <li>محاكي التجزئة المزدوجة</li>
+                        <li>دوال تجزئة مخصّصة</li>
+                        <li>حل التصادمات خطوة بخطوة</li>
+                        <li>تسلسلات استكشاف مرئية</li>
                     </ul>
-                    <div class="card-btn">Try Simulator →</div>
+                    <div class="card-btn">جرّب المحاكي ←</div>
                 </div>
             </a>
 
-            <!-- Card 3: Advanced Techniques -->
-            <a href="hashTable-advanced.html" class="card">
+            <!-- البطاقة 3: التقنيات المتقدمة -->
+            <a href="hashTable-advanced-ar.html" class="card">
                 <div class="card-header">
                     <div class="card-icon">🚀</div>
-                    <h3>Advanced Techniques</h3>
-                    <p>Rehashing, Buckets & Chaining</p>
+                    <h3>تقنيات متقدمة</h3>
+                    <p>إعادة التجزئة والدلاء والسلاسل</p>
                 </div>
                 <div class="card-body">
-                    <h4>Explore:</h4>
+                    <h4>استكشف:</h4>
                     <ul class="topics-list">
-                        <li>Rehashing (table restructuring)</li>
-                        <li>Load factor and thresholds</li>
-                        <li>Bucket Hashing (2D arrays)</li>
-                        <li>Overflow area handling</li>
-                        <li>Separate Chaining (linked lists)</li>
-                        <li>Comparing collision strategies</li>
+                        <li>إعادة التجزئة (Rehashing): إعادة هيكلة الجدول</li>
+                        <li>معامل التحميل (Load Factor) وعتباته</li>
+                        <li>التجزئة بالدلاء (Bucket Hashing): مصفوفات ثنائية الأبعاد</li>
+                        <li>التعامل مع منطقة الفائض (Overflow Area)</li>
+                        <li>السلاسل المنفصلة (Separate Chaining): قوائم مرتبطة</li>
+                        <li>مقارنة استراتيجيات حل التصادم</li>
                     </ul>
-                    <div class="card-btn">Explore Advanced →</div>
+                    <div class="card-btn">استكشف الموضوعات المتقدمة ←</div>
                 </div>
             </a>
         </div>
 
-        <!-- Learning Path -->
+        <!-- مسار التعلّم -->
         <div class="learning-path">
-            <h3>Recommended Learning Path</h3>
+            <h3>مسار التعلّم المقترح</h3>
             <div class="path-steps">
                 <div class="path-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h4>Read the Tutorial</h4>
-                        <p>Understand concepts with Ahmed & Omar's story</p>
+                        <h4>اقرأ الدرس</h4>
+                        <p>افهم المفاهيم من خلال قصة أحمد وعمر</p>
                     </div>
                 </div>
-                <div class="path-arrow">→</div>
+                <div class="path-arrow">←</div>
                 <div class="path-step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h4>Practice Probing</h4>
-                        <p>Use simulators to visualize collision resolution</p>
+                        <h4>تدرّب على الاستكشاف</h4>
+                        <p>استخدم المحاكيات لتصوّر حل التصادمات</p>
                     </div>
                 </div>
-                <div class="path-arrow">→</div>
+                <div class="path-arrow">←</div>
                 <div class="path-step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h4>Master Advanced Topics</h4>
-                        <p>Learn rehashing, buckets & chaining</p>
+                        <h4>أتقن الموضوعات المتقدمة</h4>
+                        <p>تعلّم إعادة التجزئة والدلاء والسلاسل</p>
                     </div>
                 </div>
             </div>
@@ -437,8 +472,8 @@
     </main>
 
     <footer>
-        <p><strong>Data Structures I</strong></p>
-        <p>Prepared by Dr. Almalawi</p>
+        <p><strong>هياكل البيانات 1</strong></p>
+        <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
     </footer>
 </body>
 </html>
