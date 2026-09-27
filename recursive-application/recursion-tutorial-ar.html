@@ -778,8 +778,14 @@
            Arabic prose (not code), so it reads right-to-left. */
         #counter-code-lines, #counter-code-lines .exec-line { direction: rtl; text-align: right; }
         #counter-code-lines .exec-line {
-            font-family: 'Haradh', 'Courier New', monospace;
-            font-size: 1em;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, sans-serif;
+            font-size: 0.92em;
+            line-height: 1.7;
+            padding: 3px 10px;
+        }
+        #counter-code-lines .exec-line span[dir="ltr"] {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
         }
         #counter-code-lines .exec-line.active { border-left: none; border-right: 3px solid #ffd700; }
 
@@ -1040,7 +1046,7 @@
                                 <div class="exec-line" id="c-line-4"><span dir="ltr">counter3(2)</span>: تصبح n=3 وتستدعي <span dir="ltr">counter4(3)</span></div>
                                 <div class="exec-line" id="c-line-5"><span dir="ltr">counter4(3)</span>: تصبح n=4 وتستدعي <span dir="ltr">counter5(4)</span></div>
                                 <div class="exec-line" id="c-line-6"><span dir="ltr">counter5(4)</span>: تصبح n=5 وتطبع 5 (الأخيرة!)</div>
-                                <div class="exec-line" id="c-line-7"><span style="color:#6272a4;">-- الانحلال (Unwinding): كل دالة تطبع عند إزالتها من المكدس --</span></div>
+                                <div class="exec-line" id="c-line-7"><span style="color:#6272a4;">-- الانحلال (Unwinding): تطبع كل دالة عند خروجها --</span></div>
                             </div>
                         </div>
                         <div class="demo-stack-panel">
@@ -1852,7 +1858,7 @@
     </script>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
+    <p><strong>هياكل البيانات 1</strong></p>
     <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
