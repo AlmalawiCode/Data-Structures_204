@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Double Hashing Question</title>
+    <title>سؤال التجزئة المزدوجة</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         body {
-            font-family: 'Times New Roman', Times, serif;
+            font-family: 'Haradh', 'Times New Roman', Times, serif;
             font-size: 12pt;
             max-width: 750px;
             margin: 30px auto;
@@ -83,10 +108,16 @@
             .page-break { page-break-before: always; }
         }
 
+        /* ---------- RTL (Arabic) overrides ---------- */
+        /* Formulas, key sequences and index rows (0..10) stay left-to-right */
+        .formula { direction: ltr; text-align: right; unicode-bidi: isolate; }
+        table.slots { direction: ltr; }
+        body { line-height: 1.8; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
-            right: 20px;
+            left: 20px;
             background: white;
             color: #667eea;
             border: 2px solid #667eea;
@@ -103,32 +134,32 @@
     </style>
 </head>
 <body>
-    <a href="double_hashing_question-ar.html" class="lang-switch-btn">عربي</a>
+<a href="double_hashing_question.html" class="lang-switch-btn">English</a>
 
-<p style="margin-bottom: 5px;"><a href="../index.html" style="color: #000; text-decoration: none;">← Back to Home</a></p>
+<p style="margin-bottom: 5px;"><a href="../index.html" style="color: #000; text-decoration: none;">→ العودة إلى الرئيسية</a></p>
 
-<h1>Double Hashing</h1>
+<h1>التجزئة المزدوجة</h1>
 
 <div class="question-box">
-    <strong>Question:</strong> You have the following keys that need to be stored for fast retrieval. Use <strong>Double Hashing</strong> to insert them into a hash table.
+    <strong>السؤال:</strong> لديك المفاتيح التالية التي يجب تخزينها لاسترجاعها بسرعة. استخدم <strong>التجزئة المزدوجة (Double Hashing)</strong> لإدخالها في جدول تجزئة (Hash Table).
 </div>
 
 <div class="formula-box">
-    <strong>Given:</strong>
-    <div class="formula">Table Size m = 11</div>
+    <strong>المعطيات:</strong>
+    <div class="formula" dir="rtl" style="direction: rtl;">حجم الجدول <span dir="ltr">m = 11</span></div>
     <div class="formula">h₁(k) = k mod 11</div>
     <div class="formula">h₂(k) = 7 - (k mod 7)</div>
 </div>
 
 <div class="keys-box">
-    <strong>Keys to Insert (in order):</strong> 23, 45, 67, 12, 34, 56, 78, 89
+    <strong>المفاتيح المطلوب إدخالها (بالترتيب):</strong> <span dir="ltr">23, 45, 67, 12, 34, 56, 78, 89</span>
 </div>
 
-<h2>Hash Table (Size = 11)</h2>
+<h2>جدول التجزئة (الحجم = 11)</h2>
 
-<table>
+<table class="slots">
     <tr>
-        <th>Index</th>
+        <th>الفهرس</th>
         <td>0</td>
         <td>1</td>
         <td>2</td>
@@ -142,7 +173,7 @@
         <td>10</td>
     </tr>
     <tr>
-        <th>Value</th>
+        <th>القيمة</th>
         <td></td>
         <td></td>
         <td></td>
@@ -157,94 +188,94 @@
     </tr>
 </table>
 
-<h2>Work Area</h2>
+<h2>مساحة الحل</h2>
 <div class="work-area">
-    <!-- Space for student calculations -->
+    <!-- مساحة لحسابات الطالب -->
 </div>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 <!-- SOLUTION PAGE -->
 <div class="page-break"></div>
 
-<h1>Solution</h1>
+<h1>الحل</h1>
 
-<h2>Step-by-Step Insertion</h2>
+<h2>الإدخال خطوة بخطوة</h2>
 
 <table style="font-size: 11pt;">
     <tr>
-        <th>Key</th>
+        <th>المفتاح</th>
         <th>h₁(k)</th>
         <th>h₂(k)</th>
-        <th>Probes (i=0,1,2...)</th>
-        <th>Final Index</th>
+        <th>محاولات الاستكشاف (<span dir="ltr">i=0,1,2...</span>)</th>
+        <th>الفهرس النهائي</th>
     </tr>
     <tr>
         <td><strong>23</strong></td>
-        <td>23 mod 11 = 1</td>
-        <td>7 - (23 mod 7) = 7 - 2 = 5</td>
-        <td>i=0: (1 + 0×5) mod 11 = 1 ✓</td>
+        <td dir="ltr">23 mod 11 = 1</td>
+        <td dir="ltr">7 - (23 mod 7) = 7 - 2 = 5</td>
+        <td dir="ltr">i=0: (1 + 0×5) mod 11 = 1 ✓</td>
         <td><strong>1</strong></td>
     </tr>
     <tr>
         <td><strong>45</strong></td>
-        <td>45 mod 11 = 1</td>
-        <td>7 - (45 mod 7) = 7 - 3 = 4</td>
-        <td>i=0: 1 (occupied)<br>i=1: (1 + 1×4) mod 11 = 5 ✓</td>
+        <td dir="ltr">45 mod 11 = 1</td>
+        <td dir="ltr">7 - (45 mod 7) = 7 - 3 = 4</td>
+        <td dir="ltr">i=0: 1 (مشغولة)<br>i=1: (1 + 1×4) mod 11 = 5 ✓</td>
         <td><strong>5</strong></td>
     </tr>
     <tr>
         <td><strong>67</strong></td>
-        <td>67 mod 11 = 1</td>
-        <td>7 - (67 mod 7) = 7 - 4 = 3</td>
-        <td>i=0: 1 (occupied)<br>i=1: (1 + 1×3) mod 11 = 4 ✓</td>
+        <td dir="ltr">67 mod 11 = 1</td>
+        <td dir="ltr">7 - (67 mod 7) = 7 - 4 = 3</td>
+        <td dir="ltr">i=0: 1 (مشغولة)<br>i=1: (1 + 1×3) mod 11 = 4 ✓</td>
         <td><strong>4</strong></td>
     </tr>
     <tr>
         <td><strong>12</strong></td>
-        <td>12 mod 11 = 1</td>
-        <td>7 - (12 mod 7) = 7 - 5 = 2</td>
-        <td>i=0: 1 (occupied)<br>i=1: (1 + 1×2) mod 11 = 3 ✓</td>
+        <td dir="ltr">12 mod 11 = 1</td>
+        <td dir="ltr">7 - (12 mod 7) = 7 - 5 = 2</td>
+        <td dir="ltr">i=0: 1 (مشغولة)<br>i=1: (1 + 1×2) mod 11 = 3 ✓</td>
         <td><strong>3</strong></td>
     </tr>
     <tr>
         <td><strong>34</strong></td>
-        <td>34 mod 11 = 1</td>
-        <td>7 - (34 mod 7) = 7 - 6 = 1</td>
-        <td>i=0: 1 (occupied)<br>i=1: (1 + 1×1) mod 11 = 2 ✓</td>
+        <td dir="ltr">34 mod 11 = 1</td>
+        <td dir="ltr">7 - (34 mod 7) = 7 - 6 = 1</td>
+        <td dir="ltr">i=0: 1 (مشغولة)<br>i=1: (1 + 1×1) mod 11 = 2 ✓</td>
         <td><strong>2</strong></td>
     </tr>
     <tr>
         <td><strong>56</strong></td>
-        <td>56 mod 11 = 1</td>
-        <td>7 - (56 mod 7) = 7 - 0 = 7</td>
-        <td>i=0: 1 (occupied)<br>i=1: (1 + 1×7) mod 11 = 8 ✓</td>
+        <td dir="ltr">56 mod 11 = 1</td>
+        <td dir="ltr">7 - (56 mod 7) = 7 - 0 = 7</td>
+        <td dir="ltr">i=0: 1 (مشغولة)<br>i=1: (1 + 1×7) mod 11 = 8 ✓</td>
         <td><strong>8</strong></td>
     </tr>
     <tr>
         <td><strong>78</strong></td>
-        <td>78 mod 11 = 1</td>
-        <td>7 - (78 mod 7) = 7 - 1 = 6</td>
-        <td>i=0: 1 (occupied)<br>i=1: (1 + 1×6) mod 11 = 7 ✓</td>
+        <td dir="ltr">78 mod 11 = 1</td>
+        <td dir="ltr">7 - (78 mod 7) = 7 - 1 = 6</td>
+        <td dir="ltr">i=0: 1 (مشغولة)<br>i=1: (1 + 1×6) mod 11 = 7 ✓</td>
         <td><strong>7</strong></td>
     </tr>
     <tr>
         <td><strong>89</strong></td>
-        <td>89 mod 11 = 1</td>
-        <td>7 - (89 mod 7) = 7 - 5 = 2</td>
-        <td>i=0: 1 (occupied)<br>i=1: 3 (occupied)<br>i=2: (1 + 2×2) mod 11 = 5 (occupied)<br>i=3: (1 + 3×2) mod 11 = 7 (occupied)<br>i=4: (1 + 4×2) mod 11 = 9 ✓</td>
+        <td dir="ltr">89 mod 11 = 1</td>
+        <td dir="ltr">7 - (89 mod 7) = 7 - 5 = 2</td>
+        <td dir="ltr">i=0: 1 (مشغولة)<br>i=1: 3 (مشغولة)<br>i=2: (1 + 2×2) mod 11 = 5 (مشغولة)<br>i=3: (1 + 3×2) mod 11 = 7 (مشغولة)<br>i=4: (1 + 4×2) mod 11 = 9 ✓</td>
         <td><strong>9</strong></td>
     </tr>
 </table>
 
-<h2>Final Hash Table</h2>
+<h2>جدول التجزئة النهائي</h2>
 
-<table>
+<table class="slots">
     <tr>
-        <th>Index</th>
+        <th>الفهرس</th>
         <td>0</td>
         <td>1</td>
         <td>2</td>
@@ -258,7 +289,7 @@
         <td>10</td>
     </tr>
     <tr>
-        <th>Value</th>
+        <th>القيمة</th>
         <td>-</td>
         <td><strong>23</strong></td>
         <td><strong>34</strong></td>
@@ -274,8 +305,8 @@
 </table>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 </body>

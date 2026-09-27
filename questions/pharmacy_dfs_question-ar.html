@@ -1,12 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pharmacy DFS Traversal Question</title>
+    <title>سؤال اجتياز DFS للصيدليات</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 950px;
             margin: 40px auto;
             padding: 20px;
@@ -243,10 +268,17 @@
             }
         }
 
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .scenario { border-left: none; border-right: 4px solid #000; border-radius: 8px 0 0 8px; }
+        .step     { border-left: none; border-right: 3px solid #000; }
+        /* Graph drawing, code, adjacency data and answer sequences stay left-to-right */
+        svg, code, .final-answer, .answer-space { direction: ltr; }
+        body { line-height: 1.9; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
-            right: 20px;
+            left: 20px;
             background: white;
             color: #667eea;
             border: 2px solid #667eea;
@@ -263,22 +295,22 @@
     </style>
 </head>
 <body>
-    <a href="pharmacy_dfs_question-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="pharmacy_dfs_question.html" class="lang-switch-btn">English</a>
     <div class="container">
-        <a href="../index.html" class="back-link">← Back to Home</a>
+        <a href="../index.html" class="back-link">→ العودة إلى الرئيسية</a>
 
-        <h1>Pharmacy Network - DFS Traversal</h1>
+        <h1>شبكة الصيدليات - اجتياز DFS</h1>
 
         <div class="scenario">
-            <p>A city has <strong>10 pharmacies</strong> (A, B, C, D, E, F, G, H, I, J) connected by roads. Each road has a <strong>congestion level</strong> (weight).</p>
+            <p>في مدينةٍ <strong>10 صيدليات</strong> (<span dir="ltr">A, B, C, D, E, F, G, H, I, J</span>) تربط بينها طرق. لكل طريق <strong>مستوى ازدحام</strong> (الوزن - Weight).</p>
         </div>
 
         <div class="rules">
-            <h3>Rule</h3>
-            <p>Visit the pharmacy connected by the road with the <strong>HIGHEST congestion level first</strong>.</p>
+            <h3>القاعدة</h3>
+            <p>زُر الصيدلية المتصلة بالطريق ذي <strong>أعلى مستوى ازدحام أولًا</strong>.</p>
         </div>
 
-        <h2>Graph</h2>
+        <h2>المخطط (Graph)</h2>
 
         <div class="graph-container">
             <svg width="700" height="480" xmlns="http://www.w3.org/2000/svg">
@@ -387,62 +419,62 @@
                 <text x="320" y="458" text-anchor="middle" fill="#000" font-size="20" font-weight="bold">J</text>
 
                 <!-- Start indicator -->
-                <text x="100" y="35" text-anchor="middle" fill="#000" font-size="14" font-weight="bold">(Start)</text>
+                <text x="100" y="35" text-anchor="middle" fill="#000" font-size="14" font-weight="bold">(البداية)</text>
             </svg>
         </div>
 
-        <h2>Adjacency List</h2>
+        <h2>قائمة الجوار (Adjacency List)</h2>
 
         <table class="adjacency">
             <tr>
-                <th>Pharmacy</th>
-                <th>Connected To (Congestion Level)</th>
+                <th>الصيدلية</th>
+                <th>متصلة بـ (مستوى الازدحام)</th>
             </tr>
             <tr>
                 <td>A</td>
-                <td>B(18), C(15), D(10)</td>
+                <td dir="ltr">B(18), C(15), D(10)</td>
             </tr>
             <tr>
                 <td>B</td>
-                <td>A(18), E(12)</td>
+                <td dir="ltr">A(18), E(12)</td>
             </tr>
             <tr>
                 <td>C</td>
-                <td>G(16), A(15), D(5)</td>
+                <td dir="ltr">G(16), A(15), D(5)</td>
             </tr>
             <tr>
                 <td>D</td>
-                <td>H(17), A(10), C(5)</td>
+                <td dir="ltr">H(17), A(10), C(5)</td>
             </tr>
             <tr>
                 <td>E</td>
-                <td>F(14), B(12)</td>
+                <td dir="ltr">F(14), B(12)</td>
             </tr>
             <tr>
                 <td>F</td>
-                <td>E(14)</td>
+                <td dir="ltr">E(14)</td>
             </tr>
             <tr>
                 <td>G</td>
-                <td>C(16), H(8)</td>
+                <td dir="ltr">C(16), H(8)</td>
             </tr>
             <tr>
                 <td>H</td>
-                <td>I(19), D(17), J(11), G(8)</td>
+                <td dir="ltr">I(19), D(17), J(11), G(8)</td>
             </tr>
             <tr>
                 <td>I</td>
-                <td>H(19), J(6)</td>
+                <td dir="ltr">H(19), J(6)</td>
             </tr>
             <tr>
                 <td>J</td>
-                <td>H(11), I(6)</td>
+                <td dir="ltr">H(11), I(6)</td>
             </tr>
         </table>
 
         <div class="question-box">
-            <h3>Question: DFS Traversal</h3>
-            <p>Ali starts at <strong>Pharmacy A</strong>. Using <strong>DFS</strong>, write the order he visits all pharmacies:</p>
+            <h3>السؤال: اجتياز DFS</h3>
+            <p>يبدأ علي من <strong>الصيدلية A</strong>. باستخدام <strong>البحث بالعمق أولًا (DFS)</strong>، اكتب الترتيب الذي يزور به جميع الصيدليات:</p>
             <div class="answer-space">
                 A → ___ → ___ → ___ → ___ → ___ → ___ → ___ → ___ → ___
             </div>
@@ -450,92 +482,92 @@
 
         <!-- SOLUTION SECTION -->
         <div class="solution">
-            <h2>Solution</h2>
-            <button class="show-solution-btn" onclick="toggleSolution('solution1')">Show/Hide Solution</button>
+            <h2>الحل</h2>
+            <button class="show-solution-btn" onclick="toggleSolution('solution1')">إظهار/إخفاء الحل</button>
 
             <div id="solution1" class="solution-hidden">
                 <div class="solution-item">
-                    <h3>Step-by-Step DFS Traversal</h3>
+                    <h3>اجتياز DFS خطوة بخطوة</h3>
 
                     <div class="step">
-                        <span class="step-number">Step 1:</span> Start at <code>A</code><br>
-                        Visited: {A} | Stack: []<br>
-                        Neighbors of A: B(18), C(15), D(10)<br>
-                        Push C, D to stack. <strong>Choose B (highest = 18)</strong><br>
-                        Stack after: [D, C]
+                        <span class="step-number">الخطوة 1:</span> ابدأ من <code>A</code><br>
+                        المُزارة: <span dir="ltr">{A}</span> | المكدس: <span dir="ltr">[]</span><br>
+                        جيران A: <span dir="ltr">B(18), C(15), D(10)</span><br>
+                        ادفع (Push) C، D إلى المكدس (Stack). <strong>اختر B (الأعلى = 18)</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[D, C]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 2:</span> Move to <code>B</code><br>
-                        Visited: {A, B} | Stack: [D, C]<br>
-                        Neighbors of B: A(18)✓, E(12)<br>
-                        <strong>Choose E (highest unvisited = 12)</strong><br>
-                        Stack after: [D, C]
+                        <span class="step-number">الخطوة 2:</span> انتقل إلى <code>B</code><br>
+                        المُزارة: <span dir="ltr">{A, B}</span> | المكدس: <span dir="ltr">[D, C]</span><br>
+                        جيران B: <span dir="ltr">A(18)✓, E(12)</span><br>
+                        <strong>اختر E (الأعلى غير المُزار = 12)</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[D, C]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 3:</span> Move to <code>E</code><br>
-                        Visited: {A, B, E} | Stack: [D, C]<br>
-                        Neighbors of E: F(14), B(12)✓<br>
-                        <strong>Choose F (highest unvisited = 14)</strong><br>
-                        Stack after: [D, C]
+                        <span class="step-number">الخطوة 3:</span> انتقل إلى <code>E</code><br>
+                        المُزارة: <span dir="ltr">{A, B, E}</span> | المكدس: <span dir="ltr">[D, C]</span><br>
+                        جيران E: <span dir="ltr">F(14), B(12)✓</span><br>
+                        <strong>اختر F (الأعلى غير المُزار = 14)</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[D, C]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 4:</span> Move to <code>F</code><br>
-                        Visited: {A, B, E, F} | Stack: [D, C]<br>
-                        Neighbors of F: E(14)✓<br>
-                        <strong>DEAD END! All neighbors visited. Pop from stack → C</strong><br>
-                        Stack after: [D]
+                        <span class="step-number">الخطوة 4:</span> انتقل إلى <code>F</code><br>
+                        المُزارة: <span dir="ltr">{A, B, E, F}</span> | المكدس: <span dir="ltr">[D, C]</span><br>
+                        جيران F: <span dir="ltr">E(14)✓</span><br>
+                        <strong>طريق مسدود! جميع الجيران مُزارة. اسحب (Pop) من المكدس ← C</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[D]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 5:</span> Backtrack to <code>C</code> (from stack)<br>
-                        Visited: {A, B, E, F, C} | Stack: [D]<br>
-                        Neighbors of C: G(16), A(15)✓, D(5)<br>
-                        Push D to stack. <strong>Choose G (highest unvisited = 16)</strong><br>
-                        Stack after: [D, D]
+                        <span class="step-number">الخطوة 5:</span> ارجع (Backtrack) إلى <code>C</code> (من المكدس)<br>
+                        المُزارة: <span dir="ltr">{A, B, E, F, C}</span> | المكدس: <span dir="ltr">[D]</span><br>
+                        جيران C: <span dir="ltr">G(16), A(15)✓, D(5)</span><br>
+                        ادفع D إلى المكدس. <strong>اختر G (الأعلى غير المُزار = 16)</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[D, D]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 6:</span> Move to <code>G</code><br>
-                        Visited: {A, B, E, F, C, G} | Stack: [D, D]<br>
-                        Neighbors of G: C(16)✓, H(8)<br>
-                        <strong>Choose H (highest unvisited = 8)</strong><br>
-                        Stack after: [D, D]
+                        <span class="step-number">الخطوة 6:</span> انتقل إلى <code>G</code><br>
+                        المُزارة: <span dir="ltr">{A, B, E, F, C, G}</span> | المكدس: <span dir="ltr">[D, D]</span><br>
+                        جيران G: <span dir="ltr">C(16)✓, H(8)</span><br>
+                        <strong>اختر H (الأعلى غير المُزار = 8)</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[D, D]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 7:</span> Move to <code>H</code><br>
-                        Visited: {A, B, E, F, C, G, H} | Stack: [D, D]<br>
-                        Neighbors of H: I(19), D(17), J(11), G(8)✓<br>
-                        Push D, J to stack. <strong>Choose I (highest unvisited = 19)</strong><br>
-                        Stack after: [D, D, D, J]
+                        <span class="step-number">الخطوة 7:</span> انتقل إلى <code>H</code><br>
+                        المُزارة: <span dir="ltr">{A, B, E, F, C, G, H}</span> | المكدس: <span dir="ltr">[D, D]</span><br>
+                        جيران H: <span dir="ltr">I(19), D(17), J(11), G(8)✓</span><br>
+                        ادفع D، J إلى المكدس. <strong>اختر I (الأعلى غير المُزار = 19)</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[D, D, D, J]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 8:</span> Move to <code>I</code><br>
-                        Visited: {A, B, E, F, C, G, H, I} | Stack: [D, D, D, J]<br>
-                        Neighbors of I: H(19)✓, J(6)<br>
-                        <strong>Choose J (highest unvisited = 6)</strong><br>
-                        Stack after: [D, D, D, J]
+                        <span class="step-number">الخطوة 8:</span> انتقل إلى <code>I</code><br>
+                        المُزارة: <span dir="ltr">{A, B, E, F, C, G, H, I}</span> | المكدس: <span dir="ltr">[D, D, D, J]</span><br>
+                        جيران I: <span dir="ltr">H(19)✓, J(6)</span><br>
+                        <strong>اختر J (الأعلى غير المُزار = 6)</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[D, D, D, J]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 9:</span> Move to <code>J</code><br>
-                        Visited: {A, B, E, F, C, G, H, I, J} | Stack: [D, D, D, J]<br>
-                        Neighbors of J: H(11)✓, I(6)✓<br>
-                        <strong>DEAD END! Pop from stack → J (visited), D (visited), D (visited), D</strong><br>
-                        Stack after: []
+                        <span class="step-number">الخطوة 9:</span> انتقل إلى <code>J</code><br>
+                        المُزارة: <span dir="ltr">{A, B, E, F, C, G, H, I, J}</span> | المكدس: <span dir="ltr">[D, D, D, J]</span><br>
+                        جيران J: <span dir="ltr">H(11)✓, I(6)✓</span><br>
+                        <strong>طريق مسدود! اسحب من المكدس ← J (مُزارة)، D (مُزارة)، D (مُزارة)، D</strong><br>
+                        المكدس بعد ذلك: <span dir="ltr">[]</span>
                     </div>
 
                     <div class="step">
-                        <span class="step-number">Step 10:</span> Backtrack to <code>D</code> (from stack)<br>
-                        Visited: {A, B, E, F, C, G, H, I, J, D}<br>
-                        <strong>All 10 pharmacies visited!</strong>
+                        <span class="step-number">الخطوة 10:</span> ارجع إلى <code>D</code> (من المكدس)<br>
+                        المُزارة: <span dir="ltr">{A, B, E, F, C, G, H, I, J, D}</span><br>
+                        <strong>تمت زيارة جميع الصيدليات العشر!</strong>
                     </div>
 
-                    <h3>Final Answer</h3>
+                    <h3>الإجابة النهائية</h3>
                     <div class="final-answer">
                         A → B → E → F → C → G → H → I → J → D
                     </div>
@@ -546,8 +578,8 @@
     </div>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
     <script>
