@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heap Data Structure</title>
+    <title>بنية بيانات الكومة</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.7;
             color: #2c3e50;
             background: linear-gradient(135deg, #1a0030 0%, #7b1fa2 100%);
@@ -304,6 +329,31 @@
         /* Mermaid */
         .mermaid { display: flex; justify-content: center; margin: 20px 0; }
         .mermaid svg { max-width: 100%; height: auto; }
+        /* ── RTL overrides ── */
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+        ul, ol { margin: 10px 26px 14px 0; }
+        .info-box    { border-left: none; border-right: 5px solid #7b1fa2; border-radius: 8px 0 0 8px; }
+        .warning-box { border-left: none; border-right: 5px solid #f39c12; border-radius: 8px 0 0 8px; }
+        .error-box   { border-left: none; border-right: 5px solid #e74c3c; border-radius: 8px 0 0 8px; }
+        .success-box { border-left: none; border-right: 5px solid #27ae60; border-radius: 8px 0 0 8px; }
+        th { text-align: right; }
+        /* Letter-spacing and upper-casing break Arabic letter joining */
+        .toc h3, .key-concept h4, .btn { letter-spacing: 0; text-transform: none; }
+
+        /* Formulas, pseudocode, value inputs, trees and array strips stay
+           left-to-right so indices [0], [1], ... read in the same order as
+           the code and the English page. */
+        .formula-box, .sim-input-row input[type="text"] { direction: ltr; text-align: left; }
+        .formula-spot { direction: rtl; }
+        .mermaid, svg, #fArrayDiv, #simBArrayDiv, #delArrDiv { direction: ltr; }
+
+        /* In RTL the header's home link sits at the top-right corner, under
+           the fixed language button; shift it clear of the button. */
+        @media (max-width: 1320px) {
+            header .back-link { margin-right: 120px; }
+        }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -325,32 +375,32 @@
     <script>mermaid.initialize({startOnLoad:true, theme:'base', securityLevel:'loose'});</script>
 </head>
 <body>
-<a href="heap-tutorial-ar.html" class="lang-switch-btn">عربي</a>
+<a href="heap-tutorial.html" class="lang-switch-btn">English</a>
 <div class="container">
 
 <!-- ═══════════ HEADER ═══════════ -->
 <header>
-    <a href="../index.html" class="back-link">&#8592; Back to Home</a>
-    <h1>&#127875; Heap Data Structure</h1>
-    <p>Data Structures I &nbsp;|&nbsp; Complete Interactive Tutorial</p>
+    <a href="../index.html" class="back-link">&#8594; العودة إلى الرئيسية</a>
+    <h1>&#127875; بنية بيانات الكومة (Heap)</h1>
+    <p>هياكل البيانات 1 &nbsp;|&nbsp; درس تفاعلي شامل</p>
 </header>
 
 <!-- ═══════════ TABLE OF CONTENTS ═══════════ -->
 <nav class="toc">
-    <h3>&#128203; Contents</h3>
+    <h3>&#128203; المحتويات</h3>
     <div class="toc-links">
-        <a href="#s1">1. Introduction</a>
-        <a href="#s2">2. What Is a Heap?</a>
-        <a href="#s3">3. Hospital Emergency</a>
-        <a href="#s4">4. Heap Definition</a>
-        <a href="#s5">5. Min-Heap vs Max-Heap</a>
-        <a href="#s6">6. Complete Tree &amp; Memory</a>
-        <a href="#s7">7. Array Representation</a>
-        <a href="#s8">8. Insertion &amp; Percolate Up</a>
-        <a href="#s9">9. Deletion &amp; Percolate Down</a>
-        <a href="#s10">10. Ordered, Not Sorted</a>
-        <a href="#s11">11. Complexity Analysis</a>
-        <a href="#s12">12. Summary</a>
+        <a href="#s1">1. مقدمة</a>
+        <a href="#s2">2. ما الكومة؟</a>
+        <a href="#s3">3. طوارئ المستشفى</a>
+        <a href="#s4">4. تعريف الكومة</a>
+        <a href="#s5">5. الكومة الصغرى مقابل الكومة الكبرى</a>
+        <a href="#s6">6. الشجرة الكاملة والذاكرة</a>
+        <a href="#s7">7. التمثيل بالمصفوفة</a>
+        <a href="#s8">8. الإدراج والترشيح للأعلى</a>
+        <a href="#s9">9. الحذف والترشيح للأسفل</a>
+        <a href="#s10">10. منظَّمة لا مرتَّبة</a>
+        <a href="#s11">11. تحليل التعقيد</a>
+        <a href="#s12">12. الخلاصة</a>
     </div>
 </nav>
 
@@ -360,49 +410,49 @@
      SECTION 1 — INTRODUCTION
 ═══════════════════════════════════════════════════════ -->
 <section id="s1">
-    <h2><span class="sec-num">1</span>Welcome &mdash; Today We Study the Heap</h2>
+    <h2><span class="sec-num">1</span>مرحبًا &mdash; اليوم ندرس الكومة</h2>
 
-    <p>Hello students! Welcome back. Throughout this semester we have already studied a number of very important data structures. Let us take a moment to remember what we have covered &mdash; and then let us meet today's new topic: the <strong>Heap</strong>.</p>
+    <p>مرحبًا بكم أيها الطلاب! أهلًا بعودتكم. لقد درسنا خلال هذا الفصل الدراسي عددًا من هياكل البيانات المهمة جدًا. لنتوقف لحظة لنتذكر ما تناولناه &mdash; ثم لنتعرّف على موضوع اليوم الجديد: <strong>الكومة (Heap)</strong>.</p>
 
     <div class="ds-grid">
         <div class="ds-card">
             <div class="icon">&#9638;</div>
-            <h4>Array</h4>
-            <p>Fixed-size, indexed, consecutive memory</p>
+            <h4>المصفوفة (Array)</h4>
+            <p>حجم ثابت، مفهرسة، ذاكرة متتالية</p>
         </div>
         <div class="ds-card">
             <div class="icon">&#128279;</div>
-            <h4>Linked List</h4>
-            <p>Dynamic nodes connected by pointers</p>
+            <h4>القائمة المرتبطة (Linked List)</h4>
+            <p>عقد ديناميكية متصلة بالمراجع</p>
         </div>
         <div class="ds-card">
             <div class="icon">&#128218;</div>
-            <h4>Stack</h4>
-            <p>LIFO &mdash; Last In, First Out</p>
+            <h4>المكدس (Stack)</h4>
+            <p><span dir="ltr">LIFO</span> &mdash; الداخل أخيرًا يخرج أولًا</p>
         </div>
         <div class="ds-card">
             <div class="icon">&#128678;</div>
-            <h4>Queue</h4>
-            <p>FIFO &mdash; First In, First Out</p>
+            <h4>الطابور (Queue)</h4>
+            <p><span dir="ltr">FIFO</span> &mdash; الداخل أولًا يخرج أولًا</p>
         </div>
         <div class="ds-card">
             <div class="icon">&#127795;</div>
-            <h4>Tree</h4>
-            <p>Hierarchical, non-linear structure</p>
+            <h4>الشجرة (Tree)</h4>
+            <p>بنية هرمية غير خطية</p>
         </div>
         <div class="ds-card highlight">
             <div class="icon">&#127875;</div>
-            <h4>Heap &larr; NEW TODAY!</h4>
-            <p>Complete binary tree with ordering property</p>
+            <h4>الكومة &rarr; جديد اليوم!</h4>
+            <p>شجرة ثنائية كاملة مع خاصية ترتيب</p>
         </div>
     </div>
 
     <div class="key-concept">
-        <h4>&#128273; Why Do We Need Heap?</h4>
-        <p>Sometimes we need to <strong>always access the most important element quickly</strong> &mdash; not based on <em>when</em> it arrived, but based on its <strong>priority</strong>. The heap is the perfect data structure for this. It gives us <strong>O(log n)</strong> for both insertion and deletion of the highest or lowest priority element.</p>
+        <h4>&#128273; لماذا نحتاج إلى الكومة؟</h4>
+        <p>نحتاج أحيانًا إلى <strong>الوصول دائمًا إلى العنصر الأهم بسرعة</strong> &mdash; لا بناءً على <em>وقت</em> وصوله، بل بناءً على <strong>أولويته</strong>. والكومة هي بنية البيانات المثالية لذلك؛ إذ توفر لنا <strong><span dir="ltr">O(log n)</span></strong> لكلٍّ من إدراج العنصر ذي الأولوية الأعلى أو الأدنى وحذفه.</p>
     </div>
 
-    <p>By the end of this tutorial you will understand: what a heap is, how to build one step by step, how to insert and delete efficiently using percolate up and percolate down, and most importantly &mdash; <strong>why the heap is far better than sorting an array every time</strong>.</p>
+    <p>بنهاية هذا الدرس ستفهم: ما الكومة، وكيف تُبنى خطوة بخطوة، وكيف يتم الإدراج والحذف بكفاءة باستخدام الترشيح للأعلى (Percolate Up) والترشيح للأسفل (Percolate Down)، والأهم من ذلك كله &mdash; <strong>لماذا تتفوّق الكومة كثيرًا على فرز المصفوفة في كل مرة</strong>.</p>
 </section>
 
 
@@ -410,44 +460,44 @@
      SECTION 2 — MEANING OF HEAP
 ═══════════════════════════════════════════════════════ -->
 <section id="s2">
-    <h2><span class="sec-num">2</span>What Does "Heap" Mean?</h2>
+    <h2><span class="sec-num">2</span>ماذا تعني كلمة "Heap"؟</h2>
 
-    <h3>&#128218; The Literal English Meaning</h3>
-    <p>Before we study the data structure, let us understand the English word itself. In English, a <strong>heap</strong> means a <strong>pile or collection of things placed together</strong> &mdash; not perfectly arranged, but loosely organized. For example:</p>
+    <h3>&#128218; المعنى الحرفي في اللغة الإنجليزية</h3>
+    <p>قبل أن ندرس بنية البيانات، لنفهم الكلمة الإنجليزية نفسها. تعني كلمة <strong>heap</strong> في الإنجليزية <strong>كومةً أو مجموعةً من الأشياء الموضوعة معًا</strong> &mdash; ليست مرتبة ترتيبًا تامًا، بل منظَّمة تنظيمًا فضفاضًا. على سبيل المثال:</p>
 
     <div class="grid-3">
         <div class="card">
             <p style="font-size:2.5em;">&#128218;</p>
-            <h4>A heap of books</h4>
-            <p style="font-size:0.85em;color:#666;">Books piled on top of each other. The top book is easy to reach, but the pile is not neatly sorted.</p>
+            <h4>كومة من الكتب</h4>
+            <p style="font-size:0.85em;color:#666;">كتب مكدَّسة بعضها فوق بعض. يسهل الوصول إلى الكتاب العلوي، لكن الكومة ليست مرتبة بعناية.</p>
         </div>
         <div class="card">
             <p style="font-size:2.5em;">&#129521;</p>
-            <h4>A heap of sand</h4>
-            <p style="font-size:0.85em;color:#666;">Sand piled high. The top is the highest point, but the individual grains are not in any order.</p>
+            <h4>كومة من الرمل</h4>
+            <p style="font-size:0.85em;color:#666;">رمل مكوَّم عاليًا. القمة هي أعلى نقطة، لكن حبات الرمل المفردة ليست في أي ترتيب.</p>
         </div>
         <div class="card purple">
             <p style="font-size:2.5em;">&#127875;</p>
-            <h4>Heap Data Structure</h4>
-            <p style="font-size:0.85em;color:#6a1b9a;">Data arranged so the "most important" item is always at the top &mdash; like the biggest item sitting at the peak of the pile!</p>
+            <h4>بنية بيانات الكومة</h4>
+            <p style="font-size:0.85em;color:#6a1b9a;">بيانات مرتّبة بحيث يكون العنصر "الأهم" دائمًا في القمة &mdash; تمامًا كأكبر عنصر يستقر في قمة الكومة!</p>
         </div>
     </div>
 
     <div class="info-box">
-        <strong>Key Insight:</strong> Just like a physical heap where the largest or most important item naturally sits at the top and is easiest to reach, a <strong>heap data structure</strong> always keeps the most important element (maximum or minimum) at the <strong>root</strong> for instant O(1) access.
+        <strong>فكرة أساسية:</strong> تمامًا كما في الكومة المادية التي يستقر فيها العنصر الأكبر أو الأهم في القمة بشكل طبيعي ويكون الأسهل وصولًا، فإن <strong>بنية بيانات الكومة</strong> تُبقي دائمًا العنصر الأهم (الأكبر أو الأصغر) في <strong>الجذر (Root)</strong> للوصول الفوري إليه في <span dir="ltr">O(1)</span>.
     </div>
 
-    <h3>&#128187; Heap in Computer Science</h3>
-    <p>In computer science, a <strong>heap</strong> is a special tree-based data structure with these characteristics:</p>
+    <h3>&#128187; الكومة في علوم الحاسب</h3>
+    <p>في علوم الحاسب، <strong>الكومة</strong> بنية بيانات خاصة قائمة على الشجرة، ولها الخصائص التالية:</p>
     <ul>
-        <li>The data is arranged <strong>in order</strong> (every parent satisfies a rule with respect to its children)</li>
-        <li>But the data is <strong>NOT fully sorted</strong> (we will see this clearly later!)</li>
-        <li>The <strong>root</strong> is always the maximum or minimum element</li>
-        <li>It must be stored as a <strong>complete binary tree</strong> (we will explain exactly why this matters)</li>
+        <li>البيانات مرتّبة <strong>بنظام</strong> (كل أب (Parent) يحقق قاعدة معينة بالنسبة إلى أبنائه (Children))</li>
+        <li>لكن البيانات <strong>ليست مرتبة ترتيبًا كاملًا</strong> (سنرى ذلك بوضوح لاحقًا!)</li>
+        <li><strong>الجذر</strong> هو دائمًا العنصر الأكبر أو الأصغر</li>
+        <li>يجب أن تُخزَّن على شكل <strong>شجرة ثنائية كاملة (Complete Binary Tree)</strong> (وسنشرح بالضبط لماذا يهم ذلك)</li>
     </ul>
 
     <div class="warning-box">
-        <strong>&#9888; Important Note:</strong> Do NOT confuse the "heap" data structure with the "heap memory" area in operating systems. These are two completely different things that happen to share the same name!
+        <strong>&#9888; ملاحظة مهمة:</strong> لا تخلط بين بنية البيانات "الكومة" ومنطقة "ذاكرة الكومة" (Heap Memory) في أنظمة التشغيل. فهما شيئان مختلفان تمامًا يتصادف أنهما يحملان الاسم نفسه!
     </div>
 </section>
 
@@ -456,74 +506,74 @@
      SECTION 3 — HOSPITAL EMERGENCY MOTIVATION
 ═══════════════════════════════════════════════════════ -->
 <section id="s3">
-    <h2><span class="sec-num">3</span>Why Do We Need Heap? &mdash; The Hospital Emergency</h2>
+    <h2><span class="sec-num">3</span>لماذا نحتاج إلى الكومة؟ &mdash; طوارئ المستشفى</h2>
 
-    <p>Imagine you are asked to build a software system for a <strong>hospital emergency room</strong>. Patients arrive one by one and each is given a <strong>triage score</strong> (a number from 1 to 100). The higher the score, the more critical and urgent the patient's condition is.</p>
+    <p>تخيّل أنه طُلب منك بناء نظام برمجي لـ<strong>قسم الطوارئ في مستشفى</strong>. يصل المرضى واحدًا تلو الآخر، ويُعطى كلٌّ منهم <strong>درجة فرز طبي (Triage Score)</strong> (رقمًا من 1 إلى 100). وكلما ارتفعت الدرجة، كانت حالة المريض أخطر وأكثر إلحاحًا.</p>
 
     <div class="info-box">
-        <strong><span style="color:#e74c3c;">&#9790;&#65038;</span> What Is a Triage Score?</strong> In hospital emergency rooms, <em>triage</em> is the process of assessing patients and prioritizing them by the urgency of their condition. A high triage score means the patient needs immediate treatment. We do <strong>NOT</strong> treat patients in the order they arrived &mdash; we always treat the most critical patient first!
+        <strong><span style="color:#e74c3c;">&#9790;&#65038;</span> ما درجة الفرز الطبي؟</strong> في أقسام الطوارئ بالمستشفيات، <em>الفرز الطبي (Triage)</em> هو عملية تقييم المرضى وترتيب أولوياتهم حسب مدى إلحاح حالاتهم. والدرجة المرتفعة تعني أن المريض يحتاج إلى علاج فوري. نحن <strong>لا</strong> نعالج المرضى حسب ترتيب وصولهم &mdash; بل نعالج دائمًا المريض الأخطر حالةً أولًا!
     </div>
 
-    <h3><span style="color:#e74c3c;">&#9790;&#65038;</span> Six Patients in the Emergency Room</h3>
-    <p>Six patients have arrived with the following triage scores:</p>
+    <h3><span style="color:#e74c3c;">&#9790;&#65038;</span> ستة مرضى في قسم الطوارئ</h3>
+    <p>وصل ستة مرضى بدرجات الفرز الطبي التالية:</p>
 
     <div class="patient-grid">
         <div class="patient-card normal">
             <span class="score" style="color:#c0392b;">45</span>
-            <span class="name">Patient A</span>
+            <span class="name">المريض A</span>
         </div>
         <div class="patient-card normal">
             <span class="score" style="color:#e67e22;">30</span>
-            <span class="name">Patient B</span>
+            <span class="name">المريض B</span>
         </div>
         <div class="patient-card normal">
             <span class="score" style="color:#e74c3c;">60</span>
-            <span class="name">Patient C</span>
+            <span class="name">المريض C</span>
         </div>
         <div class="patient-card normal">
             <span class="score" style="color:#27ae60;">20</span>
-            <span class="name">Patient D</span>
+            <span class="name">المريض D</span>
         </div>
         <div class="patient-card normal">
             <span class="score" style="color:#f39c12;">35</span>
-            <span class="name">Patient E</span>
+            <span class="name">المريض E</span>
         </div>
         <div class="patient-card normal">
             <span class="score" style="color:#8e44ad;">50</span>
-            <span class="name">Patient F</span>
+            <span class="name">المريض F</span>
         </div>
     </div>
 
-    <h3>&#128680; A New Critical Patient Arrives!</h3>
-    <p>Now, a seventh patient suddenly arrives at the emergency room with a triage score of <strong>90</strong> &mdash; by far the most critical patient so far!</p>
+    <h3>&#128680; وصول مريض جديد في حالة حرجة!</h3>
+    <p>الآن، يصل فجأة مريض سابع إلى قسم الطوارئ بدرجة فرز طبي قدرها <strong>90</strong> &mdash; وهو أخطر المرضى حالةً حتى الآن بفارق كبير!</p>
 
     <div class="patient-grid">
         <div class="patient-card critical">
             <span class="score">90</span>
-            <span class="name">Patient G &#128680; CRITICAL!</span>
+            <span class="name">المريض G &#128680; حالة حرجة!</span>
         </div>
     </div>
 
-    <p><strong>The Question:</strong> How do we efficiently ensure that Patient G (score 90) is always treated before everyone else, and that we can quickly find the next most critical patient after Patient G is treated?</p>
+    <p><strong>السؤال:</strong> كيف نضمن بكفاءة أن يُعالَج المريض G (الدرجة 90) دائمًا قبل الجميع، وأن نتمكن بسرعة من إيجاد المريض التالي الأخطر حالةً بعد معالجة المريض G؟</p>
 
-    <h3>&#9940; Approach 1: Sorted Array &mdash; The Naive Solution</h3>
-    <p>One student might say: <em>"Doctor, let us just keep all patients in an array sorted in descending order. After each new arrival, sort the array again!"</em></p>
+    <h3>&#9940; الطريقة 1: المصفوفة المرتبة &mdash; الحل الساذج</h3>
+    <p>قد يقول أحد الطلاب: <em>"يا دكتور، لنحتفظ بجميع المرضى في مصفوفة (Array) مرتبة تنازليًا. وبعد كل وصول جديد، نعيد فرز المصفوفة!"</em></p>
 
     <div class="grid-2">
         <div>
-            <h4>What happens each time:</h4>
+            <h4>ما يحدث في كل مرة:</h4>
             <ol>
-                <li>Keep all patients in an array</li>
-                <li>New patient arrives &rarr; add to end</li>
-                <li><strong>Sort the entire array again</strong> (descending)</li>
-                <li>Treat patient at index 0 (highest score)</li>
-                <li>Remove index 0 &rarr; shift all elements left</li>
+                <li>نحتفظ بجميع المرضى في مصفوفة</li>
+                <li>يصل مريض جديد &larr; نضيفه في النهاية</li>
+                <li><strong>نعيد فرز المصفوفة كاملة</strong> (تنازليًا)</li>
+                <li>نعالج المريض في الفهرس 0 (أعلى درجة)</li>
+                <li>نحذف الفهرس 0 &larr; ونزيح جميع العناصر إلى اليسار</li>
             </ol>
-            <p style="margin-top:12px;">Yes, this works. But look at the cost!</p>
+            <p style="margin-top:12px;">نعم، هذه الطريقة تعمل. لكن انظر إلى التكلفة!</p>
         </div>
         <div class="svg-wrap" style="padding:16px;">
-            <p style="font-size:0.9em;font-weight:bold;color:#4a148c;margin-bottom:10px;">Array after sorting (descending):</p>
-            <div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;">
+            <p style="font-size:0.9em;font-weight:bold;color:#4a148c;margin-bottom:10px;">المصفوفة بعد الفرز (تنازليًا):</p>
+            <div dir="ltr" style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;">
                 <div style="text-align:center;"><div style="width:46px;height:46px;background:#c0392b;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.05em;border-radius:6px;">90</div><div style="font-size:9px;color:#666;margin-top:3px;">[0]</div></div>
                 <div style="text-align:center;"><div style="width:46px;height:46px;background:#e74c3c;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.05em;border-radius:6px;">60</div><div style="font-size:9px;color:#666;margin-top:3px;">[1]</div></div>
                 <div style="text-align:center;"><div style="width:46px;height:46px;background:#e67e22;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.05em;border-radius:6px;">50</div><div style="font-size:9px;color:#666;margin-top:3px;">[2]</div></div>
@@ -536,22 +586,22 @@
     </div>
 
     <div class="error-box">
-        <strong>&#10060; The Problem with this approach:</strong>
+        <strong>&#10060; مشكلة هذه الطريقة:</strong>
         <ul style="margin-top:8px;">
-            <li>Every time a new patient arrives, we must <strong>sort the entire array</strong></li>
-            <li>The cost of each sort is <strong>O(n log n)</strong></li>
-            <li>When we treat the top patient and remove them, we must <strong>shift all elements</strong> left &rarr; another <strong>O(n)</strong> operation</li>
-            <li>For 7 patients this is fine &mdash; but the heap is used beyond hospitals! Think of a search engine computing <strong>similarity scores for millions of documents</strong>, or a recommendation system ranking <strong>millions of products</strong> by relevance score. Sorting everything from scratch every time a new record is added is <strong>completely impractical</strong> at that scale.</li>
+            <li>في كل مرة يصل فيها مريض جديد، يجب علينا <strong>فرز المصفوفة كاملة</strong></li>
+            <li>تكلفة كل عملية فرز هي <strong><span dir="ltr">O(n log n)</span></strong></li>
+            <li>عندما نعالج المريض الأول ونحذفه، يجب أن <strong>نزيح جميع العناصر</strong> إلى اليسار &larr; وهي عملية أخرى تكلفتها <strong><span dir="ltr">O(n)</span></strong></li>
+            <li>مع 7 مرضى لا بأس بذلك &mdash; لكن الكومة تُستخدم في ما هو أبعد من المستشفيات! فكّر في محرك بحث يحسب <strong>درجات التشابه لملايين المستندات</strong>، أو نظام توصيات يرتّب <strong>ملايين المنتجات</strong> حسب درجة الصلة. إن فرز كل شيء من البداية في كل مرة يُضاف فيها سجل جديد <strong>غير عملي إطلاقًا</strong> على هذا النطاق.</li>
         </ul>
     </div>
 
     <div class="success-box">
-        <strong>&#10004; The Heap Solution:</strong>
+        <strong>&#10004; حل الكومة:</strong>
         <ul style="margin-top:8px;">
-            <li><strong>Insert</strong> a new patient: <strong>O(log n)</strong></li>
-            <li><strong>Treat and remove</strong> the most critical patient: <strong>O(log n)</strong></li>
-            <li>The most critical patient is <strong>always at the root</strong> for instant O(1) access</li>
-            <li>For a dataset with <strong>1 billion records</strong> (such as document similarity scores or product rankings) &mdash; at most <strong>30 comparisons</strong> per insert or delete!</li>
+            <li><strong>إدراج</strong> مريض جديد: <strong><span dir="ltr">O(log n)</span></strong></li>
+            <li><strong>معالجة وحذف</strong> المريض الأخطر حالةً: <strong><span dir="ltr">O(log n)</span></strong></li>
+            <li>المريض الأخطر حالةً <strong>موجود دائمًا في الجذر</strong> للوصول الفوري إليه في <span dir="ltr">O(1)</span></li>
+            <li>لمجموعة بيانات تضم <strong>مليار سجل</strong> (مثل درجات تشابه المستندات أو ترتيب المنتجات) &mdash; نحتاج إلى <strong>30 مقارنة</strong> على الأكثر لكل عملية إدراج أو حذف!</li>
         </ul>
     </div>
 </section>
@@ -561,37 +611,37 @@
      SECTION 4 — HEAP DEFINITION
 ═══════════════════════════════════════════════════════ -->
 <section id="s4">
-    <h2><span class="sec-num">4</span>What Is a Heap?</h2>
+    <h2><span class="sec-num">4</span>ما الكومة؟</h2>
 
-    <p>A heap has <strong>two required properties</strong>. Both must be satisfied at all times:</p>
+    <p>للكومة <strong>خاصيتان إلزاميتان</strong>، ويجب أن تتحققا كلتاهما في جميع الأوقات:</p>
 
     <div class="grid-2">
         <div class="card purple">
-            <h4>&#127775; Property 1: Complete Binary Tree</h4>
-            <p style="font-size:0.9em;margin-top:8px;">A heap <strong>must</strong> be stored as a complete binary tree:</p>
-            <ul style="font-size:0.88em;text-align:left;margin-top:8px;">
-                <li>All levels are completely filled, <em>except possibly the last</em></li>
-                <li>The last level is filled <strong>left to right</strong> with no gaps</li>
+            <h4>&#127775; الخاصية 1: شجرة ثنائية كاملة</h4>
+            <p style="font-size:0.9em;margin-top:8px;">يجب <strong>حتمًا</strong> أن تُخزَّن الكومة على شكل شجرة ثنائية كاملة:</p>
+            <ul style="font-size:0.88em;text-align:right;margin-top:8px;">
+                <li>جميع المستويات ممتلئة تمامًا، <em>ما عدا المستوى الأخير ربما</em></li>
+                <li>يُملأ المستوى الأخير <strong>من اليسار إلى اليمين</strong> دون فجوات</li>
             </ul>
         </div>
         <div class="card purple">
-            <h4>&#127775; Property 2: Heap Property</h4>
-            <p style="font-size:0.9em;margin-top:8px;">Every parent node follows an ordering rule:</p>
-            <ul style="font-size:0.88em;text-align:left;margin-top:8px;">
-                <li><strong>Max-Heap:</strong> Parent &ge; both children</li>
-                <li><strong>Min-Heap:</strong> Parent &le; both children</li>
-                <li>This applies to <strong>every</strong> parent-child pair in the entire tree</li>
+            <h4>&#127775; الخاصية 2: خاصية الكومة</h4>
+            <p style="font-size:0.9em;margin-top:8px;">كل عقدة أب تتبع قاعدة ترتيب:</p>
+            <ul style="font-size:0.88em;text-align:right;margin-top:8px;">
+                <li><strong>الكومة الكبرى (Max-Heap):</strong> الأب &ge; كلا الابنين</li>
+                <li><strong>الكومة الصغرى (Min-Heap):</strong> الأب &le; كلا الابنين</li>
+                <li>ينطبق هذا على <strong>كل</strong> زوج من الأب والابن في الشجرة بأكملها</li>
             </ul>
         </div>
     </div>
 
     <div class="key-concept">
-        <h4>&#128273; Definition</h4>
-        <p>A <strong>Heap</strong> is a <strong>complete binary tree</strong> where every parent node is either <strong>greater than or equal to</strong> (max-heap) or <strong>less than or equal to</strong> (min-heap) both of its children. Because of this, the root <strong>always holds the maximum (or minimum) element</strong>.</p>
+        <h4>&#128273; التعريف</h4>
+        <p><strong>الكومة</strong> هي <strong>شجرة ثنائية كاملة</strong> تكون فيها كل عقدة أب إمّا <strong>أكبر من أو تساوي</strong> (الكومة الكبرى) أو <strong>أصغر من أو تساوي</strong> (الكومة الصغرى) كلا ابنيها. ولهذا السبب، <strong>يحتوي الجذر دائمًا على العنصر الأكبر (أو الأصغر)</strong>.</p>
     </div>
 
-    <h3>&#128269; Verifying the Heap Property</h3>
-    <p>Let us look at a max-heap built from our 7 patients and verify the heap property holds at every node:</p>
+    <h3>&#128269; التحقق من خاصية الكومة</h3>
+    <p>لننظر إلى كومة كبرى مبنية من مرضانا السبعة، ونتحقق من أن خاصية الكومة متحققة عند كل عقدة:</p>
 
     <div class="mermaid">
 graph TD
@@ -610,12 +660,12 @@ graph TD
     </div>
 
     <table>
-        <thead><tr><th>Node (Value)</th><th>Left Child</th><th>Right Child</th><th>Heap Property: Parent &ge; Children?</th></tr></thead>
+        <thead><tr><th>العقدة (القيمة)</th><th>الابن الأيسر</th><th>الابن الأيمن</th><th>خاصية الكومة: الأب &ge; الأبناء؟</th></tr></thead>
         <tbody>
-            <tr><td><strong>Root: 90</strong></td><td>35</td><td>60</td><td style="color:#27ae60;font-weight:bold;">&#10004; 90 &ge; 35 &nbsp; and &nbsp; 90 &ge; 60</td></tr>
-            <tr><td><strong>35</strong></td><td>20</td><td>30</td><td style="color:#27ae60;font-weight:bold;">&#10004; 35 &ge; 20 &nbsp; and &nbsp; 35 &ge; 30</td></tr>
-            <tr><td><strong>60</strong></td><td>45</td><td>50</td><td style="color:#27ae60;font-weight:bold;">&#10004; 60 &ge; 45 &nbsp; and &nbsp; 60 &ge; 50</td></tr>
-            <tr><td><strong>Leaves: 20, 30, 45, 50</strong></td><td>&mdash;</td><td>&mdash;</td><td style="color:#27ae60;font-weight:bold;">&#10004; No children &rarr; always valid</td></tr>
+            <tr><td><strong>الجذر: 90</strong></td><td>35</td><td>60</td><td style="color:#27ae60;font-weight:bold;">&#10004; <span dir="ltr">90 &ge; 35</span> &nbsp; و &nbsp; <span dir="ltr">90 &ge; 60</span></td></tr>
+            <tr><td><strong>35</strong></td><td>20</td><td>30</td><td style="color:#27ae60;font-weight:bold;">&#10004; <span dir="ltr">35 &ge; 20</span> &nbsp; و &nbsp; <span dir="ltr">35 &ge; 30</span></td></tr>
+            <tr><td><strong>60</strong></td><td>45</td><td>50</td><td style="color:#27ae60;font-weight:bold;">&#10004; <span dir="ltr">60 &ge; 45</span> &nbsp; و &nbsp; <span dir="ltr">60 &ge; 50</span></td></tr>
+            <tr><td><strong>الأوراق: 20، 30، 45، 50</strong></td><td>&mdash;</td><td>&mdash;</td><td style="color:#27ae60;font-weight:bold;">&#10004; لا أبناء &larr; صالحة دائمًا</td></tr>
         </tbody>
     </table>
 </section>
@@ -625,20 +675,20 @@ graph TD
      SECTION 5 — MIN-HEAP vs MAX-HEAP
 ═══════════════════════════════════════════════════════ -->
 <section id="s5">
-    <h2><span class="sec-num">5</span>Min-Heap vs Max-Heap</h2>
+    <h2><span class="sec-num">5</span>الكومة الصغرى مقابل الكومة الكبرى</h2>
 
-    <p>A heap can be either a <strong>max-heap</strong> or a <strong>min-heap</strong> depending on the problem we need to solve:</p>
+    <p>يمكن أن تكون الكومة إمّا <strong>كومة كبرى</strong> أو <strong>كومة صغرى</strong> بحسب المسألة التي نحتاج إلى حلها:</p>
 
     <div class="grid-2">
         <div>
             <div class="card red" style="margin-bottom:14px;">
-                <h4>&#128200; Max-Heap &mdash; Parent &ge; Children</h4>
-                <p style="font-size:0.88em;margin-top:8px;">The <strong>maximum element is always at the root</strong>. Use when you need quick access to the <em>largest</em> element.</p>
-                <p style="font-size:0.84em;margin-top:8px;color:#c0392b;"><strong>Example:</strong> Hospital triage (highest score treated first)</p>
+                <h4>&#128200; الكومة الكبرى &mdash; الأب &ge; الأبناء</h4>
+                <p style="font-size:0.88em;margin-top:8px;"><strong>العنصر الأكبر موجود دائمًا في الجذر</strong>. استخدمها عندما تحتاج إلى وصول سريع إلى العنصر <em>الأكبر</em>.</p>
+                <p style="font-size:0.84em;margin-top:8px;color:#c0392b;"><strong>مثال:</strong> الفرز الطبي في المستشفى (تُعالَج الدرجة الأعلى أولًا)</p>
             </div>
             <div class="mermaid">
 graph TD
-    ra(("90 MAX")) --> rb(("35"))
+    ra(("90 الأكبر")) --> rb(("35"))
     ra --> rc(("60"))
     rb --> rd(("20"))
     rb --> re(("30"))
@@ -654,13 +704,13 @@ graph TD
         </div>
         <div>
             <div class="card blue" style="margin-bottom:14px;">
-                <h4>&#128201; Min-Heap &mdash; Parent &le; Children</h4>
-                <p style="font-size:0.88em;margin-top:8px;">The <strong>minimum element is always at the root</strong>. Use when you need quick access to the <em>smallest</em> element.</p>
-                <p style="font-size:0.84em;margin-top:8px;color:#1a6fa0;"><strong>Example:</strong> Dijkstra's algorithm (always pick shortest distance node)</p>
+                <h4>&#128201; الكومة الصغرى &mdash; الأب &le; الأبناء</h4>
+                <p style="font-size:0.88em;margin-top:8px;"><strong>العنصر الأصغر موجود دائمًا في الجذر</strong>. استخدمها عندما تحتاج إلى وصول سريع إلى العنصر <em>الأصغر</em>.</p>
+                <p style="font-size:0.84em;margin-top:8px;color:#1a6fa0;"><strong>مثال:</strong> خوارزمية دايكسترا (Dijkstra) (تختار دائمًا العقدة ذات المسافة الأقصر)</p>
             </div>
             <div class="mermaid">
 graph TD
-    ma(("20 MIN")) --> mb(("30"))
+    ma(("20 الأصغر")) --> mb(("30"))
     ma --> mc(("45"))
     mb --> md(("35"))
     mb --> me(("50"))
@@ -677,16 +727,16 @@ graph TD
     </div>
 
     <div class="info-box">
-        <strong>&#128161; Same values, different ordering!</strong> Both heaps above contain the exact same values: {20, 30, 35, 45, 50, 60, 90}. Only the ordering rule is different. In the max-heap the larger values rise to the top; in the min-heap the smaller values rise to the top. For our hospital emergency we use a <strong>max-heap</strong>.
+        <strong>&#128161; القيم نفسها، والترتيب مختلف!</strong> تحتوي الكومتان أعلاه على القيم نفسها تمامًا: <span dir="ltr">{20, 30, 35, 45, 50, 60, 90}</span>. والاختلاف الوحيد هو قاعدة الترتيب. ففي الكومة الكبرى تصعد القيم الأكبر إلى القمة، وفي الكومة الصغرى تصعد القيم الأصغر إلى القمة. وفي مثال طوارئ المستشفى نستخدم <strong>كومة كبرى</strong>.
     </div>
 
     <table>
-        <thead><tr><th>Property</th><th>Max-Heap</th><th>Min-Heap</th></tr></thead>
+        <thead><tr><th>الخاصية</th><th>الكومة الكبرى</th><th>الكومة الصغرى</th></tr></thead>
         <tbody>
-            <tr><td>Root element</td><td>Maximum value</td><td>Minimum value</td></tr>
-            <tr><td>Ordering rule</td><td>Parent &ge; both children</td><td>Parent &le; both children</td></tr>
-            <tr><td>Best use case</td><td>Priority queue (serve highest priority first)</td><td>Priority queue (serve lowest priority first)</td></tr>
-            <tr><td>Examples</td><td>Hospital triage, task scheduling (high priority)</td><td>Dijkstra's shortest path, event simulation</td></tr>
+            <tr><td>عنصر الجذر</td><td>القيمة الكبرى</td><td>القيمة الصغرى</td></tr>
+            <tr><td>قاعدة الترتيب</td><td>الأب &ge; كلا الابنين</td><td>الأب &le; كلا الابنين</td></tr>
+            <tr><td>أفضل حالة استخدام</td><td>طابور الأولوية (Priority Queue) (يُخدَم صاحب الأولوية الأعلى أولًا)</td><td>طابور الأولوية (يُخدَم صاحب الأولوية الأدنى أولًا)</td></tr>
+            <tr><td>أمثلة</td><td>الفرز الطبي في المستشفى، جدولة المهام (ذات الأولوية العالية)</td><td>أقصر مسار لدايكسترا، محاكاة الأحداث</td></tr>
         </tbody>
     </table>
 </section>
@@ -696,15 +746,15 @@ graph TD
      SECTION 6 — COMPLETE TREE + MEMORY
 ═══════════════════════════════════════════════════════ -->
 <section id="s6">
-    <h2><span class="sec-num">6</span>Why Must the Heap Be a Complete Tree?</h2>
+    <h2><span class="sec-num">6</span>لماذا يجب أن تكون الكومة شجرة كاملة؟</h2>
 
-    <p>A student in the class asked: <em>"Doctor, why must the heap be a complete binary tree? Can it not be any binary tree shape?"</em></p>
-    <p>Excellent question! The answer is: <strong>Memory efficiency and the ability to represent the tree as a simple array.</strong></p>
+    <p>سأل أحد الطلاب في القاعة: <em>"يا دكتور، لماذا يجب أن تكون الكومة شجرة ثنائية كاملة؟ ألا يمكن أن تكون على شكل أي شجرة ثنائية (Binary Tree)؟"</em></p>
+    <p>سؤال ممتاز! والإجابة هي: <strong>كفاءة استخدام الذاكرة، والقدرة على تمثيل الشجرة كمصفوفة بسيطة.</strong></p>
 
-    <h3>&#128295; The Array Representation Trick</h3>
-    <p>The most powerful feature of the heap is that we can store a <strong>complete binary tree perfectly inside a simple array</strong> &mdash; with <em>no wasted space</em> and <em>no pointers</em>. This works because of a beautiful mathematical property of complete trees.</p>
+    <h3>&#128295; حيلة التمثيل بالمصفوفة</h3>
+    <p>أقوى ميزة في الكومة أننا نستطيع تخزين <strong>شجرة ثنائية كاملة داخل مصفوفة بسيطة تخزينًا مثاليًا</strong> &mdash; <em>دون أي مساحة مهدرة</em> و<em>دون أي مراجع</em>. وينجح ذلك بفضل خاصية رياضية جميلة في الأشجار الكاملة.</p>
 
-    <p>Using a <strong>0-indexed array</strong> (index starts at 0), for any node at index <strong>i</strong>:</p>
+    <p>باستخدام <strong>مصفوفة تبدأ فهارسها من 0</strong> (يبدأ الفهرس من 0)، فإنه لأي عقدة (Node) في الفهرس (Index) <strong><span dir="ltr">i</span></strong>:</p>
 
     <div class="formula-box">
         <span class="hl">Parent(i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> = &lfloor;(i &minus; 1) / 2&rfloor;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// integer division (floor), only valid when i &gt; 0</span><br>
@@ -712,11 +762,11 @@ graph TD
         <span class="hl">RightChild(i)</span> = 2 &times; i + 2
     </div>
 
-    <h3>&#10003; Complete Tree &mdash; Perfect Fit, Zero Waste</h3>
+    <h3>&#10003; الشجرة الكاملة &mdash; ملاءمة تامة، وهدر صفري</h3>
 
     <div class="grid-2">
         <div>
-            <p>A <strong>complete binary tree</strong> with 7 nodes maps perfectly to an array of size 7. Every array position is used. <strong>No waste at all!</strong></p>
+            <p>تتطابق <strong>الشجرة الثنائية الكاملة</strong> ذات العقد السبع تطابقًا تامًا مع مصفوفة حجمها 7. كل موضع في المصفوفة مستخدم. <strong>لا هدر على الإطلاق!</strong></p>
             <div class="mermaid">
 graph TD
     ca(("90 [0]")) --> cb(("35 [1]"))
@@ -730,9 +780,9 @@ graph TD
             </div>
         </div>
         <div>
-            <p>The array that holds this tree:</p>
+            <p>المصفوفة التي تحتوي هذه الشجرة:</p>
             <div style="margin:14px 0;">
-                <div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;align-items:flex-end;">
+                <div dir="ltr" style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;align-items:flex-end;">
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#4a148c;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">90</div><div style="font-size:9px;color:#555;margin-top:2px;">[0]</div></div>
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#7b1fa2;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">35</div><div style="font-size:9px;color:#555;margin-top:2px;">[1]</div></div>
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#7b1fa2;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">60</div><div style="font-size:9px;color:#555;margin-top:2px;">[2]</div></div>
@@ -741,19 +791,19 @@ graph TD
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#ce93d8;color:#2c0955;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">45</div><div style="font-size:9px;color:#555;margin-top:2px;">[5]</div></div>
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#ce93d8;color:#2c0955;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">50</div><div style="font-size:9px;color:#555;margin-top:2px;">[6]</div></div>
                 </div>
-                <p style="text-align:center;font-size:0.85em;color:#27ae60;margin-top:10px;font-weight:bold;">&#10004; 7 nodes &rarr; 7 array positions used. ZERO waste!</p>
+                <p style="text-align:center;font-size:0.85em;color:#27ae60;margin-top:10px;font-weight:bold;">&#10004; 7 عقد &larr; 7 مواضع مستخدمة في المصفوفة. هدر صفري!</p>
             </div>
         </div>
     </div>
 
-    <h3>&#10007; Incomplete Tree &mdash; Wasted Memory!</h3>
-    <p>Now what if the tree is <strong>NOT complete</strong> &mdash; it has a gap in the last level? Suppose node 45 is the right child of 60 but the left child of 60 is missing:</p>
+    <h3>&#10007; الشجرة غير الكاملة &mdash; ذاكرة مهدرة!</h3>
+    <p>والآن ماذا لو كانت الشجرة <strong>غير كاملة</strong> &mdash; أي فيها فجوة في المستوى الأخير؟ لنفترض أن العقدة 45 هي الابن الأيمن للعقدة 60، لكن الابن الأيسر للعقدة 60 مفقود:</p>
 
     <div class="grid-2">
         <div>
             <div class="error-box" style="margin-bottom:10px;">
-                This tree has a <strong>gap at position [5]!</strong><br>
-                Node 45 is at position [6], but position [5] is empty.
+                في هذه الشجرة <strong>فجوة في الموضع [5]!</strong><br>
+                العقدة 45 في الموضع [6]، لكن الموضع [5] فارغ.
             </div>
             <div class="mermaid">
 graph TD
@@ -761,7 +811,7 @@ graph TD
     ia --> ic(("60 [2]"))
     ib --> id(("20 [3]"))
     ib --> ie(("30 [4]"))
-    ic -.->|missing!| ix(("? [5]"))
+    ic -.->|"مفقود!‏"| ix(("? [5]"))
     ic --> ig(("45 [6]"))
     classDef filled fill:#c0392b,stroke:#922b21,color:white,font-weight:bold
     classDef missing fill:#fde8e8,stroke:#e74c3c,color:#c0392b,font-style:italic,stroke-dasharray:5
@@ -770,9 +820,9 @@ graph TD
             </div>
         </div>
         <div>
-            <p>The array must reserve position [5] even though nothing is there:</p>
+            <p>يجب أن تحجز المصفوفة الموضع [5] مع أنه لا يحتوي شيئًا:</p>
             <div style="margin:14px 0;">
-                <div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;align-items:flex-end;">
+                <div dir="ltr" style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;align-items:flex-end;">
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#c0392b;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">90</div><div style="font-size:9px;color:#555;margin-top:2px;">[0]</div></div>
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#e74c3c;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">35</div><div style="font-size:9px;color:#555;margin-top:2px;">[1]</div></div>
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#e74c3c;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">60</div><div style="font-size:9px;color:#555;margin-top:2px;">[2]</div></div>
@@ -781,18 +831,18 @@ graph TD
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#fde8e8;border:2px dashed #e74c3c;color:#c0392b;display:flex;align-items:center;justify-content:center;font-size:0.75em;font-weight:bold;border-radius:4px;">null</div><div style="font-size:9px;color:#c0392b;margin-top:2px;">[5]&#9888;</div></div>
                     <div style="text-align:center;"><div style="width:42px;height:42px;background:#e74c3c;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;">45</div><div style="font-size:9px;color:#555;margin-top:2px;">[6]</div></div>
                 </div>
-                <p style="text-align:center;font-size:0.85em;color:#c0392b;margin-top:10px;font-weight:bold;">&#10008; 6 nodes but 7 positions needed! 1 wasted!</p>
+                <p style="text-align:center;font-size:0.85em;color:#c0392b;margin-top:10px;font-weight:bold;">&#10008; 6 عقد لكننا نحتاج إلى 7 مواضع! موضع واحد مهدر!</p>
             </div>
         </div>
     </div>
 
     <div class="warning-box">
-        <strong>&#9888; The Bigger Problem:</strong> With large datasets (millions of nodes), an incomplete tree can waste <strong>millions of array positions</strong>! The complete binary tree constraint ensures we never waste any memory and the index formulas parent=&lfloor;(i&minus;1)/2&rfloor;, left=2i+1, right=2i+2 work <em>perfectly and reliably</em>.
+        <strong>&#9888; المشكلة الأكبر:</strong> مع مجموعات البيانات الكبيرة (ملايين العقد)، قد تهدر الشجرة غير الكاملة <strong>ملايين المواضع في المصفوفة</strong>! ويضمن قيد الشجرة الثنائية الكاملة ألّا نهدر أي ذاكرة على الإطلاق، وأن تعمل صيغ الفهارس <span dir="ltr">parent=&lfloor;(i&minus;1)/2&rfloor;, left=2i+1, right=2i+2</span> <em>بشكل مثالي وموثوق</em>.
     </div>
 
     <div class="key-concept">
-        <h4>&#128161; Complete Tree = Amazing Memory Efficiency</h4>
-        <p>The heap stores a complete binary tree in a simple array with <strong>no wasted space, no null values, and no pointers</strong>. This is one of the most elegant ideas in all of data structures &mdash; a tree that lives inside an array!</p>
+        <h4>&#128161; الشجرة الكاملة = كفاءة مذهلة في استخدام الذاكرة</h4>
+        <p>تخزّن الكومة شجرة ثنائية كاملة في مصفوفة بسيطة <strong>دون مساحة مهدرة، ودون قيم فارغة (null)، ودون مراجع</strong>. وهذه واحدة من أكثر الأفكار أناقةً في هياكل البيانات كلها &mdash; شجرة تعيش داخل مصفوفة!</p>
     </div>
 </section>
 
@@ -801,36 +851,36 @@ graph TD
      SECTION 7 — ARRAY REPRESENTATION + FORMULAS
 ═══════════════════════════════════════════════════════ -->
 <section id="s7">
-    <h2><span class="sec-num">7</span>Array Representation &amp; Index Formulas</h2>
+    <h2><span class="sec-num">7</span>التمثيل بالمصفوفة وصيغ الفهارس</h2>
 
-    <p>Let us now deeply understand how the heap is stored in an array and verify the formulas with our own hands.</p>
+    <p>لنفهم الآن فهمًا عميقًا كيف تُخزَّن الكومة في مصفوفة، ولنتحقق من الصيغ بأيدينا.</p>
 
     <div class="info-box">
-        <strong>Convention:</strong> We use a <strong>0-indexed array</strong> &mdash; the heap starts at index 0 (the root). Every index is used; nothing is wasted. This matches how arrays work in all real programming languages.
+        <strong>اصطلاح:</strong> نستخدم <strong>مصفوفة تبدأ فهارسها من 0</strong> &mdash; تبدأ الكومة من الفهرس 0 (الجذر). كل فهرس مستخدم، ولا شيء مهدر. وهذا يطابق طريقة عمل المصفوفات في جميع لغات البرمجة الحقيقية.
     </div>
 
-    <h3>&#128290; The Three Key Formulas</h3>
+    <h3>&#128290; الصيغ الأساسية الثلاث</h3>
 
     <div class="grid-3">
         <div class="card purple" style="text-align:center;">
-            <h4>Parent of node i</h4>
-            <p style="font-size:1.6em;font-weight:bold;color:#4a148c;margin:10px 0;">&lfloor;(i &minus; 1) &divide; 2&rfloor;</p>
-            <p style="font-size:0.84em;">Integer division. If i = 4: parent = &lfloor;3/2&rfloor; = <strong>1</strong></p>
+            <h4>أب العقدة <span dir="ltr">i</span></h4>
+            <p dir="ltr" style="font-size:1.6em;font-weight:bold;color:#4a148c;margin:10px 0;">&lfloor;(i &minus; 1) &divide; 2&rfloor;</p>
+            <p style="font-size:0.84em;">قسمة صحيحة. إذا كان <span dir="ltr">i = 4</span>: الأب = <span dir="ltr">&lfloor;3/2&rfloor; = <strong>1</strong></span></p>
         </div>
         <div class="card purple" style="text-align:center;">
-            <h4>Left Child of node i</h4>
-            <p style="font-size:1.6em;font-weight:bold;color:#4a148c;margin:10px 0;">2 &times; i + 1</p>
-            <p style="font-size:0.84em;">If i = 2: left child = 2&times;2+1 = <strong>5</strong></p>
+            <h4>الابن الأيسر للعقدة <span dir="ltr">i</span></h4>
+            <p dir="ltr" style="font-size:1.6em;font-weight:bold;color:#4a148c;margin:10px 0;">2 &times; i + 1</p>
+            <p style="font-size:0.84em;">إذا كان <span dir="ltr">i = 2</span>: الابن الأيسر = <span dir="ltr">2&times;2+1 = <strong>5</strong></span></p>
         </div>
         <div class="card purple" style="text-align:center;">
-            <h4>Right Child of node i</h4>
-            <p style="font-size:1.6em;font-weight:bold;color:#4a148c;margin:10px 0;">2&times;i + 2</p>
-            <p style="font-size:0.84em;">If i = 2: right child = 2&times;2+2 = <strong>6</strong></p>
+            <h4>الابن الأيمن للعقدة <span dir="ltr">i</span></h4>
+            <p dir="ltr" style="font-size:1.6em;font-weight:bold;color:#4a148c;margin:10px 0;">2&times;i + 2</p>
+            <p style="font-size:0.84em;">إذا كان <span dir="ltr">i = 2</span>: الابن الأيمن = <span dir="ltr">2&times;2+2 = <strong>6</strong></span></p>
         </div>
     </div>
 
-    <h3>&#128279; Click a Node &mdash; See the Formulas in Action</h3>
-    <p>Click any node in the tree to see its parent, left child, and right child highlighted in both the tree and the array:</p>
+    <h3>&#128279; انقر على عقدة &mdash; وشاهد الصيغ أثناء التطبيق</h3>
+    <p>انقر على أي عقدة في الشجرة لترى أباها وابنها الأيسر وابنها الأيمن مُظلَّلة في كلٍّ من الشجرة والمصفوفة:</p>
 
     <div class="sim-box">
         <div class="svg-wrap" style="margin-bottom:14px;">
@@ -870,21 +920,21 @@ graph TD
         <div id="fArrayDiv" style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:10px 0;"></div>
 
         <div id="fMsg" class="sim-msg" style="font-size:0.88em;">
-            &#128072; Click on any node above to see its parent, left child, and right child highlighted!
+            &#128073; انقر على أي عقدة أعلاه لترى أباها وابنها الأيسر وابنها الأيمن مُظلَّلة!
         </div>
     </div>
 
-    <h3>&#128296; Formula Verification Table</h3>
+    <h3>&#128296; جدول التحقق من الصيغ</h3>
     <table>
-        <thead><tr><th>Index (i)</th><th>Value</th><th>Parent = &lfloor;(i&minus;1)/2&rfloor;</th><th>Left Child = 2i+1</th><th>Right Child = 2i+2</th></tr></thead>
+        <thead><tr><th>الفهرس (<span dir="ltr">i</span>)</th><th>القيمة</th><th>الأب = <span dir="ltr">&lfloor;(i&minus;1)/2&rfloor;</span></th><th>الابن الأيسر = <span dir="ltr">2i+1</span></th><th>الابن الأيمن = <span dir="ltr">2i+2</span></th></tr></thead>
         <tbody>
-            <tr><td>0 (root)</td><td>90</td><td>&mdash; (no parent)</td><td>[1] &rarr; 35</td><td>[2] &rarr; 60</td></tr>
-            <tr><td>1</td><td>35</td><td>&lfloor;0/2&rfloor; = 0 &rarr; 90</td><td>[3] &rarr; 20</td><td>[4] &rarr; 30</td></tr>
-            <tr><td>2</td><td>60</td><td>&lfloor;1/2&rfloor; = 0 &rarr; 90</td><td>[5] &rarr; 45</td><td>[6] &rarr; 50</td></tr>
-            <tr><td>3</td><td>20</td><td>&lfloor;2/2&rfloor; = 1 &rarr; 35</td><td>[7] &rarr; out of range</td><td>[8] &rarr; out of range</td></tr>
-            <tr><td>4</td><td>30</td><td>&lfloor;3/2&rfloor; = 1 &rarr; 35</td><td>[9] &rarr; out of range</td><td>[10] &rarr; out of range</td></tr>
-            <tr><td>5</td><td>45</td><td>&lfloor;4/2&rfloor; = 2 &rarr; 60</td><td>[11] &rarr; out of range</td><td>[12] &rarr; out of range</td></tr>
-            <tr><td>6</td><td>50</td><td>&lfloor;5/2&rfloor; = 2 &rarr; 60</td><td>[13] &rarr; out of range</td><td>[14] &rarr; out of range</td></tr>
+            <tr><td>0 (الجذر)</td><td>90</td><td>&mdash; (لا أب)</td><td><span dir="ltr">[1] &rarr; 35</span></td><td><span dir="ltr">[2] &rarr; 60</span></td></tr>
+            <tr><td>1</td><td>35</td><td><span dir="ltr">&lfloor;0/2&rfloor; = 0 &rarr; 90</span></td><td><span dir="ltr">[3] &rarr; 20</span></td><td><span dir="ltr">[4] &rarr; 30</span></td></tr>
+            <tr><td>2</td><td>60</td><td><span dir="ltr">&lfloor;1/2&rfloor; = 0 &rarr; 90</span></td><td><span dir="ltr">[5] &rarr; 45</span></td><td><span dir="ltr">[6] &rarr; 50</span></td></tr>
+            <tr><td>3</td><td>20</td><td><span dir="ltr">&lfloor;2/2&rfloor; = 1 &rarr; 35</span></td><td><span dir="ltr">[7]</span> &larr; خارج النطاق</td><td><span dir="ltr">[8]</span> &larr; خارج النطاق</td></tr>
+            <tr><td>4</td><td>30</td><td><span dir="ltr">&lfloor;3/2&rfloor; = 1 &rarr; 35</span></td><td><span dir="ltr">[9]</span> &larr; خارج النطاق</td><td><span dir="ltr">[10]</span> &larr; خارج النطاق</td></tr>
+            <tr><td>5</td><td>45</td><td><span dir="ltr">&lfloor;4/2&rfloor; = 2 &rarr; 60</span></td><td><span dir="ltr">[11]</span> &larr; خارج النطاق</td><td><span dir="ltr">[12]</span> &larr; خارج النطاق</td></tr>
+            <tr><td>6</td><td>50</td><td><span dir="ltr">&lfloor;5/2&rfloor; = 2 &rarr; 60</span></td><td><span dir="ltr">[13]</span> &larr; خارج النطاق</td><td><span dir="ltr">[14]</span> &larr; خارج النطاق</td></tr>
         </tbody>
     </table>
 </section>
@@ -894,96 +944,96 @@ graph TD
      SECTION 8 — INSERTION + PERCOLATE UP
 ═══════════════════════════════════════════════════════ -->
 <section id="s8">
-    <h2><span class="sec-num">8</span>Heap Insertion &amp; Percolate Up</h2>
+    <h2><span class="sec-num">8</span>الإدراج في الكومة والترشيح للأعلى</h2>
 
-    <h3>&#128203; The Insertion Algorithm</h3>
-    <p>When we insert a new element into a max-heap:</p>
+    <h3>&#128203; خوارزمية الإدراج</h3>
+    <p>عندما ندرج عنصرًا جديدًا في كومة كبرى:</p>
     <ol>
-        <li><strong>Step 1 &mdash; Add at end:</strong> Place the new element at the <em>next available position</em> (end of the array). This maintains the complete tree shape.</li>
-        <li><strong>Step 2 &mdash; Compare with parent:</strong> Find the parent using the formula &lfloor;(i&minus;1)/2&rfloor;. Compare the new element with its parent.</li>
-        <li><strong>Step 3 &mdash; Swap if needed:</strong> If the new element is <em>greater</em> than its parent (max-heap), swap them.</li>
-        <li><strong>Step 4 &mdash; Repeat:</strong> Move up and continue comparing until we reach the root or the heap property is satisfied.</li>
+        <li><strong>الخطوة 1 &mdash; الإضافة في النهاية:</strong> ضع العنصر الجديد في <em>الموضع المتاح التالي</em> (نهاية المصفوفة). وهذا يحافظ على شكل الشجرة الكاملة.</li>
+        <li><strong>الخطوة 2 &mdash; المقارنة مع الأب:</strong> أوجد الأب باستخدام الصيغة <span dir="ltr">&lfloor;(i&minus;1)/2&rfloor;</span>. ثم قارن العنصر الجديد بأبيه.</li>
+        <li><strong>الخطوة 3 &mdash; التبديل عند الحاجة:</strong> إذا كان العنصر الجديد <em>أكبر</em> من أبيه (في الكومة الكبرى)، فبدّل بينهما.</li>
+        <li><strong>الخطوة 4 &mdash; التكرار:</strong> اصعد للأعلى وتابع المقارنة حتى نصل إلى الجذر أو تتحقق خاصية الكومة.</li>
     </ol>
 
     <div class="key-concept">
-        <h4>&#11014; Percolate Up (also called "Bubble Up" or "Sift Up")</h4>
-        <p>The new element "percolates up" through the tree &mdash; comparing with each parent and rising until it reaches its correct position where the heap property is satisfied. Like a bubble of air rising through water to its natural level.</p>
+        <h4>&#11014; الترشيح للأعلى (Percolate Up) (ويُسمّى أيضًا "Bubble Up" أو "Sift Up")</h4>
+        <p>"يترشّح" العنصر الجديد صعودًا عبر الشجرة &mdash; فيُقارَن بكل أب ويرتفع حتى يصل إلى موضعه الصحيح الذي تتحقق فيه خاصية الكومة. تمامًا كفقاعة هواء ترتفع عبر الماء إلى مستواها الطبيعي.</p>
     </div>
 
     <!-- ═══ SIMULATION A: TREE VISUAL ═══ -->
-    <h3>&#127918; Simulation A &mdash; Visual Tree Construction</h3>
-    <p>Watch the max-heap grow as a <strong>visual binary tree</strong>. The key message to understand: we always insert at the <em>next available position</em>, filling <strong>left to right, level by level</strong>. This is completely different from a BST — we do <strong>NOT</strong> decide left or right based on the value!</p>
+    <h3>&#127918; المحاكاة (أ) &mdash; بناء الشجرة بصريًا</h3>
+    <p>شاهد الكومة الكبرى وهي تنمو على شكل <strong>شجرة ثنائية مرئية</strong>. والرسالة الأساسية التي يجب فهمها: ندرج دائمًا في <em>الموضع المتاح التالي</em>، فنملأ الشجرة <strong>من اليسار إلى اليمين، مستوًى تلو الآخر</strong>. وهذا مختلف تمامًا عن شجرة البحث الثنائية (Binary Search Tree) — إذ إننا <strong>لا</strong> نقرر اليسار أو اليمين بناءً على القيمة!</p>
 
     <div class="warning-box" style="margin-bottom:6px;">
-        <strong>&#9888; Heap vs BST:</strong> In a Binary Search Tree, smaller values go LEFT and larger values go RIGHT. In a Heap, <strong>position is determined by level order</strong> (to keep the tree complete), and then <strong>value order is enforced by percolate up</strong>.
+        <strong>&#9888; الكومة مقابل شجرة البحث الثنائية:</strong> في شجرة البحث الثنائية تذهب القيم الأصغر إلى اليسار والقيم الأكبر إلى اليمين. أما في الكومة، <strong>فالموضع يُحدَّد حسب ترتيب المستويات</strong> (للحفاظ على اكتمال الشجرة)، ثم <strong>يُفرَض ترتيب القيم بواسطة الترشيح للأعلى</strong>.
     </div>
 
     <div class="sim-input-row">
-        <span style="font-weight:600;color:#4a148c;white-space:nowrap;">Values (comma-separated):</span>
+        <span style="font-weight:600;color:#4a148c;white-space:nowrap;">القيم (مفصولة بفواصل):</span>
         <input type="text" id="simAValInput" value="54, 87, 27, 67, 19, 31, 29, 18, 32, 56, 7, 12, 31">
-        <button class="btn btn-purple" onclick="loadSimAVals()" style="padding:7px 16px;white-space:nowrap;">&#128257; Load</button>
-        <button class="btn btn-gray"   onclick="resetSimAVals()" style="padding:7px 14px;white-space:nowrap;">Default</button>
+        <button class="btn btn-purple" onclick="loadSimAVals()" style="padding:7px 16px;white-space:nowrap;">&#128257; تحميل</button>
+        <button class="btn btn-gray"   onclick="resetSimAVals()" style="padding:7px 14px;white-space:nowrap;">الافتراضي</button>
     </div>
 
     <div class="sim-box">
         <div class="legend">
-            <div class="leg-item"><div class="leg-dot" style="background:#8b5cf6;"></div> Normal node</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#2ecc71;"></div> Newly inserted (position-based, not value-based!)</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#f39c12;"></div> Being compared (percolate up)</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#e74c3c;"></div> Being swapped</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#3498db;"></div> Final position found</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#8b5cf6;"></div> عقدة عادية</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#2ecc71;"></div> مُدرَجة حديثًا (حسب الموضع، لا حسب القيمة!)</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#f39c12;"></div> قيد المقارنة (الترشيح للأعلى)</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#e74c3c;"></div> قيد التبديل</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#3498db;"></div> وُجد الموضع النهائي</div>
         </div>
 
         <div class="svg-wrap" style="margin-bottom:10px;">
             <svg id="simASVG" viewBox="0 0 600 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:290px;">
-                <text x="300" y="145" text-anchor="middle" font-size="14" fill="#aaa">Empty — press Next Step to begin</text>
+                <text x="300" y="145" text-anchor="middle" font-size="14" fill="#aaa">فارغة — اضغط "الخطوة التالية" للبدء</text>
             </svg>
         </div>
 
-        <div id="simAMsg" class="sim-msg">&#128072; Click "Next Step" to begin building the heap tree visually...</div>
+        <div id="simAMsg" class="sim-msg">&#128073; انقر على "الخطوة التالية" لبدء بناء شجرة الكومة بصريًا...</div>
 
         <div class="btn-row">
-            <button class="btn btn-purple" onclick="simANext()">&#9654; Next Step</button>
-            <button class="btn btn-gray"   onclick="simAReset()">&#8634; Reset</button>
-            <span id="simAProgress" style="font-size:0.85em;color:#666;">Step 0 / ?</span>
+            <button class="btn btn-purple" onclick="simANext()">&#9664; الخطوة التالية</button>
+            <button class="btn btn-gray"   onclick="simAReset()">&#8635; إعادة الضبط</button>
+            <span id="simAProgress" style="font-size:0.85em;color:#666;">الخطوة 0 / ?</span>
         </div>
     </div>
 
     <!-- ═══ SIMULATION B: ARRAY WITH FORMULA ═══ -->
-    <h3>&#127918; Simulation B &mdash; Array Construction with Formula</h3>
-    <p>You can use the same values as Simulation A or enter <strong>your own set</strong> to see a completely independent run. Each new value is appended at the end of the array and then the formula <strong>&lfloor;(i&minus;1) / 2&rfloor;</strong> finds the parent for comparison. Watch the formula spotlight at every step!</p>
+    <h3>&#127918; المحاكاة (ب) &mdash; بناء المصفوفة باستخدام الصيغة</h3>
+    <p>يمكنك استخدام القيم نفسها المستخدمة في المحاكاة (أ)، أو إدخال <strong>مجموعتك الخاصة</strong> لترى تشغيلًا مستقلًا تمامًا. تُلحَق كل قيمة جديدة بنهاية المصفوفة، ثم تجد الصيغة <strong><span dir="ltr">&lfloor;(i&minus;1) / 2&rfloor;</span></strong> الأب لإجراء المقارنة. راقب إبراز الصيغة في كل خطوة!</p>
 
     <div class="sim-input-row">
-        <span style="font-weight:600;color:#4a148c;white-space:nowrap;">Values (comma-separated):</span>
+        <span style="font-weight:600;color:#4a148c;white-space:nowrap;">القيم (مفصولة بفواصل):</span>
         <input type="text" id="simBValInput" value="54, 87, 27, 67, 19, 31, 29, 18, 32, 56, 7, 12, 31">
-        <button class="btn btn-purple" onclick="loadSimBVals()" style="padding:7px 16px;white-space:nowrap;">&#128257; Load</button>
-        <button class="btn btn-gray"   onclick="resetSimBVals()" style="padding:7px 14px;white-space:nowrap;">Default</button>
+        <button class="btn btn-purple" onclick="loadSimBVals()" style="padding:7px 16px;white-space:nowrap;">&#128257; تحميل</button>
+        <button class="btn btn-gray"   onclick="resetSimBVals()" style="padding:7px 14px;white-space:nowrap;">الافتراضي</button>
     </div>
 
     <div class="sim-box">
         <div class="legend">
-            <div class="leg-item"><div class="leg-dot" style="background:#2ecc71;"></div> Newly appended</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#f39c12;"></div> Being compared</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#e74c3c;"></div> Being swapped</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#3498db;"></div> Final position</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#2ecc71;"></div> مُلحَقة حديثًا</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#f39c12;"></div> قيد المقارنة</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#e74c3c;"></div> قيد التبديل</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#3498db;"></div> الموضع النهائي</div>
         </div>
 
         <div id="simBArrayDiv" class="svg-wrap" style="padding:14px;min-height:84px;margin-bottom:8px;">
-            <p style="color:#aaa;font-size:0.84em;text-align:center;">Array will appear here</p>
+            <p style="color:#aaa;font-size:0.84em;text-align:center;">ستظهر المصفوفة هنا</p>
         </div>
 
-        <div id="simBFormula" class="formula-spot">&#128272; Formula step will appear here</div>
+        <div id="simBFormula" class="formula-spot">&#128272; ستظهر خطوة الصيغة هنا</div>
 
-        <div id="simBMsg" class="sim-msg">&#128072; Enter values above and click "Next Step" to begin...</div>
+        <div id="simBMsg" class="sim-msg">&#128073; أدخل القيم أعلاه وانقر على "الخطوة التالية" للبدء...</div>
 
         <div class="btn-row">
-            <button class="btn btn-purple" onclick="simBNext()">&#9654; Next Step</button>
-            <button class="btn btn-gray"   onclick="simBReset()">&#8634; Reset</button>
-            <span id="simBProgress" style="font-size:0.85em;color:#666;">Step 0 / ?</span>
+            <button class="btn btn-purple" onclick="simBNext()">&#9664; الخطوة التالية</button>
+            <button class="btn btn-gray"   onclick="simBReset()">&#8635; إعادة الضبط</button>
+            <span id="simBProgress" style="font-size:0.85em;color:#666;">الخطوة 0 / ?</span>
         </div>
     </div>
 
-    <h3>&#128203; Pseudocode</h3>
+    <h3>&#128203; الشيفرة الزائفة (Pseudocode)</h3>
     <div class="formula-box">
         <span class="hl">INSERT(heap, value):</span><br>
         &nbsp;&nbsp;heap[heap.size] &larr; value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// add at end (maintain complete tree)</span><br>
@@ -1005,61 +1055,61 @@ graph TD
      SECTION 9 — DELETION + PERCOLATE DOWN
 ═══════════════════════════════════════════════════════ -->
 <section id="s9">
-    <h2><span class="sec-num">9</span>Heap Deletion &amp; Percolate Down</h2>
+    <h2><span class="sec-num">9</span>الحذف من الكومة والترشيح للأسفل</h2>
 
-    <h3>&#128203; The Deletion Algorithm</h3>
-    <p>In a heap we <strong>always delete the root</strong> (the maximum in a max-heap). We never delete from the middle. Here are the steps:</p>
+    <h3>&#128203; خوارزمية الحذف</h3>
+    <p>في الكومة <strong>نحذف الجذر دائمًا</strong> (القيمة الكبرى في الكومة الكبرى)، ولا نحذف أبدًا من المنتصف. وهذه هي الخطوات:</p>
     <ol>
-        <li><strong>Step 1 &mdash; Save and remove root:</strong> The root is always the maximum (in a max-heap). Save its value and remove it.</li>
-        <li><strong>Step 2 &mdash; Move last to root:</strong> Take the very last element in the array (bottom-right leaf) and place it at the root [0]. Decrease size by 1.</li>
-        <li><strong>Step 3 &mdash; Compare with children:</strong> The new root likely violates the heap property. Compare it with its two children.</li>
-        <li><strong>Step 4 &mdash; Swap with larger child:</strong> Swap with the <em>larger</em> child (for max-heap), if the root is smaller than it.</li>
-        <li><strong>Step 5 &mdash; Repeat:</strong> Continue moving down until the heap property is restored. This is <strong>Percolate Down</strong>.</li>
+        <li><strong>الخطوة 1 &mdash; حفظ الجذر وإزالته:</strong> الجذر هو دائمًا القيمة الكبرى (في الكومة الكبرى). احفظ قيمته ثم أزله.</li>
+        <li><strong>الخطوة 2 &mdash; نقل العنصر الأخير إلى الجذر:</strong> خذ آخر عنصر في المصفوفة (الورقة السفلية اليمنى) وضعه في الجذر [0]. ثم أنقص الحجم بمقدار 1.</li>
+        <li><strong>الخطوة 3 &mdash; المقارنة مع الأبناء:</strong> من المرجّح أن يخالف الجذر الجديد خاصية الكومة. قارنه بابنيه.</li>
+        <li><strong>الخطوة 4 &mdash; التبديل مع الابن الأكبر:</strong> بدّله مع الابن <em>الأكبر</em> (في الكومة الكبرى) إذا كان الجذر أصغر منه.</li>
+        <li><strong>الخطوة 5 &mdash; التكرار:</strong> تابع النزول حتى تستعيد الكومة خاصيتها. وهذا هو <strong>الترشيح للأسفل</strong>.</li>
     </ol>
 
     <div class="key-concept">
-        <h4>&#11015; Percolate Down (also called "Sift Down")</h4>
-        <p>After deletion, the element placed at the root "percolates down" through the tree &mdash; comparing with its children and sinking until it reaches its correct position. It always swaps with the <strong>larger child</strong> (max-heap) to maintain the heap property.</p>
+        <h4>&#11015; الترشيح للأسفل (Percolate Down) (ويُسمّى أيضًا "Sift Down")</h4>
+        <p>بعد الحذف، "يترشّح" العنصر الموضوع في الجذر نزولًا عبر الشجرة &mdash; فيُقارَن بأبنائه ويهبط حتى يصل إلى موضعه الصحيح. ويُبدَّل دائمًا مع <strong>الابن الأكبر</strong> (في الكومة الكبرى) للحفاظ على خاصية الكومة.</p>
     </div>
 
-    <h3>&#127918; Simulation: Extract Max &amp; Percolate Down</h3>
-    <p>The heap below is already built from the default values <strong>[54, 87, 27, 67, 19, 31, 29, 18, 32, 56, 7, 12, 31]</strong>. The maximum (87) is at the root [0]. Click <em>Next Step</em> to extract the root and watch percolate down restore the heap property.</p>
+    <h3>&#127918; المحاكاة: استخراج القيمة الكبرى والترشيح للأسفل</h3>
+    <p>الكومة أدناه مبنية مسبقًا من القيم الافتراضية <strong dir="ltr">[54, 87, 27, 67, 19, 31, 29, 18, 32, 56, 7, 12, 31]</strong>. والقيمة الكبرى (87) موجودة في الجذر [0]. انقر على <em>الخطوة التالية</em> لاستخراج الجذر ومشاهدة الترشيح للأسفل وهو يستعيد خاصية الكومة.</p>
 
     <div class="sim-box">
         <div class="legend">
-            <div class="leg-item"><div class="leg-dot" style="background:#8b5cf6;"></div> Normal node</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#e74c3c;"></div> Root being removed</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#2ecc71;"></div> Last element moved to root</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#f39c12;"></div> Being compared</div>
-            <div class="leg-item"><div class="leg-dot" style="background:#3498db;"></div> Settled (done)</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#8b5cf6;"></div> عقدة عادية</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#e74c3c;"></div> الجذر قيد الإزالة</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#2ecc71;"></div> العنصر الأخير المنقول إلى الجذر</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#f39c12;"></div> قيد المقارنة</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#3498db;"></div> استقر (انتهى)</div>
         </div>
 
         <div>
-            <p style="font-size:0.85em;font-weight:bold;color:#4a148c;margin-bottom:6px;">&#127795; Tree View:</p>
+            <p style="font-size:0.85em;font-weight:bold;color:#4a148c;margin-bottom:6px;">&#127795; عرض الشجرة:</p>
             <div class="svg-wrap">
                 <svg id="delSVG" viewBox="0 0 600 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:290px;">
-                    <text x="300" y="145" text-anchor="middle" font-size="14" fill="#aaa">Loading...</text>
+                    <text x="300" y="145" text-anchor="middle" font-size="14" fill="#aaa">جارٍ التحميل...</text>
                 </svg>
             </div>
         </div>
 
         <div>
-            <p style="font-size:0.85em;font-weight:bold;color:#4a148c;margin:10px 0 6px;">&#128293; Array View:</p>
+            <p style="font-size:0.85em;font-weight:bold;color:#4a148c;margin:10px 0 6px;">&#128293; عرض المصفوفة:</p>
             <div id="delArrDiv" class="svg-wrap" style="padding:14px;min-height:76px;"></div>
         </div>
 
-        <div id="delMsg" class="sim-msg">&#128072; Heap ready &mdash; click "Next Step" to extract the maximum element.</div>
+        <div id="delMsg" class="sim-msg">&#128073; الكومة جاهزة &mdash; انقر على "الخطوة التالية" لاستخراج العنصر الأكبر.</div>
 
         <div class="btn-row">
-            <button class="btn btn-red"  onclick="delNext()">&#11015; Next Step (Percolate Down)</button>
-            <button class="btn btn-gray" onclick="delReset()">&#8634; Reset</button>
-            <span id="delProgress" style="font-size:0.85em;color:#666;">Step 0 / ?</span>
+            <button class="btn btn-red"  onclick="delNext()">&#11015; الخطوة التالية (الترشيح للأسفل)</button>
+            <button class="btn btn-gray" onclick="delReset()">&#8635; إعادة الضبط</button>
+            <span id="delProgress" style="font-size:0.85em;color:#666;">الخطوة 0 / ?</span>
         </div>
 
         <div id="extractedList" style="margin-top:14px;"></div>
     </div>
 
-    <h3>&#128203; Pseudocode</h3>
+    <h3>&#128203; الشيفرة الزائفة</h3>
     <div class="formula-box">
         <span class="hl">EXTRACT_MAX(heap):</span><br>
         &nbsp;&nbsp;max &larr; heap[0] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// save root (the maximum)</span><br>
@@ -1081,13 +1131,13 @@ graph TD
         &nbsp;&nbsp;return max
     </div>
 
-    <h3 style="margin-top:32px;">&#128260; Why Must the Heap Be a Complete Binary Tree?</h3>
-    <p>The max-heap property alone does not guarantee efficiency &mdash; the tree must also be <strong>complete</strong>. Compare the same 10 nodes arranged two different ways:</p>
+    <h3 style="margin-top:32px;">&#128260; لماذا يجب أن تكون الكومة شجرة ثنائية كاملة؟</h3>
+    <p>خاصية الكومة الكبرى وحدها لا تضمن الكفاءة &mdash; بل يجب أن تكون الشجرة أيضًا <strong>كاملة</strong>. قارن العقد العشر نفسها مرتّبةً بطريقتين مختلفتين:</p>
 
     <div class="grid-2" style="align-items:start;margin-top:18px;">
         <div>
-            <h4 style="color:#1b5e20;margin-bottom:8px;">&#10004; Complete &mdash; Left-to-Right Fill</h4>
-            <p style="font-size:0.9em;margin-bottom:10px;">Last level fills <strong>left to right</strong>: nodes at <strong>[7], [8], [9]</strong>. No gaps anywhere.</p>
+            <h4 style="color:#1b5e20;margin-bottom:8px;">&#10004; كاملة &mdash; ملء من اليسار إلى اليمين</h4>
+            <p style="font-size:0.9em;margin-bottom:10px;">يُملأ المستوى الأخير <strong>من اليسار إلى اليمين</strong>: العقد في المواضع <strong dir="ltr">[7], [8], [9]</strong>. لا فجوات في أي مكان.</p>
             <div class="mermaid">
 graph TD
     ca(("90 [0]")) --> cb(("70 [1]"))
@@ -1107,7 +1157,7 @@ graph TD
     class ch,ci,cj leaf
             </div>
             <div style="margin:10px 0;">
-                <div style="display:flex;gap:3px;justify-content:center;flex-wrap:wrap;align-items:flex-end;">
+                <div dir="ltr" style="display:flex;gap:3px;justify-content:center;flex-wrap:wrap;align-items:flex-end;">
                     <div style="text-align:center;"><div style="width:36px;height:36px;background:#4a148c;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.8em;">90</div><div style="font-size:9px;color:#555;margin-top:2px;">[0]</div></div>
                     <div style="text-align:center;"><div style="width:36px;height:36px;background:#7b1fa2;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.8em;">70</div><div style="font-size:9px;color:#555;margin-top:2px;">[1]</div></div>
                     <div style="text-align:center;"><div style="width:36px;height:36px;background:#7b1fa2;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.8em;">80</div><div style="font-size:9px;color:#555;margin-top:2px;">[2]</div></div>
@@ -1119,12 +1169,12 @@ graph TD
                     <div style="text-align:center;"><div style="width:36px;height:36px;background:#ce93d8;color:#2c0955;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.8em;">40</div><div style="font-size:9px;color:#555;margin-top:2px;">[8]</div></div>
                     <div style="text-align:center;"><div style="width:36px;height:36px;background:#ce93d8;color:#2c0955;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.8em;">35</div><div style="font-size:9px;color:#555;margin-top:2px;">[9]</div></div>
                 </div>
-                <p style="text-align:center;font-size:0.85em;color:#27ae60;margin-top:8px;font-weight:bold;">&#10004; 10 nodes &rarr; exactly 10 array slots. ZERO waste!</p>
+                <p style="text-align:center;font-size:0.85em;color:#27ae60;margin-top:8px;font-weight:bold;">&#10004; 10 عقد &larr; 10 خانات في المصفوفة بالضبط. هدر صفري!</p>
             </div>
         </div>
         <div>
-            <h4 style="color:#b71c1c;margin-bottom:8px;">&#10007; Incomplete &mdash; Gaps in Last Level</h4>
-            <p style="font-size:0.9em;margin-bottom:10px;">Same 10 nodes, but last 3 are <strong>NOT left-to-right</strong>: placed at <strong>[9], [11], [13]</strong> &mdash; leaving 4 empty gaps.</p>
+            <h4 style="color:#b71c1c;margin-bottom:8px;">&#10007; غير كاملة &mdash; فجوات في المستوى الأخير</h4>
+            <p style="font-size:0.9em;margin-bottom:10px;">العقد العشر نفسها، لكن آخر 3 عقد <strong>ليست من اليسار إلى اليمين</strong>: وُضعت في المواضع <strong dir="ltr">[9], [11], [13]</strong> &mdash; تاركةً 4 فجوات فارغة.</p>
             <div class="mermaid">
 graph TD
     ia(("90 [0]")) --> ib(("70 [1]"))
@@ -1146,7 +1196,7 @@ graph TD
     class g7,g8,g10,g12 ghost
             </div>
             <div style="margin:10px 0;">
-                <div style="display:flex;gap:2px;justify-content:center;flex-wrap:nowrap;align-items:flex-end;">
+                <div dir="ltr" style="display:flex;gap:2px;justify-content:center;flex-wrap:nowrap;align-items:flex-end;">
                     <div style="text-align:center;"><div style="width:30px;height:30px;background:#c0392b;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.72em;">90</div><div style="font-size:8px;color:#555;margin-top:2px;">[0]</div></div>
                     <div style="text-align:center;"><div style="width:30px;height:30px;background:#c0392b;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.72em;">70</div><div style="font-size:8px;color:#555;margin-top:2px;">[1]</div></div>
                     <div style="text-align:center;"><div style="width:30px;height:30px;background:#c0392b;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.72em;">80</div><div style="font-size:8px;color:#555;margin-top:2px;">[2]</div></div>
@@ -1162,13 +1212,13 @@ graph TD
                     <div style="text-align:center;"><div style="width:30px;height:30px;border:2px dashed #e74c3c;background:#fde8e8;color:#c0392b;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.8em;">&#8709;</div><div style="font-size:8px;color:#e74c3c;margin-top:2px;font-weight:bold;">[12]</div></div>
                     <div style="text-align:center;"><div style="width:30px;height:30px;background:#c0392b;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;border-radius:4px;font-size:0.72em;">30</div><div style="font-size:8px;color:#555;margin-top:2px;">[13]</div></div>
                 </div>
-                <p style="text-align:center;font-size:0.85em;color:#c0392b;margin-top:8px;font-weight:bold;">&#10007; 10 nodes but array needs 14 slots. 4 positions WASTED!</p>
+                <p style="text-align:center;font-size:0.85em;color:#c0392b;margin-top:8px;font-weight:bold;">&#10007; 10 عقد لكن المصفوفة تحتاج إلى 14 خانة. 4 مواضع مهدرة!</p>
             </div>
         </div>
     </div>
 
     <div class="warning-box">
-        &#9888; <strong>The Completeness Rule:</strong> When a node is placed out of left-to-right order, the array must reserve a slot for <em>every missing position</em> between it and its parent. Moving just 3 leaf nodes out of order here wastes 4 array slots &mdash; and in a heap with millions of nodes, this waste grows massively. <strong>A heap must always be a complete binary tree!</strong>
+        &#9888; <strong>قاعدة الاكتمال:</strong> عندما توضع عقدة خارج الترتيب من اليسار إلى اليمين، يجب أن تحجز المصفوفة خانةً لـ<em>كل موضع مفقود</em> بينها وبين أبيها. إن نقل 3 عقد ورقية فقط خارج الترتيب هنا يهدر 4 خانات في المصفوفة &mdash; وفي كومة تضم ملايين العقد، يتضخم هذا الهدر تضخمًا هائلًا. <strong>يجب أن تكون الكومة دائمًا شجرة ثنائية كاملة!</strong>
     </div>
 </section>
 
@@ -1177,20 +1227,20 @@ graph TD
      SECTION 10 — ORDERED NOT SORTED
 ═══════════════════════════════════════════════════════ -->
 <section id="s10">
-    <h2><span class="sec-num">10</span>Ordered but NOT Sorted &mdash; Very Important!</h2>
+    <h2><span class="sec-num">10</span>منظَّمة لكنها ليست مرتَّبة &mdash; مهم جدًا!</h2>
 
-    <p>This is one of the most important concepts in this tutorial. You must clearly understand the difference.</p>
+    <p>هذا واحد من أهم المفاهيم في هذا الدرس، ويجب أن تفهم الفرق فهمًا واضحًا.</p>
 
     <div class="key-concept">
-        <h4>&#128214; The Key Distinction</h4>
-        <p>A heap is <strong>ORDERED</strong>: every parent satisfies the heap property with respect to its children (parent &ge; children in a max-heap). But a heap is <strong>NOT SORTED</strong>: the elements are <em>not</em> arranged in descending (or ascending) order throughout the entire tree.</p>
+        <h4>&#128214; الفرق الجوهري</h4>
+        <p>الكومة <strong>منظَّمة</strong>: كل أب يحقق خاصية الكومة بالنسبة إلى أبنائه (الأب &ge; الأبناء في الكومة الكبرى). لكن الكومة <strong>ليست مرتَّبة</strong>: فالعناصر <em>ليست</em> مرتبة ترتيبًا تنازليًا (أو تصاعديًا) عبر الشجرة بأكملها.</p>
     </div>
 
-    <p>Look carefully at our max-heap: array = [&mdash;, <strong>90</strong>, 35, 60, 20, 30, 45, 50]</p>
+    <p>انظر بعناية إلى كومتنا الكبرى: المصفوفة = <span dir="ltr">[&mdash;, <strong>90</strong>, 35, 60, 20, 30, 45, 50]</span></p>
 
     <div class="grid-2">
         <div>
-            <h4>&#127775; The Max-Heap (Ordered):</h4>
+            <h4>&#127775; الكومة الكبرى (منظَّمة):</h4>
             <div class="mermaid">
 graph TD
     oa(("90")) --> ob(("35"))
@@ -1207,38 +1257,38 @@ graph TD
     class od,oe,of,og leaf
             </div>
             <div class="success-box" style="margin-top:8px;">
-                <strong>&#10004; Heap property holds everywhere:</strong><br>
-                90 &ge; 35 and 90 &ge; 60 &nbsp;&#10004;<br>
-                35 &ge; 20 and 35 &ge; 30 &nbsp;&#10004;<br>
-                60 &ge; 45 and 60 &ge; 50 &nbsp;&#10004;
+                <strong>&#10004; خاصية الكومة متحققة في كل مكان:</strong><br>
+                <span dir="ltr">90 &ge; 35</span> و <span dir="ltr">90 &ge; 60</span> &nbsp;&#10004;<br>
+                <span dir="ltr">35 &ge; 20</span> و <span dir="ltr">35 &ge; 30</span> &nbsp;&#10004;<br>
+                <span dir="ltr">60 &ge; 45</span> و <span dir="ltr">60 &ge; 50</span> &nbsp;&#10004;
             </div>
         </div>
         <div>
-            <h4>&#10060; But NOT Sorted!</h4>
+            <h4>&#10060; لكنها ليست مرتَّبة!</h4>
             <div class="warning-box">
-                <strong>Look at these two values:</strong><br><br>
-                &bull; <strong>35</strong> is at level 1 (left child of root)<br>
-                &bull; <strong>45</strong> is at level 2 (left child of 60)<br><br>
-                35 &lt; 45, but 35 appears <em>above</em> 45 in the tree!<br>
-                In a truly sorted tree, this would not be allowed.<br><br>
-                <strong>Also notice:</strong><br>
-                &bull; 50 &lt; 60 but 50 is below 60 &nbsp;&#10004; (heap ok)<br>
-                &bull; 35 &lt; 60 but both are at the same level!<br><br>
-                The heap is <strong>partially ordered</strong>, not fully sorted.
+                <strong>انظر إلى هاتين القيمتين:</strong><br><br>
+                &bull; <strong>35</strong> في المستوى 1 (الابن الأيسر للجذر)<br>
+                &bull; <strong>45</strong> في المستوى 2 (الابن الأيسر للعقدة 60)<br><br>
+                <span dir="ltr">35 &lt; 45</span>، ومع ذلك تظهر 35 <em>فوق</em> 45 في الشجرة!<br>
+                في شجرة مرتَّبة ترتيبًا حقيقيًا، لن يكون هذا مسموحًا.<br><br>
+                <strong>لاحظ أيضًا:</strong><br>
+                &bull; <span dir="ltr">50 &lt; 60</span> و50 تقع أسفل 60 &nbsp;&#10004; (الكومة سليمة)<br>
+                &bull; <span dir="ltr">35 &lt; 60</span> لكن كلتيهما في المستوى نفسه!<br><br>
+                الكومة <strong>منظَّمة جزئيًا</strong>، وليست مرتَّبة ترتيبًا كاملًا.
             </div>
             <p style="margin-top:10px;font-size:0.88em;">
-                To retrieve elements in fully sorted order from a heap, you would have to extract the root one by one. That operation is exactly what <strong>HeapSort</strong> uses!
+                لاسترجاع العناصر من الكومة بترتيب كامل، عليك أن تستخرج الجذر واحدًا تلو الآخر. وهذه العملية هي بالضبط ما تستخدمه خوارزمية <strong>فرز الكومة (HeapSort)</strong>!
             </p>
         </div>
     </div>
 
     <table>
-        <thead><tr><th>Property</th><th>Max-Heap</th><th>Sorted Array (descending)</th></tr></thead>
+        <thead><tr><th>الخاصية</th><th>الكومة الكبرى</th><th>المصفوفة المرتَّبة (تنازليًا)</th></tr></thead>
         <tbody>
-            <tr><td>Maximum element location</td><td>Always at root [index 0]</td><td>Always at index 0</td></tr>
-            <tr><td>All elements in sorted order?</td><td><strong style="color:#c0392b;">NO</strong> &mdash; only parent &ge; children</td><td><strong style="color:#27ae60;">YES</strong></td></tr>
-            <tr><td>Insert new element</td><td>O(log n) percolate up</td><td>O(n) shift to maintain sort</td></tr>
-            <tr><td>Remove maximum</td><td>O(log n) percolate down</td><td>O(1) remove index 0 + O(n) shift</td></tr>
+            <tr><td>موقع العنصر الأكبر</td><td>دائمًا في الجذر [الفهرس 0]</td><td>دائمًا في الفهرس 0</td></tr>
+            <tr><td>هل جميع العناصر مرتَّبة؟</td><td><strong style="color:#c0392b;">لا</strong> &mdash; فقط الأب &ge; الأبناء</td><td><strong style="color:#27ae60;">نعم</strong></td></tr>
+            <tr><td>إدراج عنصر جديد</td><td><span dir="ltr">O(log n)</span> ترشيح للأعلى</td><td><span dir="ltr">O(n)</span> إزاحة للحفاظ على الترتيب</td></tr>
+            <tr><td>حذف القيمة الكبرى</td><td><span dir="ltr">O(log n)</span> ترشيح للأسفل</td><td><span dir="ltr">O(1)</span> حذف الفهرس 0 + <span dir="ltr">O(n)</span> إزاحة</td></tr>
         </tbody>
     </table>
 </section>
@@ -1248,10 +1298,10 @@ graph TD
      SECTION 11 — COMPLEXITY ANALYSIS
 ═══════════════════════════════════════════════════════ -->
 <section id="s11">
-    <h2><span class="sec-num">11</span>Complexity Analysis &mdash; Why Is Heap So Fast?</h2>
+    <h2><span class="sec-num">11</span>تحليل التعقيد &mdash; لماذا الكومة سريعة جدًا؟</h2>
 
-    <h3>&#128202; Height of the Heap = O(log n)</h3>
-    <p>This is the key insight behind all heap efficiency. Because the heap is a <strong>complete binary tree</strong>, its height is always:</p>
+    <h3>&#128202; ارتفاع الكومة = <span dir="ltr">O(log n)</span></h3>
+    <p>هذه هي الفكرة الأساسية وراء كفاءة الكومة كلها. فلأن الكومة <strong>شجرة ثنائية كاملة</strong>، يكون ارتفاعها (Height) دائمًا:</p>
 
     <div class="formula-box">
         <span class="hl">Height(n) = &lfloor;log&#8322;(n)&rfloor;</span><br>
@@ -1265,55 +1315,55 @@ graph TD
     </div>
 
     <div class="info-box">
-        <strong>&#128161; Think about this!</strong> The hospital example has a small number of patients &mdash; that is realistic. But the heap is used in many systems that handle truly massive data: search engines ranking document similarity scores, recommendation systems scoring millions of products, GPS navigation finding shortest paths. For <strong>one billion records</strong> in any such system, inserting or removing the top-priority element requires at most <strong>29 comparisons</strong>. Compare that to sorting or shifting a billion elements!
+        <strong>&#128161; فكّر في هذا!</strong> مثال المستشفى فيه عدد قليل من المرضى &mdash; وهذا واقعي. لكن الكومة تُستخدم في أنظمة كثيرة تتعامل مع بيانات ضخمة حقًا: محركات البحث التي ترتّب درجات تشابه المستندات، وأنظمة التوصيات التي تقيّم ملايين المنتجات، وأنظمة الملاحة (GPS) التي تجد أقصر المسارات. فمع <strong>مليار سجل</strong> في أيٍّ من هذه الأنظمة، يتطلب إدراج العنصر ذي الأولوية القصوى أو حذفه <strong>29 مقارنة</strong> على الأكثر. قارن ذلك بفرز مليار عنصر أو إزاحتها!
     </div>
 
-    <h3>&#9203; Complexity of Each Operation</h3>
+    <h3>&#9203; تعقيد كل عملية</h3>
     <table>
-        <thead><tr><th>Operation</th><th>Cost</th><th>Reason</th></tr></thead>
+        <thead><tr><th>العملية</th><th>التكلفة</th><th>السبب</th></tr></thead>
         <tbody>
-            <tr><td><strong>Insert</strong> (percolate up)</td>   <td style="color:#27ae60;font-weight:bold;">O(log n)</td><td>Moves up at most &lfloor;log&#8322; n&rfloor; levels</td></tr>
-            <tr><td><strong>Extract Max/Min</strong> (percolate down)</td><td style="color:#27ae60;font-weight:bold;">O(log n)</td><td>Moves down at most &lfloor;log&#8322; n&rfloor; levels</td></tr>
-            <tr><td><strong>Peek at Max/Min</strong> (read root)</td><td style="color:#27ae60;font-weight:bold;">O(1)</td><td>Root is always at index 0</td></tr>
-            <tr><td><strong>Build heap</strong> from n elements</td><td style="color:#27ae60;font-weight:bold;">O(n log n)</td><td>n insertions, each O(log n)</td></tr>
-            <tr><td><strong>Search</strong> for a specific value</td><td style="color:#e67e22;font-weight:bold;">O(n)</td><td>Heap is NOT sorted &mdash; must check all elements</td></tr>
+            <tr><td><strong>الإدراج</strong> (الترشيح للأعلى)</td>   <td style="color:#27ae60;font-weight:bold;"><span dir="ltr">O(log n)</span></td><td>يصعد <span dir="ltr">&lfloor;log&#8322; n&rfloor;</span> مستوًى على الأكثر</td></tr>
+            <tr><td><strong>استخراج القيمة الكبرى/الصغرى</strong> (الترشيح للأسفل)</td><td style="color:#27ae60;font-weight:bold;"><span dir="ltr">O(log n)</span></td><td>ينزل <span dir="ltr">&lfloor;log&#8322; n&rfloor;</span> مستوًى على الأكثر</td></tr>
+            <tr><td><strong>الاطلاع على القيمة الكبرى/الصغرى</strong> (قراءة الجذر)</td><td style="color:#27ae60;font-weight:bold;"><span dir="ltr">O(1)</span></td><td>الجذر دائمًا في الفهرس 0</td></tr>
+            <tr><td><strong>بناء الكومة</strong> من n عنصر</td><td style="color:#27ae60;font-weight:bold;"><span dir="ltr">O(n log n)</span></td><td>n عملية إدراج، كلٌّ منها <span dir="ltr">O(log n)</span></td></tr>
+            <tr><td><strong>البحث</strong> عن قيمة محددة</td><td style="color:#e67e22;font-weight:bold;"><span dir="ltr">O(n)</span></td><td>الكومة ليست مرتَّبة &mdash; يجب فحص جميع العناصر</td></tr>
         </tbody>
     </table>
 
-    <h3>&#128202; Heap vs Sorted Array: The Real Comparison</h3>
+    <h3>&#128202; الكومة مقابل المصفوفة المرتَّبة: المقارنة الحقيقية</h3>
     <table>
-        <thead><tr><th>Scenario</th><th>Sorted Array</th><th>Max-Heap</th><th>Winner</th></tr></thead>
+        <thead><tr><th>السيناريو</th><th>المصفوفة المرتَّبة</th><th>الكومة الكبرى</th><th>الفائز</th></tr></thead>
         <tbody>
             <tr>
-                <td>Insert 1 new patient</td>
-                <td>O(n) &mdash; shift elements + possible re-sort</td>
-                <td>O(log n)</td>
-                <td style="color:#27ae60;font-weight:bold;">Heap &#9733;</td>
+                <td>إدراج مريض جديد واحد</td>
+                <td><span dir="ltr">O(n)</span> &mdash; إزاحة العناصر + إعادة فرز محتملة</td>
+                <td><span dir="ltr">O(log n)</span></td>
+                <td style="color:#27ae60;font-weight:bold;">الكومة &#9733;</td>
             </tr>
             <tr>
-                <td>Get most critical patient</td>
-                <td>O(1) &mdash; array[0]</td>
-                <td>O(1) &mdash; heap[0]</td>
-                <td>Tie</td>
+                <td>الحصول على المريض الأخطر حالةً</td>
+                <td><span dir="ltr">O(1)</span> &mdash; <span dir="ltr">array[0]</span></td>
+                <td><span dir="ltr">O(1)</span> &mdash; <span dir="ltr">heap[0]</span></td>
+                <td>تعادل</td>
             </tr>
             <tr>
-                <td>Remove most critical patient</td>
-                <td>O(n) &mdash; shift all elements left</td>
-                <td>O(log n)</td>
-                <td style="color:#27ae60;font-weight:bold;">Heap &#9733;</td>
+                <td>حذف المريض الأخطر حالةً</td>
+                <td><span dir="ltr">O(n)</span> &mdash; إزاحة جميع العناصر إلى اليسار</td>
+                <td><span dir="ltr">O(log n)</span></td>
+                <td style="color:#27ae60;font-weight:bold;">الكومة &#9733;</td>
             </tr>
             <tr>
-                <td>1,000,000 insertions</td>
-                <td>&asymp; 10<sup>12</sup> operations</td>
-                <td>&asymp; 20,000,000 operations</td>
-                <td style="color:#27ae60;font-weight:bold;">Heap by &gt;50,000&times; &#9733;</td>
+                <td>مليون (<span dir="ltr">1,000,000</span>) عملية إدراج</td>
+                <td>&asymp; <span dir="ltr">10<sup>12</sup></span> عملية</td>
+                <td>&asymp; <span dir="ltr">20,000,000</span> عملية</td>
+                <td style="color:#27ae60;font-weight:bold;">الكومة بفارق <span dir="ltr">&gt;50,000&times;</span> &#9733;</td>
             </tr>
         </tbody>
     </table>
 
     <div class="key-concept">
-        <h4>&#128214; Final Answer: Why Not Just Sort the Array?</h4>
-        <p>Sorting the array works perfectly for a <strong>static dataset</strong>. But in a <strong>dynamic system</strong> (patients constantly arriving and leaving, jobs constantly submitted and completed), we need <em>repeated, efficient insert and delete operations</em>. The heap gives us both for <strong>O(log n)</strong> each &mdash; making it ideal for any <strong>priority queue</strong> application.</p>
+        <h4>&#128214; الإجابة النهائية: لماذا لا نكتفي بفرز المصفوفة؟</h4>
+        <p>يعمل فرز المصفوفة بشكل ممتاز مع <strong>مجموعة بيانات ثابتة</strong>. لكن في <strong>نظام ديناميكي</strong> (مرضى يصلون ويغادرون باستمرار، ومهام تُرسَل وتُنجَز باستمرار)، نحتاج إلى <em>عمليات إدراج وحذف متكررة وفعّالة</em>. والكومة توفر لنا كلتيهما بتكلفة <strong><span dir="ltr">O(log n)</span></strong> لكلٍّ منهما &mdash; مما يجعلها مثالية لأي تطبيق يعتمد على <strong>طابور الأولوية</strong>.</p>
     </div>
 </section>
 
@@ -1322,81 +1372,81 @@ graph TD
      SECTION 12 — SUMMARY
 ═══════════════════════════════════════════════════════ -->
 <section id="s12">
-    <h2><span class="sec-num">12</span>Summary &mdash; Everything About the Heap</h2>
+    <h2><span class="sec-num">12</span>الخلاصة &mdash; كل شيء عن الكومة</h2>
 
     <div class="key-concept">
-        <h4>&#127942; The Heap Is a Priority Queue</h4>
-        <p>A heap is the most efficient implementation of a <strong>priority queue</strong>: a data structure where every element has a priority and the element with the highest (or lowest) priority is always served first. Our hospital emergency room is the perfect real-world model!</p>
+        <h4>&#127942; الكومة هي طابور أولوية</h4>
+        <p>الكومة هي أكفأ تطبيق لـ<strong>طابور الأولوية</strong>: وهو بنية بيانات لكل عنصر فيها أولوية، ويُخدَم فيها دائمًا العنصر ذو الأولوية الأعلى (أو الأدنى) أولًا. وقسم الطوارئ في مستشفانا هو النموذج الواقعي المثالي لذلك!</p>
     </div>
 
-    <h3>&#128200; Full Comparison: Heap vs Sorted Array vs Unsorted Array</h3>
+    <h3>&#128200; مقارنة شاملة: الكومة مقابل المصفوفة المرتَّبة مقابل المصفوفة غير المرتَّبة</h3>
     <table>
         <thead>
-            <tr><th>Operation</th><th>Max-Heap</th><th>Sorted Array</th><th>Unsorted Array</th></tr>
+            <tr><th>العملية</th><th>الكومة الكبرى</th><th>المصفوفة المرتَّبة</th><th>المصفوفة غير المرتَّبة</th></tr>
         </thead>
         <tbody>
-            <tr><td>Insert</td>
-                <td style="color:#27ae60;font-weight:bold;">O(log n)</td>
-                <td style="color:#e67e22;">O(n)</td>
-                <td style="color:#27ae60;">O(1)</td></tr>
-            <tr><td>Find Maximum</td>
-                <td style="color:#27ae60;font-weight:bold;">O(1)</td>
-                <td style="color:#27ae60;">O(1)</td>
-                <td style="color:#e74c3c;">O(n)</td></tr>
-            <tr><td>Delete Maximum</td>
-                <td style="color:#27ae60;font-weight:bold;">O(log n)</td>
-                <td style="color:#e67e22;">O(n)</td>
-                <td style="color:#e74c3c;">O(n)</td></tr>
-            <tr><td>Is sorted?</td><td>No (partially ordered)</td><td>Yes</td><td>No</td></tr>
-            <tr><td>Memory</td><td>Compact array (no waste)</td><td>Compact array</td><td>Compact array</td></tr>
-            <tr><td>Best for</td><td>Repeated insert + delete max/min</td><td>Search &amp; range queries</td><td>Simple storage</td></tr>
+            <tr><td>الإدراج</td>
+                <td style="color:#27ae60;font-weight:bold;"><span dir="ltr">O(log n)</span></td>
+                <td style="color:#e67e22;"><span dir="ltr">O(n)</span></td>
+                <td style="color:#27ae60;"><span dir="ltr">O(1)</span></td></tr>
+            <tr><td>إيجاد القيمة الكبرى</td>
+                <td style="color:#27ae60;font-weight:bold;"><span dir="ltr">O(1)</span></td>
+                <td style="color:#27ae60;"><span dir="ltr">O(1)</span></td>
+                <td style="color:#e74c3c;"><span dir="ltr">O(n)</span></td></tr>
+            <tr><td>حذف القيمة الكبرى</td>
+                <td style="color:#27ae60;font-weight:bold;"><span dir="ltr">O(log n)</span></td>
+                <td style="color:#e67e22;"><span dir="ltr">O(n)</span></td>
+                <td style="color:#e74c3c;"><span dir="ltr">O(n)</span></td></tr>
+            <tr><td>هل هي مرتَّبة؟</td><td>لا (منظَّمة جزئيًا)</td><td>نعم</td><td>لا</td></tr>
+            <tr><td>الذاكرة</td><td>مصفوفة مضغوطة (بلا هدر)</td><td>مصفوفة مضغوطة</td><td>مصفوفة مضغوطة</td></tr>
+            <tr><td>الأنسب لـ</td><td>الإدراج المتكرر + حذف القيمة الكبرى/الصغرى</td><td>البحث واستعلامات النطاق</td><td>التخزين البسيط</td></tr>
         </tbody>
     </table>
 
-    <h3>&#127793; Real-World Applications of Heaps</h3>
+    <h3>&#127793; تطبيقات الكومة في العالم الحقيقي</h3>
     <div class="grid-3">
         <div class="card">
             <p style="font-size:2em;color:#e74c3c;">&#9790;&#65038;</p>
-            <h4>Hospital Triage</h4>
-            <p style="font-size:0.82em;">Always treat the most critical patient first regardless of arrival order</p>
+            <h4>الفرز الطبي في المستشفى</h4>
+            <p style="font-size:0.82em;">معالجة المريض الأخطر حالةً أولًا دائمًا بغض النظر عن ترتيب الوصول</p>
         </div>
         <div class="card">
             <p style="font-size:2em;">&#128187;</p>
-            <h4>CPU Scheduling</h4>
-            <p style="font-size:0.82em;">Operating systems use heaps to run processes by priority level</p>
+            <h4>جدولة المعالج (CPU Scheduling)</h4>
+            <p style="font-size:0.82em;">تستخدم أنظمة التشغيل الكومة لتشغيل العمليات حسب مستوى أولويتها</p>
         </div>
         <div class="card">
             <p style="font-size:2em;">&#128506;</p>
-            <h4>Dijkstra's Algorithm</h4>
-            <p style="font-size:0.82em;">Shortest path in graphs: always pick the unvisited node with smallest distance</p>
+            <h4>خوارزمية دايكسترا</h4>
+            <p style="font-size:0.82em;">أقصر مسار في المخططات (Graphs): اختيار العقدة غير المزارة ذات المسافة الأصغر دائمًا</p>
         </div>
         <div class="card">
             <p style="font-size:2em;">&#128293;</p>
-            <h4>HeapSort</h4>
-            <p style="font-size:0.82em;">An O(n log n) sorting algorithm built directly on the heap</p>
+            <h4>فرز الكومة</h4>
+            <p style="font-size:0.82em;">خوارزمية فرز تعقيدها <span dir="ltr">O(n log n)</span> مبنية مباشرةً على الكومة</p>
         </div>
         <div class="card">
             <p style="font-size:2em;">&#127941;</p>
-            <h4>Event Simulation</h4>
-            <p style="font-size:0.82em;">Process events in order of scheduled time using a min-heap</p>
+            <h4>محاكاة الأحداث</h4>
+            <p style="font-size:0.82em;">معالجة الأحداث حسب وقتها المجدول باستخدام كومة صغرى</p>
         </div>
         <div class="card purple">
             <p style="font-size:2em;">&#127891;</p>
-            <h4>And More...</h4>
-            <p style="font-size:0.82em;">Any problem needing the min/max of a dynamic set uses a heap!</p>
+            <h4>والمزيد...</h4>
+            <p style="font-size:0.82em;">أي مسألة تحتاج إلى القيمة الصغرى/الكبرى لمجموعة ديناميكية تستخدم الكومة!</p>
         </div>
     </div>
 
     <div class="info-box" style="margin-top:28px;">
-        <strong>&#127891; What You Must Remember:</strong>
+        <strong>&#127891; ما يجب أن تتذكره:</strong>
         <ul style="margin-top:8px;">
-            <li>A heap is a <strong>complete binary tree</strong> + <strong>heap property</strong> (parent &ge; children for max-heap)</li>
-            <li>It is <strong>ordered</strong> (heap property holds) but <strong>NOT sorted</strong></li>
-            <li>Stored as a <strong>0-indexed array</strong>: parent = &lfloor;(i&minus;1)/2&rfloor;, left = 2i+1, right = 2i+2</li>
-            <li>The <strong>complete tree constraint</strong> ensures zero memory waste and valid index formulas</li>
-            <li><strong>Insert:</strong> add at end &rarr; percolate up &rarr; <strong>O(log n)</strong></li>
-            <li><strong>Extract Max:</strong> remove root &rarr; move last to root &rarr; percolate down &rarr; <strong>O(log n)</strong></li>
-            <li>Far better than sorting an array each time: O(log n) vs O(n log n) per operation</li>
+            <li>الكومة = <strong>شجرة ثنائية كاملة</strong> + <strong>خاصية الكومة</strong> (الأب &ge; الأبناء في الكومة الكبرى)</li>
+            <li>هي <strong>منظَّمة</strong> (خاصية الكومة متحققة) لكنها <strong>ليست مرتَّبة</strong></li>
+            <li>تُخزَّن على شكل <strong>مصفوفة تبدأ فهارسها من 0</strong>: <span dir="ltr">parent = &lfloor;(i&minus;1)/2&rfloor;, left = 2i+1, right = 2i+2</span></li>
+            <li><strong>قيد الشجرة الكاملة</strong> يضمن هدرًا صفريًا في الذاكرة وصحة صيغ الفهارس</li>
+            <li><strong>الإدراج:</strong> الإضافة في النهاية &larr; الترشيح للأعلى &larr; <strong><span dir="ltr">O(log n)</span></strong></li>
+            <li><strong>استخراج القيمة الكبرى:</strong> إزالة الجذر &larr; نقل العنصر الأخير إلى الجذر &larr; الترشيح للأسفل &larr; <strong><span dir="ltr">O(log n)</span></strong></li>
+            <li>أفضل بكثير من فرز المصفوفة في كل مرة: <span dir="ltr">O(log n)</span> مقابل <span dir="ltr">O(n log n)</span> لكل عملية</li>
         </ul>
     </div>
 </section>
@@ -1404,8 +1454,8 @@ graph TD
 </div><!-- end .content -->
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 </div><!-- end .container -->
@@ -1436,12 +1486,12 @@ function buildSimSteps(values) {
         const parent = i0 > 0 ? Math.floor((i0 - 1) / 2) : null;
         const isLeft = (i0 % 2 === 1);
         const posNote = i0 === 0
-            ? `<strong>${v}</strong> is the first value &rarr; placed as the <strong>ROOT</strong> at position [0].`
-            : `<strong>${v}</strong> placed at position [${i0}] &mdash; the ${isLeft ? '<strong>LEFT</strong>' : '<strong>RIGHT</strong>'} child of node[${parent}].<br><span style="color:#f1c40f;">&#9888;&nbsp;We chose position [${i0}] because it is the <em>next available spot (left&rarr;right, level by level)</em> to keep the tree <strong>COMPLETE</strong> &mdash; NOT based on the value!</span>`;
+            ? `<strong>${v}</strong> هي القيمة الأولى &larr; وُضعت بوصفها <strong>الجذر</strong> في الموضع [0].`
+            : `<strong>${v}</strong> وُضعت في الموضع [${i0}] &mdash; بوصفها الابن ${isLeft ? '<strong>الأيسر</strong>' : '<strong>الأيمن</strong>'} للعقدة <span dir="ltr">node[${parent}]</span>.<br><span style="color:#f1c40f;">&#9888;&nbsp;اخترنا الموضع [${i0}] لأنه <em>الموضع المتاح التالي (من اليسار إلى اليمين، مستوًى تلو الآخر)</em> للحفاظ على الشجرة <strong>كاملة</strong> &mdash; وليس بناءً على القيمة!</span>`;
 
         steps.push({
             heap: [...heap], size, hl: { [i0]: 'new' },
-            formula: `Append <strong>${v}</strong> at end &nbsp;&rarr;&nbsp; i = <strong>${i0}</strong>`,
+            formula: `ألحِق <strong>${v}</strong> في النهاية &nbsp;&larr;&nbsp; <span dir="ltr">i = <strong>${i0}</strong></span>`,
             msg: posNote
         });
 
@@ -1450,39 +1500,39 @@ function buildSimSteps(values) {
             const p = Math.floor((i - 1) / 2);
             steps.push({
                 heap: [...heap], size, hl: { [i]: 'compare', [p]: 'compare' },
-                formula: `i = ${i} &nbsp;&rarr;&nbsp; parent = &lfloor;(${i}&minus;1) / 2&rfloor; = <strong>${p}</strong> &nbsp;&rarr;&nbsp; arr[${i}] = ${heap[i]} vs arr[${p}] = ${heap[p]}`,
-                msg: `Compare arr[${i}] = <strong>${heap[i]}</strong> with parent arr[${p}] = <strong>${heap[p]}</strong>. &nbsp; Is ${heap[i]} &gt; ${heap[p]}?`
+                formula: `<span dir="ltr">i = ${i} &nbsp;&rarr;&nbsp; parent = &lfloor;(${i}&minus;1) / 2&rfloor; = <strong>${p}</strong> &nbsp;&rarr;&nbsp; arr[${i}] = ${heap[i]} مقابل arr[${p}] = ${heap[p]}</span>`,
+                msg: `قارن <span dir="ltr">arr[${i}] = <strong>${heap[i]}</strong></span> مع الأب <span dir="ltr">arr[${p}] = <strong>${heap[p]}</strong></span>. &nbsp; هل <span dir="ltr">${heap[i]} &gt; ${heap[p]}</span>؟`
             });
             if (heap[i] > heap[p]) {
                 [heap[i], heap[p]] = [heap[p], heap[i]];
                 steps.push({
                     heap: [...heap], size, hl: { [i]: 'swap', [p]: 'swap' },
-                    formula: `SWAP arr[${p}] &harr; arr[${i}] &nbsp;&rarr;&nbsp; now i = <strong>${p}</strong>, continue up`,
-                    msg: `<strong>YES!</strong> &nbsp;<strong>${heap[p]}</strong> &uarr; rises to [${p}]. &nbsp;<strong>${heap[i]}</strong> &darr; drops to [${i}]. Continue percolating up...`
+                    formula: `تبديل <span dir="ltr">arr[${p}] &harr; arr[${i}]</span> &nbsp;&larr;&nbsp; الآن <span dir="ltr">i = <strong>${p}</strong></span>، تابع الصعود`,
+                    msg: `<strong>نعم!</strong> &nbsp;<strong>${heap[p]}</strong> &uarr; تصعد إلى [${p}]. &nbsp;<strong>${heap[i]}</strong> &darr; تنزل إلى [${i}]. تابع الترشيح للأعلى...`
                 });
                 i = p;
             } else {
                 steps.push({
                     heap: [...heap], size, hl: { [i]: 'done' },
-                    formula: `arr[${i}] = ${heap[i]} &le; arr[${p}] = ${heap[p]} &nbsp;&rarr;&nbsp; <strong>STOP</strong>`,
-                    msg: `<strong>NO.</strong> &nbsp;${heap[i]} &le; ${heap[p]}. Heap property satisfied. Value stays at [${i}]. &#10004;`
+                    formula: `<span dir="ltr">arr[${i}] = ${heap[i]} &le; arr[${p}] = ${heap[p]}</span> &nbsp;&larr;&nbsp; <strong>توقّف</strong>`,
+                    msg: `<strong>لا.</strong> &nbsp;<span dir="ltr">${heap[i]} &le; ${heap[p]}</span>. خاصية الكومة متحققة. تبقى القيمة في [${i}]. &#10004;`
                 });
                 placed = true; break;
             }
         }
         if (!placed) steps.push({
             heap: [...heap], size, hl: { [i]: 'done' },
-            formula: i === 0 ? `i = 0 = <strong>ROOT</strong> &nbsp;&rarr;&nbsp; STOP` : `Heap property satisfied`,
+            formula: i === 0 ? `<span dir="ltr">i = 0</span> = <strong>الجذر</strong> &nbsp;&larr;&nbsp; توقّف` : `خاصية الكومة متحققة`,
             msg: i === 0
-                ? `Reached the <strong>ROOT</strong>. Percolate up complete! &#10004;`
-                : `Done at [${i}]. &#10004;`
+                ? `وصلنا إلى <strong>الجذر</strong>. اكتمل الترشيح للأعلى! &#10004;`
+                : `انتهى عند [${i}]. &#10004;`
         });
     }
 
     steps.push({
         heap: [...heap], size, hl: {},
-        formula: `Max-Heap complete &nbsp;&rarr;&nbsp; Root = heap[0] = <strong>${heap[0]}</strong> (maximum)`,
-        msg: `&#127942; <strong>Heap construction complete!</strong><br>Root = <strong>${heap[0]}</strong> (maximum). &nbsp; Array: [${heap.join(', ')}]`,
+        formula: `اكتملت الكومة الكبرى &nbsp;&larr;&nbsp; الجذر = <span dir="ltr">heap[0] = <strong>${heap[0]}</strong></span> (القيمة الكبرى)`,
+        msg: `&#127942; <strong>اكتمل بناء الكومة!</strong><br>الجذر = <strong>${heap[0]}</strong> (القيمة الكبرى). &nbsp; المصفوفة: <span dir="ltr">[${heap.join(', ')}]</span>`,
         final: true
     });
 
@@ -1523,7 +1573,7 @@ function drawBigTree(svgId, heap, size, hl) {
         nodes += `<text x="${x}" y="${y + 4}" text-anchor="middle" font-size="${r >= 22 ? 13 : 11}" font-weight="bold" fill="${tc}" style="pointer-events:none">${heap[i]}</text>`;
         nodes += `<text x="${x}" y="${y + r + 12}" text-anchor="middle" font-size="9" fill="#888" style="pointer-events:none">[${i}]</text>`;
     }
-    if (size === 0) nodes = `<text x="${W / 2}" y="${H / 2}" text-anchor="middle" font-size="14" fill="#aaa">Empty heap</text>`;
+    if (size === 0) nodes = `<text x="${W / 2}" y="${H / 2}" text-anchor="middle" font-size="14" fill="#aaa">الكومة فارغة</text>`;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.innerHTML = edges + nodes;
 }
@@ -1557,15 +1607,15 @@ function drawArrFull(cId, heap, size, hl, maxSize) {
 function loadSimAVals() {
     const raw  = document.getElementById('simAValInput').value;
     const vals = raw.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0);
-    if (vals.length < 2)  { alert('Please enter at least 2 positive integers separated by commas.'); return; }
-    if (vals.length > 20) { alert('Maximum 20 values for a clear visualization.'); return; }
+    if (vals.length < 2)  { alert('يُرجى إدخال عددين صحيحين موجبين على الأقل مفصولين بفواصل.'); return; }
+    if (vals.length > 20) { alert('الحد الأقصى 20 قيمة للحصول على عرض بصري واضح.'); return; }
     simASteps = buildSimSteps(vals);
     simAIdx   = 0;
     const svgA = document.getElementById('simASVG');
-    if (svgA) svgA.innerHTML = '<text x="300" y="145" text-anchor="middle" font-size="14" fill="#aaa">Values loaded — press Next Step to begin</text>';
-    document.getElementById('simAMsg').innerHTML = '&#10004; Values loaded! Click "Next Step" to start.';
+    if (svgA) svgA.innerHTML = '<text x="300" y="145" text-anchor="middle" font-size="14" fill="#aaa">تم تحميل القيم — اضغط "الخطوة التالية" للبدء</text>';
+    document.getElementById('simAMsg').innerHTML = '&#10004; تم تحميل القيم! انقر على "الخطوة التالية" للبدء.';
     document.getElementById('simAMsg').className = 'sim-msg';
-    document.getElementById('simAProgress').textContent = `Step 0 / ${simASteps.length}`;
+    document.getElementById('simAProgress').textContent = `الخطوة 0 / ${simASteps.length}`;
 }
 function resetSimAVals() {
     document.getElementById('simAValInput').value = SIM_DEFAULT.join(', ');
@@ -1579,32 +1629,32 @@ function simANext() {
     const m = document.getElementById('simAMsg');
     m.innerHTML = s.msg;
     m.className = s.final ? 'sim-msg done-msg' : 'sim-msg';
-    document.getElementById('simAProgress').textContent = `Step ${simAIdx + 1} / ${simASteps.length}`;
+    document.getElementById('simAProgress').textContent = `الخطوة ${simAIdx + 1} / ${simASteps.length}`;
     simAIdx++;
 }
 function simAReset() {
     simAIdx = 0;
     const svgA = document.getElementById('simASVG');
-    if (svgA) svgA.innerHTML = '<text x="300" y="145" text-anchor="middle" font-size="14" fill="#aaa">Empty — press Next Step to begin</text>';
-    document.getElementById('simAMsg').innerHTML = '&#128072; Click "Next Step" to begin building the heap tree visually...';
+    if (svgA) svgA.innerHTML = '<text x="300" y="145" text-anchor="middle" font-size="14" fill="#aaa">فارغة — اضغط "الخطوة التالية" للبدء</text>';
+    document.getElementById('simAMsg').innerHTML = '&#128073; انقر على "الخطوة التالية" لبدء بناء شجرة الكومة بصريًا...';
     document.getElementById('simAMsg').className = 'sim-msg';
-    document.getElementById('simAProgress').textContent = `Step 0 / ${simASteps.length}`;
+    document.getElementById('simAProgress').textContent = `الخطوة 0 / ${simASteps.length}`;
 }
 
 /* ── Simulation B: input + controls ── */
 function loadSimBVals() {
     const raw  = document.getElementById('simBValInput').value;
     const vals = raw.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0);
-    if (vals.length < 2)  { alert('Please enter at least 2 positive integers separated by commas.'); return; }
-    if (vals.length > 20) { alert('Maximum 20 values for a clear visualization.'); return; }
+    if (vals.length < 2)  { alert('يُرجى إدخال عددين صحيحين موجبين على الأقل مفصولين بفواصل.'); return; }
+    if (vals.length > 20) { alert('الحد الأقصى 20 قيمة للحصول على عرض بصري واضح.'); return; }
     simBSteps   = buildSimSteps(vals);
     simBIdx     = 0;
     simBMaxSize = vals.length;
     drawArrFull('simBArrayDiv', [], 0, {}, simBMaxSize);
-    document.getElementById('simBFormula').innerHTML  = '&#128272; Formula step will appear here';
-    document.getElementById('simBMsg').innerHTML = '&#10004; Values loaded! Click "Next Step" to start.';
+    document.getElementById('simBFormula').innerHTML  = '&#128272; ستظهر خطوة الصيغة هنا';
+    document.getElementById('simBMsg').innerHTML = '&#10004; تم تحميل القيم! انقر على "الخطوة التالية" للبدء.';
     document.getElementById('simBMsg').className = 'sim-msg';
-    document.getElementById('simBProgress').textContent = `Step 0 / ${simBSteps.length}`;
+    document.getElementById('simBProgress').textContent = `الخطوة 0 / ${simBSteps.length}`;
 }
 function resetSimBVals() {
     document.getElementById('simBValInput').value = SIM_DEFAULT.join(', ');
@@ -1619,16 +1669,16 @@ function simBNext() {
     const m = document.getElementById('simBMsg');
     m.innerHTML = s.msg;
     m.className = s.final ? 'sim-msg done-msg' : 'sim-msg';
-    document.getElementById('simBProgress').textContent = `Step ${simBIdx + 1} / ${simBSteps.length}`;
+    document.getElementById('simBProgress').textContent = `الخطوة ${simBIdx + 1} / ${simBSteps.length}`;
     simBIdx++;
 }
 function simBReset() {
     simBIdx = 0;
     drawArrFull('simBArrayDiv', [], 0, {}, simBMaxSize);
-    document.getElementById('simBFormula').innerHTML  = '&#128272; Formula step will appear here';
-    document.getElementById('simBMsg').innerHTML = '&#128072; Click "Next Step" to begin...';
+    document.getElementById('simBFormula').innerHTML  = '&#128272; ستظهر خطوة الصيغة هنا';
+    document.getElementById('simBMsg').innerHTML = '&#128073; انقر على "الخطوة التالية" للبدء...';
     document.getElementById('simBMsg').className = 'sim-msg';
-    document.getElementById('simBProgress').textContent = `Step 0 / ${simBSteps.length}`;
+    document.getElementById('simBProgress').textContent = `الخطوة 0 / ${simBSteps.length}`;
 }
 
 // Initialize Sim A & B with default values on page load
@@ -1655,7 +1705,7 @@ function renderFArray(hl) {
     for (let i = 0; i < FH.length; i++) {
         const t = hl[i];
         const co = t ? (colors[t] || {bg:'#f3e5f5', bd:'#7b1fa2'}) : {bg:'#f3e5f5', bd:'#7b1fa2'};
-        const lbl = {sel:'selected', parent:'parent', lchild:'left child', rchild:'right child'}[t] || '';
+        const lbl = {sel:'المحددة', parent:'الأب', lchild:'الابن الأيسر', rchild:'الابن الأيمن'}[t] || '';
         h += `<div style="text-align:center;">
             <div style="width:42px;height:42px;border:2px solid ${co.bd};background:${co.bg};display:flex;align-items:center;justify-content:center;font-weight:bold;color:#2c3e50;border-radius:5px;">${FH[i]}</div>
             <div style="font-size:9px;color:#888;margin-top:2px;">[${i}]</div>
@@ -1681,13 +1731,13 @@ function fClick(i) {
     setFNode(i, '#f1c40f', '#c9a000'); hl[i] = 'sel';
     const p = i > 0 ? Math.floor((i - 1) / 2) : null;
     const lc = 2*i+1, rc = 2*i+2;
-    let msg = `<strong>Node [${i}] = ${FH[i]}</strong><br>`;
-    if (i > 0) { setFNode(p, '#2ecc71', '#1e8449'); hl[p] = 'parent'; msg += `&#10004; Parent: &lfloor;(${i}&minus;1)/2&rfloor; = <strong>${p}</strong> &rarr; value = <strong>${FH[p]}</strong><br>`; }
-    else msg += `&#128281; This is the <strong>ROOT</strong> &mdash; no parent.<br>`;
-    if (lc <= 6) { setFNode(lc, '#3498db', '#1a6fa0'); hl[lc] = 'lchild'; msg += `&#10004; Left Child: 2&times;${i}+1 = <strong>${lc}</strong> &rarr; value = <strong>${FH[lc]}</strong><br>`; }
-    else msg += `&#10060; Left Child: 2&times;${i}+1 = ${lc} &rarr; <strong>out of range (no child)</strong><br>`;
-    if (rc <= 6) { setFNode(rc, '#e67e22', '#ca6f1e'); hl[rc] = 'rchild'; msg += `&#10004; Right Child: 2&times;${i}+2 = <strong>${rc}</strong> &rarr; value = <strong>${FH[rc]}</strong>`; }
-    else msg += `&#10060; Right Child: 2&times;${i}+2 = ${rc} &rarr; <strong>out of range (no child)</strong>`;
+    let msg = `<strong>العقدة <span dir="ltr">[${i}] = ${FH[i]}</span></strong><br>`;
+    if (i > 0) { setFNode(p, '#2ecc71', '#1e8449'); hl[p] = 'parent'; msg += `&#10004; الأب: <span dir="ltr">&lfloor;(${i}&minus;1)/2&rfloor; = <strong>${p}</strong></span> &larr; القيمة = <strong>${FH[p]}</strong><br>`; }
+    else msg += `&#128281; هذه هي عقدة <strong>الجذر</strong> &mdash; لا أب لها.<br>`;
+    if (lc <= 6) { setFNode(lc, '#3498db', '#1a6fa0'); hl[lc] = 'lchild'; msg += `&#10004; الابن الأيسر: <span dir="ltr">2&times;${i}+1 = <strong>${lc}</strong></span> &larr; القيمة = <strong>${FH[lc]}</strong><br>`; }
+    else msg += `&#10060; الابن الأيسر: <span dir="ltr">2&times;${i}+1 = ${lc}</span> &larr; <strong>خارج النطاق (لا يوجد ابن)</strong><br>`;
+    if (rc <= 6) { setFNode(rc, '#e67e22', '#ca6f1e'); hl[rc] = 'rchild'; msg += `&#10004; الابن الأيمن: <span dir="ltr">2&times;${i}+2 = <strong>${rc}</strong></span> &larr; القيمة = <strong>${FH[rc]}</strong>`; }
+    else msg += `&#10060; الابن الأيمن: <span dir="ltr">2&times;${i}+2 = ${rc}</span> &larr; <strong>خارج النطاق (لا يوجد ابن)</strong>`;
     document.getElementById('fMsg').innerHTML = msg;
     renderFArray(hl);
 }
@@ -1728,7 +1778,7 @@ function drawTree(svgId, heap, size, hl) {
         nodes += `<text x="${x}" y="${y+5}" text-anchor="middle" font-size="13" font-weight="bold" fill="${tc}" style="pointer-events:none">${heap[i]}</text>`;
         nodes += `<text x="${x}" y="${y+R+13}" text-anchor="middle" font-size="9" fill="#888" style="pointer-events:none">[${i}]</text>`;
     }
-    if (size === 0) nodes = `<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="#aaa">Empty heap</text>`;
+    if (size === 0) nodes = `<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="#aaa">الكومة فارغة</text>`;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.innerHTML = edges + nodes;
 }
@@ -1736,7 +1786,7 @@ function drawTree(svgId, heap, size, hl) {
 function drawArr(cId, heap, size, hl) {
     const c = document.getElementById(cId);
     if (!c) return;
-    if (size === 0) { c.innerHTML = '<p style="color:#aaa;font-size:0.84em;text-align:center;padding:16px;">Empty heap</p>'; return; }
+    if (size === 0) { c.innerHTML = '<p style="color:#aaa;font-size:0.84em;text-align:center;padding:16px;">الكومة فارغة</p>'; return; }
     const bc = {new:{bg:'#d5f5e3',bd:'#2ecc71'}, compare:{bg:'#fef9e7',bd:'#f39c12'}, swap:{bg:'#fde8e8',bd:'#e74c3c'}, done:{bg:'#d6eaf8',bd:'#3498db'}, remove:{bg:'#fde8e8',bd:'#e74c3c'}, moved:{bg:'#d5f5e3',bd:'#2ecc71'}};
     let h = '<div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:6px 0;">';
     for (let i = 0; i < size; i++) {
@@ -1761,11 +1811,11 @@ function buildDelSteps(heap0, size0) {
 
     for (let ex = 0; ex < 3 && s > 0; ex++) {
         const maxVal = h[0];
-        steps.push({ heap:[...h], size:s, hl:{0:'remove'}, msg:`&#128193; <strong>Extract Max:</strong> Remove root = <strong>${maxVal}</strong> (the maximum). It leaves the heap.`, ext:null });
+        steps.push({ heap:[...h], size:s, hl:{0:'remove'}, msg:`&#128193; <strong>استخراج القيمة الكبرى:</strong> أزل الجذر = <strong>${maxVal}</strong> (القيمة الكبرى). وهو يغادر الكومة.`, ext:null });
         ext = [...ext, maxVal];
-        if (s === 1) { s = 0; h = []; steps.push({ heap:[], size:0, hl:{}, msg:`Heap is now empty.`, ext:[...ext] }); break; }
+        if (s === 1) { s = 0; h = []; steps.push({ heap:[], size:0, hl:{}, msg:`أصبحت الكومة الآن فارغة.`, ext:[...ext] }); break; }
         h[0] = h[s-1]; h[s-1] = undefined; s--;
-        steps.push({ heap:[...h], size:s, hl:{0:'moved'}, msg:`&#8618; Move last element (<strong>${h[0]}</strong>) from position [${s}] to the root [0]. Heap size is now ${s}. Heap property may be violated &mdash; percolate down!`, ext:[...ext] });
+        steps.push({ heap:[...h], size:s, hl:{0:'moved'}, msg:`&#8617; انقل العنصر الأخير (<strong>${h[0]}</strong>) من الموضع [${s}] إلى الجذر [0]. أصبح حجم الكومة الآن ${s}. قد تُخالَف خاصية الكومة &mdash; نفّذ الترشيح للأسفل!`, ext:[...ext] });
 
         let i = 0, settled = false;
         while (2*i+1 < s) {
@@ -1774,17 +1824,17 @@ function buildDelSteps(heap0, size0) {
             if (rc < s && h[rc] > h[lc]) lg = rc;
             const chl = {[i]:'compare', [lc]:'compare'};
             if (rc < s) chl[rc] = 'compare';
-            steps.push({ heap:[...h], size:s, hl:chl, msg:`Percolate Down: node[${i}] = <strong>${h[i]}</strong>. ${rc<s ? `Left=[${lc}]=${h[lc]}, Right=[${rc}]=${h[rc]}.` : `Only left child [${lc}]=${h[lc]}.`} Larger child = [${lg}] = <strong>${h[lg]}</strong>. &nbsp; Is ${h[i]} &lt; ${h[lg]}?`, ext:[...ext] });
+            steps.push({ heap:[...h], size:s, hl:chl, msg:`الترشيح للأسفل: <span dir="ltr">node[${i}] = <strong>${h[i]}</strong></span>. ${rc<s ? `الأيسر=<span dir="ltr">[${lc}]=${h[lc]}</span>، الأيمن=<span dir="ltr">[${rc}]=${h[rc]}</span>.` : `يوجد ابن أيسر فقط <span dir="ltr">[${lc}]=${h[lc]}</span>.`} الابن الأكبر = <span dir="ltr">[${lg}] = <strong>${h[lg]}</strong></span>. &nbsp; هل <span dir="ltr">${h[i]} &lt; ${h[lg]}</span>؟`, ext:[...ext] });
             if (h[i] < h[lg]) {
                 [h[i], h[lg]] = [h[lg], h[i]];
-                steps.push({ heap:[...h], size:s, hl:{[i]:'swap',[lg]:'swap'}, msg:`<strong>YES!</strong> Swap node[${i}] &harr; node[${lg}]: <strong>${h[i]}</strong> &uarr; &nbsp; <strong>${h[lg]}</strong> &darr;. Continue percolating down...`, ext:[...ext] });
+                steps.push({ heap:[...h], size:s, hl:{[i]:'swap',[lg]:'swap'}, msg:`<strong>نعم!</strong> بدّل <span dir="ltr">node[${i}] &harr; node[${lg}]</span>: <strong>${h[i]}</strong> &uarr; &nbsp; <strong>${h[lg]}</strong> &darr;. تابع الترشيح للأسفل...`, ext:[...ext] });
                 i = lg;
             } else {
-                steps.push({ heap:[...h], size:s, hl:{[i]:'done'}, msg:`<strong>NO.</strong> ${h[i]} &ge; ${h[lg]}. Heap property restored! &#10004; &nbsp; New max = <strong>${h[0]}</strong> at root [0].`, ext:[...ext] });
+                steps.push({ heap:[...h], size:s, hl:{[i]:'done'}, msg:`<strong>لا.</strong> <span dir="ltr">${h[i]} &ge; ${h[lg]}</span>. استُعيدت خاصية الكومة! &#10004; &nbsp; القيمة الكبرى الجديدة = <strong>${h[0]}</strong> في الجذر [0].`, ext:[...ext] });
                 settled = true; break;
             }
         }
-        if (!settled && s > 0) steps.push({ heap:[...h], size:s, hl:{[i]:'done'}, msg:`Reached a leaf &mdash; no children. Percolate down complete. &#10004; &nbsp; New max = <strong>${h[0]}</strong> at root [0].`, ext:[...ext] });
+        if (!settled && s > 0) steps.push({ heap:[...h], size:s, hl:{[i]:'done'}, msg:`وصلنا إلى ورقة &mdash; لا أبناء. اكتمل الترشيح للأسفل. &#10004; &nbsp; القيمة الكبرى الجديدة = <strong>${h[0]}</strong> في الجذر [0].`, ext:[...ext] });
     }
     return steps;
 }
@@ -1795,11 +1845,11 @@ function delNext() {
     drawBigTree('delSVG', s.heap, s.size, s.hl);
     drawArr('delArrDiv', s.heap, s.size, s.hl);
     document.getElementById('delMsg').innerHTML = s.msg;
-    document.getElementById('delProgress').textContent = `Step ${delIdx+1} / ${DEL_STEPS.length}`;
+    document.getElementById('delProgress').textContent = `الخطوة ${delIdx+1} / ${DEL_STEPS.length}`;
     if (s.ext && s.ext.length > extracted.length) {
         extracted = s.ext;
-        let lh = '<div style="margin-top:10px;"><strong style="color:#4a148c;">Extracted values (descending order):</strong><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">';
-        extracted.forEach((v,i) => { lh += `<div style="background:#4a148c;color:white;padding:6px 14px;border-radius:20px;font-weight:bold;font-size:0.88em;">#${i+1}: ${v}</div>`; });
+        let lh = '<div style="margin-top:10px;"><strong style="color:#4a148c;">القيم المستخرجة (بترتيب تنازلي):</strong><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">';
+        extracted.forEach((v,i) => { lh += `<div style="background:#4a148c;color:white;padding:6px 14px;border-radius:20px;font-weight:bold;font-size:0.88em;" dir="ltr">#${i+1}: ${v}</div>`; });
         lh += '</div></div>';
         document.getElementById('extractedList').innerHTML = lh;
     }
@@ -1810,8 +1860,8 @@ function delReset() {
     delIdx = 0; extracted = [];
     drawBigTree('delSVG', DEL_HEAP, DEL_SIZE, {});
     drawArr('delArrDiv', DEL_HEAP, DEL_SIZE, {});
-    document.getElementById('delMsg').innerHTML = `&#128072; Heap reset &mdash; click "Next Step" to extract the maximum element.`;
-    document.getElementById('delProgress').textContent = `Step 0 / ${DEL_STEPS.length}`;
+    document.getElementById('delMsg').innerHTML = `&#128073; أُعيد ضبط الكومة &mdash; انقر على "الخطوة التالية" لاستخراج العنصر الأكبر.`;
+    document.getElementById('delProgress').textContent = `الخطوة 0 / ${DEL_STEPS.length}`;
     document.getElementById('extractedList').innerHTML = '';
 }
 
@@ -1819,7 +1869,7 @@ function delReset() {
 DEL_STEPS = buildDelSteps(DEL_HEAP, DEL_SIZE);
 drawBigTree('delSVG', DEL_HEAP, DEL_SIZE, {});
 drawArr('delArrDiv', DEL_HEAP, DEL_SIZE, {});
-document.getElementById('delProgress').textContent = `Step 0 / ${DEL_STEPS.length}`;
+document.getElementById('delProgress').textContent = `الخطوة 0 / ${DEL_STEPS.length}`;
 </script>
 </body>
 </html>

@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive BST Practice</title>
+<title>تدريب تفاعلي على شجرة البحث الثنائية (BST)</title>
 <style>
+@font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+    font-weight: 400;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+    font-weight: 600;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+    font-weight: 700;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+    font-weight: 800;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{
-  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  font-family:'Haradh','Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
   background:linear-gradient(135deg,#0a3d1f 0%,#27ae60 100%);
   min-height:100vh; padding:20px; color:#1a2e1a;
 }
@@ -100,7 +124,7 @@ circle.clickable{cursor:pointer;}
 circle.clickable:hover{stroke-width:4!important;}
 /* ── PART A controls ── */
 .ctrl-row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:10px 0;}
-.step-info{font-size:.85em; color:#7f8c8d; margin-left:auto;}
+.step-info{font-size:.85em; color:#7f8c8d; margin-right:auto;}
 .path-box{
   background:#fffbeb; border:1px solid #f59e0b; border-radius:6px;
   padding:9px 14px; font-size:.9em; min-height:38px; margin:8px 0;
@@ -113,7 +137,7 @@ circle.clickable:hover{stroke-width:4!important;}
   cursor:pointer; background:#fff; color:#2980b9; font-weight:700; font-size:.88em;
 }
 .ttab.act{background:#2980b9; color:#fff;}
-.trav-panel{border:2px solid #2980b9; border-radius:0 8px 8px 8px; padding:14px;}
+.trav-panel{border:2px solid #2980b9; border-radius:8px 0 8px 8px; padding:14px;}
 .tile-bank{
   display:flex; flex-wrap:wrap; gap:7px; padding:10px;
   background:#eaf4fb; border-radius:6px; min-height:48px; margin:6px 0;
@@ -212,59 +236,66 @@ footer strong { opacity: 1; }
     z-index: 1000;
 }
 .lang-switch-btn:hover { background: #667eea; color: white; }
+/* ── RTL: code, identifiers and tree drawings stay left-to-right ── */
+body{line-height:1.7;}
+code{direction:ltr; unicode-bidi:isolate;}
+.code-ta, .code-sol, pre{direction:ltr; text-align:left;}
+.tree-frame, .svg-wrap{direction:ltr;}
+#cinput{direction:ltr; text-align:left;}
+#cinput:placeholder-shown{direction:rtl; text-align:right;}
 </style>
 </head>
 <body>
-<a href="binary_tree_question-ar.html" class="lang-switch-btn">عربي</a>
+<a href="binary_tree_question.html" class="lang-switch-btn">English</a>
 <div class="container">
 
 <!-- HEADER -->
 <header>
   <div>
-    <h1>🌳 Interactive BST Practice</h1>
-    <div class="sub">Data Structures | Dr. Almalawi</div>
+    <h1>🌳 تدريب تفاعلي على شجرة البحث الثنائية (BST)</h1>
+    <div class="sub">هياكل البيانات | د. المعلوي (Dr. Almalawi)</div>
   </div>
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-    <div class="score-pill" id="score-lbl">Score: 0</div>
-    <button class="new-btn" onclick="doRandom()">🎲 New Question</button>
-    <button class="new-btn" onclick="showAllAnswers()" style="background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.5);">👁 Show All Answers</button>
-    <a href="../index.html" style="color:rgba(255,255,255,.75);font-size:.85em;">← Home</a>
+    <div class="score-pill" id="score-lbl">النتيجة: 0</div>
+    <button class="new-btn" onclick="doRandom()">🎲 سؤال جديد</button>
+    <button class="new-btn" onclick="showAllAnswers()" style="background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.5);">👁 عرض جميع الإجابات</button>
+    <a href="../index.html" style="color:rgba(255,255,255,.75);font-size:.85em;">→ الرئيسية</a>
   </div>
 </header>
 
 <!-- KEY INPUT -->
 <div class="key-section">
-  <h2>🔢 Keys to Insert into the BST</h2>
+  <h2>🔢 المفاتيح المراد إدراجها في شجرة البحث الثنائية</h2>
   <div class="input-row">
-    <button class="btn btn-b" onclick="doRandom()">🎲 Random</button>
-    <input id="cinput" type="text" placeholder="Or type your own: e.g. 50, 25, 75, 10, 30" />
-    <button class="btn btn-g" onclick="doCustom()">▶ Generate BST</button>
+    <button class="btn btn-b" onclick="doRandom()">🎲 عشوائي</button>
+    <input id="cinput" type="text" placeholder="أو اكتب مفاتيحك: مثل 50, 25, 75, 10, 30" />
+    <button class="btn btn-g" onclick="doCustom()">▶ إنشاء الشجرة</button>
   </div>
   <div class="keys-disp" id="kdisp"></div>
   <div class="hint-box" style="margin-top:8px;">
-    <strong>BST Rule:</strong> &nbsp; key &lt; current node → go <strong>Left</strong> &nbsp;|&nbsp; key &gt; current node → go <strong>Right</strong>
+    <strong>قاعدة شجرة البحث الثنائية:</strong> &nbsp; المفتاح &lt; العقدة الحالية ← اتجه إلى <strong>اليسار</strong> &nbsp;|&nbsp; المفتاح &gt; العقدة الحالية ← اتجه إلى <strong>اليمين</strong>
   </div>
 </div>
 
 <!-- PART A: DRAG & DROP BUILD -->
 <div class="part" id="partA">
   <div class="part-hdr">
-    <span class="part-badge">Part A</span>
-    <h2>Build the BST — Drag Keys into the Tree</h2>
+    <span class="part-badge">الجزء (أ)</span>
+    <h2>ابنِ شجرة البحث الثنائية — اسحب المفاتيح إلى الشجرة</h2>
   </div>
   <div class="hint-box">
-    Drag each key tile and drop it into the <strong>correct circle</strong> in the tree skeleton below.
-    If a position is <strong>wrong</strong> the circle flashes red and the tile returns to the bank — think about the BST rule before dropping!
+    اسحب كل بطاقة مفتاح وأفلتها في <strong>الدائرة الصحيحة</strong> ضمن هيكل الشجرة أدناه.
+    إذا كان الموضع <strong>خاطئًا</strong> تومض الدائرة باللون الأحمر وتعود البطاقة إلى المخزن — فكّر في قاعدة شجرة البحث الثنائية قبل الإفلات!
   </div>
-  <div style="font-size:.82em;color:#7f8c8d;margin:10px 0 4px;">Keys to insert — drag from here:</div>
+  <div style="font-size:.82em;color:#7f8c8d;margin:10px 0 4px;">المفاتيح المراد إدراجها — اسحب من هنا:</div>
   <div class="tile-bank" id="aBankDiv"></div>
-  <div class="path-box" id="pathBox" style="margin-top:10px;">Drag a key tile into the correct position in the skeleton below...</div>
+  <div class="path-box" id="pathBox" style="margin-top:10px;">اسحب بطاقة مفتاح إلى موضعها الصحيح في الهيكل أدناه...</div>
   <div class="tree-frame" id="treeA" style="min-height:120px;"></div>
   <div class="ctrl-row" style="margin-top:10px;">
-    <button class="btn btn-gr" onclick="aReset()">↺ Reset</button>
-    <button class="btn btn-g"  onclick="aCheck()">✓ Check Tree</button>
-    <button class="btn btn-b"  onclick="aReveal()">👁 Show Answer</button>
-    <span class="step-info" id="stepMeta">0 / 0 inserted</span>
+    <button class="btn btn-gr" onclick="aReset()">↺ إعادة تعيين</button>
+    <button class="btn btn-g"  onclick="aCheck()">✓ تحقّق من الشجرة</button>
+    <button class="btn btn-b"  onclick="aReveal()">👁 عرض الإجابة</button>
+    <span class="step-info" id="stepMeta">0 / 0 مُدرَج</span>
   </div>
   <div id="aFb"></div>
 </div>
@@ -273,35 +304,35 @@ footer strong { opacity: 1; }
 <div class="part" id="partB">
   <div class="part-lock" id="lockB">
     <span class="lock-icon">🔒</span>
-    <span class="lock-msg">Complete Part A first to unlock</span>
+    <span class="lock-msg">أكمل الجزء (أ) أولًا لفتح هذا الجزء</span>
   </div>
   <div class="part-hdr">
-    <span class="part-badge">Part B</span>
-    <h2>Traversal Quiz — Drag tiles into the correct order</h2>
+    <span class="part-badge">الجزء (ب)</span>
+    <h2>اختبار الاجتياز (Traversal) — اسحب البطاقات بالترتيب الصحيح</h2>
   </div>
   <p style="font-size:.88em;color:#555;margin-bottom:12px;">
-    This quiz uses the <strong>complete tree</strong> (all keys inserted). Switch tabs for Pre / In / Post-Order.
+    يستخدم هذا الاختبار <strong>الشجرة الكاملة</strong> (بعد إدراج جميع المفاتيح). بدّل بين التبويبات للاجتياز القبلي / البيني / البعدي.
   </p>
   <div class="trav-tabs">
-    <button class="ttab act" id="tab-pre"  onclick="switchTrav('pre')">Pre-Order</button>
-    <button class="ttab"     id="tab-in"   onclick="switchTrav('in')">In-Order</button>
-    <button class="ttab"     id="tab-post" onclick="switchTrav('post')">Post-Order</button>
+    <button class="ttab act" id="tab-pre"  onclick="switchTrav('pre')">القبلي (Pre-Order)</button>
+    <button class="ttab"     id="tab-in"   onclick="switchTrav('in')">البيني (In-Order)</button>
+    <button class="ttab"     id="tab-post" onclick="switchTrav('post')">البعدي (Post-Order)</button>
   </div>
   <div class="trav-panel">
     <div class="hint-box" id="travHint"></div>
-    <div style="font-size:.82em;color:#7f8c8d;margin-top:8px;">Bank — drag tiles from here:</div>
+    <div style="font-size:.82em;color:#7f8c8d;margin-top:8px;">المخزن — اسحب البطاقات من هنا:</div>
     <div class="tile-bank" id="tbank"
          ondragover="event.preventDefault();this.classList.add('drag-over')"
          ondragleave="this.classList.remove('drag-over')"
          ondrop="dropBank(event)"></div>
-    <div style="font-size:.82em;color:#7f8c8d;margin-top:4px;">Your answer — drag here (left = first):</div>
+    <div style="font-size:.82em;color:#7f8c8d;margin-top:4px;">إجابتك — اسحب إلى هنا (اليمين = الأول):</div>
     <div class="slot-row" id="tslots"
          ondragover="event.preventDefault()"
          ondrop="dropSlotArea(event)"></div>
     <div class="ctrl-row">
-      <button class="btn btn-g" onclick="checkTrav()">✓ Check</button>
-      <button class="btn btn-gr" onclick="resetTrav()">↺ Reset</button>
-      <button class="btn btn-b" onclick="revealTrav()">👁 Reveal Answer</button>
+      <button class="btn btn-g" onclick="checkTrav()">✓ تحقّق</button>
+      <button class="btn btn-gr" onclick="resetTrav()">↺ إعادة تعيين</button>
+      <button class="btn btn-b" onclick="revealTrav()">👁 كشف الإجابة</button>
     </div>
     <div id="travFb"></div>
   </div>
@@ -311,32 +342,32 @@ footer strong { opacity: 1; }
 <div class="part" id="partC">
   <div class="part-lock" id="lockC">
     <span class="lock-icon">🔒</span>
-    <span class="lock-msg">Complete Part A first to unlock</span>
+    <span class="lock-msg">أكمل الجزء (أ) أولًا لفتح هذا الجزء</span>
   </div>
   <div class="part-hdr">
-    <span class="part-badge">Part C</span>
-    <h2>True or False — Based on your BST</h2>
+    <span class="part-badge">الجزء (ج)</span>
+    <h2>صواب أم خطأ — بناءً على شجرتك</h2>
   </div>
   <div style="text-align:center;margin-bottom:14px;">
-    <div style="font-size:.82em;color:#555;margin-bottom:6px;">Reference tree for all questions below:</div>
+    <div style="font-size:.82em;color:#555;margin-bottom:6px;">الشجرة المرجعية لجميع الأسئلة أدناه:</div>
     <div id="treeCWrap" style="display:inline-block;background:#f0faf4;border:1.5px solid #a8d5b5;border-radius:10px;padding:12px;"></div>
   </div>
   <!-- Tree properties summary (computed by standalone methods) -->
   <div id="treePropBox" style="display:none;background:#f0faf4;border:1.5px solid #a8d5b5;border-radius:8px;padding:12px 18px;margin-bottom:16px;font-size:.9em;">
-    <strong style="color:#0a3d1f;">📊 Tree Properties (computed):</strong>
+    <strong style="color:#0a3d1f;">📊 خصائص الشجرة (محسوبة):</strong>
     <table style="width:100%;margin-top:8px;border-collapse:collapse;">
       <tr>
-        <td style="padding:4px 10px 4px 0;color:#555;">Height</td>
+        <td style="padding:4px 0 4px 10px;color:#555;">الارتفاع (Height)</td>
         <td style="font-weight:700;color:#1e5631;" id="tp-height">—</td>
-        <td style="padding:4px 10px;color:#555;">Leaf nodes</td>
+        <td style="padding:4px 10px;color:#555;">الأوراق (Leaf nodes)</td>
         <td style="font-weight:700;color:#1e5631;" id="tp-leaves">—</td>
-        <td style="padding:4px 10px;color:#555;">Internal nodes</td>
+        <td style="padding:4px 10px;color:#555;">العقد الداخلية (Internal nodes)</td>
         <td style="font-weight:700;color:#1e5631;" id="tp-internal">—</td>
       </tr>
       <tr>
-        <td style="padding:4px 10px 4px 0;color:#555;">Full Binary Tree?</td>
+        <td style="padding:4px 0 4px 10px;color:#555;">شجرة ثنائية ممتلئة (Full)؟</td>
         <td style="font-weight:700;" id="tp-full">—</td>
-        <td style="padding:4px 10px;color:#555;">Complete Binary Tree?</td>
+        <td style="padding:4px 10px;color:#555;">شجرة ثنائية كاملة (Complete)؟</td>
         <td style="font-weight:700;" id="tp-complete">—</td>
         <td></td><td></td>
       </tr>
@@ -347,49 +378,49 @@ footer strong { opacity: 1; }
 
     <!-- Q1: Complete? -->
     <div class="cq-row">
-      <div class="cq-text">1. Is this BST a <strong>Complete Binary Tree</strong>?</div>
+      <div class="cq-text">1. هل هذه الشجرة <strong>شجرة ثنائية كاملة (Complete Binary Tree)</strong>؟</div>
       <div class="cq-tf">
-        <button class="tf-btn cq1-btn" onclick="pickCQ(1,true,this)">True</button>
-        <button class="tf-btn cq1-btn" onclick="pickCQ(1,false,this)">False</button>
+        <button class="tf-btn cq1-btn" onclick="pickCQ(1,true,this)">صواب</button>
+        <button class="tf-btn cq1-btn" onclick="pickCQ(1,false,this)">خطأ</button>
       </div>
       <div class="cq-res" id="cq1res"></div>
     </div>
 
     <!-- Q2: Full? -->
     <div class="cq-row">
-      <div class="cq-text">2. Is this BST a <strong>Full Binary Tree</strong>?</div>
+      <div class="cq-text">2. هل هذه الشجرة <strong>شجرة ثنائية ممتلئة (Full Binary Tree)</strong>؟</div>
       <div class="cq-tf">
-        <button class="tf-btn cq2-btn" onclick="pickCQ(2,true,this)">True</button>
-        <button class="tf-btn cq2-btn" onclick="pickCQ(2,false,this)">False</button>
+        <button class="tf-btn cq2-btn" onclick="pickCQ(2,true,this)">صواب</button>
+        <button class="tf-btn cq2-btn" onclick="pickCQ(2,false,this)">خطأ</button>
       </div>
       <div class="cq-res" id="cq2res"></div>
     </div>
 
     <!-- Q3: Leaf nodes -->
     <div class="cq-row">
-      <div class="cq-text">3. How many <strong>leaf nodes</strong> are in this tree?</div>
-      <input class="cq-inp" type="number" id="cq3inp" min="0" placeholder="Enter number" onchange="checkNumCQ(3,this.value)" />
+      <div class="cq-text">3. كم عدد <strong>الأوراق</strong> في هذه الشجرة؟</div>
+      <input class="cq-inp" type="number" id="cq3inp" min="0" placeholder="أدخل رقمًا" onchange="checkNumCQ(3,this.value)" />
       <div class="cq-res" id="cq3res"></div>
     </div>
 
     <!-- Q4: Internal nodes -->
     <div class="cq-row">
-      <div class="cq-text">4. How many <strong>internal nodes</strong> are in this tree?</div>
-      <input class="cq-inp" type="number" id="cq4inp" min="0" placeholder="Enter number" onchange="checkNumCQ(4,this.value)" />
+      <div class="cq-text">4. كم عدد <strong>العقد الداخلية</strong> في هذه الشجرة؟</div>
+      <input class="cq-inp" type="number" id="cq4inp" min="0" placeholder="أدخل رقمًا" onchange="checkNumCQ(4,this.value)" />
       <div class="cq-res" id="cq4res"></div>
     </div>
 
     <!-- Q5: Height -->
     <div class="cq-row">
-      <div class="cq-text">5. What is the <strong>height</strong> of this tree?</div>
-      <input class="cq-inp" type="number" id="cq5inp" min="0" placeholder="Enter number" onchange="checkNumCQ(5,this.value)" />
+      <div class="cq-text">5. ما <strong>ارتفاع</strong> هذه الشجرة؟</div>
+      <input class="cq-inp" type="number" id="cq5inp" min="0" placeholder="أدخل رقمًا" onchange="checkNumCQ(5,this.value)" />
       <div class="cq-res" id="cq5res"></div>
     </div>
 
   </div>
   <div class="ctrl-row" style="margin-top:16px;">
-    <button class="btn btn-g" onclick="checkCQ()">✓ Check All</button>
-    <button class="btn btn-gr" onclick="resetCQ()">↺ Reset</button>
+    <button class="btn btn-g" onclick="checkCQ()">✓ تحقّق من الكل</button>
+    <button class="btn btn-gr" onclick="resetCQ()">↺ إعادة تعيين</button>
   </div>
   <div id="cFb"></div>
 </div>
@@ -398,20 +429,20 @@ footer strong { opacity: 1; }
 <div class="part" id="partD">
   <div class="part-lock" id="lockD">
     <span class="lock-icon">🔒</span>
-    <span class="lock-msg">Complete Part A first to unlock</span>
+    <span class="lock-msg">أكمل الجزء (أ) أولًا لفتح هذا الجزء</span>
   </div>
   <div class="part-hdr">
-    <span class="part-badge">Part D</span>
-    <h2>Delete a Node — Show How the Tree Looks After Deletion</h2>
+    <span class="part-badge">الجزء (د)</span>
+    <h2>حذف عقدة — بيّن شكل الشجرة بعد الحذف (Deletion)</h2>
   </div>
   <div class="warn-box" id="delNote">
-    👆 Click any node in the tree (or pick from the list) to select it. The skeleton below will immediately show what the tree looks like after that deletion — drag the value tiles into the correct positions.
+    👆 انقر أي عقدة في الشجرة (أو اخترها من القائمة) لتحديدها. سيعرض الهيكل أدناه فورًا شكل الشجرة بعد ذلك الحذف — اسحب بطاقات القيم إلى مواضعها الصحيحة.
   </div>
   <div class="ctrl-row">
-    <span id="delLbl" style="color:#7f8c8d;font-style:italic;font-size:.9em;">No node selected — click a node above</span>
+    <span id="delLbl" style="color:#7f8c8d;font-style:italic;font-size:.9em;">لم تُحدَّد أي عقدة — انقر عقدة في الأعلى</span>
     <select id="delDD" onchange="pickFromDD(this.value)"
             style="padding:7px 10px;border:2px solid #aab7b8;border-radius:6px;font-size:.9em;">
-      <option value="">— or pick from list —</option>
+      <option value="">— أو اختر من القائمة —</option>
     </select>
   </div>
   <div class="tree-frame"><div class="svg-wrap" id="treeDWrap"><svg id="treeD"></svg></div></div>
@@ -419,17 +450,17 @@ footer strong { opacity: 1; }
   <!-- Method choice (shown only when selected node has 2 children) -->
   <div id="methodChoice" style="display:none;margin-top:14px;">
     <div class="warn-box">
-      Node <strong id="choiceTarget">?</strong> has <strong>two children</strong>.
-      There are two valid deletion methods — choose one and then fill in the tree:
+      العقدة <strong id="choiceTarget">?</strong> لها <strong>ابنان</strong>.
+      توجد طريقتان صحيحتان للحذف — اختر إحداهما ثم املأ الشجرة:
     </div>
     <div class="ctrl-row" style="margin-top:10px;">
       <button class="btn btn-b" onclick="applyMethod('succ')" style="flex:1;padding:12px;">
-        📥 Method 1: In-order <strong>Successor</strong><br>
-        <span style="font-weight:400;font-size:.85em;">Replace with the <em>smallest</em> value in the <em>right</em> subtree</span>
+        📥 الطريقة 1: <strong>اللاحق</strong> البيني (In-order Successor)<br>
+        <span style="font-weight:400;font-size:.85em;">الاستبدال بـ<em>أصغر</em> قيمة في الشجرة الفرعية <em>اليمنى</em></span>
       </button>
       <button class="btn btn-g" onclick="applyMethod('pred')" style="flex:1;padding:12px;">
-        📤 Method 2: In-order <strong>Predecessor</strong><br>
-        <span style="font-weight:400;font-size:.85em;">Replace with the <em>largest</em> value in the <em>left</em> subtree</span>
+        📤 الطريقة 2: <strong>السابق</strong> البيني (In-order Predecessor)<br>
+        <span style="font-weight:400;font-size:.85em;">الاستبدال بـ<em>أكبر</em> قيمة في الشجرة الفرعية <em>اليسرى</em></span>
       </button>
     </div>
   </div>
@@ -437,21 +468,21 @@ footer strong { opacity: 1; }
   <!-- Rebuild section (shown after deletion) -->
   <div id="rebuildSec" style="display:none;margin-top:18px;">
     <div class="hint-box" id="rebuildHint">
-      If node <strong id="rebuildTarget">?</strong> is deleted, how does the tree look? Drag the tiles into the correct positions below.
+      إذا حُذفت العقدة <strong id="rebuildTarget">?</strong>، فكيف يبدو شكل الشجرة؟ اسحب البطاقات إلى مواضعها الصحيحة أدناه.
     </div>
     <div class="tree-frame" style="margin-top:10px;">
       <div class="svg-wrap" id="rebuildWrap"></div>
     </div>
     <div style="margin-top:10px;">
-      <div style="font-size:.82em;color:#7f8c8d;margin-bottom:5px;">Available tiles — drag into tree:</div>
+      <div style="font-size:.82em;color:#7f8c8d;margin-bottom:5px;">البطاقات المتاحة — اسحبها إلى الشجرة:</div>
       <div class="tile-bank" id="rbank"
            ondragover="event.preventDefault()"
            ondrop="rDropBank(event)"></div>
     </div>
     <div class="ctrl-row" style="margin-top:8px;">
-      <button class="btn btn-g" onclick="checkRebuild()">✓ Check Tree</button>
-      <button class="btn btn-gr" onclick="resetRebuild()">↺ Reset</button>
-      <button class="btn btn-b" onclick="revealRebuild()">👁 Show Answer</button>
+      <button class="btn btn-g" onclick="checkRebuild()">✓ تحقّق من الشجرة</button>
+      <button class="btn btn-gr" onclick="resetRebuild()">↺ إعادة تعيين</button>
+      <button class="btn btn-b" onclick="revealRebuild()">👁 عرض الإجابة</button>
     </div>
     <div id="rebuildFb"></div>
   </div>
@@ -461,26 +492,26 @@ footer strong { opacity: 1; }
 <div class="part" id="partE">
   <div class="part-lock" id="lockE">
     <span class="lock-icon">🔒</span>
-    <span class="lock-msg">Complete Part A first to unlock</span>
+    <span class="lock-msg">أكمل الجزء (أ) أولًا لفتح هذا الجزء</span>
   </div>
   <div class="part-hdr">
-    <span class="part-badge">Part E</span>
-    <h2>Write the Recursive Java Method</h2>
+    <span class="part-badge">الجزء (هـ)</span>
+    <h2>اكتب الدالة الذاتية الاستدعاء (Recursive) بلغة Java</h2>
   </div>
   <div class="warn-box" id="codeDesc"></div>
-  <div style="font-size:.82em;color:#7f8c8d;margin:8px 0 4px;">Complete the method in Java:</div>
+  <div style="font-size:.82em;color:#7f8c8d;margin:8px 0 4px;">أكمل الدالة بلغة Java:</div>
   <textarea class="code-ta" id="codeTa" spellcheck="false"></textarea>
   <div class="ctrl-row" style="margin-top:8px;">
-    <button class="btn btn-b" onclick="showSol()">👁 Show Solution</button>
-    <button class="btn btn-gr" onclick="clearCode()">✕ Clear</button>
-    <button class="btn btn-o" onclick="rerollCode()">🔄 Different Problem</button>
+    <button class="btn btn-b" onclick="showSol()">👁 عرض الحل</button>
+    <button class="btn btn-gr" onclick="clearCode()">✕ مسح</button>
+    <button class="btn btn-o" onclick="rerollCode()">🔄 مسألة أخرى</button>
   </div>
   <pre class="code-sol" id="codeSol"></pre>
 </div>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 </div><!-- /container -->
 
@@ -757,7 +788,7 @@ function init(){
   fullBST=new BST();
   for(const k of keys)fullBST.insert(k);
   selDel=null; delBST=null;
-  document.getElementById('delLbl').textContent='No node selected — click a node above';
+  document.getElementById('delLbl').textContent='لم تُحدَّد أي عقدة — انقر عقدة في الأعلى';
   document.getElementById('delLbl').style.color='#7f8c8d';
   document.getElementById('methodChoice').style.display='none';
   document.getElementById('rebuildSec').style.display='none';
@@ -768,7 +799,7 @@ function init(){
   document.getElementById('treeCWrap').innerHTML='';
   document.getElementById('treeDWrap').innerHTML='';
   const dd=document.getElementById('delDD');
-  dd.innerHTML='<option value="">— pick from list —</option>'+fullBST.vals().map(v=>`<option value="${v}">${v}</option>`).join('');
+  dd.innerHTML='<option value="">— اختر من القائمة —</option>'+fullBST.vals().map(v=>`<option value="${v}">${v}</option>`).join('');
   setupTrav();
   setupCQ();
   setupCode();
@@ -783,8 +814,8 @@ function doRandom(){
 function doCustom(){
   const raw=document.getElementById('cinput').value;
   const vals=[...new Set(raw.split(/[\s,]+/).map(s=>parseInt(s)).filter(n=>!isNaN(n)&&n>0&&n<1000))];
-  if(vals.length<3){alert('Please enter at least 3 unique positive numbers.');return;}
-  if(vals.length>20){alert('Maximum 20 keys allowed.');return;}
+  if(vals.length<3){alert('يُرجى إدخال 3 أعداد موجبة غير مكررة على الأقل.');return;}
+  if(vals.length>20){alert('الحد الأقصى المسموح به 20 مفتاحًا.');return;}
   keys=vals; init();
 }
 
@@ -836,8 +867,8 @@ function aReset(){
   treeEl.innerHTML=`<div style="position:relative;width:${W}px;height:${H}px;display:inline-block;">${edgeSvg}${slotDivs}</div>`;
 
   renderABank();
-  document.getElementById('pathBox').textContent='Drag key tiles from the bank into the correct circle positions in the skeleton.';
-  document.getElementById('stepMeta').textContent=`0 / ${keys.length} placed`;
+  document.getElementById('pathBox').textContent='اسحب بطاقات المفاتيح من المخزن إلى مواضع الدوائر الصحيحة في الهيكل.';
+  document.getElementById('stepMeta').textContent=`0 / ${keys.length} موضوع`;
   document.getElementById('aFb').innerHTML='';
   lockParts();
 }
@@ -845,7 +876,7 @@ function aReset(){
 function renderABank(){
   document.getElementById('aBankDiv').innerHTML=aPending.map(v=>
     `<div class="tile" draggable="true" ondragstart="aDragStart(event,${v})">${v}</div>`
-  ).join('')||'<span style="color:#27ae60;font-weight:700;padding:6px;">🎉 All keys placed!</span>';
+  ).join('')||'<span style="color:#27ae60;font-weight:700;padding:6px;">🎉 وُضعت جميع المفاتيح!</span>';
 }
 
 function aDragStart(e,v){
@@ -874,23 +905,23 @@ function aDropToSlot(e,el){
     const path=[];
     let c=fullBST.root;
     while(c&&c.v!==aDragVal){
-      if(aDragVal<c.v){path.push(`${c.v}→L`);c=c.L;}
-      else{path.push(`${c.v}→R`);c=c.R;}
+      if(aDragVal<c.v){path.push(`${c.v} ← يسار`);c=c.L;}
+      else{path.push(`${c.v} ← يمين`);c=c.R;}
     }
-    const pathStr=path.length?path.join(', ')+' → placed':'placed as <b>root</b>';
-    document.getElementById('pathBox').innerHTML=`✓ <b>${aDragVal}</b> correct! Path: ${pathStr}`;
-    document.getElementById('stepMeta').textContent=`${aSlots.filter(s=>s.cur!==null).length} / ${keys.length} placed`;
+    const pathStr=path.length?path.join('، ')+' ← وُضع':'وُضع بوصفه <b>الجذر</b>';
+    document.getElementById('pathBox').innerHTML=`✓ <b>${aDragVal}</b> صحيح! المسار: ${pathStr}`;
+    document.getElementById('stepMeta').textContent=`${aSlots.filter(s=>s.cur!==null).length} / ${keys.length} موضوع`;
     if(aPending.length===0){
       score++;
-      document.getElementById('score-lbl').textContent=`Score: ${score}`;
-      document.getElementById('aFb').innerHTML='<div class="fb fb-ok">🎉 All nodes placed correctly — BST built! Parts B, C, D and E are now unlocked.</div>';
+      document.getElementById('score-lbl').textContent=`النتيجة: ${score}`;
+      document.getElementById('aFb').innerHTML='<div class="fb fb-ok">🎉 وُضعت جميع العقد بشكل صحيح — اكتمل بناء شجرة البحث الثنائية! فُتحت الآن الأجزاء (ب) و(ج) و(د) و(هـ).</div>';
       unlockParts();
     }
   }else{
     // ✗ Wrong position — flash red, tile stays in bank
     renderASlot(slot,'bad');
     document.getElementById('pathBox').innerHTML=
-      `✗ <b>${aDragVal}</b> does not belong here. Think: is ${aDragVal} less than or greater than the parent node? BST rule: smaller → left, larger → right.`;
+      `✗ <b>${aDragVal}</b> لا ينتمي إلى هذا الموضع. فكّر: هل ${aDragVal} أصغر من العقدة الأب أم أكبر منها؟ قاعدة شجرة البحث الثنائية: الأصغر ← اليسار، والأكبر ← اليمين.`;
     setTimeout(()=>renderASlot(slot,null),900);
   }
   aDragVal=null;
@@ -922,8 +953,8 @@ function unlockParts(){
   document.getElementById('tp-height').textContent=_h;
   document.getElementById('tp-leaves').textContent=_lv;
   document.getElementById('tp-internal').textContent=_iv;
-  const yes='<span style="color:#1e8449">✔ Yes</span>';
-  const no ='<span style="color:#c0392b">✘ No</span>';
+  const yes='<span style="color:#1e8449">✔ نعم</span>';
+  const no ='<span style="color:#c0392b">✘ لا</span>';
   document.getElementById('tp-full').innerHTML=_fl?yes:no;
   document.getElementById('tp-complete').innerHTML=_cmp?yes:no;
   document.getElementById('treePropBox').style.display='block';
@@ -934,8 +965,8 @@ function showAllAnswers(){
     if(s.cur===null){s.cur=s.correctVal;aPending=aPending.filter(v=>v!==s.correctVal);renderASlot(s,'ok');}
   });
   renderABank();
-  document.getElementById('stepMeta').textContent=`${keys.length} / ${keys.length} placed`;
-  document.getElementById('aFb').innerHTML='<div class="fb fb-ok">👁 Answers revealed by instructor.</div>';
+  document.getElementById('stepMeta').textContent=`${keys.length} / ${keys.length} موضوع`;
+  document.getElementById('aFb').innerHTML='<div class="fb fb-ok">👁 كشف المحاضر عن الإجابات.</div>';
   unlockParts();
 }
 
@@ -952,20 +983,20 @@ function aCheck(){
   const placed=aSlots.filter(s=>s.cur!==null).length;
   if(placed<keys.length){
     document.getElementById('aFb').innerHTML=
-      `<div class="fb fb-err">Place all ${keys.length-placed} remaining tiles first!</div>`;
+      `<div class="fb fb-err">ضع البطاقات المتبقية (${keys.length-placed}) كلها أولًا!</div>`;
     return;
   }
   // All placements are already validated on drop, so reaching here means all correct
-  document.getElementById('aFb').innerHTML='<div class="fb fb-ok">✓ BST is complete and correct!</div>';
+  document.getElementById('aFb').innerHTML='<div class="fb fb-ok">✓ شجرة البحث الثنائية مكتملة وصحيحة!</div>';
 }
 
 function aReveal(){
   aSlots.forEach(s=>{s.cur=s.correctVal;renderASlot(s,'ok');});
   aPending=[];
   renderABank();
-  document.getElementById('pathBox').innerHTML=`Answer revealed — all <b>${keys.length}</b> nodes shown in their correct BST positions.`;
-  document.getElementById('stepMeta').textContent=`${keys.length} / ${keys.length} placed`;
-  document.getElementById('aFb').innerHTML='<div class="fb fb-ok">👁 Answer revealed — Parts B, C, D and E are now unlocked.</div>';
+  document.getElementById('pathBox').innerHTML=`كُشفت الإجابة — عُرضت جميع العقد (<b>${keys.length}</b>) في مواضعها الصحيحة في شجرة البحث الثنائية.`;
+  document.getElementById('stepMeta').textContent=`${keys.length} / ${keys.length} موضوع`;
+  document.getElementById('aFb').innerHTML='<div class="fb fb-ok">👁 كُشفت الإجابة — فُتحت الآن الأجزاء (ب) و(ج) و(د) و(هـ).</div>';
   unlockParts();
 }
 
@@ -973,9 +1004,9 @@ function aReveal(){
 // PART B — TRAVERSAL DRAG & DROP
 // ═══════════════════════════════════════════
 const THINTS={
-  pre:'Pre-Order: Visit <strong>Root</strong> first, then <strong>Left</strong> subtree, then <strong>Right</strong> subtree (Root → Left → Right)',
-  in: 'In-Order: Visit <strong>Left</strong> subtree first, then <strong>Root</strong>, then <strong>Right</strong> (Left → Root → Right). In a BST this gives <strong>sorted order</strong>!',
-  post:'Post-Order: Visit <strong>Left</strong> subtree, then <strong>Right</strong>, then <strong>Root</strong> last (Left → Right → Root)'
+  pre:'الاجتياز القبلي (Pre-Order): زُر <strong>الجذر</strong> أولًا، ثم الشجرة الفرعية <strong>اليسرى</strong>، ثم الشجرة الفرعية <strong>اليمنى</strong> (الجذر ← اليسار ← اليمين)',
+  in: 'الاجتياز البيني (In-Order): زُر الشجرة الفرعية <strong>اليسرى</strong> أولًا، ثم <strong>الجذر</strong>، ثم <strong>اليمنى</strong> (اليسار ← الجذر ← اليمين). في شجرة البحث الثنائية يعطي هذا <strong>ترتيبًا مفروزًا</strong>!',
+  post:'الاجتياز البعدي (Post-Order): زُر الشجرة الفرعية <strong>اليسرى</strong>، ثم <strong>اليمنى</strong>، ثم <strong>الجذر</strong> أخيرًا (اليسار ← اليمين ← الجذر)'
 };
 
 function setupTrav(){
@@ -1057,7 +1088,7 @@ function dropSlotArea(e){e.preventDefault();tDrag=null;}
 function checkTrav(){
   const st=tState[tAct];
   if(st.slots.some(v=>v===null)){
-    document.getElementById('travFb').innerHTML='<div class="fb fb-err">Fill all slots before checking!</div>';
+    document.getElementById('travFb').innerHTML='<div class="fb fb-err">املأ جميع الخانات قبل التحقق!</div>';
     return;
   }
   let ok=true;
@@ -1068,10 +1099,10 @@ function checkTrav(){
   });
   if(ok){
     score++;
-    document.getElementById('score-lbl').textContent=`Score: ${score}`;
-    document.getElementById('travFb').innerHTML=`<div class="fb fb-ok">✓ Correct! ${tAct}-order: ${st.correct.join(', ')}</div>`;
+    document.getElementById('score-lbl').textContent=`النتيجة: ${score}`;
+    document.getElementById('travFb').innerHTML=`<div class="fb fb-ok">✓ صحيح! الاجتياز ${tAct==='pre'?'القبلي':tAct==='in'?'البيني':'البعدي'}: ${st.correct.join('، ')}</div>`;
   }else{
-    document.getElementById('travFb').innerHTML='<div class="fb fb-err">✗ Some positions are wrong (red). Rearrange and try again!</div>';
+    document.getElementById('travFb').innerHTML='<div class="fb fb-err">✗ بعض المواضع خاطئة (باللون الأحمر). أعد الترتيب وحاول مجددًا!</div>';
   }
 }
 function resetTrav(){switchTrav(tAct);}
@@ -1079,7 +1110,7 @@ function revealTrav(){
   const st=tState[tAct];
   st.slots=[...st.correct];st.bank=[];
   renderTrav();
-  document.getElementById('travFb').innerHTML=`<div class="fb fb-inf">Answer: ${st.correct.join(' → ')}</div>`;
+  document.getElementById('travFb').innerHTML=`<div class="fb fb-inf">الإجابة: ${st.correct.join(' ← ')}</div>`;
 }
 
 // ═══════════════════════════════════════════
@@ -1122,120 +1153,120 @@ function genTFPool(){
   const p=[];
 
   // ── Root ───────────────────────────────────────────
-  p.push({q:`The root of this BST is <strong>${root.v}</strong>`,a:true,
-          e:`True. The first inserted key becomes the root (${root.v}).`});
+  p.push({q:`جذر هذه الشجرة هو <strong>${root.v}</strong>`,a:true,
+          e:`صواب. أول مفتاح يُدرَج يصبح الجذر (${root.v}).`});
   // false root: claim it is the second key in pre-order
   if(preOrd.length>1)
-    p.push({q:`The root of this BST is <strong>${preOrd[1]}</strong>`,a:false,
-            e:`False. The root is ${root.v} (the first inserted key), not ${preOrd[1]}.`});
+    p.push({q:`جذر هذه الشجرة هو <strong>${preOrd[1]}</strong>`,a:false,
+            e:`خطأ. الجذر هو ${root.v} (أول مفتاح مُدرَج)، وليس ${preOrd[1]}.`});
 
   // ── Leaf / Internal ───────────────────────────────
   {const nd=rand(leafNodes);
-  p.push({q:`Node <strong>${nd.v}</strong> is a <strong>leaf node</strong> (has no children)`,a:true,
-          e:`True. Node ${nd.v} has no left or right child.`});}
+  p.push({q:`العقدة <strong>${nd.v}</strong> <strong>ورقة</strong> (ليس لها أبناء)`,a:true,
+          e:`صواب. العقدة ${nd.v} ليس لها ابن أيسر ولا ابن أيمن.`});}
 
   if(intNodes.length>0){
     const nd=rand(intNodes);
-    p.push({q:`Node <strong>${nd.v}</strong> is a <strong>leaf node</strong> (has no children)`,a:false,
-            e:`False. Node ${nd.v} has ${nd.hasL?`a left child (${nd.lv})`:'no left child'} and ${nd.hasR?`a right child (${nd.rv})`:'no right child'}, so it is an internal node.`});
+    p.push({q:`العقدة <strong>${nd.v}</strong> <strong>ورقة</strong> (ليس لها أبناء)`,a:false,
+            e:`خطأ. العقدة ${nd.v} ${nd.hasL?`لها ابن أيسر (${nd.lv})`:'ليس لها ابن أيسر'} و${nd.hasR?`لها ابن أيمن (${nd.rv})`:'ليس لها ابن أيمن'}، لذا فهي عقدة داخلية.`});
   }
 
   // ── Left / Right subtree membership ───────────────
   if(leftSubVals.length>0){
     const v=rand(leftSubVals);
-    p.push({q:`Node <strong>${v}</strong> is in the <strong>left subtree</strong> of the root`,a:true,
-            e:`True. ${v} < ${root.v} (root), so it is in the left subtree.`});
+    p.push({q:`العقدة <strong>${v}</strong> في <strong>الشجرة الفرعية اليسرى</strong> للجذر`,a:true,
+            e:`صواب. ${v} < ${root.v} (الجذر)، لذا فهي في الشجرة الفرعية اليسرى.`});
   }
   if(rightSubVals.length>0){
     const v=rand(rightSubVals);
-    p.push({q:`Node <strong>${v}</strong> is in the <strong>left subtree</strong> of the root`,a:false,
-            e:`False. ${v} > ${root.v} (root), so it is in the right subtree, not the left.`});
+    p.push({q:`العقدة <strong>${v}</strong> في <strong>الشجرة الفرعية اليسرى</strong> للجذر`,a:false,
+            e:`خطأ. ${v} > ${root.v} (الجذر)، لذا فهي في الشجرة الفرعية اليمنى، لا اليسرى.`});
   }
   if(leftSubVals.length>0){
     const v=rand(leftSubVals);
-    p.push({q:`Node <strong>${v}</strong> is in the <strong>right subtree</strong> of the root`,a:false,
-            e:`False. ${v} < ${root.v} (root), so it is in the left subtree.`});
+    p.push({q:`العقدة <strong>${v}</strong> في <strong>الشجرة الفرعية اليمنى</strong> للجذر`,a:false,
+            e:`خطأ. ${v} < ${root.v} (الجذر)، لذا فهي في الشجرة الفرعية اليسرى.`});
   }
 
   // ── Parent-child relationships ─────────────────────
   const shuffCh=[...childNodes].sort(()=>Math.random()-.5).slice(0,5);
   for(const nd of shuffCh){
-    const side=nd.isLeft?'left':'right';
-    const opp =nd.isLeft?'right':'left';
-    p.push({q:`Node <strong>${nd.v}</strong> is the <strong>${side} child</strong> of node <strong>${nd.parent}</strong>`,a:true,
-            e:`True. ${nd.v} is ${nd.isLeft?'less than':'greater than'} ${nd.parent}, so it is the ${side} child.`});
-    p.push({q:`Node <strong>${nd.v}</strong> is the <strong>${opp} child</strong> of node <strong>${nd.parent}</strong>`,a:false,
-            e:`False. ${nd.v} is the ${side} child of ${nd.parent}, not the ${opp} child.`});
+    const side=nd.isLeft?'الأيسر':'الأيمن';
+    const opp =nd.isLeft?'الأيمن':'الأيسر';
+    p.push({q:`العقدة <strong>${nd.v}</strong> هي <strong>الابن ${side}</strong> للعقدة <strong>${nd.parent}</strong>`,a:true,
+            e:`صواب. ${nd.v} ${nd.isLeft?'أصغر من':'أكبر من'} ${nd.parent}، لذا فهي الابن ${side}.`});
+    p.push({q:`العقدة <strong>${nd.v}</strong> هي <strong>الابن ${opp}</strong> للعقدة <strong>${nd.parent}</strong>`,a:false,
+            e:`خطأ. ${nd.v} هي الابن ${side} للعقدة ${nd.parent}، وليست الابن ${opp}.`});
   }
 
   // ── Children count ─────────────────────────────────
   if(twoChNodes.length>0){
     const nd=rand(twoChNodes);
-    p.push({q:`Node <strong>${nd.v}</strong> has <strong>two children</strong>`,a:true,
-            e:`True. Node ${nd.v} has left child ${nd.lv} and right child ${nd.rv}.`});
+    p.push({q:`للعقدة <strong>${nd.v}</strong> <strong>ابنان</strong>`,a:true,
+            e:`صواب. للعقدة ${nd.v} ابن أيسر ${nd.lv} وابن أيمن ${nd.rv}.`});
   }
   if(oneChNodes.length>0){
     const nd=rand(oneChNodes);
-    const which=nd.hasL?'left':'right';
-    p.push({q:`Node <strong>${nd.v}</strong> has <strong>two children</strong>`,a:false,
-            e:`False. Node ${nd.v} has only one child (${which} child: ${nd.hasL?nd.lv:nd.rv}).`});
+    const which=nd.hasL?'الأيسر':'الأيمن';
+    p.push({q:`للعقدة <strong>${nd.v}</strong> <strong>ابنان</strong>`,a:false,
+            e:`خطأ. للعقدة ${nd.v} ابن واحد فقط (الابن ${which}: ${nd.hasL?nd.lv:nd.rv}).`});
   }
   // leaves have no children
   {const nd=rand(leafNodes);
-  p.push({q:`Node <strong>${nd.v}</strong> has <strong>two children</strong>`,a:false,
-          e:`False. Node ${nd.v} is a leaf — it has no children at all.`});}
+  p.push({q:`للعقدة <strong>${nd.v}</strong> <strong>ابنان</strong>`,a:false,
+          e:`خطأ. العقدة ${nd.v} ورقة — ليس لها أبناء على الإطلاق.`});}
 
   // ── Height ─────────────────────────────────────────
-  p.push({q:`The height of this BST is <strong>${h}</strong>`,a:true,
-          e:`True. Height = ${h} (levels from root to deepest leaf).`});
-  p.push({q:`The height of this BST is <strong>${h+1}</strong>`,a:false,
-          e:`False. The actual height is ${h}, not ${h+1}.`});
+  p.push({q:`ارتفاع هذه الشجرة هو <strong>${h}</strong>`,a:true,
+          e:`صواب. الارتفاع = ${h} (عدد المستويات من الجذر إلى أعمق ورقة).`});
+  p.push({q:`ارتفاع هذه الشجرة هو <strong>${h+1}</strong>`,a:false,
+          e:`خطأ. الارتفاع الفعلي هو ${h}، وليس ${h+1}.`});
 
   // ── Complete / Full ────────────────────────────────
-  p.push({q:`This BST is a <strong>Complete Binary Tree</strong>`,a:cmp,
-          e:cmp?`True — every level is fully filled from left to right.`:`False — the nodes are not filled level-by-level from left to right.`});
-  p.push({q:`This BST is a <strong>Full Binary Tree</strong>`,a:fl,
-          e:fl?`True — every node has exactly 0 or 2 children.`:`False — at least one node has exactly 1 child.`});
+  p.push({q:`هذه الشجرة <strong>شجرة ثنائية كاملة</strong>`,a:cmp,
+          e:cmp?`صواب — كل مستوى مملوء بالكامل من اليسار إلى اليمين.`:`خطأ — العقد غير مملوءة مستوىً بعد مستوى من اليسار إلى اليمين.`});
+  p.push({q:`هذه الشجرة <strong>شجرة ثنائية ممتلئة</strong>`,a:fl,
+          e:fl?`صواب — لكل عقدة 0 أو 2 من الأبناء بالضبط.`:`خطأ — توجد عقدة واحدة على الأقل لها ابن واحد بالضبط.`});
 
   // ── Counts ─────────────────────────────────────────
-  p.push({q:`The number of leaf nodes is <strong>${lv}</strong>`,a:true,
-          e:`True. Leaf nodes: ${leafNodes.map(x=>x.v).join(', ')}.`});
-  p.push({q:`The number of leaf nodes is <strong>${lv+1}</strong>`,a:false,
-          e:`False. There are ${lv} leaf node${lv!==1?'s':''}, not ${lv+1}.`});
-  p.push({q:`This BST has <strong>${n}</strong> total nodes`,a:true,
-          e:`True — ${n} keys were inserted.`});
-  p.push({q:`This BST has <strong>${n+1}</strong> total nodes`,a:false,
-          e:`False. The tree has exactly ${n} nodes.`});
+  p.push({q:`عدد الأوراق هو <strong>${lv}</strong>`,a:true,
+          e:`صواب. الأوراق: ${leafNodes.map(x=>x.v).join('، ')}.`});
+  p.push({q:`عدد الأوراق هو <strong>${lv+1}</strong>`,a:false,
+          e:`خطأ. عدد الأوراق ${lv}، وليس ${lv+1}.`});
+  p.push({q:`عدد العقد الكلي في هذه الشجرة <strong>${n}</strong>`,a:true,
+          e:`صواب — أُدرج ${n} من المفاتيح.`});
+  p.push({q:`عدد العقد الكلي في هذه الشجرة <strong>${n+1}</strong>`,a:false,
+          e:`خطأ. تحتوي الشجرة على ${n} من العقد بالضبط.`});
 
   // ── Min / Max ──────────────────────────────────────
-  p.push({q:`The minimum value in this BST is <strong>${mn}</strong>`,a:true,
-          e:`True. In a BST, the leftmost node holds the minimum (${mn}).`});
-  p.push({q:`The maximum value in this BST is <strong>${mx}</strong>`,a:true,
-          e:`True. In a BST, the rightmost node holds the maximum (${mx}).`});
-  p.push({q:`The minimum value in this BST is <strong>${mn+1}</strong>`,a:false,
-          e:`False. The minimum is ${mn}, not ${mn+1}.`});
+  p.push({q:`أصغر قيمة في هذه الشجرة هي <strong>${mn}</strong>`,a:true,
+          e:`صواب. في شجرة البحث الثنائية، تحمل العقدة الواقعة في أقصى اليسار أصغر قيمة (${mn}).`});
+  p.push({q:`أكبر قيمة في هذه الشجرة هي <strong>${mx}</strong>`,a:true,
+          e:`صواب. في شجرة البحث الثنائية، تحمل العقدة الواقعة في أقصى اليمين أكبر قيمة (${mx}).`});
+  p.push({q:`أصغر قيمة في هذه الشجرة هي <strong>${mn+1}</strong>`,a:false,
+          e:`خطأ. أصغر قيمة هي ${mn}، وليست ${mn+1}.`});
 
   // ── Traversal ──────────────────────────────────────
-  p.push({q:`<strong>In-Order</strong> traversal gives values in ascending sorted order`,a:true,
-          e:`True. In-Order traversal of any BST always gives ascending order: ${inOrd.join(', ')}.`});
-  p.push({q:`The first value in <strong>Pre-Order</strong> traversal is <strong>${preOrd[0]}</strong>`,a:true,
-          e:`True. Pre-Order visits the root first. Sequence: ${preOrd.join(' → ')}.`});
+  p.push({q:`يعطي <strong>الاجتياز البيني</strong> القيم مرتبة تصاعديًا`,a:true,
+          e:`صواب. يعطي الاجتياز البيني لأي شجرة بحث ثنائية ترتيبًا تصاعديًا دائمًا: ${inOrd.join('، ')}.`});
+  p.push({q:`أول قيمة في <strong>الاجتياز القبلي</strong> هي <strong>${preOrd[0]}</strong>`,a:true,
+          e:`صواب. يزور الاجتياز القبلي الجذر أولًا. التسلسل: ${preOrd.join(' ← ')}.`});
   if(preOrd.length>1)
-    p.push({q:`The first value in <strong>Pre-Order</strong> traversal is <strong>${preOrd[preOrd.length-1]}</strong>`,a:false,
-            e:`False. Pre-Order starts at the root (${preOrd[0]}). Full sequence: ${preOrd.join(' → ')}.`});
-  p.push({q:`The last value in <strong>Post-Order</strong> traversal is <strong>${postOrd[postOrd.length-1]}</strong>`,a:true,
-          e:`True. Post-Order always visits the root last. Sequence: ${postOrd.join(' → ')}.`});
+    p.push({q:`أول قيمة في <strong>الاجتياز القبلي</strong> هي <strong>${preOrd[preOrd.length-1]}</strong>`,a:false,
+            e:`خطأ. يبدأ الاجتياز القبلي من الجذر (${preOrd[0]}). التسلسل الكامل: ${preOrd.join(' ← ')}.`});
+  p.push({q:`آخر قيمة في <strong>الاجتياز البعدي</strong> هي <strong>${postOrd[postOrd.length-1]}</strong>`,a:true,
+          e:`صواب. يزور الاجتياز البعدي الجذر أخيرًا دائمًا. التسلسل: ${postOrd.join(' ← ')}.`});
   if(postOrd.length>1)
-    p.push({q:`The last value in <strong>Post-Order</strong> traversal is <strong>${postOrd[0]}</strong>`,a:false,
-            e:`False. Post-Order visits the root last (${postOrd[postOrd.length-1]}), not first. Sequence: ${postOrd.join(' → ')}.`});
+    p.push({q:`آخر قيمة في <strong>الاجتياز البعدي</strong> هي <strong>${postOrd[0]}</strong>`,a:false,
+            e:`خطأ. يزور الاجتياز البعدي الجذر أخيرًا (${postOrd[postOrd.length-1]})، لا أولًا. التسلسل: ${postOrd.join(' ← ')}.`});
   // Pre-order consecutive pair (pick positions i < j, both True about order)
   if(preOrd.length>=3){
     const i=Math.floor(Math.random()*(preOrd.length-2));
     const j=i+1+Math.floor(Math.random()*(preOrd.length-i-2));
-    p.push({q:`In <strong>Pre-Order</strong> traversal, <strong>${preOrd[i]}</strong> appears before <strong>${preOrd[j]}</strong>`,a:true,
-            e:`True. Pre-Order sequence: ${preOrd.join(' → ')}.`});
-    p.push({q:`In <strong>Pre-Order</strong> traversal, <strong>${preOrd[j]}</strong> appears before <strong>${preOrd[i]}</strong>`,a:false,
-            e:`False. In Pre-Order, ${preOrd[i]} comes before ${preOrd[j]}. Sequence: ${preOrd.join(' → ')}.`});
+    p.push({q:`في <strong>الاجتياز القبلي</strong>، تظهر <strong>${preOrd[i]}</strong> قبل <strong>${preOrd[j]}</strong>`,a:true,
+            e:`صواب. تسلسل الاجتياز القبلي: ${preOrd.join(' ← ')}.`});
+    p.push({q:`في <strong>الاجتياز القبلي</strong>، تظهر <strong>${preOrd[j]}</strong> قبل <strong>${preOrd[i]}</strong>`,a:false,
+            e:`خطأ. في الاجتياز القبلي تأتي ${preOrd[i]} قبل ${preOrd[j]}. التسلسل: ${preOrd.join(' ← ')}.`});
   }
 
   // ── Select 5 with T/F balance ──────────────────────
@@ -1291,9 +1322,9 @@ function pickCQ(q,val,btn){
   const correct=(q===1)?bstIsComplete(keys):bstIsFull(keys);
   const res=document.getElementById('cq'+q+'res');
   if(val===correct){
-    res.innerHTML='<span style="color:#27ae60;font-weight:700;">✓ Correct!</span>';
+    res.innerHTML='<span style="color:#27ae60;font-weight:700;">✓ صحيح!</span>';
   }else{
-    res.innerHTML='<span style="color:#c0392b;font-weight:700;">✗ Not correct — try the other answer.</span>';
+    res.innerHTML='<span style="color:#c0392b;font-weight:700;">✗ غير صحيح — جرّب الإجابة الأخرى.</span>';
   }
 }
 
@@ -1303,9 +1334,9 @@ function checkNumCQ(q,rawVal){
   if(isNaN(val)||rawVal===''){res.innerHTML='';return;}
   const correct={3:bstCountLeaves(keys),4:bstCountInternal(keys),5:bstHeight(keys)};
   if(val===correct[q]){
-    res.innerHTML='<span style="color:#27ae60;font-weight:700;">✓ Correct!</span>';
+    res.innerHTML='<span style="color:#27ae60;font-weight:700;">✓ صحيح!</span>';
   }else{
-    res.innerHTML='<span style="color:#c0392b;font-weight:700;">✗ Not correct — try again.</span>';
+    res.innerHTML='<span style="color:#c0392b;font-weight:700;">✗ غير صحيح — حاول مرة أخرى.</span>';
   }
 }
 
@@ -1326,12 +1357,12 @@ function checkCQ(){
   [1,2].forEach(q=>{
     const res=document.getElementById('cq'+q+'res');
     if(cqPicked[q]===null){
-      res.innerHTML='<span style="color:#e67e22;">⚠ No answer selected</span>';
+      res.innerHTML='<span style="color:#e67e22;">⚠ لم تُختر إجابة</span>';
       return;
     }
     const ok=(cqPicked[q]===ans[q]);
-    if(ok){correct++;res.innerHTML='<span style="color:#27ae60;">✓ Correct</span>';}
-    else res.innerHTML=`<span style="color:#c0392b;">✗ Answer: <strong>${ans[q]?'True':'False'}</strong></span>`;
+    if(ok){correct++;res.innerHTML='<span style="color:#27ae60;">✓ صحيح</span>';}
+    else res.innerHTML=`<span style="color:#c0392b;">✗ الإجابة: <strong>${ans[q]?'صواب':'خطأ'}</strong></span>`;
   });
   // Q3, Q4, Q5 — numbers
   [3,4,5].forEach(q=>{
@@ -1339,19 +1370,19 @@ function checkCQ(){
     const res=document.getElementById('cq'+q+'res');
     const val=parseInt(inp.value);
     if(isNaN(val)){
-      res.innerHTML='<span style="color:#e67e22;">⚠ No answer entered</span>';
+      res.innerHTML='<span style="color:#e67e22;">⚠ لم تُدخل إجابة</span>';
       return;
     }
     const ok=(val===ans[q]);
-    if(ok){correct++;res.innerHTML='<span style="color:#27ae60;">✓ Correct</span>';}
-    else res.innerHTML=`<span style="color:#c0392b;">✗ Answer: <strong>${ans[q]}</strong></span>`;
+    if(ok){correct++;res.innerHTML='<span style="color:#27ae60;">✓ صحيح</span>';}
+    else res.innerHTML=`<span style="color:#c0392b;">✗ الإجابة: <strong>${ans[q]}</strong></span>`;
   });
   const total=5;
-  if(correct===total){score++;document.getElementById('score-lbl').textContent=`Score: ${score}`;}
+  if(correct===total){score++;document.getElementById('score-lbl').textContent=`النتيجة: ${score}`;}
   document.getElementById('cFb').innerHTML=
     `<div class="fb ${correct===total?'fb-ok':correct>=3?'fb-inf':'fb-err'}">
-      ${correct===total?'🎉 All 5 correct!':
-        `You got <strong>${correct}/${total}</strong> correct.`}
+      ${correct===total?'🎉 جميع الإجابات الخمس صحيحة!':
+        `أجبت إجابة صحيحة عن <strong dir="ltr">${correct}/${total}</strong>.`}
     </div>`;
 }
 
@@ -1386,14 +1417,14 @@ function nodeClicked(v){
     document.getElementById('choiceTarget').textContent=v;
     document.getElementById('methodChoice').style.display='block';
     document.getElementById('delLbl').innerHTML=
-      `Node <strong style="color:#c0392b">${v}</strong> has two children — choose a deletion method above:`;
+      `للعقدة <strong style="color:#c0392b">${v}</strong> ابنان — اختر طريقة الحذف أدناه:`;
   }else{
     // Only one valid result → show skeleton immediately
     delBST=fullBST.clone();
     const succ=delBST.delete(v); // standard delete handles 0 or 1 child
-    let msg=`If <strong style="color:#c0392b">${v}</strong> is deleted`;
-    if(!ch.left&&!ch.right) msg+=` (leaf node — simply removed):`;
-    else msg+=` (one child — child moves up):`;
+    let msg=`إذا حُذفت <strong style="color:#c0392b">${v}</strong>`;
+    if(!ch.left&&!ch.right) msg+=` (ورقة — تُزال ببساطة):`;
+    else msg+=` (ابن واحد — يصعد الابن إلى مكانها):`;
     document.getElementById('delLbl').innerHTML=msg;
     document.getElementById('rebuildTarget').textContent=v;
     const lay=computeLayout(delBST);
@@ -1408,14 +1439,14 @@ function applyMethod(method){
   let replacement,methodLabel;
   if(method==='succ'){
     replacement=delBST.delete(selDel); // uses in-order successor
-    methodLabel=`in-order <strong>successor</strong> <strong style="color:#2980b9">${replacement}</strong> (smallest in right subtree)`;
+    methodLabel=`<strong>اللاحق</strong> البيني <strong style="color:#2980b9">${replacement}</strong> (أصغر قيمة في الشجرة الفرعية اليمنى)`;
   }else{
     replacement=delBST.deleteWithPredecessor(selDel);
-    methodLabel=`in-order <strong>predecessor</strong> <strong style="color:#27ae60">${replacement}</strong> (largest in left subtree)`;
+    methodLabel=`<strong>السابق</strong> البيني <strong style="color:#27ae60">${replacement}</strong> (أكبر قيمة في الشجرة الفرعية اليسرى)`;
   }
   document.getElementById('methodChoice').style.display='none';
   document.getElementById('delLbl').innerHTML=
-    `If <strong style="color:#c0392b">${selDel}</strong> is deleted using ${methodLabel}:`;
+    `إذا حُذفت <strong style="color:#c0392b">${selDel}</strong> باستخدام ${methodLabel}:`;
   document.getElementById('rebuildTarget').textContent=selDel;
   const lay=computeLayout(delBST);
   const{W,H}=buildSVG(lay,{});
@@ -1525,10 +1556,10 @@ function checkRebuild(){
   const tot=rSlots.length;
   if(ok===tot){
     score++;
-    document.getElementById('score-lbl').textContent=`Score: ${score}`;
-    document.getElementById('rebuildFb').innerHTML='<div class="fb fb-ok">✓ Perfect! You correctly rebuilt the tree after deletion.</div>';
+    document.getElementById('score-lbl').textContent=`النتيجة: ${score}`;
+    document.getElementById('rebuildFb').innerHTML='<div class="fb fb-ok">✓ ممتاز! أعدت بناء الشجرة بشكل صحيح بعد الحذف.</div>';
   }else{
-    document.getElementById('rebuildFb').innerHTML=`<div class="fb fb-err">✗ ${ok}/${tot} nodes in the correct position. Red = wrong place. Keep trying!</div>`;
+    document.getElementById('rebuildFb').innerHTML=`<div class="fb fb-err">✗ <span dir="ltr">${ok}/${tot}</span> من العقد في الموضع الصحيح. الأحمر = موضع خاطئ. واصل المحاولة!</div>`;
   }
 }
 function resetRebuild(){
@@ -1540,7 +1571,7 @@ function resetRebuild(){
 function revealRebuild(){
   rSlots.forEach(s=>{s.cur=s.correct;renderRSlot(s);});
   rBank=[];renderRBank();
-  document.getElementById('rebuildFb').innerHTML='<div class="fb fb-inf">Answer revealed — each node is placed at its correct BST position.</div>';
+  document.getElementById('rebuildFb').innerHTML='<div class="fb fb-inf">كُشفت الإجابة — وُضعت كل عقدة في موضعها الصحيح في شجرة البحث الثنائية.</div>';
 }
 
 // ═══════════════════════════════════════════
@@ -1548,12 +1579,12 @@ function revealRebuild(){
 // ═══════════════════════════════════════════
 const PROBS=[
 {
-  title:'Count Even Nodes',sig:'int countEven(Node root)',
+  title:'عدّ العقد الزوجية',sig:'int countEven(Node root)',
   desc(){
     const ec=fullBST.countEven();
     const ev=fullBST.vals().filter(v=>v%2===0);
-    return `Write a <strong>recursive</strong> Java method that counts the number of nodes with <strong>even values</strong> in the BST.<br>
-            <em style="font-size:.9em;">For this tree: countEven() should return <strong>${ec}</strong> (even nodes: ${ev.length?ev.join(', '):'none'})</em>`;
+    return `اكتب دالة <strong>ذاتية الاستدعاء</strong> بلغة Java تعدّ العقد ذات <strong>القيم الزوجية</strong> في شجرة البحث الثنائية.<br>
+            <em style="font-size:.9em;">لهذه الشجرة: يجب أن تُرجع <code>countEven()</code> القيمة <strong>${ec}</strong> (العقد الزوجية: ${ev.length?ev.join('، '):'لا يوجد'})</em>`;
   },
   tpl(){
     return `public int countEven(Node root) {\n    // Base case\n\n\n    // Is this node even?\n\n\n    // Recurse left and right\n\n}`
@@ -1570,14 +1601,14 @@ const PROBS=[
 }`
 },
 {
-  title:'Sum of All Leaf Nodes',sig:'int sumLeaves(Node root)',
+  title:'مجموع قيم جميع الأوراق',sig:'int sumLeaves(Node root)',
   desc(){
     const sl=fullBST.sumLeaves();
     const lv=[];
     const f=(n)=>{if(!n)return;if(!n.L&&!n.R){lv.push(n.v);return;}f(n.L);f(n.R);};
     f(fullBST.root);
-    return `Write a <strong>recursive</strong> Java method that returns the <strong>sum of all leaf node values</strong> (nodes with no children).<br>
-            <em style="font-size:.9em;">For this tree: sumLeaves() should return <strong>${sl}</strong> (leaf nodes: ${lv.join(', ')})</em>`;
+    return `اكتب دالة <strong>ذاتية الاستدعاء</strong> بلغة Java تُرجع <strong>مجموع قيم جميع الأوراق</strong> (العقد التي ليس لها أبناء).<br>
+            <em style="font-size:.9em;">لهذه الشجرة: يجب أن تُرجع <code>sumLeaves()</code> القيمة <strong>${sl}</strong> (الأوراق: ${lv.join('، ')})</em>`;
   },
   tpl(){
     return `public int sumLeaves(Node root) {\n    // Base case: empty subtree\n\n\n    // Leaf node check (no children)\n\n\n    // Recurse on left and right\n\n}`
@@ -1594,13 +1625,13 @@ const PROBS=[
 }`
 },
 {
-  title:'Count Nodes Greater Than K',sig:'int countGreater(Node root, int k)',
+  title:'عدّ العقد الأكبر من k',sig:'int countGreater(Node root, int k)',
   desc(){
     const vals=fullBST.vals();
     const k=vals[Math.floor(vals.length/2)];
     const cnt=vals.filter(v=>v>k).length;
-    return `Write a <strong>recursive</strong> Java method that counts nodes with values <strong>strictly greater than k</strong>.<br>
-            <em style="font-size:.9em;">For this tree with k = ${k}: countGreater() should return <strong>${cnt}</strong></em>`;
+    return `اكتب دالة <strong>ذاتية الاستدعاء</strong> بلغة Java تعدّ العقد التي تكون قيمها <strong>أكبر تمامًا من k</strong>.<br>
+            <em style="font-size:.9em;">لهذه الشجرة مع <code>k = ${k}</code>: يجب أن تُرجع <code>countGreater()</code> القيمة <strong>${cnt}</strong></em>`;
   },
   tpl(){
     return `public int countGreater(Node root, int k) {\n    // Base case: empty subtree\n\n\n    // Count this node if > k\n\n\n    // Recurse on both subtrees\n\n}`
@@ -1627,7 +1658,7 @@ function showCodeProb(){
   document.getElementById('codeDesc').innerHTML=
     `<strong>${p.title}</strong><br/>${p.desc()}<br/>
      <span style="font-size:.88em;margin-top:6px;display:block;">
-       Method signature: <code style="background:#1e293b;color:#86efac;padding:2px 8px;border-radius:4px;">${p.sig}</code>
+       ترويسة الدالة (Method signature): <code style="background:#1e293b;color:#86efac;padding:2px 8px;border-radius:4px;">${p.sig}</code>
      </span>`;
   document.getElementById('codeTa').value=p.tpl();
   document.getElementById('codeSol').style.display='none';

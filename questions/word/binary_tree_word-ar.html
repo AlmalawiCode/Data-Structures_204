@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Binary Search Tree - Word</title>
+    <title>شجرة البحث الثنائية - نسخة Word</title>
     <style>
-        /* ── FOOTER ── */
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
+        code { direction: ltr; unicode-bidi: isolate; }
+
+        /* ── التذييل ── */
         footer {
             background: #1f2937;
             color: white;
@@ -33,36 +60,36 @@
         .lang-switch-btn:hover { background: #667eea; color: white; }
     </style>
 </head>
-<body style="font-family: Times New Roman; font-size: 12pt; margin: 40px;">
-<a href="binary_tree_word-ar.html" class="lang-switch-btn">عربي</a>
+<body style="font-family: 'Haradh', 'Times New Roman'; font-size: 12pt; margin: 40px;">
+<a href="binary_tree_word.html" class="lang-switch-btn">English</a>
 
-<h2 style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">Binary Search Tree (BST) - Comprehensive Question</h2>
+<h2 style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">شجرة البحث الثنائية (Binary Search Tree - BST) - سؤال شامل</h2>
 
-<p style="text-align: center; font-weight: bold; font-size: 14pt;">Total Marks: 15</p>
+<p style="text-align: center; font-weight: bold; font-size: 14pt;">الدرجة الكلية: 15</p>
 
 <table border="1" cellpadding="10" cellspacing="0" style="margin: 15px 0;">
     <tr>
-        <td><strong>Question:</strong></td>
-        <td>Insert the following keys into an initially empty <strong>Binary Search Tree (BST)</strong>. Insert them in the given order from left to right.</td>
+        <td><strong>السؤال:</strong></td>
+        <td>أدرج المفاتيح التالية في <strong>شجرة بحث ثنائية (BST)</strong> فارغة في البداية، وذلك بالترتيب المعطى من اليسار إلى اليمين.</td>
     </tr>
 </table>
 
 <p style="text-align: center; font-size: 16pt; border: 2px solid black; padding: 15px; background-color: #f0f0f0;">
-    <strong>Keys:</strong> 50, 25, 75, 10, 30, 60, 90, 5, 15, 28, 55, 85
+    <strong>المفاتيح:</strong> <span dir="ltr">50, 25, 75, 10, 30, 60, 90, 5, 15, 28, 55, 85</span>
 </p>
 
-<p><strong>Rule:</strong> For each key k, if k &lt; current node, go left; if k &gt; current node, go right.</p>
+<p><strong>القاعدة:</strong> لكل مفتاح k: إذا كان <span dir="ltr">k &lt; العقدة الحالية</span> فاتجه يسارًا؛ وإذا كان <span dir="ltr">k &gt; العقدة الحالية</span> فاتجه يمينًا.</p>
 
 <br>
 
 <!-- Part A -->
 <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
     <tr style="background-color: #e0e0e0;">
-        <td><strong>Part A: Construct the BST</strong></td>
-        <td style="text-align: right;"><strong>(3 Marks)</strong></td>
+        <td><strong>الجزء أ: بناء شجرة البحث الثنائية</strong></td>
+        <td style="text-align: left;"><strong>(3 درجات)</strong></td>
     </tr>
 </table>
-<p>Draw the Binary Search Tree after inserting all keys in the given order.</p>
+<p>ارسم شجرة البحث الثنائية بعد إدراج جميع المفاتيح بالترتيب المعطى.</p>
 <table border="1" cellpadding="0" cellspacing="0" style="width: 100%; height: 200px;">
     <tr><td>&nbsp;</td></tr>
 </table>
@@ -72,13 +99,13 @@
 <!-- Part B -->
 <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
     <tr style="background-color: #e0e0e0;">
-        <td><strong>Part B: Post-Order Traversal</strong></td>
-        <td style="text-align: right;"><strong>(3 Marks)</strong></td>
+        <td><strong>الجزء ب: الاجتياز البعدي (Post-Order Traversal)</strong></td>
+        <td style="text-align: left;"><strong>(3 درجات)</strong></td>
     </tr>
 </table>
-<p>Write the Post-Order traversal of the tree. (Left &rarr; Right &rarr; Root)</p>
+<p>اكتب نتيجة الاجتياز البعدي للشجرة. (اليسار &larr; اليمين &larr; الجذر)</p>
 <p style="border: 1px dashed black; padding: 15px;">
-    Post-Order: ________________________________________________________________
+    الاجتياز البعدي: ________________________________________________________________
 </p>
 
 <br>
@@ -86,29 +113,29 @@
 <!-- Part C -->
 <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
     <tr style="background-color: #e0e0e0;">
-        <td><strong>Part C: True or False</strong></td>
-        <td style="text-align: right;"><strong>(3 Marks)</strong></td>
+        <td><strong>الجزء ج: صح أم خطأ</strong></td>
+        <td style="text-align: left;"><strong>(3 درجات)</strong></td>
     </tr>
 </table>
 
 <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; margin-top: 10px;">
     <tr style="background-color: #f0f0f0;">
-        <th style="width: 70%;">Statement</th>
-        <th style="width: 15%;">True</th>
-        <th style="width: 15%;">False</th>
+        <th style="width: 70%;">العبارة</th>
+        <th style="width: 15%;">صح</th>
+        <th style="width: 15%;">خطأ</th>
     </tr>
     <tr>
-        <td>1. This BST is a <strong>Complete Binary Tree</strong></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>2. This BST is a <strong>Full Binary Tree</strong></td>
+        <td>1. شجرة البحث الثنائية هذه <strong>شجرة ثنائية كاملة (Complete Binary Tree)</strong></td>
         <td></td>
         <td></td>
     </tr>
     <tr>
-        <td>3. The height of this BST is <strong>4</strong></td>
+        <td>2. شجرة البحث الثنائية هذه <strong>شجرة ثنائية ممتلئة (Full Binary Tree)</strong></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>3. ارتفاع (Height) شجرة البحث الثنائية هذه يساوي <strong>4</strong></td>
         <td></td>
         <td></td>
     </tr>
@@ -119,11 +146,11 @@
 <!-- Part D -->
 <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
     <tr style="background-color: #e0e0e0;">
-        <td><strong>Part D: Delete Node 25</strong></td>
-        <td style="text-align: right;"><strong>(3 Marks)</strong></td>
+        <td><strong>الجزء د: حذف العقدة 25</strong></td>
+        <td style="text-align: left;"><strong>(3 درجات)</strong></td>
     </tr>
 </table>
-<p>Delete node <strong>25</strong> from the tree. Draw the resulting tree.</p>
+<p>احذف العقدة <strong>25</strong> من الشجرة، ثم ارسم الشجرة الناتجة.</p>
 <table border="1" cellpadding="0" cellspacing="0" style="width: 100%; height: 180px;">
     <tr><td>&nbsp;</td></tr>
 </table>
@@ -133,13 +160,13 @@
 <!-- Part E -->
 <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
     <tr style="background-color: #e0e0e0;">
-        <td><strong>Part E: Write Code</strong></td>
-        <td style="text-align: right;"><strong>(3 Marks)</strong></td>
+        <td><strong>الجزء هـ: كتابة الشيفرة</strong></td>
+        <td style="text-align: left;"><strong>(3 درجات)</strong></td>
     </tr>
 </table>
-<p>Write a <strong>recursive method</strong> that counts the number of nodes containing <strong>even numbers</strong> in a BST.</p>
-<p><em>Method signature:</em> <code>int countEven(Node root)</code></p>
-<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; font-family: Courier New;">
+<p>اكتب <strong>دالة ذاتية الاستدعاء (Recursive Method)</strong> تحسب عدد العقد (Nodes) التي تحتوي على <strong>أعداد زوجية</strong> في شجرة بحث ثنائية.</p>
+<p><em>ترويسة الدالة:</em> <code dir="ltr">int countEven(Node root)</code></p>
+<table dir="ltr" border="1" cellpadding="10" cellspacing="0" style="width: 100%; font-family: Courier New; text-align: left;">
     <tr>
         <td style="height: 180px; vertical-align: top;">
             public int countEven(Node root) {<br><br><br><br><br><br><br><br>}
@@ -152,11 +179,11 @@
 <!-- ==================== SOLUTION PAGE ==================== -->
 <br><br><br>
 
-<h2 style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">Solution</h2>
+<h2 style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">الحل</h2>
 
 <!-- Solution Part A -->
-<h3>Part A: BST Construction (3 Marks)</h3>
-<p><strong>Insertion Order:</strong> 50, 25, 75, 10, 30, 60, 90, 5, 15, 28, 55, 85</p>
+<h3>الجزء أ: بناء شجرة البحث الثنائية (3 درجات)</h3>
+<p><strong>ترتيب الإدراج:</strong> <span dir="ltr">50, 25, 75, 10, 30, 60, 90, 5, 15, 28, 55, 85</span></p>
 
 <div style="text-align: center; margin: 20px 0; border: 1px solid black; padding: 10px;">
     <svg width="600" height="300" xmlns="http://www.w3.org/2000/svg">
@@ -216,49 +243,49 @@
     </svg>
 </div>
 
-<p><strong>Properties:</strong> 12 nodes | Height: 4 levels | Even: 50,10,30,60,90,28 (6) | Odd: 25,75,5,15,55,85 (6)</p>
+<p><strong>الخصائص:</strong> 12 عقدة | الارتفاع: 4 مستويات | الزوجية: <span dir="ltr">50,10,30,60,90,28</span> (6) | الفردية: <span dir="ltr">25,75,5,15,55,85</span> (6)</p>
 
 <!-- Solution Part B -->
-<h3>Part B: Post-Order Traversal (3 Marks)</h3>
+<h3>الجزء ب: الاجتياز البعدي (3 درجات)</h3>
 <p style="font-size: 13pt; border: 2px solid black; padding: 10px; text-align: center;">
-    <strong>5, 15, 10, 28, 30, 25, 55, 60, 85, 90, 75, 50</strong>
+    <strong dir="ltr">5, 15, 10, 28, 30, 25, 55, 60, 85, 90, 75, 50</strong>
 </p>
 
 <!-- Solution Part C -->
-<h3>Part C: True or False (3 Marks)</h3>
+<h3>الجزء ج: صح أم خطأ (3 درجات)</h3>
 <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
     <tr style="background-color: #e0e0e0;">
-        <th>Statement</th>
-        <th>Answer</th>
-        <th>Reason</th>
+        <th>العبارة</th>
+        <th>الإجابة</th>
+        <th>السبب</th>
     </tr>
     <tr>
-        <td>1. Complete Binary Tree</td>
-        <td><strong>FALSE</strong></td>
-        <td>Last level not filled left-to-right</td>
+        <td>1. شجرة ثنائية كاملة</td>
+        <td><strong>خطأ</strong></td>
+        <td>المستوى الأخير غير مملوء من اليسار إلى اليمين</td>
     </tr>
     <tr>
-        <td>2. Full Binary Tree</td>
-        <td><strong>FALSE</strong></td>
-        <td>Nodes 30, 60, 90 have only 1 child</td>
+        <td>2. شجرة ثنائية ممتلئة</td>
+        <td><strong>خطأ</strong></td>
+        <td>العقد 30 و60 و90 لكل منها ابن واحد فقط</td>
     </tr>
     <tr>
-        <td>3. Height is 4</td>
-        <td><strong>TRUE</strong></td>
-        <td>4 levels (root at level 1)</td>
+        <td>3. الارتفاع يساوي 4</td>
+        <td><strong>صح</strong></td>
+        <td>4 مستويات (الجذر في المستوى 1)</td>
     </tr>
 </table>
 
 <!-- Solution Part D -->
-<h3>Part D: Delete Node 25 (3 Marks)</h3>
-<p style="border: 1px solid black; padding: 8px; background-color: #f0f0f0;"><strong>Note:</strong> Both methods are correct. Students may use either one.</p>
+<h3>الجزء د: حذف العقدة 25 (3 درجات)</h3>
+<p style="border: 1px solid black; padding: 8px; background-color: #f0f0f0;"><strong>ملاحظة:</strong> كلتا الطريقتين صحيحة، ويمكن للطالب استخدام أيٍّ منهما.</p>
 
-<h4>Method 1: In-order Successor</h4>
-<p><strong>Steps:</strong> Node 25 has 2 children &rarr; Find in-order successor (smallest in right subtree) = <strong>28</strong> &rarr; Replace 25 with 28 &rarr; Delete original 28</p>
+<h4>الطريقة 1: اللاحق البيني (In-order Successor)</h4>
+<p><strong>الخطوات:</strong> للعقدة 25 ابنان &larr; أوجد اللاحق البيني (أصغر قيمة في الشجرة الفرعية اليمنى) = <strong>28</strong> &larr; استبدل 25 بـ 28 &larr; احذف العقدة 28 الأصلية</p>
 
 <div style="text-align: center; margin: 20px 0; border: 1px solid black; padding: 10px;">
     <svg width="600" height="280" xmlns="http://www.w3.org/2000/svg">
-        <text x="300" y="20" text-anchor="middle" font-size="12" font-weight="bold">Using In-order Successor (28)</text>
+        <text x="300" y="20" text-anchor="middle" font-size="12" font-weight="bold">باستخدام اللاحق البيني (28)</text>
         <!-- Level 0: Root -->
         <circle cx="300" cy="45" r="20" fill="#fff" stroke="#000" stroke-width="2"/>
         <text x="300" y="52" text-anchor="middle" font-size="14" font-weight="bold">50</text>
@@ -309,16 +336,16 @@
         <circle cx="470" cy="237" r="20" fill="#fff" stroke="#000" stroke-width="2"/>
         <text x="470" y="244" text-anchor="middle" font-size="14" font-weight="bold">85</text>
 
-        <text x="300" y="270" text-anchor="middle" font-size="10">Node 30 now has no left child (28 moved up)</text>
+        <text x="300" y="270" text-anchor="middle" font-size="10">لم يعد للعقدة 30 ابن أيسر (انتقلت 28 إلى الأعلى)</text>
     </svg>
 </div>
 
-<h4>Method 2: In-order Predecessor</h4>
-<p><strong>Steps:</strong> Node 25 has 2 children &rarr; Find in-order predecessor (largest in left subtree) = <strong>15</strong> &rarr; Replace 25 with 15 &rarr; Delete original 15</p>
+<h4>الطريقة 2: السابق البيني (In-order Predecessor)</h4>
+<p><strong>الخطوات:</strong> للعقدة 25 ابنان &larr; أوجد السابق البيني (أكبر قيمة في الشجرة الفرعية اليسرى) = <strong>15</strong> &larr; استبدل 25 بـ 15 &larr; احذف العقدة 15 الأصلية</p>
 
 <div style="text-align: center; margin: 20px 0; border: 1px solid black; padding: 10px;">
     <svg width="600" height="280" xmlns="http://www.w3.org/2000/svg">
-        <text x="300" y="20" text-anchor="middle" font-size="12" font-weight="bold">Using In-order Predecessor (15)</text>
+        <text x="300" y="20" text-anchor="middle" font-size="12" font-weight="bold">باستخدام السابق البيني (15)</text>
         <!-- Level 0: Root -->
         <circle cx="300" cy="45" r="20" fill="#fff" stroke="#000" stroke-width="2"/>
         <text x="300" y="52" text-anchor="middle" font-size="14" font-weight="bold">50</text>
@@ -369,13 +396,13 @@
         <circle cx="470" cy="237" r="20" fill="#fff" stroke="#000" stroke-width="2"/>
         <text x="470" y="244" text-anchor="middle" font-size="14" font-weight="bold">85</text>
 
-        <text x="300" y="270" text-anchor="middle" font-size="10">Node 10 now has no right child (15 moved up)</text>
+        <text x="300" y="270" text-anchor="middle" font-size="10">لم يعد للعقدة 10 ابن أيمن (انتقلت 15 إلى الأعلى)</text>
     </svg>
 </div>
 
 <!-- Solution Part E -->
-<h3>Part E: Count Even Nodes (3 Marks)</h3>
-<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; font-family: Courier New; font-size: 11pt;">
+<h3>الجزء هـ: عدّ العقد الزوجية (3 درجات)</h3>
+<table dir="ltr" border="1" cellpadding="10" cellspacing="0" style="width: 100%; font-family: Courier New; font-size: 11pt; text-align: left;">
     <tr>
         <td>
 public int countEven(Node root) {<br>
@@ -393,13 +420,13 @@ public int countEven(Node root) {<br>
         </td>
     </tr>
 </table>
-<p><strong>Result:</strong> Returns <strong>6</strong> for this tree (50, 10, 30, 60, 90, 28)</p>
+<p><strong>النتيجة:</strong> تُعيد الدالة القيمة <strong>6</strong> لهذه الشجرة (<span dir="ltr">50, 10, 30, 60, 90, 28</span>)</p>
 
 <br>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 </body>
 </html>
