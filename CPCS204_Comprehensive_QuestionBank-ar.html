@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>هياكل البيانات 1 — بنك الأسئلة الشامل</title>
+
+<!-- Mermaid for diagram rendering -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (window.mermaid) {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "neutral",
+        flowchart: { htmlLabels: true, curve: "linear" },
+        themeVariables: {
+          fontFamily: "Haradh, Georgia, 'Times New Roman', serif",
+          fontSize: "14px",
+          primaryColor: "#ffffff",
+          primaryBorderColor: "#222222",
+          primaryTextColor: "#111111",
+          lineColor: "#444444",
+          secondaryColor: "#f4f4f0",
+          tertiaryColor: "#fafaf6"
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+@font-face {
+    font-family: 'Haradh';
+    src: url('fonts/haradh/haradh-regular.otf') format('opentype');
+    font-weight: 400;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('fonts/haradh/haradh-semibold.otf') format('opentype');
+    font-weight: 600;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('fonts/haradh/haradh-bold.otf') format('opentype');
+    font-weight: 700;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+    font-family: 'Haradh';
+    src: url('fonts/haradh/haradh-heavy.otf') format('opentype');
+    font-weight: 800;
+    unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* =========================================================================
+   PAGE SETUP — A4, print-first design
+   ========================================================================= */
+@page {
+  size: A4;
+  margin: 18mm 18mm 20mm 18mm;
+}
+
+:root {
+  --ink:        #1a1a1a;
+  --ink-soft:   #3a3a3a;
+  --rule:       #888;
+  --rule-soft:  #bbb;
+  --paper:      #ffffff;
+  --paper-tint: #fbfbf7;
+  --kau-green:  #0d5a31;
+  --kau-deep:   #063b21;
+  --accent:     #1c3f8a;
+  --warn:       #8a1c1c;
+  --gold:       #8a6a14;
+  --code-bg:    #f5f5ef;
+  --code-rule:  #d6d6cf;
+  --box-bg:     #fcfcfa;
+  --tag-easy:   #e9f5e9;
+  --tag-easy-i: #1e6b1e;
+  --tag-med:    #fbf3e0;
+  --tag-med-i:  #8a6014;
+  --tag-hard:   #f9e6e6;
+  --tag-hard-i: #8a1c1c;
+}
+
+/* =========================================================================
+   BASE TYPOGRAPHY
+   ========================================================================= */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ececec;
+  color: var(--ink);
+  font-family: "Haradh", "Georgia", "Cambria", "Times New Roman", serif;
+  font-size: 11.5pt;
+  line-height: 1.55;
+}
+body { padding: 14mm 0; }
+
+/* Each .sheet behaves as a printable A4 page in screen view */
+.sheet {
+  background: var(--paper);
+  width: 210mm;
+  min-height: 285mm;
+  margin: 0 auto 8mm;
+  padding: 18mm 20mm;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+  border: 1px solid #d8d8d8;
+  position: relative;
+}
+.sheet.cover { padding-top: 24mm; }
+
+/* Headings */
+h1, h2, h3, h4, h5 {
+  font-family: "Haradh", "Georgia", "Cambria", serif;
+  color: var(--ink);
+  margin-top: 0;
+}
+h1 { font-size: 22pt; letter-spacing: .5px; }
+h2 { font-size: 16pt; }
+h3 { font-size: 13pt; }
+h4 { font-size: 11.5pt; }
+
+/* =========================================================================
+   COVER PAGE
+   ========================================================================= */
+.cover-header {
+  text-align: center;
+  border-bottom: 3px double var(--kau-deep);
+  padding-bottom: 14px;
+}
+.cover-header .bismi { font-size: 11pt; color: var(--ink-soft); font-style: italic; }
+.cover-header h1 { color: var(--kau-deep); margin: 8px 0 2px; }
+.cover-header .uni-sub { font-size: 12pt; font-weight: 600; margin: 2px 0; }
+.cover-header .uni-dept { font-size: 11pt; color: var(--ink-soft); margin: 2px 0; }
+
+.cover-title {
+  text-align: center;
+  margin-top: 24px;
+  padding: 18px 12px;
+  border: 1.5px solid var(--kau-green);
+  background: var(--paper-tint);
+}
+.cover-title .doc-title { font-size: 20pt; color: var(--kau-deep); font-weight: 700; }
+.cover-title .doc-sub   { font-size: 13pt; color: var(--ink-soft); margin-top: 4px; }
+.cover-title .doc-meta  { font-size: 11pt; margin-top: 10px; color: var(--ink); letter-spacing: .3px; }
+
+.cover-info {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 30px;
+  font-size: 11pt;
+}
+.cover-info .row { display: flex; align-items: center; gap: 8px; }
+.cover-info .row span.label { width: 90px; font-weight: 600; }
+.cover-info .row span.field {
+  flex: 1; border-bottom: 1px solid var(--ink); height: 18px;
+}
+
+.cover-overview {
+  margin-top: 26px;
+  border: 1px solid var(--rule-soft);
+  background: var(--paper-tint);
+  padding: 14px 18px;
+}
+.cover-overview h3 {
+  margin: 0 0 8px;
+  color: var(--kau-deep);
+  border-bottom: 1px solid var(--rule-soft);
+  padding-bottom: 4px;
+}
+.cover-overview p { margin: 6px 0; font-size: 10.5pt; }
+
+.cover-toc {
+  margin-top: 22px;
+  border: 1px solid var(--rule-soft);
+  background: #fff;
+  padding: 14px 18px;
+}
+.cover-toc h3 {
+  margin: 0 0 10px;
+  color: var(--kau-deep);
+  border-bottom: 1px solid var(--rule-soft);
+  padding-bottom: 4px;
+}
+.cover-toc ol {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 10.8pt;
+  column-count: 2;
+  column-gap: 22px;
+}
+.cover-toc ol li { margin-bottom: 4px; break-inside: avoid; }
+.cover-toc .pg { color: var(--ink-soft); float: right; }
+
+/* =========================================================================
+   PART AND SECTION HEADERS
+   ========================================================================= */
+.part-header {
+  page-break-before: always;
+  margin: 0 0 14px;
+  text-align: center;
+}
+.part-header .label {
+  display: inline-block;
+  font-size: 10pt;
+  color: #fff;
+  background: var(--kau-deep);
+  padding: 3px 12px;
+  border-radius: 2px;
+  letter-spacing: 2px;
+}
+.part-header h2 {
+  color: var(--kau-deep);
+  margin: 8px 0 2px;
+  font-size: 18pt;
+}
+.part-header .sub {
+  font-size: 10.5pt;
+  color: var(--ink-soft);
+  font-style: italic;
+  border-bottom: 1.5px solid var(--kau-green);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+h3.q {
+  margin: 18px 0 6px;
+  padding: 5px 0 4px 8px;
+  border-left: 4px solid var(--kau-green);
+  background: var(--paper-tint);
+  font-size: 12pt;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  break-after: avoid;
+}
+h3.q .pts {
+  font-size: 10.5pt;
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+h4.sub {
+  margin: 14px 0 6px;
+  font-size: 11pt;
+  color: var(--kau-deep);
+  text-decoration: underline;
+  break-after: avoid;
+}
+
+/* Difficulty pill */
+.tag {
+  display: inline-block;
+  font-size: 8.5pt;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 8px;
+  margin-left: 6px;
+  letter-spacing: .5px;
+  vertical-align: 2px;
+}
+.tag-easy { background: var(--tag-easy); color: var(--tag-easy-i); border: 1px solid var(--tag-easy-i); }
+.tag-med  { background: var(--tag-med);  color: var(--tag-med-i);  border: 1px solid var(--tag-med-i);  }
+.tag-hard { background: var(--tag-hard); color: var(--tag-hard-i); border: 1px solid var(--tag-hard-i); }
+
+/* =========================================================================
+   TEXT, LISTS, BOXES
+   ========================================================================= */
+.q-body { margin: 4px 0 12px 4px; break-inside: avoid; }
+.q-body p { margin: 6px 0; }
+.q-body ol, .q-body ul { margin: 6px 0 6px 22px; padding: 0; }
+.q-body li { margin-bottom: 3px; }
+
+p .lead, p.lead { margin: 0 0 8px; }
+
+.note {
+  border-left: 4px solid var(--gold);
+  background: #fbf8ec;
+  padding: 8px 14px;
+  margin: 10px 0;
+  font-size: 10.8pt;
+}
+.note b { color: var(--gold); }
+
+.answer-line {
+  display: inline-block;
+  border-bottom: 1px solid var(--ink);
+  min-width: 140px;
+  height: 16px;
+  margin: 0 4px;
+}
+.answer-box {
+  border: 1px dashed var(--rule);
+  background: var(--box-bg);
+  min-height: 80px;
+  padding: 8px 10px;
+  margin: 8px 0 12px;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 10.5pt;
+  color: var(--ink-soft);
+  break-inside: avoid;
+}
+.answer-box.sm { min-height: 50px; }
+.answer-box.md { min-height: 120px; }
+.answer-box.lg { min-height: 180px; }
+.answer-box.xl { min-height: 240px; }
+
+.fill-area {
+  border: 1px dashed var(--rule);
+  background: var(--box-bg);
+  padding: 10px;
+  margin: 8px 0 12px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  font-size: 10.5pt;
+}
+
+/* =========================================================================
+   CODE BLOCKS  (LIGHT, PRINTER-FRIENDLY)
+   ========================================================================= */
+pre.code, code.inline {
+  font-family: "Consolas", "Cascadia Code", "Courier New", monospace;
+  font-size: 10.5pt;
+}
+pre.code {
+  background: var(--code-bg);
+  color: var(--ink);
+  border: 1px solid var(--code-rule);
+  border-left: 3px solid var(--kau-green);
+  padding: 10px 14px;
+  margin: 8px 0;
+  white-space: pre;
+  overflow-x: auto;
+  break-inside: avoid;
+  line-height: 1.45;
+}
+code.inline {
+  background: #efece2;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--ink);
+  border: 1px solid #e1ddc9;
+}
+.kw { color: #6b1b6b; font-weight: 600; }
+.ty { color: #14506b; font-weight: 600; }
+.st { color: #6b4a14; }
+.cm { color: #707070; font-style: italic; }
+
+/* =========================================================================
+   TABLES
+   ========================================================================= */
+table.data {
+  border-collapse: collapse;
+  margin: 8px 0 12px;
+  font-size: 10.5pt;
+  break-inside: avoid;
+}
+table.data th, table.data td {
+  border: 1px solid #333;
+  padding: 5px 9px;
+  text-align: center;
+  min-width: 36px;
+  background: #fff;
+}
+table.data th { background: #ecece4; font-weight: 700; }
+table.data .row-label { background: #f6f6ee; font-weight: 600; text-align: left; padding-left: 8px; }
+table.data.full { width: 100%; }
+
+/* Compact marks table for cover */
+table.marks {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px auto 0;
+  font-size: 10pt;
+}
+table.marks th, table.marks td {
+  border: 1px solid #444;
+  padding: 5px 6px;
+  text-align: center;
+  background: #fff;
+}
+table.marks th { background: #ecece4; }
+
+/* =========================================================================
+   MCQ AND TRUE/FALSE
+   ========================================================================= */
+.mcq {
+  margin: 6px 0 12px;
+  break-inside: avoid;
+}
+.mcq .stem { font-weight: 700; margin-bottom: 4px; }
+.mcq .opts {
+  margin-left: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 18px;
+  row-gap: 3px;
+  font-size: 10.8pt;
+}
+
+.tf {
+  margin: 8px 0;
+}
+.tf .item {
+  margin: 5px 0;
+  padding-left: 18px;
+  text-indent: -18px;
+  break-inside: avoid;
+}
+.tf .ch {
+  display: inline-block;
+  width: 70px;
+  margin-left: 10px;
+  color: var(--ink-soft);
+}
+.tf .ch::before {
+  content: "\25A1";
+  display: inline-block;
+  width: 14px;
+  color: #666;
+}
+
+/* =========================================================================
+   STACK / QUEUE VISUALS (PURE HTML/CSS)
+   ========================================================================= */
+.stack-row { display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0; break-inside: avoid; }
+.stack-col { display: flex; flex-direction: column; align-items: center; }
+.stack-col .stack {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.stack-col .stack .cell {
+  width: 72px;
+  height: 26px;
+  border: 1px solid #333;
+  border-top: none;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Consolas", monospace;
+  font-size: 10.5pt;
+}
+.stack-col .stack .cell:first-child { border-top: 1px solid #333; }
+.stack-col .label { margin-top: 4px; font-size: 10pt; font-weight: 600; }
+
+.queue-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 10px 0;
+  font-family: "Consolas", monospace;
+  font-size: 10.5pt;
+}
+.queue-row .cell {
+  width: 44px; height: 28px;
+  border: 1px solid #333;
+  border-right: none;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff;
+}
+.queue-row .cell:last-child { border-right: 1px solid #333; }
+.queue-row .marker {
+  font-size: 9pt;
+  text-align: center;
+  width: 44px;
+  margin-top: 2px;
+}
+
+/* Linked list visualization (inline) */
+.ll-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  font-family: "Consolas", monospace;
+  font-size: 10.5pt;
+  justify-content: center;
+}
+.ll-row .node {
+  border: 1px solid #333;
+  padding: 4px 10px;
+  background: #fff;
+  min-width: 38px;
+  text-align: center;
+}
+.ll-row .arr { font-size: 14pt; padding: 0 4px; color: #444; }
+
+/* =========================================================================
+   DIAGRAM BLOCK (Mermaid)
+   ========================================================================= */
+.diagram {
+  break-inside: avoid;
+  margin: 10px 0;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--rule-soft);
+  text-align: center;
+  overflow: hidden;
+}
+.diagram .mermaid { display: inline-block; margin: 0 auto; }
+.diagram-caption {
+  font-size: 9.5pt;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* =========================================================================
+   ANSWER KEY APPENDIX
+   ========================================================================= */
+.key-section {
+  margin: 14px 0;
+  padding: 8px 12px;
+  background: #f4f7f2;
+  border: 1px solid #b5cdb6;
+  break-inside: avoid;
+}
+.key-section h3 {
+  margin: 0 0 6px;
+  color: var(--kau-deep);
+  font-size: 12pt;
+  border-bottom: 1px dashed #aac3ab;
+  padding-bottom: 3px;
+}
+.key-item {
+  margin: 4px 0;
+  padding: 4px 8px;
+  background: #fff;
+  border-left: 3px solid var(--kau-green);
+  font-size: 10.5pt;
+}
+
+/* =========================================================================
+   PRINT MEDIA QUERY
+   ========================================================================= */
+@media print {
+  html, body { background: #fff; margin: 0; padding: 0; }
+  body { padding: 0; }
+  .sheet {
+    box-shadow: none;
+    border: none;
+    margin: 0;
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    page-break-after: always;
+  }
+  .sheet:last-child { page-break-after: auto; }
+  .part-header { page-break-before: always; }
+  h3.q, .answer-box, table.data, pre.code, .diagram, .mcq, .tf .item, .key-section {
+    page-break-inside: avoid;
+  }
+  /* Hide the on-screen note about Mermaid rendering */
+  .screen-only { display: none !important; }
+  /* Reset link colors to black */
+  a { color: var(--ink) !important; text-decoration: none; }
+}
+
+/* =========================================================================
+   PAGE NUMBER HINT (screen) — purely visual cue
+   ========================================================================= */
+.page-corner {
+  position: absolute;
+  top: 8mm;
+  right: 14mm;
+  font-size: 9pt;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.lang-switch-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 10px 22px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+  transition: all 0.3s;
+  z-index: 1000;
+}
+.lang-switch-btn:hover { background: #667eea; color: white; }
+@media print { .lang-switch-btn { display: none; } }
+
+/* =========================================================================
+   RTL (ARABIC) OVERRIDES
+   ========================================================================= */
+html, body { line-height: 1.8; }
+h1, h2, h3, h4, h5 { line-height: 1.6; }
+.part-header .label { letter-spacing: 0; }
+.cover-info .row span.label { width: 110px; }
+.cover-toc ol { padding-left: 0; padding-right: 22px; }
+.cover-toc .pg { float: left; }
+h3.q { padding: 5px 8px 4px 0; border-left: none; border-right: 4px solid var(--kau-green); }
+.tag { margin-left: 0; margin-right: 6px; letter-spacing: 0; }
+.q-body { margin: 4px 4px 12px 0; }
+.q-body ol, .q-body ul { margin: 6px 22px 6px 0; }
+.note { border-left: none; border-right: 4px solid var(--gold); }
+.mcq .opts { margin-left: 0; margin-right: 18px; }
+.tf .item { padding-left: 0; padding-right: 18px; }
+.tf .ch { margin-left: 0; margin-right: 10px; }
+.key-item { border-left: none; border-right: 3px solid var(--kau-green); }
+.page-corner { right: auto; left: 14mm; }
+table.data .row-label { text-align: right; padding-left: 9px; padding-right: 8px; }
+.nw { white-space: nowrap; }
+
+/* Code, formulas, array/index tables and diagrams stay left-to-right so
+   they read exactly as in the English booklet. */
+pre.code, code.inline, .diagram .mermaid, table.data.arr-ltr { direction: ltr; }
+pre.code { text-align: left; }
+code.inline { unicode-bidi: isolate; }
+table.data.arr-ltr .row-label { text-align: left; padding-left: 8px; padding-right: 9px; }
+
+.lang-switch-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 10px 22px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+  transition: all 0.3s;
+  z-index: 1000;
+}
+.lang-switch-btn:hover { background: #667eea; color: white; }
+@media print { .lang-switch-btn { display: none; } }
+</style>
+</head>
+<body>
+
+<a href="CPCS204_Comprehensive_QuestionBank.html" class="lang-switch-btn">English</a>
+
+<!-- =============================================================================
+                                COVER PAGE
+============================================================================== -->
+<section class="sheet cover">
+  <div class="cover-header">
+    <div class="bismi">بسم الله الرحمن الرحيم</div>
+  </div>
+
+  <div class="cover-title">
+    <div class="doc-title">بنك الأسئلة الشامل والاختبار النهائي التدريبي</div>
+    <div class="doc-sub">هياكل البيانات 1</div>
+    <div class="doc-meta">العام الجامعي <span dir="ltr">2025 &ndash; 2026</span> &nbsp;|&nbsp; كتيّب مراجعة شامل للمقرر</div>
+  </div>
+
+  <div class="cover-info">
+    <div class="row"><span class="label">الرقم الجامعي:</span><span class="field"></span></div>
+    <div class="row"><span class="label">الشعبة:</span><span class="field"></span></div>
+    <div class="row"><span class="label">اسم الطالب:</span><span class="field"></span></div>
+    <div class="row"><span class="label">أستاذ المقرر:</span><span class="field"></span></div>
+  </div>
+
+  <div class="cover-overview">
+    <h3>عن هذا الكتيّب</h3>
+    <p>هذه الوثيقة كتيّب مراجعة شامل لمقرر <b>هياكل البيانات 1</b>. وهو منظَّم على هيئة بنك أسئلة موزَّع على <b>اثني عشر جزءًا</b>، تتدرّج من المفاهيم الأساسية إلى مسائل التتبّع المتقدمة، وينتهي بـ<b>مفتاح الإجابات وورقة التلميحات</b>. والغاية منه أن يعرّفك على <b>كل نمط متكرر من الأسئلة</b> قد يظهر في الاختبارات الفصلية والنهائية.</p>
+    <p>يحمل كل سؤال وسمًا يبيّن مستوى صعوبته: <span class="tag tag-easy">سهل</span> <span class="tag tag-med">متوسط</span> <span class="tag tag-hard">صعب</span>. وترافق الرسومُ التوضيحية كثيرًا من الأسئلة لتوضيح هيكل البيانات أو الخوارزمية المعنية. وقد هُيّئ الكتيّب للقراءة على الشاشة و<b>للطباعة على ورق A4</b> معًا.</p>
+    <p class="screen-only" style="color:var(--warn);font-size:10pt;"><b>ملاحظة (للعرض على الشاشة فقط):</b> تُرسَم مخططات الأشجار والكومات والقوائم والمخططات البيانية باستخدام مكتبة Mermaid. إذا ظهر أحد الرسوم فارغًا، فتأكد من اتصال الصفحة بالإنترنت عند التحميل الأول، ثم أعد تحميلها.</p>
+  </div>
+
+  <div class="cover-toc">
+    <h3>جدول المحتويات</h3>
+    <ol>
+      <li>الجزء الأول &mdash; تحليل الخوارزميات وترميز O الكبير <span class="nw">(Big-O)</span></li>
+      <li>الجزء الثاني &mdash; العودية (Recursion): التتبّع وكتابة الشيفرة</li>
+      <li>الجزء الثالث &mdash; القوائم المرتبطة (Linked Lists): الأحادية والمزدوجة</li>
+      <li>الجزء الرابع &mdash; المكدسات (Stacks) وتحويل التعابير</li>
+      <li>الجزء الخامس &mdash; الطوابير (Queues) والطوابير الدائرية</li>
+      <li>الجزء السادس &mdash; خوارزميات الفرز (Sorting)</li>
+      <li>الجزء السابع &mdash; الأشجار (Trees) وأشجار البحث الثنائية</li>
+      <li>الجزء الثامن &mdash; الكومات (Heaps) وطوابير الأولوية</li>
+      <li>الجزء التاسع &mdash; جداول التجزئة (Hash Tables)</li>
+      <li>الجزء العاشر &mdash; المخططات (Graphs): التمثيل والاجتياز</li>
+      <li>الجزء الحادي عشر &mdash; مفاهيم متنوعة وأسئلة صح/خطأ</li>
+      <li>الملحق &mdash; مفتاح الإجابات وورقة التلميحات</li>
+    </ol>
+  </div>
+
+  <table class="marks">
+    <thead>
+      <tr>
+        <th rowspan="2">الموضوع</th>
+        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th>
+        <th>7</th><th>8</th><th>9</th><th>10</th><th>11</th>
+        <th rowspan="2">المجموع</th>
+      </tr>
+      <tr>
+        <th>Big-O</th><th>العودية</th><th>القوائم</th><th>المكدس</th><th>الطابور</th><th>الفرز</th>
+        <th>الشجرة</th><th>الكومة</th><th>التجزئة</th><th>المخطط</th><th>متنوع</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>الدرجات</td>
+        <td>68</td><td>72</td><td>66</td><td>38</td><td>44</td><td>48</td>
+        <td>69</td><td>34</td><td>36</td><td>18</td><td>52</td>
+        <td><b>545</b></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- =============================================================================
+                       PART I — ALGORITHM ANALYSIS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء الأول</div>
+    <h2>تحليل الخوارزميات وترميز O الكبير <span class="nw">(Big-O)</span></h2>
+    <div class="sub">التعقيد الزمني (Time Complexity)، وأفضل/أسوأ/متوسط حالة، والعلاقات التكرارية (Recurrence Relations)</div>
+  </div>
+
+  <h3 class="q">السؤال 1.1 &mdash; رتبة Big-O لمقاطع ذات حلقة واحدة <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>اذكر رتبة <b>Big-O</b> لكل مقطع بدلالة <code class="inline">n</code>. لا يلزم التعليل.</p>
+<pre class="code"><span class="cm">// (a)</span>
+<span class="kw">for</span> (<span class="ty">int</span> i = 0; i &lt; n; i += 3) {
+    System.out.println(i);
+}
+
+<span class="cm">// (b)</span>
+<span class="kw">for</span> (<span class="ty">int</span> i = 1; i &lt;= n; i = i * 3) {
+    sum += i;
+}
+
+<span class="cm">// (c)</span>
+<span class="kw">for</span> (<span class="ty">int</span> i = n; i &gt; 0; i = i / 2) {
+    <span class="kw">for</span> (<span class="ty">int</span> j = 0; j &lt; 100; j++) {
+        x++;
+    }
+}</pre>
+    <p><span dir="ltr"><b>(a)</b> O(<span class="answer-line"></span>)</span> &nbsp; <span dir="ltr"><b>(b)</b> O(<span class="answer-line"></span>)</span> &nbsp; <span dir="ltr"><b>(c)</b> O(<span class="answer-line"></span>)</span></p>
+  </div>
+
+  <h3 class="q">السؤال 1.2 &mdash; حلقات متداخلة بزيادات مختلفة <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>حدّد زمن التشغيل بترميز Big-O. <b>اشرح إجابتك</b>. الإجابة الصحيحة دون شرح تحصل على نصف الدرجة فقط.</p>
+<pre class="code"><span class="kw">public void</span> exam(<span class="ty">int</span>[][] M, <span class="ty">int</span> n) {
+    <span class="kw">for</span> (<span class="ty">int</span> i = 1; i &lt;= n; i++)
+        <span class="kw">for</span> (<span class="ty">int</span> j = 1; j &lt;= n; j = j * 2)
+            <span class="kw">for</span> (<span class="ty">int</span> k = 0; k &lt; n; k++)
+                M[i][j] = M[i][j] + k;
+}</pre>
+    <p><span dir="ltr"><b>T(n) =</b> O(<span class="answer-line"></span>)</span> &nbsp; <b>الشرح:</b></p>
+    <div class="answer-box"></div>
+  </div>
+
+  <h3 class="q">السؤال 1.3 &mdash; الحلقات المثلثية <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+<pre class="code"><span class="ty">int</span> count = 0;
+<span class="kw">for</span> (<span class="ty">int</span> i = 0; i &lt; n; i++)
+    <span class="kw">for</span> (<span class="ty">int</span> j = i; j &lt; n; j++)
+        <span class="kw">for</span> (<span class="ty">int</span> k = j; k &lt; n; k++)
+            count++;</pre>
+    <p>بيّن أن جسم الحلقة يُنفَّذ <span dir="ltr">&Theta;(n<sup>3</sup>)</span> مرة. أعطِ العدد الدقيق بصيغة مغلقة وأكّد رتبة Big-O.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 1.4 &mdash; زمن التشغيل التجريبي (أوجد C، أوجد n) <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>تعمل الخوارزمية <b>K</b> في <b dir="ltr">O(n<sup>2</sup> log<sub>2</sub> n)</b>. ولمدخل حجمه <b dir="ltr">n = 8</b> تكتمل الخوارزمية في <b dir="ltr">192 ms</b>.</p>
+    <ol type="i">
+      <li>أوجد الثابت <b>C</b>. (5 درجات)</li>
+      <li>ما حجم المدخل الذي تكتمل عنده الخوارزمية في <b dir="ltr">800 ms</b> تقريبًا؟ (5 درجات)</li>
+    </ol>
+    <p><i>يجب أن تبيّن خطوات الحل.</i></p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">السؤال 1.5 &mdash; تقدير الحجم لخوارزمية لوغاريتمية <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>تعمل الخوارزمية <b>R</b> في <b dir="ltr">O(log<sub>3</sub> n)</b>. وتستغرق <b dir="ltr">24 ms</b> لمدخل حجمه <b dir="ltr">n = 81</b>.</p>
+    <ol type="a">
+      <li>أوجد الثابت <b>C</b>.</li>
+      <li>ما حجم المدخل الذي يتطلب <b dir="ltr">72 ms</b>؟</li>
+      <li>ما حجم المدخل الذي يتطلب <b dir="ltr">96 ms</b>؟</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 1.6 &mdash; تحليل العلاقات التكرارية <span class="tag tag-hard">صعب</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>أعطِ حدًّا محكمًا بترميز Big-O لكل علاقة تكرارية (Recurrence). علّل باختصار بالتعويض أو برسم شجرة العودية (Recursion Tree) رسمًا تقريبيًا.</p>
+    <ol type="a">
+      <li><code class="inline">T(n) = T(n−1) + n</code>، <span dir="ltr">T(1) = 1</span></li>
+      <li><code class="inline">T(n) = 2&middot;T(n/2) + n</code>، <span dir="ltr">T(1) = 1</span></li>
+      <li><code class="inline">T(n) = T(n/2) + 1</code>، <span dir="ltr">T(1) = 1</span></li>
+      <li><code class="inline">T(n) = 2&middot;T(n−1) + 1</code>، <span dir="ltr">T(0) = 1</span></li>
+    </ol>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">السؤال 1.7 &mdash; مقطع شيفرة يستقبل قائمة <span class="tag tag-med">متوسط</span><span class="pts">[7 درجات]</span></h3>
+  <div class="q-body">
+    <p>تحتوي القائمة <code class="inline">L</code> على <b>m</b> عقدة؛ ويخزّن الحقل <code class="inline">data</code> في كل عقدة عددًا صحيحًا موجبًا لا يتجاوز <b>d</b> من الأرقام.</p>
+<pre class="code"><span class="kw">public int</span> totalDigitSum(ll_node head) {
+    ll_node hp = head;
+    <span class="ty">int</span> total = 0;
+    <span class="kw">while</span> (hp != null) {
+        <span class="ty">int</span> v = hp.data;
+        <span class="kw">while</span> (v &gt; 0) {
+            total += v % 10;
+            v = v / 10;
+        }
+        hp = hp.next;
+    }
+    <span class="kw">return</span> total;
+}</pre>
+    <p><span dir="ltr"><b>T =</b> O(<span class="answer-line"></span>)</span> &nbsp; <b>الشرح:</b></p>
+    <div class="answer-box"></div>
+  </div>
+
+  <h3 class="q">السؤال 1.8 &mdash; ترتيب معدلات النمو <span class="tag tag-easy">سهل</span><span class="pts">[5 درجات]</span></h3>
+  <div class="q-body">
+    <p>رتّب الدوال التالية <b>تصاعديًا</b> بحسب معدل النمو:</p>
+    <p dir="ltr" style="text-align:center;font-family:Consolas,monospace;font-size:11pt;">
+      n! &nbsp; , &nbsp; 2<sup>n</sup> &nbsp; , &nbsp; n<sup>3</sup> &nbsp; , &nbsp; n&middot;log n &nbsp; , &nbsp; n<sup>2</sup> &nbsp; , &nbsp; log n &nbsp; , &nbsp; &radic;n &nbsp; , &nbsp; n &nbsp; , &nbsp; n<sup>log n</sup> &nbsp; , &nbsp; 1
+    </p>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">السؤال 1.9 &mdash; مجموعة أسئلة اختيار من متعدد <span class="tag tag-easy">سهل</span><span class="pts">[10 درجات &middot; درجة واحدة لكل فقرة]</span></h3>
+  <div class="q-body">
+    <div class="mcq">
+      <div class="stem">1) أيّ التعابير التالية ليس <span dir="ltr">O(n<sup>2</sup>)</span>؟</div>
+      <div class="opts"><span>أ) <span dir="ltr">3n<sup>2</sup> + 5n</span></span><span>ب) <span dir="ltr">n log n</span></span><span>ج) <span dir="ltr">n<sup>2</sup> + 10<sup>9</sup></span></span><span>د) <span dir="ltr">n<sup>3</sup> / log n</span></span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">2) الحدّ المهيمن في <code class="inline">5n<sup>3</sup> + 100 n log n + 10000</code> هو:</div>
+      <div class="opts"><span>أ) <span dir="ltr">10000</span></span><span>ب) <span dir="ltr">100 n log n</span></span><span>ج) <span dir="ltr">5 n<sup>3</sup></span></span><span>د) لا يمكن تحديده</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">3) الدالة التي تنتمي إلى <span dir="ltr">&Theta;(n)</span> تنتمي إلى:</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(n)</span> فقط</span><span>ب) <span dir="ltr">&Omega;(n)</span> فقط</span><span>ج) كلٍّ من <span dir="ltr">O(n)</span> و<span dir="ltr">&Omega;(n)</span></span><span>د) لا شيء منهما</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">4) ترميز Big-O يصف:</div>
+      <div class="opts"><span>أ) أفضل حالة فقط</span><span>ب) حدًّا أعلى</span><span>ج) حدًّا أدنى</span><span>د) زمن التشغيل الدقيق</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">5) مع المدخلات الصغيرة، قد تتفوق خوارزمية <span dir="ltr">O(n<sup>2</sup>)</span> على خوارزمية <span dir="ltr">O(n log n)</span> لأن:</div>
+      <div class="opts"><span>أ) ترميز Big-O خاطئ</span><span>ب) الثوابت المخفية مؤثرة</span><span>ج) الذاكرة المخبئية غير موجودة</span><span>د) لا يمكن ذلك</span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">6) حلّ العلاقة <span dir="ltr">T(n) = T(n−1) + 1</span> هو:</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(log n)</span></span><span>ب) <span dir="ltr">O(n)</span></span><span>ج) <span dir="ltr">O(n log n)</span></span><span>د) <span dir="ltr">O(2<sup>n</sup>)</span></span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">7) حلّ العلاقة <span dir="ltr">T(n) = T(n/2) + O(1)</span> هو:</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(1)</span></span><span>ب) <span dir="ltr">O(log n)</span></span><span>ج) <span dir="ltr">O(n)</span></span><span>د) <span dir="ltr">O(n log n)</span></span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">8) مضاعفة حجم المدخل لخوارزمية <span dir="ltr">O(n<sup>2</sup>)</span> تضرب الزمن في:</div>
+      <div class="opts"><span>أ) 2</span><span>ب) 4</span><span>ج) 8</span><span>د) <span dir="ltr">log 2</span></span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">9) أيّ العبارات التالية صحيحة؟</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(n) &sub; O(n<sup>2</sup>)</span></span><span>ب) <span dir="ltr">O(n<sup>2</sup>) &sub; O(n)</span></span><span>ج) <span dir="ltr">O(n!) = O(2<sup>n</sup>)</span></span><span>د) <span dir="ltr">O(1) = O(log n)</span></span></div>
+    </div>
+    <div class="mcq">
+      <div class="stem">10) العلاقة <span dir="ltr">T(n) = 2T(n/2) + n</span> تطابق أيّ خوارزمية؟</div>
+      <div class="opts"><span>أ) البحث الثنائي (Binary Search)</span><span>ب) الفرز بالدمج (Merge Sort)</span><span>ج) الفرز الفقاعي (Bubble Sort)</span><span>د) الفرز بالاختيار (Selection Sort)</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART II — RECURSION
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء الثاني</div>
+    <h2>العودية (Recursion)</h2>
+    <div class="sub">تتبّع الاستدعاءات العودية، وكتابة الدوال العودية، والحالات الأساسية (Base Cases)</div>
+  </div>
+
+  <h3 class="q">السؤال 2.1 &mdash; تتبّع عودية على سلسلة نصية <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>تتبّع الدالة التالية عند استدعائها بالشكل <code class="inline">decode("ab2cd3e")</code>. ارسم <b>جميع</b> الاستدعاءات العودية و<b>القيمة النهائية المُعادة</b>.</p>
+<pre class="code"><span class="kw">public static</span> <span class="ty">String</span> decode(<span class="ty">String</span> s) {
+    <span class="kw">if</span> (s.length() == 0)
+        <span class="kw">return</span> "";
+    <span class="kw">char</span> c = s.charAt(0);
+    <span class="kw">if</span> (Character.isDigit(c))
+        <span class="kw">return</span> "[" + c + "]" + decode(s.substring(1));
+    <span class="kw">return</span> c + decode(s.substring(1));
+}</pre>
+
+    <p>ارسم جميع الاستدعاءات العودية (بأسلوب صناديق العودية) واكتب القيمة المُعادة من كل استدعاء:</p>
+    <div class="answer-box xl"></div>
+  </div>
+
+  <h3 class="q">السؤال 2.2 &mdash; تتبّع عودية على الأعداد الصحيحة <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>تتبّع <code class="inline">mystery(12)</code>. بيّن جميع الاستدعاءات والقيمة النهائية المُعادة.</p>
+<pre class="code"><span class="kw">public static int</span> mystery(<span class="ty">int</span> n) {
+    <span class="kw">if</span> (n &lt; 2) <span class="kw">return</span> n;
+    <span class="kw">if</span> (n % 2 == 0)
+        <span class="kw">return</span> 1 + mystery(n / 2);
+    <span class="kw">return</span> 2 + mystery(n - 1);
+}</pre>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 2.3 &mdash; تتبّع أسلوب فرّق تسُد (Divide-and-Conquer) <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>إذا كانت <code class="inline">arr = {4, 7, 2, 9, 3, 1, 6}</code>، فتتبّع <code class="inline">find(arr, 0, 6)</code>.</p>
+<pre class="code"><span class="kw">public static int</span> find(<span class="ty">int</span>[] a, <span class="ty">int</span> lo, <span class="ty">int</span> hi) {
+    <span class="kw">if</span> (lo == hi) <span class="kw">return</span> a[lo];
+    <span class="ty">int</span> mid   = (lo + hi) / 2;
+    <span class="ty">int</span> left  = find(a, lo, mid);
+    <span class="ty">int</span> right = find(a, mid + 1, hi);
+    <span class="kw">return</span> Math.max(left, right);
+}</pre>
+
+    <p>ارسم شجرة الاستدعاءات كاملة، وضع على كل ورقة (Leaf) القيمة التي تُعيدها. واذكر القيمة النهائية التي يُعيدها الاستدعاء في المستوى الأعلى.</p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">السؤال 2.4 &mdash; اكتب دالة عودية: power <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">power(int base, int exp)</code> تُعيد <code class="inline">base<sup>exp</sup></code> حيث <code class="inline">exp &ge; 0</code>. دون استخدام حلقات تكرارية.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 2.5 &mdash; اكتب دالة عودية: sumDigits <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">sumDigits(int n)</code> تُعيد مجموع أرقام <i>n</i>.</p>
+    <p>مثال: <code class="inline">sumDigits(20461) = 2 + 0 + 4 + 6 + 1 = 13</code></p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 2.6 &mdash; اكتب دالة عودية: countSub <span class="tag tag-hard">صعب</span><span class="pts">[12 درجة]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">countSub(String s, String t)</code> تُعيد عدد مرات ظهور <code class="inline">t</code> في <code class="inline">s</code> <b>دون تداخل</b>. افترض أن <code class="inline">t</code> ليست فارغة.</p>
+<pre class="code">countSub("banana_bananas", "ana")  &rarr; 2
+countSub("xyzxyz",         "xy")   &rarr; 2
+countSub("hello",          "world")&rarr; 0</pre>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">السؤال 2.7 &mdash; اكتب دالة عودية: maxOf <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">maxOf(int[] a, int size)</code> تُعيد أكبر عنصر من بين أول <i>size</i> عنصرًا. دون استخدام حلقات تكرارية.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 2.8 &mdash; نمط عودي: المعيّن (Diamond) <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">printDiamond(int n)</code>. يُسمح باستخدام دوال عودية مساعدة؛ ولا يُسمح بالحلقات التكرارية.</p>
+    <p>مثال: <code class="inline">printDiamond(3)</code> تطبع:</p>
+<pre class="code">  *
+ ***
+*****
+ ***
+  *</pre>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 2.9 &mdash; اكتشف الأخطاء <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>تحتوي كل دالة أدناه على خطأ برمجي. حدّده واكتب السطر (أو الأسطر) بعد التصحيح.</p>
+<pre class="code"><span class="cm">// (a) intended: factorial(n) for n &gt;= 0</span>
+<span class="kw">public static int</span> fact(<span class="ty">int</span> n) {
+    <span class="kw">if</span> (n == 1) <span class="kw">return</span> 1;
+    <span class="kw">return</span> n * fact(n - 1);
+}
+
+<span class="cm">// (b) intended: print 1..n</span>
+<span class="kw">public static void</span> printUp(<span class="ty">int</span> n) {
+    <span class="kw">if</span> (n == 0) <span class="kw">return</span>;
+    System.out.println(n);
+    printUp(n - 1);
+}
+
+<span class="cm">// (c) intended: sum of a[0..size-1]</span>
+<span class="kw">public static int</span> sum(<span class="ty">int</span>[] a, <span class="ty">int</span> size) {
+    <span class="kw">return</span> a[size - 1] + sum(a, size - 1);
+}</pre>
+    <div class="answer-box md"></div>
+  </div>
+</section>
+
+
+
+<!-- =============================================================================
+                          PART III — LINKED LISTS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء الثالث</div>
+    <h2>القوائم المرتبطة (Linked Lists)</h2>
+    <div class="sub">القوائم المرتبطة الأحادية والمزدوجة &mdash; الاجتياز، والإدراج، والحذف، وكتابة الشيفرة</div>
+  </div>
+
+  <h3 class="q">السؤال 3.1 &mdash; تتبّع المراجع (Pointers) <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>لتكن لدينا القائمة المرتبطة الأحادية (Singly Linked List) التالية:</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  H[head] --> N1((5)) --> N2((8)) --> N3((12)) --> N4((17)) --> N5((23)) --> N["null"]
+      </div>
+      <div class="diagram-caption">قائمة مرتبطة أحادية تتكوّن من خمس عقد</div>
+    </div>
+
+    <p>اذكر ناتج كل عبارة (أو الخطأ الناتج عنها)؛ وتعامل مع كل عبارة <b>بشكل مستقل</b> عن غيرها.</p>
+    <ol type="a">
+      <li><code class="inline">head.next.next.data</code></li>
+      <li><code class="inline">head.next.next.next.next.data</code></li>
+      <li><code class="inline">head.next.next.next.next.next.data</code></li>
+      <li>بعد تنفيذ <code class="inline">head = head.next.next;</code>، ما قيمة <code class="inline">head.data</code>؟</li>
+      <li>بعد تنفيذ <code class="inline">head.next = head.next.next;</code>، اكتب القائمة الجديدة.</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 3.2 &mdash; شيفرة: مجموع القيم الفردية <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب <code class="inline">sumOdd(LLnode head)</code> التي تُعيد مجموع قيم جميع العقد ذات القيم الفردية؛ وتُعيد 0 إذا كانت القائمة فارغة.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 3.3 &mdash; شيفرة: الإدراج مع الحفاظ على الترتيب <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>القائمة مرتّبة تصاعديًا. اكتب <code class="inline">insertSorted(LLnode head, int v)</code> التي تُدرج عقدة جديدة في موضعها الصحيح. غطِّ الحالات الطرفية الأربع جميعها. وأعِد رأس القائمة (Head) (الذي قد يكون جديدًا).</p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">السؤال 3.4 &mdash; شيفرة: عكس قائمة مرتبطة أحادية <span class="tag tag-hard">صعب</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>اعكس القائمة <b>في مكانها</b> (دون إنشاء عقد جديدة) وأعِد رأس القائمة الجديد. يجب أن تعمل دالتك في <span dir="ltr">O(n)</span>.</p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">السؤال 3.5 &mdash; القائمة المرتبطة المزدوجة: الإدراج بين عقدتين <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>يشير <code class="inline">helpPtr</code> إلى العقدة التي تحتوي على <i dir="ltr">"Faisal"</i>. اكتب العبارات اللازمة لإدراج عقدة جديدة تحتوي على <i dir="ltr">"Khalid"</i> بين <code class="inline">helpPtr</code> والعقدة التالية له.</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  S["..."] <--> F[Faisal<br/>helpPtr] <--> O[Omar] <--> E["..."]
+      </div>
+      <div class="diagram-caption">قبل الإدراج &mdash; احرص على ضبط الرابطين <span dir="ltr">prev</span> و<span dir="ltr">next</span> كليهما للعقدة الجديدة.</div>
+    </div>
+
+    <p>اكتب عبارة إنشاء العقدة الجديدة وعبارات الإسناد الأربع للمراجع.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 3.6 &mdash; القائمة المرتبطة المزدوجة: صح / خطأ <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>لتكن لدينا القائمة المرتبطة المزدوجة (Doubly Linked List) <b dir="ltr">A &harr; B &harr; C &harr; D &harr; E</b>، ويشير <code class="inline">helpPtr</code> إلى <b>C</b>.</p>
+    <div class="tf">
+      <div class="item">1) <code class="inline">helpPtr.next.next == E</code> &nbsp; <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">2) <code class="inline">helpPtr.prev.prev == A</code> &nbsp; <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">3) بعد تنفيذ <code class="inline">helpPtr.next = helpPtr.prev;</code> يشير <span dir="ltr">C.next</span> الآن إلى B. &nbsp; <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">4) <code class="inline">helpPtr.prev.next == helpPtr</code> &nbsp; <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">5) <code class="inline">helpPtr.next.prev.next.data</code> تساوي <code class="inline">"D"</code>. &nbsp; <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">6) بعد تنفيذ <code class="inline">helpPtr = helpPtr.prev.prev;</code> تصبح قيمة helpPtr هي null. &nbsp; <span class="ch">صح</span><span class="ch">خطأ</span></div>
+    </div>
+  </div>
+
+  <h3 class="q">السؤال 3.7 &mdash; شيفرة: التقسيم حسب الزوجية <span class="tag tag-hard">صعب</span><span class="pts">[12 درجة]</span></h3>
+  <div class="q-body">
+    <p>اكتب <code class="inline">split(LLnode head, LLnode evens, LLnode odds)</code> التي تمر على القائمة الأصلية <b>مرة واحدة</b> وتُلحق كل قيمة إما بالقائمة <code class="inline">evens</code> أو بالقائمة <code class="inline">odds</code>. وأعِد عدد القيم الفردية.</p>
+    <p><b>مثال على المدخل:</b> <code class="inline">head: 3 &rarr; 8 &rarr; 6 &rarr; 7 &rarr; 11 &rarr; 4</code></p>
+    <div class="answer-box lg"></div>
+  </div>
+
+  <h3 class="q">السؤال 3.8 &mdash; أسئلة مفاهيمية اختيار من متعدد <span class="tag tag-easy">سهل</span><span class="pts">[8 درجات &middot; درجة واحدة لكل فقرة]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) أيٌّ مما يلي هيكل بيانات <b>منطقي</b>؟</div>
+      <div class="opts"><span>أ) المصفوفة (Array)</span><span>ب) القائمة المرتبطة</span><span>ج) المكدس (Stack)</span><span>د) كلٌّ من (ب) و(ج)</span></div></div>
+    <div class="mcq"><div class="stem">2) الوصول العشوائي في <span dir="ltr">O(1)</span> تدعمه:</div>
+      <div class="opts"><span>أ) القائمة المرتبطة الأحادية</span><span>ب) القائمة المرتبطة المزدوجة</span><span>ج) المصفوفة</span><span>د) القائمة المرتبطة الدائرية</span></div></div>
+    <div class="mcq"><div class="stem">3) الإدراج بعد مرجع عقدة معطى في قائمة مرتبطة أحادية يستغرق:</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(1)</span></span><span>ب) <span dir="ltr">O(log n)</span></span><span>ج) <span dir="ltr">O(n)</span></span><span>د) <span dir="ltr">O(n<sup>2</sup>)</span></span></div></div>
+    <div class="mcq"><div class="stem">4) حذف العقدة الأخيرة من قائمة مرتبطة أحادية (مع معرفة الرأس فقط) يستغرق:</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(1)</span></span><span>ب) <span dir="ltr">O(log n)</span></span><span>ج) <span dir="ltr">O(n)</span></span><span>د) <span dir="ltr">O(n log n)</span></span></div></div>
+    <div class="mcq"><div class="stem">5) كل عقدة في القائمة المرتبطة المزدوجة (DLL) تتكوّن على الأقل من:</div>
+      <div class="opts"><span>أ) جزء واحد</span><span>ب) جزأين</span><span>ج) 3 أجزاء</span><span>د) 4 أجزاء</span></div></div>
+    <div class="mcq"><div class="stem">6) القائمة المرتبطة الدائرية هي الأنسب لـ:</div>
+      <div class="opts"><span>أ) الجدولة الدورية (Round-robin)</span><span>ب) الوصول العشوائي</span><span>ج) البحث الثنائي</span><span>د) التجزئة (Hashing)</span></div></div>
+    <div class="mcq"><div class="stem">7) حذف عقدة داخلية في <span dir="ltr">O(1)</span> يتطلب:</div>
+      <div class="opts"><span>أ) مرجع العقدة فقط في قائمة أحادية</span><span>ب) قائمة مرتبطة مزدوجة</span><span>ج) وصولًا عشوائيًا</span><span>د) قائمة مرتّبة</span></div></div>
+    <div class="mcq"><div class="stem">8) أيّ اجتياز يستحيل تنفيذه انطلاقًا من رأس قائمة مرتبطة أحادية؟</div>
+      <div class="opts"><span>أ) الأمامي</span><span>ب) الخلفي</span><span>ج) عدّ الطول</span><span>د) طباعة الذيل</span></div></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART IV — STACKS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء الرابع</div>
+    <h2>المكدسات (Stacks) وتحويل التعابير</h2>
+    <div class="sub">الدفع/السحب (Push/Pop)، وتقييم التعابير اللاحقة (Postfix)، وتحويل التعابير الوسيطة (Infix)، والتطبيقات</div>
+  </div>
+
+  <h3 class="q">السؤال 4.1 &mdash; تقييم تعبير لاحق مع نقاط تحقق <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>قيّم التعبير باستخدام مكدس؛ وبيّن محتوى المكدس عند A وB وC؛ ثم أعطِ القيمة النهائية.</p>
+    <p dir="ltr" style="text-align:center;font-family:Consolas,monospace;font-size:13pt;margin:8px 0;">
+      9 &nbsp; 2 &nbsp; 3 &nbsp; * &nbsp; &minus; &nbsp;<span style="color:var(--warn);">&#9660;A</span>&nbsp; 8 &nbsp; 4 &nbsp; / &nbsp; +&nbsp; <span style="color:var(--warn);">&#9660;B</span>&nbsp; 5 &nbsp; * &nbsp; 1 &nbsp; &minus; &nbsp;<span style="color:var(--warn);">&#9660;C</span>
+    </p>
+    <div class="stack-row">
+      <div class="stack-col">
+        <div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+        <div class="label">A (3 درجات)</div>
+      </div>
+      <div class="stack-col">
+        <div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+        <div class="label">B (3 درجات)</div>
+      </div>
+      <div class="stack-col">
+        <div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+        <div class="label">C (درجتان)</div>
+      </div>
+    </div>
+    <p><b>القيمة النهائية:</b> <span class="answer-line"></span> &nbsp; (درجتان)</p>
+  </div>
+
+  <h3 class="q">السؤال 4.2 &mdash; من الصيغة الوسيطة إلى الصيغة اللاحقة <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>حوّل التعبير إلى الصيغة اللاحقة (Postfix)؛ وبيّن مكدس المؤثرات (Operators) عند A وB وC؛ ثم اكتب الصيغة اللاحقة النهائية.</p>
+    <p dir="ltr" style="text-align:center;font-family:Consolas,monospace;font-size:12pt;margin:8px 0;">
+      A + B * ( C &minus; D ) /<span style="color:var(--warn);"> &#9660;A</span> E ^ F<span style="color:var(--warn);"> &#9660;B</span> &minus; G % H<span style="color:var(--warn);"> &#9660;C</span>
+    </p>
+    <div class="stack-row">
+      <div class="stack-col"><div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div><div class="label">A</div></div>
+      <div class="stack-col"><div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div><div class="label">B</div></div>
+      <div class="stack-col"><div class="stack"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div><div class="label">C</div></div>
+    </div>
+    <p><b>الصيغة اللاحقة:</b></p>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">السؤال 4.3 &mdash; من الصيغة الوسيطة إلى الصيغة السابقة <span class="tag tag-hard">صعب</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>حوّل التعبير إلى <b>الصيغة السابقة (Prefix)</b>:</p>
+    <p dir="ltr" style="text-align:center;font-family:Consolas,monospace;font-size:12pt;">
+      ( X + Y ) * Z &minus; W / ( P &minus; Q )
+    </p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 4.4 &mdash; تتبّع عمليات المكدس <span class="tag tag-easy">سهل</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>يبدأ المكدس <code class="inline">S</code> فارغًا.</p>
+<pre class="code">S.push(7);
+S.push(3);
+print(S.pop());        <span class="cm">// (a)</span>
+S.push(11);
+S.push(S.top() + 4);
+print(S.pop());        <span class="cm">// (b)</span>
+print(S.pop());        <span class="cm">// (c)</span>
+S.push(20);
+print(S.size());       <span class="cm">// (d)</span></pre>
+    <p><b>المخرجات:</b></p>
+    <table class="data">
+      <thead><tr><th>(a)</th><th>(b)</th><th>(c)</th><th>(d)</th></tr></thead>
+      <tbody><tr><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+    <p><b>المكدس النهائي (من القمة &larr; إلى القاع):</b> <span class="answer-line" style="min-width:280px;"></span></p>
+  </div>
+
+  <h3 class="q">السؤال 4.5 &mdash; تطبيقات المكدس <span class="tag tag-easy">سهل</span><span class="pts">[4 درجات]</span></h3>
+  <div class="q-body">
+    <p>اذكر تطبيقين واقعيين للمكدس، واشرح في جملة واحدة لكلٍّ منهما سبب ملاءمة المكدس له.</p>
+    <div class="answer-box sm"></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART V — QUEUES
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء الخامس</div>
+    <h2>الطوابير (Queues)</h2>
+    <div class="sub">مبدأ الداخل أولًا يخرج أولًا (FIFO)، والطوابير الدائرية، والتفاعل بين المكدس والطابور، ومفاهيم طابور الأولوية</div>
+  </div>
+
+  <h3 class="q">السؤال 5.1 &mdash; تتبّع التفاعل بين المكدس والطابور <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>كلٌّ من Q وS فارغ في البداية. بيّن كل المخرجات والمحتويات النهائية.</p>
+<pre class="code">Q.enqueue('A');
+Q.enqueue('B');
+S.push(Q.dequeue());
+Q.enqueue('C');
+print(Q.dequeue());          <span class="cm">// (a)</span>
+S.push('D');
+Q.enqueue(S.pop());
+Q.enqueue('E');
+print(S.pop());              <span class="cm">// (b)</span>
+print(Q.dequeue());          <span class="cm">// (c)</span>
+print(Q.dequeue());          <span class="cm">// (d)</span>
+S.push('F');</pre>
+
+    <table class="data">
+      <thead><tr><th>(a)</th><th>(b)</th><th>(c)</th><th>(d)</th></tr></thead>
+      <tbody><tr><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+    <p><b>الطابور Q النهائي (من المقدمة &larr; إلى المؤخرة):</b> <span class="answer-line" style="min-width:240px;"></span></p>
+    <p><b>المكدس S النهائي (من القمة &larr; إلى القاع):</b> <span class="answer-line" style="min-width:240px;"></span></p>
+  </div>
+
+  <h3 class="q">السؤال 5.2 &mdash; تتبّع الطابور الدائري <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>طابور دائري (Circular Queue) حجمه 8؛ وفي البداية <code class="inline">front = rear = &minus;1</code>.</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  I0((0)) --> I1((1)) --> I2((2)) --> I3((3)) --> I4((4)) --> I5((5)) --> I6((6)) --> I7((7)) --> I0
+      </div>
+      <div class="diagram-caption">التخطيط المنطقي لطابور دائري سعته 8.</div>
+    </div>
+
+<pre class="code">CQ.enqueue(10); CQ.enqueue(20); CQ.enqueue(30);
+print(CQ.dequeue());           <span class="cm">// (a)</span>
+CQ.enqueue(40); CQ.enqueue(50); CQ.enqueue(60);
+print(CQ.dequeue());           <span class="cm">// (b)</span>
+print(CQ.dequeue());           <span class="cm">// (c)</span>
+CQ.enqueue(70); CQ.enqueue(80); CQ.enqueue(90);
+CQ.enqueue(100);                <span class="cm">// (d) attempt</span></pre>
+
+    <p><b>المصفوفة النهائية:</b></p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>الفهرس</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead>
+      <tbody><tr><td class="row-label">القيمة</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+    <p><span dir="ltr"><b>front =</b> <span class="answer-line" style="min-width:60px;"></span></span> &nbsp;&nbsp; <span dir="ltr"><b>rear =</b> <span class="answer-line" style="min-width:60px;"></span></span></p>
+    <table class="data">
+      <thead><tr><th>(a)</th><th>(b)</th><th>(c)</th><th>(d)</th></tr></thead>
+      <tbody><tr><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 5.3 &mdash; عكس طابور باستخدام مكدس <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>اعكس محتويات الطابور <code class="inline">q</code> باستخدام العمليات <code class="inline">enqueue, dequeue, isEmpty, push, pop</code> فقط. يُسمح باستخدام مكدس مساعد واحد.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 5.4 &mdash; دمج طابورين مرتّبين <span class="tag tag-hard">صعب</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>الطابوران A وB مرتّبان تصاعديًا بدءًا من المقدمة. أعِد طابورًا جديدًا C يحتوي على جميع قيم A وB مرتّبة. دون تكرار للقيم.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 5.5 &mdash; أسئلة مفاهيمية اختيار من متعدد <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) المبدأ الذي يعمل به الطابور هو:</div>
+      <div class="opts"><span>أ) FILO</span><span>ب) FIFO</span><span>ج) LIFO</span><span>د) عشوائي</span></div></div>
+    <div class="mcq"><div class="stem">2) عندما يمتلئ الطابور الدائري، فإن عملية الإدخال (enqueue) التالية يجب أن:</div>
+      <div class="opts"><span>أ) تنجح بصمت</span><span>ب) تكتب فوق المقدمة</span><span>ج) ترمي استثناء فيض (overflow) / تُعيد false</span><span>د) يُعاد تحجيم الطابور تلقائيًا</span></div></div>
+    <div class="mcq"><div class="stem">3) الطابور الفعّال المبني على قائمة مرتبطة يتطلب:</div>
+      <div class="opts"><span>أ) مرجع الرأس فقط</span><span>ب) مرجعَي الرأس والذيل</span><span>ج) مكدسًا فقط</span><span>د) شجرة بحث ثنائية (BST)</span></div></div>
+    <div class="mcq"><div class="stem">4) أنسب هيكل بيانات لمُجدوِل طباعة يخدم المهمة الأقصر أولًا:</div>
+      <div class="opts"><span>أ) طابور بسيط</span><span>ب) مكدس</span><span>ج) طابور أولوية (كومة)</span><span>د) طابور دائري</span></div></div>
+    <div class="mcq"><div class="stem">5) يكون الطابور الدائري ذو السعة k فارغًا عندما:</div>
+      <div class="opts"><span>أ) <span dir="ltr">front == rear == &minus;1</span></span><span>ب) <span dir="ltr">front == 0</span></span><span>ج) <span dir="ltr">rear == k &minus; 1</span></span><span>د) <span dir="ltr">(rear+1)%k == front</span></span></div></div>
+    <div class="mcq"><div class="stem">6) أيّ عمليات الطابور (المنفَّذ بقائمة مرتبطة) ليست <span dir="ltr">O(1)</span>؟</div>
+      <div class="opts"><span>أ) enqueue</span><span>ب) dequeue</span><span>ج) isEmpty</span><span>د) search</span></div></div>
+  </div>
+</section>
+
+
+
+<!-- =============================================================================
+                            PART VI — SORTING
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء السادس</div>
+    <h2>خوارزميات الفرز (Sorting)</h2>
+    <div class="sub">الفرز الفقاعي، والفرز بالاختيار، والفرز بالإدراج، والفرز بالدمج، والفرز السريع، والفرز بالكومة &mdash; التتبّع والمقارنة</div>
+  </div>
+
+  <h3 class="q">السؤال 6.1 &mdash; تتبّع الفرز الفقاعي (Bubble Sort) <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>طبّق الفرز الفقاعي (تصاعديًا) على <b dir="ltr">{ 28, 11, 47, 19, 35, 8 }</b>. وبيّن المحتويات بعد كل تمريرة (Pass).</p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>التمريرة</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">البداية</td><td>28</td><td>11</td><td>47</td><td>19</td><td>35</td><td>8</td></tr>
+        <tr><td class="row-label">التمريرة 1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 6.2 &mdash; تتبّع الفرز بالاختيار (Selection Sort) <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>طبّق الفرز بالاختيار (تنازليًا) على <b dir="ltr">{ 5, 21, 7, 13, 3, 18, 9 }</b>.</p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>التمريرة</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">البداية</td><td>5</td><td>21</td><td>7</td><td>13</td><td>3</td><td>18</td><td>9</td></tr>
+        <tr><td class="row-label">التمريرة 1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 6</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 6.3 &mdash; تتبّع الفرز بالإدراج (Insertion Sort) <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>طبّق الفرز بالإدراج (تصاعديًا) على <b dir="ltr">{ M, A, R, K, B, T }</b>.</p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>التمريرة</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">البداية</td><td>M</td><td>A</td><td>R</td><td>K</td><td>B</td><td>T</td></tr>
+        <tr><td class="row-label">التمريرة 1</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 2</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 3</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 4</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التمريرة 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 6.4 &mdash; تتبّع الفرز بالدمج (Merge Sort) <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>بيّن محتويات المصفوفة بعد كل استدعاء لعملية الدمج على <b dir="ltr">{ 12, 4, 19, 7, 25, 3, 16, 8 }</b> (تصاعديًا).</p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>الخطوة</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">البداية</td><td>12</td><td>4</td><td>19</td><td>7</td><td>25</td><td>3</td><td>16</td><td>8</td></tr>
+        <tr><td class="row-label">الدمج الأول</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الدمج الثاني</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الدمج الثالث</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الدمج الرابع</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الدمج الخامس</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الدمج السادس</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الدمج السابع</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">النهائي</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 6.5 &mdash; الفرز السريع (Quick Sort) &mdash; استدعاءان للتقسيم <span class="tag tag-hard">صعب</span><span class="pts">[14 درجة]</span></h3>
+  <div class="q-body">
+    <p>استخدم الفرز السريع على <b dir="ltr">{ 31, 7, 49, 12, 38, 5, 26, 18, 44, 11 }</b> مع اعتماد <b>العنصر الأول من كل جزء محورًا (Pivot)</b> (تصاعديًا). وبيّن المحتويات بعد كل عملية تبديل.</p>
+
+    <h4 class="sub">استدعاء التقسيم (Partition) الأول</h4>
+    <table class="data full arr-ltr">
+      <thead><tr><th>الفهرس</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">البداية</td><td>31</td><td>7</td><td>49</td><td>12</td><td>38</td><td>5</td><td>26</td><td>18</td><td>44</td><td>11</td></tr>
+        <tr><td class="row-label">التبديل الأول</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التبديل الثاني</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التبديل الثالث</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التبديل الرابع</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">وضع المحور</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h4 class="sub">استدعاء التقسيم الثاني (على المصفوفة الجزئية اليسرى)</h4>
+    <table class="data full arr-ltr">
+      <thead><tr><th>الفهرس</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">من السابق</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التبديل الأول</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التبديل الثاني</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">التبديل الثالث</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">وضع المحور</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 6.6 &mdash; جدول المقارنة <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <table class="data full">
+      <thead><tr><th>الخوارزمية</th><th>أفضل حالة</th><th>متوسط الحالة</th><th>أسوأ حالة</th><th>مستقرة؟</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">الفرز الفقاعي</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الفرز بالاختيار</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الفرز بالإدراج</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الفرز بالدمج</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">الفرز السريع</td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 6.7 &mdash; أسئلة مفاهيمية قصيرة <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <ol type="a">
+      <li>ما نمط المدخلات الذي يتسبب في أسوأ حالة للفرز السريع عند اختيار العنصر الأول محورًا؟</li>
+      <li>لماذا يُفضَّل الفرز بالدمج على الفرز السريع في فرز القوائم المرتبطة؟</li>
+      <li>لماذا يكون الفرز بالإدراج سريعًا على المدخلات شبه المرتّبة؟</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART VII — TREES
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء السابع</div>
+    <h2>الأشجار (Trees) وأشجار البحث الثنائية</h2>
+    <div class="sub">البناء، والاجتيازات، والإدراج، والحذف، والشيفرة العودية للأشجار</div>
+  </div>
+
+  <h3 class="q">السؤال 7.1 &mdash; بناء شجرة بحث ثنائية (BST) والاجتيازات <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>أدرج القيم التالية من اليسار إلى اليمين (العدد 50 هو الجذر) في شجرة بحث ثنائية (Binary Search Tree) فارغة في البداية. ارسم الشجرة النهائية في المساحة أدناه، واكتب الاجتيازات (Traversals) الأربعة جميعها.</p>
+    <p dir="ltr" style="text-align:center;font-family:Consolas,monospace;font-size:13pt;">
+      <b>50, &nbsp; 30, &nbsp; 70, &nbsp; 20, &nbsp; 40, &nbsp; 60, &nbsp; 85, &nbsp; 10, &nbsp; 35, &nbsp; 65, &nbsp; 90, &nbsp; 33, &nbsp; 75</b>
+    </p>
+
+    <div class="fill-area" style="min-height:420px;">ارسم شجرة البحث الثنائية هنا</div>
+
+    <p><b>الاجتياز القبلي (Pre-order):</b> <span class="answer-line" style="min-width:520px;"></span></p>
+    <p><b>الاجتياز البيني (In-order):</b> &nbsp; <span class="answer-line" style="min-width:520px;"></span></p>
+    <p><b>الاجتياز البعدي (Post-order):</b> <span class="answer-line" style="min-width:520px;"></span></p>
+    <p><b>الاجتياز حسب المستوى (Level-order):</b> <span class="answer-line" style="min-width:520px;"></span></p>
+  </div>
+
+  <h3 class="q">السؤال 7.2 &mdash; مسار البحث <span class="tag tag-easy">سهل</span><span class="pts">[3 درجات]</span></h3>
+  <div class="q-body">
+    <p>باستخدام شجرة البحث الثنائية من السؤال 7.1، اذكر تسلسل العقد التي تُزار عند البحث عن المفتاح <b>34</b>. هل عُثر عليه أم لا؟</p>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">السؤال 7.3 &mdash; حالات الحذف <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>طبّق عمليات الحذف التالية بالتتابع على شجرة البحث الثنائية في السؤال 7.1. استخدم استراتيجية <b>اللاحق البيني (In-order Successor)</b> في حالات العقد ذات الابنين. وارسم الشجرة بعد كل عملية حذف.</p>
+    <ol type="a">
+      <li>احذف <b>10</b> (ورقة)</li>
+      <li>احذف <b>85</b> (ابن واحد)</li>
+      <li>احذف <b>30</b> (ابنان)</li>
+      <li>احذف <b>50</b> (الجذر)</li>
+    </ol>
+    <div class="fill-area" style="min-height:540px;">ارسم كل شجرة بعد تحديثها هنا</div>
+  </div>
+
+  <h3 class="q">السؤال 7.4 &mdash; شيفرة عودية: countLeaves <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">countLeaves(BSTNode p)</code>.</p>
+<pre class="code"><span class="kw">class</span> BSTNode {
+    <span class="ty">int</span> data;
+    BSTNode left, right;
+}
+
+<span class="kw">public int</span> countLeaves(BSTNode p) {
+
+    <span class="cm">// your code</span>
+
+}</pre>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 7.5 &mdash; شيفرة عودية: height <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">height(BSTNode p)</code>. ارتفاع الشجرة ذات العقدة الواحدة يساوي 0؛ وارتفاع الشجرة الفارغة يساوي <span dir="ltr">&minus;1</span>.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 7.6 &mdash; شيفرة عودية: rangeSum <span class="tag tag-hard">صعب</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">rangeSum(BSTNode root, int lo, int hi)</code> تُعيد مجموع القيم <b>v</b> التي تحقق <code class="inline">lo &le; v &le; hi</code>. واستبعد (قلّم) الأشجار الفرعية التي لا يمكن أن تُسهم في الناتج.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 7.7 &mdash; شيفرة عودية: sameStructure <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>اكتب دالة عودية <code class="inline">sameStructure(BSTNode a, BSTNode b)</code> تُعيد true إذا وفقط إذا كان للشجرتين الشكل نفسه والقيم نفسها.</p>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 7.8 &mdash; إعادة بناء شجرة <span class="tag tag-hard">صعب</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>الاجتياز القبلي: <code class="inline">F B A D C E G I H</code>؛ الاجتياز البيني: <code class="inline">A B C D E F G H I</code>. ارسم الشجرة.</p>
+    <div class="fill-area" style="min-height:320px;">ارسم الشجرة بعد إعادة بنائها</div>
+  </div>
+
+  <h3 class="q">السؤال 7.9 &mdash; أسئلة مفاهيمية اختيار من متعدد <span class="tag tag-easy">سهل</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) الاجتياز البيني لشجرة بحث ثنائية يعطي:</div>
+      <div class="opts"><span>أ) ترتيبًا عشوائيًا</span><span>ب) ترتيبًا تصاعديًا</span><span>ج) ترتيب الإدراج</span><span>د) ترتيب المستويات</span></div></div>
+    <div class="mcq"><div class="stem">2) عدد الحواف (Edges) في شجرة تحتوي على <i>n</i> عقدة:</div>
+      <div class="opts"><span>أ) n</span><span>ب) <span dir="ltr">n &minus; 1</span></span><span>ج) <span dir="ltr">n + 1</span></span><span>د) 2n</span></div></div>
+    <div class="mcq"><div class="stem">3) أقصى عدد من العقد في شجرة ثنائية مكتملة ارتفاعها h:</div>
+      <div class="opts"><span>أ) h</span><span>ب) 2h</span><span>ج) <span dir="ltr">2<sup>h+1</sup> &minus; 1</span></span><span>د) <span dir="ltr">2<sup>h</sup> + 1</span></span></div></div>
+    <div class="mcq"><div class="stem">4) البحث في أسوأ حالة في شجرة بحث ثنائية تحتوي على <i>n</i> عقدة:</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(1)</span></span><span>ب) <span dir="ltr">O(log n)</span></span><span>ج) <span dir="ltr">O(n)</span></span><span>د) <span dir="ltr">O(n log n)</span></span></div></div>
+    <div class="mcq"><div class="stem">5) الجذر، ثم الأيسر، ثم الأيمن هو الاجتياز:</div>
+      <div class="opts"><span>أ) القبلي (Pre-order)</span><span>ب) البيني (In-order)</span><span>ج) البعدي (Post-order)</span><span>د) حسب المستوى (Level-order)</span></div></div>
+    <div class="mcq"><div class="stem">6) الاجتياز حسب المستوى يستخدم أيّ هيكل؟</div>
+      <div class="opts"><span>أ) المكدس</span><span>ب) الطابور</span><span>ج) طابور الأولوية</span><span>د) جدول التجزئة</span></div></div>
+    <div class="mcq"><div class="stem">7) اللاحق البيني لعقدة لها شجرة فرعية يمنى غير فارغة هو:</div>
+      <div class="opts"><span>أ) الأب</span><span>ب) الابن الأيسر</span><span>ج) أقصى عقدة يسارًا في الشجرة الفرعية اليمنى</span><span>د) الابن الأيمن فقط</span></div></div>
+    <div class="mcq"><div class="stem">8) الشجرة الثنائية الممتلئة (Full Binary Tree) تعني أن كل عقدة داخلية لها:</div>
+      <div class="opts"><span>أ) ابن واحد</span><span>ب) 0 أو 2 من الأبناء</span><span>ج) ابنان بالضبط</span><span>د) ابن واحد على الأقل</span></div></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART VIII — HEAPS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء الثامن</div>
+    <h2>الكومات (Heaps) وطوابير الأولوية</h2>
+    <div class="sub">الكومات العظمى/الصغرى (Max/Min Heaps)، والإدراج/الحذف، والترتيب الكومي (Heapify)، وبناء الكومة، والتطبيقات</div>
+  </div>
+
+  <h3 class="q">السؤال 8.1 &mdash; بناء كومة عظمى (Max-Heap) خطوة بخطوة <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>أدرج <b dir="ltr">17, 9, 28, 14, 36, 8, 31, 22</b> واحدًا تلو الآخر في <b>كومة عظمى</b> فارغة. ارسم الكومة بعد كل عملية إدراج (8 لقطات إجمالًا). وبيّن كل خطوة ترشيح لأعلى (Percolate-up) حيثما تنطبق.</p>
+    <div class="fill-area" style="min-height:480px;">ارسم لقطات الكومة الثماني المتتالية</div>
+  </div>
+
+  <h3 class="q">السؤال 8.2 &mdash; بناء كومة صغرى (Min-Heap) من مجموعة بيانات <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>ابنِ <b>كومة صغرى</b> بإدراج القيم التالية واحدة تلو الأخرى في كومة فارغة في البداية (حسب الترتيب الأبجدي، <code class="inline">A &lt; B &lt; ... &lt; Z</code>):</p>
+    <p dir="ltr" style="text-align:center;font-family:Consolas,monospace;font-size:13pt;">
+      <b>M, &nbsp; R, &nbsp; A, &nbsp; K, &nbsp; B, &nbsp; T, &nbsp; H, &nbsp; C</b>
+    </p>
+    <p>بيّن الكومة على هيئة شجرة بعد <b>كل عملية إدراج</b>، ثم اكتب <b>التمثيل الشجري النهائي</b> و<b>صيغة المصفوفة</b> المقابلة له.</p>
+    <div class="fill-area" style="min-height:420px;">ارسم الكومة بعد كل عملية إدراج (8 لقطات)</div>
+    <p><b>صيغة المصفوفة النهائية:</b></p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>الفهرس</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead>
+      <tbody><tr><td class="row-label">القيمة</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 8.3 &mdash; عملية deleteMax <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>باستخدام الكومة العظمى النهائية التي حصلت عليها في السؤال 8.1، نفّذ عمليتَي <code class="inline">deleteMax</code> <b>متتاليتين</b>. ولكل عملية:</p>
+    <ol type="a">
+      <li>حدّد العنصر الذي سيُحذف.</li>
+      <li>انقل الورقة الأخيرة إلى الجذر.</li>
+      <li>بيّن كل خطوة تبديل في <b>الترشيح لأسفل (Heapify-down / Percolate-down)</b> حتى تُستعاد خاصية الكومة العظمى.</li>
+    </ol>
+    <div class="fill-area" style="min-height:360px;">بيّن الكومة بعد كل تبديل أثناء الترشيح لأسفل</div>
+  </div>
+
+  <h3 class="q">السؤال 8.4 &mdash; فهرسة الكومة في المصفوفة <span class="tag tag-easy">سهل</span><span class="pts">[4 درجات]</span></h3>
+  <div class="q-body">
+    <ol type="a">
+      <li>أب الفهرس <code class="inline">i</code> (في مصفوفة تبدأ فهارسها من 0): __________</li>
+      <li>الابن الأيسر لـ <code class="inline">i</code>: __________ &nbsp; الابن الأيمن: __________</li>
+      <li>فهرس آخر عقدة غير ورقية في كومة تحتوي على <i>n</i> عنصرًا: __________</li>
+    </ol>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">السؤال 8.5 &mdash; تطبيق على طابور الأولوية <span class="tag tag-med">متوسط</span><span class="pts">[4 درجات]</span></h3>
+  <div class="q-body">
+    <p>يفرز قسم الطوارئ المرضى حسب شدة الحالة (1 = الأشد خطورة). يصل من مريض إلى 3 مرضى كل دقيقة؛ ويُعالَج مريض واحد. اختر هيكل البيانات المناسب، واذكر تعقيد العمليتين.</p>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">السؤال 8.6 &mdash; أسئلة اختيار من متعدد عن الكومة <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) أكثر طريقة طبيعية لتنفيذ الكومة هي باستخدام:</div>
+      <div class="opts"><span>أ) قائمة مرتبطة</span><span>ب) مصفوفة</span><span>ج) جدول تجزئة</span><span>د) شجرة من العقد</span></div></div>
+    <div class="mcq"><div class="stem">2) الإدراج في كومة تحتوي على <i>n</i> عنصرًا يستغرق:</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(1)</span></span><span>ب) <span dir="ltr">O(log n)</span></span><span>ج) <span dir="ltr">O(n)</span></span><span>د) <span dir="ltr">O(n log n)</span></span></div></div>
+    <div class="mcq"><div class="stem">3) في الكومة العظمى، تكون قيمة أب أي عقدة:</div>
+      <div class="opts"><span>أ) أصغر من كلا الابنين</span><span>ب) أكبر من أو تساوي كلا الابنين</span><span>ج) مساوية لأبنائه</span><span>د) ذات علاقة عشوائية بأبنائه</span></div></div>
+    <div class="mcq"><div class="stem">4) بناء الكومة من الأسفل إلى الأعلى لـ <i>n</i> عنصرًا يستغرق:</div>
+      <div class="opts"><span>أ) <span dir="ltr">O(log n)</span></span><span>ب) <span dir="ltr">O(n)</span></span><span>ج) <span dir="ltr">O(n log n)</span></span><span>د) <span dir="ltr">O(n<sup>2</sup>)</span></span></div></div>
+    <div class="mcq"><div class="stem">5) في الكومة الصغرى، يقع العنصر الأكبر:</div>
+      <div class="opts"><span>أ) في الجذر</span><span>ب) في إحدى الأوراق</span><span>ج) عند الفهرس <span dir="ltr">n/2</span></span><span>د) لا يمكن الجزم دون مسح</span></div></div>
+    <div class="mcq"><div class="stem">6) الكومة دائمًا:</div>
+      <div class="opts"><span>أ) شجرة ثنائية ممتلئة (Full)</span><span>ب) شجرة ثنائية مكتملة (Complete)</span><span>ج) شجرة ثنائية تامة (Perfect)</span><span>د) شجرة بحث ثنائية (BST)</span></div></div>
+  </div>
+</section>
+
+
+
+<!-- =============================================================================
+                            PART IX — HASH TABLES
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء التاسع</div>
+    <h2>جداول التجزئة (Hash Tables)</h2>
+    <div class="sub">دوال التجزئة (Hash Functions)، والسبر الخطي/التربيعي/التجزئة المزدوجة، والسلاسل المنفصلة (Separate Chaining)</div>
+  </div>
+
+  <h3 class="q">السؤال 9.1 &mdash; السبر الخطي (Linear Probing) <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>أدرج <b dir="ltr">{ 41, 12, 24, 5, 16, 35, 28, 19, 7 }</b> في جدول تجزئة حجمه <b>13</b> باستخدام <code class="inline">h(x) = x mod 13</code> والسبر الخطي.</p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>الفهرس</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr></thead>
+      <tbody><tr><td class="row-label">القيمة</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 9.2 &mdash; السبر التربيعي (Quadratic Probing) <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>المفاتيح نفسها، ودالة التجزئة نفسها، مع تسلسل السبر <span dir="ltr"><code class="inline">h(x) + i<sup>2</sup></code> mod 13</span>.</p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>الفهرس</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr></thead>
+      <tbody><tr><td class="row-label">القيمة</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 9.3 &mdash; التجزئة المزدوجة (Double Hashing) <span class="tag tag-hard">صعب</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>أدرج المفاتيح <b dir="ltr">{ 49, 26, 18, 7, 38, 25, 11, 33 }</b> في جدول تجزئة حجمه <b>11</b> باستخدام <b>التجزئة المزدوجة</b>، علمًا بأن:</p>
+    <p dir="ltr" style="text-align:center;font-family:Consolas,monospace;font-size:12.5pt;">
+      <b>h<sub>1</sub>(x) = x mod 11</b> &nbsp;&nbsp;&nbsp;&nbsp; <b>h<sub>2</sub>(x) = 1 + (x mod 9)</b>
+    </p>
+    <table class="data full arr-ltr">
+      <thead><tr><th>الفهرس</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+      <tbody><tr><td class="row-label">القيمة</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 9.4 &mdash; السلاسل المنفصلة (Separate Chaining) <span class="tag tag-easy">سهل</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>أدرج <b dir="ltr">{ 14, 27, 33, 5, 22, 41, 18, 9, 26 }</b> في جدول تجزئة حجمه <b>7</b> باستخدام <code class="inline">h(x) = x mod 7</code> والسلاسل المنفصلة مع الإدراج في رأس السلسلة.</p>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  Tk["الخانة i"] --> N1["key<sub>1</sub>"] --> N2["key<sub>2</sub>"] --> NULL["null"]
+      </div>
+      <div class="diagram-caption">الفكرة: كل خانة هي رأس قائمتها المرتبطة الخاصة (السلسلة). ومع <b>الإدراج في الرأس</b> يكون المفتاح المُدرَج مؤخرًا هو الأقرب إلى الخانة.</div>
+    </div>
+
+    <table class="data full arr-ltr">
+      <thead><tr><th>الفهرس</th><th colspan="5">السلسلة (من الرأس &rarr; إلى الذيل)</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">0</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">1</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">2</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">3</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">4</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">5</td><td colspan="5"></td></tr>
+        <tr><td class="row-label">6</td><td colspan="5"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="q">السؤال 9.5 &mdash; مفاهيم دوال التجزئة <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <ol type="a">
+      <li>عرّف <b>معامل التحميل (Load Factor)</b> &alpha;. ما العتبات النموذجية لإعادة التحجيم في السبر الخطي مقارنةً بالسلاسل المنفصلة؟</li>
+      <li>لماذا تُفضَّل الجداول ذات <b>الأحجام الأولية</b> عند استخدام <code class="inline">x mod m</code>؟</li>
+      <li>ما <b>التكتل الأولي (Primary Clustering)</b>؟ وأيّ استراتيجيات السبر تحدّ منه على أفضل وجه؟</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 9.6 &mdash; تكلفة البحث <span class="tag tag-med">متوسط</span><span class="pts">[4 درجات]</span></h3>
+  <div class="q-body">
+    <p>باستخدام جدول السبر الخطي من 8.1، اذكر الخانات التي تُفحص عند البحث عن كل مفتاح، وبيّن هل عُثر عليه أم لا:</p>
+    <ol type="a"><li>ابحث عن 19</li><li>ابحث عن 36</li><li>ابحث عن 7</li><li>ابحث عن 50</li></ol>
+    <div class="answer-box sm"></div>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART X — GRAPHS
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء العاشر</div>
+    <h2>المخططات (Graphs)</h2>
+    <div class="sub">طرق التمثيل، والاجتياز، والمقارنة</div>
+  </div>
+
+  <h3 class="q">السؤال 10.1 &mdash; مصفوفة الجوار وقائمة الجوار <span class="tag tag-med">متوسط</span><span class="pts">[8 درجات]</span></h3>
+  <div class="q-body">
+    <p>ليكن لدينا المخطط الموجَّه الموزون التالي:</p>
+<pre class="code">A &rarr; B (4),  A &rarr; D (7),  B &rarr; C (2),  B &rarr; E (5),
+C &rarr; F (1),  D &rarr; C (3),  D &rarr; E (9),  E &rarr; F (2),  F &rarr; A (6)</pre>
+
+    <div class="diagram">
+      <div class="mermaid">
+graph LR
+  A((A)) -->|4| B((B))
+  A -->|7| D((D))
+  B -->|2| C((C))
+  B -->|5| E((E))
+  C -->|1| F((F))
+  D -->|3| C
+  D -->|9| E
+  E -->|2| F
+  F -->|6| A
+      </div>
+      <div class="diagram-caption">رسم مرجعي للمخطط (موجَّه، موزون).</div>
+    </div>
+
+    <h4 class="sub">مصفوفة الجوار (Adjacency Matrix)</h4>
+    <table class="data arr-ltr">
+      <thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">A</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">B</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">C</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">D</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">E</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="row-label">F</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h4 class="sub">قائمة الجوار (Adjacency List)</h4>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 10.2 &mdash; البحث بالعرض أولًا (BFS) والبحث بالعمق أولًا (DFS) <span class="tag tag-med">متوسط</span><span class="pts">[6 درجات]</span></h3>
+  <div class="q-body">
+    <p>بدءًا من <b>A</b>، ومع كسر التعادل حسب الترتيب الأبجدي، اذكر ترتيب زيارة الرؤوس (Vertices) في:</p>
+    <ol type="a"><li>BFS</li><li>DFS</li></ol>
+    <div class="answer-box sm"></div>
+  </div>
+
+  <h3 class="q">السؤال 10.3 &mdash; مقارنة طرق التمثيل <span class="tag tag-easy">سهل</span><span class="pts">[4 درجات]</span></h3>
+  <div class="q-body">
+    <table class="data full">
+      <thead><tr><th></th><th>مصفوفة الجوار</th><th>قائمة الجوار</th></tr></thead>
+      <tbody>
+        <tr><td class="row-label">التحقق من وجود الحافة <span dir="ltr">(u,v)</span></td><td></td><td></td></tr>
+        <tr><td class="row-label">المرور على جيران u</td><td></td><td></td></tr>
+        <tr><td class="row-label">الأنسب لأيّ كثافة</td><td></td><td></td></tr>
+        <tr><td class="row-label">ميزة واحدة</td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- =============================================================================
+                            PART XI — MIXED
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الجزء الحادي عشر</div>
+    <h2>مفاهيم متنوعة وأسئلة صح/خطأ</h2>
+    <div class="sub">مراجعة عبر الموضوعات، وتعريفات، واختيار الهيكل المناسب</div>
+  </div>
+
+  <h3 class="q">السؤال 11.1 &mdash; صح أم خطأ <span class="tag tag-easy">سهل</span><span class="pts">[12 درجة &middot; درجة واحدة لكل فقرة]</span></h3>
+  <div class="q-body">
+    <div class="tf">
+      <div class="item">1) المصفوفة هيكل بيانات منطقي. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">2) أسوأ حالة للبحث الثنائي في مصفوفة مرتّبة من <i>n</i> عنصرًا هي <span dir="ltr">O(log n)</span>. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">3) يمكن تنفيذ كلٍّ من المكدس والطابور باستخدام قائمة مرتبطة أحادية. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">4) الفرز بالإدراج أسرع من الفرز بالدمج على كل مدخل حجمه <span dir="ltr">1,000,000</span>. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">5) الشجرة الثنائية المكتملة التي تحتوي على <i>n</i> عقدة ارتفاعها <span dir="ltr">&lfloor;log<sub>2</sub> n&rfloor;</span>. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">6) تُنفَّذ الكومات دائمًا باستخدام القوائم المرتبطة. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">7) الاجتياز البيني لشجرة البحث الثنائية يعطي قيمًا غير متناقصة. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">8) الفرز السريع دائمًا أسرع من الفرز بالدمج بسبب ثوابته الأفضل. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">9) السبر الخطي يقضي على التكتل الأولي. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">10) إدراج <i>n</i> قيمة في شجرة بحث ثنائية بترتيب <b>مرتّب</b> يُنتج شجرة ارتفاعها <span dir="ltr"><i>n</i>&minus;1</span>. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">11) تستهلك العودية دائمًا ذاكرة أقل من الحل التكراري المكافئ. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+      <div class="item">12) يمكن تنفيذ DFS باستخدام مكدس صريح. <span class="ch">صح</span><span class="ch">خطأ</span></div>
+    </div>
+  </div>
+
+  <h3 class="q">السؤال 11.2 &mdash; إجابات قصيرة <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <ol type="a">
+      <li>عرّف <b>نوع البيانات المجرد (ADT)</b>. وأعطِ مثالين مع طرق تنفيذهما المعتادة.</li>
+      <li>الفرق بين هيكل البيانات <b>الفيزيائي</b> وهيكل البيانات <b>المنطقي</b>.</li>
+      <li>ما <b>العودية الذيلية (Tail Recursion)</b>؟ ولماذا قد يُحسّنها المترجم (Compiler)؟</li>
+      <li>لماذا يتدهور البحث في شجرة البحث الثنائية إلى <span dir="ltr">O(n)</span> عند إدراج المفاتيح بترتيب مرتّب؟</li>
+      <li>اذكر موقفًا تُفضَّل فيه شجرة البحث الثنائية على جدول التجزئة.</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 11.3 &mdash; اختر الهيكل المناسب <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات &middot; درجتان لكل فقرة]</span></h3>
+  <div class="q-body">
+    <p>لكل سيناريو، اختر هيكل البيانات <b>الأنسب</b> وعلّل اختيارك في جملة واحدة.</p>
+    <ol type="a">
+      <li>ميزة التراجع (Undo) في محرر نصوص (الأحدث أولًا).</li>
+      <li>نظام شبّاك تذاكر يخدم العملاء حسب ترتيب وصولهم.</li>
+      <li>قاموس يتطلب بحثًا سريعًا واستعلامات نطاق مرتّبة معًا.</li>
+      <li>لوحة صدارة تعرض اللاعب صاحب أعلى نتيجة عند الطلب.</li>
+      <li>جدول رموز في مترجم لا حاجة فيه إلى المرور المرتّب على العناصر.</li>
+    </ol>
+    <div class="answer-box md"></div>
+  </div>
+
+  <h3 class="q">السؤال 11.4 &mdash; أسئلة اختيار من متعدد عبر الموضوعات <span class="tag tag-med">متوسط</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <div class="mcq"><div class="stem">1) ارتفاع شجرة بحث ثنائية متوازنة تحتوي على <span dir="ltr">10<sup>6</sup></span> عقدة يساوي تقريبًا:</div>
+      <div class="opts"><span>أ) 10</span><span>ب) 20</span><span>ج) 100</span><span>د) 1000</span></div></div>
+    <div class="mcq"><div class="stem">2) أيّها يمكن أن يكون فارغًا وممتلئًا معًا عند <code class="inline">front == rear</code>؟</div>
+      <div class="opts"><span>أ) الطابور البسيط</span><span>ب) الطابور الدائري</span><span>ج) المكدس</span><span>د) شجرة البحث الثنائية</span></div></div>
+    <div class="mcq"><div class="stem">3) أسوأ خوارزمية فرز يجب ألّا تُختار أبدًا لفرز 10 عناصر فقط بشكل تفاعلي:</div>
+      <div class="opts"><span>أ) الفرز بالإدراج</span><span>ب) الفرز بالاختيار</span><span>ج) الفرز الفقاعي</span><span>د) لا شيء &mdash; جميعها مناسبة لـ 10 عناصر</span></div></div>
+    <div class="mcq"><div class="stem">4) عدد المقارنات في أسوأ حالة للبحث الثنائي عندما <span dir="ltr"><i>n</i> = 64</span>:</div>
+      <div class="opts"><span>أ) 6</span><span>ب) 7</span><span>ج) 8</span><span>د) 64</span></div></div>
+    <div class="mcq"><div class="stem">5) بعد إدراج <span dir="ltr">20, 10, 30, 5, 15</span> في شجرة بحث ثنائية، يكون الاجتياز البعدي:</div>
+      <div class="opts"><span>أ) <span dir="ltr">5 15 10 30 20</span></span><span>ب) <span dir="ltr">5 10 15 20 30</span></span><span>ج) <span dir="ltr">20 10 5 15 30</span></span><span>د) <span dir="ltr">30 15 5 10 20</span></span></div></div>
+    <div class="mcq"><div class="stem">6) أنسب اجتياز لنسخ شجرة:</div>
+      <div class="opts"><span>أ) البيني</span><span>ب) القبلي</span><span>ج) البعدي</span><span>د) حسب المستوى</span></div></div>
+    <div class="mcq"><div class="stem">7) أنسب اجتياز لحذف شجرة:</div>
+      <div class="opts"><span>أ) البيني</span><span>ب) القبلي</span><span>ج) البعدي</span><span>د) حسب المستوى</span></div></div>
+    <div class="mcq"><div class="stem">8) إدراج <code class="inline">10, 20, 30, 40, 50</code> في شجرة بحث ثنائية فارغة يُنتج شجرة ارتفاعها:</div>
+      <div class="opts"><span>أ) 0</span><span>ب) 2</span><span>ج) 4</span><span>د) 5</span></div></div>
+    <div class="mcq"><div class="stem">9) جدول تجزئة حجمه 100 ويحتوي على 70 مفتاحًا: معامل التحميل =</div>
+      <div class="opts"><span>أ) 0.07</span><span>ب) 0.7</span><span>ج) 7</span><span>د) 70</span></div></div>
+    <div class="mcq"><div class="stem">10) الصيغة اللاحقة للتعبير <code class="inline">a + b * c</code>:</div>
+      <div class="opts"><span>أ) <span dir="ltr">a b + c *</span></span><span>ب) <span dir="ltr">a b c * +</span></span><span>ج) <span dir="ltr">a b c + *</span></span><span>د) <span dir="ltr">+ a * b c</span></span></div></div>
+  </div>
+
+  <h3 class="q">السؤال 11.5 &mdash; التحدي الأخير <span class="tag tag-hard">صعب</span><span class="pts">[10 درجات]</span></h3>
+  <div class="q-body">
+    <p>صمّم (بشبه الشيفرة) ثلاث خوارزميات مختلفة لطباعة قائمة مرتبطة أحادية <b>بترتيب معكوس</b>، واذكر <b>التعقيد الزمني</b> لكلٍّ منها.</p>
+    <ol type="a">
+      <li>باستخدام <b>مكدس</b> مساعد.</li>
+      <li>بـ<b>عكس</b> القائمة في مكانها، ثم طباعتها، ثم استعادة ترتيبها الأصلي.</li>
+      <li>باستخدام <b>العودية</b> (دون مكدس صريح).</li>
+    </ol>
+    <div class="answer-box lg"></div>
+  </div>
+</section>
+
+
+
+<!-- =============================================================================
+                            APPENDIX — ANSWER KEY
+============================================================================== -->
+<section class="sheet">
+  <div class="part-header">
+    <div class="label">الملحق</div>
+    <h2>مفتاح الإجابات وورقة التلميحات</h2>
+    <div class="sub">للدراسة الذاتية &mdash; حاول حلّ كل سؤال أولًا</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء الأول &mdash; تحليل الخوارزميات</h3>
+    <div class="key-item"><b>1.1</b> <span dir="ltr">(a) O(n)</span> &nbsp; <span dir="ltr">(b) O(log<sub>3</sub> n) = O(log n)</span> &nbsp; <span dir="ltr">(c) O(log n)</span> (الحلقة الخارجية تُنصِّف؛ والحلقة الداخلية ثابتة).</div>
+    <div class="key-item"><b>1.2</b> الخارجية = n، والوسطى = <span dir="ltr">log<sub>2</sub> n</span>، والداخلية = n &larr; <b dir="ltr">T(n) = O(n<sup>2</sup> log n)</b>.</div>
+    <div class="key-item"><b>1.3</b> ثلاث حلقات متداخلة بحدود دنيا متزايدة: العدد = <span dir="ltr">n(n+1)(n+2)/6 = &Theta;(n<sup>3</sup>) &rArr; O(n<sup>3</sup>)</span>.</div>
+    <div class="key-item"><b>1.4</b> <span dir="ltr">T = C n<sup>2</sup> log<sub>2</sub> n</span>. عندما <span dir="ltr">n = 8</span>: <span dir="ltr">192 = C &middot; 64 &middot; 3 &rArr; C = 1</span>. ولـ <span dir="ltr">800 ms</span>: <span dir="ltr">n<sup>2</sup> log<sub>2</sub> n &asymp; 800 &rArr; n &asymp; 14&ndash;15</span>.</div>
+    <div class="key-item"><b>1.5</b> <span dir="ltr">(a) 24 = C &middot; log<sub>3</sub> 81 = 4C &rArr; <b>C = 6</b></span>. <span dir="ltr">(b) 72 = 6 log<sub>3</sub> n &rArr; n = 3<sup>12</sup></span>. <span dir="ltr">(c) 96 = 6 log<sub>3</sub> n &rArr; n = 3<sup>16</sup></span>.</div>
+    <div class="key-item"><b>1.6</b> <span dir="ltr">(a) O(n<sup>2</sup>) (b) O(n log n) (c) O(log n) (d) O(2<sup>n</sup>)</span>.</div>
+    <div class="key-item"><b>1.7</b> الحلقة الخارجية m تكرارًا &middot; والداخلية d تكرارًا &lArr; <span dir="ltr">T = O(m &middot; d)</span>.</div>
+    <div class="key-item"><b>1.8</b> <span dir="ltr">1, log n, &radic;n, n, n log n, n<sup>2</sup>, n<sup>3</sup>, n<sup>log n</sup>, 2<sup>n</sup>, n!</span>.</div>
+    <div class="key-item"><b>1.9 اختيار من متعدد</b> 1-د، 2-ج، 3-ج، 4-ب، 5-ب، 6-ب، 7-ب، 8-ب، 9-أ، 10-ب.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء الثاني &mdash; العودية</h3>
+    <div class="key-item"><b>2.1</b> <span dir="ltr">"ab[2]cd[3]e"</span>.</div>
+    <div class="key-item"><b>2.2</b> 12 زوجي &larr; <span dir="ltr">1 + mystery(6)</span>؛ 6 زوجي &larr; <span dir="ltr">1 + mystery(3)</span>؛ 3 فردي &larr; <span dir="ltr">2 + mystery(2)</span>؛ 2 زوجي &larr; <span dir="ltr">1 + mystery(1)</span>؛ الحالة الأساسية = 1. المجموع <b>= 6</b>.</div>
+    <div class="key-item"><b>2.3</b> تُعيد القيمة العظمى <b>9</b>.</div>
+    <div class="key-item"><b>2.4</b> <code class="inline">if (exp == 0) return 1; return base * power(base, exp - 1);</code></div>
+    <div class="key-item"><b>2.5</b> <code class="inline">if (n &lt; 10) return n; return n % 10 + sumDigits(n / 10);</code></div>
+    <div class="key-item"><b>2.6</b> إذا كان <code class="inline">s.startsWith(t)</code>: <span dir="ltr">1 + countSub(s.substring(t.length()), t)</span>؛ وإلا: <span dir="ltr">countSub(s.substring(1), t)</span>؛ والحالة الأساسية عندما تكون أقصر من t &larr; 0.</div>
+    <div class="key-item"><b>2.7</b> <code class="inline">if (size == 1) return a[0]; int r = maxOf(a, size - 1); return Math.max(a[size - 1], r);</code></div>
+    <div class="key-item"><b>2.8</b> دالتان مساعدتان عوديتان: الأولى تطبع n صفًا تصاعديًا ثم <span dir="ltr">n&minus;1</span> صفًا تنازليًا؛ ودالة الصف تطبع النجوم عوديًا.</div>
+    <div class="key-item"><b>2.9</b> <span dir="ltr">(a)</span> تفشل الحالة الأساسية عندما <span dir="ltr">n = 0</span>؛ استخدم <code class="inline">if (n &le; 1) return 1;</code>. <span dir="ltr">(b)</span> تطبع من n إلى 1؛ بدّل موضعَي الطباعة والاستدعاء. <span dir="ltr">(c)</span> الحالة الأساسية مفقودة <code class="inline">if (size == 0) return 0;</code>.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء الثالث &mdash; القوائم المرتبطة</h3>
+    <div class="key-item"><b>3.1</b> <span dir="ltr">(a) 12 (b) 23 (c) NullPointerException (d) 12 (e) 5 &rarr; 12 &rarr; 17 &rarr; 23</span>.</div>
+    <div class="key-item"><b>3.2</b> امشِ على القائمة، واجمع عندما يتحقق <span dir="ltr">(data % 2 != 0)</span>.</div>
+    <div class="key-item"><b>3.3</b> عالج حالة القائمة الفارغة/الرأس الجديد؛ وامشِ ما دام <span dir="ltr">next.data &lt; v</span>؛ ثم اربط العقدة في موضعها.</div>
+    <div class="key-item"><b>3.4</b> ثلاثة مراجع: <span dir="ltr">prev = null, curr = head</span>؛ ما دام curr: <span dir="ltr">next = curr.next; curr.next = prev; prev = curr; curr = next;</span> ثم <span dir="ltr">return prev</span>.</div>
+    <div class="key-item"><b>3.5</b> أنشئ العقدة، ثم نفّذ 4 عبارات إسناد: <code class="inline">n.next = helpPtr.next; n.prev = helpPtr; helpPtr.next.prev = n; helpPtr.next = n;</code></div>
+    <div class="key-item"><b>3.6</b> العبارات الست جميعها صحيحة.</div>
+    <div class="key-item"><b>3.7</b> مرور واحد: الزوجي &larr; إلى ذيل evens، وإلا إلى ذيل odds مع زيادة العدّاد <span dir="ltr">counter++</span>.</div>
+    <div class="key-item"><b>3.8 اختيار من متعدد</b> 1-د، 2-ج، 3-أ، 4-ج، 5-ج، 6-أ، 7-ب، 8-ب.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء الرابع &mdash; المكدسات</h3>
+    <div class="key-item"><b>4.1</b> A: <span dir="ltr">[3]</span>؛ B: <span dir="ltr">[5]</span>؛ C: <span dir="ltr">[24]</span>. القيمة النهائية = 24.</div>
+    <div class="key-item"><b>4.2</b> الصيغة اللاحقة = <code class="inline">A B C D - * E F ^ / + G H % -</code></div>
+    <div class="key-item"><b>4.3</b> الصيغة السابقة = <code class="inline">- * + X Y Z / W - P Q</code></div>
+    <div class="key-item"><b>4.4</b> المخرجات <span dir="ltr">(a) 3 (b) 15 (c) 11 (d) 2</span>. المكدس النهائي من القمة&larr;إلى القاع = <span dir="ltr">{20, 7}</span>.</div>
+    <div class="key-item"><b>4.5</b> أمثلة: استدعاء الدوال والعودة منها (الإطارات تعمل بمبدأ LIFO)؛ والتراجع (Undo) (الأحدث أولًا).</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء الخامس &mdash; الطوابير</h3>
+    <div class="key-item"><b>5.1</b> المخرجات <span dir="ltr">(a) B (b) D (c) C (d) A</span>. الطابور Q النهائي = <span dir="ltr">{E}</span>. المكدس S النهائي = <span dir="ltr">{F}</span>.</div>
+    <div class="key-item"><b>5.2</b> المخرجات <span dir="ltr">(a) 10 (b) 20 (c) 30</span> <span dir="ltr">(d)</span> فيض (overflow). تمتلئ الخانات بالقيم من 40 إلى 90؛ وفي <span dir="ltr">(d)</span> تحدث محاولة فيض لأن الطابور ممتلئ.</div>
+    <div class="key-item"><b>5.3</b> أخرِج جميع العناصر من الطابور وادفعها في المكدس؛ ثم اسحبها جميعًا وأعِدها إلى الطابور.</div>
+    <div class="key-item"><b>5.4</b> الدمج القياسي بمؤشرين.</div>
+    <div class="key-item"><b>5.5 اختيار من متعدد</b> 1-ب، 2-ج، 3-ب، 4-ج، 5-أ، 6-د.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء السادس &mdash; الفرز</h3>
+    <div class="key-item"><b>6.1 الفقاعي</b> <span dir="ltr">P1 {11,28,19,35,8,47}; P2 {11,19,28,8,35,47}; P3 {11,19,8,28,35,47}; P4 {11,8,19,28,35,47}; P5 {8,11,19,28,35,47}</span>.</div>
+    <div class="key-item"><b>6.2 بالاختيار (تنازليًا)</b> <span dir="ltr">P1 {21,5,7,13,3,18,9}; P2 {21,18,7,13,3,5,9}; P3 {21,18,13,7,3,5,9}; P4 {21,18,13,9,3,5,7}; P5 {21,18,13,9,7,5,3}</span>.</div>
+    <div class="key-item"><b>6.3 بالإدراج</b> <span dir="ltr">P1 {A,M,R,K,B,T}; P2 {A,M,R,K,B,T}; P3 {A,K,M,R,B,T}; P4 {A,B,K,M,R,T}; P5 {A,B,K,M,R,T}</span>.</div>
+    <div class="key-item"><b>6.4 بالدمج</b> النهائي = <span dir="ltr">{3,4,7,8,12,16,19,25}</span>.</div>
+    <div class="key-item"><b>6.5 السريع</b> يوضع المحور 31 في موضعه؛ ويحصل الجانب الأيسر على <span dir="ltr">{7, 12, 5, 26, 18, 11}</span>؛ ثم نستدعي عوديًا مع المحور 7.</div>
+    <div class="key-item"><b>6.6 المقارنة</b> الفقاعي <span dir="ltr">n / n<sup>2</sup> / n<sup>2</sup></span> &mdash; مستقر. بالاختيار <span dir="ltr">n<sup>2</sup> / n<sup>2</sup> / n<sup>2</sup></span> &mdash; غير مستقر. بالإدراج <span dir="ltr">n / n<sup>2</sup> / n<sup>2</sup></span> &mdash; مستقر. بالدمج <span dir="ltr">n log n / n log n / n log n</span> &mdash; مستقر. السريع <span dir="ltr">n log n / n log n / n<sup>2</sup></span> &mdash; غير مستقر.</div>
+    <div class="key-item"><b>6.7</b> المدخلات المرتّبة (أو المرتّبة عكسيًا) هي أسوأ حالة للفرز السريع عند اختيار العنصر الأول محورًا. يتعامل الفرز بالدمج جيدًا مع القوائم المرتبطة (لا يحتاج إلى وصول عشوائي). ويقترب الفرز بالإدراج من <span dir="ltr">O(n)</span> عندما تكون المدخلات مرتّبة مسبقًا لأن الحلقة الداخلية تنتهي مبكرًا.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء السابع &mdash; الأشجار</h3>
+    <div class="key-item"><b>7.1</b> القبلي: <span dir="ltr">50 30 20 10 40 35 33 70 60 65 85 75 90</span>. البيني: <span dir="ltr">10 20 30 33 35 40 50 60 65 70 75 85 90</span>. البعدي: <span dir="ltr">10 20 33 35 40 30 65 60 75 90 85 70 50</span>. حسب المستوى: <span dir="ltr">50 30 70 20 40 60 85 10 35 65 75 90 33</span>.</div>
+    <div class="key-item"><b>7.2</b> <span dir="ltr">50 &rarr; 30 &rarr; 40 &rarr; 35 &rarr; 33 &rarr; null</span>. <b>لم يُعثر عليه</b>.</div>
+    <div class="key-item"><b>7.3</b> الحذف القياسي من شجرة البحث الثنائية؛ استخدم اللاحق البيني (أصغر عقدة في الشجرة الفرعية اليمنى) في حالات العقد ذات الابنين.</div>
+    <div class="key-item"><b>7.4</b> <code class="inline">if (p == null) return 0; if (p.left == null &amp;&amp; p.right == null) return 1; return countLeaves(p.left) + countLeaves(p.right);</code></div>
+    <div class="key-item"><b>7.5</b> <code class="inline">if (p == null) return -1; return 1 + Math.max(height(p.left), height(p.right));</code></div>
+    <div class="key-item"><b>7.6</b> إذا كان <span dir="ltr">root.data &lt; lo</span>: استدعِ عوديًا على اليمين فقط. وإذا كان <span dir="ltr">&gt; hi</span>: استدعِ عوديًا على اليسار فقط. وإلا: أضِف القيمة واستدعِ عوديًا على الجانبين.</div>
+    <div class="key-item"><b>7.7</b> كلاهما null &larr; true؛ أحدهما null &larr; false؛ وإلا تساوي البيانات مع تطابق نتيجة الاستدعاء العودي على الجانبين.</div>
+    <div class="key-item"><b>7.8</b> الجذر F (أول عنصر في الاجتياز القبلي). يقسم الاجتياز البيني عند F: اليسار = <span dir="ltr">{A,B,C,D,E}</span>؛ واليمين = <span dir="ltr">{G,H,I}</span>. ثم كرّر عوديًا.</div>
+    <div class="key-item"><b>7.9 اختيار من متعدد</b> 1-ب، 2-ب، 3-ج، 4-ج، 5-أ، 6-ب، 7-ج، 8-ب.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء الثامن &mdash; الكومات</h3>
+    <div class="key-item"><b>8.1</b> بعد جميع عمليات الإدراج، يكون الجذر = 36؛ مع الحفاظ على خاصية الكومة.</div>
+    <div class="key-item"><b>8.2</b> جذر الكومة الصغرى = A.</div>
+    <div class="key-item"><b>8.3</b> أول عملية deleteMax تحذف 36؛ استبدلها بالورقة الأخيرة، ثم رشّح لأسفل. وكرّر ذلك للعنصر الأكبر التالي.</div>
+    <div class="key-item"><b>8.4</b> <span dir="ltr">(a)</span> الأب = <span dir="ltr">(i&minus;1)/2</span>. <span dir="ltr">(b)</span> الأيسر = <span dir="ltr">2i+1</span>، الأيمن = <span dir="ltr">2i+2</span>. <span dir="ltr">(c)</span> آخر عقدة غير ورقية = <span dir="ltr">(n/2) &minus; 1</span>.</div>
+    <div class="key-item"><b>8.5</b> طابور أولوية مبني على كومة صغرى؛ الإدراج <span dir="ltr">O(log n)</span>؛ وحذف الأصغر <span dir="ltr">O(log n)</span>.</div>
+    <div class="key-item"><b>8.6 اختيار من متعدد</b> 1-ب، 2-ب، 3-ب (خاصية الكومة العظمى: الأب &ge; الأبناء)، 4-ب، 5-ب، 6-ب.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء التاسع &mdash; جداول التجزئة</h3>
+    <div class="key-item"><b>9.1</b> الفهارس بباقي القسمة على 13: <span dir="ltr">41&rarr;2, 12&rarr;12, 24&rarr;11, 5&rarr;5, 16&rarr;3, 35&rarr;9</span>، والعدد 28 يتصادم عند 2 &larr; يُسبر <span dir="ltr">3..4</span>، <span dir="ltr">19&rarr;6, 7&rarr;7</span>.</div>
+    <div class="key-item"><b>9.2</b> الفهارس الأولية نفسها؛ وتُحَلّ التصادمات بـ <span dir="ltr">+1, +4, +9, ... mod 13</span>.</div>
+    <div class="key-item"><b>9.3</b> احسب <span dir="ltr">h<sub>1</sub></span> و<span dir="ltr">h<sub>2</sub></span> لكل مفتاح؛ فمثلًا للعدد 49: <span dir="ltr">h<sub>1</sub>=5, h<sub>2</sub>=1+(49 mod 9)=5</span>؛ فيوضع عند 5.</div>
+    <div class="key-item"><b>9.4</b> تمتلئ الحاويات (Buckets) عند الفهارس من 0 إلى 6 وفقًا لـ <span dir="ltr">x mod 7</span>. والإدراج في الرأس يعكس ترتيب الوصول داخل كل حاوية.</div>
+    <div class="key-item"><b>9.5</b> <span dir="ltr">(a)</span> <span dir="ltr">&alpha; = n/m</span>؛ في السلاسل يُعاد التحجيم عند <span dir="ltr">&alpha; &gt; 1</span> تقريبًا؛ وفي السبر عند <span dir="ltr">&alpha; &gt; 0.5&ndash;0.75</span> تقريبًا. <span dir="ltr">(b)</span> الأحجام الأولية تقلل أنماط العوامل المشتركة مع المفاتيح. <span dir="ltr">(c)</span> التكتل الأولي = سلاسل متجاورة طويلة في السبر الخطي؛ ويحدّ منه السبر التربيعي / التجزئة المزدوجة.</div>
+    <div class="key-item"><b>9.6</b> ينتهي البحث عند أول خانة فارغة في تسلسل السبر. المفاتيح التي يُعثر عليها تُعيد فهرسها؛ والتي لا يُعثر عليها يُذكر لها تسلسل السبر والخانة الفارغة.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء العاشر &mdash; المخططات</h3>
+    <div class="key-item"><b>10.1</b> مدخلات المصفوفة = أوزان الحواف؛ و0 فيما عدا ذلك. القائمة: <span dir="ltr">A:[B(4),D(7)] B:[C(2),E(5)] C:[F(1)] D:[C(3),E(9)] E:[F(2)] F:[A(6)]</span>.</div>
+    <div class="key-item"><b>10.2</b> BFS من A (أبجديًا): <span dir="ltr">A B D C E F</span>. وDFS من A: <span dir="ltr">A B C F D E</span>.</div>
+    <div class="key-item"><b>10.3</b> المصفوفة: التحقق من الحافة في <span dir="ltr">O(1)</span>، والمرور على الجيران في <span dir="ltr">O(V)</span>، والأنسب للمخططات <b>الكثيفة</b> &mdash; ميزتها: سرعة البحث عن الحافة. القائمة: التحقق من الحافة في <span dir="ltr">O(deg)</span>، والمرور على الجيران في <span dir="ltr">O(deg)</span>، والأنسب للمخططات <b>المتناثرة</b> &mdash; ميزتها: تخزّن الحواف الموجودة فعلًا فقط.</div>
+  </div>
+
+  <div class="key-section">
+    <h3>الجزء الحادي عشر &mdash; متنوع</h3>
+    <div class="key-item"><b>11.1 صح/خطأ</b> 1-خطأ، 2-صح، 3-صح، 4-خطأ، 5-صح، 6-خطأ، 7-صح، 8-خطأ، 9-خطأ، 10-صح (الإدراج بترتيب مرتّب يُنتج شجرة بحث ثنائية مائلة تمامًا)، 11-خطأ، 12-صح.</div>
+    <div class="key-item"><b>11.2</b> <span dir="ltr">(a)</span> نوع البيانات المجرد (ADT) = عقد سلوكي مستقل عن طريقة التنفيذ (مثل المكدس &mdash; بمصفوفة أو بقائمة مرتبطة). <span dir="ltr">(b)</span> الفيزيائي = طريقة التخزين في الذاكرة؛ والمنطقي = منظور نوع البيانات المجرد. <span dir="ltr">(c)</span> في العودية الذيلية يكون الاستدعاء هو آخر عملية؛ وقد يحوّلها المترجم إلى حلقة تكرارية، فيوفّر إطارات المكدس. <span dir="ltr">(d)</span> كل مفتاح مرتّب جديد أكبر من جميع المفاتيح الموجودة، فيذهب إلى الابن الأيمن فقط &mdash; فتتدهور الشجرة إلى قائمة ارتفاعها <span dir="ltr"><i>n</i>&minus;1</span>، مما يجعل البحث <span dir="ltr">O(n)</span>. <span dir="ltr">(e)</span> استعلامات النطاق / المرور المرتّب تستغرق <span dir="ltr">O(log n + k)</span> في شجرة البحث الثنائية لكنها تستغرق <span dir="ltr">O(n)</span> في جدول التجزئة.</div>
+    <div class="key-item"><b>11.3</b> <span dir="ltr">(a)</span> مكدس &mdash; تراجع بمبدأ LIFO. <span dir="ltr">(b)</span> طابور &mdash; وصول بمبدأ FIFO. <span dir="ltr">(c)</span> شجرة بحث ثنائية (BST). <span dir="ltr">(d)</span> كومة عظمى. <span dir="ltr">(e)</span> جدول تجزئة.</div>
+    <div class="key-item"><b>11.4 اختيار من متعدد</b> 1-ب، 2-ب، 3-د، 4-ب، 5-أ، 6-ب، 7-ج، 8-ج (الارتفاع = <span dir="ltr">n&minus;1 = 4</span>)، 9-ب، 10-ب.</div>
+    <div class="key-item"><b>11.5</b> <span dir="ltr">(a)</span> امشِ على القائمة مرة واحدة دافعًا كل قيمة في المكدس، ثم اسحب واطبع &mdash; زمن <span dir="ltr">O(n)</span>. <span dir="ltr">(b)</span> اعكس القائمة، ثم اجتزها واطبعها، ثم اعكسها مرة أخرى &mdash; زمن <span dir="ltr">O(n)</span>. <span dir="ltr">(c)</span> <code class="inline">printRev(node) { if (node == null) return; printRev(node.next); print(node.data); }</code> &mdash; زمن <span dir="ltr">O(n)</span>.</div>
+  </div>
+
+  <p style="text-align:center;margin-top:24px;font-style:italic;color:var(--ink-soft);">
+    &mdash; نهاية بنك الأسئلة &mdash; مع أطيب التمنيات بالتوفيق!
+  </p>
+</section>
+
+</body>
+</html>

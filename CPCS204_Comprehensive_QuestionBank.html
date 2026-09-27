@@ -552,9 +552,29 @@ table.marks th { background: #ecece4; }
   color: var(--ink-soft);
   font-style: italic;
 }
+
+.lang-switch-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 10px 22px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+  transition: all 0.3s;
+  z-index: 1000;
+}
+.lang-switch-btn:hover { background: #667eea; color: white; }
+@media print { .lang-switch-btn { display: none; } }
 </style>
 </head>
 <body>
+
+<a href="CPCS204_Comprehensive_QuestionBank-ar.html" class="lang-switch-btn">عربي</a>
 
 <!-- =============================================================================
                                 COVER PAGE
