@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sorting Algorithms</title>
+  <title>خوارزميات الفرز (Sorting Algorithms)</title>
   <style>
+    @font-face {
+      font-family: 'Haradh';
+      src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+      font-weight: 400;
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    @font-face {
+      font-family: 'Haradh';
+      src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+      font-weight: 600;
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    @font-face {
+      font-family: 'Haradh';
+      src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+      font-weight: 700;
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    @font-face {
+      font-family: 'Haradh';
+      src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+      font-weight: 800;
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+
     /* ── Reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -13,7 +38,7 @@
       background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #06b6d4 100%);
       min-height: 100vh;
       padding: 20px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #334155;
     }
 
@@ -291,6 +316,23 @@
     footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
     footer strong { opacity: 1; }
 
+    /* ---------- RTL (Arabic) overrides ---------- */
+    .box ul { margin: 8px 20px 0 0; }
+    .box-teal   { border-left: none; border-right: 5px solid #0d9488; }
+    .box-yellow { border-left: none; border-right: 5px solid #ca8a04; }
+    .box-green  { border-left: none; border-right: 5px solid #16a34a; }
+    .ba-label { text-transform: none; letter-spacing: 0; }
+    .resource-type { text-transform: none; letter-spacing: 0; }
+
+    /* Arrays, Big-O labels and the complexity chart stay left-to-right so
+       index 0..n reads left-to-right exactly as in the English page. */
+    .before-after, .ba-array, .big-o, canvas#complexityGraph { direction: ltr; }
+    .ba-label { direction: rtl; text-align: left; }
+    .ba-array { direction: ltr; }
+
+    body { line-height: 1.9; }
+    h1, h2, h3, h4 { line-height: 1.6; }
+
     .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -311,26 +353,26 @@
   </style>
 </head>
 <body>
-<a href="index-ar.html" class="lang-switch-btn">عربي</a>
+<a href="index.html" class="lang-switch-btn">English</a>
 <div class="container">
 
   <!-- ══════════════════════════ HEADER ══════════════════════════ -->
   <header>
-    <a href="../index.html" class="back-link">← Back to Course</a>
-    <h1>Sorting Algorithms</h1>
-    <p>Data Structures I</p>
+    <a href="../index.html" class="back-link">→ الرئيسية</a>
+    <h1>خوارزميات الفرز (Sorting Algorithms)</h1>
+    <p>هياكل البيانات 1</p>
     <div class="header-badges">
-      <span class="badge">Modules 12 &amp; 13</span>
-      <span class="badge">O(n²) &amp; O(n log n)</span>
+      <span class="badge">الوحدتان 12 و13</span>
+      <span class="badge"><span dir="ltr">O(n²)</span> و<span dir="ltr">O(n log n)</span></span>
     </div>
   </header>
 
   <!-- ══════════════════════════ SECTION NAV ══════════════════════════ -->
   <nav class="section-nav">
-    <a href="#what-is-sorting">1 · What is Sorting?</a>
-    <a href="#visualization">2 · Array Visualization</a>
-    <a href="#families">3 · Two Sorting Families</a>
-    <a href="#begin">4 · Begin Studying</a>
+    <a href="#what-is-sorting">1 · ما هو الفرز؟</a>
+    <a href="#visualization">2 · تصوّر المصفوفة</a>
+    <a href="#families">3 · عائلتان من خوارزميات الفرز</a>
+    <a href="#begin">4 · ابدأ الدراسة</a>
   </nav>
 
   <!-- ══════════════════════════ CONTENT ══════════════════════════ -->
@@ -338,160 +380,160 @@
 
     <!-- ─── SECTION 1: What is Sorting? ─── -->
     <section id="what-is-sorting">
-      <h2>1 · What is Sorting?</h2>
-      <p><strong>Sorting</strong> is one of the most fundamental operations in computing. Every time you see a list ordered — from the cheapest flight to the most expensive, from newest email to oldest, from "A" to "Z" — sorting is at work behind the scenes.</p>
-      <p>It is so common that computer scientists have spent decades inventing and refining algorithms to do it as fast as possible. In this module you will learn <em>how</em> those algorithms work and <em>why</em> some are faster than others.</p>
+      <h2>1 · ما هو الفرز؟</h2>
+      <p>يُعدّ <strong>الفرز (Sorting)</strong> من أكثر العمليات أساسيةً في علم الحاسب. ففي كل مرة ترى فيها قائمةً مرتّبة — من أرخص رحلة طيران إلى أغلاها، ومن أحدث بريد إلكتروني إلى أقدمه، ومن "A" إلى "Z" — يكون الفرز قائمًا بعمله خلف الكواليس.</p>
+      <p>وهو شائع إلى درجة أن علماء الحاسب أمضوا عقودًا في ابتكار الخوارزميات التي تنجزه وتحسينها لتعمل بأقصى سرعة ممكنة. ستتعلّم في هذه الوحدة <em>كيف</em> تعمل تلك الخوارزميات، و<em>لماذا</em> يكون بعضها أسرع من بعض.</p>
 
       <div class="examples-grid">
         <div class="example-card">
           <div class="card-icon">📱</div>
           <h4>Android / iOS</h4>
-          <p>Apps sorted alphabetically or by recent use</p>
+          <p>تطبيقات مرتّبة أبجديًا أو حسب آخر استخدام</p>
         </div>
         <div class="example-card">
           <div class="card-icon">📊</div>
           <h4>Excel / Sheets</h4>
-          <p>Sort rows by any column — A→Z or largest first</p>
+          <p>فرز الصفوف حسب أي عمود — <span dir="ltr">A→Z</span> أو الأكبر أولًا</p>
         </div>
         <div class="example-card">
           <div class="card-icon">🛒</div>
-          <h4>Online Shopping</h4>
-          <p>Products sorted by price, rating, or relevance</p>
+          <h4>التسوّق الإلكتروني</h4>
+          <p>منتجات مرتّبة حسب السعر أو التقييم أو مدى الصلة</p>
         </div>
         <div class="example-card">
           <div class="card-icon">📧</div>
-          <h4>Email Inbox</h4>
-          <p>Messages sorted by date, sender, or subject</p>
+          <h4>صندوق البريد الوارد</h4>
+          <p>رسائل مرتّبة حسب التاريخ أو المُرسِل أو الموضوع</p>
         </div>
         <div class="example-card">
           <div class="card-icon">🎵</div>
-          <h4>Music Player</h4>
-          <p>Tracks sorted by artist, album, or play count</p>
+          <h4>مشغّل الموسيقى</h4>
+          <p>مقاطع مرتّبة حسب الفنان أو الألبوم أو عدد مرات التشغيل</p>
         </div>
         <div class="example-card">
           <div class="card-icon">🗂️</div>
-          <h4>File Explorer</h4>
-          <p>Files sorted by name, size, or date modified</p>
+          <h4>مستكشف الملفات</h4>
+          <p>ملفات مرتّبة حسب الاسم أو الحجم أو تاريخ التعديل</p>
         </div>
       </div>
     </section>
 
     <!-- ─── SECTION 2: Visualising on an Array ─── -->
     <section id="visualization">
-      <h2>2 · Visualising Sorting on an Array</h2>
-      <p>An array is like a row in a spreadsheet — a sequence of values stored in numbered slots. Sorting rearranges those values into order.</p>
-      <p>Below is a six-element array before and after sorting. Use the button to switch between ascending and descending order.</p>
+      <h2>2 · تصوّر الفرز على مصفوفة</h2>
+      <p>المصفوفة (Array) تشبه صفًّا في جدول بيانات — أي سلسلة من القيم المخزّنة في خانات مرقّمة. ويعيد الفرز ترتيب تلك القيم وفق نظام معيّن.</p>
+      <p>فيما يلي مصفوفة من ستة عناصر (Elements) قبل الفرز وبعده. استخدم الزر للتبديل بين الترتيب التصاعدي والترتيب التنازلي.</p>
 
       <div class="sort-dir-toggle">
-        <button class="btn btn-toggle" id="ba-toggle-btn" onclick="toggleBeforeAfter()">Show: Ascending ↑</button>
+        <button class="btn btn-toggle" id="ba-toggle-btn" onclick="toggleBeforeAfter()">عرض: تصاعدي ↑</button>
       </div>
 
       <div class="before-after">
         <div class="ba-section">
-          <div class="ba-label">Before Sorting</div>
+          <div class="ba-label">قبل الفرز</div>
           <div class="ba-array" id="ba-before"></div>
         </div>
         <div class="ba-arrow">→</div>
         <div class="ba-section">
-          <div class="ba-label" id="ba-after-label">After Sorting (Ascending)</div>
+          <div class="ba-label" id="ba-after-label">بعد الفرز (تصاعدي)</div>
           <div class="ba-array" id="ba-after"></div>
         </div>
       </div>
 
       <div class="box box-teal">
-        <strong>Key terms:</strong>
+        <strong>مصطلحات أساسية:</strong>
         <ul>
-          <li><strong>Ascending order</strong> — smallest value first: 3, 9, 27, 38, 43, 82</li>
-          <li><strong>Descending order</strong> — largest value first: 82, 43, 38, 27, 9, 3</li>
+          <li><strong>الترتيب التصاعدي (Ascending order)</strong> — أصغر قيمة أولًا: <span dir="ltr">3, 9, 27, 38, 43, 82</span></li>
+          <li><strong>الترتيب التنازلي (Descending order)</strong> — أكبر قيمة أولًا: <span dir="ltr">82, 43, 38, 27, 9, 3</span></li>
         </ul>
       </div>
     </section>
 
     <!-- ─── SECTION 3: Two Sorting Families ─── -->
     <section id="families">
-      <h2>3 · Two Sorting Families</h2>
-      <p>Sorting algorithms are a <em>hot research topic</em>. How fast can we sort? This question has driven decades of innovation. In this module we study two families:</p>
+      <h2>3 · عائلتان من خوارزميات الفرز</h2>
+      <p>تُعدّ خوارزميات الفرز <em>موضوعًا بحثيًا نشطًا</em>. ما أقصى سرعة يمكننا الفرز بها؟ لقد قاد هذا السؤال عقودًا من الابتكار. سندرس في هذه الوحدة عائلتين:</p>
 
       <div class="complexity-cards">
         <div class="complexity-card quad">
           <div class="big-o">O(n²)</div>
-          <div class="name">Quadratic Sorting</div>
-          <p style="font-size:0.85em;margin-top:8px;color:#475569;">Selection · Insertion · Bubble<br>Simple to understand; slow on large data</p>
+          <div class="name">الفرز التربيعي (Quadratic Sorting)</div>
+          <p style="font-size:0.85em;margin-top:8px;color:#475569;">الاختيار · الإدراج · الفقاعي<br>سهل الفهم؛ بطيء مع البيانات الكبيرة</p>
         </div>
         <div class="complexity-card log">
           <div class="big-o">O(n log n)</div>
-          <div class="name">Logarithmic Sorting</div>
-          <p style="font-size:0.85em;margin-top:8px;color:#475569;">Quick Sort · Merge Sort<br>More complex; efficient on large data</p>
+          <div class="name">الفرز اللوغاريتمي (Logarithmic Sorting)</div>
+          <p style="font-size:0.85em;margin-top:8px;color:#475569;">الفرز السريع (Quick Sort) · الفرز بالدمج (Merge Sort)<br>أكثر تعقيدًا؛ فعّال مع البيانات الكبيرة</p>
         </div>
       </div>
 
-      <h3>Why does complexity matter?</h3>
-      <p>When we say an algorithm is O(n²), its number of operations grows as the <em>square</em> of the input size. Double the data → four times the work. For small arrays this is fine; for millions of records it becomes a bottleneck. The graph below shows how dramatically the curves diverge as <em>n</em> grows.</p>
+      <h3>لماذا يهمّ التعقيد؟</h3>
+      <p>عندما نقول إن تعقيد خوارزمية ما هو <span dir="ltr">O(n²)</span>، فإن عدد عملياتها ينمو بمقدار <em>مربّع</em> حجم المدخلات. ضاعِف البيانات ← يتضاعف العمل أربع مرات. هذا مقبول مع المصفوفات الصغيرة، لكنه يصبح عنق زجاجة مع ملايين السجلات. يوضّح الرسم البياني أدناه مدى التباعد الكبير بين المنحنيات كلما ازدادت <em>n</em>.</p>
 
       <div style="background:#1e293b;border-radius:12px;padding:20px;margin:20px 0;">
         <canvas id="complexityGraph" height="280"></canvas>
       </div>
 
       <div class="box box-yellow">
-        <strong>Example (n = 1000 elements):</strong>
+        <strong>مثال (<span dir="ltr">n = 1000</span> عنصر):</strong>
         <ul>
-          <li>O(n) → ~1,000 operations</li>
-          <li>O(n log n) → ~10,000 operations</li>
-          <li>O(n²) → ~1,000,000 operations — 1000× more than O(n log n)!</li>
+          <li><span dir="ltr">O(n) → ~1,000</span> عملية</li>
+          <li><span dir="ltr">O(n log n) → ~10,000</span> عملية</li>
+          <li><span dir="ltr">O(n²) → ~1,000,000</span> عملية — أي أكثر بـ <span dir="ltr">1000×</span> من <span dir="ltr">O(n log n)</span>!</li>
         </ul>
       </div>
 
       <div class="box box-green">
-        <strong>The takeaway:</strong> For everyday use with small datasets both families work fine. But when the data grows large — millions of contacts, billions of web pages — only O(n log n) algorithms are practical.
+        <strong>الخلاصة:</strong> في الاستخدام اليومي مع مجموعات البيانات الصغيرة تعمل العائلتان بشكل جيد. لكن عندما تكبر البيانات — ملايين جهات الاتصال، ومليارات صفحات الويب — تصبح خوارزميات <span dir="ltr">O(n log n)</span> وحدها هي العملية.
       </div>
     </section>
 
     <!-- ─── SECTION 4: Begin Studying ─── -->
     <section id="begin">
-      <h2>4 · Begin Studying</h2>
-      <p>Follow the path in order — start with the quadratic sorts, practise them, then move to the faster logarithmic algorithms.</p>
+      <h2>4 · ابدأ الدراسة</h2>
+      <p>اتّبع المسار بالترتيب — ابدأ بخوارزميات الفرز التربيعية، وتدرّب عليها، ثم انتقل إلى الخوارزميات اللوغاريتمية الأسرع.</p>
 
       <div class="nav-cards">
-        <a href="sorting-tutorial.html" class="nav-card quad">
+        <a href="sorting-tutorial-ar.html" class="nav-card quad">
           <div class="nav-card-header">
-            <div class="nav-card-title">① Quadratic Sorts Tutorial</div>
-            <div class="nav-card-sub">Start here — O(n²) algorithms</div>
+            <div class="nav-card-title">① درس خوارزميات الفرز التربيعية</div>
+            <div class="nav-card-sub">ابدأ من هنا — خوارزميات <span dir="ltr">O(n²)</span></div>
           </div>
           <div class="nav-card-body">
-            <div class="nav-card-topics">Covers: Selection Sort · Insertion Sort · Bubble Sort<br>Includes step-by-step simulations and algorithm analysis.</div>
-            <div class="nav-card-arrow">Start Learning →</div>
+            <div class="nav-card-topics">يغطّي: الفرز بالاختيار (Selection Sort) · الفرز بالإدراج (Insertion Sort) · الفرز الفقاعي (Bubble Sort)<br>يتضمّن محاكاة خطوة بخطوة وتحليلًا للخوارزميات.</div>
+            <div class="nav-card-arrow">ابدأ التعلّم ←</div>
           </div>
         </a>
-        <a href="sorting-logarithmic.html" class="nav-card log">
+        <a href="sorting-logarithmic-ar.html" class="nav-card log">
           <div class="nav-card-header">
-            <div class="nav-card-title">③ Logarithmic Sorts Tutorial</div>
-            <div class="nav-card-sub">After practising quadratic sorts — O(n log n)</div>
+            <div class="nav-card-title">③ درس خوارزميات الفرز اللوغاريتمية</div>
+            <div class="nav-card-sub">بعد التدرّب على الفرز التربيعي — <span dir="ltr">O(n log n)</span></div>
           </div>
           <div class="nav-card-body">
-            <div class="nav-card-topics">Covers: Quick Sort · Merge Sort<br>Includes complexity analysis and divide-and-conquer explanation.</div>
-            <div class="nav-card-arrow">Continue Learning →</div>
+            <div class="nav-card-topics">يغطّي: الفرز السريع · الفرز بالدمج<br>يتضمّن تحليل التعقيد وشرح أسلوب فرّق تَسُد (Divide and Conquer).</div>
+            <div class="nav-card-arrow">تابع التعلّم ←</div>
           </div>
         </a>
       </div>
 
-      <h3>Additional Resources</h3>
-      <p>After finishing each tutorial, use these to deepen your understanding:</p>
+      <h3>مصادر إضافية</h3>
+      <p>بعد إنهاء كل درس، استخدم هذه المصادر لتعميق فهمك:</p>
 
       <div class="resources-row">
-        <a href="sorting-questions.html" class="resource-card">
+        <a href="sorting-questions-ar.html" class="resource-card">
           <div class="resource-icon">📝</div>
-          <div class="resource-title">② Practice Questions</div>
-          <div class="resource-type">Drag &amp; Drop · All 5 Sorts</div>
+          <div class="resource-title">② أسئلة تدريبية</div>
+          <div class="resource-type">سحب وإفلات · جميع خوارزميات الفرز الخمس</div>
         </a>
-        <a href="quicksort-simulation.html" class="resource-card">
+        <a href="quicksort-simulation-ar.html" class="resource-card">
           <div class="resource-icon">⚡</div>
-          <div class="resource-title">④ Quick Sort Simulation</div>
-          <div class="resource-type">Simulation · Step by Step</div>
+          <div class="resource-title">④ محاكاة الفرز السريع</div>
+          <div class="resource-type">محاكاة · خطوة بخطوة</div>
         </a>
-        <a href="mergesort-simulation.html" class="resource-card">
+        <a href="mergesort-simulation-ar.html" class="resource-card">
           <div class="resource-icon">🌲</div>
-          <div class="resource-title">⑤ Merge Sort Simulation</div>
-          <div class="resource-type">Simulation · Tree View</div>
+          <div class="resource-title">⑤ محاكاة الفرز بالدمج</div>
+          <div class="resource-type">محاكاة · عرض شجري</div>
         </a>
       </div>
     </section>
@@ -525,8 +567,8 @@ function renderBeforeAfter() {
         c.className = 'ba-cell ' + (baAscending ? 'sorted-asc' : 'sorted-desc');
         c.textContent = v; aft.appendChild(c);
     });
-    lbl.textContent = `After Sorting (${baAscending ? 'Ascending ↑' : 'Descending ↓'})`;
-    btn.textContent = `Show: ${baAscending ? 'Ascending ↑' : 'Descending ↓'}`;
+    lbl.textContent = `بعد الفرز (${baAscending ? 'تصاعدي ↑' : 'تنازلي ↓'})`;
+    btn.textContent = `عرض: ${baAscending ? 'تصاعدي ↑' : 'تنازلي ↓'}`;
 }
 
 function toggleBeforeAfter() {
@@ -559,13 +601,13 @@ function drawComplexityGraph() {
     for (let i = 0; i <= 4; i++) {
         const y = pad.t + (i / 4) * gH;
         ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l+gW, y); ctx.stroke();
-        ctx.fillStyle = '#94a3b8'; ctx.font = '11px Segoe UI'; ctx.textAlign='right';
+        ctx.fillStyle = '#94a3b8'; ctx.font = '11px Haradh, Segoe UI'; ctx.textAlign='right';
         ctx.fillText(Math.round(maxY*(4-i)/4), pad.l-6, y+4);
     }
     for (let n = 0; n <= N; n+=5) {
         const x = xp(n);
         ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t+gH); ctx.stroke();
-        ctx.fillStyle = '#94a3b8'; ctx.font = '11px Segoe UI'; ctx.textAlign='center';
+        ctx.fillStyle = '#94a3b8'; ctx.font = '11px Haradh, Segoe UI'; ctx.textAlign='center';
         ctx.fillText(n, x, pad.t+gH+18);
     }
 
@@ -574,10 +616,10 @@ function drawComplexityGraph() {
     ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t+gH); ctx.lineTo(pad.l+gW, pad.t+gH); ctx.stroke();
 
     // axis labels
-    ctx.fillStyle = '#94a3b8'; ctx.font = '12px Segoe UI'; ctx.textAlign='center';
-    ctx.fillText('n  (array size)', pad.l + gW/2, H-6);
+    ctx.fillStyle = '#94a3b8'; ctx.font = '12px Haradh, Segoe UI'; ctx.textAlign='center';
+    ctx.fillText('n  (حجم المصفوفة)', pad.l + gW/2, H-6);
     ctx.save(); ctx.translate(14, pad.t + gH/2);
-    ctx.rotate(-Math.PI/2); ctx.fillText('Operations', 0, 0); ctx.restore();
+    ctx.rotate(-Math.PI/2); ctx.fillText('العمليات', 0, 0); ctx.restore();
 
     // O(n) line
     ctx.beginPath(); ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2.5;
@@ -599,11 +641,11 @@ function drawComplexityGraph() {
 
     // legend
     const legends = [
-        { color:'#f87171', label:'O(n²) — Quadratic (Selection/Insertion/Bubble)' },
-        { color:'#60a5fa', label:'O(n log n) — Logarithmic (Quick/Merge Sort)' },
-        { color:'#4ade80', label:'O(n) — Linear (ideal)' },
+        { color:'#f87171', label:'O(n²) — تربيعي (الاختيار/الإدراج/الفقاعي)' },
+        { color:'#60a5fa', label:'O(n log n) — لوغاريتمي (السريع/الدمج)' },
+        { color:'#4ade80', label:'O(n) — خطي (مثالي)' },
     ];
-    ctx.font = '12px Segoe UI'; ctx.textAlign='left';
+    ctx.font = '12px Haradh, Segoe UI'; ctx.textAlign='left';
     legends.forEach((l,i) => {
         const lx=pad.l+10, ly=pad.t+12+i*20;
         ctx.fillStyle=l.color;
@@ -621,8 +663,8 @@ window.addEventListener('load', function() {
 window.addEventListener('resize', drawComplexityGraph);
 </script>
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 </body>
 </html>
