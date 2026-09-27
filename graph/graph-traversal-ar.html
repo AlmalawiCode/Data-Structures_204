@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graph Traversal — DFS &amp; BFS Simulator</title>
+  <title>اجتياز المخططات — محاكي DFS و BFS</title>
   <style>
+    @font-face {
+      font-family: 'Haradh';
+      src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+      font-weight: 400;
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    @font-face {
+      font-family: 'Haradh';
+      src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+      font-weight: 600;
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    @font-face {
+      font-family: 'Haradh';
+      src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+      font-weight: 700;
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+    @font-face {
+      font-family: 'Haradh';
+      src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+      font-weight: 800;
+      unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f1f5f9;
       min-height: 100vh;
       color: #1e293b;
@@ -58,7 +83,7 @@
     /* ── CALLOUT BOXES ── */
     .box {
       border-radius:10px; padding:16px 20px; margin:16px 0;
-      border-left:5px solid; font-size:0.95rem;
+      border-right:5px solid; font-size:0.95rem;
     }
     .box-blue  { background:#eff6ff; border-color:#3b82f6; color:#1e3a5f; }
     .box-orange{ background:#fff7ed; border-color:#f97316; color:#7c2d12; }
@@ -89,7 +114,7 @@
       box-shadow:0 4px 14px rgba(0,0,0,0.15);
     }
     .why-step-num {
-      position:absolute; top:-2px; right:-4px;
+      position:absolute; top:-2px; left:-4px;
       width:22px; height:22px; border-radius:50%;
       background:#1e293b; color:#fff;
       font-size:0.7rem; font-weight:700;
@@ -218,7 +243,7 @@
     .btn-auto.playing { background:linear-gradient(135deg,#ef4444,#dc2626); }
     .btn:disabled { opacity:0.45; cursor:not-allowed; transform:none !important; }
     .step-counter {
-      font-size:0.88rem; color:#64748b; font-weight:600; margin-left:6px;
+      font-size:0.88rem; color:#64748b; font-weight:600; margin-right:6px;
     }
 
     /* ── STACK / QUEUE PANEL ── */
@@ -277,8 +302,8 @@
       position:relative;
     }
     .sn-top::after {
-      content:'◀ TOP';
-      position:absolute; right:10px; top:50%; transform:translateY(-50%);
+      content:'▶ القمة';
+      position:absolute; left:10px; top:50%; transform:translateY(-50%);
       font-size:0.6rem; font-weight:700; color:rgba(255,255,255,0.7);
       letter-spacing:0.05em;
     }
@@ -286,7 +311,7 @@
       background: linear-gradient(135deg,#3b82f6,#2563eb);
       box-shadow:0 4px 14px rgba(59,130,246,0.5);
     }
-    .sn-top.bfs-top::after { content:'◀ FRONT'; }
+    .sn-top.bfs-top::after { content:'▶ المقدمة'; }
     .sn-rest {
       background:#334155; color:#94a3b8;
     }
@@ -295,8 +320,8 @@
       color:#d1d5db; box-shadow:0 2px 8px rgba(0,0,0,0.3);
     }
     .sn-skip::after {
-      content:'✗ SKIP';
-      position:absolute; right:10px; top:50%; transform:translateY(-50%);
+      content:'✗ تخطٍّ';
+      position:absolute; left:10px; top:50%; transform:translateY(-50%);
       font-size:0.6rem; font-weight:700; color:rgba(255,255,255,0.6);
     }
 
@@ -418,7 +443,7 @@
     .cmp-table { width:100%; border-collapse:collapse; font-size:0.92rem; }
     .cmp-table th {
       background:linear-gradient(135deg,#1e3a5f,#2563eb);
-      color:#fff; padding:11px 16px; text-align:left;
+      color:#fff; padding:11px 16px; text-align:right;
     }
     .cmp-table td { padding:10px 16px; border-bottom:1px solid #e2e8f0; }
     .cmp-table tr:last-child td { border:none; }
@@ -447,7 +472,7 @@
     .count-val { font-size:1.25rem; font-weight:700; color:#1e293b; min-width:28px; text-align:center; }
     .tog-group { display:flex; border-radius:8px; overflow:hidden; border:2px solid #e2e8f0; }
     .tog-btn { padding:8px 15px; border:none; background:#f8fafc; color:#64748b; font-size:0.88rem; font-weight:600; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
-    .tog-btn + .tog-btn { border-left:1px solid #e2e8f0; }
+    .tog-btn + .tog-btn { border-right:1px solid #e2e8f0; }
     .tog-btn.tog-active { background:linear-gradient(135deg,#1e3a5f,#2563eb); color:#fff; }
     .matrix-outer { overflow-x:auto; margin-bottom:18px; }
     .adj-matrix { border-collapse:collapse; margin:0 auto; }
@@ -490,7 +515,18 @@
     .lbl-input { width:52px; padding:6px 4px; text-align:center; border:2px solid #e2e8f0; border-radius:6px; font-size:0.9rem; font-weight:700; font-family:inherit; color:#1e293b; }
     .lbl-input:focus { outline:none; border-color:#3b82f6; }
     .lbl-input.lbl-dup { border-color:#ef4444; background:#fef2f2; }
-    /* ── LANGUAGE SWITCH ── */
+    /* ---------- RTL (Arabic) overrides ---------- */
+    /* Arabic letters must stay joined: no letter-spacing on Arabic labels */
+    .desc-box .step-label, .stack-box-header, .stack-label-top, .stack-label-bottom,
+    .visited-label, .visited-arr-header, .control-group > label, .header-badge,
+    .sn, .sn-top::after, .sn-skip::after { letter-spacing: 0; }
+    body { line-height: 1.7; }
+
+    /* Code, graph drawing, arrays, matrix and visit-order sequence stay left-to-right */
+    pre, code, svg, .graph-wrap, .visited-row, .visited-arr-grid,
+    .matrix-outer, .adj-matrix, .label-inputs-row { direction: ltr; }
+    pre, pre.code-block { text-align: left; }
+
     .lang-switch-btn {
       position: fixed;
       bottom: 20px;
@@ -510,16 +546,16 @@
   </style>
 </head>
 <body>
-<a href="graph-traversal-ar.html" class="lang-switch-btn">عربي</a>
+<a href="graph-traversal.html" class="lang-switch-btn">English</a>
 
 <header>
   <div class="header-nav">
-    <a href="../index.html" class="nav-link">← Module Hub</a>
-    <a href="graph-tutorial.html" class="nav-link">Graph Foundations</a>
+    <a href="../index.html" class="nav-link">→ مركز الوحدات</a>
+    <a href="graph-tutorial-ar.html" class="nav-link">أساسيات المخططات</a>
   </div>
-  <h1>Graph <span>Traversal</span></h1>
-  <p class="subtitle">DFS &amp; BFS — Interactive Visual Simulator</p>
-  <span class="header-badge">Module 16</span>
+  <h1>اجتياز <span>المخططات</span></h1>
+  <p class="subtitle">البحث بالعمق أولًا (DFS) والبحث بالعرض أولًا (BFS) — محاكٍ مرئي تفاعلي</p>
+  <span class="header-badge">الوحدة 16</span>
 </header>
 
 <div class="main-container">
@@ -529,11 +565,11 @@
   ════════════════════════════════════════════════════════ -->
   <div class="section-card">
     <div class="section-header">
-      <h2>Why Do We Traverse a Graph?</h2>
-      <p>The fundamental operations that make graphs useful</p>
+      <h2>لماذا نجتاز المخطط؟</h2>
+      <p>العمليات الأساسية التي تجعل المخططات مفيدة</p>
     </div>
     <div class="section-body">
-      <p style="font-size:0.95rem;color:#334155;margin-bottom:4px;">A graph stores connections — but to be useful we need to <strong>visit all reachable nodes</strong> systematically. Traversal is the foundation of almost every graph algorithm:</p>
+      <p style="font-size:0.95rem;color:#334155;margin-bottom:4px;">يخزّن المخطط (Graph) الروابط — لكن لكي يكون مفيدًا نحتاج إلى <strong>زيارة جميع العقد (Nodes) التي يمكن الوصول إليها</strong> بطريقة منهجية. الاجتياز (Traversal) هو الأساس الذي تقوم عليه جميع خوارزميات المخططات تقريبًا:</p>
 
       <div class="why-timeline">
         <!-- Step 1 -->
@@ -541,32 +577,32 @@
           <div class="why-step-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">
             <span class="why-step-num">1</span>🔍
           </div>
-          <h3>Searching</h3>
-          <p>Find if node B is reachable from A — like checking if two computers are on the same network.</p>
+          <h3>البحث</h3>
+          <p>معرفة ما إذا كان يمكن الوصول إلى العقدة B انطلاقًا من A — مثل التحقق مما إذا كان جهازا حاسوب على الشبكة نفسها.</p>
         </div>
-        <div class="why-connector">───▶</div>
+        <div class="why-connector">◀───</div>
         <!-- Step 2 -->
         <div class="why-step">
           <div class="why-step-icon" style="background:linear-gradient(135deg,#f97316,#ea580c)">
             <span class="why-step-num">2</span>🗺️
           </div>
-          <h3>Pathfinding</h3>
-          <p>Find the shortest or any path between two nodes — the core of GPS navigation and routing.</p>
+          <h3>إيجاد المسار</h3>
+          <p>إيجاد أقصر مسار (Path) أو أي مسار بين عقدتين — وهو جوهر الملاحة عبر GPS وتوجيه المسارات.</p>
         </div>
-        <div class="why-connector">───▶</div>
+        <div class="why-connector">◀───</div>
         <!-- Step 3 -->
         <div class="why-step">
           <div class="why-step-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a)">
             <span class="why-step-num">3</span>🔗
           </div>
-          <h3>Connectivity</h3>
-          <p>Find all nodes in a connected component — used in social networks, disease spread models.</p>
+          <h3>الاتصالية</h3>
+          <p>إيجاد جميع العقد في مكوّن متصل — ويُستخدم في الشبكات الاجتماعية ونماذج انتشار الأمراض.</p>
         </div>
       </div>
 
       <div class="box box-yellow" style="text-align:center;">
-        <b>Two strategies, one goal</b>
-        Both DFS and BFS visit every reachable vertex exactly once. The difference is <em>order</em>: DFS dives deep first, BFS explores level by level. Use the simulator below to see exactly how each one works.
+        <b>استراتيجيتان، وهدف واحد</b>
+        كلٌّ من البحث بالعمق أولًا (DFS) والبحث بالعرض أولًا (BFS) يزور كل رأس (Vertex) يمكن الوصول إليه مرة واحدة بالضبط. الفرق هو <em>الترتيب</em>: يغوص DFS في العمق أولًا، بينما يستكشف BFS مستوى تلو مستوى. استخدم المحاكي أدناه لترى بالضبط كيف يعمل كلٌّ منهما.
       </div>
     </div>
   </div>
@@ -576,27 +612,27 @@
   ════════════════════════════════════════════════════════ -->
   <div class="section-card">
     <div class="section-header">
-      <h2>Build Your Own Graph</h2>
-      <p>Define your graph below, then load it into the simulator</p>
+      <h2>ابنِ مخططك الخاص</h2>
+      <p>عرّف مخططك أدناه، ثم حمّله في المحاكي</p>
     </div>
     <div class="section-body">
 
       <div class="builder-controls">
         <div class="control-group">
-          <label>Number of Nodes</label>
+          <label>عدد العقد</label>
           <div class="count-ctrl">
             <button class="count-btn" id="btn-nm" onclick="changeNodeCount(-1)">−</button>
             <span class="count-val" id="count-val">6</span>
             <button class="count-btn" id="btn-np" onclick="changeNodeCount(1)">+</button>
           </div>
-          <div style="font-size:0.73rem;color:#94a3b8;margin-top:2px;">Min 5 · Max 10</div>
+          <div style="font-size:0.73rem;color:#94a3b8;margin-top:2px;">الحد الأدنى 5 · الحد الأقصى 10</div>
         </div>
 
         <div class="control-group">
-          <label>Graph Type</label>
+          <label>نوع المخطط</label>
           <div class="tog-group">
-            <button class="tog-btn tog-active" id="tog-undir" onclick="setBuilderType('undirected')">Undirected</button>
-            <button class="tog-btn"            id="tog-dir"   onclick="setBuilderType('directed')">Directed</button>
+            <button class="tog-btn tog-active" id="tog-undir" onclick="setBuilderType('undirected')">غير موجّه (Undirected)</button>
+            <button class="tog-btn"            id="tog-dir"   onclick="setBuilderType('directed')">موجّه (Directed)</button>
           </div>
         </div>
 
@@ -604,10 +640,10 @@
 
       <div class="label-editor" id="label-editor">
         <div class="label-editor-header">
-          <span style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.07em;">Node Labels</span>
+          <span style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;">تسميات العقد</span>
           <div style="display:flex;gap:6px;">
-            <button class="lbl-preset" onclick="setLabelPreset('letters')">Auto A–J</button>
-            <button class="lbl-preset" onclick="setLabelPreset('numbers')">Auto 1–10</button>
+            <button class="lbl-preset" onclick="setLabelPreset('letters')">تلقائي <span dir="ltr">A–J</span></button>
+            <button class="lbl-preset" onclick="setLabelPreset('numbers')">تلقائي <span dir="ltr">1–10</span></button>
           </div>
         </div>
         <div class="label-inputs-row" id="label-inputs-row">
@@ -618,9 +654,9 @@
       <div class="matrix-outer" id="matrix-outer"></div>
 
       <div class="builder-btns">
-        <button class="b-btn b-rand"  onclick="randomizeGraph()">⚄ Random Graph</button>
-        <button class="b-btn b-clear" onclick="clearGraph()">✕ Clear</button>
-        <button class="b-btn b-load"  onclick="loadIntoSimulator()">▶ Load into Simulator</button>
+        <button class="b-btn b-rand"  onclick="randomizeGraph()">⚄ مخطط عشوائي</button>
+        <button class="b-btn b-clear" onclick="clearGraph()">✕ مسح</button>
+        <button class="b-btn b-load"  onclick="loadIntoSimulator()">▶ تحميل في المحاكي</button>
       </div>
       <div class="builder-msg" id="builder-msg"></div>
 
@@ -632,39 +668,39 @@
   ════════════════════════════════════════════════════════ -->
   <div class="section-card" id="sim-section">
     <div class="section-header">
-      <h2 id="sim-title">DFS Simulator — Depth-First Search</h2>
-      <p id="sim-subtitle">Iterative DFS using an explicit Stack (LIFO) — start at node A</p>
+      <h2 id="sim-title">محاكي DFS — البحث بالعمق أولًا</h2>
+      <p id="sim-subtitle">DFS التكراري باستخدام مكدس (Stack) صريح (LIFO) — البدء من العقدة A</p>
     </div>
     <div class="section-body">
 
       <!-- Tab bar -->
       <div class="tab-bar">
         <button class="tab-btn active" id="tab-dfs" onclick="setMode('dfs')">
-          🔶 DFS — Depth First Search
+          🔶 DFS — البحث بالعمق أولًا
         </button>
         <button class="tab-btn" id="tab-bfs" onclick="setMode('bfs')">
-          🔷 BFS — Breadth First Search
+          🔷 BFS — البحث بالعرض أولًا
         </button>
       </div>
 
       <!-- Start node selector -->
       <div class="start-node-row">
-        <label class="start-node-label" for="start-node-select">Starting Node:</label>
+        <label class="start-node-label" for="start-node-select">عقدة البداية:</label>
         <select id="start-node-select" class="start-node-select" onchange="onStartNodeChange()">
           <option value="0">A</option>
         </select>
-        <span class="start-node-hint">Choose which node to begin the traversal from</span>
+        <span class="start-node-hint">اختر العقدة التي يبدأ منها الاجتياز</span>
       </div>
 
       <!-- Neighbor selection rule -->
       <div class="start-node-row">
-        <label class="start-node-label" for="neighbor-rule-select">Neighbor Order:</label>
+        <label class="start-node-label" for="neighbor-rule-select">ترتيب الجيران:</label>
         <select id="neighbor-rule-select" class="start-node-select" style="min-width:200px" onchange="onNeighborRuleChange()">
-          <option value="alpha">Alphabetical (A&#x2192;Z)</option>
-          <option value="lowest">Lowest weight first</option>
-          <option value="highest">Highest weight first</option>
+          <option value="alpha">أبجدي (A&#x2192;Z)</option>
+          <option value="lowest">الأقل وزنًا أولًا</option>
+          <option value="highest">الأعلى وزنًا أولًا</option>
         </select>
-        <span class="start-node-hint">Rule for choosing which neighbor to visit next</span>
+        <span class="start-node-hint">قاعدة اختيار الجار (Neighbor) الذي نزوره تاليًا</span>
       </div>
 
       <!-- Simulator grid -->
@@ -730,31 +766,31 @@
 
         <!-- Description box -->
         <div class="desc-box" id="desc-box">
-          <div class="step-label" id="desc-label">Ready</div>
-          <div id="desc-text">Press <strong>Next Step</strong> to begin. When you visit a node, mark it as visited and push it onto the Stack. To explore deeper, <strong>suspend</strong> the current node (it stays on the Stack) and go to an unvisited neighbor. When all neighbors are visited, <strong>backtrack</strong> by popping from the Stack.</div>
+          <div class="step-label" id="desc-label">جاهز</div>
+          <div id="desc-text">اضغط <strong>الخطوة التالية</strong> للبدء. عندما تزور عقدة، علّمها بأنها مُزارة (Visited) وادفعها (Push) إلى المكدس. للتعمق أكثر، <strong>علّق</strong> العقدة الحالية (تبقى في المكدس) وانتقل إلى جار غير مُزار. عندما تكون جميع الجيران مُزارة، <strong>تراجع</strong> (Backtrack) بالسحب (Pop) من المكدس.</div>
         </div>
 
         <!-- Controls -->
         <div class="controls">
-          <button class="btn btn-primary" id="btn-next" onclick="nextStep()">▶ Next Step</button>
-          <button class="btn btn-auto"    id="btn-auto" onclick="toggleAuto()">⏵ Auto-Play</button>
-          <button class="btn btn-secondary" onclick="resetSim()">↺ Reset</button>
-          <span class="step-counter" id="step-counter">Step 0 / 8</span>
+          <button class="btn btn-primary" id="btn-next" onclick="nextStep()">◀ الخطوة التالية</button>
+          <button class="btn btn-auto"    id="btn-auto" onclick="toggleAuto()">⏵ تشغيل تلقائي</button>
+          <button class="btn btn-secondary" onclick="resetSim()">↺ إعادة ضبط</button>
+          <span class="step-counter" id="step-counter">الخطوة <span dir="ltr">0 / 8</span></span>
         </div>
 
         <!-- Stack panel -->
         <div class="stack-panel">
           <div class="stack-box">
-            <div class="stack-box-header" id="stack-header">STACK (LIFO)</div>
-            <div class="stack-label-top" id="stack-label-top">▼ TOP — pop / push here</div>
+            <div class="stack-box-header" id="stack-header">المكدس (LIFO)</div>
+            <div class="stack-label-top" id="stack-label-top">▼ القمة — السحب / الدفع هنا</div>
             <div class="stack-nodes" id="stack-nodes">
-              <div class="stack-empty">Empty</div>
+              <div class="stack-empty">فارغ</div>
             </div>
-            <div class="stack-label-bottom" id="stack-label-bottom">▲ BOTTOM</div>
+            <div class="stack-label-bottom" id="stack-label-bottom">▲ القاع</div>
           </div>
           <!-- visited[] boolean array display -->
           <div class="visited-arr-box">
-            <div class="visited-arr-header">visited[ ] array</div>
+            <div class="visited-arr-header">المصفوفة <span dir="ltr">visited[ ]</span></div>
             <div class="visited-arr-grid" id="visited-arr-grid">
               <div class="va-cell" id="va-A"><span class="va-node">A</span><span class="va-val" id="vav-A">F</span></div>
               <div class="va-cell" id="va-B"><span class="va-node">B</span><span class="va-val" id="vav-B">F</span></div>
@@ -768,9 +804,9 @@
 
         <!-- Visited result row -->
         <div class="visited-section" style="grid-column:1/3;grid-row:4;">
-          <div class="visited-label" id="visited-label">✅ Explored Order (Result)</div>
+          <div class="visited-label" id="visited-label">✅ ترتيب الاستكشاف (النتيجة)</div>
           <div class="visited-row" id="visited-row">
-            <span class="visited-empty" id="visited-empty">No nodes explored yet</span>
+            <span class="visited-empty" id="visited-empty">لم تُستكشف أي عقدة بعد</span>
           </div>
         </div>
 
@@ -785,21 +821,21 @@
   <div class="section-card">
     <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="toggleCodeSection()">
       <div>
-        <h2>Professional Implementation</h2>
-        <p>How DFS and BFS are actually written in code — Java (standard implementation)</p>
+        <h2>التنفيذ الاحترافي</h2>
+        <p>كيف يُكتب DFS و BFS فعليًا في الشيفرة — Java (التنفيذ القياسي)</p>
       </div>
       <button class="collapse-btn" id="code-collapse-btn" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:6px 14px;border-radius:20px;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;">
-        Show &#x25BC;
+        إظهار &#x25BC;
       </button>
     </div>
     <div class="section-body" id="code-section-body" style="display:none">
       <div class="box box-yellow" style="margin-bottom:18px;">
-        <b>Key rule in both algorithms:</b>
-        Mark <code>visited[node] = true</code> as soon as you <strong>arrive</strong> at a node. This prevents any other path from revisiting the same node.
+        <b>قاعدة أساسية في كلتا الخوارزميتين:</b>
+        ضع <code>visited[node] = true</code> بمجرد <strong>وصولك</strong> إلى العقدة. هذا يمنع أي مسار آخر من إعادة زيارة العقدة نفسها.
       </div>
 
       <div class="code-tabs">
-        <button class="code-tab active" onclick="showCode('dfs')">DFS — iterative</button>
+        <button class="code-tab active" onclick="showCode('dfs')">DFS — تكراري</button>
         <button class="code-tab"        onclick="showCode('bfs')">BFS</button>
       </div>
 
@@ -838,8 +874,8 @@
     <span class="c-kw">return</span> result;
 }</pre>
         <div class="box box-blue" style="margin-top:14px;font-size:0.9rem;">
-          <b>How this works</b>
-          <code>stack.peek()</code> looks at the current node without removing it — the node stays <em>suspended</em> on the stack while you go deeper. When you find an unvisited neighbor, you push it (go deeper). When none remain, you <code>stack.pop()</code> (backtrack). The stack always holds your current path from start to current node.
+          <b>كيف يعمل هذا</b>
+          تنظر <code>stack.peek()</code> إلى العقدة الحالية دون إزالتها — تبقى العقدة <em>معلّقة</em> في المكدس بينما تتعمق أكثر. عندما تجد جارًا غير مُزار، تدفعه (تتعمق أكثر). وعندما لا يتبقى أي جار، تستدعي <code>stack.pop()</code> (تتراجع). يحتفظ المكدس دائمًا بمسارك الحالي من عقدة البداية إلى العقدة الحالية.
         </div>
       </div>
 
@@ -872,7 +908,7 @@
     <span class="c-kw">return</span> result;
 }</pre>
         <div class="box box-blue" style="margin-top:14px;font-size:0.9rem;">
-          <b>Identical pattern to DFS</b> — the only difference is the data structure: <code>Stack</code> with <code>stack.pop()</code> (LIFO) vs <code>Queue</code> with <code>queue.poll()</code> (FIFO). The <code>visited[]</code> marking rule is exactly the same in both.
+          <b>النمط نفسه تمامًا كما في DFS</b> — الفرق الوحيد هو بنية البيانات: المكدس <code>Stack</code> مع <code>stack.pop()</code> (LIFO) مقابل الطابور (Queue) <code>Queue</code> مع <code>queue.poll()</code> (FIFO). وقاعدة التعليم في <code>visited[]</code> هي نفسها تمامًا في كليهما.
         </div>
       </div>
 
@@ -883,8 +919,8 @@
 </div><!-- /main-container -->
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 <script>
@@ -936,7 +972,7 @@ function renderStep(idx) {
 
   /* step counter */
   document.getElementById('step-counter').textContent =
-    `Step ${idx} / ${steps.length - 1}`;
+    `الخطوة \u2066${idx} / ${steps.length - 1}\u2069`;
 
   /* buttons */
   const btnNext = document.getElementById('btn-next');
@@ -1078,7 +1114,7 @@ function rebuildVisitedArrGrid() {
 function buildStack(containerId, arr, isSkip, isBfs) {
   const el = document.getElementById(containerId);
   if (!arr || arr.length === 0) {
-    el.innerHTML = '<div class="stack-empty">Empty</div>';
+    el.innerHTML = '<div class="stack-empty">فارغ</div>';
     return;
   }
   el.innerHTML = '';
@@ -1089,7 +1125,7 @@ function buildStack(containerId, arr, isSkip, isBfs) {
     if (i === 0) {
       if (isSkip) {
         div.className = 'sn sn-skip';
-        div.innerHTML = node + '<span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.6)">✗ SKIP</span>';
+        div.innerHTML = node + '<span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.6)">✗ تخطٍّ</span>';
         div.style.position = 'relative';
       } else {
         div.className = isBfs ? 'sn sn-top bfs-top' : 'sn sn-top';
@@ -1109,14 +1145,14 @@ function buildVisited(containerId, result, prevLen, isBfs) {
   const emptyEl = document.getElementById('visited-empty');
 
   if (!result || result.length === 0) {
-    el.innerHTML = '<span class="visited-empty" id="visited-empty">No nodes visited yet</span>';
+    el.innerHTML = '<span class="visited-empty" id="visited-empty">لم تُزر أي عقدة بعد</span>';
     return;
   }
 
   // Remove empty placeholder
   if (emptyEl) emptyEl.remove();
 
-  const ordinals = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th'];
+  const ordinals = ['الأولى','الثانية','الثالثة','الرابعة','الخامسة','السادسة','السابعة','الثامنة','التاسعة','العاشرة'];
   const color = isBfs ? 'linear-gradient(135deg,#3b82f6,#2563eb)' : 'linear-gradient(135deg,#22c55e,#16a34a)';
 
   // Only append NEW nodes (those beyond prevLen)
@@ -1137,7 +1173,7 @@ function buildVisited(containerId, result, prevLen, isBfs) {
     circle.textContent = node;
     const ord = document.createElement('div');
     ord.className = 'v-ordinal';
-    ord.textContent = ordinals[absIdx] || (absIdx+1)+'th';
+    ord.textContent = ordinals[absIdx] || 'رقم ' + (absIdx+1);
     vnode.appendChild(circle);
     vnode.appendChild(ord);
     el.appendChild(vnode);
@@ -1170,7 +1206,7 @@ function toggleAuto() {
 
 function updateAutoBtn() {
   const btn = document.getElementById('btn-auto');
-  btn.textContent = autoTimer ? '⏸ Pause' : '⏵ Auto-Play';
+  btn.textContent = autoTimer ? '⏸ إيقاف مؤقت' : '⏵ تشغيل تلقائي';
   btn.classList.toggle('playing', !!autoTimer);
 }
 
@@ -1197,7 +1233,7 @@ function resetSim() {
 
   // Clear panels before rendering step 0
   document.getElementById('stack-nodes').innerHTML = '';
-  document.getElementById('visited-row').innerHTML = '<span class="visited-empty" id="visited-empty">No nodes explored yet</span>';
+  document.getElementById('visited-row').innerHTML = '<span class="visited-empty" id="visited-empty">لم تُستكشف أي عقدة بعد</span>';
 
   // Rebuild visited[] array grid to match current nodeLabels
   rebuildVisitedArrGrid();
@@ -1226,8 +1262,8 @@ function onStartNodeChange() {
   const isBfs = mode === 'bfs';
   const startLabel = nodeLabels[simStartIdx];
   document.getElementById('sim-subtitle').textContent =
-    isBfs ? `BFS using a Queue (FIFO) — start at node ${startLabel}`
-           : `DFS — explore one neighbor at a time, backtrack when stuck — start at node ${startLabel}`;
+    isBfs ? `BFS باستخدام طابور (FIFO) — البدء من العقدة ${startLabel}`
+           : `DFS — استكشف جارًا واحدًا في كل مرة، وتراجع عندما لا يبقى مكان للتقدم — البدء من العقدة ${startLabel}`;
 }
 
 /* ── NEIGHBOR RULE ── */
@@ -1278,15 +1314,15 @@ function setMode(m) {
   // Header
   const startLabel = nodeLabels[simStartIdx] || nodeLabels[0] || 'A';
   document.getElementById('sim-title').textContent =
-    isBfs ? 'BFS Simulator — Breadth-First Search' : 'DFS Simulator — Depth-First Search';
+    isBfs ? 'محاكي BFS — البحث بالعرض أولًا' : 'محاكي DFS — البحث بالعمق أولًا';
   document.getElementById('sim-subtitle').textContent =
-    isBfs ? `BFS using a Queue (FIFO) — start at node ${startLabel}` : `DFS — explore one neighbor at a time, backtrack when stuck — start at node ${startLabel}`;
+    isBfs ? `BFS باستخدام طابور (FIFO) — البدء من العقدة ${startLabel}` : `DFS — استكشف جارًا واحدًا في كل مرة، وتراجع عندما لا يبقى مكان للتقدم — البدء من العقدة ${startLabel}`;
 
   // Stack panel labels
-  document.getElementById('stack-header').textContent    = isBfs ? 'QUEUE (FIFO)' : 'STACK (LIFO)';
-  document.getElementById('stack-label-top').textContent = isBfs ? '▼ FRONT — dequeue / output from here' : '▼ TOP — pop / push here';
+  document.getElementById('stack-header').textContent    = isBfs ? 'الطابور (FIFO)' : 'المكدس (LIFO)';
+  document.getElementById('stack-label-top').textContent = isBfs ? '▼ المقدمة — الإخراج من الطابور إلى النتيجة من هنا' : '▼ القمة — السحب / الدفع هنا';
   document.getElementById('stack-label-top').className   = isBfs ? 'stack-label-top bfs-label' : 'stack-label-top';
-  document.getElementById('stack-label-bottom').textContent = isBfs ? '▲ BACK — enqueue new nodes here' : '▲ BOTTOM';
+  document.getElementById('stack-label-bottom').textContent = isBfs ? '▲ المؤخرة — تُدخَل العقد الجديدة في الطابور هنا' : '▲ القاع';
 
   resetSim();
 }
@@ -1626,7 +1662,7 @@ function generateDFSSteps(adj, n, startIdx) {
     return adj[nodeIdx].map(ni => {
       const nlbl = nodeLabels[ni];
       const w = simWeightMatrix.length ? simWeightMatrix[nodeIdx][ni] : 1;
-      return visitedArr[ni] ? `— ${nlbl} (weight ${w}): already visited ✗` : `— ${nlbl} (weight ${w}): unvisited`;
+      return visitedArr[ni] ? `— ${nlbl} (الوزن ${w}): مُزارة مسبقًا ✗` : `— ${nlbl} (الوزن ${w}): غير مُزارة`;
     }).join('<br>&nbsp;&nbsp;');
   }
 
@@ -1638,17 +1674,17 @@ function generateDFSSteps(adj, n, startIdx) {
   }
 
   // Step 0: Arrive at start node — stack is EMPTY
-  const startNeighborList = adj[startIdx].map(ni => nodeLabels[ni]).join(', ') || 'none';
+  const startNeighborList = adj[startIdx].map(ni => nodeLabels[ni]).join(', ') || 'لا يوجد';
 
   steps.push({
     stack:   [],
     visited: [startLbl],
     result:  [startLbl],
     active: startLbl, done: [], ring: startLbl, edges: [],
-    label: `Step 0 — Start from ${startLbl}`,
-    desc:  `We are at <strong>${startLbl}</strong>. Mark ${startLbl} as visited: visited[${startLbl}] = True.<br><br>` +
-           `${startLbl}'s neighbors: ${startNeighborList}.<br>` +
-           `The stack is empty.`
+    label: `الخطوة 0 — البدء من ${startLbl}`,
+    desc:  `نحن عند <strong>${startLbl}</strong>. نعلّم ${startLbl} بأنها مُزارة: <span dir="ltr">visited[${startLbl}] = True</span>.<br><br>` +
+           `جيران ${startLbl}: <span dir="ltr">${startNeighborList}</span>.<br>` +
+           `المكدس فارغ.`
   });
 
   while (true) {
@@ -1668,8 +1704,8 @@ function generateDFSSteps(adj, n, startIdx) {
       const nextLbl = nodeLabels[nextIdx];
       const edgeW = simWeightMatrix.length ? simWeightMatrix[fromIdx][nextIdx] : 1;
       let choiceReason = '';
-      if (neighborRule === 'lowest') choiceReason = ` — lowest weight unvisited (weight ${edgeW})`;
-      else if (neighborRule === 'highest') choiceReason = ` — highest weight unvisited (weight ${edgeW})`;
+      if (neighborRule === 'lowest') choiceReason = ` — الجار غير المُزار ذو الوزن الأقل (الوزن ${edgeW})`;
+      else if (neighborRule === 'highest') choiceReason = ` — الجار غير المُزار ذو الوزن الأعلى (الوزن ${edgeW})`;
 
       // Suspend current node in stack, visit neighbor
       stack.push(fromIdx);
@@ -1697,17 +1733,17 @@ function generateDFSSteps(adj, n, startIdx) {
 
       if (nextHasUnvisited) {
         // ── Normal visit: new node has unvisited neighbors ──
-        const desc = `To leave ${fromLbl} and explore deeper, <strong>suspend ${fromLbl}</strong> in the stack.<br>` +
-                     `Go to <strong>${nextLbl}</strong>${choiceReason} (neighbor of ${fromLbl}). Mark ${nextLbl} as visited: visited[${nextLbl}] = True.<br><br>` +
-                     `${nextLbl}'s neighbors:<br>&nbsp;&nbsp;${nbrLines}<br><br>` +
-                     `${nextLbl} has unvisited neighbors — we will explore deeper.`;
+        const desc = `لمغادرة ${fromLbl} والتعمق أكثر، <strong>نعلّق ${fromLbl}</strong> في المكدس.<br>` +
+                     `ننتقل إلى <strong>${nextLbl}</strong>${choiceReason} (جار ${fromLbl}). نعلّم ${nextLbl} بأنها مُزارة: <span dir="ltr">visited[${nextLbl}] = True</span>.<br><br>` +
+                     `جيران ${nextLbl}:<br>&nbsp;&nbsp;${nbrLines}<br><br>` +
+                     `لدى ${nextLbl} جيران غير مُزارة — سنتعمق أكثر.`;
 
         steps.push({
           stack:   [...stackLabels],
           visited: currentVisited,
           result:  [...result],
           active: nextLbl, done: [...done], ring: nextLbl, edges: [edgeId],
-          label: `Step ${steps.length} — Go to ${nextLbl}`,
+          label: `الخطوة ${steps.length} — الانتقال إلى ${nextLbl}`,
           desc:  desc
         });
 
@@ -1716,18 +1752,18 @@ function generateDFSSteps(adj, n, startIdx) {
         // Show the new node as active, stack BEFORE popping (student sees what will be popped)
         done.push(nextLbl);
 
-        const desc = `Suspend <strong>${fromLbl}</strong> in the stack. Go to <strong>${nextLbl}</strong>${choiceReason} (neighbor of ${fromLbl}).<br>` +
-                     `Mark ${nextLbl} as visited: visited[${nextLbl}] = True.<br><br>` +
-                     `${nextLbl}'s neighbors:<br>&nbsp;&nbsp;${nbrLines}<br><br>` +
-                     `All of ${nextLbl}'s neighbors are already visited — there is <strong>nowhere to go</strong> from ${nextLbl}.<br>` +
-                     `Since we cannot move forward, we go to the stack and <strong>pop</strong>.`;
+        const desc = `نعلّق <strong>${fromLbl}</strong> في المكدس. ننتقل إلى <strong>${nextLbl}</strong>${choiceReason} (جار ${fromLbl}).<br>` +
+                     `نعلّم ${nextLbl} بأنها مُزارة: <span dir="ltr">visited[${nextLbl}] = True</span>.<br><br>` +
+                     `جيران ${nextLbl}:<br>&nbsp;&nbsp;${nbrLines}<br><br>` +
+                     `جميع جيران ${nextLbl} مُزارة مسبقًا — <strong>لا يوجد مكان نذهب إليه</strong> من ${nextLbl}.<br>` +
+                     `وبما أننا لا نستطيع التقدم، نذهب إلى المكدس و<strong>نسحب</strong> منه.`;
 
         steps.push({
           stack:   [...stackLabels],
           visited: currentVisited,
           result:  [...result],
           active: nextLbl, done: [...done], ring: nextLbl, edges: [edgeId],
-          label: `Step ${steps.length} — Go to ${nextLbl}`,
+          label: `الخطوة ${steps.length} — الانتقال إلى ${nextLbl}`,
           desc:  desc
         });
 
@@ -1740,23 +1776,23 @@ function generateDFSSteps(adj, n, startIdx) {
       // ── BACKTRACK step: current node has no unvisited neighbors ──
       // (This only runs when we RETURN to a node and it also has no unvisited left)
       const stuckLbl = curLbl;
-      const stuckNeighbors = neighbors.map(ni => nodeLabels[ni]).join(', ') || 'none';
+      const stuckNeighbors = neighbors.map(ni => nodeLabels[ni]).join(', ') || 'لا يوجد';
       done.push(stuckLbl);
 
       // Show stuck node as active, stack BEFORE popping
       const prePopStackLabels = stack.map(i => nodeLabels[i]);
       const currentVisited = getVisitedList();
 
-      const desc = `We are at <strong>${stuckLbl}</strong>. Check its neighbors: ${stuckNeighbors}.<br>` +
-                   `They are <strong>all already visited</strong> — there is nowhere to go from ${stuckLbl}.<br><br>` +
-                   `Since we cannot move forward, we go to the stack and <strong>pop</strong>.`;
+      const desc = `نحن عند <strong>${stuckLbl}</strong>. نفحص جيرانها: <span dir="ltr">${stuckNeighbors}</span>.<br>` +
+                   `إنها <strong>جميعها مُزارة مسبقًا</strong> — لا يوجد مكان نذهب إليه من ${stuckLbl}.<br><br>` +
+                   `وبما أننا لا نستطيع التقدم، نذهب إلى المكدس و<strong>نسحب</strong> منه.`;
 
       steps.push({
         stack:   [...prePopStackLabels],
         visited: currentVisited,
         result:  [...result],
         active: stuckLbl, done: [...done], ring: stuckLbl, edges: [],
-        label: `Step ${steps.length} — Backtrack from ${stuckLbl}`,
+        label: `الخطوة ${steps.length} — التراجع من ${stuckLbl}`,
         desc: desc
       });
 
@@ -1779,15 +1815,15 @@ function generateDFSSteps(adj, n, startIdx) {
   steps.push({
     stack: [], visited: allNodeLabels, result: finalResult,
     active: null, done: allNodeLabels, ring: null, edges: [],
-    label: 'DFS Complete!',
-    desc:  `We are at <strong>${nodeLabels[curIdx]}</strong>. All its neighbors are already visited — there is nowhere to go.<br>` +
-           `We go to the stack to pop, but the stack is <strong>empty</strong> — there is nothing to pop.<br><br>` +
-           `<strong>DFS is finished!</strong><br><br>` +
-           `Key concepts:<br>` +
-           `&nbsp;&nbsp;— <strong>Visit</strong> a node = go to it, mark visited[node] = True.<br>` +
-           `&nbsp;&nbsp;— <strong>Suspend</strong> a node = push it onto the stack when we leave it to go deeper.<br>` +
-           `&nbsp;&nbsp;— <strong>Backtrack</strong> = when all neighbors are visited and there is nowhere to go, we go to the stack and pop to return to the previous node.<br><br>` +
-           `Final DFS order: <strong>${finalResult.join(' → ')}</strong>`
+    label: 'اكتمل DFS!',
+    desc:  `نحن عند <strong>${nodeLabels[curIdx]}</strong>. جميع جيرانها مُزارة مسبقًا — لا يوجد مكان نذهب إليه.<br>` +
+           `نذهب إلى المكدس لنسحب منه، لكن المكدس <strong>فارغ</strong> — لا يوجد شيء لنسحبه.<br><br>` +
+           `<strong>انتهى DFS!</strong><br><br>` +
+           `المفاهيم الأساسية:<br>` +
+           `&nbsp;&nbsp;— <strong>زيارة</strong> عقدة = الانتقال إليها وتعيين <span dir="ltr">visited[node] = True</span>.<br>` +
+           `&nbsp;&nbsp;— <strong>تعليق</strong> عقدة = دفعها إلى المكدس عندما نغادرها للتعمق أكثر.<br>` +
+           `&nbsp;&nbsp;— <strong>التراجع</strong> = عندما تكون جميع الجيران مُزارة ولا يوجد مكان نذهب إليه، نذهب إلى المكدس ونسحب منه للعودة إلى العقدة السابقة.<br><br>` +
+           `ترتيب DFS النهائي: <strong><span dir="ltr">${finalResult.join(' → ')}</span></strong>`
   });
 
   return steps;
@@ -1804,7 +1840,7 @@ function generateBFSSteps(adj, n, startIdx) {
   visitedArr[startIdx] = true;
 
   const startLbl = nodeLabels[startIdx];
-  const startNeighborList = adj[startIdx].map(ni => nodeLabels[ni]).join(', ') || 'none';
+  const startNeighborList = adj[startIdx].map(ni => nodeLabels[ni]).join(', ') || 'لا يوجد';
 
   // Helper: get current visited list
   function getVisitedList() {
@@ -1820,10 +1856,10 @@ function generateBFSSteps(adj, n, startIdx) {
     result: [],
     active: startLbl, done: [], ring: startLbl,
     edges: [], badges: [],
-    label: `Step 0 — Start from ${startLbl}`,
-    desc: `We are at <strong>${startLbl}</strong>. Mark ${startLbl} as visited: visited[${startLbl}] = True.<br>` +
-          `Add ${startLbl} to the queue.<br><br>` +
-          `${startLbl}'s neighbors: ${startNeighborList}.`
+    label: `الخطوة 0 — البدء من ${startLbl}`,
+    desc: `نحن عند <strong>${startLbl}</strong>. نعلّم ${startLbl} بأنها مُزارة: <span dir="ltr">visited[${startLbl}] = True</span>.<br>` +
+          `نضيف ${startLbl} إلى الطابور.<br><br>` +
+          `جيران ${startLbl}: <span dir="ltr">${startNeighborList}</span>.`
   });
 
   const result = [];
@@ -1862,7 +1898,7 @@ function generateBFSSteps(adj, n, startIdx) {
     const doneCopy = [...done];
 
     // Build neighbor description lines
-    const neighborList = neighbors.map(ni => nodeLabels[ni]).join(', ') || 'none';
+    const neighborList = neighbors.map(ni => nodeLabels[ni]).join(', ') || 'لا يوجد';
     let neighborDesc;
 
     if (newVisits.length > 0) {
@@ -1871,20 +1907,20 @@ function generateBFSSteps(adj, n, startIdx) {
         const nlbl = nodeLabels[ni];
         const w = simWeightMatrix.length ? simWeightMatrix[frontIdx][ni] : 1;
         if (newVisits.includes(nlbl)) {
-          return `— ${nlbl} (weight ${w}): not visited → mark ${nlbl} as visited, add to queue`;
+          return `— ${nlbl} (الوزن ${w}): غير مُزارة ← نعلّم ${nlbl} بأنها مُزارة، ونضيفها إلى الطابور`;
         } else {
-          return `— ${nlbl} (weight ${w}): already visited ✗`;
+          return `— ${nlbl} (الوزن ${w}): مُزارة مسبقًا ✗`;
         }
       }).join('<br>&nbsp;&nbsp;');
 
-      neighborDesc = `Take <strong>${frontLbl}</strong> from the queue.<br>` +
-                     `Explore its neighbors: ${neighborList}.<br><br>` +
+      neighborDesc = `نأخذ <strong>${frontLbl}</strong> من الطابور.<br>` +
+                     `نستكشف جيرانها: <span dir="ltr">${neighborList}</span>.<br><br>` +
                      `&nbsp;&nbsp;${lines}`;
     } else {
       // All neighbors already visited
-      neighborDesc = `Take <strong>${frontLbl}</strong> from the queue.<br>` +
-                     `Explore its neighbors: ${neighborList}.<br><br>` +
-                     `All neighbors are already visited — no new nodes to add to the queue.`;
+      neighborDesc = `نأخذ <strong>${frontLbl}</strong> من الطابور.<br>` +
+                     `نستكشف جيرانها: <span dir="ltr">${neighborList}</span>.<br><br>` +
+                     `جميع الجيران مُزارة مسبقًا — لا توجد عقد جديدة لإضافتها إلى الطابور.`;
     }
 
     steps.push({
@@ -1896,7 +1932,7 @@ function generateBFSSteps(adj, n, startIdx) {
       ring: frontLbl,
       edges: highlightEdges,
       badges: [...resultCopy],
-      label: `Step ${steps.length} — Take ${frontLbl}`,
+      label: `الخطوة ${steps.length} — أخذ ${frontLbl}`,
       desc: neighborDesc
     });
 
@@ -1913,13 +1949,13 @@ function generateBFSSteps(adj, n, startIdx) {
     ring: null,
     edges: [],
     badges: [...finalResult],
-    label: 'BFS Complete!',
-    desc: `The queue is empty — <strong>BFS is finished!</strong><br><br>` +
-          `Key concepts:<br>` +
-          `&nbsp;&nbsp;— <strong>Visit</strong> a node = mark visited[node] = True, add it to the queue.<br>` +
-          `&nbsp;&nbsp;— <strong>Take</strong> from the queue = remove the front node and explore its neighbors.<br>` +
-          `&nbsp;&nbsp;— For each neighbor: if not visited → visit it and add to queue. If already visited → skip.<br><br>` +
-          `Final BFS order: <strong>${finalResult.join(' → ')}</strong>`
+    label: 'اكتمل BFS!',
+    desc: `الطابور فارغ — <strong>انتهى BFS!</strong><br><br>` +
+          `المفاهيم الأساسية:<br>` +
+          `&nbsp;&nbsp;— <strong>زيارة</strong> عقدة = تعيين <span dir="ltr">visited[node] = True</span> وإضافتها إلى الطابور.<br>` +
+          `&nbsp;&nbsp;— <strong>الأخذ</strong> من الطابور = إزالة العقدة الأمامية واستكشاف جيرانها.<br>` +
+          `&nbsp;&nbsp;— لكل جار: إن لم يكن مُزارًا ← نزوره ونضيفه إلى الطابور. وإن كان مُزارًا مسبقًا ← نتخطاه.<br><br>` +
+          `ترتيب BFS النهائي: <strong><span dir="ltr">${finalResult.join(' → ')}</span></strong>`
   });
 
   return steps;
@@ -1962,9 +1998,9 @@ function renderMatrix() {
   // Direction hint
   let hint = '';
   if (builderDirected) {
-    hint = '<div class="dir-hint dir-hint-directed">&#x2192; Directed: row i &#x2192; column j. Click to increase weight (0–9), right-click to remove.</div>';
+    hint = '<div class="dir-hint dir-hint-directed">&#x2190; موجّه: الصف i &#x2190; العمود j. انقر لزيادة الوزن (<span dir="ltr">0–9</span>)، وانقر بالزر الأيمن للإزالة.</div>';
   } else {
-    hint = '<div class="dir-hint dir-hint-undirected">&#x2194; Undirected: click to increase weight (0–9), right-click to remove. Mirror updates automatically.</div>';
+    hint = '<div class="dir-hint dir-hint-undirected">&#x2194; غير موجّه: انقر لزيادة الوزن (<span dir="ltr">0–9</span>)، وانقر بالزر الأيمن للإزالة. تُحدَّث الخلية المتناظرة تلقائيًا.</div>';
   }
   let html = hint + '<table class="adj-matrix"><thead><tr><th></th>';
   for (let j = 0; j < builderN; j++) {
@@ -2070,8 +2106,8 @@ function renderLabelInputs() {
       <input type="text" class="lbl-input" id="lbl-inp-${i}" maxlength="6"
              value="${builderLabels[i]}"
              oninput="onLabelInput(${i}, this.value)"
-             title="Label for node ${i+1}"/>
-      <span>node ${i+1}</span>`;
+             title="تسمية العقدة ${i+1}"/>
+      <span>العقدة ${i+1}</span>`;
     row.appendChild(group);
   }
   validateLabels();
@@ -2162,20 +2198,20 @@ function clearGraph() {
   simWeightMatrix = [];
   customMode = false;
 
-  _customDFSSteps = [{ stack:[], visited:[], result:[], active:null, done:[], ring:null, edges:[], label:'Ready', desc:'Build a graph above and click <strong>Load into Simulator</strong> to begin.' }];
-  _customBFSSteps = [{ queue:[], visited:[], result:[], active:null, done:[], ring:null, edges:[], badges:[], label:'Ready', desc:'Build a graph above and click <strong>Load into Simulator</strong> to begin.' }];
+  _customDFSSteps = [{ stack:[], visited:[], result:[], active:null, done:[], ring:null, edges:[], label:'جاهز', desc:'ابنِ مخططًا أعلاه ثم انقر <strong>تحميل في المحاكي</strong> للبدء.' }];
+  _customBFSSteps = [{ queue:[], visited:[], result:[], active:null, done:[], ring:null, edges:[], badges:[], label:'جاهز', desc:'ابنِ مخططًا أعلاه ثم انقر <strong>تحميل في المحاكي</strong> للبدء.' }];
 
   if (autoTimer) { clearInterval(autoTimer); autoTimer = null; updateAutoBtn(); }
   stepIdx = 0;
   prevResultLen = 0;
   prevStackLen = 0;
 
-  document.getElementById('stack-nodes').innerHTML = '<div class="stack-empty">Empty</div>';
-  document.getElementById('visited-row').innerHTML = '<span class="visited-empty" id="visited-empty">No nodes explored yet</span>';
+  document.getElementById('stack-nodes').innerHTML = '<div class="stack-empty">فارغ</div>';
+  document.getElementById('visited-row').innerHTML = '<span class="visited-empty" id="visited-empty">لم تُستكشف أي عقدة بعد</span>';
   document.getElementById('visited-arr-grid').innerHTML = '';
   document.getElementById('start-node-select').innerHTML = '';
-  document.getElementById('desc-label').textContent = 'Ready';
-  document.getElementById('desc-text').innerHTML = 'Build a graph above and click <strong>Load into Simulator</strong> to begin.';
+  document.getElementById('desc-label').textContent = 'جاهز';
+  document.getElementById('desc-text').innerHTML = 'ابنِ مخططًا أعلاه ثم انقر <strong>تحميل في المحاكي</strong> للبدء.';
   document.getElementById('step-counter').textContent = '';
   document.getElementById('btn-next').disabled = true;
   document.getElementById('desc-box').style.background = '#f0f9ff';
@@ -2193,7 +2229,7 @@ function showBuilderMsg(text, type) {
 function loadIntoSimulator(silent) {
   // Validate labels first
   if (!validateLabels()) {
-    if (!silent) showBuilderMsg('Please fix duplicate or empty node labels before loading.', 'warn');
+    if (!silent) showBuilderMsg('يُرجى تصحيح تسميات العقد المكررة أو الفارغة قبل التحميل.', 'warn');
     return;
   }
 
@@ -2205,7 +2241,7 @@ function loadIntoSimulator(silent) {
     }
   }
   if (edgeCount === 0) {
-    if (!silent) showBuilderMsg('No edges defined. Please add at least one edge to the matrix.', 'warn');
+    if (!silent) showBuilderMsg('لا توجد حواف معرّفة. يُرجى إضافة حافة (Edge) واحدة على الأقل إلى المصفوفة.', 'warn');
     return;
   }
 
@@ -2249,7 +2285,7 @@ function loadIntoSimulator(silent) {
   setMode(mode);
 
   // Show confirmation
-  if (!silent) showBuilderMsg(`Graph loaded: ${builderN} nodes, ${simDirected ? 'directed' : 'undirected'}. Simulator is ready below.`, 'ok');
+  if (!silent) showBuilderMsg(`تم تحميل المخطط: ${builderN} عقد، ${simDirected ? 'موجّه' : 'غير موجّه'}. المحاكي جاهز في الأسفل.`, 'ok');
 
   // Scroll to simulator
   if (!silent) document.getElementById('sim-section').scrollIntoView({ behavior: 'smooth' });
@@ -2261,7 +2297,7 @@ function toggleCodeSection() {
   const btn  = document.getElementById('code-collapse-btn');
   const hidden = body.style.display === 'none';
   body.style.display = hidden ? 'block' : 'none';
-  btn.textContent = hidden ? 'Hide \u25B2' : 'Show \u25BC';
+  btn.textContent = hidden ? 'إخفاء \u25B2' : 'إظهار \u25BC';
 }
 
 /* ── CODE PANEL TABS ── */

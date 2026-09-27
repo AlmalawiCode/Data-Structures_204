@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Hash Table Simulator</title>
+    <title>محاكي جدول التجزئة التفاعلي</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         :root {
             --primary-color: #2563eb;
             --primary-light: #3b82f6;
@@ -27,7 +52,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
@@ -567,54 +592,72 @@
         }
 
         .lang-switch-btn:hover { background: #667eea; color: white; }
+
+        /* ---------- RTL (Arabic) overrides ---------- */
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+        .step-panel { border-left: none; border-right: 4px solid var(--primary-color); }
+
+        /* Formulas, hash-table slots (indices 0..m-1), the key queue,
+           calculations and key/formula inputs always stay left-to-right. */
+        .formula, .hash-table-visual, .queue-items,
+        .step-content .calculation {
+            direction: ltr;
+        }
+        .step-content .calculation { text-align: left; }
+        #linear-keys, #quadratic-keys, #double-keys, #double-h2-custom,
+        .control-group input[type="number"] {
+            direction: ltr;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
-    <a href="hashTable-interactive-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="hashTable-interactive.html" class="lang-switch-btn">English</a>
     <header>
-        <a href="index.html" class="back-link">← Back to Home</a>
-        <h1>Interactive Hash Table Simulator</h1>
-        <p>Learn probing techniques step-by-step with visual animations</p>
+        <a href="index-ar.html" class="back-link">→ العودة إلى الرئيسية</a>
+        <h1>محاكي جدول التجزئة (Hash Table) التفاعلي</h1>
+        <p>تعلّم تقنيات الاستكشاف (Probing) خطوة بخطوة من خلال رسوم متحركة مرئية</p>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('linear')">Linear Probing</button>
-        <button class="tab-btn" onclick="showTab('quadratic')">Quadratic Probing</button>
-        <button class="tab-btn" onclick="showTab('double')">Double Hashing</button>
+        <button class="tab-btn active" onclick="showTab('linear')">الاستكشاف الخطي</button>
+        <button class="tab-btn" onclick="showTab('quadratic')">الاستكشاف التربيعي</button>
+        <button class="tab-btn" onclick="showTab('double')">التجزئة المزدوجة</button>
     </div>
 
     <main>
-        <!-- Linear Probing Simulator -->
+        <!-- محاكي الاستكشاف الخطي -->
         <div id="linear-simulator" class="simulator active">
             <div class="simulator-card">
-                <h2 class="simulator-title">📊 Linear Probing Simulator</h2>
+                <h2 class="simulator-title">📊 محاكي الاستكشاف الخطي (Linear Probing)</h2>
 
                 <div class="formula-display">
-                    <h3>Formula</h3>
+                    <h3>الصيغة</h3>
                     <p class="formula">index<sub>i</sub> = (h(k) + i) mod m</p>
-                    <p style="margin-top: 0.5rem; color: var(--text-muted);">where h(k) = k mod m, and i = 0, 1, 2, ...</p>
+                    <p style="margin-top: 0.5rem; color: var(--text-muted);">حيث <span dir="ltr">h(k) = k mod m</span>، و<span dir="ltr">i = 0, 1, 2, ...</span></p>
                 </div>
 
                 <div class="controls">
                     <div class="control-group">
-                        <label for="linear-table-size">Table Size (m):</label>
+                        <label for="linear-table-size">حجم الجدول (m):</label>
                         <input type="number" id="linear-table-size" value="10" min="5" max="20">
                     </div>
                     <div class="control-group">
-                        <label for="linear-keys">Keys to Insert (comma-separated):</label>
-                        <input type="text" id="linear-keys" value="40, 55, 66, 80, 90" placeholder="e.g., 40, 55, 66, 80, 90">
+                        <label for="linear-keys">المفاتيح المراد إدخالها (مفصولة بفواصل):</label>
+                        <input type="text" id="linear-keys" value="40, 55, 66, 80, 90" placeholder="مثال: 40, 55, 66, 80, 90">
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-primary" onclick="linearProbing.initialize()">🔄 Initialize</button>
-                    <button class="btn btn-success" onclick="linearProbing.nextStep()" id="linear-next-btn" disabled>▶️ Next Step</button>
-                    <button class="btn btn-warning" onclick="linearProbing.insertNext()" id="linear-insert-btn" disabled>➕ Insert Next Key</button>
-                    <button class="btn btn-danger" onclick="linearProbing.reset()">🗑️ Reset</button>
+                    <button class="btn btn-primary" onclick="linearProbing.initialize()">🔄 تهيئة</button>
+                    <button class="btn btn-success" onclick="linearProbing.nextStep()" id="linear-next-btn" disabled>▶️ الخطوة التالية</button>
+                    <button class="btn btn-warning" onclick="linearProbing.insertNext()" id="linear-insert-btn" disabled>➕ إدخال المفتاح التالي</button>
+                    <button class="btn btn-danger" onclick="linearProbing.reset()">🗑️ إعادة ضبط</button>
                 </div>
 
                 <div class="queue-panel" id="linear-queue">
-                    <h4>Keys to Insert:</h4>
+                    <h4>المفاتيح المراد إدخالها:</h4>
                     <div class="queue-items" id="linear-queue-items"></div>
                 </div>
 
@@ -623,50 +666,50 @@
                 </div>
 
                 <div class="step-panel" id="linear-step-panel">
-                    <h4>📝 Current Step</h4>
+                    <h4>📝 الخطوة الحالية</h4>
                     <div class="step-content" id="linear-step-content">
-                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                        انقر «تهيئة» للبدء، ثم «إدخال المفتاح التالي» لبدء الإدخال.
                     </div>
                 </div>
 
                 <div class="history-panel">
-                    <h4>📜 History Log</h4>
+                    <h4>📜 سجل العمليات</h4>
                     <div id="linear-history"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Quadratic Probing Simulator -->
+        <!-- محاكي الاستكشاف التربيعي -->
         <div id="quadratic-simulator" class="simulator">
             <div class="simulator-card">
-                <h2 class="simulator-title">📊 Quadratic Probing Simulator</h2>
+                <h2 class="simulator-title">📊 محاكي الاستكشاف التربيعي (Quadratic Probing)</h2>
 
                 <div class="formula-display">
-                    <h3>Formula</h3>
+                    <h3>الصيغة</h3>
                     <p class="formula">index<sub>i</sub> = (h(k) + i²) mod m</p>
-                    <p style="margin-top: 0.5rem; color: var(--text-muted);">where h(k) = k mod m, and i = 0, 1, 2, ...</p>
+                    <p style="margin-top: 0.5rem; color: var(--text-muted);">حيث <span dir="ltr">h(k) = k mod m</span>، و<span dir="ltr">i = 0, 1, 2, ...</span></p>
                 </div>
 
                 <div class="controls">
                     <div class="control-group">
-                        <label for="quadratic-table-size">Table Size (m):</label>
+                        <label for="quadratic-table-size">حجم الجدول (m):</label>
                         <input type="number" id="quadratic-table-size" value="11" min="5" max="20">
                     </div>
                     <div class="control-group">
-                        <label for="quadratic-keys">Keys to Insert (comma-separated):</label>
-                        <input type="text" id="quadratic-keys" value="5, 16, 27, 38" placeholder="e.g., 5, 16, 27, 38">
+                        <label for="quadratic-keys">المفاتيح المراد إدخالها (مفصولة بفواصل):</label>
+                        <input type="text" id="quadratic-keys" value="5, 16, 27, 38" placeholder="مثال: 5, 16, 27, 38">
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-primary" onclick="quadraticProbing.initialize()">🔄 Initialize</button>
-                    <button class="btn btn-success" onclick="quadraticProbing.nextStep()" id="quadratic-next-btn" disabled>▶️ Next Step</button>
-                    <button class="btn btn-warning" onclick="quadraticProbing.insertNext()" id="quadratic-insert-btn" disabled>➕ Insert Next Key</button>
-                    <button class="btn btn-danger" onclick="quadraticProbing.reset()">🗑️ Reset</button>
+                    <button class="btn btn-primary" onclick="quadraticProbing.initialize()">🔄 تهيئة</button>
+                    <button class="btn btn-success" onclick="quadraticProbing.nextStep()" id="quadratic-next-btn" disabled>▶️ الخطوة التالية</button>
+                    <button class="btn btn-warning" onclick="quadraticProbing.insertNext()" id="quadratic-insert-btn" disabled>➕ إدخال المفتاح التالي</button>
+                    <button class="btn btn-danger" onclick="quadraticProbing.reset()">🗑️ إعادة ضبط</button>
                 </div>
 
                 <div class="queue-panel" id="quadratic-queue">
-                    <h4>Keys to Insert:</h4>
+                    <h4>المفاتيح المراد إدخالها:</h4>
                     <div class="queue-items" id="quadratic-queue-items"></div>
                 </div>
 
@@ -675,109 +718,109 @@
                 </div>
 
                 <div class="step-panel" id="quadratic-step-panel">
-                    <h4>📝 Current Step</h4>
+                    <h4>📝 الخطوة الحالية</h4>
                     <div class="step-content" id="quadratic-step-content">
-                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                        انقر «تهيئة» للبدء، ثم «إدخال المفتاح التالي» لبدء الإدخال.
                     </div>
                 </div>
 
                 <div class="history-panel">
-                    <h4>📜 History Log</h4>
+                    <h4>📜 سجل العمليات</h4>
                     <div id="quadratic-history"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Double Hashing Simulator -->
+        <!-- محاكي التجزئة المزدوجة -->
         <div id="double-simulator" class="simulator">
             <div class="simulator-card">
-                <h2 class="simulator-title">📊 Double Hashing Simulator</h2>
+                <h2 class="simulator-title">📊 محاكي التجزئة المزدوجة (Double Hashing)</h2>
 
                 <div class="formula-display">
-                    <h3>Main Formula</h3>
+                    <h3>الصيغة الرئيسية</h3>
                     <p class="formula">index<sub>i</sub> = (h₁(k) + i × h₂(k)) mod m</p>
-                    <p style="margin-top: 0.5rem; color: var(--text-muted);">where i = 0, 1, 2, ...</p>
+                    <p style="margin-top: 0.5rem; color: var(--text-muted);">حيث <span dir="ltr">i = 0, 1, 2, ...</span></p>
                 </div>
 
-                <!-- Custom Hash Functions Section -->
+                <!-- قسم دوال التجزئة المخصّصة -->
                 <div class="hash-functions-config">
-                    <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">⚙️ Hash Functions Configuration</h3>
+                    <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">⚙️ إعداد دوال التجزئة (Hash Functions)</h3>
 
-                    <div class="info-note" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid var(--success-color); padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1rem;">
-                        <strong style="color: var(--success-color);">📘 Default Functions (Recommended):</strong>
-                        <p style="margin-top: 0.5rem;">The default functions below are the <strong>standard choice</strong> because:</p>
-                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-color);">
-                            <li><strong>h₁(k) = k mod m</strong> — Distributes keys across the table</li>
-                            <li><strong>h₂(k) = 1 + (k mod (m-1))</strong> — Guarantees h₂ is never 0 and is coprime with m (when m is prime)</li>
+                    <div class="info-note" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-right: 4px solid var(--success-color); padding: 1rem; border-radius: 8px 0 0 8px; margin-bottom: 1rem;">
+                        <strong style="color: var(--success-color);">📘 الدوال الافتراضية (مُوصى بها):</strong>
+                        <p style="margin-top: 0.5rem;">الدوال الافتراضية أدناه هي <strong>الخيار القياسي</strong> للأسباب التالية:</p>
+                        <ul style="margin: 0.5rem 1.5rem 0 0; color: var(--text-color);">
+                            <li><strong dir="ltr">h₁(k) = k mod m</strong> — توزّع المفاتيح على امتداد الجدول</li>
+                            <li><strong dir="ltr">h₂(k) = 1 + (k mod (m-1))</strong> — تضمن ألّا تساوي h₂ صفرًا أبدًا، وأن تكون أوّلية نسبيًا (Coprime) مع m (عندما يكون m عددًا أوليًا)</li>
                         </ul>
                     </div>
 
-                    <div class="info-note" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid var(--accent-color); padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem;">
-                        <strong style="color: #b45309;">⚠️ Important Rules for h₂(k):</strong>
-                        <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-color);">
-                            <li><strong>h₂(k) must NEVER be 0</strong> — Otherwise we stay stuck at the same index!</li>
-                            <li><strong>h₂(k) should be coprime with m</strong> — To visit all table positions</li>
-                            <li><strong>Using a prime m</strong> makes it easier to satisfy these conditions</li>
+                    <div class="info-note" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-right: 4px solid var(--accent-color); padding: 1rem; border-radius: 8px 0 0 8px; margin-bottom: 1.5rem;">
+                        <strong style="color: #b45309;">⚠️ قواعد مهمة للدالة <span dir="ltr">h₂(k)</span>:</strong>
+                        <ul style="margin: 0.5rem 1.5rem 0 0; color: var(--text-color);">
+                            <li><strong>يجب ألّا تساوي <span dir="ltr">h₂(k)</span> صفرًا أبدًا</strong> — وإلا فسنبقى عالقين عند الفهرس نفسه!</li>
+                            <li><strong>ينبغي أن تكون <span dir="ltr">h₂(k)</span> أوّلية نسبيًا مع m</strong> — لكي نزور جميع مواقع الجدول</li>
+                            <li><strong>استخدام عدد أولي للحجم m</strong> يسهّل تحقيق هذه الشروط</li>
                         </ul>
                     </div>
 
                     <div class="controls" style="background: #f8fafc; padding: 1rem; border-radius: 10px; border: 2px dashed var(--border-color);">
                         <div class="control-group">
-                            <label for="double-h1-type">h₁(k) Function:</label>
+                            <label for="double-h1-type">الدالة <span dir="ltr">h₁(k)</span>:</label>
                             <select id="double-h1-type" style="padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem;">
-                                <option value="standard">k mod m (Standard)</option>
+                                <option value="standard">&#x2066;k mod m&#x2069; (القياسية)</option>
                             </select>
                         </div>
                         <div class="control-group">
-                            <label for="double-h2-type">h₂(k) Function:</label>
+                            <label for="double-h2-type">الدالة <span dir="ltr">h₂(k)</span>:</label>
                             <select id="double-h2-type" style="padding: 0.75rem; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem;">
-                                <option value="standard">1 + (k mod (m-1)) (Standard - Recommended)</option>
-                                <option value="prime">Prime - (k mod Prime)</option>
-                                <option value="custom">Custom Formula</option>
+                                <option value="standard">&#x2066;1 + (k mod (m-1))&#x2069; (القياسية - مُوصى بها)</option>
+                                <option value="prime">&#x2066;العدد الأولي - (k mod العدد الأولي)&#x2069;</option>
+                                <option value="custom">صيغة مخصّصة</option>
                             </select>
                         </div>
                         <div class="control-group" id="double-h2-prime-group" style="display: none;">
-                            <label for="double-h2-prime">Prime number (must be less than m):</label>
+                            <label for="double-h2-prime">العدد الأولي (يجب أن يكون أصغر من m):</label>
                             <input type="number" id="double-h2-prime" value="7" min="2">
-                            <small id="double-h2-prime-hint" style="color: var(--text-muted);">Current max: 10 (must be &lt; m)</small>
+                            <small id="double-h2-prime-hint" style="color: var(--text-muted);">الحد الأقصى الحالي: 10 (يجب أن يكون أصغر من m)</small>
                         </div>
                         <div class="control-group" id="double-h2-custom-group" style="display: none;">
-                            <label for="double-h2-custom">Custom h₂ formula:</label>
-                            <input type="text" id="double-h2-custom" value="4 - (k % 2)" placeholder="e.g., 4 - (k % 2)">
-                            <small style="color: var(--text-muted);">Use 'k' for key, 'm' for table size. Example: 4 - (k % 2)</small>
-                            <small style="color: var(--danger-color);">⚠️ Make sure your formula never returns 0!</small>
+                            <label for="double-h2-custom">صيغة <span dir="ltr">h₂</span> المخصّصة:</label>
+                            <input type="text" id="double-h2-custom" value="4 - (k % 2)" placeholder="مثال: 4 - (k % 2)">
+                            <small style="color: var(--text-muted);">استخدم «k» للمفتاح و«m» لحجم الجدول. مثال: <span dir="ltr">4 - (k % 2)</span></small>
+                            <small style="color: var(--danger-color);">⚠️ تأكّد من أن صيغتك لا تُرجع 0 أبدًا!</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="controls" style="margin-top: 1.5rem;">
                     <div class="control-group">
-                        <label for="double-table-size">Table Size (m) - should be prime:</label>
+                        <label for="double-table-size">حجم الجدول (m) - ينبغي أن يكون عددًا أوليًا:</label>
                         <input type="number" id="double-table-size" value="11" min="5" max="20">
-                        <small style="color: var(--text-muted);">Recommended primes: 7, 11, 13, 17, 19</small>
+                        <small style="color: var(--text-muted);">أعداد أولية مُوصى بها: <span dir="ltr">7, 11, 13, 17, 19</span></small>
                     </div>
                     <div class="control-group">
-                        <label for="double-keys">Keys to Insert (comma-separated):</label>
-                        <input type="text" id="double-keys" value="27, 38, 49, 60" placeholder="e.g., 27, 38, 49, 60">
+                        <label for="double-keys">المفاتيح المراد إدخالها (مفصولة بفواصل):</label>
+                        <input type="text" id="double-keys" value="27, 38, 49, 60" placeholder="مثال: 27, 38, 49, 60">
                     </div>
                 </div>
 
-                <!-- Current Functions Display -->
+                <!-- عرض الدوال الحالية -->
                 <div id="double-current-functions" class="formula-display" style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); margin-top: 1rem;">
-                    <h3>Current Hash Functions</h3>
+                    <h3>دوال التجزئة الحالية</h3>
                     <p class="formula" id="double-h1-display">h₁(k) = k mod m</p>
                     <p class="formula" id="double-h2-display">h₂(k) = 1 + (k mod (m - 1))</p>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-primary" onclick="doubleHashing.initialize()">🔄 Initialize</button>
-                    <button class="btn btn-success" onclick="doubleHashing.nextStep()" id="double-next-btn" disabled>▶️ Next Step</button>
-                    <button class="btn btn-warning" onclick="doubleHashing.insertNext()" id="double-insert-btn" disabled>➕ Insert Next Key</button>
-                    <button class="btn btn-danger" onclick="doubleHashing.reset()">🗑️ Reset</button>
+                    <button class="btn btn-primary" onclick="doubleHashing.initialize()">🔄 تهيئة</button>
+                    <button class="btn btn-success" onclick="doubleHashing.nextStep()" id="double-next-btn" disabled>▶️ الخطوة التالية</button>
+                    <button class="btn btn-warning" onclick="doubleHashing.insertNext()" id="double-insert-btn" disabled>➕ إدخال المفتاح التالي</button>
+                    <button class="btn btn-danger" onclick="doubleHashing.reset()">🗑️ إعادة ضبط</button>
                 </div>
 
                 <div class="queue-panel" id="double-queue">
-                    <h4>Keys to Insert:</h4>
+                    <h4>المفاتيح المراد إدخالها:</h4>
                     <div class="queue-items" id="double-queue-items"></div>
                 </div>
 
@@ -786,14 +829,14 @@
                 </div>
 
                 <div class="step-panel" id="double-step-panel">
-                    <h4>📝 Current Step</h4>
+                    <h4>📝 الخطوة الحالية</h4>
                     <div class="step-content" id="double-step-content">
-                        Click "Initialize" to start, then "Insert Next Key" to begin inserting.
+                        انقر «تهيئة» للبدء، ثم «إدخال المفتاح التالي» لبدء الإدخال.
                     </div>
                 </div>
 
                 <div class="history-panel">
-                    <h4>📜 History Log</h4>
+                    <h4>📜 سجل العمليات</h4>
                     <div id="double-history"></div>
                 </div>
             </div>
@@ -852,9 +895,9 @@
                 this.getElement('insert-btn').disabled = this.keys.length === 0;
 
                 // Update step panel
-                this.updateStepPanel('Ready! Click "Insert Next Key" to start inserting keys.', 'info');
+                this.updateStepPanel('جاهز! انقر «إدخال المفتاح التالي» لبدء إدخال المفاتيح.', 'info');
 
-                this.addHistory('Table initialized with size m = ' + this.tableSize);
+                this.addHistory('تمت تهيئة الجدول بحجم \u2066m = ' + this.tableSize + '\u2069');
             }
 
             renderTable() {
@@ -923,7 +966,7 @@
 
             insertNext() {
                 if (this.currentKeyIndex >= this.keys.length - 1 && !this.isInserting) {
-                    this.updateStepPanel('All keys have been inserted!', 'success');
+                    this.updateStepPanel('تم إدخال جميع المفاتيح!', 'success');
                     this.getElement('insert-btn').disabled = true;
                     return;
                 }
@@ -956,7 +999,7 @@
                 this.clearHistory();
                 this.getElement('next-btn').disabled = true;
                 this.getElement('insert-btn').disabled = true;
-                this.updateStepPanel('Click "Initialize" to start, then "Insert Next Key" to begin inserting.');
+                this.updateStepPanel('انقر «تهيئة» للبدء، ثم «إدخال المفتاح التالي» لبدء الإدخال.');
             }
         }
 
@@ -975,14 +1018,14 @@
                 const h = key % this.tableSize;
 
                 this.updateStepPanel(`
-                    <strong>Inserting key: ${key}</strong>
+                    <strong>إدخال المفتاح: ${key}</strong>
                     <div class="calculation">
                         h(${key}) = ${key} mod ${this.tableSize} = <strong>${h}</strong>
                     </div>
-                    <p>Initial hash value is <strong>${h}</strong>. Click "Next Step" to check index ${h}.</p>
+                    <p>قيمة التجزئة الأولية هي <strong>${h}</strong>. انقر «الخطوة التالية» لفحص الفهرس ${h}.</p>
                 `);
 
-                this.addHistory(`Starting insertion of key ${key}, h(${key}) = ${h}`);
+                this.addHistory(`بدء إدخال المفتاح ${key}، \u2066h(${key}) = ${h}\u2069`);
             }
 
             nextStep() {
@@ -1004,14 +1047,14 @@
                         this.highlightCell(index, 'success');
 
                         this.updateStepPanel(`
-                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <strong>محاولة الاستكشاف ${i}: فحص الفهرس ${index}</strong>
                             <div class="calculation">
                                 index = (${key % this.tableSize} + ${i}) mod ${this.tableSize} = ${index}
                             </div>
-                            <span class="result success">✅ Index ${index} is EMPTY! Key ${key} inserted successfully!</span>
+                            <span class="result success">✅ الفهرس ${index} فارغ! تم إدخال المفتاح ${key} بنجاح!</span>
                         `);
 
-                        this.addHistory(`Key ${key} inserted at index ${index} (probe ${i})`, 'success');
+                        this.addHistory(`تم إدخال المفتاح ${key} في الفهرس ${index} (محاولة الاستكشاف ${i})`, 'success');
 
                         this.isInserting = false;
                         this.getElement('next-btn').disabled = true;
@@ -1022,15 +1065,15 @@
                         this.highlightCell(index, 'collision');
 
                         this.updateStepPanel(`
-                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <strong>محاولة الاستكشاف ${i}: فحص الفهرس ${index}</strong>
                             <div class="calculation">
                                 index = (${key % this.tableSize} + ${i}) mod ${this.tableSize} = ${index}
                             </div>
-                            <span class="result collision">❌ COLLISION! Index ${index} contains ${this.table[index]}</span>
-                            <p style="margin-top: 0.5rem;">Click "Next Step" to try index ${this.calculateIndex(key, i + 1)}...</p>
+                            <span class="result collision">❌ تصادم! الفهرس ${index} يحتوي على ${this.table[index]}</span>
+                            <p style="margin-top: 0.5rem;">انقر «الخطوة التالية» لتجربة الفهرس ${this.calculateIndex(key, i + 1)}...</p>
                         `);
 
-                        this.addHistory(`Probe ${i}: Index ${index} occupied by ${this.table[index]} - collision!`, 'collision');
+                        this.addHistory(`محاولة الاستكشاف ${i}: الفهرس ${index} مشغول بالقيمة ${this.table[index]} - تصادم!`, 'collision');
 
                         this.currentProbeStep++;
                     }
@@ -1053,14 +1096,14 @@
                 const h = key % this.tableSize;
 
                 this.updateStepPanel(`
-                    <strong>Inserting key: ${key}</strong>
+                    <strong>إدخال المفتاح: ${key}</strong>
                     <div class="calculation">
                         h(${key}) = ${key} mod ${this.tableSize} = <strong>${h}</strong>
                     </div>
-                    <p>Initial hash value is <strong>${h}</strong>. Click "Next Step" to check index ${h} (i=0, offset=0²=0).</p>
+                    <p>قيمة التجزئة الأولية هي <strong>${h}</strong>. انقر «الخطوة التالية» لفحص الفهرس ${h} (<span dir="ltr">i=0</span>، الإزاحة <span dir="ltr">offset=0²=0</span>).</p>
                 `);
 
-                this.addHistory(`Starting insertion of key ${key}, h(${key}) = ${h}`);
+                this.addHistory(`بدء إدخال المفتاح ${key}، \u2066h(${key}) = ${h}\u2069`);
             }
 
             nextStep() {
@@ -1084,16 +1127,16 @@
                         this.highlightCell(index, 'success');
 
                         this.updateStepPanel(`
-                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <strong>محاولة الاستكشاف ${i}: فحص الفهرس ${index}</strong>
                             <div class="calculation">
                                 index = (h(k) + i²) mod m<br>
                                 index = (${h} + ${i}²) mod ${this.tableSize}<br>
                                 index = (${h} + ${offset}) mod ${this.tableSize} = <strong>${index}</strong>
                             </div>
-                            <span class="result success">✅ Index ${index} is EMPTY! Key ${key} inserted successfully!</span>
+                            <span class="result success">✅ الفهرس ${index} فارغ! تم إدخال المفتاح ${key} بنجاح!</span>
                         `);
 
-                        this.addHistory(`Key ${key} inserted at index ${index} (probe ${i}, offset ${offset})`, 'success');
+                        this.addHistory(`تم إدخال المفتاح ${key} في الفهرس ${index} (محاولة الاستكشاف ${i}، الإزاحة ${offset})`, 'success');
 
                         this.isInserting = false;
                         this.getElement('next-btn').disabled = true;
@@ -1107,17 +1150,17 @@
                         const nextIndex = this.calculateIndex(key, nextI);
 
                         this.updateStepPanel(`
-                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <strong>محاولة الاستكشاف ${i}: فحص الفهرس ${index}</strong>
                             <div class="calculation">
                                 index = (h(k) + i²) mod m<br>
                                 index = (${h} + ${i}²) mod ${this.tableSize}<br>
                                 index = (${h} + ${offset}) mod ${this.tableSize} = <strong>${index}</strong>
                             </div>
-                            <span class="result collision">❌ COLLISION! Index ${index} contains ${this.table[index]}</span>
-                            <p style="margin-top: 0.5rem;">Click "Next Step" to try i=${nextI} (offset=${nextOffset}), index ${nextIndex}...</p>
+                            <span class="result collision">❌ تصادم! الفهرس ${index} يحتوي على ${this.table[index]}</span>
+                            <p style="margin-top: 0.5rem;">انقر «الخطوة التالية» لتجربة <span dir="ltr">i=${nextI}</span> (الإزاحة <span dir="ltr">offset=${nextOffset}</span>)، الفهرس ${nextIndex}...</p>
                         `);
 
-                        this.addHistory(`Probe ${i}: Index ${index} (offset ${offset}) occupied - collision!`, 'collision');
+                        this.addHistory(`محاولة الاستكشاف ${i}: الفهرس ${index} (الإزاحة ${offset}) مشغول - تصادم!`, 'collision');
 
                         this.currentProbeStep++;
                     }
@@ -1176,7 +1219,7 @@
                     const primeHint = document.getElementById('double-h2-prime-hint');
 
                     // Update max hint
-                    primeHint.textContent = `Current max: ${tableSize - 1} (must be < m)`;
+                    primeHint.textContent = `الحد الأقصى الحالي: ${tableSize - 1} (يجب أن يكون أصغر من m)`;
 
                     // Adjust prime value if it's now too large
                     let currentPrime = parseInt(primeInput.value) || 7;
@@ -1237,14 +1280,14 @@
                     try {
                         result = Math.floor(eval(this.h2CustomFormula));
                     } catch (e) {
-                        console.error('Error in h2 formula:', e);
+                        console.error('خطأ في صيغة h2:', e);
                         result = 1 + (k % (m - 1)); // Fallback to standard
                     }
                 }
 
                 // Safety check: h2 must never be 0
                 if (result === 0 || result === undefined || isNaN(result)) {
-                    this.addHistory('⚠️ WARNING: h₂ returned 0 or invalid! Using 1 instead.', 'collision');
+                    this.addHistory('⚠️ تحذير: أرجعت h₂ القيمة 0 أو قيمة غير صالحة! سيُستخدم 1 بدلًا منها.', 'collision');
                     result = 1;
                 }
 
@@ -1306,8 +1349,8 @@
                 super.initialize();
 
                 // Add info about current hash functions
-                this.addHistory(`Using h₁(k) = ${this.h1Description}`);
-                this.addHistory(`Using h₂(k) = ${this.h2Description}`);
+                this.addHistory(`استخدام \u2066h₁(k) = ${this.h1Description}\u2069`);
+                this.addHistory(`استخدام \u2066h₂(k) = ${this.h2Description}\u2069`);
             }
 
             showInitialStep() {
@@ -1316,16 +1359,16 @@
                 const h2 = this.h2(key);
 
                 this.updateStepPanel(`
-                    <strong>Inserting key: ${key}</strong>
+                    <strong>إدخال المفتاح: ${key}</strong>
                     <div class="calculation">
                         ${this.getH1Calculation(key)}<br>
                         ${this.getH2Calculation(key)}
                     </div>
-                    <p>Hash values: h₁ = <strong>${h1}</strong>, h₂ = <strong>${h2}</strong> (step size)</p>
-                    <p>Click "Next Step" to check index ${h1} (i=0).</p>
+                    <p>قيم التجزئة: <span dir="ltr">h₁ = <strong>${h1}</strong>, h₂ = <strong>${h2}</strong></span> (حجم الخطوة)</p>
+                    <p>انقر «الخطوة التالية» لفحص الفهرس ${h1} (<span dir="ltr">i=0</span>).</p>
                 `);
 
-                this.addHistory(`Starting insertion of key ${key}, h₁=${h1}, h₂=${h2} (step size)`);
+                this.addHistory(`بدء إدخال المفتاح ${key}، \u2066h₁=${h1}, h₂=${h2}\u2069 (حجم الخطوة)`);
             }
 
             nextStep() {
@@ -1349,16 +1392,16 @@
                         this.highlightCell(index, 'success');
 
                         this.updateStepPanel(`
-                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <strong>محاولة الاستكشاف ${i}: فحص الفهرس ${index}</strong>
                             <div class="calculation">
                                 index = (h₁(k) + i × h₂(k)) mod m<br>
                                 index = (${h1} + ${i} × ${h2}) mod ${this.tableSize}<br>
                                 index = (${h1 + i * h2}) mod ${this.tableSize} = <strong>${index}</strong>
                             </div>
-                            <span class="result success">✅ Index ${index} is EMPTY! Key ${key} inserted successfully!</span>
+                            <span class="result success">✅ الفهرس ${index} فارغ! تم إدخال المفتاح ${key} بنجاح!</span>
                         `);
 
-                        this.addHistory(`Key ${key} inserted at index ${index} (probe ${i})`, 'success');
+                        this.addHistory(`تم إدخال المفتاح ${key} في الفهرس ${index} (محاولة الاستكشاف ${i})`, 'success');
 
                         this.isInserting = false;
                         this.getElement('next-btn').disabled = true;
@@ -1371,17 +1414,17 @@
                         const nextIndex = this.calculateIndex(key, nextI);
 
                         this.updateStepPanel(`
-                            <strong>Probe ${i}: Checking index ${index}</strong>
+                            <strong>محاولة الاستكشاف ${i}: فحص الفهرس ${index}</strong>
                             <div class="calculation">
                                 index = (h₁(k) + i × h₂(k)) mod m<br>
                                 index = (${h1} + ${i} × ${h2}) mod ${this.tableSize}<br>
                                 index = (${h1 + i * h2}) mod ${this.tableSize} = <strong>${index}</strong>
                             </div>
-                            <span class="result collision">❌ COLLISION! Index ${index} contains ${this.table[index]}</span>
-                            <p style="margin-top: 0.5rem;">Click "Next Step" to try i=${nextI}, stepping by h₂=${h2} to index ${nextIndex}...</p>
+                            <span class="result collision">❌ تصادم! الفهرس ${index} يحتوي على ${this.table[index]}</span>
+                            <p style="margin-top: 0.5rem;">انقر «الخطوة التالية» لتجربة <span dir="ltr">i=${nextI}</span>، بالتقدّم بمقدار <span dir="ltr">h₂=${h2}</span> إلى الفهرس ${nextIndex}...</p>
                         `);
 
-                        this.addHistory(`Probe ${i}: Index ${index} occupied by ${this.table[index]} - collision!`, 'collision');
+                        this.addHistory(`محاولة الاستكشاف ${i}: الفهرس ${index} مشغول بالقيمة ${this.table[index]} - تصادم!`, 'collision');
 
                         this.currentProbeStep++;
                     }
@@ -1396,8 +1439,8 @@
     </script>
 
     <footer>
-        <p><strong>Data Structures I</strong></p>
-        <p>Prepared by Dr. Almalawi</p>
+        <p><strong>هياكل البيانات 1</strong></p>
+        <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
     </footer>
 </body>
 </html>

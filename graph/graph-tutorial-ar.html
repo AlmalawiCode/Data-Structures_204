@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graphs – Data Structures</title>
+  <title>المخططات – هياكل البيانات</title>
   <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
     /* ============================
        RESET & BASE
     ============================ */
@@ -12,7 +37,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f1f5f9;
       min-height: 100vh;
       padding: 0 0 60px 0;
@@ -662,8 +687,49 @@
       .preview-card { flex-direction: column; }
       .cabinet-intro { padding: 20px; }
     }
-    /* Language switch (bottom-right: the top of the page is taken by the
-       header back-link and the sticky table of contents). */
+
+    /* ============================
+       RTL (Arabic) overrides
+    ============================ */
+    body { line-height: 1.9; }
+    section p { line-height: 1.95; }
+    h1, h2, h3, h4 { line-height: 1.6; }
+    header h1 { letter-spacing: 0; line-height: 1.3; }
+    header .chapter-badge, nav.toc span.toc-label, .btn-next { letter-spacing: 0; }
+
+    header .back-link { left: auto; right: 24px; }
+    nav.toc span.toc-label { margin-right: 0; margin-left: 4px; }
+
+    .arabic-term, .term-def .example, .map-caption { font-style: normal; }
+
+    .cabinet-intro { border-left: none; border-right: 5px solid #2563eb; }
+
+    .box-blue   { border-left: none; border-right: 5px solid #2563eb; border-radius: 12px 0 0 12px; }
+    .box-yellow { border-left: none; border-right: 5px solid #f59e0b; border-radius: 12px 0 0 12px; }
+    .box-green  { border-left: none; border-right: 5px solid #22c55e; border-radius: 12px 0 0 12px; }
+    .box-blue:hover, .box-yellow:hover, .box-green:hover { transform: translateX(-3px); }
+
+    .why-card-num { right: auto; left: -4px; }
+
+    .term-item:hover { transform: translateX(-4px); }
+
+    .compare-table th { text-align: right; }
+    .compare-table th:first-child { border-radius: 0 10px 0 0; }
+    .compare-table th:last-child { border-radius: 10px 0 0 0; }
+
+    .preview-card { text-align: right; }
+
+    /* Code, formulas, matrices and graph drawings always stay left-to-right,
+       so vertex order A..E and arrows read the same as in the English page. */
+    pre, code, .code-block, .adj-matrix, .matrix-wrap, svg, .svg-wrap, .svg-pair {
+      direction: ltr;
+    }
+    .code-block, .code-block code { text-align: left; }
+    .svg-label { direction: rtl; }
+    .ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+
+    /* Language switch (bottom-right in both twins: the top of the page is
+       taken by the header back-link and the sticky table of contents). */
     .lang-switch-btn {
       position: fixed;
       bottom: 20px;
@@ -683,32 +749,32 @@
   </style>
 </head>
 <body>
-<a href="graph-tutorial-ar.html" class="lang-switch-btn">عربي</a>
+<a href="graph-tutorial.html" class="lang-switch-btn">English</a>
 
 <!-- ======================================================
      HEADER
 ====================================================== -->
 <header>
-  <a class="back-link" href="../index.html">&#8592; Back to Course</a>
-  <div class="chapter-badge">Chapter 9</div>
-  <h1>Graphs</h1>
-  <p class="subtitle">A Powerful Data Structure for Connected Worlds</p>
+  <a class="back-link" href="../index.html">&#8594; العودة إلى المقرر</a>
+  <div class="chapter-badge">الفصل 9</div>
+  <h1>المخططات</h1>
+  <p class="subtitle">هيكل بيانات قوي لعالمٍ مترابط</p>
 </header>
 
 <!-- ======================================================
      STICKY TOC
 ====================================================== -->
 <nav class="toc">
-  <span class="toc-label">Jump to:</span>
-  <a href="#intro">Introduction</a>
-  <a href="#definition">Definition</a>
-  <a href="#why">Why Graphs?</a>
-  <a href="#types">Types</a>
-  <a href="#terminology">Terminology</a>
-  <a href="#matrix">Adjacency Matrix</a>
-  <a href="#adjlist">Adjacency List</a>
-  <a href="#compare">Matrix vs List</a>
-  <a href="#next">Next: Traversal</a>
+  <span class="toc-label">انتقل إلى:</span>
+  <a href="#intro">مقدمة</a>
+  <a href="#definition">التعريف</a>
+  <a href="#why">لماذا المخططات؟</a>
+  <a href="#types">الأنواع</a>
+  <a href="#terminology">المصطلحات</a>
+  <a href="#matrix">مصفوفة الجوار</a>
+  <a href="#adjlist">قائمة الجوار</a>
+  <a href="#compare">المصفوفة مقابل القائمة</a>
+  <a href="#next">التالي: الاجتياز</a>
 </nav>
 
 <!-- ======================================================
@@ -720,22 +786,22 @@
        SECTION 1 — INTRODUCTION (NEW)
   =========================== -->
   <section id="intro">
-    <h2>Introduction: Think of a Cabinet</h2>
+    <h2>مقدمة: فكّر في الخزانة</h2>
 
     <div class="cabinet-intro">
-      <h3>&#x1F5C4;&#xFE0F; Data Structures are Like Cabinets</h3>
+      <h3>&#x1F5C4;&#xFE0F; هياكل البيانات تشبه الخزائن</h3>
       <p>
-        A helpful way to understand data structures: think of a <strong>cabinet</strong>.
-        A wardrobe has shelves and hanging space — designed for clothes.
-        A filing cabinet has labeled drawers — designed for documents.
-        A bookshelf has rows — designed for books.<br><br>
-        Each cabinet is built for a specific kind of storage. In the same way,
-        the data structures you have already learned —
-        <strong>arrays, linked lists, stacks, queues, and trees</strong> —
-        are different kinds of "cabinets" for organizing data inside the computer.
-        Each one is built for a specific purpose, with its own strengths and limitations.<br><br>
-        Today, we ask: <em>which cabinet do we use for a map?</em>
-        And we add a powerful new structure to our collection: the <strong>Graph</strong>.
+        إليك طريقة مفيدة لفهم هياكل البيانات (Data Structures): فكّر في <strong>الخزانة</strong>.
+        خزانة الملابس فيها رفوف ومساحة للتعليق — صُمّمت للملابس.
+        وخزانة الملفات فيها أدراج مُعنونة — صُمّمت للمستندات.
+        ورفّ الكتب فيه صفوف — صُمّم للكتب.<br><br>
+        كل خزانة مبنية لنوع محدد من التخزين. وبالطريقة نفسها،
+        فإن هياكل البيانات التي تعلّمتها من قبل —
+        <strong>المصفوفات (Arrays)، والقوائم المرتبطة (Linked Lists)، والمكدسات (Stacks)، والطوابير (Queues)، والأشجار (Trees)</strong> —
+        هي أنواع مختلفة من «الخزائن» لتنظيم البيانات داخل الحاسوب.
+        كلٌّ منها مبني لغرض محدد، وله نقاط قوته وحدوده الخاصة.<br><br>
+        واليوم نسأل: <em>أيّ خزانة نستخدم لتخزين خريطة؟</em>
+        ونضيف إلى مجموعتنا هيكلًا جديدًا قويًا: <strong>المخطط (Graph)</strong>.
       </p>
     </div>
 
@@ -745,128 +811,129 @@
         <div class="map-header">
           <span class="map-icon">&#x1F5FA;&#xFE0F;</span>
           <div class="map-header-text">
-            <h3>A Real-World Challenge: Cities of Saudi Arabia</h3>
-            <p>Study this map carefully — then ask yourself: how would I store this data in a program?</p>
+            <h3>تحدٍّ من الواقع: مدن المملكة العربية السعودية</h3>
+            <p>ادرس هذه الخريطة بعناية — ثم اسأل نفسك: كيف سأخزّن هذه البيانات في برنامج؟</p>
           </div>
         </div>
         <div class="map-img-wrap">
-          <img src="sauidCites.png" alt="Map of Saudi Arabian cities with road connections and distances" />
+          <img src="sauidCites.png" alt="خريطة لمدن المملكة العربية السعودية تُظهر الطرق التي تربط بينها والمسافات" />
         </div>
         <div class="map-caption">
-          Saudi Arabian cities (vertices) connected by roads (edges). Each connection has a distance in kilometers.
-          Source: CPCS204 Course Material
+          مدن المملكة العربية السعودية (الرؤوس) تربط بينها الطرق (الحواف). لكل اتصال مسافة بالكيلومترات.
+          المصدر: مادة مقرر CPCS204
         </div>
       </div>
     </div>
 
     <p>
-      Look at the map above. It shows major cities of Saudi Arabia &mdash;
-      <strong>Riyadh, Jeddah, Mecca, Medina, Dammam, Tabuk</strong>, and more &mdash;
-      each connected to others by roads, with distances marked in kilometers.
+      انظر إلى الخريطة أعلاه. إنها تُظهر المدن الرئيسية في المملكة العربية السعودية &mdash;
+      <strong>الرياض، وجدة، ومكة المكرمة، والمدينة المنورة، والدمام، وتبوك</strong>، وغيرها &mdash;
+      وكل مدينة متصلة بمدن أخرى عبر طرق، مع المسافات مُبيّنة بالكيلومترات.
     </p>
 
     <div class="box-blue">
-      <strong>The Challenge</strong>
-      Write a program to store: all the cities, which cities are directly connected by road,
-      and the distance (in km) between each connected pair.
-      A traveler should be able to ask: <em>"Which cities can I reach directly from Riyadh?"</em>
-      or <em>"What is the road distance from Jeddah to Mecca?"</em>
+      <strong>التحدي</strong>
+      اكتب برنامجًا يخزّن: جميع المدن، وأيّ المدن يربط بينها طريق مباشر،
+      والمسافة (بالكيلومتر) بين كل زوج من المدن المتصلة.
+      ينبغي أن يتمكّن المسافر من أن يسأل: <em>«ما المدن التي يمكنني الوصول إليها مباشرة من الرياض؟»</em>
+      أو <em>«ما المسافة البرية من جدة إلى مكة المكرمة؟»</em>
     </div>
 
     <div class="challenge-prompt">
-      <h3>&#x1F914; Which data structure would you use?</h3>
-      <p>Think carefully — which of your existing "cabinets" fits this problem?</p>
+      <h3>&#x1F914; أيّ هيكل بيانات ستستخدم؟</h3>
+      <p>فكّر جيدًا — أيّ «خزانة» من خزائنك الحالية تناسب هذه المسألة؟</p>
     </div>
 
     <div class="challenge-grid">
 
       <div class="challenge-card">
-        <div class="cc-header"><span class="cc-icon">&#x274C;</span> Array</div>
+        <div class="cc-header"><span class="cc-icon">&#x274C;</span> المصفوفة</div>
         <div class="cc-body">
-          An array stores a sequence: <code>cities[0]="Riyadh"</code>, <code>cities[1]="Jeddah"</code>...
-          But how do you encode that Riyadh connects to <em>both</em> Jeddah <em>and</em> Medina <em>and</em> Dammam?
-          An array just stores values in a line — it has no concept of "connection" between elements.
+          تخزّن المصفوفة تسلسلًا: <code>cities[0]="Riyadh"</code>، <code>cities[1]="Jeddah"</code>...
+          ولكن كيف تُعبّر عن أن الرياض متصلة <em>بكلٍّ من</em> جدة <em>و</em>المدينة المنورة <em>و</em>الدمام؟
+          المصفوفة تخزّن القيم في صفٍّ واحد فقط — وليس لديها أي مفهوم لـ«الاتصال» بين العناصر.
         </div>
-        <div class="cc-verdict">&#10007; Cannot represent multiple connections between cities</div>
+        <div class="cc-verdict">&#10007; لا يمكنها تمثيل اتصالات متعددة بين المدن</div>
       </div>
 
       <div class="challenge-card">
-        <div class="cc-header"><span class="cc-icon">&#x274C;</span> Linked List</div>
+        <div class="cc-header"><span class="cc-icon">&#x274C;</span> القائمة المرتبطة</div>
         <div class="cc-body">
-          A linked list goes: Riyadh &#8594; Jeddah &#8594; Mecca &#8594; null.
-          Each node has <em>one</em> next pointer.
-          But Riyadh connects to many cities at once — Jeddah, Medina, Dammam, and more.
-          A linked list can only link each city to exactly one neighbor.
+          تسير القائمة المرتبطة هكذا: <span class="ltr" dir="ltr">Riyadh &#8594; Jeddah &#8594; Mecca &#8594; null</span>
+          (الرياض ثم جدة ثم مكة ثم <code>null</code>).
+          لكل عقدة (Node) مرجع <em>واحد</em> فقط إلى العنصر التالي (next).
+          لكن الرياض متصلة بمدن كثيرة في آنٍ واحد — جدة، والمدينة المنورة، والدمام، وغيرها.
+          القائمة المرتبطة لا تستطيع ربط كل مدينة إلا بجارٍ واحد فقط.
         </div>
-        <div class="cc-verdict">&#10007; Each node has only one "next" — cannot fan out</div>
+        <div class="cc-verdict">&#10007; لكل عقدة مرجع «next» واحد فقط — لا يمكنها التفرّع</div>
       </div>
 
       <div class="challenge-card">
-        <div class="cc-header"><span class="cc-icon">&#x274C;</span> Tree</div>
+        <div class="cc-header"><span class="cc-icon">&#x274C;</span> الشجرة</div>
         <div class="cc-body">
-          A tree has a root with children and grandchildren — a hierarchy.
-          But Riyadh and Jeddah are equal neighboring cities, not parent and child.
-          Trees cannot represent cycles (circular routes), and road networks are full of them.
-          The structure is simply wrong for this data.
+          للشجرة جذر (Root) له أبناء وأحفاد — أي بنية هرمية.
+          لكن الرياض وجدة مدينتان متجاورتان متكافئتان، وليستا أبًا وابنًا.
+          ولا تستطيع الأشجار تمثيل الدورات (Cycles) (أي المسارات الدائرية)، وشبكات الطرق مليئة بها.
+          فهذه البنية ببساطة غير مناسبة لهذه البيانات.
         </div>
-        <div class="cc-verdict">&#10007; Hierarchical — cities are peers, not parent/child</div>
+        <div class="cc-verdict">&#10007; بنية هرمية — المدن متكافئة، وليست أبًا وابنًا</div>
       </div>
 
     </div>
 
     <div class="answer-card">
-      <div class="ac-header"><span class="ac-icon">&#x2705;</span> The Answer: A Graph!</div>
+      <div class="ac-header"><span class="ac-icon">&#x2705;</span> الإجابة: المخطط!</div>
       <div class="ac-body">
-        A <strong>Graph</strong> is a data structure that stores a set of <strong>entities (cities)</strong>
-        and the <strong>connections (roads)</strong> between them —
-        where any entity can connect to any number of other entities, in any direction,
-        with any weight (distance).
-        Riyadh can connect to five cities, Jeddah to four, each road storing its own distance.
-        No other structure you have learned can do this naturally.<br><br>
-        <strong>This is what we study today.</strong>
-        Graphs are one of the most powerful and widely-used structures in all of computer science —
-        and they begin right here, with a map of Saudi Arabia.
+        <strong>المخطط</strong> هيكل بيانات يخزّن مجموعة من <strong>الكيانات (المدن)</strong>
+        و<strong>الاتصالات (الطرق)</strong> بينها —
+        بحيث يمكن لأي كيان أن يتصل بأي عدد من الكيانات الأخرى، وفي أي اتجاه،
+        وبأي وزن (مسافة).
+        قد تتصل الرياض بخمس مدن، وجدة بأربع، ويخزّن كل طريق مسافته الخاصة.
+        ولا يوجد هيكل آخر مما تعلّمته تستطيع فعل ذلك بشكل طبيعي.<br><br>
+        <strong>وهذا ما سندرسه اليوم.</strong>
+        المخططات من أقوى البنى وأوسعها استخدامًا في علوم الحاسب كلها —
+        وتبدأ رحلتنا معها هنا، بخريطة المملكة العربية السعودية.
       </div>
     </div>
 
     <p style="margin-top: 28px;">
-      Before we define it formally, consider these everyday systems you already use —
-      all of them are graphs:
+      قبل أن نعرّفه تعريفًا رسميًا، تأمّل هذه الأنظمة اليومية التي تستخدمها بالفعل —
+      كلها مخططات:
     </p>
 
     <div class="realworld-grid">
       <div class="rw-card">
         <div class="rw-icon">&#127757;</div>
-        <h4>Google Maps</h4>
-        <p>Cities and locations are connected by roads. Finding the shortest route between two cities is a graph problem solved millions of times per second.</p>
+        <h4>خرائط Google</h4>
+        <p>المدن والمواقع متصلة بالطرق. وإيجاد أقصر طريق بين مدينتين مسألةُ مخططات تُحلّ ملايين المرات في الثانية.</p>
       </div>
       <div class="rw-card">
         <div class="rw-icon">&#128101;</div>
-        <h4>Social Networks</h4>
-        <p>Facebook, LinkedIn, and Twitter are graphs. People are nodes, friendships and follows are edges. "Friends of friends" is graph traversal.</p>
+        <h4>الشبكات الاجتماعية</h4>
+        <p>فيسبوك ولينكدإن وتويتر مخططات. الأشخاص عُقد، والصداقات والمتابعات حواف. و«أصدقاء الأصدقاء» هو اجتياز (Traversal) للمخطط.</p>
       </div>
       <div class="rw-card">
         <div class="rw-icon">&#9992;</div>
-        <h4>Flight Routes</h4>
-        <p>Airlines connect airports with direct flights. Planning a trip with a layover is finding a path through a graph of airports and routes.</p>
+        <h4>مسارات الطيران</h4>
+        <p>تربط شركات الطيران المطارات برحلات مباشرة. والتخطيط لرحلة فيها توقف (ترانزيت) هو إيجاد مسار عبر مخطط من المطارات والخطوط.</p>
       </div>
       <div class="rw-card">
         <div class="rw-icon">&#127760;</div>
-        <h4>Internet Routing</h4>
-        <p>Computers and servers are connected by cables and wireless links. Every webpage you load travels through a graph of network devices.</p>
+        <h4>توجيه الإنترنت</h4>
+        <p>الحواسيب والخوادم متصلة بكابلات وروابط لاسلكية. وكل صفحة ويب تحمّلها تنتقل عبر مخطط من أجهزة الشبكة.</p>
       </div>
       <div class="rw-card">
         <div class="rw-icon">&#9881;</div>
-        <h4>Task Scheduling</h4>
-        <p>In compilers and build systems, tasks have dependencies — "task A must run before task B." This is a directed graph called a DAG.</p>
+        <h4>جدولة المهام</h4>
+        <p>في المترجمات (Compilers) وأنظمة البناء، للمهام اعتماديات — «يجب تنفيذ المهمة A قبل المهمة B». وهذا مخطط موجّه يُسمّى DAG.</p>
       </div>
     </div>
 
     <div class="box-green">
-      <strong>Key Insight</strong>
-      All of these problems share a common structure: a set of <em>things</em> (cities, people, computers, tasks)
-      connected by <em>relationships</em> (roads, friendships, cables, dependencies).
-      Graphs are the data structure that captures exactly this — many-to-many connections.
+      <strong>فكرة أساسية</strong>
+      تشترك كل هذه المسائل في بنية واحدة: مجموعة من <em>الأشياء</em> (مدن، أشخاص، حواسيب، مهام)
+      تربط بينها <em>علاقات</em> (طرق، صداقات، كابلات، اعتماديات).
+      والمخططات هي هيكل البيانات الذي يلتقط هذا تمامًا — الاتصالات من نوع متعدد إلى متعدد.
     </div>
   </section>
 
@@ -874,21 +941,21 @@
        SECTION 2 — DEFINITION
   =========================== -->
   <section id="definition">
-    <h2>What Is a Graph? — Formal Definition</h2>
+    <h2>ما المخطط؟ — التعريف الرسمي</h2>
 
     <p>
-      A graph is defined mathematically as an ordered pair:
+      يُعرَّف المخطط رياضيًا بأنه زوج مرتّب:
     </p>
 
     <div class="box-blue">
-      <strong>G = (V, E)</strong>
-      Where <strong>V</strong> is a set of <em>vertices</em> (also called nodes) and <strong>E</strong> is a set of <em>edges</em> (also called connections or links).
-      Each edge connects two vertices.
+      <strong><span class="ltr" dir="ltr">G = (V, E)</span></strong>
+      حيث <strong>V</strong> مجموعة من <em>الرؤوس (Vertices)</em> (وتُسمّى أيضًا العُقد) و<strong>E</strong> مجموعة من <em>الحواف (Edges)</em> (وتُسمّى أيضًا الاتصالات أو الروابط).
+      كل حافة تصل بين رأسين.
     </div>
 
     <p>
-      For example, a graph with five cities and four connecting roads would have
-      <strong>V = {A, B, C, D, E}</strong> and <strong>E = {(A,B), (A,C), (B,D), (C,D), (D,E)}</strong>.
+      على سبيل المثال، مخطط فيه خمس مدن وأربعة طرق رابطة سيكون فيه
+      <strong><span class="ltr" dir="ltr">V = {A, B, C, D, E}</span></strong> و<strong><span class="ltr" dir="ltr">E = {(A,B), (A,C), (B,D), (C,D), (D,E)}</span></strong>.
     </p>
 
     <div class="svg-wrap">
@@ -930,15 +997,15 @@
     </div>
 
     <p>
-      In this graph, <strong>V = {A, B, C, D, E}</strong> — five vertices.
-      The edges <strong>E = {(A,B), (A,C), (B,D), (C,D), (D,E)}</strong> connect them.
-      Notice that this graph has no direction (edges go both ways) and no weights — it is the simplest kind.
+      في هذا المخطط، <strong><span class="ltr" dir="ltr">V = {A, B, C, D, E}</span></strong> — خمسة رؤوس.
+      والحواف <strong><span class="ltr" dir="ltr">E = {(A,B), (A,C), (B,D), (C,D), (D,E)}</span></strong> تصل بينها.
+      لاحظ أن هذا المخطط بلا اتجاه (الحواف تعمل في الاتجاهين) وبلا أوزان — إنه أبسط الأنواع.
     </p>
 
     <div class="box-yellow">
-      <strong>Graphs vs Trees</strong>
-      A tree is actually a special type of graph — a connected, undirected graph with no cycles.
-      Graphs are more general: they can have cycles, disconnected components, directed edges, and weighted edges.
+      <strong>المخططات مقابل الأشجار</strong>
+      الشجرة في الحقيقة نوع خاص من المخططات — مخطط متصل غير موجّه بلا دورات.
+      أما المخططات فهي أعمّ: يمكن أن تحتوي على دورات، ومكوّنات منفصلة، وحواف موجّهة، وحواف موزونة.
     </div>
   </section>
 
@@ -946,29 +1013,29 @@
        SECTION 3 — WHY GRAPHS?
   =========================== -->
   <section id="why">
-    <h2>Why Graphs?</h2>
+    <h2>لماذا المخططات؟</h2>
 
     <p>
-      You might ask: <em>"Can't we store graph data in an array or linked list?"</em>
-      Let us think carefully about what arrays and linked lists can and cannot represent.
+      قد تسأل: <em>«ألا يمكننا تخزين بيانات المخطط في مصفوفة أو قائمة مرتبطة؟»</em>
+      لنفكّر بعناية فيما تستطيع المصفوفات والقوائم المرتبطة تمثيله وما لا تستطيع.
     </p>
 
     <div class="box-yellow">
-      <strong>Problem: Arrays and Linked Lists are Linear</strong>
-      An array stores a sequence: element[0], element[1], element[2], ...
-      A linked list stores a chain: node &#8594; node &#8594; node &#8594; null.
-      Both structures have one fundamental property: <em>each element has at most one predecessor and one successor</em>.
-      This makes them linear — fine for sequences, but broken for networks.
+      <strong>المشكلة: المصفوفات والقوائم المرتبطة بنى خطية</strong>
+      تخزّن المصفوفة تسلسلًا: <span class="ltr" dir="ltr">element[0], element[1], element[2], ...</span>
+      وتخزّن القائمة المرتبطة سلسلة: <span class="ltr" dir="ltr">node &#8594; node &#8594; node &#8594; null</span>.
+      وللبنيتين خاصية جوهرية واحدة: <em>لكل عنصر سابق واحد على الأكثر ولاحق واحد على الأكثر</em>.
+      وهذا يجعلهما خطيتين — مناسبتين للتسلسلات، لكنهما عاجزتان أمام الشبكات.
     </div>
 
     <p>
-      Consider a road network. The city of Jeddah is connected to Mecca, Medina, Taif, and Riyadh.
-      In a linked list, Jeddah can only point to <em>one</em> city.
-      In an array, Jeddah is just an index — you cannot encode "Jeddah is connected to Mecca and Taif" without a separate, complex structure.
+      تأمّل شبكة طرق. مدينة جدة متصلة بمكة المكرمة، والمدينة المنورة، والطائف، والرياض.
+      في القائمة المرتبطة، لا تستطيع جدة أن تشير إلا إلى مدينة <em>واحدة</em>.
+      وفي المصفوفة، جدة مجرد فهرس (Index) — ولا يمكنك التعبير عن أن «جدة متصلة بمكة والطائف» دون بنية منفصلة ومعقدة.
     </p>
 
     <p>
-      Here is why graphs are the right tool for each domain:
+      إليك لماذا تُعدّ المخططات الأداة الصحيحة في كل مجال:
     </p>
 
     <div class="why-cards">
@@ -976,30 +1043,30 @@
         <div class="why-card-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">
           <span class="why-card-num">1</span>&#128663;
         </div>
-        <h3>Road Networks</h3>
-        <p>Cities are vertices, roads are edges. A city can have many roads (many neighbors) and each edge can store the distance. No linear structure can represent this naturally.</p>
+        <h3>شبكات الطرق</h3>
+        <p>المدن رؤوس، والطرق حواف. قد يكون للمدينة طرق كثيرة (جيران كثيرون)، ويمكن لكل حافة أن تخزّن المسافة. ولا توجد بنية خطية تستطيع تمثيل ذلك بشكل طبيعي.</p>
       </div>
       <div class="why-card">
         <div class="why-card-icon" style="background:linear-gradient(135deg,#f97316,#ea580c)">
           <span class="why-card-num">2</span>&#128101;
         </div>
-        <h3>Social Networks</h3>
-        <p>A person (vertex) can have hundreds of friends (edges). Friendship is mutual — the edge is undirected. "Mutual friends" is a graph intersection problem.</p>
+        <h3>الشبكات الاجتماعية</h3>
+        <p>قد يكون للشخص (رأس) مئات الأصدقاء (حواف). والصداقة متبادلة — فالحافة غير موجّهة. و«الأصدقاء المشتركون» مسألة تقاطع في المخطط.</p>
       </div>
       <div class="why-card">
         <div class="why-card-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a)">
           <span class="why-card-num">3</span>&#127760;
         </div>
-        <h3>Internet Routing</h3>
-        <p>Routers (vertices) connect to several other routers (edges). Packets travel along graph paths. Dijkstra's algorithm finds the fastest route on a weighted graph.</p>
+        <h3>توجيه الإنترنت</h3>
+        <p>تتصل الموجّهات (Routers) (رؤوس) بعدة موجّهات أخرى (حواف). وتنتقل حزم البيانات على مسارات المخطط. وتجد خوارزمية ديكسترا (Dijkstra) أسرع طريق في مخطط موزون.</p>
       </div>
     </div>
 
     <div class="box-green" style="text-align:center;">
-      <strong>Conclusion</strong>
-      Some data by nature is about <em>many-to-many relationships</em>.
-      Graphs are the only data structure designed precisely for this.
-      When entities can be connected to multiple other entities in arbitrary ways — use a graph.
+      <strong>الخلاصة</strong>
+      بعض البيانات بطبيعتها تدور حول <em>علاقات من نوع متعدد إلى متعدد</em>.
+      والمخططات هي هيكل البيانات الوحيد المصمم لهذا تحديدًا.
+      فعندما يمكن أن يتصل كيان بعدة كيانات أخرى بطرق اعتباطية — استخدم مخططًا.
     </div>
   </section>
 
@@ -1007,21 +1074,21 @@
        SECTION 4 — TYPES OF GRAPHS
   =========================== -->
   <section id="types">
-    <h2>Types of Graphs</h2>
+    <h2>أنواع المخططات</h2>
 
     <p>
-      Graphs come in many varieties depending on the nature of their edges and connectivity.
-      Understanding the types is essential for choosing the right algorithm.
+      تأتي المخططات في أشكال كثيرة بحسب طبيعة حوافها ومدى اتصالها.
+      وفهم هذه الأنواع ضروري لاختيار الخوارزمية المناسبة.
     </p>
 
     <div class="types-grid">
 
       <!-- TYPE 1: Undirected vs Directed -->
       <div class="type-card">
-        <h3>Undirected vs Directed</h3>
+        <h3>غير الموجّه مقابل الموجّه</h3>
         <p>
-          In an <strong>undirected</strong> graph, edges have no direction — if A connects to B, then B also connects to A.
-          In a <strong>directed</strong> graph (digraph), edges have a direction — an arrow from A to B does not imply B to A.
+          في المخطط <strong>غير الموجّه (Undirected)</strong>، لا اتجاه للحواف — إذا اتصل A بـ B، فإن B متصل أيضًا بـ A.
+          وفي المخطط <strong>الموجّه (Directed)</strong> (ويُسمّى digraph)، للحواف اتجاه — فالسهم من A إلى B لا يعني وجود سهم من B إلى A.
         </p>
         <div class="svg-pair">
           <div>
@@ -1036,7 +1103,7 @@
               <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
               <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
             </svg>
-            <div class="svg-label">Undirected</div>
+            <div class="svg-label">غير موجّه</div>
           </div>
           <div>
             <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
@@ -1055,18 +1122,18 @@
               <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
               <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
             </svg>
-            <div class="svg-label">Directed</div>
+            <div class="svg-label">موجّه</div>
           </div>
         </div>
       </div>
 
       <!-- TYPE 2: Weighted vs Unweighted -->
       <div class="type-card">
-        <h3>Weighted vs Unweighted</h3>
+        <h3>الموزون مقابل غير الموزون</h3>
         <p>
-          In an <strong>unweighted</strong> graph, all edges are equal.
-          In a <strong>weighted</strong> graph, each edge carries a numeric value (cost, distance, capacity).
-          Road maps use weighted graphs — the weight is the distance between cities.
+          في المخطط <strong>غير الموزون (Unweighted)</strong>، جميع الحواف متساوية.
+          وفي المخطط <strong>الموزون (Weighted)</strong>، تحمل كل حافة قيمة عددية (تكلفة، مسافة، سعة).
+          وتستخدم خرائط الطرق مخططات موزونة — فالوزن هو المسافة بين المدن.
         </p>
         <div class="svg-pair">
           <div>
@@ -1081,7 +1148,7 @@
               <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
               <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
             </svg>
-            <div class="svg-label">Unweighted</div>
+            <div class="svg-label">غير موزون</div>
           </div>
           <div>
             <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
@@ -1098,18 +1165,18 @@
               <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
               <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
             </svg>
-            <div class="svg-label">Weighted</div>
+            <div class="svg-label">موزون</div>
           </div>
         </div>
       </div>
 
       <!-- TYPE 3: Cyclic vs Acyclic -->
       <div class="type-card">
-        <h3>Cyclic vs Acyclic</h3>
+        <h3>الدوري مقابل اللادوري</h3>
         <p>
-          A <strong>cyclic</strong> graph contains at least one cycle — a path that starts and ends at the same vertex.
-          An <strong>acyclic</strong> graph has no cycles.
-          Trees are acyclic. Road networks are typically cyclic.
+          يحتوي المخطط <strong>الدوري (Cyclic)</strong> على دورة واحدة على الأقل — أي مسار يبدأ وينتهي عند الرأس نفسه.
+          أما المخطط <strong>اللادوري (Acyclic)</strong> فلا دورات فيه.
+          الأشجار لادورية. وشبكات الطرق عادةً دورية.
         </p>
         <div class="svg-pair">
           <div>
@@ -1129,7 +1196,7 @@
               <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
               <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
             </svg>
-            <div class="svg-label">Cyclic (A&#8594;B&#8594;C&#8594;A)</div>
+            <div class="svg-label">دوري (<span class="ltr" dir="ltr">A&#8594;B&#8594;C&#8594;A</span>)</div>
           </div>
           <div>
             <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
@@ -1148,17 +1215,17 @@
               <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
               <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
             </svg>
-            <div class="svg-label">Acyclic (no cycle)</div>
+            <div class="svg-label">لادوري (لا دورة)</div>
           </div>
         </div>
       </div>
 
       <!-- TYPE 4: Connected vs Disconnected -->
       <div class="type-card">
-        <h3>Connected vs Disconnected</h3>
+        <h3>المتصل مقابل غير المتصل</h3>
         <p>
-          A <strong>connected</strong> graph has a path between every pair of vertices.
-          A <strong>disconnected</strong> graph has at least two vertices with no path between them — it contains multiple connected components.
+          في المخطط <strong>المتصل (Connected)</strong> يوجد مسار بين كل زوج من الرؤوس.
+          أما المخطط <strong>غير المتصل (Disconnected)</strong> ففيه رأسان على الأقل لا يوجد بينهما مسار — أي أنه يحتوي على عدة مكوّنات متصلة.
         </p>
         <div class="svg-pair">
           <div>
@@ -1173,7 +1240,7 @@
               <text x="65"  y="25" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">B</text>
               <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
             </svg>
-            <div class="svg-label">Connected</div>
+            <div class="svg-label">متصل</div>
           </div>
           <div>
             <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
@@ -1186,17 +1253,17 @@
               <text x="105" y="65" text-anchor="middle" fill="white" font-weight="bold" font-size="13" font-family="'Segoe UI', sans-serif">C</text>
               <text x="80" y="64" text-anchor="middle" fill="#ef4444" font-size="18" font-family="'Segoe UI', sans-serif">&#10007;</text>
             </svg>
-            <div class="svg-label">Disconnected</div>
+            <div class="svg-label">غير متصل</div>
           </div>
         </div>
       </div>
 
       <!-- TYPE 5: DAG -->
       <div class="type-card">
-        <h3>DAG — Directed Acyclic Graph</h3>
+        <h3>DAG — المخطط الموجّه اللادوري (Directed Acyclic Graph)</h3>
         <p>
-          A DAG is a directed graph with no cycles. It is fundamental in task scheduling, compilers (dependency resolution), spreadsheets, and package managers.
-          Topological sort — ordering tasks by dependencies — only works on DAGs.
+          الـ DAG مخطط موجّه بلا دورات. وهو أساسي في جدولة المهام، والمترجمات (حلّ الاعتماديات)، وجداول البيانات، ومديري الحزم.
+          والفرز الطوبولوجي (Topological Sort) — أي ترتيب المهام بحسب اعتمادياتها — لا يعمل إلا على مخططات DAG.
         </p>
         <div class="svg-pair">
           <div>
@@ -1222,7 +1289,7 @@
               <text x="170" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="11" font-family="'Segoe UI', sans-serif">D</text>
               <text x="225" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="11" font-family="'Segoe UI', sans-serif">E</text>
             </svg>
-            <div class="svg-label">DAG — No cycles, directions flow forward</div>
+            <div class="svg-label">DAG — لا دورات، والاتجاهات تسير إلى الأمام</div>
           </div>
         </div>
       </div>
@@ -1234,77 +1301,77 @@
        SECTION 5 — TERMINOLOGY
   =========================== -->
   <section id="terminology">
-    <h2>Terminology</h2>
+    <h2>المصطلحات</h2>
 
     <p>
-      Before studying graph algorithms, you must be comfortable with the vocabulary.
-      Every term below appears repeatedly in algorithm descriptions.
+      قبل دراسة خوارزميات المخططات، يجب أن تكون متمكّنًا من مفرداتها.
+      فكل مصطلح أدناه يتكرر كثيرًا في وصف الخوارزميات.
     </p>
 
     <ul class="term-list">
       <li class="term-item">
-        <div class="term-name">Vertex / Node</div>
+        <div class="term-name">الرأس / العقدة (Vertex / Node)</div>
         <div class="term-def">
-          A fundamental unit of a graph. Represents an entity: a city, a person, a computer, a task.
-          The set of all vertices is denoted <strong>V</strong>.
-          <div class="example">Example: In a flight map, each airport is a vertex.</div>
+          الوحدة الأساسية في المخطط. يمثّل كيانًا: مدينة، أو شخصًا، أو حاسوبًا، أو مهمة.
+          ويُرمز لمجموعة كل الرؤوس بـ <strong>V</strong>.
+          <div class="example">مثال: في خريطة الرحلات الجوية، كل مطار رأس.</div>
         </div>
       </li>
       <li class="term-item">
-        <div class="term-name">Edge</div>
+        <div class="term-name">الحافة (Edge)</div>
         <div class="term-def">
-          A connection between two vertices. Represents a relationship or link.
-          The set of all edges is denoted <strong>E</strong>. An edge can be directed (one-way) or undirected (two-way).
-          <div class="example">Example: A direct flight between two airports is an edge.</div>
+          اتصال بين رأسين. تمثّل علاقة أو رابطًا.
+          ويُرمز لمجموعة كل الحواف بـ <strong>E</strong>. ويمكن أن تكون الحافة موجّهة (باتجاه واحد) أو غير موجّهة (باتجاهين).
+          <div class="example">مثال: الرحلة المباشرة بين مطارين حافة.</div>
         </div>
       </li>
       <li class="term-item">
-        <div class="term-name">Degree</div>
+        <div class="term-name">الدرجة (Degree)</div>
         <div class="term-def">
-          The <strong>degree</strong> of a vertex is the number of edges connected to it.
-          For directed graphs: <strong>in-degree</strong> = edges coming in, <strong>out-degree</strong> = edges going out.
-          <div class="example">Example: If city D connects to B, C, and E — its degree is 3.</div>
+          <strong>درجة</strong> الرأس هي عدد الحواف المتصلة به.
+          وفي المخططات الموجّهة: <strong>درجة الدخول (in-degree)</strong> = الحواف الداخلة، و<strong>درجة الخروج (out-degree)</strong> = الحواف الخارجة.
+          <div class="example">مثال: إذا كانت المدينة D متصلة بـ B وC وE — فدرجتها 3.</div>
         </div>
       </li>
       <li class="term-item">
-        <div class="term-name">Path</div>
+        <div class="term-name">المسار (Path)</div>
         <div class="term-def">
-          A <strong>path</strong> is a sequence of vertices where each consecutive pair is connected by an edge.
-          A <strong>simple path</strong> visits no vertex more than once.
-          <div class="example">Example: A &#8594; B &#8594; D &#8594; E is a path of length 3 (three edges).</div>
+          <strong>المسار</strong> تسلسل من الرؤوس بحيث يتصل كل زوج متتالٍ منها بحافة.
+          و<strong>المسار البسيط (Simple Path)</strong> لا يزور أي رأس أكثر من مرة.
+          <div class="example">مثال: <span class="ltr" dir="ltr">A &#8594; B &#8594; D &#8594; E</span> مسار طوله 3 (ثلاث حواف).</div>
         </div>
       </li>
       <li class="term-item">
-        <div class="term-name">Cycle</div>
+        <div class="term-name">الدورة (Cycle)</div>
         <div class="term-def">
-          A <strong>cycle</strong> is a path that starts and ends at the same vertex, passing through at least one other vertex.
-          Detecting cycles is critical in deadlock detection and dependency resolution.
-          <div class="example">Example: A &#8594; B &#8594; D &#8594; C &#8594; A is a cycle.</div>
+          <strong>الدورة</strong> مسار يبدأ وينتهي عند الرأس نفسه، مارًّا برأس آخر واحد على الأقل.
+          واكتشاف الدورات أمر حاسم في كشف حالات الجمود (Deadlock) وحلّ الاعتماديات.
+          <div class="example">مثال: <span class="ltr" dir="ltr">A &#8594; B &#8594; D &#8594; C &#8594; A</span> دورة.</div>
         </div>
       </li>
       <li class="term-item">
-        <div class="term-name">Adjacent</div>
+        <div class="term-name">متجاوران (Adjacent)</div>
         <div class="term-def">
-          Two vertices are <strong>adjacent</strong> (or neighbors) if there is an edge directly connecting them.
-          In a directed graph, adjacency is directional: if edge (u,v) exists, v is adjacent to u but not necessarily u to v.
-          <div class="example">Example: A and B are adjacent because edge (A,B) exists.</div>
+          يكون الرأسان <strong>متجاورين</strong> (أو جارين (Neighbors)) إذا وُجدت حافة تصل بينهما مباشرة.
+          وفي المخطط الموجّه، التجاور له اتجاه: إذا وُجدت الحافة <span class="ltr" dir="ltr">(u,v)</span>، فإن v مجاور لـ u، وليس بالضرورة أن يكون u مجاورًا لـ v.
+          <div class="example">مثال: A وB متجاوران لأن الحافة <span class="ltr" dir="ltr">(A,B)</span> موجودة.</div>
         </div>
       </li>
       <li class="term-item">
-        <div class="term-name">Connected Component</div>
+        <div class="term-name">المكوّن المتصل (Connected Component)</div>
         <div class="term-def">
-          A <strong>connected component</strong> is a maximal subset of vertices such that every vertex in the subset is reachable from every other vertex in the subset.
-          A connected graph has exactly one component.
-          <div class="example">Example: A disconnected graph with 6 vertices might have two components: {A,B,C} and {D,E,F}.</div>
+          <strong>المكوّن المتصل</strong> أكبر مجموعة جزئية من الرؤوس بحيث يمكن الوصول إلى كل رأس فيها من أي رأس آخر فيها.
+          والمخطط المتصل له مكوّن واحد بالضبط.
+          <div class="example">مثال: قد يكون لمخطط غير متصل فيه 6 رؤوس مكوّنان: <span class="ltr" dir="ltr">{A,B,C}</span> و<span class="ltr" dir="ltr">{D,E,F}</span>.</div>
         </div>
       </li>
     </ul>
 
     <div class="box-yellow">
-      <strong>Quick Memory Aid</strong>
-      Think of a graph as a city map. Vertices = intersections. Edges = roads.
-      Degree = number of roads at an intersection. Path = a route from one place to another.
-      Cycle = a road loop. Adjacent = directly connected by one road. Component = a region you can reach.
+      <strong>وسيلة سريعة للتذكّر</strong>
+      تخيّل المخطط خريطة مدينة. الرؤوس = التقاطعات. الحواف = الطرق.
+      الدرجة = عدد الطرق عند التقاطع. المسار = طريق من مكان إلى آخر.
+      الدورة = طريق دائري. المتجاوران = متصلان مباشرة بطريق واحد. المكوّن = منطقة يمكنك الوصول إليها.
     </div>
   </section>
 
@@ -1312,20 +1379,20 @@
        SECTION 6 — ADJACENCY MATRIX
   =========================== -->
   <section id="matrix">
-    <h2>Adjacency Matrix</h2>
+    <h2>مصفوفة الجوار</h2>
 
     <p>
-      An <strong>adjacency matrix</strong> is one of the two main ways to represent a graph in memory.
-      It uses a 2D array (matrix) of size <strong>V &times; V</strong>, where V is the number of vertices.
+      <strong>مصفوفة الجوار (Adjacency Matrix)</strong> إحدى الطريقتين الرئيسيتين لتمثيل المخطط في الذاكرة.
+      وهي تستخدم مصفوفة ثنائية الأبعاد (2D array) حجمها <strong><span class="ltr" dir="ltr">V &times; V</span></strong>، حيث V عدد الرؤوس.
     </p>
 
     <div class="box-blue">
-      <strong>Rule:</strong>
-      <code>matrix[i][j] = 1</code> if there is an edge from vertex i to vertex j, otherwise <code>matrix[i][j] = 0</code>.
-      For undirected graphs, the matrix is symmetric: <code>matrix[i][j] = matrix[j][i]</code>.
+      <strong>القاعدة:</strong>
+      <code>matrix[i][j] = 1</code> إذا وُجدت حافة من الرأس i إلى الرأس j، وإلا فإن <code>matrix[i][j] = 0</code>.
+      وفي المخططات غير الموجّهة تكون المصفوفة متماثلة: <code>matrix[i][j] = matrix[j][i]</code>.
     </div>
 
-    <p>Consider the same 5-node graph from Section 2: edges (A,B), (A,C), (B,D), (C,D), (D,E).</p>
+    <p>لنأخذ المخطط نفسه ذا العقد الخمس من القسم 2: الحواف <span class="ltr" dir="ltr">(A,B), (A,C), (B,D), (C,D), (D,E)</span>.</p>
 
     <div class="svg-wrap">
       <svg width="500" height="200" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
@@ -1405,22 +1472,22 @@
     </div>
 
     <p>
-      The <span style="background:#dbeafe;color:#1e3a5f;font-weight:bold;padding:2px 8px;border-radius:4px;">blue 1s</span> mark positions where an edge exists.
-      Notice the matrix is symmetric along the diagonal — this is because the graph is undirected.
-      The diagonal is all zeros because a vertex does not have an edge to itself.
+      تشير <span style="background:#dbeafe;color:#1e3a5f;font-weight:bold;padding:2px 8px;border-radius:4px;">الآحاد الزرقاء</span> إلى المواضع التي توجد فيها حافة.
+      لاحظ أن المصفوفة متماثلة حول القطر — وذلك لأن المخطط غير موجّه.
+      والقطر كله أصفار لأن الرأس ليس له حافة إلى نفسه.
     </p>
 
     <div class="box-green">
-      <strong>Advantages</strong>
-      Checking whether an edge (u, v) exists takes <strong>O(1)</strong> time — just look up matrix[u][v].
-      Adding or removing an edge is also O(1). Simple to implement.
+      <strong>المزايا</strong>
+      التحقق من وجود حافة <span class="ltr" dir="ltr">(u, v)</span> يستغرق زمنًا <strong><span class="ltr" dir="ltr">O(1)</span></strong> — يكفي النظر في <span class="ltr" dir="ltr">matrix[u][v]</span>.
+      وإضافة حافة أو حذفها أيضًا <span class="ltr" dir="ltr">O(1)</span>. وتنفيذها بسيط.
     </div>
 
     <div class="box-yellow">
-      <strong>Disadvantages</strong>
-      Space usage is always <strong>O(V&sup2;)</strong> regardless of how many edges exist.
-      For a graph with 1000 vertices, this means a 1,000,000-cell matrix — most of which may be zero for a sparse graph.
-      Iterating over all neighbors of a vertex takes O(V) time, not O(degree).
+      <strong>العيوب</strong>
+      استهلاك المساحة دائمًا <strong><span class="ltr" dir="ltr">O(V&sup2;)</span></strong> بغض النظر عن عدد الحواف الموجودة.
+      فلمخطط فيه 1000 رأس، يعني هذا مصفوفة من 1,000,000 خانة — قد يكون معظمها أصفارًا في المخطط المتناثر (Sparse).
+      والمرور على جميع جيران رأسٍ ما يستغرق زمنًا <span class="ltr" dir="ltr">O(V)</span>، وليس <span class="ltr" dir="ltr">O(degree)</span>.
     </div>
   </section>
 
@@ -1428,20 +1495,20 @@
        SECTION 7 — ADJACENCY LIST
   =========================== -->
   <section id="adjlist">
-    <h2>Adjacency List</h2>
+    <h2>قائمة الجوار</h2>
 
     <p>
-      An <strong>adjacency list</strong> represents the graph by storing, for each vertex, a list of its neighbors.
-      Instead of a full V&times;V matrix, we only store the edges that actually exist.
+      تمثّل <strong>قائمة الجوار (Adjacency List)</strong> المخطط بأن تخزّن لكل رأس قائمةً بجيرانه.
+      فبدلًا من مصفوفة كاملة بحجم <span class="ltr" dir="ltr">V&times;V</span>، نخزّن فقط الحواف الموجودة فعلًا.
     </p>
 
     <div class="box-blue">
-      <strong>Structure:</strong>
-      An array (or dictionary) of size V. Each entry is a list (linked list, dynamic array, etc.)
-      containing the vertices adjacent to that vertex.
+      <strong>البنية:</strong>
+      مصفوفة (أو قاموس (Dictionary)) حجمها V. وكل مُدخل فيها قائمة (قائمة مرتبطة، أو مصفوفة ديناميكية، وغير ذلك)
+      تحتوي على الرؤوس المجاورة لذلك الرأس.
     </div>
 
-    <p>For the same graph — edges (A,B), (A,C), (B,D), (C,D), (D,E):</p>
+    <p>للمخطط نفسه — الحواف <span class="ltr" dir="ltr">(A,B), (A,C), (B,D), (C,D), (D,E)</span>:</p>
 
     <div class="code-block">
       <code><span class="key">A</span> <span class="arrow">--&gt;</span> <span class="val">[ B, C ]</span>
@@ -1452,29 +1519,29 @@
     </div>
 
     <p>
-      Each key is a vertex and each value is the list of its direct neighbors.
-      Vertex D has three neighbors (B, C, E) so its list has three entries.
-      Vertex E has only one neighbor (D), so its list has one entry.
+      كل مفتاح رأس، وكل قيمة هي قائمة جيرانه المباشرين.
+      للرأس D ثلاثة جيران (B، C، E) لذا تحتوي قائمته على ثلاثة مُدخلات.
+      وللرأس E جار واحد فقط (D)، لذا تحتوي قائمته على مُدخل واحد.
     </p>
 
     <div class="box-green">
-      <strong>Advantages</strong>
-      Space usage is <strong>O(V + E)</strong> — only actual edges are stored. Far more efficient than a matrix for sparse graphs.
-      Iterating over all neighbors of a vertex takes <strong>O(degree)</strong> time, not O(V).
-      This is what most graph algorithms (DFS, BFS, Dijkstra's) rely on.
+      <strong>المزايا</strong>
+      استهلاك المساحة <strong><span class="ltr" dir="ltr">O(V + E)</span></strong> — تُخزَّن الحواف الفعلية فقط. وهي أكفأ بكثير من المصفوفة في المخططات المتناثرة.
+      والمرور على جميع جيران رأسٍ ما يستغرق زمنًا <strong><span class="ltr" dir="ltr">O(degree)</span></strong>، وليس <span class="ltr" dir="ltr">O(V)</span>.
+      وهذا ما تعتمد عليه معظم خوارزميات المخططات (البحث بالعمق أولًا (DFS)، والبحث بالعرض أولًا (BFS)، وخوارزمية ديكسترا).
     </div>
 
     <div class="box-yellow">
-      <strong>Disadvantages</strong>
-      Checking whether a specific edge (u, v) exists requires scanning u's adjacency list: <strong>O(degree(u))</strong> time.
-      For dense graphs (many edges), this can be slower than the matrix's O(1) lookup.
+      <strong>العيوب</strong>
+      التحقق من وجود حافة محددة <span class="ltr" dir="ltr">(u, v)</span> يتطلب المرور على قائمة جوار u: زمن <strong><span class="ltr" dir="ltr">O(degree(u))</span></strong>.
+      وفي المخططات الكثيفة (Dense) (كثيرة الحواف)، قد يكون هذا أبطأ من البحث في المصفوفة بزمن <span class="ltr" dir="ltr">O(1)</span>.
     </div>
 
     <div class="box-blue">
-      <strong>In Practice</strong>
-      Most real-world graphs are <em>sparse</em> — a person on Facebook has hundreds of friends, not billions.
-      A city has dozens of roads, not connections to every other city on Earth.
-      For sparse graphs, the adjacency list almost always outperforms the adjacency matrix.
+      <strong>في الواقع العملي</strong>
+      معظم المخططات في العالم الحقيقي <em>متناثرة</em> — فالشخص على فيسبوك له مئات الأصدقاء، لا مليارات.
+      والمدينة لها عشرات الطرق، لا اتصالات بكل مدينة أخرى على وجه الأرض.
+      وفي المخططات المتناثرة، تتفوّق قائمة الجوار دائمًا تقريبًا على مصفوفة الجوار.
     </div>
   </section>
 
@@ -1482,68 +1549,68 @@
        SECTION 8 — COMPARISON
   =========================== -->
   <section id="compare">
-    <h2>Adjacency Matrix vs Adjacency List</h2>
+    <h2>مصفوفة الجوار مقابل قائمة الجوار</h2>
 
     <p>
-      Choosing the right representation affects the performance of every graph algorithm you run.
-      Here is a direct comparison:
+      يؤثّر اختيار التمثيل المناسب في أداء كل خوارزمية مخططات تنفّذها.
+      وإليك مقارنة مباشرة:
     </p>
 
     <div class="compare-table-wrap">
       <table class="compare-table">
         <thead>
           <tr>
-            <th>Feature</th>
-            <th>Adjacency Matrix</th>
-            <th>Adjacency List</th>
+            <th>الخاصية</th>
+            <th>مصفوفة الجوار</th>
+            <th>قائمة الجوار</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Space Complexity</strong></td>
-            <td><span class="badge-blue">O(V&sup2;)</span> — always allocates V&times;V cells</td>
-            <td><span class="badge-green">O(V + E)</span> — only stores existing edges</td>
+            <td><strong>التعقيد المكاني</strong></td>
+            <td><span class="badge-blue ltr" dir="ltr">O(V&sup2;)</span> — تحجز دائمًا <span class="ltr" dir="ltr">V&times;V</span> خانة</td>
+            <td><span class="badge-green ltr" dir="ltr">O(V + E)</span> — تخزّن الحواف الموجودة فقط</td>
           </tr>
           <tr>
-            <td><strong>Check edge (u, v)</strong></td>
-            <td><span class="badge-green">O(1)</span> — direct array lookup</td>
-            <td><span class="badge-blue">O(degree(u))</span> — must scan neighbor list</td>
+            <td><strong>التحقق من الحافة <span class="ltr" dir="ltr">(u, v)</span></strong></td>
+            <td><span class="badge-green ltr" dir="ltr">O(1)</span> — وصول مباشر إلى المصفوفة</td>
+            <td><span class="badge-blue ltr" dir="ltr">O(degree(u))</span> — يجب المرور على قائمة الجيران</td>
           </tr>
           <tr>
-            <td><strong>Add an edge</strong></td>
-            <td><span class="badge-green">O(1)</span> — set two cells to 1</td>
-            <td><span class="badge-green">O(1)</span> — append to adjacency list</td>
+            <td><strong>إضافة حافة</strong></td>
+            <td><span class="badge-green ltr" dir="ltr">O(1)</span> — تعيين خانتين إلى 1</td>
+            <td><span class="badge-green ltr" dir="ltr">O(1)</span> — إلحاق بقائمة الجوار</td>
           </tr>
           <tr>
-            <td><strong>Remove an edge</strong></td>
-            <td><span class="badge-green">O(1)</span> — set two cells to 0</td>
-            <td><span class="badge-blue">O(degree(u))</span> — find and remove from list</td>
+            <td><strong>حذف حافة</strong></td>
+            <td><span class="badge-green ltr" dir="ltr">O(1)</span> — تعيين خانتين إلى 0</td>
+            <td><span class="badge-blue ltr" dir="ltr">O(degree(u))</span> — البحث في القائمة ثم الحذف منها</td>
           </tr>
           <tr>
-            <td><strong>Iterate all neighbors of u</strong></td>
-            <td><span class="badge-blue">O(V)</span> — must scan entire row, even zeros</td>
-            <td><span class="badge-green">O(degree(u))</span> — only visits real neighbors</td>
+            <td><strong>المرور على جميع جيران u</strong></td>
+            <td><span class="badge-blue ltr" dir="ltr">O(V)</span> — يجب المرور على الصف كاملًا، حتى الأصفار</td>
+            <td><span class="badge-green ltr" dir="ltr">O(degree(u))</span> — يزور الجيران الحقيقيين فقط</td>
           </tr>
           <tr>
-            <td><strong>Best suited for</strong></td>
-            <td>Dense graphs (E close to V&sup2;), or when frequent edge-existence checks are needed</td>
-            <td>Sparse graphs (E much less than V&sup2;), which is most real-world graphs</td>
+            <td><strong>الأنسب لـ</strong></td>
+            <td>المخططات الكثيفة (E قريب من <span class="ltr" dir="ltr">V&sup2;</span>)، أو عند الحاجة إلى التحقق المتكرر من وجود الحواف</td>
+            <td>المخططات المتناثرة (E أقل بكثير من <span class="ltr" dir="ltr">V&sup2;</span>)، وهي معظم المخططات في العالم الحقيقي</td>
           </tr>
           <tr>
-            <td><strong>Memory with V=1000</strong></td>
-            <td>1,000,000 cells (even if only 2,000 edges exist)</td>
-            <td>~4,000 entries (2 &times; E for undirected graph with 2000 edges)</td>
+            <td><strong>الذاكرة عند <span class="ltr" dir="ltr">V=1000</span></strong></td>
+            <td>1,000,000 خانة (حتى لو لم يوجد إلا 2,000 حافة)</td>
+            <td>قرابة 4,000 مُدخل (<span class="ltr" dir="ltr">2 &times; E</span> لمخطط غير موجّه فيه 2000 حافة)</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div class="box-green">
-      <strong>Rule of Thumb</strong>
-      Use an <strong>adjacency list</strong> as your default choice. Switch to a matrix only when:
-      (a) the graph is dense, or
-      (b) you need O(1) edge existence checks and memory is not a concern.
-      DFS, BFS, Dijkstra's, and most classic algorithms are designed around adjacency lists.
+      <strong>قاعدة عامة</strong>
+      استخدم <strong>قائمة الجوار</strong> خيارًا افتراضيًا. ولا تنتقل إلى المصفوفة إلا عندما:
+      (أ) يكون المخطط كثيفًا، أو
+      (ب) تحتاج إلى التحقق من وجود الحواف بزمن <span class="ltr" dir="ltr">O(1)</span> ولا تشكّل الذاكرة مصدر قلق.
+      وخوارزميات DFS وBFS وديكسترا ومعظم الخوارزميات الكلاسيكية مصممة على أساس قوائم الجوار.
     </div>
   </section>
 
@@ -1551,32 +1618,32 @@
        SECTION 9 — NEXT / CONTINUE
   =========================== -->
   <section id="next" class="next-section">
-    <h2>Ready to Explore Graphs?</h2>
-    <p>You now understand what graphs are, why they matter, their types, terminology, and how to represent them. The next step is learning how to <em>traverse</em> a graph.</p>
+    <h2>هل أنت مستعد لاستكشاف المخططات؟</h2>
+    <p>أصبحت الآن تفهم ما المخططات، ولماذا هي مهمة، وأنواعها، ومصطلحاتها، وكيفية تمثيلها. والخطوة التالية هي تعلّم كيفية <em>اجتياز</em> المخطط.</p>
 
-    <a class="btn-next" href="graph-traversal.html">Next: Graph Traversal (DFS &amp; BFS) &#8594;</a>
+    <a class="btn-next" href="graph-traversal-ar.html">التالي: اجتياز المخططات (DFS &amp; BFS) &#8592;</a>
 
     <div style="margin-top: 32px;">
       <div class="preview-card">
         <div class="preview-item">
           <div class="pi-icon">&#128269;</div>
           <div>
-            <h4>Depth-First Search (DFS)</h4>
-            <p>Explores as deep as possible before backtracking. Uses a stack. Finds paths, detects cycles, and classifies edges.</p>
+            <h4>البحث بالعمق أولًا (DFS)</h4>
+            <p>يتعمّق إلى أبعد حدّ ممكن قبل التراجع. يستخدم مكدسًا. يجد المسارات، ويكتشف الدورات، ويصنّف الحواف.</p>
           </div>
         </div>
         <div class="preview-item">
           <div class="pi-icon">&#127774;</div>
           <div>
-            <h4>Breadth-First Search (BFS)</h4>
-            <p>Explores all neighbors before going deeper. Uses a queue. Finds shortest paths in unweighted graphs.</p>
+            <h4>البحث بالعرض أولًا (BFS)</h4>
+            <p>يستكشف جميع الجيران قبل التعمّق أكثر. يستخدم طابورًا. يجد أقصر المسارات في المخططات غير الموزونة.</p>
           </div>
         </div>
         <div class="preview-item">
           <div class="pi-icon">&#9654;</div>
           <div>
-            <h4>Step-by-Step Simulation</h4>
-            <p>Interactive animation showing exactly how DFS and BFS visit vertices, with the stack/queue state at every step.</p>
+            <h4>محاكاة خطوة بخطوة</h4>
+            <p>رسوم متحركة تفاعلية تُظهر بالضبط كيف يزور كلٌّ من DFS وBFS الرؤوس، مع حالة المكدس/الطابور في كل خطوة.</p>
           </div>
         </div>
       </div>
@@ -1589,8 +1656,8 @@
      FOOTER
 ====================================================== -->
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 </body>

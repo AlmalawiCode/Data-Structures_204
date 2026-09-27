@@ -1,12 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graph Traversal Question</title>
+    <title>سؤال اجتياز المخطط</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 900px;
             margin: 40px auto;
             padding: 20px;
@@ -197,6 +222,16 @@
         footer p { margin: 4px 0; opacity: 0.85; font-size: 0.92em; }
         footer strong { opacity: 1; }
 
+        /* ---------- RTL (Arabic) overrides ---------- */
+        .rules    { border-left: none; border-right: 4px solid #3498db; }
+        .solution { border-left: none; border-right: 4px solid #27ae60; }
+        /* Graph drawings, code and answer sequences keep left-to-right order */
+        svg, code, .final-answer { direction: ltr; }
+        .final-answer { text-align: right; }
+        .graph-ascii { direction: rtl; text-align: right; }
+        .graph-ascii .adj-label { display: inline-block; min-width: 5.5em; }
+        body { line-height: 1.9; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -217,21 +252,21 @@
     </style>
 </head>
 <body>
-    <a href="graph_traversal_question-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="graph_traversal_question.html" class="lang-switch-btn">English</a>
     <div class="container">
-        <h1>Graph Traversal Question</h1>
+        <h1>سؤال اجتياز المخطط</h1>
 
         <div class="rules">
-            <h3>Traversal Rules</h3>
-            <p>When choosing which neighbor to visit next, follow these priority rules:</p>
+            <h3>قواعد الاجتياز</h3>
+            <p>عند اختيار الجار (Neighbor) الذي ستزوره تاليًا، اتبع قواعد الأولوية التالية:</p>
             <ul>
-                <li><strong>Rule 1:</strong> Always visit nodes with <strong>even numbers</strong> before nodes with odd numbers.</li>
-                <li><strong>Rule 2:</strong> If both nodes are even (or both are odd), visit the node with the <strong>greater number</strong> first.</li>
+                <li><strong>القاعدة 1:</strong> زُر دائمًا العقد ذات <strong>الأرقام الزوجية</strong> قبل العقد ذات الأرقام الفردية.</li>
+                <li><strong>القاعدة 2:</strong> إذا كانت العقدتان زوجيتين (أو فرديتين)، فزُر العقدة ذات <strong>الرقم الأكبر</strong> أولًا.</li>
             </ul>
         </div>
 
-        <h2>Given Graph</h2>
-        <p>Consider the following directed graph with 10 nodes:</p>
+        <h2>المخطط المعطى</h2>
+        <p>ليكن لدينا المخطط (Graph) الموجّه (Directed) التالي المكوّن من 10 عقد (Nodes):</p>
 
         <div class="graph-container">
             <svg width="500" height="450" xmlns="http://www.w3.org/2000/svg">
@@ -309,64 +344,64 @@
                 <text x="180" y="348" text-anchor="middle" fill="white" font-size="18" font-weight="bold">10</text>
 
                 <!-- Legend -->
-                <text x="370" y="100" font-size="14" fill="#2c3e50" font-weight="bold">Legend:</text>
+                <text x="370" y="100" font-size="14" fill="#2c3e50" font-weight="bold">مفتاح الرموز:</text>
                 <circle cx="390" cy="120" r="12" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
-                <text x="410" y="125" font-size="12" fill="#2c3e50">Even</text>
+                <text x="410" y="125" font-size="12" fill="#2c3e50">زوجي</text>
                 <circle cx="390" cy="145" r="12" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
-                <text x="410" y="150" font-size="12" fill="#2c3e50">Odd</text>
+                <text x="410" y="150" font-size="12" fill="#2c3e50">فردي</text>
             </svg>
         </div>
 
-        <h2>Graph Adjacency List</h2>
-        <p>The graph is represented by the following adjacency list (showing neighbors for each node):</p>
+        <h2>قائمة الجوار للمخطط</h2>
+        <p>يُمثَّل المخطط بقائمة الجوار (Adjacency List) التالية (تعرض جيران كل عقدة):</p>
         <div class="graph-ascii">
-Node 1:  [2, 4]
-Node 2:  [3, 5]
-Node 3:  []
-Node 4:  [5, 7]
-Node 5:  [6, 8]
-Node 6:  [3]
-Node 7:  [8]
-Node 8:  [9, 10]
-Node 9:  []
-Node 10: []
+<span class="adj-label">العقدة 1:</span> <span dir="ltr">[2, 4]</span>
+<span class="adj-label">العقدة 2:</span> <span dir="ltr">[3, 5]</span>
+<span class="adj-label">العقدة 3:</span> <span dir="ltr">[]</span>
+<span class="adj-label">العقدة 4:</span> <span dir="ltr">[5, 7]</span>
+<span class="adj-label">العقدة 5:</span> <span dir="ltr">[6, 8]</span>
+<span class="adj-label">العقدة 6:</span> <span dir="ltr">[3]</span>
+<span class="adj-label">العقدة 7:</span> <span dir="ltr">[8]</span>
+<span class="adj-label">العقدة 8:</span> <span dir="ltr">[9, 10]</span>
+<span class="adj-label">العقدة 9:</span> <span dir="ltr">[]</span>
+<span class="adj-label">العقدة 10:</span> <span dir="ltr">[]</span>
         </div>
 
         <div class="question-box">
-            <h3>Question A: Depth First Search (DFS)</h3>
-            <p>Perform a <strong>Depth First Search (DFS)</strong> starting from node <code>1</code>, using the traversal rules specified above.</p>
-            <p><strong>Write the order in which nodes are visited:</strong></p>
+            <h3>السؤال (أ): البحث بالعمق أولًا (DFS)</h3>
+            <p>نفّذ <strong>البحث بالعمق أولًا (DFS)</strong> بدءًا من العقدة <code>1</code>، مستخدمًا قواعد الاجتياز (Traversal) المحددة أعلاه.</p>
+            <p><strong>اكتب الترتيب الذي تُزار به العقد:</strong></p>
             <div class="answer-space">
-                Answer: _______________________________________________
+                الإجابة: _______________________________________________
             </div>
         </div>
 
         <div class="question-box">
-            <h3>Question B: Breadth First Search (BFS)</h3>
-            <p>Perform a <strong>Breadth First Search (BFS)</strong> starting from node <code>1</code>, using the traversal rules specified above.</p>
-            <p><strong>Write the order in which nodes are visited:</strong></p>
+            <h3>السؤال (ب): البحث بالعرض أولًا (BFS)</h3>
+            <p>نفّذ <strong>البحث بالعرض أولًا (BFS)</strong> بدءًا من العقدة <code>1</code>، مستخدمًا قواعد الاجتياز المحددة أعلاه.</p>
+            <p><strong>اكتب الترتيب الذي تُزار به العقد:</strong></p>
             <div class="answer-space">
-                Answer: _______________________________________________
+                الإجابة: _______________________________________________
             </div>
         </div>
 
         <!-- SOLUTION SECTION -->
         <div class="solution">
-            <h2>Solutions - Part 1 (Directed Graph)</h2>
-            <button class="show-solution-btn" onclick="toggleSolution('solution1')">Show/Hide Solutions</button>
+            <h2>الحلول - الجزء 1 (مخطط موجّه)</h2>
+            <button class="show-solution-btn" onclick="toggleSolution('solution1')">إظهار/إخفاء الحلول</button>
 
             <div id="solution1" class="solution-hidden">
                 <div class="solution-item">
-                    <h3>Question A: DFS Solution</h3>
-                    <p>Starting from node 1, following DFS with the given priority rules:</p>
+                    <h3>السؤال (أ): حل DFS</h3>
+                    <p>بدءًا من العقدة 1، باتباع DFS مع قواعد الأولوية المعطاة:</p>
                     <div class="final-answer">
                         1, 4, 7, 8, 10, 9, 5, 6, 3, 2
                     </div>
                 </div>
 
                 <div class="solution-item">
-                    <h3>Question B: BFS Solution</h3>
-                    <p>Starting from node 1, following BFS with the given priority rules:</p>
+                    <h3>السؤال (ب): حل BFS</h3>
+                    <p>بدءًا من العقدة 1، باتباع BFS مع قواعد الأولوية المعطاة:</p>
                     <div class="final-answer">
                         1, 4, 2, 7, 5, 3, 8, 6, 10, 9
                     </div>
@@ -376,20 +411,20 @@ Node 10: []
 
         <!-- PART 2: UNDIRECTED GRAPH -->
         <div class="section-divider">
-            <h1>Part 2: Undirected Graph Traversal</h1>
+            <h1>الجزء 2: اجتياز المخطط غير الموجّه</h1>
         </div>
 
         <div class="rules">
-            <h3>Traversal Rules (Same as Part 1)</h3>
-            <p>When choosing which neighbor to visit next, follow these priority rules:</p>
+            <h3>قواعد الاجتياز (نفس قواعد الجزء 1)</h3>
+            <p>عند اختيار الجار (Neighbor) الذي ستزوره تاليًا، اتبع قواعد الأولوية التالية:</p>
             <ul>
-                <li><strong>Rule 1:</strong> Always visit nodes with <strong>even numbers</strong> before nodes with odd numbers.</li>
-                <li><strong>Rule 2:</strong> If both nodes are even (or both are odd), visit the node with the <strong>greater number</strong> first.</li>
+                <li><strong>القاعدة 1:</strong> زُر دائمًا العقد ذات <strong>الأرقام الزوجية</strong> قبل العقد ذات الأرقام الفردية.</li>
+                <li><strong>القاعدة 2:</strong> إذا كانت العقدتان زوجيتين (أو فرديتين)، فزُر العقدة ذات <strong>الرقم الأكبر</strong> أولًا.</li>
             </ul>
         </div>
 
-        <h2>Given Undirected Graph</h2>
-        <p>Consider the following <strong>undirected</strong> graph with 8 nodes:</p>
+        <h2>المخطط غير الموجّه المعطى</h2>
+        <p>ليكن لدينا المخطط <strong>غير الموجّه</strong> (Undirected) التالي المكوّن من 8 عقد:</p>
 
         <div class="graph-container">
             <svg width="600" height="450" xmlns="http://www.w3.org/2000/svg">
@@ -455,62 +490,62 @@ Node 10: []
                 <text x="340" y="318" text-anchor="middle" fill="white" font-size="20" font-weight="bold">8</text>
 
                 <!-- Legend -->
-                <text x="450" y="150" font-size="14" fill="#2c3e50" font-weight="bold">Legend:</text>
+                <text x="450" y="150" font-size="14" fill="#2c3e50" font-weight="bold">مفتاح الرموز:</text>
                 <circle cx="470" cy="170" r="12" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
-                <text x="490" y="175" font-size="12" fill="#2c3e50">Even</text>
+                <text x="490" y="175" font-size="12" fill="#2c3e50">زوجي</text>
                 <circle cx="470" cy="195" r="12" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
-                <text x="490" y="200" font-size="12" fill="#2c3e50">Odd</text>
+                <text x="490" y="200" font-size="12" fill="#2c3e50">فردي</text>
             </svg>
         </div>
 
-        <h2>Graph Adjacency List</h2>
-        <p>The <strong>undirected</strong> graph is represented by the following adjacency list:</p>
+        <h2>قائمة الجوار للمخطط</h2>
+        <p>يُمثَّل المخطط <strong>غير الموجّه</strong> بقائمة الجوار التالية:</p>
         <div class="graph-ascii">
-Node 1:  [2, 3]
-Node 2:  [1, 4, 5]
-Node 3:  [1, 5]
-Node 4:  [2, 6]
-Node 5:  [2, 3, 6, 7]
-Node 6:  [4, 5, 8]
-Node 7:  [5]
-Node 8:  [6]
+<span class="adj-label">العقدة 1:</span> <span dir="ltr">[2, 3]</span>
+<span class="adj-label">العقدة 2:</span> <span dir="ltr">[1, 4, 5]</span>
+<span class="adj-label">العقدة 3:</span> <span dir="ltr">[1, 5]</span>
+<span class="adj-label">العقدة 4:</span> <span dir="ltr">[2, 6]</span>
+<span class="adj-label">العقدة 5:</span> <span dir="ltr">[2, 3, 6, 7]</span>
+<span class="adj-label">العقدة 6:</span> <span dir="ltr">[4, 5, 8]</span>
+<span class="adj-label">العقدة 7:</span> <span dir="ltr">[5]</span>
+<span class="adj-label">العقدة 8:</span> <span dir="ltr">[6]</span>
         </div>
 
         <div class="question-box">
-            <h3>Question C: Depth First Search (DFS) on Undirected Graph</h3>
-            <p>Perform a <strong>Depth First Search (DFS)</strong> starting from node <code>1</code>, using the traversal rules specified above.</p>
-            <p><strong>Write the order in which nodes are visited:</strong></p>
+            <h3>السؤال (ج): البحث بالعمق أولًا (DFS) على المخطط غير الموجّه</h3>
+            <p>نفّذ <strong>البحث بالعمق أولًا (DFS)</strong> بدءًا من العقدة <code>1</code>، مستخدمًا قواعد الاجتياز (Traversal) المحددة أعلاه.</p>
+            <p><strong>اكتب الترتيب الذي تُزار به العقد:</strong></p>
             <div class="answer-space">
-                Answer: _______________________________________________
+                الإجابة: _______________________________________________
             </div>
         </div>
 
         <div class="question-box">
-            <h3>Question D: Breadth First Search (BFS) on Undirected Graph</h3>
-            <p>Perform a <strong>Breadth First Search (BFS)</strong> starting from node <code>1</code>, using the traversal rules specified above.</p>
-            <p><strong>Write the order in which nodes are visited:</strong></p>
+            <h3>السؤال (د): البحث بالعرض أولًا (BFS) على المخطط غير الموجّه</h3>
+            <p>نفّذ <strong>البحث بالعرض أولًا (BFS)</strong> بدءًا من العقدة <code>1</code>، مستخدمًا قواعد الاجتياز المحددة أعلاه.</p>
+            <p><strong>اكتب الترتيب الذي تُزار به العقد:</strong></p>
             <div class="answer-space">
-                Answer: _______________________________________________
+                الإجابة: _______________________________________________
             </div>
         </div>
 
         <!-- SOLUTION SECTION PART 2 -->
         <div class="solution">
-            <h2>Solutions - Part 2 (Undirected Graph)</h2>
-            <button class="show-solution-btn" onclick="toggleSolution('solution2')">Show/Hide Solutions</button>
+            <h2>الحلول - الجزء 2 (مخطط غير موجّه)</h2>
+            <button class="show-solution-btn" onclick="toggleSolution('solution2')">إظهار/إخفاء الحلول</button>
 
             <div id="solution2" class="solution-hidden">
                 <div class="solution-item">
-                    <h3>Question C: DFS Solution (Undirected)</h3>
-                    <p>Starting from node 1, following DFS with the given priority rules:</p>
+                    <h3>السؤال (ج): حل DFS (غير موجّه)</h3>
+                    <p>بدءًا من العقدة 1، باتباع DFS مع قواعد الأولوية المعطاة:</p>
                     <div class="final-answer">
                         1, 2, 4, 6, 8, 5, 7, 3
                     </div>
                 </div>
 
                 <div class="solution-item">
-                    <h3>Question D: BFS Solution (Undirected)</h3>
-                    <p>Starting from node 1, following BFS with the given priority rules:</p>
+                    <h3>السؤال (د): حل BFS (غير موجّه)</h3>
+                    <p>بدءًا من العقدة 1، باتباع BFS مع قواعد الأولوية المعطاة:</p>
                     <div class="final-answer">
                         1, 2, 3, 4, 5, 6, 7, 8
                     </div>
@@ -532,8 +567,8 @@ Node 8:  [6]
     </script>
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 </body>
 </html>

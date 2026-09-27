@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>From Arrays to Hash Tables - Ahmed and Omar's Journey</title>
+    <title>من المصفوفات إلى جداول التجزئة - رحلة أحمد وعمر</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         :root {
             --primary-color: #2563eb;
             --primary-light: #3b82f6;
@@ -30,7 +55,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             line-height: 1.7;
@@ -649,6 +674,34 @@
             section { box-shadow: none; border: 1px solid #ddd; }
         }
 
+        /* ---------- RTL (Arabic) overrides ---------- */
+        body { line-height: 1.9; }
+        h1, h2, h3, h4 { line-height: 1.6; }
+        .abstract { border-left: none; border-right: 5px solid var(--primary-color); border-radius: 10px 0 0 10px; }
+        .dialogue::before { left: auto; right: 20px; }
+        .dialogue-ahmed { border-left: none; border-right: 4px solid var(--ahmed-color); }
+        .dialogue-omar  { border-left: none; border-right: 4px solid var(--omar-color); }
+        .info-box.warning   { border-left: none; border-right: 4px solid var(--accent-color); }
+        .info-box.tip       { border-left: none; border-right: 4px solid var(--secondary-color); }
+        .info-box.important { border-left: none; border-right: 4px solid var(--danger-color); }
+        .step-table th { text-align: right; }
+        .step-table .step-number { margin-right: 0; margin-left: 0.5rem; }
+        .probe-step { border-left: none; border-right: 4px solid var(--border-color); }
+        .probe-step.initial { border-right-color: var(--primary-color); }
+        .probe-step.collision { border-right-color: var(--danger-color); }
+        .probe-step.success { border-right-color: var(--success-color); }
+        ul, ol { margin: 1rem 1.5rem 1rem 0; }
+
+        /* Code, formulas and hash-table slot rows stay left-to-right
+           (indices 0..m-1 must read left to right). */
+        pre, code, .code-block, .probe-step-formula, .probe-step-num,
+        .formula-box .formula, .hash-table-viz .hash-table {
+            direction: ltr;
+        }
+        .code-block { text-align: left; }
+        code { unicode-bidi: embed; }
+        .formula-box .formula[dir="rtl"] { direction: rtl; }
+
         .lang-switch-btn {
             /* bottom-right: the sticky nav bar occupies the top edge */
             position: fixed;
@@ -670,53 +723,53 @@
     </style>
 </head>
 <body>
-    <a href="hashTable-ar.html" class="lang-switch-btn">عربي</a>
+    <a href="hashTable.html" class="lang-switch-btn">English</a>
     <header>
-        <a href="index.html" style="color: white; text-decoration: none; opacity: 0.8; font-size: 0.95rem; display: inline-block; margin-bottom: 1rem;">← Back to Home</a>
-        <h1>From Arrays to Hash Tables</h1>
-        <p class="subtitle">A Story of Ahmed and Omar Discovering Hashing</p>
-        <p>Prepared for Students of Data Structures</p>
+        <a href="index-ar.html" style="color: white; text-decoration: none; opacity: 0.8; font-size: 0.95rem; display: inline-block; margin-bottom: 1rem;">→ العودة إلى الرئيسية</a>
+        <h1>من المصفوفات إلى جداول التجزئة</h1>
+        <p class="subtitle">قصة أحمد وعمر في اكتشاف التجزئة</p>
+        <p>أُعدّ لطلاب مقرر هياكل البيانات</p>
         <div class="authors">
             <div class="author-badge">
-                <div class="author-avatar ahmed-avatar">A</div>
-                <span>Ahmed</span>
+                <div class="author-avatar ahmed-avatar">أ</div>
+                <span>أحمد</span>
             </div>
             <div class="author-badge">
-                <div class="author-avatar omar-avatar">O</div>
-                <span>Omar</span>
+                <div class="author-avatar omar-avatar">ع</div>
+                <span>عمر</span>
             </div>
         </div>
     </header>
 
     <nav>
         <ul>
-            <li><a href="#scene1">1. Arrays</a></li>
-            <li><a href="#scene2">2. Binary Search</a></li>
-            <li><a href="#scene3">3. Direct Addressing</a></li>
-            <li><a href="#scene4">4. Hashing</a></li>
-            <li><a href="#scene5">5. Collisions</a></li>
-            <li><a href="#scene6">6. Linear Probing</a></li>
-            <li><a href="#scene7">7. Quadratic Probing</a></li>
-            <li><a href="#scene8">8. Double Hashing</a></li>
-            <li><a href="#scene9">9. Comparison</a></li>
-            <li><a href="#conclusion">Conclusion</a></li>
+            <li><a href="#scene1">1. المصفوفات</a></li>
+            <li><a href="#scene2">2. البحث الثنائي</a></li>
+            <li><a href="#scene3">3. العنونة المباشرة</a></li>
+            <li><a href="#scene4">4. التجزئة</a></li>
+            <li><a href="#scene5">5. التصادمات</a></li>
+            <li><a href="#scene6">6. الاستكشاف الخطي</a></li>
+            <li><a href="#scene7">7. الاستكشاف التربيعي</a></li>
+            <li><a href="#scene8">8. التجزئة المزدوجة</a></li>
+            <li><a href="#scene9">9. المقارنة</a></li>
+            <li><a href="#conclusion">الخاتمة</a></li>
         </ul>
     </nav>
 
     <main>
         <!-- Abstract -->
         <div class="abstract">
-            <h2>About This Tutorial</h2>
-            <p>This tutorial tells the story of two students, <strong>Ahmed</strong> and <strong>Omar</strong>, who want to store and search student records efficiently. Starting from simple arrays and linear search, they gradually discover binary search, direct addressing, and finally hash tables with different collision resolution strategies: <strong>linear probing</strong>, <strong>quadratic probing</strong>, and <strong>double hashing</strong>.</p>
+            <h2>عن هذا الدرس</h2>
+            <p>يروي هذا الدرس قصة طالبين، <strong>أحمد</strong> و<strong>عمر</strong>، يريدان تخزين سجلات الطلاب والبحث فيها بكفاءة. يبدآن من المصفوفات (Arrays) البسيطة والبحث الخطي (Linear Search)، ثم يكتشفان تدريجيًا البحث الثنائي (Binary Search)، والعنونة المباشرة (Direct Addressing)، وأخيرًا جداول التجزئة (Hash Tables) مع استراتيجيات مختلفة لحل التصادمات: <strong>الاستكشاف الخطي (Linear Probing)</strong>، و<strong>الاستكشاف التربيعي (Quadratic Probing)</strong>، و<strong>التجزئة المزدوجة (Double Hashing)</strong>.</p>
         </div>
 
         <!-- Scene 1 -->
         <section id="scene1">
-            <h2><span class="scene-number">1</span> Ahmed's First Idea — Just Use an Array</h2>
+            <h2><span class="scene-number">1</span> فكرة أحمد الأولى — لنستخدم مصفوفة فحسب</h2>
 
-            <p>Ahmed is implementing a small system to store students. For each student he has a <code>studentID</code>, like 101, 203, 517, and so on, and perhaps a name and a GPA.</p>
+            <p>يعمل أحمد على بناء نظام صغير لتخزين الطلاب. لكل طالب رقم تعريف <code>studentID</code> مثل 101 و203 و517 وهكذا، وربما اسم ومعدل تراكمي.</p>
 
-            <p>The simplest data structure Ahmed knows is an <em>array</em>. So he writes:</p>
+            <p>أبسط هيكل بيانات يعرفه أحمد هو <em>المصفوفة</em>. لذا يكتب:</p>
 
             <div class="code-block collapsed"><span class="type">Student</span>[] students = <span class="keyword">new</span> <span class="type">Student</span>[N];  <span class="comment">// N = maximum number of students</span>
 <span class="type">int</span> count = <span class="number">0</span>;                          <span class="comment">// how many students are currently stored</span>
@@ -726,7 +779,7 @@
     count++;
 }</div>
 
-            <p>To <em>search</em> for a particular student by ID, Ahmed loops over the array:</p>
+            <p>ولكي <em>يبحث</em> عن طالب معيّن برقم تعريفه، يمرّ أحمد على المصفوفة بحلقة تكرار:</p>
 
             <div class="code-block collapsed"><span class="type">Student</span> <span class="function">findStudent</span>(<span class="type">int</span> id) {
     <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; count; i++) {
@@ -737,140 +790,140 @@
     <span class="keyword">return</span> <span class="keyword">null</span>;  <span class="comment">// not found</span>
 }</div>
 
-            <h3>Time Complexity of Linear Search</h3>
+            <h3>التعقيد الزمني (Time Complexity) للبحث الخطي</h3>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar asks:</div>
-                <p>"Ahmed, your search is correct, but how fast is it?"</p>
+                <div class="dialogue-label">يسأل عمر:</div>
+                <p>«يا أحمد، بحثك صحيح، لكن ما مدى سرعته؟»</p>
             </div>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed thinks:</div>
+                <div class="dialogue-label">يفكّر أحمد:</div>
                 <ul>
-                    <li>In the <em>worst case</em>, the student is not in the array, or is the last one. Then the loop checks all <strong>n</strong> elements.</li>
-                    <li>So the worst-case time is proportional to n.</li>
+                    <li>في <em>أسوأ حالة (Worst Case)</em> يكون الطالب غير موجود في المصفوفة، أو يكون الأخير فيها. عندئذٍ تفحص الحلقة جميع العناصر البالغ عددها <strong>n</strong>.</li>
+                    <li>إذن زمن أسوأ حالة يتناسب مع n.</li>
                 </ul>
             </div>
 
             <div class="formula-box">
-                <p>Time Complexity:</p>
+                <p>التعقيد الزمني:</p>
                 <p class="formula"><strong>T(n) = O(n)</strong></p>
             </div>
 
             <div class="info-box warning">
-                <div class="info-box-title">⚠️ Linear Search</div>
-                <p>This is called <strong>linear search</strong>. It is simple, but when the number of students is large, it becomes slow.</p>
+                <div class="info-box-title">⚠️ البحث الخطي</div>
+                <p>يُسمّى هذا <strong>البحث الخطي</strong>. إنه بسيط، لكنه يصبح بطيئًا عندما يكون عدد الطلاب كبيرًا.</p>
             </div>
         </section>
 
         <!-- Scene 2 -->
         <section id="scene2">
-            <h2><span class="scene-number">2</span> Omar's Suggestion — Sorting and Binary Search</h2>
+            <h2><span class="scene-number">2</span> اقتراح عمر — الفرز والبحث الثنائي</h2>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar suggests:</div>
-                <p>"Ahmed, what if we <em>sort</em> the array of students by their ID? If the array is sorted, we can use <strong>binary search</strong>. That will be much faster than linear search."</p>
+                <div class="dialogue-label">يقترح عمر:</div>
+                <p>«يا أحمد، ماذا لو <em>فرزنا (Sorting)</em> مصفوفة الطلاب حسب أرقام تعريفهم؟ إذا كانت المصفوفة مفروزة، يمكننا استخدام <strong>البحث الثنائي</strong>، وسيكون أسرع بكثير من البحث الخطي.»</p>
             </div>
 
-            <h3>Binary Search Idea</h3>
+            <h3>فكرة البحث الثنائي</h3>
 
-            <p>If the array is sorted by <code>studentID</code>, binary search works like this:</p>
+            <p>إذا كانت المصفوفة مفروزة حسب <code>studentID</code>، فإن البحث الثنائي يعمل هكذا:</p>
 
             <table class="step-table">
                 <tr>
-                    <th>Step</th>
-                    <th>Action</th>
+                    <th>الخطوة</th>
+                    <th>الإجراء</th>
                 </tr>
                 <tr>
                     <td><span class="step-number">1</span></td>
-                    <td>Look at the <em>middle</em> index</td>
+                    <td>انظر إلى الفهرس (Index) <em>الأوسط</em></td>
                 </tr>
                 <tr>
                     <td><span class="step-number">2</span></td>
-                    <td>If the middle student has the target ID, we are done</td>
+                    <td>إذا كان للطالب الأوسط رقم التعريف المطلوب، فقد انتهينا</td>
                 </tr>
                 <tr>
                     <td><span class="step-number">3</span></td>
-                    <td>If the target ID is <strong>smaller</strong>, search only in the <strong>left half</strong></td>
+                    <td>إذا كان الرقم المطلوب <strong>أصغر</strong>، فابحث في <strong>النصف الأيسر</strong> فقط</td>
                 </tr>
                 <tr>
                     <td><span class="step-number">4</span></td>
-                    <td>If the target ID is <strong>larger</strong>, search only in the <strong>right half</strong></td>
+                    <td>إذا كان الرقم المطلوب <strong>أكبر</strong>، فابحث في <strong>النصف الأيمن</strong> فقط</td>
                 </tr>
                 <tr>
                     <td><span class="step-number">5</span></td>
-                    <td>Repeat with the new half</td>
+                    <td>كرّر العملية على النصف الجديد</td>
                 </tr>
             </table>
 
-            <p>At each step, the search <em>halves</em> the remaining part of the array.</p>
+            <p>في كل خطوة، يقسم البحث الجزء المتبقي من المصفوفة <em>إلى النصف</em>.</p>
 
             <div class="formula-box">
-                <p>Time Complexity of Binary Search:</p>
+                <p>التعقيد الزمني للبحث الثنائي:</p>
                 <p class="formula"><strong>T(n) = O(log n)</strong></p>
             </div>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed is happy:</div>
-                <p>"Great! I will sort the array once, and then all my searches will be fast!"</p>
+                <div class="dialogue-label">أحمد سعيد:</div>
+                <p>«رائع! سأفرز المصفوفة مرة واحدة، وبعدها ستكون كل عمليات البحث سريعة!»</p>
             </div>
 
-            <h3>But What About Updates?</h3>
+            <h3>ولكن ماذا عن التحديثات؟</h3>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar:</div>
-                <p>"Ahmed, you are right that binary search is fast, but you forgot something."</p>
+                <div class="dialogue-label">عمر:</div>
+                <p>«يا أحمد، أنت محق في أن البحث الثنائي سريع، لكنك نسيت شيئًا.»</p>
             </div>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed:</div>
-                <p>"What did I forget?"</p>
+                <div class="dialogue-label">أحمد:</div>
+                <p>«ماذا نسيت؟»</p>
             </div>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar:</div>
-                <p>"What happens when a <em>new student</em> arrives? If you just append it at the end, the array will no longer be sorted, and binary search will not work."</p>
+                <div class="dialogue-label">عمر:</div>
+                <p>«ماذا يحدث عندما يصل <em>طالب جديد</em>؟ إذا أضفته في النهاية فحسب، فلن تبقى المصفوفة مفروزة، ولن يعمل البحث الثنائي.»</p>
             </div>
 
-            <h3>Trade-off Comparison</h3>
+            <h3>مقارنة المفاضلة</h3>
 
             <table class="comparison-table">
                 <tr>
-                    <th>Approach</th>
-                    <th>Insert Time</th>
-                    <th>Search Time</th>
+                    <th>الطريقة</th>
+                    <th>زمن الإدراج</th>
+                    <th>زمن البحث</th>
                 </tr>
                 <tr>
-                    <td class="method-name">Unsorted Array + Linear Search</td>
-                    <td><span class="complexity-box good">O(1)</span><br><small>(append at end)</small></td>
+                    <td class="method-name">مصفوفة غير مفروزة + بحث خطي</td>
+                    <td><span class="complexity-box good">O(1)</span><br><small>(إضافة في النهاية)</small></td>
                     <td><span class="complexity-box">O(n)</span></td>
                 </tr>
                 <tr>
-                    <td class="method-name">Sorted Array + Binary Search</td>
-                    <td><span class="complexity-box">O(n)</span><br><small>(to keep things sorted)</small></td>
+                    <td class="method-name">مصفوفة مفروزة + بحث ثنائي</td>
+                    <td><span class="complexity-box">O(n)</span><br><small>(للحفاظ على الترتيب)</small></td>
                     <td><span class="complexity-box good">O(log n)</span></td>
                 </tr>
             </table>
 
             <div class="key-concept">
-                <h4>🤔 The Big Question</h4>
-                <p><strong>Can we get both <em>fast search</em> AND <em>fast insert</em> at the same time?</strong></p>
-                <p>This question leads Ahmed and Omar to <strong>hashing</strong>!</p>
+                <h4>🤔 السؤال الكبير</h4>
+                <p><strong>هل يمكننا الحصول على <em>بحث سريع</em> و<em>إدراج سريع</em> في الوقت نفسه؟</strong></p>
+                <p>هذا السؤال يقود أحمد وعمر إلى <strong>التجزئة (Hashing)</strong>!</p>
             </div>
         </section>
 
         <!-- Scene 3 -->
         <section id="scene3">
-            <h2><span class="scene-number">3</span> Omar's Wild Idea — A Huge Direct-Access Array</h2>
+            <h2><span class="scene-number">3</span> فكرة عمر الجامحة — مصفوفة ضخمة للوصول المباشر</h2>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar proposes:</div>
-                <p>"Suppose the student IDs are guaranteed to be between 1 and 100. Why don't we create an array of size 100, where index <em>i</em> directly holds the student with ID <em>i</em>? Then search is <em>instant</em>."</p>
+                <div class="dialogue-label">يقترح عمر:</div>
+                <p>«لنفترض أن أرقام تعريف الطلاب مضمونٌ أن تكون بين 1 و100. لماذا لا ننشئ مصفوفة حجمها 100، يحتفظ فيها الفهرس <em>i</em> مباشرةً بالطالب ذي الرقم <em>i</em>؟ عندها يكون البحث <em>فوريًا</em>.»</p>
             </div>
 
-            <p>This is called a <strong>direct-address table</strong>.</p>
+            <p>يُسمّى هذا <strong>جدول العنونة المباشرة (Direct-Address Table)</strong>.</p>
 
-            <h3>Direct Addressing Example</h3>
+            <h3>مثال على العنونة المباشرة</h3>
 
             <div class="code-block collapsed"><span class="type">Student</span>[] table = <span class="keyword">new</span> <span class="type">Student</span>[<span class="number">101</span>];  <span class="comment">// ignore index 0, use 1..100</span>
 
@@ -883,283 +936,283 @@
 }</div>
 
             <div class="formula-box">
-                <p>Search Time:</p>
-                <p class="formula"><strong>O(1)</strong> — Just one array access!</p>
+                <p>زمن البحث:</p>
+                <p class="formula" dir="rtl"><strong dir="ltr">O(1)</strong> — وصول واحد فقط إلى المصفوفة!</p>
             </div>
 
-            <h3>But There is a Big Problem: Memory</h3>
+            <h3>لكن هناك مشكلة كبيرة: الذاكرة</h3>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed sees a problem:</div>
-                <p>"But Omar, what if we only have 5 students, and their IDs are 3, 7, 42, 50, 99? We still allocate an array of size 100 and use only 5 cells. This is a huge waste of memory."</p>
+                <div class="dialogue-label">يرى أحمد مشكلة:</div>
+                <p>«لكن يا عمر، ماذا لو كان لدينا 5 طلاب فقط، وأرقامهم 3 و7 و42 و50 و99؟ سنظل نحجز مصفوفة حجمها 100 ولا نستخدم منها إلا 5 خانات. هذا هدر هائل للذاكرة.»</p>
             </div>
 
             <div class="info-box important">
-                <div class="info-box-title">⚠️ Memory Problem</div>
-                <p>Direct addressing is only good if the key range is <strong>small and dense</strong>. For large, sparse key ranges, it wastes enormous amounts of memory.</p>
+                <div class="info-box-title">⚠️ مشكلة الذاكرة</div>
+                <p>العنونة المباشرة مناسبة فقط إذا كان نطاق المفاتيح <strong>صغيرًا وكثيفًا</strong>. أما مع نطاقات المفاتيح الكبيرة المتناثرة، فإنها تهدر كميات هائلة من الذاكرة.</p>
             </div>
         </section>
 
         <!-- Scene 4 -->
         <section id="scene4">
-            <h2><span class="scene-number">4</span> The Birth of Hashing</h2>
+            <h2><span class="scene-number">4</span> ولادة التجزئة</h2>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar proposes:</div>
-                <p>"Why don't we keep a small array, with size, say, 10 or 11, but still try to find a clever way to map any student ID into one of these positions?"</p>
+                <div class="dialogue-label">يقترح عمر:</div>
+                <p>«لماذا لا نحتفظ بمصفوفة صغيرة، حجمها مثلًا 10 أو 11، ونحاول مع ذلك إيجاد طريقة ذكية لربط أي رقم طالب بأحد هذه المواضع؟»</p>
             </div>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed:</div>
-                <p>"So we need a function that takes the key (the student ID) and returns an index of the array."</p>
+                <div class="dialogue-label">أحمد:</div>
+                <p>«إذن نحتاج إلى دالة تأخذ المفتاح (رقم الطالب) وتُرجع فهرسًا في المصفوفة.»</p>
             </div>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar:</div>
-                <p>"Exactly. That function is called a <em>hash function</em>."</p>
+                <div class="dialogue-label">عمر:</div>
+                <p>«بالضبط. هذه الدالة تُسمّى <em>دالة التجزئة (Hash Function)</em>.»</p>
             </div>
 
             <div class="key-concept">
-                <h4>📖 Hash Function Definition</h4>
-                <p>Let <strong>m</strong> be the size of the array (also called the <em>hash table</em> size). A hash function is:</p>
+                <h4>📖 تعريف دالة التجزئة</h4>
+                <p>ليكن <strong>m</strong> حجم المصفوفة (ويُسمّى أيضًا حجم <em>جدول التجزئة</em>). دالة التجزئة هي:</p>
                 <div class="formula-box">
                     <p class="formula"><strong>h(k) ∈ {0, 1, 2, ..., m-1}</strong></p>
                 </div>
-                <p>that maps a key <strong>k</strong> (like a student ID) to a valid index in the table.</p>
+                <p>التي تربط مفتاحًا <strong>k</strong> (مثل رقم طالب) بفهرس صالح في الجدول.</p>
             </div>
 
-            <h3>Using Modulo to Keep Indices in Range</h3>
+            <h3>استخدام باقي القسمة لإبقاء الفهارس ضمن النطاق</h3>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar remembers:</div>
-                <p>"One of the most fantastic operations in computer science is <em>modulo</em>. If we take any integer k and compute <strong>k mod m</strong>, the result is always between 0 and m-1."</p>
+                <div class="dialogue-label">يتذكّر عمر:</div>
+                <p>«من أروع العمليات في علوم الحاسب عملية <em>باقي القسمة (modulo)</em>. إذا أخذنا أي عدد صحيح k وحسبنا <strong dir="ltr">k mod m</strong>، فإن الناتج يكون دائمًا بين 0 و<span dir="ltr">m-1</span>.»</p>
             </div>
 
             <div class="formula-box">
-                <p>Common Hash Function:</p>
+                <p>دالة تجزئة شائعة:</p>
                 <p class="formula"><strong>h(k) = k mod m</strong></p>
             </div>
 
-            <h3>Example: Hash Function with m = 10</h3>
+            <h3>مثال: دالة تجزئة مع <span dir="ltr">m = 10</span></h3>
 
             <table class="hash-table">
                 <tr>
-                    <th>Key (k)</th>
-                    <th>Calculation</th>
-                    <th>h(k) = k mod 10</th>
+                    <th>المفتاح (k)</th>
+                    <th>الحساب</th>
+                    <th dir="ltr">h(k) = k mod 10</th>
                 </tr>
                 <tr>
                     <td>27</td>
-                    <td>27 mod 10</td>
+                    <td dir="ltr">27 mod 10</td>
                     <td class="filled-cell">7</td>
                 </tr>
                 <tr>
                     <td>40</td>
-                    <td>40 mod 10</td>
+                    <td dir="ltr">40 mod 10</td>
                     <td class="filled-cell">0</td>
                 </tr>
                 <tr>
                     <td>55</td>
-                    <td>55 mod 10</td>
+                    <td dir="ltr">55 mod 10</td>
                     <td class="filled-cell">5</td>
                 </tr>
                 <tr>
                     <td>66</td>
-                    <td>66 mod 10</td>
+                    <td dir="ltr">66 mod 10</td>
                     <td class="filled-cell">6</td>
                 </tr>
                 <tr>
                     <td>80</td>
-                    <td>80 mod 10</td>
+                    <td dir="ltr">80 mod 10</td>
                     <td class="collision-cell">0 ⚠️</td>
                 </tr>
             </table>
 
             <div class="info-box warning">
-                <div class="info-box-title">⚠️ Notice Something?</div>
-                <p>Both <strong>40</strong> and <strong>80</strong> hash to index <strong>0</strong>! This is called a <strong>collision</strong>.</p>
+                <div class="info-box-title">⚠️ هل لاحظت شيئًا؟</div>
+                <p>كلٌّ من <strong>40</strong> و<strong>80</strong> يُجزَّأ إلى الفهرس <strong>0</strong>! هذا يُسمّى <strong>تصادمًا (Collision)</strong>.</p>
             </div>
         </section>
 
         <!-- Scene 5 -->
         <section id="scene5">
-            <h2><span class="scene-number">5</span> The Collision Problem</h2>
+            <h2><span class="scene-number">5</span> مشكلة التصادم</h2>
 
-            <p>Ahmed implements the hash table with m = 10 and hash function h(k) = k mod 10. He tries to insert student IDs: 40, 55, 66, and 80.</p>
+            <p>ينفّذ أحمد جدول التجزئة بحجم <span dir="ltr">m = 10</span> ودالة التجزئة <span dir="ltr">h(k) = k mod 10</span>. ويحاول إدراج أرقام الطلاب: 40 و55 و66 و80.</p>
 
             <table class="hash-table">
                 <tr>
-                    <th>Key (k)</th>
-                    <th>h(k) = k mod 10</th>
-                    <th>Status</th>
+                    <th>المفتاح (k)</th>
+                    <th dir="ltr">h(k) = k mod 10</th>
+                    <th>الحالة</th>
                 </tr>
                 <tr>
                     <td>40</td>
                     <td class="filled-cell">0</td>
-                    <td>✅ Stored at index 0</td>
+                    <td>✅ خُزِّن في الفهرس 0</td>
                 </tr>
                 <tr>
                     <td>55</td>
                     <td class="filled-cell">5</td>
-                    <td>✅ Stored at index 5</td>
+                    <td>✅ خُزِّن في الفهرس 5</td>
                 </tr>
                 <tr>
                     <td>66</td>
                     <td class="filled-cell">6</td>
-                    <td>✅ Stored at index 6</td>
+                    <td>✅ خُزِّن في الفهرس 6</td>
                 </tr>
                 <tr>
                     <td>80</td>
                     <td class="collision-cell">0</td>
-                    <td>❌ Index 0 is occupied by 40!</td>
+                    <td>❌ الفهرس 0 مشغول بالمفتاح 40!</td>
                 </tr>
             </table>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed:</div>
-                <p>"Oh no! 80 also hashes to 0, but index 0 is already occupied by 40. We have a <em>collision</em>."</p>
+                <div class="dialogue-label">أحمد:</div>
+                <p>«يا للمشكلة! 80 يُجزَّأ أيضًا إلى 0، لكن الفهرس 0 مشغول مسبقًا بـ 40. لدينا <em>تصادم</em>.»</p>
             </div>
 
             <div class="key-concept">
-                <h4>🔑 What is a Collision?</h4>
-                <p>A collision happens when two different keys k₁ ≠ k₂ produce the same hash value:</p>
+                <h4>🔑 ما هو التصادم؟</h4>
+                <p>يحدث التصادم عندما يُنتج مفتاحان مختلفان <span dir="ltr">k₁ ≠ k₂</span> قيمة التجزئة نفسها:</p>
                 <div class="formula-box">
                     <p class="formula"><strong>h(k₁) = h(k₂)</strong></p>
                 </div>
-                <p>Collisions are <strong>unavoidable</strong> when we map a large key space into a smaller table. This follows from the <em>pigeonhole principle</em>: if more pigeons (keys) than holes (table slots) exist, at least one hole must contain more than one pigeon.</p>
+                <p>التصادمات <strong>لا يمكن تجنّبها</strong> عندما نربط فضاء مفاتيح كبيرًا بجدول أصغر. ويترتب هذا على <em>مبدأ برج الحمام (Pigeonhole Principle)</em>: إذا كان عدد الحمام (المفاتيح) أكبر من عدد الأعشاش (خانات الجدول)، فلا بد أن يحتوي عشٌّ واحد على الأقل أكثر من حمامة.</p>
             </div>
 
-            <h3>Collision Resolution Strategies</h3>
+            <h3>استراتيجيات حل التصادم</h3>
 
-            <p>So a hash table needs a strategy to <em>resolve</em> collisions. In this tutorial we focus on <strong>open addressing</strong> methods:</p>
+            <p>إذن يحتاج جدول التجزئة إلى استراتيجية <em>لحل</em> التصادمات. في هذا الدرس نركّز على طرق <strong>العنونة المفتوحة (Open Addressing)</strong>:</p>
 
             <div class="summary-cards">
                 <div class="summary-card">
-                    <h4>1. Linear Probing</h4>
-                    <p>Try the next slot, then the next, and so on...</p>
+                    <h4>1. الاستكشاف الخطي</h4>
+                    <p>جرّب الخانة التالية، ثم التي تليها، وهكذا...</p>
                 </div>
                 <div class="summary-card">
-                    <h4>2. Quadratic Probing</h4>
-                    <p>Try slots at increasing square distances...</p>
+                    <h4>2. الاستكشاف التربيعي</h4>
+                    <p>جرّب خانات على مسافات مربّعة متزايدة...</p>
                 </div>
                 <div class="summary-card">
-                    <h4>3. Double Hashing</h4>
-                    <p>Use a second hash function for step size...</p>
+                    <h4>3. التجزئة المزدوجة</h4>
+                    <p>استخدم دالة تجزئة ثانية لتحديد حجم الخطوة...</p>
                 </div>
             </div>
         </section>
 
         <!-- Scene 6: Linear Probing -->
         <section id="scene6">
-            <h2><span class="scene-number">6</span> Linear Probing</h2>
+            <h2><span class="scene-number">6</span> الاستكشاف الخطي</h2>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar suggests:</div>
-                <p>"If the desired position h(k) is already occupied, try the next cells in a linear manner until you find an empty slot."</p>
+                <div class="dialogue-label">يقترح عمر:</div>
+                <p>«إذا كان الموضع المطلوب <span dir="ltr">h(k)</span> مشغولًا، فجرّب الخانات التالية بشكل خطي حتى تجد خانة فارغة.»</p>
             </div>
 
             <div class="key-concept">
-                <h4>📖 Linear Probing Formula</h4>
-                <p>The probe sequence (the sequence of indices we try) is:</p>
+                <h4>📖 صيغة الاستكشاف الخطي</h4>
+                <p>تسلسل الاستكشاف (Probe Sequence)، أي تسلسل الفهارس التي نجرّبها، هو:</p>
                 <div class="formula-box">
                     <p class="formula"><strong>index<sub>i</sub> = (h(k) + i) mod m</strong></p>
-                    <p><small>where i = 0, 1, 2, 3, ...</small></p>
+                    <p><small>حيث <span dir="ltr">i = 0, 1, 2, 3, ...</span></small></p>
                 </div>
-                <p>So we try: h(k), h(k)+1, h(k)+2, h(k)+3, ... (all taken modulo m)</p>
+                <p>إذن نجرّب: <span dir="ltr">h(k), h(k)+1, h(k)+2, h(k)+3, ...</span> (وكلها مأخوذة بباقي القسمة على m)</p>
             </div>
 
-            <h3>Example: Linear Probing Step-by-Step</h3>
+            <h3>مثال: الاستكشاف الخطي خطوة بخطوة</h3>
 
-            <p><strong>Settings:</strong> m = 10, h(k) = k mod 10</p>
-            <p><strong>Insert keys:</strong> 40, 55, 66, 80, 90</p>
+            <p><strong>الإعدادات:</strong> <span dir="ltr">m = 10, h(k) = k mod 10</span></p>
+            <p><strong>المفاتيح المُدرجة:</strong> <span dir="ltr">40, 55, 66, 80, 90</span></p>
 
             <!-- Insert 40 -->
-            <h4>Step 1: Insert 40</h4>
+            <h4>الخطوة 1: إدراج 40</h4>
             <div class="probing-steps">
                 <div class="probe-step success">
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">h(40) = 40 mod 10 = <strong>0</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 0 is empty → Store 40 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 0 فارغ ← خزّن 40 هنا</span>
                     </div>
                 </div>
             </div>
 
             <!-- Insert 55 -->
-            <h4>Step 2: Insert 55</h4>
+            <h4>الخطوة 2: إدراج 55</h4>
             <div class="probing-steps">
                 <div class="probe-step success">
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">h(55) = 55 mod 10 = <strong>5</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 5 is empty → Store 55 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 5 فارغ ← خزّن 55 هنا</span>
                     </div>
                 </div>
             </div>
 
             <!-- Insert 66 -->
-            <h4>Step 3: Insert 66</h4>
+            <h4>الخطوة 3: إدراج 66</h4>
             <div class="probing-steps">
                 <div class="probe-step success">
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">h(66) = 66 mod 10 = <strong>6</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 6 is empty → Store 66 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 6 فارغ ← خزّن 66 هنا</span>
                     </div>
                 </div>
             </div>
 
             <!-- Insert 80 -->
-            <h4>Step 4: Insert 80 (COLLISION!)</h4>
+            <h4>الخطوة 4: إدراج 80 (تصادم!)</h4>
             <div class="probing-steps">
                 <div class="probe-step collision">
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">h(80) = 80 mod 10 = <strong>0</strong></div>
-                        <br><span class="probe-step-result result-collision">❌ Index 0 is occupied (40) → Try next</span>
+                        <br><span class="probe-step-result result-collision">❌ الفهرس 0 مشغول (40) ← جرّب التالي</span>
                     </div>
                 </div>
                 <div class="probe-step success">
                     <div class="probe-step-num">i=1</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">(0 + 1) mod 10 = <strong>1</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 1 is empty → Store 80 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 1 فارغ ← خزّن 80 هنا</span>
                     </div>
                 </div>
             </div>
 
             <!-- Insert 90 -->
-            <h4>Step 5: Insert 90 (COLLISION!)</h4>
+            <h4>الخطوة 5: إدراج 90 (تصادم!)</h4>
             <div class="probing-steps">
                 <div class="probe-step collision">
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">h(90) = 90 mod 10 = <strong>0</strong></div>
-                        <br><span class="probe-step-result result-collision">❌ Index 0 is occupied (40) → Try next</span>
+                        <br><span class="probe-step-result result-collision">❌ الفهرس 0 مشغول (40) ← جرّب التالي</span>
                     </div>
                 </div>
                 <div class="probe-step collision">
                     <div class="probe-step-num">i=1</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">(0 + 1) mod 10 = <strong>1</strong></div>
-                        <br><span class="probe-step-result result-collision">❌ Index 1 is occupied (80) → Try next</span>
+                        <br><span class="probe-step-result result-collision">❌ الفهرس 1 مشغول (80) ← جرّب التالي</span>
                     </div>
                 </div>
                 <div class="probe-step success">
                     <div class="probe-step-num">i=2</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">(0 + 2) mod 10 = <strong>2</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 2 is empty → Store 90 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 2 فارغ ← خزّن 90 هنا</span>
                     </div>
                 </div>
             </div>
 
-            <h3>Final Hash Table State</h3>
+            <h3>الحالة النهائية لجدول التجزئة</h3>
 
             <div class="hash-table-viz">
                 <table class="hash-table">
                     <tr class="index-row">
-                        <td>Index</td>
+                        <td>الفهرس</td>
                         <td>0</td>
                         <td>1</td>
                         <td>2</td>
@@ -1172,7 +1225,7 @@
                         <td>9</td>
                     </tr>
                     <tr>
-                        <td><strong>Key</strong></td>
+                        <td><strong>المفتاح</strong></td>
                         <td class="filled-cell">40</td>
                         <td class="probe-cell">80</td>
                         <td class="probe-cell">90</td>
@@ -1186,137 +1239,137 @@
                     </tr>
                 </table>
                 <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">
-                    <span style="display: inline-block; width: 20px; height: 15px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); vertical-align: middle; margin-right: 5px;"></span> Direct placement
-                    <span style="display: inline-block; width: 20px; height: 15px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); vertical-align: middle; margin-left: 15px; margin-right: 5px;"></span> Placed after probing (collision resolved)
+                    <span style="display: inline-block; width: 20px; height: 15px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); vertical-align: middle; margin-left: 5px;"></span> وضع مباشر
+                    <span style="display: inline-block; width: 20px; height: 15px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); vertical-align: middle; margin-right: 15px; margin-left: 5px;"></span> وُضع بعد الاستكشاف (حُلّ التصادم)
                 </p>
             </div>
 
-            <h3>Searching with Linear Probing</h3>
+            <h3>البحث باستخدام الاستكشاف الخطي</h3>
 
             <table class="step-table">
                 <tr>
-                    <th>Step</th>
-                    <th>Action</th>
+                    <th>الخطوة</th>
+                    <th>الإجراء</th>
                 </tr>
                 <tr>
                     <td><span class="step-number">1</span></td>
-                    <td>Compute h(k)</td>
+                    <td>احسب <span dir="ltr">h(k)</span></td>
                 </tr>
                 <tr>
                     <td><span class="step-number">2</span></td>
-                    <td>If table[h(k)] holds k → <strong>Found!</strong></td>
+                    <td>إذا كانت الخانة <span dir="ltr">table[h(k)]</span> تحتوي k ← <strong>وُجد!</strong></td>
                 </tr>
                 <tr>
                     <td><span class="step-number">3</span></td>
-                    <td>Otherwise, check table[h(k)+1], then table[h(k)+2], ... (wrapping with modulo)</td>
+                    <td>وإلا فافحص <span dir="ltr">table[h(k)+1]</span>، ثم <span dir="ltr">table[h(k)+2]</span>، ... (مع الالتفاف باستخدام باقي القسمة)</td>
                 </tr>
                 <tr>
                     <td><span class="step-number">4</span></td>
-                    <td>Stop when: you find the key → <strong>Success</strong>, OR you hit an empty slot → <strong>Not found</strong></td>
+                    <td>توقّف عندما: تجد المفتاح ← <strong>نجاح</strong>، أو تصل إلى خانة فارغة ← <strong>غير موجود</strong></td>
                 </tr>
             </table>
 
-            <h3>Primary Clustering Problem</h3>
+            <h3>مشكلة التكتل الأولي (Primary Clustering)</h3>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar points out:</div>
-                <p>"Look at indices 0, 1, and 2. They contain 40, 80, and 90. They form a big <em>cluster</em> of consecutive filled cells. Any new key that hashes to index 0, 1, or 2 will have to step through this cluster."</p>
+                <div class="dialogue-label">ينبّه عمر:</div>
+                <p>«انظر إلى الفهارس 0 و1 و2. إنها تحتوي 40 و80 و90، وتشكّل <em>تكتلًا</em> كبيرًا من الخانات المشغولة المتتالية. أي مفتاح جديد يُجزَّأ إلى الفهرس 0 أو 1 أو 2 سيضطر إلى المرور عبر هذا التكتل.»</p>
             </div>
 
             <div class="info-box important">
-                <div class="info-box-title">⚠️ Primary Clustering</div>
-                <p>Large clusters make insert and search slower because many keys have to probe through the same long block of occupied cells.</p>
-                <p><strong>Linear probing is simple, but clustering can be bad when the table becomes moderately full.</strong></p>
+                <div class="info-box-title">⚠️ التكتل الأولي</div>
+                <p>التكتلات الكبيرة تجعل الإدراج والبحث أبطأ، لأن مفاتيح كثيرة تضطر إلى الاستكشاف عبر الكتلة الطويلة نفسها من الخانات المشغولة.</p>
+                <p><strong>الاستكشاف الخطي بسيط، لكن التكتل قد يصبح سيئًا عندما يمتلئ الجدول بدرجة متوسطة.</strong></p>
             </div>
         </section>
 
         <!-- Scene 7: Quadratic Probing -->
         <section id="scene7">
-            <h2><span class="scene-number">7</span> Quadratic Probing</h2>
+            <h2><span class="scene-number">7</span> الاستكشاف التربيعي</h2>
 
-            <p>To reduce clustering, Ahmed reads about <strong>quadratic probing</strong>.</p>
+            <p>لتقليل التكتل، يقرأ أحمد عن <strong>الاستكشاف التربيعي</strong>.</p>
 
             <div class="key-concept">
-                <h4>📖 Quadratic Probing Formula</h4>
-                <p>Instead of probing linearly at offsets 0, 1, 2, 3, ..., quadratic probing uses increasing <strong>square</strong> distances:</p>
+                <h4>📖 صيغة الاستكشاف التربيعي</h4>
+                <p>بدلًا من الاستكشاف الخطي عند الإزاحات <span dir="ltr">0, 1, 2, 3, ...</span>، يستخدم الاستكشاف التربيعي مسافات <strong>مربّعة</strong> متزايدة:</p>
                 <div class="formula-box">
                     <p class="formula"><strong>index<sub>i</sub> = (h(k) + i²) mod m</strong></p>
-                    <p><small>where i = 0, 1, 2, 3, ...</small></p>
+                    <p><small>حيث <span dir="ltr">i = 0, 1, 2, 3, ...</span></small></p>
                 </div>
-                <p>So the probe offsets are: <strong>0, 1, 4, 9, 16, 25, ...</strong></p>
+                <p>إذن إزاحات الاستكشاف هي: <strong dir="ltr">0, 1, 4, 9, 16, 25, ...</strong></p>
             </div>
 
-            <h3>Example: Quadratic Probing Step-by-Step</h3>
+            <h3>مثال: الاستكشاف التربيعي خطوة بخطوة</h3>
 
-            <p><strong>Settings:</strong> m = 11, h(k) = k mod 11</p>
-            <p><strong>Insert keys:</strong> 5, 16, 27</p>
+            <p><strong>الإعدادات:</strong> <span dir="ltr">m = 11, h(k) = k mod 11</span></p>
+            <p><strong>المفاتيح المُدرجة:</strong> <span dir="ltr">5, 16, 27</span></p>
 
             <!-- Insert 5 -->
-            <h4>Step 1: Insert 5</h4>
+            <h4>الخطوة 1: إدراج 5</h4>
             <div class="probing-steps">
                 <div class="probe-step success">
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">h(5) = 5 mod 11 = <strong>5</strong></div>
                         <div class="probe-step-formula">index₀ = (5 + 0²) mod 11 = <strong>5</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 5 is empty → Store 5 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 5 فارغ ← خزّن 5 هنا</span>
                     </div>
                 </div>
             </div>
 
             <!-- Insert 16 -->
-            <h4>Step 2: Insert 16 (COLLISION!)</h4>
+            <h4>الخطوة 2: إدراج 16 (تصادم!)</h4>
             <div class="probing-steps">
                 <div class="probe-step collision">
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">h(16) = 16 mod 11 = <strong>5</strong></div>
                         <div class="probe-step-formula">index₀ = (5 + 0²) mod 11 = <strong>5</strong></div>
-                        <br><span class="probe-step-result result-collision">❌ Index 5 is occupied (5) → Try next</span>
+                        <br><span class="probe-step-result result-collision">❌ الفهرس 5 مشغول (5) ← جرّب التالي</span>
                     </div>
                 </div>
                 <div class="probe-step success">
                     <div class="probe-step-num">i=1</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">index₁ = (5 + 1²) mod 11 = (5 + 1) mod 11 = <strong>6</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 6 is empty → Store 16 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 6 فارغ ← خزّن 16 هنا</span>
                     </div>
                 </div>
             </div>
 
             <!-- Insert 27 -->
-            <h4>Step 3: Insert 27 (COLLISION!)</h4>
+            <h4>الخطوة 3: إدراج 27 (تصادم!)</h4>
             <div class="probing-steps">
                 <div class="probe-step collision">
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">h(27) = 27 mod 11 = <strong>5</strong></div>
                         <div class="probe-step-formula">index₀ = (5 + 0²) mod 11 = <strong>5</strong></div>
-                        <br><span class="probe-step-result result-collision">❌ Index 5 is occupied (5) → Try next</span>
+                        <br><span class="probe-step-result result-collision">❌ الفهرس 5 مشغول (5) ← جرّب التالي</span>
                     </div>
                 </div>
                 <div class="probe-step collision">
                     <div class="probe-step-num">i=1</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">index₁ = (5 + 1²) mod 11 = (5 + 1) mod 11 = <strong>6</strong></div>
-                        <br><span class="probe-step-result result-collision">❌ Index 6 is occupied (16) → Try next</span>
+                        <br><span class="probe-step-result result-collision">❌ الفهرس 6 مشغول (16) ← جرّب التالي</span>
                     </div>
                 </div>
                 <div class="probe-step success">
                     <div class="probe-step-num">i=2</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">index₂ = (5 + 2²) mod 11 = (5 + 4) mod 11 = <strong>9</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 9 is empty → Store 27 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 9 فارغ ← خزّن 27 هنا</span>
                     </div>
                 </div>
             </div>
 
-            <h3>Final Hash Table State</h3>
+            <h3>الحالة النهائية لجدول التجزئة</h3>
 
             <div class="hash-table-viz">
                 <table class="hash-table">
                     <tr class="index-row">
-                        <td>Index</td>
+                        <td>الفهرس</td>
                         <td>0</td>
                         <td>1</td>
                         <td>2</td>
@@ -1330,7 +1383,7 @@
                         <td>10</td>
                     </tr>
                     <tr>
-                        <td><strong>Key</strong></td>
+                        <td><strong>المفتاح</strong></td>
                         <td class="empty-cell">—</td>
                         <td class="empty-cell">—</td>
                         <td class="empty-cell">—</td>
@@ -1347,108 +1400,108 @@
             </div>
 
             <div class="info-box tip">
-                <div class="info-box-title">✅ Advantage</div>
-                <p>Keys with the same hash value (5, 16, 27 all hash to 5) do <strong>not</strong> form one long consecutive block as in linear probing. They are spread out: positions 5, 6, 9, ... This helps <strong>reduce primary clustering</strong>.</p>
+                <div class="info-box-title">✅ الميزة</div>
+                <p>المفاتيح ذات قيمة التجزئة نفسها (5 و16 و27 كلها تُجزَّأ إلى 5) <strong>لا</strong> تشكّل كتلة واحدة طويلة متتالية كما في الاستكشاف الخطي، بل تتوزع على المواضع <span dir="ltr">5, 6, 9, ...</span> وهذا يساعد على <strong>تقليل التكتل الأولي</strong>.</p>
             </div>
 
-            <h3>The Problem: Some Slots May Never Be Visited</h3>
+            <h3>المشكلة: قد لا تُزار بعض الخانات أبدًا</h3>
 
             <div class="info-box warning">
-                <div class="info-box-title">⚠️ Limitation of Quadratic Probing</div>
-                <p>The sequence of probes for one key uses indices: (h(k) + i²) mod m</p>
-                <p>Mathematically, the set of values i² mod m might <strong>not cover all</strong> residues from 0 to m-1.</p>
+                <div class="info-box-title">⚠️ قيود الاستكشاف التربيعي</div>
+                <p>يستخدم تسلسل الاستكشاف لمفتاح واحد الفهارس: <span dir="ltr">(h(k) + i²) mod m</span></p>
+                <p>رياضيًا، قد <strong>لا تغطي</strong> مجموعة القيم <span dir="ltr">i² mod m</span> جميع البواقي من 0 إلى <span dir="ltr">m-1</span>.</p>
                 <ul>
-                    <li>With careful choice of table size m (often prime), we can guarantee visiting about <strong>(m+1)/2</strong> distinct positions.</li>
-                    <li>So if the table is less than half full, we can always find an empty slot.</li>
-                    <li>But we do <strong>not necessarily visit every position</strong>.</li>
+                    <li>باختيار حجم الجدول m بعناية (وغالبًا ما يكون عددًا أوليًا)، يمكننا ضمان زيارة نحو <strong dir="ltr">(m+1)/2</strong> موضعًا مختلفًا.</li>
+                    <li>لذا إذا كان الجدول ممتلئًا بأقل من النصف، يمكننا دائمًا إيجاد خانة فارغة.</li>
+                    <li>لكننا <strong>لا نزور بالضرورة كل موضع</strong>.</li>
                 </ul>
             </div>
         </section>
 
         <!-- Scene 8: Double Hashing -->
         <section id="scene8">
-            <h2><span class="scene-number">8</span> Double Hashing</h2>
+            <h2><span class="scene-number">8</span> التجزئة المزدوجة</h2>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar suggests:</div>
-                <p>"Let me suggest a more powerful idea: <strong>double hashing</strong>. We use <em>two</em> hash functions!"</p>
+                <div class="dialogue-label">يقترح عمر:</div>
+                <p>«دعني أقترح فكرة أقوى: <strong>التجزئة المزدوجة</strong>. نستخدم دالتَي تجزئة <em>اثنتين</em>!»</p>
             </div>
 
             <div class="key-concept">
-                <h4>📖 Double Hashing Formula</h4>
-                <p>We use <strong>two</strong> hash functions: h₁(k) and h₂(k)</p>
+                <h4>📖 صيغة التجزئة المزدوجة</h4>
+                <p>نستخدم دالتَي تجزئة <strong>اثنتين</strong>: <span dir="ltr">h₁(k)</span> و<span dir="ltr">h₂(k)</span></p>
                 <div class="formula-box">
                     <p class="formula"><strong>index<sub>i</sub> = (h₁(k) + i × h₂(k)) mod m</strong></p>
-                    <p><small>where i = 0, 1, 2, ...</small></p>
+                    <p><small>حيث <span dir="ltr">i = 0, 1, 2, ...</span></small></p>
                 </div>
                 <ul>
-                    <li><strong>h₁(k)</strong> gives the <em>initial position</em></li>
-                    <li><strong>h₂(k)</strong> gives the <em>step size</em> for probing</li>
+                    <li><strong dir="ltr">h₁(k)</strong> تعطي <em>الموضع الابتدائي</em></li>
+                    <li><strong dir="ltr">h₂(k)</strong> تعطي <em>حجم الخطوة</em> للاستكشاف</li>
                 </ul>
             </div>
 
-            <h3>Why h₂(k) Must Not Be Zero</h3>
+            <h3>لماذا يجب ألا تكون <span dir="ltr">h₂(k)</span> صفرًا</h3>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed asks:</div>
-                <p>"Why must the second hash function never return 0?"</p>
+                <div class="dialogue-label">يسأل أحمد:</div>
+                <p>«لماذا يجب ألا تُرجع دالة التجزئة الثانية القيمة 0 أبدًا؟»</p>
             </div>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar explains:</div>
-                <p>"Look at the probe formula: index<sub>i</sub> = (h₁(k) + i × h₂(k)) mod m</p>
-                <p>If h₂(k) = 0, then for all i:</p>
-                <p style="text-align: center;"><strong>index<sub>i</sub> = (h₁(k) + i × 0) mod m = h₁(k)</strong></p>
-                <p>We would keep probing the same index again and again, never moving to another slot!"</p>
+                <div class="dialogue-label">يشرح عمر:</div>
+                <p>«انظر إلى صيغة الاستكشاف: <span dir="ltr">index<sub>i</sub> = (h₁(k) + i × h₂(k)) mod m</span></p>
+                <p>إذا كانت <span dir="ltr">h₂(k) = 0</span>، فلكل قيم i:</p>
+                <p style="text-align: center;"><strong dir="ltr">index<sub>i</sub> = (h₁(k) + i × 0) mod m = h₁(k)</strong></p>
+                <p>سنظل نستكشف الفهرس نفسه مرة بعد مرة، دون أن ننتقل أبدًا إلى خانة أخرى!»</p>
             </div>
 
-            <h3>Why h₂(k) Should Be Relatively Prime to m</h3>
+            <h3>لماذا يجب أن تكون <span dir="ltr">h₂(k)</span> أولية نسبيًا مع m</h3>
 
             <div class="info-box tip">
-                <div class="info-box-title">📐 Mathematical Requirement</div>
-                <p>For the probe sequence to <strong>visit ALL positions</strong> of the table before repeating, the step size h₂(k) must be <strong>relatively prime</strong> to the table size m.</p>
-                <p>Two numbers a and m are relatively prime if their greatest common divisor is 1: <strong>gcd(a, m) = 1</strong></p>
+                <div class="info-box-title">📐 شرط رياضي</div>
+                <p>لكي <strong>يزور</strong> تسلسل الاستكشاف <strong>جميع مواضع</strong> الجدول قبل أن يتكرر، يجب أن يكون حجم الخطوة <span dir="ltr">h₂(k)</span> <strong>أوليًا نسبيًا (Relatively Prime)</strong> مع حجم الجدول m.</p>
+                <p>يكون العددان a وm أوليين نسبيًا إذا كان قاسمهما المشترك الأكبر يساوي 1: <strong dir="ltr">gcd(a, m) = 1</strong></p>
             </div>
 
-            <h3>Choosing a Prime Table Size</h3>
+            <h3>اختيار حجم جدول أولي</h3>
 
             <div class="summary-cards">
                 <div class="summary-card success-card">
-                    <h4>✅ Easy Solution</h4>
-                    <p>Choose <strong>m to be a prime number</strong>!</p>
-                    <p>If m is prime, then every integer from 1 to m-1 is relatively prime to m.</p>
+                    <h4>✅ حل سهل</h4>
+                    <p>اختر <strong>m عددًا أوليًا</strong>!</p>
+                    <p>إذا كان m أوليًا، فإن كل عدد صحيح من 1 إلى <span dir="ltr">m-1</span> يكون أوليًا نسبيًا مع m.</p>
                 </div>
                 <div class="summary-card">
-                    <h4>Common h₂(k) Choice</h4>
-                    <p><strong>h₂(k) = 1 + (k mod (m-1))</strong></p>
-                    <p>This ensures h₂(k) is always in {1, 2, ..., m-1} and never zero.</p>
+                    <h4>اختيار شائع لـ <span dir="ltr">h₂(k)</span></h4>
+                    <p><strong dir="ltr">h₂(k) = 1 + (k mod (m-1))</strong></p>
+                    <p>هذا يضمن أن <span dir="ltr">h₂(k)</span> تقع دائمًا في <span dir="ltr">{1, 2, ..., m-1}</span> ولا تساوي صفرًا أبدًا.</p>
                 </div>
             </div>
 
-            <h3>Example: Double Hashing Step-by-Step</h3>
+            <h3>مثال: التجزئة المزدوجة خطوة بخطوة</h3>
 
-            <p><strong>Settings:</strong></p>
+            <p><strong>الإعدادات:</strong></p>
             <ul>
-                <li>Table size: <strong>m = 11</strong> (prime)</li>
-                <li><strong>h₁(k) = k mod 11</strong></li>
-                <li><strong>h₂(k) = 1 + (k mod 10)</strong></li>
+                <li>حجم الجدول: <strong dir="ltr">m = 11</strong> (عدد أولي)</li>
+                <li><strong dir="ltr">h₁(k) = k mod 11</strong></li>
+                <li><strong dir="ltr">h₂(k) = 1 + (k mod 10)</strong></li>
             </ul>
-            <p><strong>Insert keys:</strong> 27, 38, 49</p>
+            <p><strong>المفاتيح المُدرجة:</strong> <span dir="ltr">27, 38, 49</span></p>
 
             <!-- Insert 27 -->
-            <h4>Step 1: Insert 27</h4>
+            <h4>الخطوة 1: إدراج 27</h4>
 
             <table class="step-table">
                 <tr>
-                    <th colspan="2">Calculate Hash Values for key = 27</th>
+                    <th colspan="2">حساب قيم التجزئة للمفتاح <span dir="ltr">key = 27</span></th>
                 </tr>
                 <tr>
                     <td><strong>h₁(27)</strong></td>
-                    <td>27 mod 11 = <strong>5</strong></td>
+                    <td dir="ltr">27 mod 11 = <strong>5</strong></td>
                 </tr>
                 <tr>
                     <td><strong>h₂(27)</strong></td>
-                    <td>1 + (27 mod 10) = 1 + 7 = <strong>8</strong></td>
+                    <td dir="ltr">1 + (27 mod 10) = 1 + 7 = <strong>8</strong></td>
                 </tr>
             </table>
 
@@ -1457,25 +1510,25 @@
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">index₀ = (5 + 0 × 8) mod 11 = <strong>5</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 5 is empty → Store 27 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 5 فارغ ← خزّن 27 هنا</span>
                     </div>
                 </div>
             </div>
 
             <!-- Insert 38 -->
-            <h4>Step 2: Insert 38 (COLLISION!)</h4>
+            <h4>الخطوة 2: إدراج 38 (تصادم!)</h4>
 
             <table class="step-table">
                 <tr>
-                    <th colspan="2">Calculate Hash Values for key = 38</th>
+                    <th colspan="2">حساب قيم التجزئة للمفتاح <span dir="ltr">key = 38</span></th>
                 </tr>
                 <tr>
                     <td><strong>h₁(38)</strong></td>
-                    <td>38 mod 11 = <strong>5</strong></td>
+                    <td dir="ltr">38 mod 11 = <strong>5</strong></td>
                 </tr>
                 <tr>
                     <td><strong>h₂(38)</strong></td>
-                    <td>1 + (38 mod 10) = 1 + 8 = <strong>9</strong></td>
+                    <td dir="ltr">1 + (38 mod 10) = 1 + 8 = <strong>9</strong></td>
                 </tr>
             </table>
 
@@ -1484,32 +1537,32 @@
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">index₀ = (5 + 0 × 9) mod 11 = <strong>5</strong></div>
-                        <br><span class="probe-step-result result-collision">❌ Index 5 is occupied (27) → Try next</span>
+                        <br><span class="probe-step-result result-collision">❌ الفهرس 5 مشغول (27) ← جرّب التالي</span>
                     </div>
                 </div>
                 <div class="probe-step success">
                     <div class="probe-step-num">i=1</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">index₁ = (5 + 1 × 9) mod 11 = 14 mod 11 = <strong>3</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 3 is empty → Store 38 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 3 فارغ ← خزّن 38 هنا</span>
                     </div>
                 </div>
             </div>
 
             <!-- Insert 49 -->
-            <h4>Step 3: Insert 49 (COLLISION!)</h4>
+            <h4>الخطوة 3: إدراج 49 (تصادم!)</h4>
 
             <table class="step-table">
                 <tr>
-                    <th colspan="2">Calculate Hash Values for key = 49</th>
+                    <th colspan="2">حساب قيم التجزئة للمفتاح <span dir="ltr">key = 49</span></th>
                 </tr>
                 <tr>
                     <td><strong>h₁(49)</strong></td>
-                    <td>49 mod 11 = <strong>5</strong></td>
+                    <td dir="ltr">49 mod 11 = <strong>5</strong></td>
                 </tr>
                 <tr>
                     <td><strong>h₂(49)</strong></td>
-                    <td>1 + (49 mod 10) = 1 + 9 = <strong>10</strong></td>
+                    <td dir="ltr">1 + (49 mod 10) = 1 + 9 = <strong>10</strong></td>
                 </tr>
             </table>
 
@@ -1518,24 +1571,24 @@
                     <div class="probe-step-num">i=0</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">index₀ = (5 + 0 × 10) mod 11 = <strong>5</strong></div>
-                        <br><span class="probe-step-result result-collision">❌ Index 5 is occupied (27) → Try next</span>
+                        <br><span class="probe-step-result result-collision">❌ الفهرس 5 مشغول (27) ← جرّب التالي</span>
                     </div>
                 </div>
                 <div class="probe-step success">
                     <div class="probe-step-num">i=1</div>
                     <div class="probe-step-content">
                         <div class="probe-step-formula">index₁ = (5 + 1 × 10) mod 11 = 15 mod 11 = <strong>4</strong></div>
-                        <br><span class="probe-step-result result-empty">✅ Index 4 is empty → Store 49 here</span>
+                        <br><span class="probe-step-result result-empty">✅ الفهرس 4 فارغ ← خزّن 49 هنا</span>
                     </div>
                 </div>
             </div>
 
-            <h3>Final Hash Table State</h3>
+            <h3>الحالة النهائية لجدول التجزئة</h3>
 
             <div class="hash-table-viz">
                 <table class="hash-table">
                     <tr class="index-row">
-                        <td>Index</td>
+                        <td>الفهرس</td>
                         <td>0</td>
                         <td>1</td>
                         <td>2</td>
@@ -1549,7 +1602,7 @@
                         <td>10</td>
                     </tr>
                     <tr>
-                        <td><strong>Key</strong></td>
+                        <td><strong>المفتاح</strong></td>
                         <td class="empty-cell">—</td>
                         <td class="empty-cell">—</td>
                         <td class="empty-cell">—</td>
@@ -1566,245 +1619,245 @@
             </div>
 
             <div class="info-box tip">
-                <div class="info-box-title">✅ Key Insight</div>
-                <p>Even though <strong>h₁(k) is the same</strong> for all three keys (27, 38, 49 all hash to 5), their <strong>h₂(k) values are different</strong> (8, 9, 10), so their <strong>probe sequences are different</strong>!</p>
-                <p>This reduces clustering and allows us to explore the table more uniformly.</p>
+                <div class="info-box-title">✅ فكرة أساسية</div>
+                <p>على الرغم من أن <strong><span dir="ltr">h₁(k)</span> متساوية</strong> للمفاتيح الثلاثة (27 و38 و49 كلها تُجزَّأ إلى 5)، فإن <strong>قيم <span dir="ltr">h₂(k)</span> مختلفة</strong> (8 و9 و10)، ولذلك <strong>تختلف تسلسلات الاستكشاف</strong> الخاصة بها!</p>
+                <p>وهذا يقلل التكتل ويتيح لنا استكشاف الجدول بصورة أكثر انتظامًا.</p>
             </div>
 
-            <h3>Summary: Why h₂(k) Values Differ</h3>
+            <h3>ملخص: لماذا تختلف قيم <span dir="ltr">h₂(k)</span></h3>
 
             <table class="comparison-table">
                 <tr>
-                    <th>Key</th>
-                    <th>h₁(k) = k mod 11</th>
-                    <th>h₂(k) = 1 + (k mod 10)</th>
-                    <th>Final Position</th>
+                    <th>المفتاح</th>
+                    <th dir="ltr">h₁(k) = k mod 11</th>
+                    <th dir="ltr">h₂(k) = 1 + (k mod 10)</th>
+                    <th>الموضع النهائي</th>
                 </tr>
                 <tr>
                     <td><strong>27</strong></td>
                     <td>5</td>
                     <td>8</td>
-                    <td class="filled-cell">Index 5</td>
+                    <td class="filled-cell">الفهرس 5</td>
                 </tr>
                 <tr>
                     <td><strong>38</strong></td>
                     <td>5</td>
                     <td>9</td>
-                    <td class="probe-cell">Index 3</td>
+                    <td class="probe-cell">الفهرس 3</td>
                 </tr>
                 <tr>
                     <td><strong>49</strong></td>
                     <td>5</td>
                     <td>10</td>
-                    <td class="probe-cell">Index 4</td>
+                    <td class="probe-cell">الفهرس 4</td>
                 </tr>
             </table>
         </section>
 
         <!-- Scene 9: Comparison -->
         <section id="scene9">
-            <h2><span class="scene-number">9</span> Comparing the Methods</h2>
+            <h2><span class="scene-number">9</span> مقارنة الطرق</h2>
 
-            <p>Ahmed and Omar now summarize what they have learned.</p>
+            <p>يلخّص أحمد وعمر الآن ما تعلّماه.</p>
 
             <table class="comparison-table">
                 <tr>
-                    <th>Method</th>
-                    <th>Probe Sequence</th>
-                    <th>Pros</th>
-                    <th>Cons</th>
+                    <th>الطريقة</th>
+                    <th>تسلسل الاستكشاف</th>
+                    <th>المزايا</th>
+                    <th>العيوب</th>
                 </tr>
                 <tr>
-                    <td class="method-name">Linear Probing</td>
+                    <td class="method-name">الاستكشاف الخطي</td>
                     <td>
-                        <div class="formula-box" style="margin: 0; padding: 0.5rem;">
+                        <div class="formula-box" style="margin: 0; padding: 0.5rem;" dir="ltr">
                             (h(k) + i) mod m
                         </div>
                     </td>
                     <td>
                         <div class="pros-cons">
-                            <span class="pro">✓ Simple to implement</span><br>
-                            <span class="pro">✓ Fast</span><br>
-                            <span class="pro">✓ Good cache performance</span>
+                            <span class="pro">✓ سهل التنفيذ</span><br>
+                            <span class="pro">✓ سريع</span><br>
+                            <span class="pro">✓ أداء جيد مع الذاكرة المخبئية (Cache)</span>
                         </div>
                     </td>
                     <td>
                         <div class="pros-cons">
-                            <span class="con">✗ Primary clustering</span><br>
-                            <span class="con">✗ Long clusters slow down operations</span>
+                            <span class="con">✗ التكتل الأولي</span><br>
+                            <span class="con">✗ التكتلات الطويلة تُبطئ العمليات</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td class="method-name">Quadratic Probing</td>
+                    <td class="method-name">الاستكشاف التربيعي</td>
                     <td>
-                        <div class="formula-box" style="margin: 0; padding: 0.5rem;">
+                        <div class="formula-box" style="margin: 0; padding: 0.5rem;" dir="ltr">
                             (h(k) + i²) mod m
                         </div>
                     </td>
                     <td>
                         <div class="pros-cons">
-                            <span class="pro">✓ Reduces primary clustering</span><br>
-                            <span class="pro">✓ Better distribution</span>
+                            <span class="pro">✓ يقلل التكتل الأولي</span><br>
+                            <span class="pro">✓ توزيع أفضل</span>
                         </div>
                     </td>
                     <td>
                         <div class="pros-cons">
-                            <span class="con">✗ May not visit all positions</span><br>
-                            <span class="con">✗ Table should be less than half full</span><br>
-                            <span class="con">✗ Secondary clustering possible</span>
+                            <span class="con">✗ قد لا يزور كل المواضع</span><br>
+                            <span class="con">✗ يجب أن يكون الجدول ممتلئًا بأقل من النصف</span><br>
+                            <span class="con">✗ احتمال حدوث التكتل الثانوي (Secondary Clustering)</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td class="method-name">Double Hashing</td>
+                    <td class="method-name">التجزئة المزدوجة</td>
                     <td>
-                        <div class="formula-box" style="margin: 0; padding: 0.5rem;">
+                        <div class="formula-box" style="margin: 0; padding: 0.5rem;" dir="ltr">
                             (h₁(k) + i × h₂(k)) mod m
                         </div>
                     </td>
                     <td>
                         <div class="pros-cons">
-                            <span class="pro">✓ Minimal clustering</span><br>
-                            <span class="pro">✓ Can visit ALL positions</span><br>
-                            <span class="pro">✓ Best distribution</span>
+                            <span class="pro">✓ أدنى قدر من التكتل</span><br>
+                            <span class="pro">✓ يمكنه زيارة جميع المواضع</span><br>
+                            <span class="pro">✓ أفضل توزيع</span>
                         </div>
                     </td>
                     <td>
                         <div class="pros-cons">
-                            <span class="con">✗ More complex</span><br>
-                            <span class="con">✗ Needs two hash functions</span><br>
-                            <span class="con">✗ h₂(k) must be coprime with m</span>
+                            <span class="con">✗ أكثر تعقيدًا</span><br>
+                            <span class="con">✗ يحتاج إلى دالتَي تجزئة</span><br>
+                            <span class="con">✗ يجب أن تكون <span dir="ltr">h₂(k)</span> أولية نسبيًا مع m</span>
                         </div>
                     </td>
                 </tr>
             </table>
 
-            <h3>Requirements for Double Hashing</h3>
+            <h3>متطلبات التجزئة المزدوجة</h3>
 
             <div class="summary-cards">
                 <div class="summary-card warning-card">
-                    <h4>⚠️ h₂(k) ≠ 0</h4>
-                    <p>The second hash function must <strong>never return 0</strong>, or we'll keep probing the same position forever.</p>
+                    <h4>⚠️ <span dir="ltr">h₂(k) ≠ 0</span></h4>
+                    <p>يجب ألا تُرجع دالة التجزئة الثانية <strong>القيمة 0 أبدًا</strong>، وإلا فسنظل نستكشف الموضع نفسه إلى ما لا نهاية.</p>
                 </div>
                 <div class="summary-card">
-                    <h4>📐 gcd(h₂(k), m) = 1</h4>
-                    <p>h₂(k) must be <strong>relatively prime to m</strong> to ensure all positions can be visited.</p>
+                    <h4>📐 <span dir="ltr">gcd(h₂(k), m) = 1</span></h4>
+                    <p>يجب أن تكون <span dir="ltr">h₂(k)</span> <strong>أولية نسبيًا مع m</strong> لضمان إمكانية زيارة جميع المواضع.</p>
                 </div>
                 <div class="summary-card success-card">
-                    <h4>✅ Use Prime m</h4>
-                    <p>Choosing a <strong>prime table size</strong> makes it easy to satisfy the coprimality requirement.</p>
+                    <h4>✅ استخدم m أوليًا</h4>
+                    <p>اختيار <strong>حجم جدول أولي</strong> يسهّل تحقيق شرط الأولية النسبية.</p>
                 </div>
             </div>
         </section>
 
         <!-- Scene 10: Final Conversation -->
         <section id="scene10">
-            <h2><span class="scene-number">10</span> The Final Conversation</h2>
+            <h2><span class="scene-number">10</span> الحوار الأخير</h2>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed reflects:</div>
-                <p>"We started with a simple array and linear search: correct but O(n). Then we used sorting and binary search to get O(log n) search but expensive insertions."</p>
+                <div class="dialogue-label">يتأمّل أحمد:</div>
+                <p>«بدأنا بمصفوفة بسيطة وبحث خطي: صحيح لكنه <span dir="ltr">O(n)</span>. ثم استخدمنا الفرز والبحث الثنائي لنحصل على بحث بزمن <span dir="ltr">O(log n)</span> لكن مع إدراجات مكلفة.»</p>
             </div>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar adds:</div>
-                <p>"We tried direct addressing, which gives O(1) search, but wastes a lot of memory if the key range is large."</p>
+                <div class="dialogue-label">يضيف عمر:</div>
+                <p>«جرّبنا العنونة المباشرة، التي تعطي بحثًا بزمن <span dir="ltr">O(1)</span>، لكنها تهدر الكثير من الذاكرة إذا كان نطاق المفاتيح كبيرًا.»</p>
             </div>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed:</div>
-                <p>"Then we discovered hash tables: a clever way to map keys to a smaller array using a hash function."</p>
+                <div class="dialogue-label">أحمد:</div>
+                <p>«ثم اكتشفنا جداول التجزئة: طريقة ذكية لربط المفاتيح بمصفوفة أصغر باستخدام دالة تجزئة.»</p>
             </div>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar:</div>
-                <p>"But hashing is not perfect: collisions are inevitable. We studied three open-addressing methods to handle collisions: linear probing, quadratic probing, and double hashing."</p>
+                <div class="dialogue-label">عمر:</div>
+                <p>«لكن التجزئة ليست مثالية: التصادمات حتمية. درسنا ثلاث طرق من طرق العنونة المفتوحة للتعامل مع التصادمات: الاستكشاف الخطي، والاستكشاف التربيعي، والتجزئة المزدوجة.»</p>
             </div>
 
             <div class="dialogue dialogue-ahmed">
-                <div class="dialogue-label">Ahmed:</div>
-                <p>"Linear probing is simple but suffers from primary clustering. Quadratic probing reduces clustering, but may fail to visit all table positions."</p>
+                <div class="dialogue-label">أحمد:</div>
+                <p>«الاستكشاف الخطي بسيط لكنه يعاني من التكتل الأولي. والاستكشاف التربيعي يقلل التكتل، لكنه قد يفشل في زيارة جميع مواضع الجدول.»</p>
             </div>
 
             <div class="dialogue dialogue-omar">
-                <div class="dialogue-label">Omar:</div>
-                <p>"Double hashing is more flexible. Using two hash functions, and choosing the table size to be prime, we can ensure that we visit all positions and reduce clustering."</p>
+                <div class="dialogue-label">عمر:</div>
+                <p>«التجزئة المزدوجة أكثر مرونة. باستخدام دالتَي تجزئة، واختيار حجم الجدول عددًا أوليًا، نضمن زيارة جميع المواضع وتقليل التكتل.»</p>
             </div>
 
             <div class="key-concept">
-                <h4>🎯 Final Conclusion</h4>
-                <p><strong>If you want a robust and efficient hash table, double hashing with a prime-sized table is a powerful choice!</strong></p>
+                <h4>🎯 الخلاصة النهائية</h4>
+                <p><strong>إذا أردت جدول تجزئة متينًا وفعّالًا، فإن التجزئة المزدوجة مع جدول حجمه عدد أولي خيارٌ قوي!</strong></p>
             </div>
         </section>
 
         <!-- Conclusion -->
         <section id="conclusion">
-            <h2>Conclusion — What We Learned</h2>
+            <h2>الخاتمة — ماذا تعلّمنا</h2>
 
-            <p>This tutorial has shown, step by step, how Ahmed and Omar move from simple arrays to sophisticated hash tables.</p>
+            <p>عرض هذا الدرس، خطوة بخطوة، كيف انتقل أحمد وعمر من المصفوفات البسيطة إلى جداول التجزئة المتطورة.</p>
 
-            <h3>Key Takeaways</h3>
+            <h3>أهم الدروس المستفادة</h3>
 
             <div class="summary-cards">
                 <div class="summary-card">
-                    <h4>1. Linear Search</h4>
-                    <p>O(n) search can be too slow for large datasets.</p>
+                    <h4>1. البحث الخطي</h4>
+                    <p>البحث بزمن <span dir="ltr">O(n)</span> قد يكون بطيئًا جدًا مع مجموعات البيانات الكبيرة.</p>
                 </div>
                 <div class="summary-card">
-                    <h4>2. Binary Search</h4>
-                    <p>O(log n) search but O(n) insertion to keep sorted.</p>
+                    <h4>2. البحث الثنائي</h4>
+                    <p>بحث بزمن <span dir="ltr">O(log n)</span> لكن الإدراج بزمن <span dir="ltr">O(n)</span> للحفاظ على الترتيب.</p>
                 </div>
                 <div class="summary-card">
-                    <h4>3. Direct Addressing</h4>
-                    <p>O(1) search but wastes memory for sparse keys.</p>
+                    <h4>3. العنونة المباشرة</h4>
+                    <p>بحث بزمن <span dir="ltr">O(1)</span> لكنها تهدر الذاكرة مع المفاتيح المتناثرة.</p>
                 </div>
                 <div class="summary-card">
-                    <h4>4. Hash Tables</h4>
-                    <p>Use modulo arithmetic to map keys to indices efficiently.</p>
+                    <h4>4. جداول التجزئة</h4>
+                    <p>تستخدم حساب باقي القسمة لربط المفاتيح بالفهارس بكفاءة.</p>
                 </div>
             </div>
 
-            <h3>Collision Resolution Summary</h3>
+            <h3>ملخص حل التصادمات</h3>
 
             <table class="step-table">
                 <tr>
-                    <th>Method</th>
-                    <th>Best For</th>
-                    <th>Key Formula</th>
+                    <th>الطريقة</th>
+                    <th>الأنسب لـ</th>
+                    <th>الصيغة الأساسية</th>
                 </tr>
                 <tr>
-                    <td><strong>Linear Probing</strong></td>
-                    <td>Simple implementations, good cache locality</td>
-                    <td>(h(k) + i) mod m</td>
+                    <td><strong>الاستكشاف الخطي</strong></td>
+                    <td>التنفيذ البسيط، وتوافق جيد مع الذاكرة المخبئية</td>
+                    <td dir="ltr">(h(k) + i) mod m</td>
                 </tr>
                 <tr>
-                    <td><strong>Quadratic Probing</strong></td>
-                    <td>Reducing primary clustering, table < 50% full</td>
-                    <td>(h(k) + i²) mod m</td>
+                    <td><strong>الاستكشاف التربيعي</strong></td>
+                    <td>تقليل التكتل الأولي، مع جدول ممتلئ بأقل من <span dir="ltr">50%</span></td>
+                    <td dir="ltr">(h(k) + i²) mod m</td>
                 </tr>
                 <tr>
-                    <td><strong>Double Hashing</strong></td>
-                    <td>Best distribution, minimal clustering</td>
-                    <td>(h₁(k) + i × h₂(k)) mod m</td>
+                    <td><strong>التجزئة المزدوجة</strong></td>
+                    <td>أفضل توزيع، وأدنى قدر من التكتل</td>
+                    <td dir="ltr">(h₁(k) + i × h₂(k)) mod m</td>
                 </tr>
             </table>
 
             <div class="info-box tip">
-                <div class="info-box-title">📚 Practice Exercises</div>
+                <div class="info-box-title">📚 تمارين للتدريب</div>
                 <ul>
-                    <li>Try inserting different keys by hand using each probing method</li>
-                    <li>Compare the number of probes needed for each method</li>
-                    <li>Implement these methods in your favorite programming language</li>
-                    <li>Experiment with different table sizes and load factors</li>
+                    <li>جرّب إدراج مفاتيح مختلفة يدويًا باستخدام كل طريقة من طرق الاستكشاف</li>
+                    <li>قارن عدد مرات الاستكشاف المطلوبة في كل طريقة</li>
+                    <li>نفّذ هذه الطرق بلغة البرمجة المفضلة لديك</li>
+                    <li>جرّب أحجام جداول مختلفة وقيمًا مختلفة لمعامل التحميل (Load Factor)</li>
                 </ul>
             </div>
         </section>
     </main>
 
     <footer>
-        <p><strong>Data Structures I</strong></p>
-        <p>Prepared by Dr. Almalawi</p>
+        <p><strong>هياكل البيانات 1</strong></p>
+        <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
     </footer>
 </body>
 </html>
