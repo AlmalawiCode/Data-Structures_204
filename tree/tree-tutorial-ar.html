@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tree Data Structure</title>
+    <title>هيكل بيانات الشجرة</title>
     <style>
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-regular.otf') format('opentype');
+            font-weight: 400;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-semibold.otf') format('opentype');
+            font-weight: 600;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-bold.otf') format('opentype');
+            font-weight: 700;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+        @font-face {
+            font-family: 'Haradh';
+            src: url('../fonts/haradh/haradh-heavy.otf') format('opentype');
+            font-weight: 800;
+            unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Haradh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.7;
             color: #2c3e50;
             background: linear-gradient(135deg, #134E5E 0%, #71B280 100%);
@@ -47,7 +72,7 @@
             border-bottom: 3px solid #27ae60;
             padding: 20px 35px;
         }
-        .toc h3 { color: #1e8449; margin-bottom: 12px; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; }
+        .toc h3 { color: #1e8449; margin-bottom: 12px; font-size: 1em; text-transform: uppercase; }
         .toc-links { display: flex; flex-wrap: wrap; gap: 8px; }
         .toc-links a {
             background: white;
@@ -91,29 +116,29 @@
         h3 { color: #16a085; font-size: 1.35em; margin: 28px 0 12px; }
         h4 { color: #2c3e50; font-size: 1.1em; margin: 16px 0 8px; }
         p { margin-bottom: 13px; }
-        ul, ol { margin: 10px 0 14px 26px; line-height: 1.9; }
+        ul, ol { margin: 10px 26px 14px 0; line-height: 1.9; }
 
         /* Boxes */
         .info-box {
             background: #f0fff4;
-            border-left: 5px solid #27ae60;
+            border-right: 5px solid #27ae60;
             padding: 16px 20px;
             margin: 20px 0;
-            border-radius: 0 8px 8px 0;
+            border-radius: 8px 0 0 8px;
         }
         .warning-box {
             background: #fef9e7;
-            border-left: 5px solid #f39c12;
+            border-right: 5px solid #f39c12;
             padding: 16px 20px;
             margin: 20px 0;
-            border-radius: 0 8px 8px 0;
+            border-radius: 8px 0 0 8px;
         }
         .error-box {
             background: #fde8e8;
-            border-left: 5px solid #e74c3c;
+            border-right: 5px solid #e74c3c;
             padding: 16px 20px;
             margin: 20px 0;
-            border-radius: 0 8px 8px 0;
+            border-radius: 8px 0 0 8px;
         }
         .key-concept {
             background: linear-gradient(135deg, #1e8449, #27ae60);
@@ -122,7 +147,7 @@
             border-radius: 12px;
             margin: 22px 0;
         }
-        .key-concept h4 { color: #a9dfbf; margin-bottom: 8px; font-size: 1em; text-transform: uppercase; letter-spacing: 1px; }
+        .key-concept h4 { color: #a9dfbf; margin-bottom: 8px; font-size: 1em; text-transform: uppercase; }
         .key-concept p { margin-bottom: 0; }
 
         /* SVG */
@@ -197,7 +222,7 @@
         .btn {
             padding: 10px 22px; border: none; border-radius: 8px;
             cursor: pointer; font-size: 0.92em; font-weight: 700;
-            transition: all 0.2s; letter-spacing: 0.5px;
+            transition: all 0.2s;
         }
         .btn-green  { background: #27ae60; color: white; }
         .btn-green:hover  { background: #1e8449; }
@@ -224,6 +249,8 @@
             min-height: 52px;
             margin: 14px 0;
             letter-spacing: 3px;
+            direction: ltr;
+            text-align: left;
         }
         .trav-step-info {
             background: #ecf0f1;
@@ -236,7 +263,7 @@
 
         /* Table */
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th { background: #27ae60; color: white; padding: 12px 16px; text-align: left; }
+        th { background: #27ae60; color: white; padding: 12px 16px; text-align: right; }
         td { border: 1px solid #dee2e6; padding: 10px 16px; }
         tr:nth-child(even) td { background: #f8f9fa; }
 
@@ -325,6 +352,13 @@
         .mermaid { display:flex; justify-content:center; margin:20px 0; }
         .mermaid svg { max-width:100%; height:auto; }
 
+        /* RTL: code, formulas and diagrams stay left-to-right */
+        code { direction: ltr; unicode-bidi: isolate; }
+        pre { direction: ltr; text-align: left; }
+        .code-ltr { direction: ltr; text-align: left; }
+        .mermaid, [id^="mermaid-"], #complete-tree-container { direction: ltr; }
+        .btn, .quiz-opt, .subtree-btn, .level-btn { font-family: inherit; }
+
         .lang-switch-btn {
             position: fixed;
             top: 20px;
@@ -347,34 +381,34 @@
     <script>mermaid.initialize({startOnLoad:true, theme:'base', securityLevel:'loose'});</script>
 </head>
 <body>
-<a href="tree-tutorial-ar.html" class="lang-switch-btn">عربي</a>
+<a href="tree-tutorial.html" class="lang-switch-btn">English</a>
 <div class="container">
 
 <!-- ═══════════════ HEADER ═══════════════ -->
 <header>
-    <a href="../index.html" class="back-link">&#8592; Back to Home</a>
-    <h1>&#127795; Tree Data Structure</h1>
-    <p>Data Structures I &nbsp;|&nbsp; Complete Interactive Tutorial</p>
+    <a href="../index.html" class="back-link">&#8594; العودة إلى الرئيسية</a>
+    <h1>&#127795; هيكل بيانات الشجرة (Tree)</h1>
+    <p>هياكل البيانات 1 &nbsp;|&nbsp; درس تفاعلي شامل</p>
 </header>
 
 <!-- ═══════════════ TABLE OF CONTENTS ═══════════════ -->
 <nav class="toc">
-    <h3>&#128203; Contents</h3>
+    <h3>&#128203; المحتويات</h3>
     <div class="toc-links">
-        <a href="#s1">1. Introduction</a>
-        <a href="#s2">2. Nature to CS</a>
-        <a href="#s3">3. Linear vs Non-Linear</a>
-        <a href="#s4">4. Terminology</a>
+        <a href="#s1">1. مقدمة</a>
+        <a href="#s2">2. من الطبيعة إلى علوم الحاسب</a>
+        <a href="#s3">3. الخطي مقابل غير الخطي</a>
+        <a href="#s4">4. المصطلحات</a>
 
-        <a href="#s6">6. Height &amp; Depth</a>
-        <a href="#s7">7. Logical Structure</a>
-        <a href="#s8">8. Types of Trees</a>
-        <a href="#s9">9. Binary Tree</a>
-        <a href="#s10">10. Levels &amp; Max Nodes</a>
-        <a href="#s11">11. Subtrees</a>
-        <a href="#s12">12. Full Binary Tree</a>
-        <a href="#s13">13. Complete Binary Tree</a>
-        <a href="#s14">14. Tree Traversal</a>
+        <a href="#s6">6. الارتفاع والعمق</a>
+        <a href="#s7">7. البنية المنطقية</a>
+        <a href="#s8">8. أنواع الأشجار</a>
+        <a href="#s9">9. الشجرة الثنائية</a>
+        <a href="#s10">10. المستويات والحد الأقصى للعقد</a>
+        <a href="#s11">11. الأشجار الفرعية</a>
+        <a href="#s12">12. الشجرة الثنائية الممتلئة</a>
+        <a href="#s13">13. الشجرة الثنائية الكاملة</a>
+        <a href="#s14">14. اجتياز الشجرة</a>
     </div>
 </nav>
 
@@ -384,44 +418,44 @@
      SECTION 1 — INTRODUCTION
 ═══════════════════════════════════════════════════════ -->
 <section id="s1">
-    <h2><span class="sec-num">1</span>Introduction &mdash; Today We Study the Tree</h2>
+    <h2><span class="sec-num">1</span>مقدمة &mdash; اليوم ندرس الشجرة</h2>
 
-    <p>Welcome! We have already studied several important data structures. Each one stores and organizes data in a special way. Before we begin, let us look at what we already know &mdash; and then meet today's new topic: the <strong>Tree</strong>.</p>
+    <p>مرحبًا بك! لقد درسنا من قبل عددًا من هياكل البيانات المهمة، وكل واحد منها يخزّن البيانات وينظّمها بطريقة خاصة. قبل أن نبدأ، لنستعرض ما نعرفه بالفعل &mdash; ثم نتعرّف على موضوع اليوم الجديد: <strong>الشجرة (Tree)</strong>.</p>
 
     <div class="ds-grid">
         <div class="ds-card">
             <div class="icon">&#9638;</div>
-            <h4>Array</h4>
-            <p>Fixed-size, indexed, consecutive memory</p>
+            <h4>المصفوفة (Array)</h4>
+            <p>حجم ثابت، مفهرسة، ذاكرة متتالية</p>
         </div>
         <div class="ds-card">
             <div class="icon">&#128279;</div>
-            <h4>Linked List</h4>
-            <p>Dynamic, nodes with pointers, linear order</p>
+            <h4>القائمة المرتبطة (Linked List)</h4>
+            <p>ديناميكية، عقد بمراجع، ترتيب خطي</p>
         </div>
         <div class="ds-card">
             <div class="icon">&#128218;</div>
-            <h4>Stack</h4>
-            <p>LIFO &mdash; Last In, First Out</p>
+            <h4>المكدس (Stack)</h4>
+            <p><span dir="ltr">LIFO</span> &mdash; الداخل أخيرًا يخرج أولًا</p>
         </div>
         <div class="ds-card">
             <div class="icon">&#128678;</div>
-            <h4>Queue</h4>
-            <p>FIFO &mdash; First In, First Out</p>
+            <h4>الطابور (Queue)</h4>
+            <p><span dir="ltr">FIFO</span> &mdash; الداخل أولًا يخرج أولًا</p>
         </div>
         <div class="ds-card highlight">
             <div class="icon">&#127795;</div>
-            <h4>Tree &#8592; NEW TODAY!</h4>
-            <p>Hierarchical, non-linear, branches &amp; levels</p>
+            <h4>الشجرة &#8594; جديد اليوم!</h4>
+            <p>هرمية، غير خطية، فروع ومستويات</p>
         </div>
     </div>
 
     <div class="key-concept">
-        <h4>&#128273; Key Difference</h4>
-        <p>All previous data structures (Array, Linked List, Stack, Queue) are <strong>LINEAR</strong> &mdash; you move through them one step at a time in a single direction. The <strong>Tree</strong> is completely different: it is <strong>NON-LINEAR</strong> and <strong>HIERARCHICAL</strong>. This makes it powerful for representing real-world relationships.</p>
+        <h4>&#128273; الفرق الجوهري</h4>
+        <p>جميع هياكل البيانات السابقة (المصفوفة، القائمة المرتبطة، المكدس، الطابور) هي هياكل <strong>خطية (Linear)</strong> &mdash; تتنقّل خلالها خطوة واحدة في كل مرة وفي اتجاه واحد. أما <strong>الشجرة</strong> فمختلفة تمامًا: إنها <strong>غير خطية (Non-Linear)</strong> و<strong>هرمية (Hierarchical)</strong>، وهذا ما يجعلها قوية في تمثيل العلاقات في العالم الحقيقي.</p>
     </div>
 
-    <p>The Tree is one of the most important data structures in all of computer science. Operating system file systems, search algorithms, compilers, databases, and AI decision trees are all built using tree structures. Let us explore why!</p>
+    <p>تُعدّ الشجرة من أهم هياكل البيانات في علوم الحاسب كلها؛ فأنظمة الملفات في أنظمة التشغيل، وخوارزميات البحث، والمترجمات (Compilers)، وقواعد البيانات، وأشجار القرار في الذكاء الاصطناعي، كلها مبنية على هياكل شجرية. هيا نكتشف السبب!</p>
 </section>
 
 
@@ -429,20 +463,20 @@
      SECTION 2 — FROM NATURE TO COMPUTER SCIENCE
 ═══════════════════════════════════════════════════════ -->
 <section id="s2">
-    <h2><span class="sec-num">2</span>From Nature to Computer Science</h2>
+    <h2><span class="sec-num">2</span>من الطبيعة إلى علوم الحاسب</h2>
 
-    <p>The word "tree" in computer science comes directly from nature. Think of a date palm tree, or any tree you see outside. It has a <strong>root</strong> (where it begins), <strong>branches</strong> that spread outward, and <strong>leaves</strong> at the very tips where it ends.</p>
+    <p>كلمة «شجرة» في علوم الحاسب مأخوذة مباشرة من الطبيعة. فكّر في نخلة، أو في أي شجرة تراها في الخارج: لها <strong>جذر</strong> (حيث تبدأ)، و<strong>فروع</strong> تمتد إلى الخارج، و<strong>أوراق</strong> في أطرافها حيث تنتهي.</p>
 
     <div class="grid-3">
         <!-- Nature tree -->
         <div class="card">
-            <h4>&#127796; Nature Tree</h4>
+            <h4>&#127796; شجرة الطبيعة</h4>
             <div class="svg-box">
 <div class="mermaid">
 graph BT
-    Root(("🌱 Root")) --> BL(("Branch L"))
-    Root --> BC(("Branch C"))
-    Root --> BR(("Branch R"))
+    Root(("🌱 الجذر")) --> BL(("فرع أيسر"))
+    Root --> BC(("فرع أوسط"))
+    Root --> BR(("فرع أيمن"))
     BL --> L1(("🍃"))
     BL --> L2(("🍃"))
     BC --> L3(("🍃"))
@@ -457,12 +491,12 @@ graph BT
     class L1,L2,L3,L4,L5,L6 leaf
 </div>
             </div>
-            <p style="font-size:0.82em;color:#666;">Root is on the ground, leaves at the top</p>
+            <p style="font-size:0.82em;color:#666;">الجذر على الأرض، والأوراق في الأعلى</p>
         </div>
 
         <!-- CS tree -->
         <div class="card green">
-            <h4 style="color:#1e8449;">&#128187; CS Tree</h4>
+            <h4 style="color:#1e8449;">&#128187; شجرة علوم الحاسب</h4>
             <div class="svg-box">
 <div class="mermaid">
 graph TD
@@ -480,26 +514,26 @@ graph TD
     class D,E,F,G leaf
 </div>
             </div>
-            <p style="font-size:0.82em;color:#1e8449;">Root is at the <strong>top</strong> &mdash; inverted!</p>
+            <p style="font-size:0.82em;color:#1e8449;">الجذر في <strong>الأعلى</strong> &mdash; أي مقلوبة!</p>
         </div>
 
         <!-- Mapping table -->
         <div class="card blue">
-            <h4>&#128101; The Connection</h4>
+            <h4>&#128101; وجه الارتباط</h4>
             <br>
             <table style="margin:0; font-size:0.83em;">
-                <tr><th>Nature</th><th>CS Tree</th></tr>
-                <tr><td>Root (ground)</td><td>Root node</td></tr>
-                <tr><td>Trunk / Branch</td><td>Edge</td></tr>
-                <tr><td>Junction point</td><td>Internal node</td></tr>
-                <tr><td>Leaf</td><td>Leaf node</td></tr>
-                <tr><td>Height of tree</td><td>Height (# edges)</td></tr>
+                <tr><th>الطبيعة</th><th>شجرة علوم الحاسب</th></tr>
+                <tr><td>الجذر (في الأرض)</td><td>عقدة الجذر</td></tr>
+                <tr><td>الجذع / الفرع</td><td>الحافة (Edge)</td></tr>
+                <tr><td>نقطة التفرّع</td><td>العقدة الداخلية</td></tr>
+                <tr><td>الورقة</td><td>العقدة الورقية</td></tr>
+                <tr><td>ارتفاع الشجرة</td><td>الارتفاع (عدد الحواف)</td></tr>
             </table>
         </div>
     </div>
 
     <div class="info-box">
-        <strong>Convention:</strong> In computer science we draw the tree <strong>upside down</strong> compared to nature &mdash; the <strong>root is at the top</strong> and the <strong>leaves are at the bottom</strong>. This is the universal convention used in all textbooks and courses.
+        <strong>اصطلاح:</strong> في علوم الحاسب نرسم الشجرة <strong>مقلوبة</strong> مقارنةً بالطبيعة &mdash; فيكون <strong>الجذر في الأعلى</strong> و<strong>الأوراق في الأسفل</strong>. وهذا هو الاصطلاح المعتمد عالميًا في جميع الكتب والمقررات.
     </div>
 </section>
 
@@ -508,15 +542,15 @@ graph TD
      SECTION 3 — LINEAR vs NON-LINEAR
 ═══════════════════════════════════════════════════════ -->
 <section id="s3">
-    <h2><span class="sec-num">3</span>Linear vs Non-Linear Data Structures</h2>
+    <h2><span class="sec-num">3</span>هياكل البيانات الخطية مقابل غير الخطية</h2>
 
-    <p>This is the most fundamental concept to understand. What does it mean for a data structure to be <strong>linear</strong> or <strong>non-linear</strong>?</p>
+    <p>هذا هو المفهوم الأكثر جوهرية الذي يجب فهمه. ماذا يعني أن يكون هيكل البيانات <strong>خطيًا</strong> أو <strong>غير خطي</strong>؟</p>
 
-    <h3>&#9632; Array &mdash; Linear, Consecutive Memory</h3>
-    <p>Elements are stored in <strong>consecutive memory locations</strong>. One comes directly after the other. Movement is one-directional: forward.</p>
+    <h3>&#9632; المصفوفة &mdash; خطية، ذاكرة متتالية</h3>
+    <p>تُخزَّن العناصر في <strong>مواقع ذاكرة متتالية</strong>؛ يأتي كل عنصر مباشرة بعد الآخر، والحركة في اتجاه واحد: إلى الأمام.</p>
 
     <div class="svg-box">
-        <svg width="540" height="90" xmlns="http://www.w3.org/2000/svg">
+        <svg width="540" height="90" xmlns="http://www.w3.org/2000/svg" direction="ltr" style="direction:ltr;">
             <!-- Outer border (one continuous block) -->
             <rect x="10" y="22" width="380" height="46" fill="none" stroke="#2980b9" stroke-width="2" rx="4"/>
             <!-- Cell fills -->
@@ -544,16 +578,16 @@ graph TD
             <text x="352" y="82" text-anchor="middle" font-size="10" fill="#7f8c8d">[4] addr:104</text>
 
             <rect x="412" y="10" width="120" height="60" fill="#ebf5fb" stroke="#2980b9" stroke-width="2" rx="8"/>
-            <text x="472" y="37" text-anchor="middle" font-size="13" fill="#1a5276" font-weight="bold">LINEAR</text>
-            <text x="472" y="56" text-anchor="middle" font-size="11" fill="#7f8c8d">Consecutive memory</text>
+            <text x="472" y="37" text-anchor="middle" font-size="13" fill="#1a5276" font-weight="bold">خطية</text>
+            <text x="472" y="56" text-anchor="middle" font-size="11" fill="#7f8c8d">ذاكرة متتالية</text>
         </svg>
     </div>
 
-    <h3>&#128279; Linked List &mdash; Linear, Scattered Memory</h3>
-    <p>Nodes are stored at <strong>random (scattered) memory addresses</strong>. However, each node stores the <strong>address of the next node</strong> (a pointer), so we traverse them in a <strong>linear, sequential order</strong>. It is scattered in memory, but the <em>logical order</em> is still linear.</p>
+    <h3>&#128279; القائمة المرتبطة &mdash; خطية، ذاكرة متفرقة</h3>
+    <p>تُخزَّن العقد (Nodes) في <strong>عناوين ذاكرة عشوائية (متفرقة)</strong>. ومع ذلك، تخزّن كل عقدة <strong>عنوان العقدة التالية</strong> (مرجع)، لذلك نجتازها <strong>بترتيب خطي تسلسلي</strong>. فهي متفرقة في الذاكرة، لكن <em>ترتيبها المنطقي</em> يبقى خطيًا.</p>
 
     <div class="svg-box">
-        <svg width="540" height="90" xmlns="http://www.w3.org/2000/svg">
+        <svg width="540" height="90" xmlns="http://www.w3.org/2000/svg" direction="ltr" style="direction:ltr;">
             <defs>
                 <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
                     <polygon points="0 0, 8 4, 0 8" fill="#e67e22"/>
@@ -585,17 +619,17 @@ graph TD
             <text x="362" y="82" text-anchor="middle" font-size="10" fill="#95a5a6">@112</text>
 
             <rect x="430" y="10" width="102" height="60" fill="#fef5e7" stroke="#e67e22" stroke-width="2" rx="8"/>
-            <text x="481" y="37" text-anchor="middle" font-size="13" fill="#784212" font-weight="bold">LINEAR</text>
-            <text x="481" y="56" text-anchor="middle" font-size="11" fill="#95a5a6">Scattered memory</text>
+            <text x="481" y="37" text-anchor="middle" font-size="13" fill="#784212" font-weight="bold">خطية</text>
+            <text x="481" y="56" text-anchor="middle" font-size="11" fill="#95a5a6">ذاكرة متفرقة</text>
         </svg>
     </div>
 
     <div class="info-box">
-        <strong>Array &amp; Linked List:</strong> Both are <em>linear</em>. Each element/node has exactly <strong>one predecessor</strong> and <strong>one successor</strong>. You can only move in one direction.
+        <strong>المصفوفة والقائمة المرتبطة:</strong> كلتاهما <em>خطية</em>. لكل عنصر/عقدة <strong>سابق واحد</strong> و<strong>لاحق واحد</strong> بالضبط، ولا يمكنك التحرك إلا في اتجاه واحد.
     </div>
 
-    <h3>&#127795; Tree &mdash; Non-Linear, Hierarchical</h3>
-    <p>In a tree, a single node can connect to <strong>multiple children</strong>. From any node you can go <strong>down-left or down-right</strong> (or more). There is no single "next" element. This branching is what makes the tree <strong>non-linear</strong>.</p>
+    <h3>&#127795; الشجرة &mdash; غير خطية، هرمية</h3>
+    <p>في الشجرة، يمكن أن ترتبط العقدة الواحدة <strong>بعدة أبناء</strong>. ومن أي عقدة يمكنك النزول <strong>إلى اليسار أو إلى اليمين</strong> (أو أكثر)، فلا يوجد عنصر «تالٍ» واحد. وهذا التفرّع هو ما يجعل الشجرة <strong>غير خطية</strong>.</p>
 
     <div class="svg-box">
 <div class="mermaid">
@@ -615,43 +649,43 @@ graph TD
 </div>
     </div>
 
-    <h3>&#128202; Comparison Summary</h3>
+    <h3>&#128202; ملخص المقارنة</h3>
     <table>
         <tr>
-            <th>Feature</th>
-            <th>Array</th>
-            <th>Linked List</th>
-            <th>Tree</th>
+            <th>الخاصية</th>
+            <th>المصفوفة</th>
+            <th>القائمة المرتبطة</th>
+            <th>الشجرة</th>
         </tr>
         <tr>
-            <td><strong>Structure</strong></td>
-            <td>Linear</td>
-            <td>Linear</td>
-            <td>Non-Linear (Hierarchical)</td>
+            <td><strong>البنية</strong></td>
+            <td>خطية</td>
+            <td>خطية</td>
+            <td>غير خطية (هرمية)</td>
         </tr>
         <tr>
-            <td><strong>Memory layout</strong></td>
-            <td>Consecutive</td>
-            <td>Scattered</td>
-            <td>Scattered</td>
+            <td><strong>التوزيع في الذاكرة</strong></td>
+            <td>متتالٍ</td>
+            <td>متفرق</td>
+            <td>متفرق</td>
         </tr>
         <tr>
-            <td><strong>Movement</strong></td>
-            <td>&#8594; One direction</td>
-            <td>&#8594; Next only</td>
-            <td>&#8595;&#8592;&#8594; Multiple branches</td>
+            <td><strong>الحركة</strong></td>
+            <td>&#8592; اتجاه واحد</td>
+            <td>&#8592; إلى التالي فقط</td>
+            <td>&#8595;&#8592;&#8594; فروع متعددة</td>
         </tr>
         <tr>
-            <td><strong>Relationship name</strong></td>
-            <td>Predecessor / Successor</td>
-            <td>Previous node / Next node</td>
-            <td><strong>Parent</strong> / <strong>Child</strong></td>
+            <td><strong>اسم العلاقة</strong></td>
+            <td>السابق / اللاحق</td>
+            <td>العقدة السابقة / العقدة التالية</td>
+            <td><strong>الأب (Parent)</strong> / <strong>الابن (Child)</strong></td>
         </tr>
         <tr>
-            <td><strong>Size measurement</strong></td>
-            <td>Length (# of elements)</td>
-            <td>Length (# of nodes)</td>
-            <td><strong>Height</strong> or <strong>Depth</strong></td>
+            <td><strong>قياس الحجم</strong></td>
+            <td>الطول (عدد العناصر)</td>
+            <td>الطول (عدد العقد)</td>
+            <td><strong>الارتفاع (Height)</strong> أو <strong>العمق (Depth)</strong></td>
         </tr>
     </table>
 </section>
@@ -661,25 +695,25 @@ graph TD
      SECTION 4 — TREE TERMINOLOGY
 ═══════════════════════════════════════════════════════ -->
 <section id="s4">
-    <h2><span class="sec-num">4</span>Tree Terminology &mdash; Anatomy of a Tree</h2>
+    <h2><span class="sec-num">4</span>مصطلحات الشجرة &mdash; تشريح الشجرة</h2>
 
-    <p>Let us label the parts of a tree. Hover over any node below to learn what it is called.</p>
+    <p>لنسمِّ أجزاء الشجرة. مرّر المؤشر فوق أي عقدة أدناه لتتعرّف على اسمها.</p>
 
     <div id="mermaid-anat-container" style="background:#fff;border-radius:12px;padding:16px;min-height:320px;display:flex;justify-content:center;align-items:center;"></div>
-    <p id="anat-tip" style="text-align:center;font-size:0.92em;color:#888;font-style:italic;margin-top:8px;">&#128073; Click any node to learn its role</p>
+    <p id="anat-tip" style="text-align:center;font-size:0.92em;color:#888;font-style:italic;margin-top:8px;">&#128072; انقر على أي عقدة لتتعرّف على دورها</p>
 
     <table>
-        <tr><th>Term</th><th>Definition</th><th>Example (above)</th></tr>
-        <tr><td><strong>Root</strong></td><td>The topmost node; has no parent. There is exactly one root.</td><td>Node 6</td></tr>
-        <tr><td><strong>Leaf</strong></td><td>A node with no children (end node).</td><td>5, 7, 9, 1, 3</td></tr>
-        <tr><td><strong>Internal node</strong></td><td>A node that has at least one child. (Not a leaf.)</td><td>6, 4, 8, 2</td></tr>
-        <tr><td><strong>Parent</strong></td><td>A node that has children directly below it.</td><td>2 is parent of 1 and 3</td></tr>
-        <tr><td><strong>Child</strong></td><td>A node directly below another node.</td><td>1 and 3 are children of 2</td></tr>
-        <tr><td><strong>Siblings</strong></td><td>Nodes that share the same parent.</td><td>1 and 3 are siblings</td></tr>
-        <tr><td><strong>Ancestor</strong></td><td>Any node on the path from root to this node.</td><td>Ancestors of 1: 2, 4, 6</td></tr>
-        <tr><td><strong>Descendant</strong></td><td>Any node in the subtree below this node.</td><td>Descendants of 4: 2, 5, 1, 3</td></tr>
-        <tr><td><strong>Edge</strong></td><td>The link (connection) between a parent and child.</td><td>6&mdash;4, 6&mdash;8, etc.</td></tr>
-        <tr><td><strong>Path</strong></td><td>A sequence of nodes connected by edges.</td><td>6 &#8594; 4 &#8594; 2 &#8594; 1</td></tr>
+        <tr><th>المصطلح</th><th>التعريف</th><th>مثال (من الشكل أعلاه)</th></tr>
+        <tr><td><strong>الجذر (Root)</strong></td><td>العقدة العليا؛ ليس لها أب. ويوجد جذر واحد فقط بالضبط.</td><td>العقدة 6</td></tr>
+        <tr><td><strong>الورقة (Leaf)</strong></td><td>عقدة ليس لها أبناء (عقدة طرفية).</td><td><span dir="ltr">5, 7, 9, 1, 3</span></td></tr>
+        <tr><td><strong>العقدة الداخلية (Internal node)</strong></td><td>عقدة لها ابن واحد على الأقل (أي ليست ورقة).</td><td><span dir="ltr">6, 4, 8, 2</span></td></tr>
+        <tr><td><strong>الأب (Parent)</strong></td><td>عقدة لها أبناء أسفلها مباشرة.</td><td>2 هي أب لـ 1 و3</td></tr>
+        <tr><td><strong>الابن (Child)</strong></td><td>عقدة تقع أسفل عقدة أخرى مباشرة.</td><td>1 و3 ابنان لـ 2</td></tr>
+        <tr><td><strong>الأشقاء (Siblings)</strong></td><td>عقد تشترك في الأب نفسه.</td><td>1 و3 شقيقان</td></tr>
+        <tr><td><strong>السلف (Ancestor)</strong></td><td>أي عقدة على المسار من الجذر إلى هذه العقدة.</td><td>أسلاف 1: <span dir="ltr">2, 4, 6</span></td></tr>
+        <tr><td><strong>السليل (Descendant)</strong></td><td>أي عقدة في الشجرة الفرعية أسفل هذه العقدة.</td><td>سلائل 4: <span dir="ltr">2, 5, 1, 3</span></td></tr>
+        <tr><td><strong>الحافة (Edge)</strong></td><td>الوصلة (الارتباط) بين الأب والابن.</td><td><span dir="ltr">6&mdash;4, 6&mdash;8</span>، إلخ.</td></tr>
+        <tr><td><strong>المسار (Path)</strong></td><td>سلسلة من العقد المتصلة بالحواف.</td><td><span dir="ltr">6 &#8594; 4 &#8594; 2 &#8594; 1</span></td></tr>
     </table>
 </section>
 
@@ -690,78 +724,78 @@ graph TD
      SECTION 6 — HEIGHT & DEPTH
 ═══════════════════════════════════════════════════════ -->
 <section id="s6">
-    <h2><span class="sec-num">6</span>Measuring a Tree &mdash; Height &amp; Depth</h2>
+    <h2><span class="sec-num">6</span>قياس الشجرة &mdash; الارتفاع والعمق</h2>
 
-    <p>How do we measure the "size" of a tree? We do <strong>not</strong> use length like an array or linked list. Instead, we use <strong>height</strong> and <strong>depth</strong>.</p>
+    <p>كيف نقيس «حجم» الشجرة؟ نحن <strong>لا</strong> نستخدم الطول كما في المصفوفة أو القائمة المرتبطة، بل نستخدم <strong>الارتفاع</strong> و<strong>العمق</strong>.</p>
 
     <div class="grid-2">
         <div class="card green">
-            <h4>&#128200; Height of a Tree</h4>
-            <p>The <strong>height</strong> of a tree is the number of <em>edges</em> on the <strong>longest path</strong> from the root to any leaf.</p>
-            <p>&#128161; Count the <strong>edges</strong>, not the nodes!</p>
+            <h4>&#128200; ارتفاع الشجرة</h4>
+            <p><strong>ارتفاع</strong> الشجرة هو عدد <em>الحواف</em> على <strong>أطول مسار</strong> من الجذر إلى أي ورقة.</p>
+            <p>&#128161; احسب <strong>الحواف</strong>، لا العقد!</p>
         </div>
         <div class="card blue">
-            <h4>&#128200; Depth of a Node</h4>
-            <p>The <strong>depth</strong> of a node is the number of <em>edges</em> from the <strong>root to that node</strong>.</p>
-            <p>The depth of the root is always <strong>0</strong>.</p>
+            <h4>&#128200; عمق العقدة</h4>
+            <p><strong>عمق</strong> العقدة هو عدد <em>الحواف</em> من <strong>الجذر إلى تلك العقدة</strong>.</p>
+            <p>عمق الجذر يساوي دائمًا <strong>0</strong>.</p>
         </div>
     </div>
 
-    <h3>&#127919; Example: What is the height?</h3>
-    <p>Click <strong>"Trace Height"</strong> on each tree to see the longest path highlighted in red.</p>
+    <h3>&#127919; مثال: كم يبلغ الارتفاع؟</h3>
+    <p>انقر على <strong>«تتبّع الارتفاع»</strong> في كل شجرة لترى أطول مسار مظلّلًا باللون الأحمر.</p>
 
     <div style="display:flex;flex-wrap:wrap;gap:30px;justify-content:center;margin:24px 0;">
 
         <!-- Tree height=0 -->
         <div style="text-align:center;">
-            <p style="font-weight:700;color:#555;margin-bottom:8px;">Tree with 1 node</p>
+            <p style="font-weight:700;color:#555;margin-bottom:8px;">شجرة بعقدة واحدة</p>
             <div id="mermaid-h0-container" style="background:#fff;border-radius:8px;padding:8px;min-height:100px;display:flex;justify-content:center;align-items:center;"></div>
             <div class="btn-row" style="justify-content:center;">
-                <button class="btn btn-orange" onclick="traceHeight(0)">Trace Height</button>
+                <button class="btn btn-orange" onclick="traceHeight(0)">تتبّع الارتفاع</button>
             </div>
-            <div id="h0-result" style="font-size:1.3em;font-weight:800;color:#1e8449;margin-top:6px;">Height = ?</div>
+            <div id="h0-result" style="font-size:1.3em;font-weight:800;color:#1e8449;margin-top:6px;">الارتفاع = ؟</div>
         </div>
 
         <!-- Tree height=1 -->
         <div style="text-align:center;">
-            <p style="font-weight:700;color:#555;margin-bottom:8px;">Tree with 3 nodes</p>
+            <p style="font-weight:700;color:#555;margin-bottom:8px;">شجرة بثلاث عقد</p>
             <div id="mermaid-h1-container" style="background:#fff;border-radius:8px;padding:8px;min-height:130px;display:flex;justify-content:center;align-items:center;"></div>
             <div class="btn-row" style="justify-content:center;">
-                <button class="btn btn-orange" onclick="traceHeight(1)">Trace Height</button>
+                <button class="btn btn-orange" onclick="traceHeight(1)">تتبّع الارتفاع</button>
             </div>
-            <div id="h1-result" style="font-size:1.3em;font-weight:800;color:#1e8449;margin-top:6px;">Height = ?</div>
+            <div id="h1-result" style="font-size:1.3em;font-weight:800;color:#1e8449;margin-top:6px;">الارتفاع = ؟</div>
         </div>
 
         <!-- Tree height=2 (7-node complete) -->
         <div style="text-align:center;">
-            <p style="font-weight:700;color:#555;margin-bottom:8px;">7-node complete tree</p>
+            <p style="font-weight:700;color:#555;margin-bottom:8px;">شجرة كاملة من 7 عقد</p>
             <div id="mermaid-h2-container" style="background:#fff;border-radius:8px;padding:8px;min-height:200px;display:flex;justify-content:center;align-items:center;"></div>
             <div class="btn-row" style="justify-content:center;">
-                <button class="btn btn-orange" onclick="traceHeight(2)">Trace Height</button>
+                <button class="btn btn-orange" onclick="traceHeight(2)">تتبّع الارتفاع</button>
             </div>
-            <div id="h2-result" style="font-size:1.3em;font-weight:800;color:#1e8449;margin-top:6px;">Height = ?</div>
+            <div id="h2-result" style="font-size:1.3em;font-weight:800;color:#1e8449;margin-top:6px;">الارتفاع = ؟</div>
         </div>
 
         <!-- Tree height=3 (unbalanced) -->
         <div style="text-align:center;">
-            <p style="font-weight:700;color:#555;margin-bottom:8px;">Unbalanced tree</p>
+            <p style="font-weight:700;color:#555;margin-bottom:8px;">شجرة غير متوازنة</p>
             <div id="mermaid-h3-container" style="background:#fff;border-radius:8px;padding:8px;min-height:240px;display:flex;justify-content:center;align-items:center;"></div>
             <div class="btn-row" style="justify-content:center;">
-                <button class="btn btn-orange" onclick="traceHeight(3)">Trace Height</button>
+                <button class="btn btn-orange" onclick="traceHeight(3)">تتبّع الارتفاع</button>
             </div>
-            <div id="h3-result" style="font-size:1.3em;font-weight:800;color:#1e8449;margin-top:6px;">Height = ?</div>
+            <div id="h3-result" style="font-size:1.3em;font-weight:800;color:#1e8449;margin-top:6px;">الارتفاع = ؟</div>
         </div>
 
     </div>
 
     <div class="key-concept">
-        <h4>&#128273; Rules for Height</h4>
+        <h4>&#128273; قواعد الارتفاع</h4>
         <ul style="color:white;">
-            <li>A tree with <strong>only the root</strong> (single node) has height = <strong>0</strong></li>
-            <li>Height = number of <strong>edges</strong> on the longest root-to-leaf path</li>
-            <li>Height = (number of nodes on longest path) &minus; 1</li>
-            <li>The depth of the root is always <strong>0</strong></li>
-            <li>The height of any leaf node is <strong>0</strong></li>
+            <li>الشجرة التي تتكوّن من <strong>الجذر فقط</strong> (عقدة واحدة) ارتفاعها = <strong>0</strong></li>
+            <li>الارتفاع = عدد <strong>الحواف</strong> على أطول مسار من الجذر إلى ورقة</li>
+            <li>الارتفاع = (عدد العقد على أطول مسار) &minus; 1</li>
+            <li>عمق الجذر يساوي دائمًا <strong>0</strong></li>
+            <li>ارتفاع أي عقدة ورقية يساوي <strong>0</strong></li>
         </ul>
     </div>
 </section>
@@ -771,14 +805,14 @@ graph TD
      SECTION 7 — LOGICAL STRUCTURE
 ═══════════════════════════════════════════════════════ -->
 <section id="s7">
-    <h2><span class="sec-num">7</span>Why the Tree is a Logical Data Structure</h2>
+    <h2><span class="sec-num">7</span>لماذا تُعدّ الشجرة هيكل بيانات منطقيًا؟</h2>
 
-    <p>We say the tree is a <strong>logical data structure</strong>. This means its shape is defined by <em>rules and constraints</em>, not by how data happens to be arranged in physical memory. The most important rule is: <strong>a tree must have no cycles</strong>.</p>
+    <p>نقول إن الشجرة <strong>هيكل بيانات منطقي</strong>؛ أي أن شكلها تحدّده <em>قواعد وقيود</em>، لا الطريقة التي تصادف أن تُرتَّب بها البيانات في الذاكرة الفعلية. وأهم قاعدة هي: <strong>يجب ألا تحتوي الشجرة على أي دورة (Cycle)</strong>.</p>
 
     <div class="grid-3">
         <!-- Valid tree -->
         <div class="card green">
-            <h4 style="color:#1e8449;">&#10003; Valid Tree</h4>
+            <h4 style="color:#1e8449;">&#10003; شجرة صحيحة</h4>
             <div class="svg-box">
 <div class="mermaid">
 graph TD
@@ -793,28 +827,28 @@ graph TD
     class D leaf
 </div>
             </div>
-            <p style="font-size:0.82em;color:#1e8449;">No cycle. Each node has exactly one parent. This is a valid tree.</p>
+            <p style="font-size:0.82em;color:#1e8449;">لا توجد دورة، ولكل عقدة أب واحد بالضبط. هذه شجرة صحيحة.</p>
         </div>
 
         <!-- Invalid: cycle -->
         <div class="card red">
-            <h4 style="color:#c0392b;">&#10007; Invalid &mdash; Has a Cycle</h4>
+            <h4 style="color:#c0392b;">&#10007; غير صحيحة &mdash; تحتوي على دورة</h4>
             <div class="svg-box">
 <div class="mermaid">
 graph TD
     A(("4")) --> B(("2"))
     A --> C(("6"))
-    C -.->|"⟳ cycle!"| A
+    C -.->|"⟳ دورة!"| A
     classDef invalid fill:#e74c3c,stroke:#c0392b,color:white,font-weight:bold
     class A,B,C invalid
 </div>
             </div>
-            <p style="font-size:0.82em;color:#c0392b;">This is like a <em>ring</em> or <em>necklace</em>. It is no longer a tree &mdash; it becomes a <strong>graph</strong>.</p>
+            <p style="font-size:0.82em;color:#c0392b;">هذا يشبه <em>الحلقة</em> أو <em>العِقد</em>. لم تعد شجرة &mdash; بل أصبحت <strong>مخططًا (Graph)</strong>.</p>
         </div>
 
         <!-- Invalid: two parents -->
         <div class="card red">
-            <h4 style="color:#c0392b;">&#10007; Invalid &mdash; Two Parents</h4>
+            <h4 style="color:#c0392b;">&#10007; غير صحيحة &mdash; أبوان لعقدة واحدة</h4>
             <div class="svg-box">
 <div class="mermaid">
 graph TD
@@ -828,19 +862,19 @@ graph TD
     class Y invalid
 </div>
             </div>
-            <p style="font-size:0.82em;color:#c0392b;">Node Y has two parents (A and B). In a tree, every node must have <strong>exactly one</strong> parent.</p>
+            <p style="font-size:0.82em;color:#c0392b;">للعقدة Y أبوان (A وB). في الشجرة، يجب أن يكون لكل عقدة أب <strong>واحد بالضبط</strong>.</p>
         </div>
     </div>
 
     <div class="key-concept">
-        <h4>&#128273; Tree Rules &mdash; What makes it a TREE?</h4>
+        <h4>&#128273; قواعد الشجرة &mdash; ما الذي يجعلها شجرة؟</h4>
         <ul style="color:white;line-height:2;">
-            <li>There is <strong>exactly one root</strong> node</li>
-            <li>Every node (except root) has <strong>exactly one parent</strong></li>
-            <li>There are <strong>no cycles</strong> (no path from a node back to itself)</li>
-            <li>The tree is <strong>connected</strong> (there is a path between any two nodes)</li>
+            <li>يوجد <strong>جذر واحد بالضبط</strong></li>
+            <li>لكل عقدة (عدا الجذر) <strong>أب واحد بالضبط</strong></li>
+            <li><strong>لا توجد دورات</strong> (لا يوجد مسار من عقدة يعود إليها نفسها)</li>
+            <li>الشجرة <strong>متصلة</strong> (يوجد مسار بين أي عقدتين)</li>
         </ul>
-        <p style="margin-top:10px;"><strong>If any of these rules is broken, it is NOT a tree</strong> &mdash; it becomes a general graph.</p>
+        <p style="margin-top:10px;"><strong>إذا خُرقت أي قاعدة من هذه القواعد، فهي ليست شجرة</strong> &mdash; بل تصبح مخططًا عامًا.</p>
     </div>
 </section>
 
@@ -849,15 +883,15 @@ graph TD
      SECTION 8 — TYPES OF TREES
 ═══════════════════════════════════════════════════════ -->
 <section id="s8">
-    <h2><span class="sec-num">8</span>Types of Trees</h2>
+    <h2><span class="sec-num">8</span>أنواع الأشجار</h2>
 
-    <p>There are many types of trees. The two most important to know are the <strong>General Tree</strong> and the <strong>Binary Tree</strong>.</p>
+    <p>هناك أنواع كثيرة من الأشجار، وأهم نوعين يجب معرفتهما هما <strong>الشجرة العامة (General Tree)</strong> و<strong>الشجرة الثنائية (Binary Tree)</strong>.</p>
 
     <div class="grid-2">
         <!-- General Tree -->
         <div class="card orange">
-            <h4>&#127795; General Tree</h4>
-            <p>A node can have <strong>any number of children</strong> (0, 1, 2, 3, 4, ...).</p>
+            <h4>&#127795; الشجرة العامة</h4>
+            <p>يمكن أن يكون للعقدة <strong>أي عدد من الأبناء</strong> (0، 1، 2، 3، 4، ...).</p>
             <div class="svg-box">
 <div class="mermaid">
 graph TD
@@ -876,18 +910,18 @@ graph TD
     class C,E,F,G,H,I leaf
 </div>
             </div>
-            <p style="font-size:0.85em;">Used in: File systems, XML/HTML document trees, organization charts</p>
+            <p style="font-size:0.85em;">تُستخدم في: أنظمة الملفات، وأشجار مستندات XML/HTML، والهياكل التنظيمية</p>
         </div>
 
         <!-- Binary Tree -->
         <div class="card green">
-            <h4 style="color:#1e8449;">&#127795; Binary Tree &#8592; FOCUS</h4>
-            <p>Each node can have at most <strong>2 children</strong> (left child, right child). This is the most important tree in CS.</p>
+            <h4 style="color:#1e8449;">&#127795; الشجرة الثنائية &#8594; محور التركيز</h4>
+            <p>يمكن أن يكون لكل عقدة <strong>ابنان</strong> على الأكثر (ابن أيسر وابن أيمن). وهي أهم شجرة في علوم الحاسب.</p>
             <div class="svg-box">
 <div class="mermaid">
 graph TD
-    A(("4")) -->|LEFT| B(("2"))
-    A -->|RIGHT| C(("6"))
+    A(("4")) -->|"يسار"| B(("2"))
+    A -->|"يمين"| C(("6"))
     B --> D(("1"))
     B --> E(("3"))
     C --> F(("5"))
@@ -900,16 +934,16 @@ graph TD
     class D,E,F,G leaf
 </div>
             </div>
-            <p style="font-size:0.85em;">Used in: Binary Search Trees, heaps, expression trees, Huffman coding</p>
+            <p style="font-size:0.85em;">تُستخدم في: أشجار البحث الثنائية، والكومات، وأشجار التعابير، وترميز هوفمان (Huffman)</p>
         </div>
     </div>
 
     <table>
-        <tr><th>Feature</th><th>General Tree</th><th>Binary Tree</th></tr>
-        <tr><td>Children per node</td><td>Any number (0, 1, 2, 3, ...)</td><td>At most <strong>2</strong> (left, right)</td></tr>
-        <tr><td>Child position</td><td>No fixed position</td><td>Strictly <strong>left</strong> or <strong>right</strong></td></tr>
-        <tr><td>Complexity</td><td>More flexible</td><td>More structured &amp; efficient</td></tr>
-        <tr><td>Applications</td><td>File systems, org charts</td><td>Search, sorting, compression</td></tr>
+        <tr><th>الخاصية</th><th>الشجرة العامة</th><th>الشجرة الثنائية</th></tr>
+        <tr><td>عدد الأبناء لكل عقدة</td><td>أي عدد (0، 1، 2، 3، ...)</td><td><strong>2</strong> على الأكثر (أيسر، أيمن)</td></tr>
+        <tr><td>موضع الابن</td><td>لا يوجد موضع ثابت</td><td>إما <strong>أيسر</strong> أو <strong>أيمن</strong> حصرًا</td></tr>
+        <tr><td>التعقيد</td><td>أكثر مرونة</td><td>أكثر تنظيمًا وكفاءة</td></tr>
+        <tr><td>التطبيقات</td><td>أنظمة الملفات، الهياكل التنظيمية</td><td>البحث، والفرز، والضغط</td></tr>
     </table>
 </section>
 
@@ -918,22 +952,22 @@ graph TD
      SECTION 9 — BINARY TREE
 ═══════════════════════════════════════════════════════ -->
 <section id="s9">
-    <h2><span class="sec-num">9</span>Binary Tree &mdash; The Heart of CS Trees</h2>
+    <h2><span class="sec-num">9</span>الشجرة الثنائية &mdash; قلب الأشجار في علوم الحاسب</h2>
 
     <div class="key-concept">
-        <h4>&#128218; Definition</h4>
-        <p>A <strong>Binary Tree</strong> is a tree data structure in which each node has <strong>at most two children</strong>, referred to as the <strong>left child</strong> and the <strong>right child</strong>. There is exactly <strong>one root</strong>. Each child is itself a binary tree (or empty).</p>
+        <h4>&#128218; التعريف</h4>
+        <p><strong>الشجرة الثنائية</strong> هي هيكل بيانات شجري يكون لكل عقدة فيه <strong>ابنان على الأكثر</strong>، يُسمّيان <strong>الابن الأيسر</strong> و<strong>الابن الأيمن</strong>. ويوجد <strong>جذر واحد</strong> بالضبط، وكل ابن هو بدوره شجرة ثنائية (أو فارغ).</p>
     </div>
 
-    <h3>&#128172; Properties of a Binary Tree</h3>
+    <h3>&#128172; خصائص الشجرة الثنائية</h3>
     <ul>
-        <li>Each node has: a <strong>data value</strong>, a reference to the <strong>left child</strong>, and a reference to the <strong>right child</strong></li>
-        <li>Either child can be <strong>null</strong> (empty) &mdash; nodes can have 0, 1, or 2 children</li>
-        <li>The <strong>left</strong> and <strong>right</strong> positions are distinct &mdash; a left child is different from a right child even if values are the same</li>
+        <li>تحتوي كل عقدة على: <strong>قيمة بيانات</strong>، ومرجع إلى <strong>الابن الأيسر</strong>، ومرجع إلى <strong>الابن الأيمن</strong></li>
+        <li>يمكن أن يكون أيٌّ من الابنين <strong dir="ltr">null</strong> (فارغًا) &mdash; فقد يكون للعقدة 0 أو 1 أو 2 من الأبناء</li>
+        <li>الموضعان <strong>الأيسر</strong> و<strong>الأيمن</strong> متمايزان &mdash; فالابن الأيسر يختلف عن الابن الأيمن حتى لو تساوت القيم</li>
     </ul>
 
-    <h3>&#128187; Node Structure in Java</h3>
-    <div style="background:#1a2635;color:#2ecc71;padding:18px 22px;border-radius:8px;font-family:'Courier New',monospace;font-size:0.93em;margin:16px 0;">
+    <h3>&#128187; بنية العقدة في جافا (Java)</h3>
+    <div class="code-ltr" dir="ltr" style="background:#1a2635;color:#2ecc71;padding:18px 22px;border-radius:8px;font-family:'Courier New',monospace;font-size:0.93em;margin:16px 0;">
 <span style="color:#74b9ff;">class</span> <span style="color:#fdcb6e;">Node</span> {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#74b9ff;">int</span> data;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#636e72;">// the value stored</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#fdcb6e;">Node</span> left;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#636e72;">// reference to left child</span><br>
@@ -947,16 +981,16 @@ graph TD
 }
     </div>
 
-    <h3>&#128269; Examples of Binary Trees</h3>
+    <h3>&#128269; أمثلة على الأشجار الثنائية</h3>
 
     <div style="display:flex;flex-wrap:wrap;gap:24px;justify-content:center;margin:24px 0;">
 
         <div style="text-align:center;padding:14px;border:2px solid #dee2e6;border-radius:10px;">
-            <p style="font-weight:700;font-size:0.9em;color:#555;margin-bottom:10px;">Both children present</p>
+            <p style="font-weight:700;font-size:0.9em;color:#555;margin-bottom:10px;">الابنان موجودان</p>
 <div class="mermaid">
 graph TD
-    n10(("10")) -->|left| n5(("5"))
-    n10 -->|right| n15(("15"))
+    n10(("10")) -->|"أيسر"| n5(("5"))
+    n10 -->|"أيمن"| n15(("15"))
     classDef root fill:#1e8449,stroke:#0a3d1f,color:white,font-weight:bold
     classDef child fill:#27ae60,stroke:#1e8449,color:white,font-weight:bold
     class n10 root
@@ -965,10 +999,10 @@ graph TD
         </div>
 
         <div style="text-align:center;padding:14px;border:2px solid #dee2e6;border-radius:10px;">
-            <p style="font-weight:700;font-size:0.9em;color:#555;margin-bottom:10px;">Only left child</p>
+            <p style="font-weight:700;font-size:0.9em;color:#555;margin-bottom:10px;">ابن أيسر فقط</p>
 <div class="mermaid">
 graph TD
-    n10(("10")) -->|left| n5(("5"))
+    n10(("10")) -->|"أيسر"| n5(("5"))
     n10 --- NR["null"]
     classDef root fill:#1e8449,stroke:#0a3d1f,color:white,font-weight:bold
     classDef child fill:#27ae60,stroke:#1e8449,color:white,font-weight:bold
@@ -980,11 +1014,11 @@ graph TD
         </div>
 
         <div style="text-align:center;padding:14px;border:2px solid #dee2e6;border-radius:10px;">
-            <p style="font-weight:700;font-size:0.9em;color:#555;margin-bottom:10px;">Only right child</p>
+            <p style="font-weight:700;font-size:0.9em;color:#555;margin-bottom:10px;">ابن أيمن فقط</p>
 <div class="mermaid">
 graph TD
     n10(("10")) --- NL["null"]
-    n10 -->|right| n15(("15"))
+    n10 -->|"أيمن"| n15(("15"))
     classDef root fill:#1e8449,stroke:#0a3d1f,color:white,font-weight:bold
     classDef child fill:#27ae60,stroke:#1e8449,color:white,font-weight:bold
     classDef nullNode fill:white,stroke:#bdc3c7,color:#bdc3c7
@@ -995,7 +1029,7 @@ graph TD
         </div>
 
         <div style="text-align:center;padding:14px;border:2px solid #dee2e6;border-radius:10px;">
-            <p style="font-weight:700;font-size:0.9em;color:#555;margin-bottom:10px;">Leaf (no children)</p>
+            <p style="font-weight:700;font-size:0.9em;color:#555;margin-bottom:10px;">ورقة (بلا أبناء)</p>
 <div class="mermaid">
 graph TD
     n10(("10"))
@@ -1011,23 +1045,23 @@ graph TD
      SECTION 10 — LEVELS & MAX NODES
 ═══════════════════════════════════════════════════════ -->
 <section id="s10">
-    <h2><span class="sec-num">10</span>Tree Levels &amp; Maximum Nodes</h2>
+    <h2><span class="sec-num">10</span>مستويات الشجرة والحد الأقصى لعدد العقد</h2>
 
-    <p>In a binary tree, nodes are organized by <strong>levels</strong>. The root is at level 0, its children at level 1, their children at level 2, and so on.</p>
+    <p>في الشجرة الثنائية، تُنظَّم العقد في <strong>مستويات (Levels)</strong>؛ فالجذر في المستوى 0، وأبناؤه في المستوى 1، وأبناء أبنائه في المستوى 2، وهكذا.</p>
 
     <div class="info-box">
-        <strong>Formula:</strong> The maximum number of nodes at level <em>i</em> is <strong>2<sup>i</sup></strong>
+        <strong>الصيغة:</strong> الحد الأقصى لعدد العقد في المستوى <em>i</em> هو <strong dir="ltr">2<sup>i</sup></strong>
         <ul style="margin-top:8px;">
-            <li>Level 0 (root): max <strong>2<sup>0</sup> = 1</strong> node</li>
-            <li>Level 1: max <strong>2<sup>1</sup> = 2</strong> nodes</li>
-            <li>Level 2: max <strong>2<sup>2</sup> = 4</strong> nodes</li>
-            <li>Level 3: max <strong>2<sup>3</sup> = 8</strong> nodes</li>
-            <li>Level <em>i</em>: max <strong>2<sup>i</sup></strong> nodes</li>
+            <li>المستوى 0 (الجذر): عقدة <strong dir="ltr">2<sup>0</sup> = 1</strong> على الأكثر</li>
+            <li>المستوى 1: <strong dir="ltr">2<sup>1</sup> = 2</strong> عقدة على الأكثر</li>
+            <li>المستوى 2: <strong dir="ltr">2<sup>2</sup> = 4</strong> عقد على الأكثر</li>
+            <li>المستوى 3: <strong dir="ltr">2<sup>3</sup> = 8</strong> عقد على الأكثر</li>
+            <li>المستوى <em>i</em>: <strong dir="ltr">2<sup>i</sup></strong> عقدة على الأكثر</li>
         </ul>
     </div>
 
-    <h3>&#127918; Interactive Level Explorer</h3>
-    <p>Click a level button to highlight all nodes at that level and see the maximum count.</p>
+    <h3>&#127918; مستكشف المستويات التفاعلي</h3>
+    <p>انقر على زر أحد المستويات لتظليل جميع العقد في ذلك المستوى ومعرفة الحد الأقصى لعددها.</p>
 
     <div class="level-selector">
         <button class="level-btn active" onclick="highlightLevel(0, this)">0</button>
@@ -1035,24 +1069,24 @@ graph TD
         <button class="level-btn" onclick="highlightLevel(2, this)">2</button>
         <button class="level-btn" onclick="highlightLevel(3, this)">3</button>
         <div id="level-info" class="level-info">
-            Level 0: max nodes = 2<sup>0</sup> = <strong>1</strong> &nbsp;|&nbsp; Root is the only node at this level.
+            المستوى 0: الحد الأقصى للعقد = <span dir="ltr">2<sup>0</sup> = <strong>1</strong></span> &nbsp;|&nbsp; الجذر هو العقدة الوحيدة في هذا المستوى.
         </div>
     </div>
 
     <div id="mermaid-level-container" style="background:#fff;border-radius:12px;padding:16px;min-height:340px;display:flex;justify-content:center;align-items:center;"></div>
 
     <table>
-        <tr><th>Level (i)</th><th>Max nodes = 2<sup>i</sup></th><th>Example nodes</th></tr>
-        <tr><td>0</td><td>2<sup>0</sup> = <strong>1</strong></td><td>8</td></tr>
-        <tr><td>1</td><td>2<sup>1</sup> = <strong>2</strong></td><td>4, 11</td></tr>
-        <tr><td>2</td><td>2<sup>2</sup> = <strong>4</strong></td><td>2, 6, 10, 13</td></tr>
-        <tr><td>3</td><td>2<sup>3</sup> = <strong>8</strong></td><td>1, 3, 5, 7, 9, 12, 14 (7 shown, max is 8)</td></tr>
-        <tr><td>i</td><td>2<sup>i</sup></td><td>&mdash;</td></tr>
+        <tr><th>المستوى (i)</th><th>الحد الأقصى للعقد = <span dir="ltr">2<sup>i</sup></span></th><th>أمثلة على العقد</th></tr>
+        <tr><td>0</td><td><span dir="ltr">2<sup>0</sup> = <strong>1</strong></span></td><td>8</td></tr>
+        <tr><td>1</td><td><span dir="ltr">2<sup>1</sup> = <strong>2</strong></span></td><td><span dir="ltr">4, 11</span></td></tr>
+        <tr><td>2</td><td><span dir="ltr">2<sup>2</sup> = <strong>4</strong></span></td><td><span dir="ltr">2, 6, 10, 13</span></td></tr>
+        <tr><td>3</td><td><span dir="ltr">2<sup>3</sup> = <strong>8</strong></span></td><td><span dir="ltr">1, 3, 5, 7, 9, 12, 14</span> (معروض 7، والحد الأقصى 8)</td></tr>
+        <tr><td>i</td><td><span dir="ltr">2<sup>i</sup></span></td><td>&mdash;</td></tr>
     </table>
 
     <div class="info-box">
-        <strong>Total nodes in a perfect binary tree of height h:</strong> 2<sup>h+1</sup> &minus; 1<br>
-        <em>Example:</em> height = 2 &rarr; 2<sup>3</sup> &minus; 1 = <strong>7</strong> total nodes
+        <strong>إجمالي العقد في شجرة ثنائية تامة (Perfect Binary Tree) ارتفاعها h:</strong> <span dir="ltr">2<sup>h+1</sup> &minus; 1</span><br>
+        <em>مثال:</em> الارتفاع = 2 &larr; <span dir="ltr">2<sup>3</sup> &minus; 1</span> = <strong>7</strong> عقد إجمالًا
     </div>
 </section>
 
@@ -1061,29 +1095,29 @@ graph TD
      SECTION 11 — SUBTREES
 ═══════════════════════════════════════════════════════ -->
 <section id="s11">
-    <h2><span class="sec-num">11</span>Subtrees</h2>
+    <h2><span class="sec-num">11</span>الأشجار الفرعية</h2>
 
-    <p>A <strong>subtree</strong> is a smaller tree formed by taking any node in the tree and all of its descendants. Every node in a tree is the root of its own subtree!</p>
+    <p><strong>الشجرة الفرعية (Subtree)</strong> هي شجرة أصغر تتكوّن من أي عقدة في الشجرة مع جميع سلائلها. وكل عقدة في الشجرة هي جذر لشجرتها الفرعية الخاصة!</p>
 
     <div class="key-concept">
-        <h4>&#128218; Definition</h4>
-        <p>A <strong>subtree</strong> rooted at node X consists of node X and all its descendants (children, grandchildren, etc.). By definition, a subtree is itself a valid binary tree.</p>
+        <h4>&#128218; التعريف</h4>
+        <p><strong>الشجرة الفرعية</strong> التي جذرها العقدة X تتكوّن من العقدة X وجميع سلائلها (الأبناء، وأبناء الأبناء، إلخ). وبحسب التعريف، فالشجرة الفرعية هي بحد ذاتها شجرة ثنائية صحيحة.</p>
     </div>
 
-    <h3>&#128073; Click a node to highlight its subtree</h3>
+    <h3>&#128072; انقر على عقدة لتظليل شجرتها الفرعية</h3>
 
     <div class="subtree-btns">
-        <button class="subtree-btn" data-node="A" onclick="showSubtree('A')">Subtree of 4 (whole tree)</button>
-        <button class="subtree-btn" data-node="B" onclick="showSubtree('B')">Subtree of 2</button>
-        <button class="subtree-btn" data-node="C" onclick="showSubtree('C')">Subtree of 6</button>
-        <button class="subtree-btn" data-node="D" onclick="showSubtree('D')">Subtree of 1</button>
-        <button class="subtree-btn" data-node="E" onclick="showSubtree('E')">Subtree of 3</button>
-        <button class="subtree-btn" data-node="F" onclick="showSubtree('F')">Subtree of 5</button>
-        <button class="subtree-btn" data-node="G" onclick="showSubtree('G')">Subtree of 7</button>
+        <button class="subtree-btn" data-node="A" onclick="showSubtree('A')">الشجرة الفرعية للعقدة 4 (الشجرة كلها)</button>
+        <button class="subtree-btn" data-node="B" onclick="showSubtree('B')">الشجرة الفرعية للعقدة 2</button>
+        <button class="subtree-btn" data-node="C" onclick="showSubtree('C')">الشجرة الفرعية للعقدة 6</button>
+        <button class="subtree-btn" data-node="D" onclick="showSubtree('D')">الشجرة الفرعية للعقدة 1</button>
+        <button class="subtree-btn" data-node="E" onclick="showSubtree('E')">الشجرة الفرعية للعقدة 3</button>
+        <button class="subtree-btn" data-node="F" onclick="showSubtree('F')">الشجرة الفرعية للعقدة 5</button>
+        <button class="subtree-btn" data-node="G" onclick="showSubtree('G')">الشجرة الفرعية للعقدة 7</button>
     </div>
 
     <div id="subtree-desc" style="padding:10px 16px;background:#f0fff4;border-radius:8px;margin-bottom:12px;font-size:0.93em;">
-        Click a button to see a subtree highlighted.
+        انقر على أحد الأزرار لترى شجرة فرعية مظلّلة.
     </div>
 
     <div id="mermaid-sub-container" style="background:#fff;border-radius:12px;padding:16px;min-height:280px;display:flex;justify-content:center;align-items:center;"></div>
@@ -1094,14 +1128,14 @@ graph TD
      SECTION 12 — FULL BINARY TREE
 ═══════════════════════════════════════════════════════ -->
 <section id="s12">
-    <h2><span class="sec-num">12</span>Full Binary Tree</h2>
+    <h2><span class="sec-num">12</span>الشجرة الثنائية الممتلئة</h2>
 
     <div class="key-concept">
-        <h4>&#128218; Definition</h4>
-        <p>A <strong>Full Binary Tree</strong> is a binary tree in which every node has either <strong>0 children</strong> (leaf) or <strong>2 children</strong> (both left and right). No node has exactly 1 child.</p>
+        <h4>&#128218; التعريف</h4>
+        <p><strong>الشجرة الثنائية الممتلئة (Full Binary Tree)</strong> هي شجرة ثنائية يكون لكل عقدة فيها إما <strong>0 أبناء</strong> (ورقة) أو <strong>ابنان</strong> (أيسر وأيمن معًا). ولا توجد عقدة لها ابن واحد فقط.</p>
     </div>
 
-    <h3>&#128505; Full? Not Full? Let's See!</h3>
+    <h3>&#128505; ممتلئة أم غير ممتلئة؟ لنرَ!</h3>
 
     <div class="tree-examples">
         <!-- Full tree 1 -->
@@ -1119,8 +1153,8 @@ graph TD
     class B internal
     class C,D,E leaf
 </div>
-            <div class="verdict">&#10003; FULL</div>
-            <p style="font-size:0.8em;">4 has 2, 2 has 2, 6/1/3 have 0</p>
+            <div class="verdict">&#10003; ممتلئة</div>
+            <p style="font-size:0.8em;">للعقدة 4 ابنان، وللعقدة 2 ابنان، وللعقد <span dir="ltr">6/1/3</span> صفر</p>
         </div>
 
         <!-- Full tree 2 (just root) -->
@@ -1131,8 +1165,8 @@ graph TD
     classDef root fill:#1e8449,stroke:#0a3d1f,color:white,font-weight:bold
     class A root
 </div>
-            <div class="verdict">&#10003; FULL</div>
-            <p style="font-size:0.8em;">Single node &mdash; 0 children is OK!</p>
+            <div class="verdict">&#10003; ممتلئة</div>
+            <p style="font-size:0.8em;">عقدة واحدة &mdash; وجود 0 أبناء مقبول!</p>
         </div>
 
         <!-- NOT full: one child -->
@@ -1149,8 +1183,8 @@ graph TD
     class B invalid
     class C,D leaf
 </div>
-            <div class="verdict">&#10007; NOT FULL</div>
-            <p style="font-size:0.8em;">3 has only 1 child (1). Must be 0 or 2!</p>
+            <div class="verdict">&#10007; غير ممتلئة</div>
+            <p style="font-size:0.8em;">للعقدة 3 ابن واحد فقط (1). يجب أن يكون 0 أو 2!</p>
         </div>
 
         <!-- NOT full: another example -->
@@ -1167,59 +1201,60 @@ graph TD
     class C invalid
     class B,D leaf
 </div>
-            <div class="verdict">&#10007; NOT FULL</div>
-            <p style="font-size:0.8em;">8 has only 1 child (6). Leaf 2 is OK. 8 is not!</p>
+            <div class="verdict">&#10007; غير ممتلئة</div>
+            <p style="font-size:0.8em;">للعقدة 8 ابن واحد فقط (6). الورقة 2 لا إشكال فيها، أما 8 فلا!</p>
         </div>
     </div>
 
     <!-- Quick Quiz -->
     <div class="quiz-box">
-        <div class="quiz-q">&#10067; Quick Quiz: Is the 7-node complete binary tree (4 with children 2,6; 2 with 1,3; 6 with 5,7) a Full Binary Tree?</div>
+        <div class="quiz-q">&#10067; اختبار سريع: هل الشجرة الثنائية الكاملة ذات العقد السبع (4 وابناها 2 و6؛ و2 وابناها 1 و3؛ و6 وابناها 5 و7) شجرة ثنائية ممتلئة؟</div>
         <div class="quiz-opts">
-            <div class="quiz-opt" onclick="checkQuiz(this, true, 'full-q1')">Yes, it is Full</div>
-            <div class="quiz-opt" onclick="checkQuiz(this, false, 'full-q1')">No, it is not Full</div>
+            <div class="quiz-opt" onclick="checkQuiz(this, true, 'full-q1')">نعم، إنها ممتلئة</div>
+            <div class="quiz-opt" onclick="checkQuiz(this, false, 'full-q1')">لا، ليست ممتلئة</div>
         </div>
         <div id="full-q1-fb" class="quiz-feedback"></div>
     </div>
 </section>
 
 
+
 <!-- ═══════════════════════════════════════════════════════
      SECTION 13 — COMPLETE BINARY TREE
 ═══════════════════════════════════════════════════════ -->
 <section id="s13">
-    <h2><span class="sec-num">13</span>Complete Binary Tree</h2>
+    <h2><span class="sec-num">13</span>الشجرة الثنائية الكاملة</h2>
 
     <div class="key-concept">
-        <h4>&#128218; Definition</h4>
-        <p>A <strong>Complete Binary Tree</strong> is a binary tree in which:<br>
-        1. All levels are <strong>completely filled</strong> except possibly the <strong>last level</strong>.<br>
-        2. The last level has all nodes as <strong>far left as possible</strong>.</p>
+        <h4>&#128218; التعريف</h4>
+        <p><strong>الشجرة الثنائية الكاملة (Complete Binary Tree)</strong> هي شجرة ثنائية تتحقق فيها الشروط الآتية:<br>
+        1. جميع المستويات <strong>مملوءة بالكامل</strong> باستثناء <strong>المستوى الأخير</strong> على الأرجح.<br>
+        2. تكون جميع عقد المستوى الأخير <strong>في أقصى اليسار قدر الإمكان</strong>.</p>
     </div>
 
-    <h3>&#128202; Interactive Level-by-Level Complete Tree Explorer</h3>
-    <p>Click an example to see the <strong>level-by-level analysis</strong>. Each level shows its capacity (2<sup>i</sup>), the filled slots, and whether the left-to-right rule is satisfied.</p>
+    <h3>&#128202; مستكشف الشجرة الكاملة التفاعلي مستوىً بمستوى</h3>
+    <p>انقر على أحد الأمثلة لترى <strong>التحليل مستوىً بمستوى</strong>. يعرض كل مستوى سعته (<span dir="ltr">2<sup>i</sup></span>)، والمواضع المملوءة، وما إذا كانت قاعدة الملء من اليسار إلى اليمين متحققة.</p>
 
     <style>
     .ct-btns{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0;}
-    .ct-btn{padding:10px 18px;border-radius:10px;border:2px solid #ccc;background:#fff;cursor:pointer;font-size:0.88em;font-weight:700;transition:all .2s;text-align:center;min-width:140px;line-height:1.4;}
+    .ct-btn{padding:10px 18px;border-radius:10px;border:2px solid #ccc;background:#fff;cursor:pointer;font-size:0.88em;font-weight:700;transition:all .2s;text-align:center;min-width:140px;line-height:1.4;font-family:inherit;}
     .ct-btn.ok{border-color:#27ae60;color:#27ae60;}.ct-btn.bad{border-color:#e74c3c;color:#e74c3c;}
     .ct-btn.ok.active{background:#27ae60;color:#fff;}.ct-btn.bad.active{background:#e74c3c;color:#fff;}
     .ct-main{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;margin:16px 0;}
     @media(max-width:700px){.ct-main{grid-template-columns:1fr;}}
     #ct-level-panel{display:flex;flex-direction:column;gap:6px;min-width:280px;}
-    .ct-level-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border-left:6px solid #ccc;background:#f8f9fa;font-size:0.87em;flex-wrap:wrap;}
-    .ct-level-row.lvl-full{border-left-color:#27ae60;background:#f0fff4;}
-    .ct-level-row.lvl-last-ok{border-left-color:#2980b9;background:#eaf4fb;}
-    .ct-level-row.lvl-last-gap{border-left-color:#e74c3c;background:#fef5f5;}
+    .ct-level-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border-right:6px solid #ccc;background:#f8f9fa;font-size:0.87em;flex-wrap:wrap;}
+    .ct-level-row.lvl-full{border-right-color:#27ae60;background:#f0fff4;}
+    .ct-level-row.lvl-last-ok{border-right-color:#2980b9;background:#eaf4fb;}
+    .ct-level-row.lvl-last-gap{border-right-color:#e74c3c;background:#fef5f5;}
     .ct-lbl{font-weight:800;color:#555;min-width:64px;}
-    .ct-form{color:#555;min-width:70px;font-family:monospace;font-size:0.94em;}
-    .ct-slots{display:flex;gap:5px;flex-wrap:wrap;flex:1;}
+    .ct-form{color:#555;min-width:70px;font-family:monospace;font-size:0.94em;direction:ltr;unicode-bidi:isolate;}
+    .ct-slots{display:flex;gap:5px;flex-wrap:wrap;flex:1;direction:ltr;}
     .ct-slot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78em;}
     .slot-filled{background:#27ae60;color:#fff;border:2px solid #1e8449;}
     .slot-empty-ok{background:#fff;color:#adb5bd;border:2px dashed #dee2e6;}
     .slot-gap{background:#fdecea;color:#e74c3c;border:2px dashed #e74c3c;}
-    .ct-count{font-weight:700;min-width:38px;text-align:right;color:#555;}
+    .ct-count{font-weight:700;min-width:38px;text-align:left;color:#555;direction:ltr;unicode-bidi:isolate;}
     .ct-status{font-weight:700;font-size:0.82em;min-width:170px;}
     .status-full{color:#27ae60;}.status-last-ok{color:#2980b9;}.status-last-gap{color:#e74c3c;}
     #complete-tree-container{background:#fff;border-radius:12px;padding:12px;min-height:260px;display:flex;justify-content:center;align-items:center;}
@@ -1229,10 +1264,10 @@ graph TD
     </style>
 
     <div class="ct-btns">
-        <button class="ct-btn ok active" data-ex="ex1" onclick="showCompleteExample('ex1')">&#10003; Example 1<br><small>Perfect Tree</small></button>
-        <button class="ct-btn ok" data-ex="ex2" onclick="showCompleteExample('ex2')">&#10003; Example 2<br><small>Partial Last Level</small></button>
-        <button class="ct-btn bad" data-ex="ex3" onclick="showCompleteExample('ex3')">&#10007; Example 3<br><small>Gap in Level</small></button>
-        <button class="ct-btn bad" data-ex="ex4" onclick="showCompleteExample('ex4')">&#10007; Example 4<br><small>Right Before Left</small></button>
+        <button class="ct-btn ok active" data-ex="ex1" onclick="showCompleteExample('ex1')">&#10003; المثال 1<br><small>شجرة تامة</small></button>
+        <button class="ct-btn ok" data-ex="ex2" onclick="showCompleteExample('ex2')">&#10003; المثال 2<br><small>مستوى أخير جزئي</small></button>
+        <button class="ct-btn bad" data-ex="ex3" onclick="showCompleteExample('ex3')">&#10007; المثال 3<br><small>فجوة في المستوى</small></button>
+        <button class="ct-btn bad" data-ex="ex4" onclick="showCompleteExample('ex4')">&#10007; المثال 4<br><small>الأيمن قبل الأيسر</small></button>
     </div>
 
     <div class="ct-main">
@@ -1242,33 +1277,33 @@ graph TD
     <div id="ct-verdict" class="ct-verdict complete"></div>
 
     <!-- Complete tree simulation / quiz -->
-    <h3>&#127918; Quiz &mdash; Complete or Not?</h3>
-    <p>Look at each tree description and decide:</p>
+    <h3>&#127918; اختبار &mdash; كاملة أم لا؟</h3>
+    <p>تأمّل وصف كل شجرة وقرّر:</p>
 
     <div class="quiz-box">
-        <div class="quiz-q">&#10067; A tree has 6 nodes. The root has 2 children. The left child has 2 children. The right child has 1 child (left only). Is this Complete?</div>
+        <div class="quiz-q">&#10067; شجرة فيها 6 عقد. للجذر ابنان، وللابن الأيسر ابنان، وللابن الأيمن ابن واحد (أيسر فقط). هل هذه الشجرة كاملة؟</div>
         <div class="quiz-opts">
-            <div class="quiz-opt" onclick="checkQuiz(this, true, 'comp-q1')">Yes, Complete</div>
-            <div class="quiz-opt" onclick="checkQuiz(this, false, 'comp-q1')">No, Not Complete</div>
+            <div class="quiz-opt" onclick="checkQuiz(this, true, 'comp-q1')">نعم، كاملة</div>
+            <div class="quiz-opt" onclick="checkQuiz(this, false, 'comp-q1')">لا، ليست كاملة</div>
         </div>
         <div id="comp-q1-fb" class="quiz-feedback"></div>
     </div>
 
     <div class="quiz-box">
-        <div class="quiz-q">&#10067; A tree has nodes added in this order: A(root), B(left of A), C(right of A), D(right of B). Is this Complete?</div>
+        <div class="quiz-q">&#10067; أُضيفت العقد إلى شجرة بهذا الترتيب: A (الجذر)، ثم B (يسار A)، ثم C (يمين A)، ثم D (يمين B). هل هذه الشجرة كاملة؟</div>
         <div class="quiz-opts">
-            <div class="quiz-opt" onclick="checkQuiz(this, false, 'comp-q2')">Yes, Complete</div>
-            <div class="quiz-opt" onclick="checkQuiz(this, true, 'comp-q2')">No, Not Complete</div>
+            <div class="quiz-opt" onclick="checkQuiz(this, false, 'comp-q2')">نعم، كاملة</div>
+            <div class="quiz-opt" onclick="checkQuiz(this, true, 'comp-q2')">لا، ليست كاملة</div>
         </div>
         <div id="comp-q2-fb" class="quiz-feedback"></div>
     </div>
 
     <table style="margin-top:20px;">
-        <tr><th>Property</th><th>Full Binary Tree</th><th>Complete Binary Tree</th></tr>
-        <tr><td>Every node has 0 or 2 children?</td><td><strong style="color:#27ae60;">Required</strong></td><td>Not required</td></tr>
-        <tr><td>Last level filled left to right?</td><td>Not required</td><td><strong style="color:#27ae60;">Required</strong></td></tr>
-        <tr><td>All levels except last fully filled?</td><td>Not required</td><td><strong style="color:#27ae60;">Required</strong></td></tr>
-        <tr><td>Can a 7-node perfect tree be both?</td><td colspan="2" style="color:#1e8449;font-weight:bold;">Yes! A perfect binary tree is both Full and Complete.</td></tr>
+        <tr><th>الخاصية</th><th>الشجرة الثنائية الممتلئة</th><th>الشجرة الثنائية الكاملة</th></tr>
+        <tr><td>هل لكل عقدة 0 أو 2 من الأبناء؟</td><td><strong style="color:#27ae60;">مطلوب</strong></td><td>غير مطلوب</td></tr>
+        <tr><td>هل يُملأ المستوى الأخير من اليسار إلى اليمين؟</td><td>غير مطلوب</td><td><strong style="color:#27ae60;">مطلوب</strong></td></tr>
+        <tr><td>هل جميع المستويات عدا الأخير مملوءة بالكامل؟</td><td>غير مطلوب</td><td><strong style="color:#27ae60;">مطلوب</strong></td></tr>
+        <tr><td>هل يمكن أن تكون الشجرة التامة ذات العقد السبع كلتيهما؟</td><td colspan="2" style="color:#1e8449;font-weight:bold;">نعم! الشجرة الثنائية التامة (Perfect Binary Tree) ممتلئة وكاملة في آنٍ واحد.</td></tr>
     </table>
 </section>
 
@@ -1277,66 +1312,66 @@ graph TD
      SECTION 14 — TREE TRAVERSAL
 ═══════════════════════════════════════════════════════ -->
 <section id="s14">
-    <h2><span class="sec-num">14</span>Tree Traversal</h2>
+    <h2><span class="sec-num">14</span>اجتياز الشجرة</h2>
 
-    <p>How do we visit every node in a tree? In an array or linked list, we go one by one in order. In a tree, there are <strong>multiple ways</strong> to traverse. We call these <strong>traversal algorithms</strong>.</p>
+    <p>كيف نزور كل عقدة في الشجرة؟ في المصفوفة أو القائمة المرتبطة نمرّ على العناصر واحدًا تلو الآخر بالترتيب. أما في الشجرة فهناك <strong>طرق متعددة</strong> للاجتياز، ونسمّيها <strong>خوارزميات الاجتياز (Traversal Algorithms)</strong>.</p>
 
     <div class="grid-2">
         <div class="card green">
-            <h4 style="color:#1e8449;">&#128242; Depth-First Search (DFS)</h4>
-            <p>Go as <strong>deep</strong> as possible before backtracking. Three variants:</p>
-            <ul style="font-size:0.9em;text-align:left;">
-                <li><strong>Pre-order</strong> (Root, Left, Right)</li>
-                <li><strong>In-order</strong> (Left, Root, Right)</li>
-                <li><strong>Post-order</strong> (Left, Right, Root)</li>
+            <h4 style="color:#1e8449;">&#128242; البحث بالعمق أولًا (Depth-First Search &ndash; DFS)</h4>
+            <p>انزل إلى <strong>أعمق</strong> نقطة ممكنة قبل التراجع. وله ثلاثة أشكال:</p>
+            <ul style="font-size:0.9em;text-align:right;">
+                <li><strong>الاجتياز القبلي (Pre-order)</strong> (الجذر، الأيسر، الأيمن)</li>
+                <li><strong>الاجتياز البيني (In-order)</strong> (الأيسر، الجذر، الأيمن)</li>
+                <li><strong>الاجتياز البعدي (Post-order)</strong> (الأيسر، الأيمن، الجذر)</li>
             </ul>
         </div>
         <div class="card blue">
-            <h4>&#127760; Breadth-First Search (BFS)</h4>
-            <p>Visit all nodes at each <strong>level</strong> before going deeper. Also called <strong>Level-Order</strong> traversal.</p>
-            <p style="font-size:0.9em;">Uses a <strong>Queue</strong> to process nodes level by level.</p>
+            <h4>&#127760; البحث بالعرض أولًا (Breadth-First Search &ndash; BFS)</h4>
+            <p>زُر جميع العقد في كل <strong>مستوى</strong> قبل النزول أعمق. ويُسمّى أيضًا <strong>الاجتياز حسب المستويات (Level-Order)</strong>.</p>
+            <p style="font-size:0.9em;">يستخدم <strong>طابورًا</strong> لمعالجة العقد مستوىً بمستوى.</p>
         </div>
     </div>
 
     <!-- The "3 visits" concept -->
-    <h3>&#128161; How to Remember: The "3 Visits" Idea</h3>
+    <h3>&#128161; كيف تتذكّر: فكرة «الزيارات الثلاث»</h3>
     <div class="warning-box">
-        <p>Imagine walking through the tree. Each time you pass through a node, count the visit:</p>
+        <p>تخيّل أنك تمشي عبر الشجرة. في كل مرة تمرّ فيها بعقدة، احسب الزيارة:</p>
         <ul style="line-height:2.2;">
-            <li><strong>1st visit (arrive)</strong> &rarr; <span style="background:#1e8449;color:white;padding:2px 10px;border-radius:4px;">Pre-order</span> &mdash; visit the root when you <em>arrive</em> at it</li>
-            <li><strong>2nd visit (return from left)</strong> &rarr; <span style="background:#2980b9;color:white;padding:2px 10px;border-radius:4px;">In-order</span> &mdash; visit when you <em>come back from the left subtree</em></li>
-            <li><strong>3rd visit (return from right)</strong> &rarr; <span style="background:#8e44ad;color:white;padding:2px 10px;border-radius:4px;">Post-order</span> &mdash; visit when you <em>come back from the right subtree</em></li>
+            <li><strong>الزيارة الأولى (الوصول)</strong> &larr; <span style="background:#1e8449;color:white;padding:2px 10px;border-radius:4px;">القبلي</span> &mdash; زُر الجذر عندما <em>تصل</em> إليه</li>
+            <li><strong>الزيارة الثانية (العودة من اليسار)</strong> &larr; <span style="background:#2980b9;color:white;padding:2px 10px;border-radius:4px;">البيني</span> &mdash; زُره عندما <em>تعود من الشجرة الفرعية اليسرى</em></li>
+            <li><strong>الزيارة الثالثة (العودة من اليمين)</strong> &larr; <span style="background:#8e44ad;color:white;padding:2px 10px;border-radius:4px;">البعدي</span> &mdash; زُره عندما <em>تعود من الشجرة الفرعية اليمنى</em></li>
         </ul>
     </div>
 
     <!-- Traversal definitions -->
     <div class="grid-3" style="margin-bottom:30px;">
         <div class="card" style="border-color:#1e8449;background:#f0fff4;">
-            <h4 style="color:#1e8449;">Pre-order</h4>
-            <p style="font-size:0.9em;font-weight:700;">Root &#8594; Left &#8594; Right</p>
-            <p style="font-size:0.83em;">First visit the root, then recursively traverse the left subtree, then the right subtree.</p>
-            <p style="font-size:0.83em;color:#888;font-style:italic;">Used for: copying a tree, prefix notation</p>
+            <h4 style="color:#1e8449;">الاجتياز القبلي</h4>
+            <p style="font-size:0.9em;font-weight:700;">الجذر &#8592; الأيسر &#8592; الأيمن</p>
+            <p style="font-size:0.83em;">زُر الجذر أولًا، ثم اجتز الشجرة الفرعية اليسرى استدعاءً ذاتيًا، ثم الشجرة الفرعية اليمنى.</p>
+            <p style="font-size:0.83em;color:#888;font-style:italic;">يُستخدم في: نسخ الشجرة، والترميز البادئ (Prefix)</p>
         </div>
         <div class="card" style="border-color:#2980b9;background:#ebf5fb;">
-            <h4 style="color:#2980b9;">In-order</h4>
-            <p style="font-size:0.9em;font-weight:700;">Left &#8594; Root &#8594; Right</p>
-            <p style="font-size:0.83em;">First traverse the left subtree, then visit the root, then the right subtree.</p>
-            <p style="font-size:0.83em;color:#888;font-style:italic;">Used for: BST gives sorted order!</p>
+            <h4 style="color:#2980b9;">الاجتياز البيني</h4>
+            <p style="font-size:0.9em;font-weight:700;">الأيسر &#8592; الجذر &#8592; الأيمن</p>
+            <p style="font-size:0.83em;">اجتز الشجرة الفرعية اليسرى أولًا، ثم زُر الجذر، ثم الشجرة الفرعية اليمنى.</p>
+            <p style="font-size:0.83em;color:#888;font-style:italic;">يُستخدم في: يُعطي ترتيبًا مفروزًا في شجرة البحث الثنائية (BST)!</p>
         </div>
         <div class="card" style="border-color:#8e44ad;background:#f5eef8;">
-            <h4 style="color:#8e44ad;">Post-order</h4>
-            <p style="font-size:0.9em;font-weight:700;">Left &#8594; Right &#8594; Root</p>
-            <p style="font-size:0.83em;">First traverse left, then right, then visit the root last.</p>
-            <p style="font-size:0.83em;color:#888;font-style:italic;">Used for: deleting a tree, postfix notation</p>
+            <h4 style="color:#8e44ad;">الاجتياز البعدي</h4>
+            <p style="font-size:0.9em;font-weight:700;">الأيسر &#8592; الأيمن &#8592; الجذر</p>
+            <p style="font-size:0.83em;">اجتز الأيسر أولًا، ثم الأيمن، ثم زُر الجذر أخيرًا.</p>
+            <p style="font-size:0.83em;color:#888;font-style:italic;">يُستخدم في: حذف الشجرة، والترميز اللاحق (Postfix)</p>
         </div>
     </div>
 
     <!-- Traversal Simulator link -->
-    <h3>&#127918; Interactive Traversal Simulator</h3>
-    <p>Open the dedicated simulator to see each traversal step-by-step, with <strong>null node visits</strong>, the <strong>3-visits concept</strong>, simultaneous pre/in/post results, and a BFS queue visualizer.</p>
+    <h3>&#127918; محاكي الاجتياز التفاعلي</h3>
+    <p>افتح المحاكي المخصّص لترى كل اجتياز خطوة بخطوة، مع <strong>زيارات العقد الفارغة (<span dir="ltr">null</span>)</strong>، و<strong>مفهوم الزيارات الثلاث</strong>، ونتائج الاجتياز القبلي والبيني والبعدي في آنٍ واحد، ومُصوِّر لطابور BFS.</p>
 
     <div style="text-align:center;margin:30px 0;">
-        <a href="tree-traversal.html" style="
+        <a href="tree-traversal-ar.html" style="
             display:inline-block;
             background:linear-gradient(135deg,#1e8449,#27ae60);
             color:white;
@@ -1348,30 +1383,30 @@ graph TD
             box-shadow:0 6px 22px rgba(39,174,96,0.4);
             transition:all 0.2s;
             letter-spacing:0.5px;
-        ">&#9654; Open Tree Traversal Simulator</a>
-        <p style="margin-top:14px;font-size:0.88em;color:#7f8c8d;">Shows DFS (Pre/In/Post-order) with null visits &amp; visit counts, and BFS with queue state</p>
+        ">&#9664; افتح محاكي اجتياز الشجرة</a>
+        <p style="margin-top:14px;font-size:0.88em;color:#7f8c8d;">يعرض DFS (القبلي/البيني/البعدي) مع زيارات <span dir="ltr">null</span> وعدد الزيارات، وBFS مع حالة الطابور</p>
     </div>
 
     <!-- BFS explanation -->
-    <h3>&#127760; Breadth-First Search (Level-Order) &mdash; How it Works</h3>
+    <h3>&#127760; البحث بالعرض أولًا (حسب المستويات) &mdash; كيف يعمل؟</h3>
     <div class="info-box">
-        <p>BFS uses a <strong>Queue</strong> data structure. The algorithm:</p>
+        <p>يستخدم BFS هيكل بيانات <strong>الطابور</strong>. والخوارزمية كالآتي:</p>
         <ol style="line-height:2;">
-            <li>Start: Enqueue the <strong>root</strong></li>
-            <li>While the queue is not empty:
+            <li>البداية: أدخل <strong>الجذر</strong> في الطابور</li>
+            <li>ما دام الطابور غير فارغ:
                 <ol type="a">
-                    <li>Dequeue the front node and <strong>visit</strong> it</li>
-                    <li>Enqueue its <strong>left child</strong> (if it exists)</li>
-                    <li>Enqueue its <strong>right child</strong> (if it exists)</li>
+                    <li>أخرج العقدة الأمامية من الطابور و<strong>زُرها</strong></li>
+                    <li>أدخل <strong>ابنها الأيسر</strong> في الطابور (إن وُجد)</li>
+                    <li>أدخل <strong>ابنها الأيمن</strong> في الطابور (إن وُجد)</li>
                 </ol>
             </li>
         </ol>
-        <p style="margin-top:10px;">This guarantees we visit nodes <strong>level by level, left to right</strong>.</p>
+        <p style="margin-top:10px;">وهذا يضمن أن نزور العقد <strong>مستوىً بمستوى، من اليسار إلى اليمين</strong>.</p>
     </div>
 
     <!-- Java code for traversals -->
-    <h3>&#128187; Java Code for All Traversals</h3>
-    <div style="background:#1a2635;color:#ecf0f1;padding:20px 24px;border-radius:10px;font-family:'Courier New',monospace;font-size:0.9em;line-height:1.8;overflow-x:auto;">
+    <h3>&#128187; شيفرة جافا لجميع أنواع الاجتياز</h3>
+    <div class="code-ltr" dir="ltr" style="background:#1a2635;color:#ecf0f1;padding:20px 24px;border-radius:10px;font-family:'Courier New',monospace;font-size:0.9em;line-height:1.8;overflow-x:auto;">
 <span style="color:#636e72;">// Pre-order: Root → Left → Right</span><br>
 <span style="color:#74b9ff;">void</span> <span style="color:#fdcb6e;">preOrder</span>(<span style="color:#fdcb6e;">Node</span> node) {<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#74b9ff;">if</span> (node == <span style="color:#e17055;">null</span>) <span style="color:#74b9ff;">return</span>;<br>
@@ -1408,42 +1443,42 @@ graph TD
     </div>
 
     <!-- Summary table -->
-    <h3>&#128202; Summary &mdash; All Traversals at a Glance</h3>
+    <h3>&#128202; ملخص &mdash; جميع أنواع الاجتياز في لمحة</h3>
     <table>
         <tr>
-            <th>Traversal</th>
-            <th>Order</th>
-            <th>Result on our tree</th>
-            <th>Uses</th>
-            <th>Data Structure Used</th>
+            <th>الاجتياز</th>
+            <th>الترتيب</th>
+            <th>النتيجة على شجرتنا</th>
+            <th>الاستخدامات</th>
+            <th>هيكل البيانات المستخدم</th>
         </tr>
         <tr>
-            <td><strong style="color:#1e8449;">Pre-order</strong></td>
-            <td>Root &rarr; Left &rarr; Right</td>
-            <td>A, B, D, E, C, F, G</td>
-            <td>Copy tree, prefix expression</td>
-            <td>Stack (recursion)</td>
+            <td><strong style="color:#1e8449;">القبلي</strong></td>
+            <td>الجذر &larr; الأيسر &larr; الأيمن</td>
+            <td dir="ltr" style="text-align:right;">A, B, D, E, C, F, G</td>
+            <td>نسخ الشجرة، التعبير البادئ</td>
+            <td>المكدس (الاستدعاء الذاتي)</td>
         </tr>
         <tr>
-            <td><strong style="color:#2980b9;">In-order</strong></td>
-            <td>Left &rarr; Root &rarr; Right</td>
-            <td>D, B, E, A, F, C, G</td>
-            <td>BST sorted output</td>
-            <td>Stack (recursion)</td>
+            <td><strong style="color:#2980b9;">البيني</strong></td>
+            <td>الأيسر &larr; الجذر &larr; الأيمن</td>
+            <td dir="ltr" style="text-align:right;">D, B, E, A, F, C, G</td>
+            <td>إخراج مفروز من شجرة البحث الثنائية</td>
+            <td>المكدس (الاستدعاء الذاتي)</td>
         </tr>
         <tr>
-            <td><strong style="color:#8e44ad;">Post-order</strong></td>
-            <td>Left &rarr; Right &rarr; Root</td>
-            <td>D, E, B, F, G, C, A</td>
-            <td>Delete tree, postfix</td>
-            <td>Stack (recursion)</td>
+            <td><strong style="color:#8e44ad;">البعدي</strong></td>
+            <td>الأيسر &larr; الأيمن &larr; الجذر</td>
+            <td dir="ltr" style="text-align:right;">D, E, B, F, G, C, A</td>
+            <td>حذف الشجرة، التعبير اللاحق</td>
+            <td>المكدس (الاستدعاء الذاتي)</td>
         </tr>
         <tr>
-            <td><strong style="color:#e67e22;">Level-order</strong></td>
-            <td>Level by level</td>
-            <td>A, B, C, D, E, F, G</td>
-            <td>BFS, shortest path</td>
-            <td><strong>Queue</strong></td>
+            <td><strong style="color:#e67e22;">حسب المستويات</strong></td>
+            <td>مستوىً بمستوى</td>
+            <td dir="ltr" style="text-align:right;">A, B, C, D, E, F, G</td>
+            <td>BFS، أقصر مسار</td>
+            <td><strong>الطابور</strong></td>
         </tr>
     </table>
 
@@ -1451,7 +1486,7 @@ graph TD
 
     <!-- Practice Questions Link -->
     <div style="text-align:center;margin:40px 0 10px;">
-        <a href="binary_tree_question.html" style="
+        <a href="../questions/binary_tree_question-ar.html" style="
             display:inline-block;
             background:linear-gradient(135deg,#0a3d1f,#1e8449);
             color:white;
@@ -1463,19 +1498,20 @@ graph TD
             box-shadow:0 6px 22px rgba(10,61,31,0.4);
             transition:all 0.2s;
             letter-spacing:0.5px;
-        ">&#127891; BST Practice Questions</a>
+        ">&#127891; أسئلة تدريبية على شجرة البحث الثنائية</a>
         <p style="margin-top:14px;font-size:0.88em;color:#7f8c8d;">
-            Build a BST by drag &amp; drop · Traversal quiz · True/False · Delete a node · Write Java code
+            بناء شجرة بحث ثنائية بالسحب والإفلات · اختبار في الاجتياز · صواب/خطأ · حذف عقدة · كتابة شيفرة جافا
         </p>
     </div>
 </div><!-- /content -->
 
 <footer>
-    <p><strong>Data Structures I</strong></p>
-    <p>Prepared by Dr. Almalawi</p>
+    <p><strong>هياكل البيانات 1</strong></p>
+    <p>إعداد: د. المعلوي (Dr. Almalawi)</p>
 </footer>
 
 </div><!-- /container -->
+
 
 
 <!-- ═══════════════════════════════════════════════════════
@@ -1485,15 +1521,15 @@ graph TD
 
 /* ─── Anatomy (Mermaid) ─── */
 const anatTips = {
-    'A': '&#127795; <strong>ROOT — node 6</strong>: The topmost node. Has no parent. Every tree has exactly one root.',
-    'B': '&#128311; <strong>INTERNAL NODE — 4</strong>: Has children 2 (left) and 5 (right). Also called an interior node.',
-    'C': '&#128311; <strong>INTERNAL NODE — 8</strong>: Has children 7 (left) and 9 (right). Sibling of 4 (same parent: 6).',
-    'D': '&#128311; <strong>INTERNAL NODE — 2</strong>: Has children 1 (left) and 3 (right). Child of 4, parent of 1 and 3.',
-    'E': '&#127823; <strong>LEAF NODE — 5</strong>: No children. Right child of 4. Sibling of 2.',
-    'F': '&#127823; <strong>LEAF NODE — 7</strong>: No children. Left child of 8. Sibling of 9.',
-    'G': '&#127823; <strong>LEAF NODE — 9</strong>: No children. Right child of 8. Sibling of 7.',
-    'H': '&#127823; <strong>LEAF NODE — 1</strong>: No children. Left child of 2. Sibling of 3.',
-    'I': '&#127823; <strong>LEAF NODE — 3</strong>: No children. Right child of 2. Sibling of 1.',
+    'A': '&#127795; <strong>الجذر — العقدة 6</strong>: العقدة العليا. ليس لها أب. ولكل شجرة جذر واحد بالضبط.',
+    'B': '&#128311; <strong>عقدة داخلية — 4</strong>: ابناها 2 (أيسر) و5 (أيمن). وتُسمّى أيضًا عقدة باطنية.',
+    'C': '&#128311; <strong>عقدة داخلية — 8</strong>: ابناها 7 (أيسر) و9 (أيمن). شقيقة 4 (الأب نفسه: 6).',
+    'D': '&#128311; <strong>عقدة داخلية — 2</strong>: ابناها 1 (أيسر) و3 (أيمن). ابنة 4، وأب لـ 1 و3.',
+    'E': '&#127823; <strong>عقدة ورقية — 5</strong>: ليس لها أبناء. الابن الأيمن لـ 4. شقيقة 2.',
+    'F': '&#127823; <strong>عقدة ورقية — 7</strong>: ليس لها أبناء. الابن الأيسر لـ 8. شقيقة 9.',
+    'G': '&#127823; <strong>عقدة ورقية — 9</strong>: ليس لها أبناء. الابن الأيمن لـ 8. شقيقة 7.',
+    'H': '&#127823; <strong>عقدة ورقية — 1</strong>: ليس لها أبناء. الابن الأيسر لـ 2. شقيقة 3.',
+    'I': '&#127823; <strong>عقدة ورقية — 3</strong>: ليس لها أبناء. الابن الأيمن لـ 2. شقيقة 1.',
 };
 
 function showAnatTip(nodeId) {
@@ -1550,10 +1586,10 @@ const _htDiagrams = {
         3: `graph TD\n    A((8)) --> B((4))\n    A --> C((12))\n    B --> D((2))\n    D --> H((1))\n    classDef n ${_htNormal}\n    class A,B,C,D,H n`
     },
     trace: {
-        0: { diagram: `graph TD\n    A((4))\n    classDef t ${_htTraced}\n    class A t`, text: 'Height = 0 (single node, no edges!)' },
-        1: { diagram: `graph TD\n    A((4)) --> B((2))\n    A --> C((6))\n    classDef t ${_htTraced}\n    classDef n ${_htNormal}\n    class A,B t\n    class C n\n    linkStyle 0 stroke:#e74c3c,stroke-width:4px`, text: 'Height = 1 (one edge: 4→2 or 4→6)' },
-        2: { diagram: `graph TD\n    A((4)) --> B((2))\n    A --> C((6))\n    B --> D((1))\n    B --> E((3))\n    C --> F((5))\n    C --> G((7))\n    classDef t ${_htTraced}\n    classDef n ${_htNormal}\n    class A,B,D t\n    class C,E,F,G n\n    linkStyle 0 stroke:#e74c3c,stroke-width:4px\n    linkStyle 2 stroke:#e74c3c,stroke-width:4px`, text: 'Height = 2 (path 4→2→1 = 2 edges)' },
-        3: { diagram: `graph TD\n    A((8)) --> B((4))\n    A --> C((12))\n    B --> D((2))\n    D --> H((1))\n    classDef t ${_htTraced}\n    classDef n ${_htNormal}\n    class A,B,D,H t\n    class C n\n    linkStyle 0 stroke:#e74c3c,stroke-width:4px\n    linkStyle 2 stroke:#e74c3c,stroke-width:4px\n    linkStyle 3 stroke:#e74c3c,stroke-width:4px`, text: 'Height = 3 (path 8→4→2→1 = 3 edges)' }
+        0: { diagram: `graph TD\n    A((4))\n    classDef t ${_htTraced}\n    class A t`, text: 'الارتفاع = 0 (عقدة واحدة، بلا حواف!)' },
+        1: { diagram: `graph TD\n    A((4)) --> B((2))\n    A --> C((6))\n    classDef t ${_htTraced}\n    classDef n ${_htNormal}\n    class A,B t\n    class C n\n    linkStyle 0 stroke:#e74c3c,stroke-width:4px`, text: 'الارتفاع = 1 (حافة واحدة: \u20664→2 أو 4→6\u2069)' },
+        2: { diagram: `graph TD\n    A((4)) --> B((2))\n    A --> C((6))\n    B --> D((1))\n    B --> E((3))\n    C --> F((5))\n    C --> G((7))\n    classDef t ${_htTraced}\n    classDef n ${_htNormal}\n    class A,B,D t\n    class C,E,F,G n\n    linkStyle 0 stroke:#e74c3c,stroke-width:4px\n    linkStyle 2 stroke:#e74c3c,stroke-width:4px`, text: 'الارتفاع = 2 (المسار \u20664→2→1\u2069 = حافتان)' },
+        3: { diagram: `graph TD\n    A((8)) --> B((4))\n    A --> C((12))\n    B --> D((2))\n    D --> H((1))\n    classDef t ${_htTraced}\n    classDef n ${_htNormal}\n    class A,B,D,H t\n    class C n\n    linkStyle 0 stroke:#e74c3c,stroke-width:4px\n    linkStyle 2 stroke:#e74c3c,stroke-width:4px\n    linkStyle 3 stroke:#e74c3c,stroke-width:4px`, text: 'الارتفاع = 3 (المسار \u20668→4→2→1\u2069 = 3 حواف)' }
     }
 };
 
@@ -1580,10 +1616,10 @@ async function traceHeight(h) {
 
 /* ─── Level Highlighter (Mermaid) ─── */
 const levelInfoTexts = {
-    0: 'Level 0: max nodes = 2<sup>0</sup> = <strong>1</strong> &nbsp;|&nbsp; The root. Only one node possible.',
-    1: 'Level 1: max nodes = 2<sup>1</sup> = <strong>2</strong> &nbsp;|&nbsp; Children of the root.',
-    2: 'Level 2: max nodes = 2<sup>2</sup> = <strong>4</strong> &nbsp;|&nbsp; Grandchildren of the root.',
-    3: 'Level 3: max nodes = 2<sup>3</sup> = <strong>8</strong> &nbsp;|&nbsp; This tree has 7 nodes at level 3 (one missing to reach max of 8).'
+    0: 'المستوى 0: الحد الأقصى للعقد = <span dir="ltr">2<sup>0</sup> = <strong>1</strong></span> &nbsp;|&nbsp; الجذر. لا يمكن أن توجد إلا عقدة واحدة.',
+    1: 'المستوى 1: الحد الأقصى للعقد = <span dir="ltr">2<sup>1</sup> = <strong>2</strong></span> &nbsp;|&nbsp; أبناء الجذر.',
+    2: 'المستوى 2: الحد الأقصى للعقد = <span dir="ltr">2<sup>2</sup> = <strong>4</strong></span> &nbsp;|&nbsp; أحفاد الجذر.',
+    3: 'المستوى 3: الحد الأقصى للعقد = <span dir="ltr">2<sup>3</sup> = <strong>8</strong></span> &nbsp;|&nbsp; في هذه الشجرة 7 عقد في المستوى 3 (تنقصها عقدة واحدة لتبلغ الحد الأقصى 8).'
 };
 const levelNodeMap = {
     0: ['A'],
@@ -1633,13 +1669,13 @@ highlightLevel(0, document.querySelector('.level-btn'));
 /* ─── Subtree Highlighter (Mermaid) ─── */
 // link indices for A((A))-->B, A-->C, B-->D, B-->E, C-->F, C-->G  (0..5)
 const subtreeMap = {
-    'A': { subtreeNodes: ['A','B','C','D','E','F','G'], rootNode: 'A', highlightedLinks: [0,1,2,3,4,5], desc: 'Subtree of 4 = the entire tree (7 nodes: 4, 2, 6, 1, 3, 5, 7)' },
-    'B': { subtreeNodes: ['B','D','E'], rootNode: 'B', highlightedLinks: [2,3], desc: 'Subtree of 2 = nodes 2, 1, 3 &mdash; the left subtree of 4' },
-    'C': { subtreeNodes: ['C','F','G'], rootNode: 'C', highlightedLinks: [4,5], desc: 'Subtree of 6 = nodes 6, 5, 7 &mdash; the right subtree of 4' },
-    'D': { subtreeNodes: ['D'], rootNode: 'D', highlightedLinks: [], desc: 'Subtree of 1 = just node 1 (it is a leaf, no children)' },
-    'E': { subtreeNodes: ['E'], rootNode: 'E', highlightedLinks: [], desc: 'Subtree of 3 = just node 3 (it is a leaf, no children)' },
-    'F': { subtreeNodes: ['F'], rootNode: 'F', highlightedLinks: [], desc: 'Subtree of 5 = just node 5 (it is a leaf, no children)' },
-    'G': { subtreeNodes: ['G'], rootNode: 'G', highlightedLinks: [], desc: 'Subtree of 7 = just node 7 (it is a leaf, no children)' },
+    'A': { subtreeNodes: ['A','B','C','D','E','F','G'], rootNode: 'A', highlightedLinks: [0,1,2,3,4,5], desc: 'الشجرة الفرعية للعقدة 4 = الشجرة كلها (7 عقد: <span dir="ltr">4, 2, 6, 1, 3, 5, 7</span>)' },
+    'B': { subtreeNodes: ['B','D','E'], rootNode: 'B', highlightedLinks: [2,3], desc: 'الشجرة الفرعية للعقدة 2 = العقد <span dir="ltr">2, 1, 3</span> &mdash; الشجرة الفرعية اليسرى للعقدة 4' },
+    'C': { subtreeNodes: ['C','F','G'], rootNode: 'C', highlightedLinks: [4,5], desc: 'الشجرة الفرعية للعقدة 6 = العقد <span dir="ltr">6, 5, 7</span> &mdash; الشجرة الفرعية اليمنى للعقدة 4' },
+    'D': { subtreeNodes: ['D'], rootNode: 'D', highlightedLinks: [], desc: 'الشجرة الفرعية للعقدة 1 = العقدة 1 وحدها (إنها ورقة، بلا أبناء)' },
+    'E': { subtreeNodes: ['E'], rootNode: 'E', highlightedLinks: [], desc: 'الشجرة الفرعية للعقدة 3 = العقدة 3 وحدها (إنها ورقة، بلا أبناء)' },
+    'F': { subtreeNodes: ['F'], rootNode: 'F', highlightedLinks: [], desc: 'الشجرة الفرعية للعقدة 5 = العقدة 5 وحدها (إنها ورقة، بلا أبناء)' },
+    'G': { subtreeNodes: ['G'], rootNode: 'G', highlightedLinks: [], desc: 'الشجرة الفرعية للعقدة 7 = العقدة 7 وحدها (إنها ورقة، بلا أبناء)' },
 };
 let _subCounter = 0;
 
@@ -1662,7 +1698,7 @@ function showSubtree(nodeId) {
         document.getElementById('mermaid-sub-container').innerHTML = svg;
         setTimeout(() => addLevelLines('mermaid-sub-container'), 50);
     });
-    document.getElementById('subtree-desc').innerHTML = '<strong>&#128073; ' + sub.desc + '</strong>';
+    document.getElementById('subtree-desc').innerHTML = '<strong>&#128072; ' + sub.desc + '</strong>';
     document.querySelectorAll('.subtree-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.subtree-btn').forEach(b => {
         if (b.dataset.node === nodeId) b.classList.add('active');
@@ -1785,9 +1821,9 @@ function addLevelLines(containerId) {
 
 /* ─── Quiz ─── */
 const quizAnswers = {
-    'full-q1': { correct: true,  yesMsg: '&#10003; Correct! Every node in the 7-node tree has 0 or 2 children: A has 2, B has 2, C has 2, and D, E, F, G all have 0. So it is FULL!', noMsg: '&#10007; Not quite! Check: A(2 children), B(2), C(2), D,E,F,G(0 each). Every node has 0 or 2 children &rarr; FULL!' },
-    'comp-q1': { correct: true,  yesMsg: '&#10003; Correct! Level 0: A. Level 1: B, C (full). Level 2: D, E (left of B), F (left of C). All nodes are as far left as possible. COMPLETE!', noMsg: '&#10007; Actually it IS complete! The last level (2) has D, E, F filled from left to right.' },
-    'comp-q2': { correct: true,  yesMsg: '&#10007; Not quite! D is the right child of B. For it to be complete, we need D as the LEFT child first. Since the right child of B is filled before the left child, this VIOLATES the complete property.', noMsg: '&#10003; Correct! D is added as the right child of B, but left child of B is empty. This breaks the "fill from left" rule. NOT complete!' },
+    'full-q1': { correct: true,  yesMsg: '&#10003; صحيح! كل عقدة في الشجرة ذات العقد السبع لها 0 أو 2 من الأبناء: للعقدة A ابنان، ولـ B ابنان، ولـ C ابنان، أما D وE وF وG فليس لأيٍّ منها أبناء. إذن فهي ممتلئة!', noMsg: '&#10007; ليس تمامًا! تحقّق: A (ابنان)، B (2)، C (2)، D وE وF وG (0 لكل منها). كل عقدة لها 0 أو 2 من الأبناء &larr; ممتلئة!' },
+    'comp-q1': { correct: true,  yesMsg: '&#10003; صحيح! المستوى 0: A. المستوى 1: B وC (ممتلئ). المستوى 2: D وE (ابنا B)، وF (الابن الأيسر لـ C). جميع العقد في أقصى اليسار قدر الإمكان. إنها كاملة!', noMsg: '&#10007; في الواقع إنها كاملة! المستوى الأخير (2) فيه D وE وF مملوءة من اليسار إلى اليمين.' },
+    'comp-q2': { correct: true,  yesMsg: '&#10007; ليس تمامًا! العقدة D هي الابن الأيمن لـ B. ولكي تكون الشجرة كاملة، يجب أن تكون D الابن الأيسر أولًا. وبما أن الابن الأيمن لـ B مُلئ قبل الابن الأيسر، فهذا يخالف خاصية الشجرة الكاملة.', noMsg: '&#10003; صحيح! أُضيفت D بوصفها الابن الأيمن لـ B، بينما الابن الأيسر لـ B فارغ. وهذا يخرق قاعدة «الملء من اليسار». ليست كاملة!' },
 };
 
 function checkQuiz(btn, selectedTrue, quizId) {
@@ -1805,7 +1841,7 @@ function checkQuiz(btn, selectedTrue, quizId) {
 const _ctExamples = {
     ex1: {
         verdict: 'complete',
-        verdictText: '&#10003; COMPLETE &mdash; Levels 0-2 are fully filled. Level 3 has 1, 3, 5 filled <strong>left to right</strong>. &#8709; slots on the right are fine.',
+        verdictText: '&#10003; كاملة &mdash; المستويات <span dir="ltr">0-2</span> مملوءة بالكامل. وفي المستوى 3 مُلئت <span dir="ltr">1, 3, 5</span> <strong>من اليسار إلى اليمين</strong>. ولا إشكال في المواضع الفارغة &#8709; على اليمين.',
         levels: [
             { num:0, max:1,  slots:[7] },
             { num:1, max:2,  slots:[4,9] },
@@ -1830,7 +1866,7 @@ const _ctExamples = {
     },
     ex2: {
         verdict: 'complete',
-        verdictText: '&#10003; COMPLETE &mdash; Levels 0-2 fully filled. Level 3 has only 1 and 3 (node 2\'s children), filled <strong>left to right</strong>. All &#8709; slots trail on the right — no gap.',
+        verdictText: '&#10003; كاملة &mdash; المستويات <span dir="ltr">0-2</span> مملوءة بالكامل. وفي المستوى 3 توجد 1 و3 فقط (ابنا العقدة 2)، مملوءتان <strong>من اليسار إلى اليمين</strong>. وجميع المواضع الفارغة &#8709; تأتي في اليمين — لا توجد فجوة.',
         levels: [
             { num:0, max:1,  slots:[6] },
             { num:1, max:2,  slots:[4,8] },
@@ -1855,7 +1891,7 @@ const _ctExamples = {
     },
     ex3: {
         verdict: 'not-complete',
-        verdictText: '&#10007; NOT COMPLETE &mdash; Level 3 GAP: slot 2 (node 2\'s right child) is empty, but slots 3 and 4 (nodes 4 and 6, children of node 5) are filled after it. Left-to-right rule broken!',
+        verdictText: '&#10007; ليست كاملة &mdash; فجوة في المستوى 3: الموضع 2 (الابن الأيمن للعقدة 2) فارغ، بينما الموضعان 3 و4 (العقدتان 4 و6، ابنا العقدة 5) مملوءان بعده. قاعدة الملء من اليسار إلى اليمين مخروقة!',
         levels: [
             { num:0, max:1,  slots:[7] },
             { num:1, max:2,  slots:[3,9] },
@@ -1882,7 +1918,7 @@ const _ctExamples = {
     },
     ex4: {
         verdict: 'not-complete',
-        verdictText: '&#10007; NOT COMPLETE &mdash; Level 3 GAP: slot 1 (node 1\'s left child) is empty, but slot 2 (node 1\'s right child = 2) is filled. Right filled before left — rule broken!',
+        verdictText: '&#10007; ليست كاملة &mdash; فجوة في المستوى 3: الموضع 1 (الابن الأيسر للعقدة 1) فارغ، بينما الموضع 2 (الابن الأيمن للعقدة 1 = 2) مملوء. مُلئ الأيمن قبل الأيسر — القاعدة مخروقة!',
         levels: [
             { num:0, max:1,  slots:[7] },
             { num:1, max:2,  slots:[3,9] },
@@ -1937,25 +1973,25 @@ function showCompleteExample(exId) {
 
         let rowClass, statusClass, statusText;
         if (!isLast) {
-            rowClass = 'lvl-full'; statusClass = 'status-full'; statusText = '&#10003; FULL';
+            rowClass = 'lvl-full'; statusClass = 'status-full'; statusText = '&#10003; ممتلئ';
         } else if (hasGap) {
-            rowClass = 'lvl-last-gap'; statusClass = 'status-last-gap'; statusText = '&#10007; GAP &mdash; not left-to-right!';
+            rowClass = 'lvl-last-gap'; statusClass = 'status-last-gap'; statusText = '&#10007; فجوة &mdash; ليس من اليسار إلى اليمين!';
         } else {
             rowClass = count === l.max ? 'lvl-full' : 'lvl-last-ok';
             statusClass = count === l.max ? 'status-full' : 'status-last-ok';
-            statusText = count === l.max ? '&#10003; FULL' : '&#10003; Filled left &rarr; right';
+            statusText = count === l.max ? '&#10003; ممتلئ' : '&#10003; مملوء من اليسار إلى اليمين';
         }
 
         const slotsHtml = l.slots.map((s, i) => {
             const cls = _ctSlotClass(l.slots, i);
-            return `<div class="ct-slot ${cls}" title="Position ${i+1}">${s !== null ? s : '&#8709;'}</div>`;
+            return `<div class="ct-slot ${cls}" title="الموضع ${i+1}">${s !== null ? s : '&#8709;'}</div>`;
         }).join('');
         const extraHtml = Array(Math.max(0, l.max - l.slots.length)).fill(0).map((_, i) =>
-            `<div class="ct-slot slot-empty-ok" title="Position ${l.slots.length+i+1}">&#8709;</div>`
+            `<div class="ct-slot slot-empty-ok" title="الموضع ${l.slots.length+i+1}">&#8709;</div>`
         ).join('');
 
         return `<div class="ct-level-row ${rowClass}">
-            <div class="ct-lbl">Level ${l.num}</div>
+            <div class="ct-lbl">المستوى ${l.num}</div>
             <div class="ct-form">2<sup>${l.num}</sup>&nbsp;=&nbsp;${l.max}</div>
             <div class="ct-slots">${slotsHtml}${extraHtml}</div>
             <div class="ct-count">${count}/${l.max}</div>
