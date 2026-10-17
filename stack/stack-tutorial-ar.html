@@ -1074,6 +1074,367 @@
                 order: 2;
             }
         }
+
+        /* ===== Postfix Evaluation Simulation (pop → var1, pop → var2, var2 op var1) ===== */
+        .pe-golden {
+            background: #fff8e1;
+            border: 2px solid #ffb300;
+            border-radius: 12px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+        .pe-golden h4 { color: #e65100; margin: 0 0 12px; font-size: 1.2em; }
+        .pe-golden pre {
+            background: #263238;
+            color: #eceff1;
+            padding: 14px 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 1em;
+            line-height: 1.6;
+            direction: ltr;
+            text-align: left;
+        }
+        .pe-golden pre .c1 { color: #ffb74d; font-weight: bold; }
+        .pe-golden pre .c2 { color: #64b5f6; font-weight: bold; }
+        .pe-golden pre .cm { color: #90a4ae; }
+        .pe-why {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px;
+            align-items: center;
+            margin: 16px 0;
+        }
+        .pe-mini-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border: 3px solid #764ba2;
+            border-top: none;
+            padding: 8px;
+            border-radius: 0 0 10px 10px;
+            min-width: 120px;
+            direction: ltr;
+        }
+        .pe-mini-stack div {
+            padding: 8px 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+        }
+        .pe-mini-stack .v1 { background: #fb8c00; }
+        .pe-mini-stack .v2 { background: #1e88e5; }
+        .pe-why-text { flex: 1; min-width: 240px; line-height: 1.8; }
+        .pe-k1 { color: #e65100; font-weight: bold; }
+        .pe-k2 { color: #1565c0; font-weight: bold; }
+        .pe-cmp-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        .pe-cmp-table th, .pe-cmp-table td {
+            border: 1px solid #e0c080;
+            padding: 8px 10px;
+            text-align: center;
+        }
+        .pe-cmp-table th { background: #ffe0b2; }
+        .pe-cmp-table td.ok { background: #e8f5e9; color: #2e7d32; font-weight: bold; }
+        .pe-cmp-table td.bad { background: #ffebee; color: #c62828; font-weight: bold; }
+        .pe-cmp-table .ltr, .pe-table .ltr { direction: ltr; unicode-bidi: isolate; }
+        .pe-static td.p1 { background: #fff3e0; }
+        .pe-static td.p2 { background: #e3f2fd; }
+        .pe-static td.cp { background: #e8f5e9; font-weight: bold; }
+
+        .pe-sim h3.pe-title { text-align: center; color: #667eea; margin-bottom: 8px; }
+        .pe-sim .pe-lead { text-align: center; margin-bottom: 14px; }
+        .pe-rule {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0 18px;
+        }
+        .pe-rule span {
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.98em;
+        }
+        .pe-rule .r1 { background: #fff3e0; color: #e65100; border: 2px solid #fb8c00; }
+        .pe-rule .r2 { background: #e3f2fd; color: #1565c0; border: 2px solid #1e88e5; }
+        .pe-rule .r3 { background: #e8f5e9; color: #2e7d32; border: 2px solid #43a047; direction: ltr; }
+        .pe-input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .pe-input-row input {
+            flex: 1 1 260px;
+            max-width: 460px;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            direction: ltr;
+            text-align: center;
+            font-family: Consolas, monospace;
+        }
+        .pe-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 12px 0;
+            align-items: center;
+        }
+        .pe-presets button {
+            border: 1px solid #b39ddb;
+            background: #f3e5f5;
+            color: #4a148c;
+            border-radius: 16px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-family: Consolas, monospace;
+            direction: ltr;
+        }
+        .pe-presets button:hover { background: #e1bee7; }
+        .pe-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0 6px;
+        }
+        .pe-bar .btn { margin: 0; }
+        .pe-counter { font-weight: bold; color: #4a148c; min-width: 120px; text-align: center; }
+        .pe-progress { height: 6px; background: #ede7f6; border-radius: 3px; overflow: hidden; margin-bottom: 16px; }
+        .pe-progress div { height: 100%; width: 0; background: linear-gradient(90deg, #667eea, #764ba2); transition: width .3s; }
+        .pe-hint { text-align: center; color: #777; font-size: 0.85em; margin-bottom: 10px; }
+
+        .pe-tape {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            padding: 22px 14px 14px;
+            background: #fff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            direction: ltr;
+            position: relative;
+        }
+        .pe-tape-label {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #667eea;
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 10px;
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+        .pe-tok {
+            position: relative;
+            min-width: 46px;
+            padding: 10px 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.25em;
+            font-weight: bold;
+            border: 2px solid;
+            font-family: Consolas, monospace;
+            transition: all .25s;
+        }
+        .pe-tok.num { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+        .pe-tok.op { background: #fff3e0; border-color: #ff9800; color: #e65100; }
+        .pe-tok.done { opacity: .35; }
+        .pe-tok.cur { transform: scale(1.18); box-shadow: 0 0 0 4px #ffd54f; }
+        .pe-tok.cur::after {
+            content: "▲";
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f57f17;
+            font-size: 0.8em;
+        }
+
+        .pe-main {
+            display: grid;
+            grid-template-columns: 270px 1fr;
+            gap: 22px;
+            align-items: start;
+        }
+        .pe-col-title {
+            text-align: center;
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 8px;
+        }
+        .pe-stack {
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 6px;
+            min-height: 330px;
+            border: 3px solid #764ba2;
+            border-top: 3px dashed #c5b3e6;
+            border-radius: 0 0 14px 14px;
+            padding: 12px 10px 12px 16px;
+            background: #faf7ff;
+            direction: ltr;
+        }
+        .pe-item {
+            position: relative;
+            width: 100px;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 1.25em;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, .15);
+        }
+        .pe-item.new { animation: peIn .5s ease; }
+        .pe-item.is-v1 { background: #fb8c00; box-shadow: 0 0 0 4px #ffe0b2; }
+        .pe-item.is-v2 { background: #1e88e5; box-shadow: 0 0 0 4px #bbdefb; }
+        .pe-item.ghost {
+            background: transparent;
+            border: 2px dashed #9e9e9e;
+            color: #9e9e9e;
+            box-shadow: none;
+            text-decoration: line-through;
+            animation: peOut .7s ease forwards;
+        }
+        .pe-item .pe-badge {
+            position: absolute;
+            left: calc(100% + 8px);
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.62em;
+            white-space: nowrap;
+            padding: 3px 8px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .pe-badge.top { background: #4a148c; color: #fff; }
+        .pe-badge.b1 { background: #fb8c00; color: #fff; }
+        .pe-badge.b2 { background: #1e88e5; color: #fff; }
+        .pe-badge.bg { background: #757575; color: #fff; }
+        .pe-empty { color: #aaa; font-style: italic; margin: auto; }
+
+        .pe-work {
+            background: #fff;
+            border: 2px solid #43a047;
+            border-radius: 12px;
+            padding: 18px;
+        }
+        .pe-expr {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
+            direction: ltr;
+            margin-bottom: 14px;
+        }
+        .pe-slot { text-align: center; }
+        .pe-box {
+            width: 92px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 1.6em;
+            font-weight: bold;
+            border: 3px dashed #bbb;
+            color: #bbb;
+            background: #fafafa;
+            transition: all .3s;
+        }
+        .pe-slot .pe-name { font-weight: bold; margin-top: 6px; font-family: Consolas, monospace; }
+        .pe-slot .pe-sub { font-size: 0.78em; color: #666; max-width: 120px; margin: 2px auto 0; line-height: 1.3; }
+        .pe-slot.v1 .pe-box.full { border: 3px solid #fb8c00; background: #fff3e0; color: #e65100; }
+        .pe-slot.v2 .pe-box.full { border: 3px solid #1e88e5; background: #e3f2fd; color: #1565c0; }
+        .pe-slot.res .pe-box.full { border: 3px solid #43a047; background: #e8f5e9; color: #2e7d32; }
+        .pe-slot.v1 .pe-name { color: #e65100; }
+        .pe-slot.v2 .pe-name { color: #1565c0; }
+        .pe-slot.res .pe-name { color: #2e7d32; }
+        .pe-box.just { animation: pePop .6s ease; }
+        .pe-sym {
+            font-size: 2em;
+            font-weight: bold;
+            color: #555;
+            height: 66px;
+            display: flex;
+            align-items: center;
+        }
+        .pe-sym.opbox {
+            min-width: 54px;
+            justify-content: center;
+            border-radius: 10px;
+            background: #fff3e0;
+            color: #e65100;
+            border: 2px solid #ff9800;
+            font-family: Consolas, monospace;
+        }
+        .pe-sym.opbox.idle { background: #fafafa; color: #ccc; border: 2px dashed #ccc; font-size: 1.1em; }
+        .pe-compare { display: grid; gap: 8px; margin-bottom: 14px; }
+        .pe-compare:empty { display: none; }
+        .pe-cmp {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .pe-cmp .ltr { direction: ltr; unicode-bidi: isolate; font-family: Consolas, monospace; font-size: 1.1em; }
+        .pe-cmp.ok { background: #e8f5e9; color: #2e7d32; border: 2px solid #66bb6a; }
+        .pe-cmp.bad { background: #ffebee; color: #c62828; border: 2px solid #ef5350; }
+        .pe-cmp.bad .ltr { text-decoration: line-through; }
+        .pe-cmp.info { display: block; background: #e3f2fd; color: #1565c0; border: 2px solid #64b5f6; font-weight: normal; line-height: 1.6; }
+        .pe-explain {
+            background: #f3e5f5;
+            border-inline-start: 5px solid #764ba2;
+            border-radius: 8px;
+            padding: 14px 16px;
+            line-height: 1.75;
+        }
+        .pe-explain h4 { margin: 0 0 6px; color: #4a148c; }
+        .pe-explain code { background: #fff; padding: 1px 6px; border-radius: 4px; direction: ltr; unicode-bidi: isolate; }
+        .pe-explain.err { background: #ffebee; border-color: #c62828; }
+        .pe-explain.err h4 { color: #c62828; }
+        .pe-explain.fin { background: #e8f5e9; border-color: #2e7d32; }
+        .pe-explain.fin h4 { color: #2e7d32; }
+        .pe-table-wrap { overflow-x: auto; margin-top: 10px; }
+        .pe-table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+        .pe-table th, .pe-table td { border: 1px solid #d1c4e9; padding: 7px 8px; text-align: center; }
+        .pe-table th { background: #ede7f6; color: #4a148c; }
+        .pe-table th.h1, .pe-table td.c1 { color: #e65100; }
+        .pe-table th.h2, .pe-table td.c2 { color: #1565c0; }
+        .pe-table td.c1, .pe-table td.c2 { font-weight: bold; }
+        .pe-table tr.live td { background: #fffde7; }
+        .pe-table tr.last td { background: #f1f8e9; }
+        .pe-table td.mono { font-family: Consolas, monospace; direction: ltr; unicode-bidi: isolate; }
+        @keyframes peIn { from { transform: translateY(-40px); opacity: 0; } to { transform: none; opacity: 1; } }
+        @keyframes peOut { 0% { opacity: 1; transform: none; } 100% { opacity: .55; transform: translateY(-14px); } }
+        @keyframes pePop { 0% { transform: scale(.6); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+        @media (max-width: 768px) {
+            .pe-main { grid-template-columns: 1fr; }
+            .pe-stack { min-height: 200px; align-items: center; padding: 12px 10px; }
+            .pe-box { width: 74px; height: 56px; font-size: 1.3em; }
+            .pe-sym { height: 56px; font-size: 1.5em; }
+            .pe-item .pe-badge { position: static; transform: none; display: block; margin-top: 4px; }
+        }
     </style>
 </head>
 <body>
@@ -1718,26 +2079,52 @@
                         <li>أنشئ مكدساً فارغاً للمعاملات</li>
                         <li>امسح تعبير Postfix من اليسار إلى اليمين:
                             <ul>
-                                <li><strong>إذا كان معاملاً:</strong> ادفعه إلى المكدس</li>
+                                <li><strong>إذا كان معاملاً:</strong> ادفعه إلى المكدس (push)</li>
                                 <li><strong>إذا كان عملية:</strong>
                                     <ul>
-                                        <li>أخرج واحفظ في <code>var1</code> (كان في القمة)</li>
-                                        <li>أخرج واحفظ في <code>var2</code> (كان أسفل var1)</li>
-                                        <li>طبّق العملية كـ: <code>result = var2 operator var1</code></li>
-                                        <li><div class="step-example">
-                                            <strong>مثال:</strong> لـ "5 3 -"<br>
-                                            المكدس يحتوي [5, 3] حيث 3 في القمة<br>
-                                            أخرج var1 = 3 (القمة)<br>
-                                            أخرج var2 = 5 (كان أسفلها)<br>
-                                            احسب: 5 - 3 = 2
-                                        </div></li>
-                                        <li>ادفع النتيجة إلى المكدس</li>
+                                        <li><strong>الإخراج الأول (pop)</strong> ← احفظه في <code>var1</code> (كان في القمة = دُفع <em>أخيراً</em>)</li>
+                                        <li><strong>الإخراج الثاني (pop)</strong> ← احفظه في <code>var2</code> (كان أسفل var1 = دُفع <em>أولاً</em>)</li>
+                                        <li>احسب <code>result = var2 operator var1</code> &nbsp;(var2 على اليسار، var1 على اليمين)</li>
+                                        <li>ادفع <code>result</code> إلى المكدس</li>
                                     </ul>
                                 </li>
                             </ul>
                         </li>
-                        <li>القيمة النهائية في المكدس هي النتيجة</li>
+                        <li>عند انتهاء المسح يجب أن يحتوي المكدس على قيمة <strong>واحدة</strong> فقط: وهي النتيجة النهائية</li>
                     </ol>
+                </div>
+
+                <div class="pe-golden">
+                    <h4>⚠️ القاعدة الذهبية: الإخراج الأول ← var1، الإخراج الثاني ← var2، ثم احسب var2 op var1</h4>
+<pre><span class="cm">// operator found:</span>
+<span class="c1">double var1 = stack.pop();</span>   <span class="cm">// 1st pop: the TOP   → RIGHT operand</span>
+<span class="c2">double var2 = stack.pop();</span>   <span class="cm">// 2nd pop: below it  → LEFT operand</span>
+double result = <span class="c2">var2</span> - <span class="c1">var1</span>;  <span class="cm">// ALWAYS var2 op var1  (never var1 op var2)</span>
+stack.push(result);</pre>
+                    <div class="pe-why">
+                        <div class="pe-mini-stack">
+                            <div class="v1">2 &nbsp;← TOP</div>
+                            <div class="v2">8</div>
+                        </div>
+                        <div class="pe-why-text">
+                            <strong>لماذا؟</strong> في التعبير Infix <code>8 - 2</code> العدد <strong>8 مكتوب أولاً</strong>، لذلك في Postfix
+                            <code>8 2 -</code> يُدفع <strong>أولاً</strong> ويكون <em>أسفل</em> المكدس. ولأن المكدس يعمل بمبدأ <strong>LIFO</strong>
+                            فإن الترتيب يخرج <strong>معكوساً</strong>: <span class="pe-k1">2 تخرج أولاً (var1)</span> و
+                            <span class="pe-k2">8 تخرج ثانياً (var2)</span>.<br>
+                            ولإعادة الترتيب الأصلي نكتب <code>var2 - var1 = 8 - 2 = 6</code> ✔ &nbsp;—&nbsp; وليس <code>var1 - var2 = 2 - 8 = -6</code> ✘.<br>
+                            💡 <strong>للحفظ:</strong> <em>"ما يخرج ثانياً هو ما كُتب أولاً."</em>
+                        </div>
+                    </div>
+                    <p><strong>هل الترتيب مهم فعلاً؟</strong> في <code>+</code> و <code>*</code> لا (عمليات <em>إبدالية</em>).
+                    أما في <code>-</code> و <code>/</code> و <code>%</code> و <code>^</code> <strong>فنعم</strong> — التبديل يعطي ناتجاً مختلفاً (خاطئاً):</p>
+                    <table class="pe-cmp-table">
+                        <tr><th>Postfix</th><th>var1 (الإخراج الأول)</th><th>var2 (الإخراج الثاني)</th><th>✔ var2 op var1</th><th>✘ var1 op var2</th><th>متساويان؟</th></tr>
+                        <tr><td class="ltr">8 2 +</td><td>2</td><td>8</td><td class="ok ltr">8 + 2 = 10</td><td class="ltr">2 + 8 = 10</td><td>نعم (إبدالية)</td></tr>
+                        <tr><td class="ltr">8 2 *</td><td>2</td><td>8</td><td class="ok ltr">8 * 2 = 16</td><td class="ltr">2 * 8 = 16</td><td>نعم (إبدالية)</td></tr>
+                        <tr><td class="ltr">8 2 -</td><td>2</td><td>8</td><td class="ok ltr">8 - 2 = 6</td><td class="bad ltr">2 - 8 = -6</td><td class="bad">لا!</td></tr>
+                        <tr><td class="ltr">8 2 /</td><td>2</td><td>8</td><td class="ok ltr">8 / 2 = 4</td><td class="bad ltr">2 / 8 = 0.25</td><td class="bad">لا!</td></tr>
+                        <tr><td class="ltr">2 3 ^</td><td>3</td><td>2</td><td class="ok ltr">2 ^ 3 = 8</td><td class="bad ltr">3 ^ 2 = 9</td><td class="bad">لا!</td></tr>
+                    </table>
                 </div>
 
                 <h3>مثال يدوي: التحويل والتقييم</h3>
@@ -1792,41 +2179,41 @@
 
                     <p><strong>نتيجة Postfix: <code>3 5 2 * +</code></strong></p>
 
-                    <p><strong>الخطوة 2: تقييم تعبير Postfix</strong></p>
-                    <table style="width: 100%; margin: 10px 0;">
-                        <tr>
-                            <th>الرمز</th>
-                            <th>الإجراء</th>
-                            <th>المكدس</th>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>ادفع معاملاً</td>
-                            <td>[ 3 ]</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>ادفع معاملاً</td>
-                            <td>[ 3, 5 ]</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>ادفع معاملاً</td>
-                            <td>[ 3, 5, 2 ]</td>
-                        </tr>
-                        <tr>
-                            <td>*</td>
-                            <td>أخرج 2 و 5، احسب 5*2=10، ادفع</td>
-                            <td>[ 3, 10 ]</td>
-                        </tr>
-                        <tr>
-                            <td>+</td>
-                            <td>أخرج 10 و 3، احسب 3+10=13، ادفع</td>
-                            <td>[ 13 ]</td>
-                        </tr>
+                    <p><strong>الخطوة 2: تقييم تعبير Postfix <code>3 5 2 * +</code></strong></p>
+                    <table class="pe-static" style="width: 100%; margin: 10px 0;">
+                        <tr><th>الرمز</th><th>الإجراء</th><th>var1 (الإخراج الأول)</th><th>var2 (الإخراج الثاني)</th><th>var2 op var1</th><th>المكدس (القاع ← القمة)</th></tr>
+                        <tr><td>3</td><td>ادفع معاملاً</td><td>—</td><td>—</td><td>—</td><td dir="ltr">[ 3 ]</td></tr>
+                        <tr><td>5</td><td>ادفع معاملاً</td><td>—</td><td>—</td><td>—</td><td dir="ltr">[ 3, 5 ]</td></tr>
+                        <tr><td>2</td><td>ادفع معاملاً</td><td>—</td><td>—</td><td>—</td><td dir="ltr">[ 3, 5, 2 ]</td></tr>
+                        <tr><td>*</td><td>pop ← var1، pop ← var2، ادفع الناتج</td><td class="p1">2</td><td class="p2">5</td><td class="cp" dir="ltr">5 * 2 = 10</td><td dir="ltr">[ 3, 10 ]</td></tr>
+                        <tr><td>+</td><td>pop ← var1، pop ← var2، ادفع الناتج</td><td class="p1">10</td><td class="p2">3</td><td class="cp" dir="ltr">3 + 10 = 13</td><td dir="ltr">[ 13 ]</td></tr>
                     </table>
 
                     <p><strong>النتيجة النهائية: 13</strong></p>
+
+                    <h4 style="margin-top: 25px;">مثال 2 (الترتيب مهم!): قيّم <code>20 4 / 8 2 - -</code> &nbsp;(Infix: <code>20 / 4 - (8 - 2)</code>)</h4>
+                    <p>هنا كل عملية إخراج (pop) مكتوبة في صف مستقل حتى ترى بالضبط أين تذهب كل قيمة.</p>
+                    <table class="pe-static" style="width: 100%; margin: 10px 0;">
+                        <tr><th>الرمز</th><th>الإجراء</th><th>var1</th><th>var2</th><th>الحساب</th><th>المكدس (القاع ← القمة)</th></tr>
+                        <tr><td>20</td><td>ادفع معاملاً</td><td></td><td></td><td></td><td dir="ltr">[ 20 ]</td></tr>
+                        <tr><td>4</td><td>ادفع معاملاً</td><td></td><td></td><td></td><td dir="ltr">[ 20, 4 ]</td></tr>
+                        <tr><td rowspan="3"><strong>/</strong></td><td>الإخراج الأول ← var1</td><td class="p1">4</td><td></td><td></td><td dir="ltr">[ 20 ]</td></tr>
+                        <tr><td>الإخراج الثاني ← var2</td><td class="p1">4</td><td class="p2">20</td><td></td><td dir="ltr">[ ]</td></tr>
+                        <tr><td>احسب var2 / var1 وادفع</td><td class="p1">4</td><td class="p2">20</td><td class="cp" dir="ltr">20 / 4 = 5</td><td dir="ltr">[ 5 ]</td></tr>
+                        <tr><td>8</td><td>ادفع معاملاً</td><td></td><td></td><td></td><td dir="ltr">[ 5, 8 ]</td></tr>
+                        <tr><td>2</td><td>ادفع معاملاً</td><td></td><td></td><td></td><td dir="ltr">[ 5, 8, 2 ]</td></tr>
+                        <tr><td rowspan="3"><strong>-</strong></td><td>الإخراج الأول ← var1</td><td class="p1">2</td><td></td><td></td><td dir="ltr">[ 5, 8 ]</td></tr>
+                        <tr><td>الإخراج الثاني ← var2</td><td class="p1">2</td><td class="p2">8</td><td></td><td dir="ltr">[ 5 ]</td></tr>
+                        <tr><td>احسب var2 - var1 وادفع</td><td class="p1">2</td><td class="p2">8</td><td class="cp" dir="ltr">8 - 2 = 6</td><td dir="ltr">[ 5, 6 ]</td></tr>
+                        <tr><td rowspan="3"><strong>-</strong></td><td>الإخراج الأول ← var1</td><td class="p1">6</td><td></td><td></td><td dir="ltr">[ 5 ]</td></tr>
+                        <tr><td>الإخراج الثاني ← var2</td><td class="p1">6</td><td class="p2">5</td><td></td><td dir="ltr">[ ]</td></tr>
+                        <tr><td>احسب var2 - var1 وادفع</td><td class="p1">6</td><td class="p2">5</td><td class="cp" dir="ltr">5 - 6 = -1</td><td dir="ltr">[ -1 ]</td></tr>
+                    </table>
+                    <p><strong>النتيجة النهائية: <span dir="ltr">-1</span></strong> ✔</p>
+                    <div class="important">
+                        <p>❌ <strong>لو عكست الترتيب</strong> (حسبت var1 op var2) ستحصل على: <code>4 / 20 = 0.2</code> ثم <code>2 - 8 = -6</code>
+                        ثم <code>-6 - 0.2 = -6.2</code> — ناتج خاطئ تماماً. دائماً: <strong>var2 op var1</strong>.</p>
+                    </div>
                 </div>
             </section>
 
@@ -1871,47 +2258,62 @@
                 </div>
 
                 <!-- رسوم متحركة لتقييم Postfix -->
-                <div class="animation-container">
-                    <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">🎬 رسوم متحركة: تقييم تعبير Postfix</h3>
-                    <p style="text-align: center; margin-bottom: 20px;">شاهد كيف تُدفع المعاملات وتُزال أثناء التقييم!</p>
+                <div class="animation-container pe-sim" id="peSim">
+                    <h3 class="pe-title">🎬 تقييم تعبير Postfix — محاكاة خطوة بخطوة</h3>
+                    <p class="pe-lead">كل عملية تُعرض في <strong>5 خطوات منفصلة</strong>: قراءة العملية ← الإخراج الأول (var1) ← الإخراج الثاني (var2) ← حساب <code>var2 op var1</code> ← دفع الناتج.</p>
+                    <div class="pe-rule">
+                        <span class="r1">① الإخراج الأول ← var1 (المعامل الأيمن)</span>
+                        <span class="r2">② الإخراج الثاني ← var2 (المعامل الأيسر)</span>
+                        <span class="r3">③ result = var2 op var1</span>
+                    </div>
 
-                    <div class="animation-controls">
-                        <input type="text" id="animPostfixInput" placeholder="أدخل تعبير Postfix (مثال: 3 5 2 * +)" />
-                        <br>
+                    <div class="pe-input-row">
+                        <input type="text" id="animPostfixInput" placeholder="8 2 - 12 4 / *" />
                         <button class="btn" onclick="startEvalAnimation()">🔄 تحميل التعبير</button>
-                        <button class="btn" onclick="prevEvalStep()" id="evalPrevBtn" disabled>◀ السابق</button>
-                        <button class="btn" onclick="nextEvalStep()" id="evalNextBtn" disabled>التالي ▶</button>
-                        <button class="btn" onclick="resetEvalAnimation()">↻ إعادة تعيين</button>
+                    </div>
+                    <div class="pe-presets">
+                        <span>جرّب:</span>
+                        <button onclick="peLoad('8 2 -')">8 2 -</button>
+                        <button onclick="peLoad('20 4 /')">20 4 /</button>
+                        <button onclick="peLoad('8 2 - 12 4 / *')">8 2 - 12 4 / *</button>
+                        <button onclick="peLoad('20 4 / 8 2 - -')">20 4 / 8 2 - -</button>
+                        <button onclick="peLoad('100 20 5 / -')">100 20 5 / -</button>
+                        <button onclick="peLoad('5 1 2 + 4 * + 3 -')">5 1 2 + 4 * + 3 -</button>
                     </div>
 
-                    <div class="status-message" id="evalAnimStatus">أدخل تعبير Postfix وانقر "تحميل التعبير"</div>
-                    <div class="status-message" id="evalNextAction" style="background: #fff3cd; border-color: #ffc107; display: none;">
-                        <strong>➡️ ما سيحدث بعد ذلك:</strong> <span id="evalNextActionText"></span>
+                    <div class="pe-bar">
+                        <button class="btn" id="pePrev" onclick="prevEvalStep()">▶ السابق</button>
+                        <button class="btn" id="pePlay" onclick="pePlay()">▶ تشغيل</button>
+                        <button class="btn" id="peNext" onclick="peStop(); nextEvalStep()">التالي ◀</button>
+                        <button class="btn" onclick="resetEvalAnimation()">↻ من البداية</button>
+                        <span class="pe-counter" id="peCounter"></span>
                     </div>
+                    <div class="pe-progress"><div id="peProgress"></div></div>
+                    <div class="pe-hint">تلميح: استخدم مفاتيح الأسهم ← → للتنقل بين الخطوات.</div>
 
-                    <div class="eval-animation-area">
-                        <div class="input-area">
-                            <h4>📥 المدخلات (Postfix)</h4>
-                            <div id="evalInputTokens"></div>
+                    <div class="pe-tape" id="peTape" data-label="📥 تعبير Postfix — يُمسح من اليسار إلى اليمين"></div>
+
+                    <div class="pe-main">
+                        <div>
+                            <div class="pe-col-title">المكدس (STACK)</div>
+                            <div class="pe-stack" id="peStack"></div>
                         </div>
-
-                        <div class="animation-stack" id="evalStack">
-                            <h4>المكدس</h4>
-                        </div>
-
-                        <div class="computation-area">
-                            <h4>🧮 الحساب</h4>
-                            <div class="computation-display" id="computationDisplay">
-                                جاهز
+                        <div class="pe-work">
+                            <div class="pe-col-title">🧮 الإخراج والحساب</div>
+                            <div class="pe-expr">
+                                <div class="pe-slot v2"><div class="pe-box" id="peVar2">?</div><div class="pe-name">var2</div><div class="pe-sub">الإخراج الثاني · المعامل الأيسر</div></div>
+                                <div class="pe-sym opbox idle" id="peOp">op</div>
+                                <div class="pe-slot v1"><div class="pe-box" id="peVar1">?</div><div class="pe-name">var1</div><div class="pe-sub">الإخراج الأول · المعامل الأيمن</div></div>
+                                <div class="pe-sym">=</div>
+                                <div class="pe-slot res"><div class="pe-box" id="peRes">?</div><div class="pe-name">result</div><div class="pe-sub">يُدفع للمكدس</div></div>
                             </div>
-                            <div style="text-align: center; margin-top: 20px;">
-                                <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
-                                    <strong>النتيجة النهائية:</strong>
-                                    <div id="finalResult" style="font-size: 2em; color: #4caf50; margin-top: 10px;">-</div>
-                                </div>
-                            </div>
+                            <div class="pe-compare" id="peCompare"></div>
+                            <div class="pe-explain" id="peExplain"></div>
                         </div>
                     </div>
+
+                    <h4 style="margin-top: 22px; color: #4a148c;">📋 جدول التتبع (يمتلئ مع كل خطوة)</h4>
+                    <div class="pe-table-wrap"><table class="pe-table" id="peTable"></table></div>
                 </div>
             </section>
 
@@ -2300,7 +2702,7 @@
                         }
 
                         stack.push(result);
-                        steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> "${token}" عملية → أخرج ${b} و ${a}، احسب ${a} ${token} ${b} = ${result}، ادفع النتيجة<br>المكدس: [${stack.join(', ')}]</div>`);
+                        steps.push(`<div class="step"><strong>الخطوة ${stepNumber++}:</strong> "${token}" عملية → الإخراج الأول: var1 = ${b}، الإخراج الثاني: var2 = ${a} → احسب var2 ${token} var1 = ${a} ${token} ${b} = ${result}، ادفع النتيجة<br>المكدس: [${stack.join(', ')}]</div>`);
                     }
                     else {
                         throw new Error(`رمز غير صالح: ${token}`);
@@ -2421,7 +2823,7 @@
                         }
 
                         stack2.push(result);
-                        evalSteps.push(`<div class="step">احسب ${a} ${token} ${b} = ${result} → [${stack2.join(', ')}]</div>`);
+                        evalSteps.push(`<div class="step">"${token}": var1 = ${b} (الإخراج الأول)، var2 = ${a} (الإخراج الثاني) → var2 ${token} var1 = ${a} ${token} ${b} = ${result} → [${stack2.join(', ')}]</div>`);
                     }
                 }
 
@@ -2962,302 +3364,316 @@
 
         // ========================================
         // POSTFIX EVALUATION ANIMATION
+        // Every operator is shown in 5 separate steps:
+        //   scan → 1st pop (var1) → 2nd pop (var2) → compute var2 op var1 → push result
         // ========================================
-        let evalAnimationSteps = [];
-        let currentEvalStep = -1;
-
-        function startEvalAnimation() {
-            const postfix = document.getElementById('animPostfixInput').value.trim();
-            if (!postfix) {
-                document.getElementById('evalAnimStatus').innerHTML = '⚠️ الرجاء إدخال تعبير Postfix!';
-                document.getElementById('evalNextAction').style.display = 'none';
-                return;
+        const PE_LANG = (document.documentElement.lang || 'en').toLowerCase().startsWith('ar') ? 'ar' : 'en';
+        const PE_TEXT = {
+            en: {
+                step: 'Step', of: 'of', top: 'TOP', empty: 'empty',
+                badge1: '→ var1 (1st pop)', badge2: '→ var2 (2nd pop)',
+                ghost1: 'popped → var1', ghost2: 'popped → var2',
+                play: '▶ Play', pause: '⏸ Pause',
+                actPush: 'push', actOp: 'pop → var1, pop → var2, push(var2 op var1)',
+                startTitle: 'Ready — the stack is empty',
+                startBody: 'We scan the postfix expression from <b>left to right</b>.<br>• Operand → <b>push</b> it.<br>• Operator → <b>pop twice</b>: the <span class="pe-k1">1st pop goes into var1</span>, the <span class="pe-k2">2nd pop goes into var2</span>, then compute <code>var2 op var1</code> and push the result.',
+                pushTitle: t => `Operand ${t} → push`,
+                pushBody: t => `"${t}" is a number, so we simply <code>push(${t})</code>. It is now on the <b>TOP</b> of the stack and waits for an operator.`,
+                scanTitle: op => `Operator "${op}" → it needs two operands`,
+                scanBody: (op, top, below) => `An operator always works on the two most recent operands, so we will pop <b>twice</b>:<br>① <span class="pe-k1">1st pop → var1 = ${top}</span> (it is on the TOP, it was pushed <b>last</b>)<br>② <span class="pe-k2">2nd pop → var2 = ${below}</span> (it is just below, it was pushed <b>first</b>)<br>Watch carefully which value goes into which variable!`,
+                pop1Title: v => `1st pop → var1 = ${v}`,
+                pop1Body: v => `<code>var1 = stack.pop();</code> → <span class="pe-k1">var1 = ${v}</span><br>var1 is the value that was pushed <b>last</b>. In the original (infix) expression it was written on the <b>RIGHT</b> of the operator, so var1 always goes on the <b>right side</b> of the operation.`,
+                pop2Title: v => `2nd pop → var2 = ${v}`,
+                pop2Body: v => `<code>var2 = stack.pop();</code> → <span class="pe-k2">var2 = ${v}</span><br>var2 was pushed <b>before</b> var1, so in the original expression it was written on the <b>LEFT</b> of the operator. var2 always goes on the <b>left side</b>.<br>LIFO reversed the order: the value that comes out <b>second</b> is the one written <b>first</b>.`,
+                computeTitle: (op, a, b, r) => `Compute var2 ${op} var1 = ${a} ${op} ${b} = ${r}`,
+                computeBody: op => `<code>result = var2 ${op} var1;</code> — the <b>2nd</b> popped value (var2) comes <b>first</b>, the <b>1st</b> popped value (var1) comes second.`,
+                okLabel: '✔ Correct (var2 op var1):',
+                badLabel: '✘ Wrong (var1 op var2):',
+                badDiff: 'different answer — this is the classic exam mistake!',
+                badSameHere: 'equal here only because var1 = var2 — in general it is wrong.',
+                nonComm: op => `"${op}" is <b>NOT commutative</b>: swapping the operands changes the answer. That is why the order var2 → var1 matters.`,
+                comm: op => `"${op}" is commutative, so swapping happens to give the same answer. Still, always write <b>var2 ${op} var1</b> — then you will never get − or / wrong.`,
+                pushResTitle: r => `Push the result ${r}`,
+                pushResBody: r => `<code>push(${r})</code> — the result becomes a new operand on the stack. A later operator may pop it again.`,
+                doneTitle: r => `Finished ✔ — Final result = ${r}`,
+                doneBody: 'All tokens are scanned and exactly <b>one</b> value is left on the stack. That value is the answer: <code>return stack.pop();</code>',
+                errUnderTitle: op => `Error: not enough operands for "${op}"`,
+                errUnderBody: 'The operator needs two values, but the stack has fewer than two. The postfix expression is <b>invalid</b>.',
+                errDivTitle: 'Error: division by zero',
+                errDivBody: 'var1 (the right operand / the divisor) is 0, so <code>var2 / var1</code> cannot be computed.',
+                errManyTitle: n => `Error: ${n} values are left on the stack`,
+                errManyBody: 'A valid postfix expression leaves exactly <b>one</b> value on the stack. This expression has too many operands (or too few operators).',
+                errTokTitle: t => `Error: unknown symbol "${t}"`,
+                errTokBody: 'Use numbers and the operators + - * / ^ % separated by spaces.',
+                enterExpr: 'Please enter a postfix expression.',
+                thead: ['#', 'Token', 'Action', 'var1 (1st pop)', 'var2 (2nd pop)', 'var2 op var1', 'Stack (bottom → top)']
+            },
+            ar: {
+                step: 'الخطوة', of: 'من', top: 'القمة', empty: 'فارغ',
+                badge1: '← var1 (الإخراج الأول)', badge2: '← var2 (الإخراج الثاني)',
+                ghost1: 'أُخرج ← var1', ghost2: 'أُخرج ← var2',
+                play: '▶ تشغيل', pause: '⏸ إيقاف',
+                actPush: 'push', actOp: 'pop → var1, pop → var2, push(var2 op var1)',
+                startTitle: 'جاهز — المكدس فارغ',
+                startBody: 'نمسح تعبير Postfix من <b>اليسار إلى اليمين</b>.<br>• معامل (رقم) ← <b>ندفعه</b> (push).<br>• عملية ← <b>نُخرج مرتين</b> (pop): <span class="pe-k1">الإخراج الأول يُخزَّن في var1</span>، و<span class="pe-k2">الإخراج الثاني يُخزَّن في var2</span>، ثم نحسب <code>var2 op var1</code> وندفع الناتج.',
+                pushTitle: t => `معامل ${t} ← push`,
+                pushBody: t => `"${t}" رقم، لذلك ندفعه مباشرة <code>push(${t})</code>. أصبح الآن في <b>قمة</b> المكدس وينتظر عملية.`,
+                scanTitle: op => `عملية "${op}" ← تحتاج معاملَين`,
+                scanBody: (op, top, below) => `العملية تعمل دائماً على آخر معاملَين، لذلك سنُخرج <b>مرتين</b>:<br>① <span class="pe-k1">الإخراج الأول ← var1 = ${top}</span> (في القمة، دُفع <b>أخيراً</b>)<br>② <span class="pe-k2">الإخراج الثاني ← var2 = ${below}</span> (تحته مباشرة، دُفع <b>أولاً</b>)<br>انتبه جيداً: أي قيمة تذهب إلى أي متغير!`,
+                pop1Title: v => `الإخراج الأول ← var1 = ${v}`,
+                pop1Body: v => `<code>var1 = stack.pop();</code> ← <span class="pe-k1">var1 = ${v}</span><br>var1 هي القيمة التي دُفعت <b>أخيراً</b>، وفي التعبير الأصلي (Infix) كانت مكتوبة على <b>يمين</b> العملية؛ لذلك var1 تكون دائماً في <b>الطرف الأيمن</b> من العملية.`,
+                pop2Title: v => `الإخراج الثاني ← var2 = ${v}`,
+                pop2Body: v => `<code>var2 = stack.pop();</code> ← <span class="pe-k2">var2 = ${v}</span><br>var2 دُفعت <b>قبل</b> var1، فهي في التعبير الأصلي مكتوبة على <b>يسار</b> العملية؛ لذلك var2 تكون دائماً في <b>الطرف الأيسر</b>.<br>مبدأ LIFO عكس الترتيب: القيمة التي تخرج <b>ثانياً</b> هي التي كُتبت <b>أولاً</b>.`,
+                computeTitle: (op, a, b, r) => `احسب var2 ${op} var1 = ${a} ${op} ${b} = ${r}`,
+                computeBody: op => `<code>result = var2 ${op} var1;</code> — القيمة المُخرجة <b>ثانياً</b> (var2) تأتي <b>أولاً</b>، والمُخرجة <b>أولاً</b> (var1) تأتي بعدها.`,
+                okLabel: '✔ صحيح (var2 op var1):',
+                badLabel: '✘ خطأ (var1 op var2):',
+                badDiff: 'ناتج مختلف — وهذا هو الخطأ الشائع في الاختبارات!',
+                badSameHere: 'متساويان هنا فقط لأن var1 = var2 — لكنه خطأ بشكل عام.',
+                nonComm: op => `العملية "${op}" <b>ليست إبدالية</b>: تبديل المعاملين يغيّر الناتج؛ لذلك ترتيب var2 ثم var1 مهم جداً.`,
+                comm: op => `العملية "${op}" إبدالية، لذلك التبديل يعطي الناتج نفسه بالصدفة. ومع ذلك اكتب دائماً <b>var2 ${op} var1</b> حتى لا تخطئ أبداً في الطرح والقسمة.`,
+                pushResTitle: r => `ادفع الناتج ${r}`,
+                pushResBody: r => `<code>push(${r})</code> — الناتج يصبح معاملاً جديداً في المكدس، وقد تُخرجه عملية لاحقة.`,
+                doneTitle: r => `انتهى ✔ — الناتج النهائي = ${r}`,
+                doneBody: 'تم مسح جميع الرموز وبقيت قيمة <b>واحدة</b> فقط في المكدس، وهي الناتج: <code>return stack.pop();</code>',
+                errUnderTitle: op => `خطأ: لا توجد معاملات كافية للعملية "${op}"`,
+                errUnderBody: 'العملية تحتاج قيمتين لكن المكدس فيه أقل من قيمتين. تعبير Postfix <b>غير صالح</b>.',
+                errDivTitle: 'خطأ: قسمة على صفر',
+                errDivBody: 'var1 (المعامل الأيمن / المقسوم عليه) يساوي 0، فلا يمكن حساب <code>var2 / var1</code>.',
+                errManyTitle: n => `خطأ: بقيت ${n} قيم في المكدس`,
+                errManyBody: 'تعبير Postfix الصحيح يترك قيمة <b>واحدة</b> فقط في المكدس. هذا التعبير فيه معاملات زائدة (أو عمليات ناقصة).',
+                errTokTitle: t => `خطأ: رمز غير معروف "${t}"`,
+                errTokBody: 'استخدم أرقاماً والعمليات + - * / ^ % مع فصلها بمسافات.',
+                enterExpr: 'الرجاء إدخال تعبير Postfix.',
+                thead: ['#', 'الرمز', 'الإجراء', 'var1 (الإخراج الأول)', 'var2 (الإخراج الثاني)', 'var2 op var1', 'المكدس (القاع ← القمة)']
             }
+        };
+        const PE_T = PE_TEXT[PE_LANG];
+        let peSteps = [];
+        let peIdx = 0;
+        let peTokens = [];
+        let peTimer = null;
 
-            evalAnimationSteps = generateEvalAnimationSteps(postfix);
-
-            if (evalAnimationSteps.length === 0) {
-                document.getElementById('evalAnimStatus').innerHTML = '❌ تعبير غير صالح!';
-                document.getElementById('evalNextAction').style.display = 'none';
-                return;
-            }
-
-            currentEvalStep = -1;
-            document.getElementById('evalAnimStatus').innerHTML = '✅ تم تحميل التعبير! انقر "التالي" لبدء الرسوم المتحركة خطوة بخطوة.';
-            document.getElementById('evalNextBtn').disabled = false;
-            document.getElementById('evalPrevBtn').disabled = true;
-
-            // Display all input tokens
-            const tokens = postfix.split(/\s+/).filter(t => t);
-            const inputDiv = document.getElementById('evalInputTokens');
-            inputDiv.innerHTML = '';
-            tokens.forEach(token => {
-                const tokenEl = document.createElement('span');
-                tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
-                tokenEl.textContent = token;
-                inputDiv.appendChild(tokenEl);
-            });
-
-            // Clear other displays
-            document.getElementById('evalStack').innerHTML = '<h4>المكدس</h4>';
-            document.getElementById('computationDisplay').innerHTML = 'جاهز';
-            document.getElementById('finalResult').textContent = '-';
-
-            // Show what happens next
-            showNextEvalAction();
-        }
-
-        function nextEvalStep() {
-            if (currentEvalStep < evalAnimationSteps.length - 1) {
-                currentEvalStep++;
-                executeEvalStep();
-                updateEvalButtons();
-                showNextEvalAction();
-            }
-        }
-
-        function prevEvalStep() {
-            if (currentEvalStep > -1) {
-                currentEvalStep--;
-                if (currentEvalStep >= 0) {
-                    executeEvalStep();
-                } else {
-                    // Reset to initial state
-                    currentEvalStep = -1;
-                    const postfix = document.getElementById('animPostfixInput').value.trim();
-                    const tokens = postfix.split(/\s+/).filter(t => t);
-                    const inputDiv = document.getElementById('evalInputTokens');
-                    inputDiv.innerHTML = '';
-                    tokens.forEach(token => {
-                        const tokenEl = document.createElement('span');
-                        tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
-                        tokenEl.textContent = token;
-                        inputDiv.appendChild(tokenEl);
-                    });
-                    document.getElementById('evalStack').innerHTML = '<h4>المكدس</h4>';
-                    document.getElementById('computationDisplay').innerHTML = 'جاهز';
-                    document.getElementById('finalResult').textContent = '-';
-                    document.getElementById('evalAnimStatus').innerHTML = '✅ تم تحميل التعبير! انقر "التالي" لبدء الرسوم المتحركة خطوة بخطوة.';
-                }
-                updateEvalButtons();
-                showNextEvalAction();
-            }
-        }
-
-        function updateEvalButtons() {
-            document.getElementById('evalPrevBtn').disabled = (currentEvalStep <= -1);
-            document.getElementById('evalNextBtn').disabled = (currentEvalStep >= evalAnimationSteps.length - 1);
-        }
-
-        function showNextEvalAction() {
-            // Special case: if we haven't started yet (currentEvalStep === -1),
-            // show what will happen with the FIRST token
-            if (currentEvalStep === -1) {
-                if (evalAnimationSteps.length > 0) {
-                    const firstStep = evalAnimationSteps[0];
-                    const firstToken = firstStep.token;
-
-                    let firstDesc = '';
-                    if (!isNaN(firstToken)) {
-                        firstDesc = `الرمز الأول هو "${firstToken}" وهو <strong>معامل</strong>. <br><strong>القاعدة:</strong> تُدفع المعاملات مباشرة إلى المكدس.`;
-                    } else if (isOperator(firstToken)) {
-                        firstDesc = `الرمز الأول هو "${firstToken}" وهو <strong>عملية</strong>. <br><strong>القاعدة:</strong> العمليات تُخرج معاملَين، تحسب، وتدفع النتيجة.`;
-                    }
-
-                    document.getElementById('evalNextActionText').innerHTML = firstDesc;
-                    document.getElementById('evalNextAction').style.display = 'block';
-                }
-            } else {
-                // Normal case: show the nextActionDescription from the CURRENT step
-                if (currentEvalStep < evalAnimationSteps.length) {
-                    const currentStep = evalAnimationSteps[currentEvalStep];
-                    document.getElementById('evalNextActionText').innerHTML = currentStep.nextActionDescription;
-                    document.getElementById('evalNextAction').style.display = 'block';
-                } else {
-                    document.getElementById('evalNextAction').style.display = 'none';
-                }
+        function peFmt(n) { return Number.isInteger(n) ? String(n) : String(+n.toFixed(4)); }
+        function peIsNum(t) { return /^\d+(\.\d+)?$/.test(t); }
+        function peApply(op, a, b) {
+            switch (op) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '*': return a * b;
+                case '/': return a / b;
+                case '^': return Math.pow(a, b);
+                case '%': return a % b;
             }
         }
+        function peTokenize(s) {
+            s = s.trim();
+            if (!s) return [];
+            // With spaces: multi-digit numbers. Without spaces: single-digit textbook style (e.g. 82-3*)
+            return /\s/.test(s) ? s.split(/\s+/) : s.split('');
+        }
 
-        function generateEvalAnimationSteps(postfix) {
+        function peBuildSteps(tokens) {
             const steps = [];
-            const tokens = postfix.split(/\s+/).filter(t => t);
             const stack = [];
+            const rows = [];
+            const snap = o => steps.push(Object.assign({
+                kind: '', tok: -1, stack: [...stack], rows: rows.map(r => ({ ...r })),
+                op: null, var1: null, var2: null, result: null, badges: false, ghost: null, compare: null
+            }, o));
 
-            try {
-                for (let i = 0; i < tokens.length; i++) {
-                    const token = tokens[i];
-                    const remainingInput = tokens.slice(i + 1);
-                    const nextToken = i + 1 < tokens.length ? tokens[i + 1] : null;
+            snap({ kind: 'start', title: PE_T.startTitle, body: PE_T.startBody });
 
-                    // OPERAND: Push to stack
-                    if (!isNaN(token)) {
-                        stack.push(parseFloat(token));
-
-                        let nextDesc = '';
-                        if (nextToken) {
-                            if (!isNaN(nextToken)) {
-                                nextDesc = `سيُمسح المعامل "${nextToken}" ويُدفع إلى المكدس.`;
-                            } else if (isOperator(nextToken)) {
-                                nextDesc = `ستُخرج العملية "${nextToken}" أعلى معاملَين (${stack[stack.length - 1]} و ${stack[stack.length - 2]}) وتُجري عملية ${nextToken}.`;
-                            }
-                        } else {
-                            nextDesc = `اكتمل مسح التعبير. النتيجة النهائية في قمة المكدس.`;
-                        }
-
-                        steps.push({
-                            action: 'push',
-                            token: token,
-                            input: [...remainingInput],
-                            stack: [...stack],
-                            computation: '',
-                            message: `مسح معامل "${token}" → ادفعه إلى المكدس`,
-                            nextActionDescription: nextDesc
-                        });
+            for (let i = 0; i < tokens.length; i++) {
+                const t = tokens[i];
+                if (peIsNum(t)) {
+                    stack.push(parseFloat(t));
+                    rows.push({ tok: t, action: PE_T.actPush, v1: '', v2: '', calc: '', stack: stack.map(peFmt).join(', ') });
+                    snap({ kind: 'push', tok: i, title: PE_T.pushTitle(t), body: PE_T.pushBody(t) });
+                } else if (isOperator(t)) {
+                    if (stack.length < 2) {
+                        snap({ kind: 'error', tok: i, title: PE_T.errUnderTitle(t), body: PE_T.errUnderBody });
+                        return steps;
                     }
-                    // OPERATOR: Pop, compute, push result
-                    else if (isOperator(token)) {
-                        if (stack.length < 2) {
-                            throw new Error('تعبير غير صالح');
-                        }
+                    const row = { tok: t, action: PE_T.actOp, v1: '', v2: '', calc: '', stack: '', live: true };
+                    rows.push(row);
+                    const top = stack[stack.length - 1];
+                    const below = stack[stack.length - 2];
+                    snap({ kind: 'scan', tok: i, op: t, badges: true, title: PE_T.scanTitle(t), body: PE_T.scanBody(t, peFmt(top), peFmt(below)) });
 
-                        const b = stack.pop();
-                        const a = stack.pop();
-                        let result;
+                    const var1 = stack.pop();
+                    row.v1 = peFmt(var1);
+                    snap({ kind: 'pop1', tok: i, op: t, var1, ghost: { v: var1, label: PE_T.ghost1, cls: 'is-v1' }, title: PE_T.pop1Title(peFmt(var1)), body: PE_T.pop1Body(peFmt(var1)) });
 
-                        switch(token) {
-                            case '+': result = a + b; break;
-                            case '-': result = a - b; break;
-                            case '*': result = a * b; break;
-                            case '/':
-                                if (b === 0) throw new Error('القسمة على صفر');
-                                result = a / b;
-                                break;
-                            case '^': result = Math.pow(a, b); break;
-                            case '%': result = a % b; break;
-                        }
+                    const var2 = stack.pop();
+                    row.v2 = peFmt(var2);
+                    snap({ kind: 'pop2', tok: i, op: t, var1, var2, ghost: { v: var2, label: PE_T.ghost2, cls: 'is-v2' }, title: PE_T.pop2Title(peFmt(var2)), body: PE_T.pop2Body(peFmt(var2)) });
 
-                        let computeNextDesc = `ستُدفع النتيجة المحسوبة ${result} مرة أخرى إلى المكدس.`;
-
-                        steps.push({
-                            action: 'compute',
-                            token: token,
-                            input: [...remainingInput],
-                            stack: [a, b],
-                            computation: `${a} ${token} ${b} = ${result}`,
-                            message: `وُجدت عملية "${token}" → أخرج أعلى معاملَين: ${b} (القمة) و ${a}، ثم احسب ${a} ${token} ${b} = ${result}`,
-                            nextActionDescription: computeNextDesc
-                        });
-
-                        stack.push(result);
-
-                        let pushNextDesc = '';
-                        if (nextToken) {
-                            if (!isNaN(nextToken)) {
-                                pushNextDesc = `سيُدفع المعامل التالي "${nextToken}" إلى المكدس.`;
-                            } else if (isOperator(nextToken)) {
-                                if (stack.length >= 2) {
-                                    pushNextDesc = `ستُخرج العملية "${nextToken}" القيم ${stack[stack.length - 1]} و ${stack[stack.length - 2]} لإجراء الحساب.`;
-                                } else {
-                                    pushNextDesc = `ستُعالج العملية "${nextToken}" بعد ذلك.`;
-                                }
-                            }
-                        } else {
-                            pushNextDesc = `اكتمل مسح التعبير. قمة المكدس ${result} هي النتيجة النهائية.`;
-                        }
-
-                        steps.push({
-                            action: 'push_result',
-                            token: result,
-                            input: [...remainingInput],
-                            stack: [...stack],
-                            computation: `النتيجة: ${result}`,
-                            message: `ادفع النتيجة المحسوبة ${result} إلى المكدس`,
-                            nextActionDescription: pushNextDesc
-                        });
+                    if ((t === '/' || t === '%') && var1 === 0) {
+                        snap({ kind: 'error', tok: i, op: t, var1, var2, title: PE_T.errDivTitle, body: PE_T.errDivBody });
+                        return steps;
                     }
-                }
-
-                if (stack.length === 1) {
-                    steps.push({
-                        action: 'done',
-                        input: [],
-                        stack: [...stack],
-                        computation: '',
-                        finalResult: stack[0],
-                        message: `✅ اكتمل التقييم! النتيجة النهائية: ${stack[0]}`,
-                        nextActionDescription: 'انتهت الرسوم المتحركة.'
+                    const result = peApply(t, var2, var1);
+                    const wrong = peApply(t, var1, var2);
+                    const commutative = (t === '+' || t === '*');
+                    row.calc = `${peFmt(var2)} ${t} ${peFmt(var1)} = ${peFmt(result)}`;
+                    snap({
+                        kind: 'compute', tok: i, op: t, var1, var2, result,
+                        compare: {
+                            right: `${peFmt(var2)} ${t} ${peFmt(var1)} = ${peFmt(result)}`,
+                            wrong: `${peFmt(var1)} ${t} ${peFmt(var2)} = ${peFmt(wrong)}`,
+                            commutative, same: peFmt(result) === peFmt(wrong)
+                        },
+                        title: PE_T.computeTitle(t, peFmt(var2), peFmt(var1), peFmt(result)), body: PE_T.computeBody(t)
                     });
-                }
 
-            } catch (error) {
-                return [];
+                    stack.push(result);
+                    row.stack = stack.map(peFmt).join(', ');
+                    row.live = false;
+                    snap({ kind: 'pushres', tok: i, op: t, var1, var2, result, title: PE_T.pushResTitle(peFmt(result)), body: PE_T.pushResBody(peFmt(result)) });
+                } else {
+                    snap({ kind: 'error', tok: i, title: PE_T.errTokTitle(t), body: PE_T.errTokBody });
+                    return steps;
+                }
             }
 
+            if (stack.length === 1) {
+                snap({ kind: 'done', tok: tokens.length, result: stack[0], title: PE_T.doneTitle(peFmt(stack[0])), body: PE_T.doneBody });
+            } else {
+                snap({ kind: 'error', tok: tokens.length, title: PE_T.errManyTitle(stack.length), body: PE_T.errManyBody });
+            }
             return steps;
         }
 
-        function executeEvalStep() {
-            if (currentEvalStep < 0 || currentEvalStep >= evalAnimationSteps.length) {
+        function peEsc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+        function peRender() {
+            const s = peSteps[peIdx];
+            if (!s) return;
+
+            // Input tape
+            document.getElementById('peTape').innerHTML = '<span class="pe-tape-label">' + document.getElementById('peTape').dataset.label + '</span>' +
+                peTokens.map((t, i) => {
+                    let cls = peIsNum(t) ? 'num' : 'op';
+                    if (i < s.tok || s.kind === 'done') cls += ' done';
+                    else if (i === s.tok) cls += ' cur';
+                    return `<span class="pe-tok ${cls}">${peEsc(t)}</span>`;
+                }).join('');
+
+            // Stack (rendered bottom → top; CSS column-reverse puts the top at the top)
+            const n = s.stack.length;
+            let html = '';
+            s.stack.forEach((v, i) => {
+                let cls = 'pe-item';
+                let badge = '';
+                if (s.badges && i === n - 1) { cls += ' is-v1'; badge = `<span class="pe-badge b1">${PE_T.badge1}</span>`; }
+                else if (s.badges && i === n - 2) { cls += ' is-v2'; badge = `<span class="pe-badge b2">${PE_T.badge2}</span>`; }
+                else if (i === n - 1 && !s.ghost) { badge = `<span class="pe-badge top">${PE_T.top}</span>`; }
+                if (i === n - 1 && (s.kind === 'push' || s.kind === 'pushres')) cls += ' new';
+                html += `<div class="${cls}">${peFmt(v)}${badge}</div>`;
+            });
+            if (s.ghost) {
+                html += `<div class="pe-item ghost">${peFmt(s.ghost.v)}<span class="pe-badge ${s.kind === 'pop1' ? 'b1' : 'b2'}">${s.ghost.label}</span></div>`;
+            }
+            if (!n && !s.ghost) html = `<div class="pe-empty">${PE_T.empty}</div>`;
+            document.getElementById('peStack').innerHTML = html;
+
+            // var2  op  var1  =  result
+            const setBox = (id, val, just) => {
+                const el = document.getElementById(id);
+                el.textContent = val === null ? '?' : peFmt(val);
+                el.className = 'pe-box' + (val === null ? '' : ' full') + (just ? ' just' : '');
+            };
+            setBox('peVar1', s.var1, s.kind === 'pop1');
+            setBox('peVar2', s.var2, s.kind === 'pop2');
+            setBox('peRes', s.result, s.kind === 'compute' || s.kind === 'done');
+            const opEl = document.getElementById('peOp');
+            opEl.textContent = s.op || 'op';
+            opEl.className = 'pe-sym opbox' + (s.op ? '' : ' idle');
+
+            // Correct vs wrong order
+            const cmp = document.getElementById('peCompare');
+            if (s.compare) {
+                const c = s.compare;
+                let h = `<div class="pe-cmp ok">${PE_T.okLabel} <span class="ltr">${c.right}</span></div>`;
+                if (c.commutative) {
+                    h += `<div class="pe-cmp info">${PE_T.comm(s.op)}</div>`;
+                } else {
+                    h += `<div class="pe-cmp bad">${PE_T.badLabel} <span class="ltr">${c.wrong}</span> <small>${c.same ? PE_T.badSameHere : PE_T.badDiff}</small></div>`;
+                    h += `<div class="pe-cmp info">${PE_T.nonComm(s.op)}</div>`;
+                }
+                cmp.innerHTML = h;
+            } else {
+                cmp.innerHTML = '';
+            }
+
+            // Explanation
+            const ex = document.getElementById('peExplain');
+            ex.className = 'pe-explain' + (s.kind === 'error' ? ' err' : s.kind === 'done' ? ' fin' : '');
+            ex.innerHTML = `<h4>${PE_T.step} ${peIdx + 1}: ${s.title}</h4><div>${s.body}</div>`;
+
+            // Trace table
+            let t = '<tr>' + PE_T.thead.map((h, i) => `<th class="${i === 3 ? 'h1' : i === 4 ? 'h2' : ''}">${h}</th>`).join('') + '</tr>';
+            s.rows.forEach((r, i) => {
+                const last = i === s.rows.length - 1;
+                const cls = r.live ? 'live' : (last && s.kind !== 'start' ? 'last' : '');
+                t += `<tr class="${cls}"><td>${i + 1}</td><td class="mono"><b>${peEsc(r.tok)}</b></td><td class="mono">${r.action}</td>` +
+                    `<td class="c1 mono">${r.v1 || '—'}</td><td class="c2 mono">${r.v2 || '—'}</td>` +
+                    `<td class="mono">${r.calc || '—'}</td><td class="mono">[ ${r.stack} ]</td></tr>`;
+            });
+            document.getElementById('peTable').innerHTML = t;
+
+            // Counter, progress, buttons
+            document.getElementById('peCounter').textContent = `${PE_T.step} ${peIdx + 1} ${PE_T.of} ${peSteps.length}`;
+            document.getElementById('peProgress').style.width = (peSteps.length > 1 ? (peIdx / (peSteps.length - 1)) * 100 : 0) + '%';
+            document.getElementById('pePrev').disabled = peIdx === 0;
+            document.getElementById('peNext').disabled = peIdx >= peSteps.length - 1;
+        }
+
+        function peLoad(expr) {
+            const input = document.getElementById('animPostfixInput');
+            if (typeof expr === 'string') input.value = expr;
+            peStop();
+            peTokens = peTokenize(input.value);
+            if (!peTokens.length) {
+                const ex = document.getElementById('peExplain');
+                ex.className = 'pe-explain err';
+                ex.innerHTML = `<h4>${PE_T.enterExpr}</h4>`;
                 return;
             }
-
-            const step = evalAnimationSteps[currentEvalStep];
-
-            // Update status message
-            document.getElementById('evalAnimStatus').innerHTML = `<strong>الخطوة ${currentEvalStep + 1}:</strong> ${step.message}`;
-
-            // Update input area
-            const inputDiv = document.getElementById('evalInputTokens');
-            inputDiv.innerHTML = '';
-            step.input.forEach(token => {
-                const tokenEl = document.createElement('span');
-                tokenEl.className = isNaN(token) ? 'token operator' : 'token number';
-                tokenEl.textContent = token;
-                inputDiv.appendChild(tokenEl);
-            });
-
-            // Update stack
-            const stackDiv = document.getElementById('evalStack');
-            stackDiv.innerHTML = '<h4>المكدس</h4>';
-            step.stack.forEach(item => {
-                const stackItem = document.createElement('div');
-                stackItem.className = 'stack-token';
-                stackItem.textContent = item;
-                stackItem.style.animation = 'pushToStack 0.5s ease';
-                stackDiv.appendChild(stackItem);
-            });
-
-            // Update computation display
-            const compDisplay = document.getElementById('computationDisplay');
-            if (step.computation) {
-                compDisplay.innerHTML = step.computation;
-                compDisplay.style.animation = 'highlight 1s ease';
-            } else {
-                compDisplay.innerHTML = 'جاهز';
-                compDisplay.style.animation = 'none';
-            }
-
-            // Update final result if done
-            if (step.action === 'done') {
-                document.getElementById('finalResult').textContent = step.finalResult;
-                document.getElementById('finalResult').style.animation = 'highlight 1s ease';
-            }
+            peSteps = peBuildSteps(peTokens);
+            peIdx = 0;
+            peRender();
         }
 
-        function resetEvalAnimation() {
-            currentEvalStep = -1;
-            evalAnimationSteps = [];
-            document.getElementById('evalInputTokens').innerHTML = '';
-            document.getElementById('evalStack').innerHTML = '<h4>المكدس</h4>';
-            document.getElementById('computationDisplay').innerHTML = 'جاهز';
-            document.getElementById('finalResult').textContent = '-';
-            document.getElementById('evalAnimStatus').innerHTML = 'أدخل تعبير Postfix وانقر "تحميل التعبير"';
-            document.getElementById('evalNextAction').style.display = 'none';
-            document.getElementById('evalNextBtn').disabled = true;
-            document.getElementById('evalPrevBtn').disabled = true;
-            document.getElementById('animPostfixInput').value = '';
+        function startEvalAnimation() { peLoad(); }
+        function nextEvalStep() { if (peIdx < peSteps.length - 1) { peIdx++; peRender(); } else { peStop(); } }
+        function prevEvalStep() { peStop(); if (peIdx > 0) { peIdx--; peRender(); } }
+        function resetEvalAnimation() { peStop(); peIdx = 0; peRender(); }
+        function peStop() {
+            if (peTimer) { clearInterval(peTimer); peTimer = null; }
+            const b = document.getElementById('pePlay');
+            if (b) b.textContent = PE_T.play;
         }
+        function pePlay() {
+            if (peTimer) { peStop(); return; }
+            if (peIdx >= peSteps.length - 1) { peIdx = 0; peRender(); }
+            document.getElementById('pePlay').textContent = PE_T.pause;
+            peTimer = setInterval(nextEvalStep, 1800);
+        }
+
+        // ← / → keys step through the simulation while it is on screen
+        document.addEventListener('keydown', function(e) {
+            if (!peSteps.length || /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+            const r = document.getElementById('peSim').getBoundingClientRect();
+            if (r.bottom < 0 || r.top > window.innerHeight) return;
+            const forward = PE_LANG === 'ar' ? 'ArrowLeft' : 'ArrowRight';
+            const back = PE_LANG === 'ar' ? 'ArrowRight' : 'ArrowLeft';
+            if (e.key === forward) { e.preventDefault(); peStop(); nextEvalStep(); }
+            else if (e.key === back) { e.preventDefault(); prevEvalStep(); }
+        });
+
+        peLoad('8 2 - 12 4 / *');
 
         // Allow Enter key for animation inputs
         document.getElementById('animInfixInput').addEventListener('keypress', function(e) {
