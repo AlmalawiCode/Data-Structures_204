@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Recursion — Practice Exam (A4 printable)</title>
+<style>
+/* =======================================================================
+   Data Structures I — RECURSION practice exam
+   Print-first, A4. Each question is a CARD. Blue module theme.
+   A "Show model answers" toggle turns the same file into an answer key.
+   ======================================================================= */
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+
+:root{
+  --blue:      #2563eb;
+  --blue-dark: #1e3a5f;
+  --blue-deep: #0f172a;
+  --blue-tint: #eef4ff;
+  --ink:       #17202a;
+  --ink-soft:  #3a4656;
+  --rule:      #cbd5e1;
+  --rule-soft: #e2e8f0;
+  --paper:     #ffffff;
+  --code-bg:   #f6f8fc;
+  --code-rule: #d7e0f0;
+  --warn:      #b42318;
+  --ans:       #1d4ed8;
+  --tag-easy:  #e7f6ec; --tag-easy-i:#1a7f37;
+  --tag-med:   #fef3e0; --tag-med-i: #9a6212;
+  --tag-hard:  #fdeaea; --tag-hard-i:#b42318;
+}
+
+*{ box-sizing:border-box; }
+html,body{
+  margin:0; padding:0;
+  background:#e9edf3;
+  color:var(--ink);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size:11pt; line-height:1.5;
+}
+body{ padding:14mm 0; }
+
+/* ---- A4 sheet ---- */
+.sheet{
+  background:var(--paper);
+  width:210mm; min-height:297mm;
+  margin:0 auto 10mm;
+  padding:15mm 15mm 18mm;
+  box-shadow:0 3px 14px rgba(15,23,42,.18);
+  position:relative;
+}
+
+/* ---- running head ---- */
+.runhead{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid var(--blue-dark);
+  padding-bottom:6px; margin-bottom:14px;
+  font-size:9.5pt; color:var(--blue-dark);
+}
+.runhead b{ font-size:10.5pt; }
+
+/* ================= COVER ================= */
+.cover-top{ text-align:center; }
+.cover-top .uni{ font-size:15pt; font-weight:800; color:var(--blue-deep); }
+.cover-top .fac{ font-size:10.5pt; color:var(--ink-soft); margin-top:2px; }
+.cover-rule{ height:2px; background:var(--blue-dark); margin:12px 0; }
+.cover-title{ font-size:22pt; font-weight:800; color:var(--blue); letter-spacing:.5px; }
+.cover-sub{ font-size:13pt; font-weight:600; margin-top:4px; }
+.cover-tag{
+  display:inline-block; margin-top:10px; padding:4px 16px;
+  background:var(--blue-tint); color:var(--blue); border:1px solid var(--blue);
+  border-radius:999px; font-weight:700; font-size:10.5pt;
+}
+
+.id-grid{
+  margin:22px 0 4px; width:100%; border-collapse:collapse; font-size:11pt;
+}
+.id-grid td{ padding:9px 6px; }
+.id-grid .lbl{ width:120px; font-weight:700; color:var(--blue-dark); }
+.id-grid .line{ border-bottom:1.4px solid #64748b; }
+
+.instr{
+  margin-top:16px; border:1px solid var(--rule);
+  border-left:5px solid var(--blue); border-radius:8px;
+  background:#fafcff; padding:12px 16px;
+}
+.instr h3{ margin:0 0 6px; font-size:11.5pt; color:var(--blue-dark); }
+.instr ul{ margin:0; padding-left:18px; }
+.instr li{ margin:3px 0; }
+
+.marks-tbl{ width:100%; border-collapse:collapse; margin-top:18px; font-size:10pt; text-align:center; }
+.marks-tbl th, .marks-tbl td{ border:1px solid var(--rule); padding:6px 4px; }
+.marks-tbl thead th{ background:var(--blue-dark); color:#fff; }
+.marks-tbl .tot{ background:var(--blue-tint); font-weight:800; }
+
+/* ================= QUESTION CARD ================= */
+.card{
+  border:1px solid var(--rule);
+  border-radius:10px;
+  margin:0 0 16px;
+  overflow:hidden;
+  break-inside:avoid; page-break-inside:avoid;
+  background:#fff;
+}
+.card-head{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  background:linear-gradient(180deg,#f3f7ff,#e9f0ff);
+  border-bottom:1px solid var(--rule);
+  padding:9px 14px;
+}
+.qno{
+  font-weight:800; color:#fff; background:var(--blue);
+  border-radius:6px; padding:3px 11px; font-size:11pt; letter-spacing:.3px;
+}
+.qtitle{ font-weight:700; font-size:11.5pt; color:var(--blue-deep); flex:1 1 240px; }
+.chips{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.chip{ font-size:8.5pt; padding:2px 8px; border-radius:999px; font-weight:700; white-space:nowrap; }
+.chip.clo{ background:#eef2ff; color:#3730a3; border:1px solid #c7d2fe; }
+.chip.so { background:#ecfeff; color:#0e7490; border:1px solid #a5f3fc; }
+.chip.pts{ background:var(--blue-dark); color:#fff; }
+.tag-easy{ background:var(--tag-easy); color:var(--tag-easy-i); border:1px solid var(--tag-easy-i); }
+.tag-med { background:var(--tag-med);  color:var(--tag-med-i);  border:1px solid var(--tag-med-i);  }
+.tag-hard{ background:var(--tag-hard); color:var(--tag-hard-i); border:1px solid var(--tag-hard-i); }
+
+.card-body{ padding:12px 16px 14px; }
+.card-body p{ margin:6px 0; }
+.note{ color:var(--warn); font-style:italic; font-weight:600; font-size:10pt; }
+.hint{ color:var(--ink-soft); font-style:italic; font-size:10pt; }
+.worked{ background:#f5faff; border:1px dashed var(--blue); border-radius:8px; padding:8px 12px; margin:10px 0; font-size:10.5pt; }
+.worked b{ color:var(--blue-dark); }
+
+/* ---- code blocks ---- */
+pre.code{
+  background:var(--code-bg); border:1px solid var(--code-rule);
+  border-left:4px solid var(--blue); border-radius:6px;
+  padding:10px 12px; margin:10px 0; overflow:auto;
+  font-family:'Consolas','DejaVu Sans Mono',monospace; font-size:10pt; line-height:1.45;
+  counter-reset:ln;
+}
+pre.code .ln{ display:block; white-space:pre; }
+pre.code.numbered .ln::before{
+  counter-increment:ln; content:counter(ln);
+  display:inline-block; width:1.6em; margin-right:10px;
+  color:#94a3b8; text-align:right; border-right:1px solid #cbd5e1; padding-right:6px;
+}
+.kw{ color:#7c3aed; font-weight:700; }
+.ty{ color:#0e7490; font-weight:700; }
+.st{ color:#b45309; }
+.cm{ color:#64748b; font-style:italic; }
+code.inl{ background:var(--code-bg); border:1px solid var(--code-rule); border-radius:4px; padding:1px 5px; font-family:'Consolas',monospace; font-size:9.8pt; }
+
+
+/* ---- answer space ---- */
+.answer-space{ margin-top:10px; }
+.answer-space .lbl{ font-style:italic; color:var(--ink-soft); font-size:10pt; }
+.writeline{ border-bottom:1px solid #94a3b8; height:1.55em; margin-top:.45em; }
+.codebox{ border:1px dashed #94a3b8; border-radius:6px; min-height:120px; margin-top:8px;
+  background:repeating-linear-gradient(#fff,#fff 1.7em,#eef2f7 1.7em,#eef2f7 calc(1.7em + 1px)); }
+.codebox.tall{ min-height:200px; }
+.boxrow{ display:flex; gap:0; margin-top:8px; }
+.boxrow .b{ flex:1; border:1.4px solid var(--blue-dark); border-right:0; height:42px; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.boxrow .b:last-child{ border-right:1.4px solid var(--blue-dark); }
+.boxrow .b .k{ font-size:8pt; color:#64748b; font-weight:600; }
+.mini{ font-size:9pt; color:#64748b; }
+
+/* array cells */
+.arr{ display:flex; margin:8px 0; font-family:'Consolas',monospace; }
+.arr .c{ width:38px; height:38px; border:1.4px solid var(--blue-dark); border-right:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; }
+.arr .c:last-child{ border-right:1.4px solid var(--blue-dark); }
+.arr.idx .c{ border:0; height:auto; color:#64748b; font-size:9pt; }
+
+/* ---- model answer block (hidden until toggled) ---- */
+.answer-key{ display:none; }
+body.show-answers .answer-key{ display:block; }
+.answer-key{
+  margin-top:12px; border:1px solid #bbf7d0; border-left:5px solid #16a34a;
+  background:#f0fdf4; border-radius:8px; padding:10px 14px;
+}
+.answer-key .akh{ font-weight:800; color:#15803d; font-size:10.5pt; margin-bottom:4px; }
+.answer-key pre.code{ border-left-color:#16a34a; background:#f3fdf6; }
+.answer-key .val{ color:#166534; font-weight:800; }
+.answer-key .rub{ color:#0e7490; font-size:9.5pt; font-style:italic; }
+
+/* ---- floating toolbar (screen only) ---- */
+.toolbar{
+  position:fixed; top:14px; right:14px; z-index:50; display:flex; gap:8px;
+  background:#fff; border:1px solid var(--rule); border-radius:10px; padding:8px 10px;
+  box-shadow:0 4px 14px rgba(15,23,42,.18);
+}
+.toolbar button{
+  font:inherit; font-size:10pt; font-weight:700; cursor:pointer;
+  border:1px solid var(--blue); border-radius:7px; padding:7px 12px;
+  background:var(--blue); color:#fff;
+}
+.toolbar button.ghost{ background:#fff; color:var(--blue); }
+.toolbar button:active{ transform:translateY(1px); }
+
+.footline{ text-align:center; margin-top:6px; color:var(--ink-soft); font-size:9.5pt; }
+.endmark{ text-align:center; font-weight:800; color:var(--blue-dark); margin:18px 0 4px; }
+
+/* ================= PRINT ================= */
+@media print{
+  html,body{ background:#fff; padding:0; }
+  .toolbar{ display:none !important; }
+  .sheet{ box-shadow:none; margin:0; width:auto; min-height:auto; padding:0; }
+  .sheet + .sheet{ page-break-before:always; }
+  .card{ box-shadow:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== screen toolbar ===== -->
+<div class="toolbar">
+  <button id="toggleAns" class="ghost">👁 Show model answers</button>
+  <button onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<!-- =====================================================================
+     COVER PAGE
+     ===================================================================== -->
+<section class="sheet cover">
+  <div class="cover-rule"></div>
+  <div class="cover-top">
+    <div class="cover-title">Data Structures I</div>
+    <div class="cover-sub">Recursion — Focused Practice Exam</div>
+    <div class="cover-tag">Tracing &middot; Numeric &middot; String &middot; Array Recursion</div>
+  </div>
+  <div class="cover-rule"></div>
+
+  <table class="id-grid">
+    <tr><td class="lbl">Student Name:</td><td class="line"></td></tr>
+    <tr><td class="lbl">Student ID:</td><td class="line"></td></tr>
+    <tr>
+      <td class="lbl">Section:</td><td class="line" style="width:35%"></td>
+      <td class="lbl" style="text-align:right;padding-right:14px">Instructor:</td><td class="line"></td>
+    </tr>
+  </table>
+
+  <div class="instr">
+    <h3>Instructions</h3>
+    <ul>
+      <li>This booklet contains <b>10 questions</b> on recursion only. <b>Total: 80 marks</b> &middot; Suggested time: <b>60 minutes</b>.</li>
+      <li>Answer <b>all</b> questions in the spaces provided. <b>Place your answers in the boxes provided.</b></li>
+      <li>Every recursive method you write must have a clear <b>base case</b> and a <b>general (recursive) case</b> that moves toward it.</li>
+      <li>When asked to trace, show <b>every</b> call with its parameter values and what it returns or prints.</li>
+      <li>Write clear Java. Partial (per-line) credit is given. <span class="note">On coding items you will not get points unless you use recursion (no loops).</span></li>
+    </ul>
+  </div>
+
+  <table class="marks-tbl">
+    <thead>
+      <tr><th>Question</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Q5</th><th>Q6</th><th>Q7</th><th>Q8</th><th>Q9</th><th>Q10</th><th class="tot">Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Max Mark</b></td><td>6</td><td>6</td><td>8</td><td>8</td><td>6</td><td>8</td><td>10</td><td>8</td><td>10</td><td>10</td><td class="tot">80</td></tr>
+      <tr><td><b>Obtained</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="tot"></td></tr>
+    </tbody>
+  </table>
+
+  <p class="footline">Topics covered: base case &amp; call stack · print-before vs. print-after tracing · tracing all calls · recursion trees &amp; counting calls · numeric, string and array recursion · recursive binary search.</p>
+</section>
+
+<!-- =====================================================================
+     PAGE 2 — Q1, Q2, Q3
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Recursion — Practice Exam</span></div>
+
+  <!-- ============ Q1 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q1</span>
+      <span class="qtitle">Recursion Concepts (Multiple Choice)</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 1 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Circle the <b>single best</b> answer for each item.</p>
+<p><b>1.</b> The <b>base case</b> of a recursive method is:</p>
+<p>&nbsp;&nbsp;(a) the first line of the method &nbsp;&nbsp; (b) the case that is solved <b>directly</b>, without another recursive call &nbsp;&nbsp; (c) the case with the largest input &nbsp;&nbsp; (d) the recursive call itself</p>
+<p><b>2.</b> A recursive method that has <b>no reachable base case</b> will normally end with:</p>
+<p>&nbsp;&nbsp;(a) a compile-time error &nbsp;&nbsp; (b) an infinite loop that never ends &nbsp;&nbsp; (c) a <b>StackOverflowError</b> at run time &nbsp;&nbsp; (d) a NullPointerException</p>
+<p><b>3.</b> Each time a method calls itself, Java stores its parameters and local variables in a new:</p>
+<p>&nbsp;&nbsp;(a) heap object &nbsp;&nbsp; (b) <b>activation record (frame) on the call stack</b> &nbsp;&nbsp; (c) static variable &nbsp;&nbsp; (d) array cell</p>
+<p><b>4.</b> A method is <b>tail-recursive</b> when:</p>
+<p>&nbsp;&nbsp;(a) it has two recursive calls &nbsp;&nbsp; (b) the recursive call is the <b>last operation</b> performed before returning &nbsp;&nbsp; (c) it has no base case &nbsp;&nbsp; (d) it is written with a loop</p>
+<p><b>5.</b> With base case <code class="inl">if (n == 0) return 1;</code>, how many calls in total (including the first) does <code class="inl">fact(5)</code> make?</p>
+<p>&nbsp;&nbsp;(a) 4 &nbsp;&nbsp; (b) 5 &nbsp;&nbsp; (c) <b>6</b> &nbsp;&nbsp; (d) 120</p>
+<p><b>6.</b> Compared with an equivalent loop, a simple linear recursion over <i>n</i> items usually:</p>
+<p>&nbsp;&nbsp;(a) uses less memory &nbsp;&nbsp; (b) uses <b>O(n) extra stack memory</b> for the pending calls &nbsp;&nbsp; (c) is always faster &nbsp;&nbsp; (d) cannot return a value</p>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q1</div>
+<p>1:&nbsp;<span class="val">(b)</span> &nbsp; 2:&nbsp;<span class="val">(c)</span> &nbsp; 3:&nbsp;<span class="val">(b)</span> &nbsp; 4:&nbsp;<span class="val">(b)</span> &nbsp; 5:&nbsp;<span class="val">(c)</span> &nbsp; 6:&nbsp;<span class="val">(b)</span></p>
+<p class="rub">1 mark each. (5) fact(5) → fact(4) → … → fact(0): that is 6 calls.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q2 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q2</span>
+      <span class="qtitle">Output Tracing — Print Before vs. After the Call</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 3 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Study each method carefully. Pay attention to <b>where</b> the print statement is: <i>before</i> or <i>after</i> the recursive call.</p>
+<p><b>(a)</b> What is printed by <code class="inl">p1(9)</code>? <span class="hint">[3 marks]</span></p>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">void</span> p1(<span class="ty">int</span> n) {</span><span class="ln">    <span class="kw">if</span> (n &lt;= <span class="st">0</span>) {</span><span class="ln">        <span class="kw">return</span>;</span><span class="ln">    }</span><span class="ln">    System.out.print(n + <span class="st">" "</span>);</span><span class="ln">    p1(n - <span class="st">2</span>);</span><span class="ln">}</span></pre>
+<div class="answer-space"><span class="lbl">Output:</span><div class="writeline"></div></div>
+<p style="margin-top:12px"><b>(b)</b> What is printed by <code class="inl">p2(13)</code>? <span class="hint">[3 marks]</span></p>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">void</span> p2(<span class="ty">int</span> n) {</span><span class="ln">    <span class="kw">if</span> (n == <span class="st">0</span>) {</span><span class="ln">        <span class="kw">return</span>;</span><span class="ln">    }</span><span class="ln">    p2(n / <span class="st">2</span>);</span><span class="ln">    System.out.print(n % <span class="st">2</span> + <span class="st">" "</span>);</span><span class="ln">}</span></pre>
+<div class="answer-space"><span class="lbl">Output:</span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q2</div>
+<p>(a) prints on the way <b>down</b>: <span class="val">9 7 5 3 1</span></p>
+<p>(b) calls p2(13) → p2(6) → p2(3) → p2(1) → p2(0); prints on the way <b>back up</b> (13%2 is printed last): <span class="val">1 1 0 1</span> &nbsp;(the binary form of 13)</p>
+<p class="rub">3 marks each: 2 for the correct values, 1 for the correct order. Reversed order in (b) earns 1 mark at most.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q3 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q3</span>
+      <span class="qtitle">Trace All Recursive Calls</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Trace the call <code class="inl">m(84, 36)</code>. You must <b>draw ALL recursive calls</b> (with their parameter values), show what each call returns, and give the final result.</p>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span> m(<span class="ty">int</span> a, <span class="ty">int</span> b) {</span><span class="ln">    <span class="kw">if</span> (b == <span class="st">0</span>) {</span><span class="ln">        <span class="kw">return</span> a;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> m(b, a % b);</span><span class="ln">}</span></pre>
+<div class="answer-space"><span class="lbl">Draw the calls and the returned values:</span><div class="codebox"></div></div>
+<p><b>(b)</b> In one short phrase, what does <code class="inl">m(a, b)</code> compute? <span class="hint">[1 mark]</span></p>
+<div class="answer-space"><span class="lbl">Answer:</span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q3</div>
+<pre class="code"><span class="ln">m(84, 36)   →  84 % 36 = 12  →  calls m(36, 12)</span><span class="ln">m(36, 12)   →  36 % 12 = 0   →  calls m(12, 0)</span><span class="ln">m(12, 0)    →  BASE CASE (b == 0)  →  return 12</span><span class="ln">            ←  12 is returned unchanged back up every level</span></pre>
+<p>Final result: <span class="val">12</span> &nbsp;·&nbsp; 3 calls in total. &nbsp; (b) the <span class="val">greatest common divisor (GCD)</span> of a and b (Euclid's algorithm).</p>
+<p class="rub">Rubric (8): each correct call with correct parameters 2 × 3 = 6 · correct final value 1 · (b) GCD 1.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 3 — Q4, Q5
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Recursion — Practice Exam</span></div>
+
+  <!-- ============ Q4 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q4</span>
+      <span class="qtitle">Recursion Tree &amp; Counting Calls — Fibonacci</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Consider the recursive Fibonacci method:</p>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span> fib(<span class="ty">int</span> n) {</span><span class="ln">    <span class="kw">if</span> (n == <span class="st">1</span> || n == <span class="st">2</span>) {</span><span class="ln">        <span class="kw">return</span> <span class="st">1</span>;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> fib(n - <span class="st">1</span>) + fib(n - <span class="st">2</span>);</span><span class="ln">}</span></pre>
+<p><b>(a)</b> Draw the <b>recursion tree</b> for <code class="inl">fib(5)</code>. <span class="hint">[3 marks]</span></p>
+<div class="answer-space"><span class="lbl">Recursion tree:</span><div class="codebox"></div></div>
+<p><b>(b)</b> What value does <code class="inl">fib(5)</code> return, and how many calls in total (including the first) are made? <span class="hint">[2 marks]</span></p>
+<div class="answer-space"><span class="lbl">Value = ______ &nbsp;&nbsp; Number of calls = ______</span><div class="writeline"></div></div>
+<p><b>(c)</b> How many calls does <code class="inl">fib(6)</code> make? Why is this method inefficient for large <i>n</i>? <span class="hint">[3 marks]</span></p>
+<div class="answer-space"><span class="lbl">Answer:</span><div class="writeline"></div></div><div class="writeline"></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q4</div>
+<pre class="code"><span class="ln">                    fib(5)</span><span class="ln">              /              \</span><span class="ln">          fib(4)              fib(3)</span><span class="ln">         /      \            /      \</span><span class="ln">     fib(3)    fib(2)=1  fib(2)=1  fib(1)=1</span><span class="ln">     /    \</span><span class="ln"> fib(2)=1  fib(1)=1</span></pre>
+<p>(b) fib(5) = <span class="val">5</span>, total calls = <span class="val">9</span>.</p>
+<p>(c) fib(6) makes <span class="val">15</span> calls (1 + 9 + 5). The method makes <b>two</b> calls per level and recomputes the same values again and again (fib(3) is computed twice inside fib(5)), so the number of calls grows <b>exponentially</b> — roughly O(2<sup>n</sup>).</p>
+<p class="rub">(a) 3 for a complete, correct tree · (b) 1 + 1 · (c) 15 calls 1, "repeated sub-problems / exponential growth" 2.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q5 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q5</span>
+      <span class="qtitle">Fill in the Blanks — Palindrome</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 2 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Complete the recursive method below so that it returns <code class="inl">true</code> if the string <code class="inl">s</code> is a <b>palindrome</b> (reads the same forwards and backwards), otherwise <code class="inl">false</code>. Examples: "racecar" → true, "abba" → true, "abca" → false, "" → true.</p>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">boolean</span> isPal(<span class="ty">String</span> s) {</span><span class="ln">    <span class="kw">if</span> (________________________) {             <span class="cm">// (i)   base case</span></span><span class="ln">        <span class="kw">return</span> <span class="kw">true</span>;</span><span class="ln">    }</span><span class="ln">    <span class="kw">if</span> (s.charAt(<span class="st">0</span>) != ________________________) {   <span class="cm">// (ii)</span></span><span class="ln">        <span class="kw">return</span> <span class="kw">false</span>;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> isPal(________________________);      <span class="cm">// (iii) smaller problem</span></span><span class="ln">}</span></pre>
+<div class="answer-space">
+  <span class="lbl">(i)</span><div class="writeline"></div>
+  <span class="lbl">(ii)</span><div class="writeline"></div>
+  <span class="lbl">(iii)</span><div class="writeline"></div>
+</div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q5</div>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">boolean</span> isPal(<span class="ty">String</span> s) {</span><span class="ln">    <span class="kw">if</span> (s.length() &lt;= <span class="st">1</span>) {                         <span class="cm">// (i)</span></span><span class="ln">        <span class="kw">return</span> <span class="kw">true</span>;</span><span class="ln">    }</span><span class="ln">    <span class="kw">if</span> (s.charAt(<span class="st">0</span>) != s.charAt(s.length() - <span class="st">1</span>)) {  <span class="cm">// (ii)</span></span><span class="ln">        <span class="kw">return</span> <span class="kw">false</span>;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> isPal(s.substring(<span class="st">1</span>, s.length() - <span class="st">1</span>));  <span class="cm">// (iii) drop first and last</span></span><span class="ln">}</span></pre>
+<p class="rub">2 marks each. (i) must cover <b>both</b> the empty string and a single character — <code class="inl">s.length() == 0</code> alone fails for odd lengths such as "racecar" (gets 1 mark). (iii) <code class="inl">s.substring(1)</code> alone is wrong.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 4 — Q6, Q7
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Recursion — Practice Exam</span></div>
+
+  <!-- ============ Q6 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q6</span>
+      <span class="qtitle">Numeric Recursion — Count a Digit</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Write &nbsp;<code class="inl">public static int exam06(int n, int d)</code>&nbsp; that returns <b>how many times the digit <code class="inl">d</code> appears</b> in the non-negative integer <code class="inl">n</code>. Assume <code class="inl">0 ≤ d ≤ 9</code>; for <code class="inl">n == 0</code> return 0.</p>
+<p class="note">Note: you will not get points unless you use recursion (no loops).</p>
+<div class="worked"><b>Worked examples.</b> &nbsp;exam06(70737, 7) → <b>3</b> &nbsp;·&nbsp; exam06(5, 3) → <b>0</b> &nbsp;·&nbsp; exam06(1001, 1) → <b>2</b></div>
+<p class="hint">Hint: <code class="inl">n % 10</code> gives the last digit and <code class="inl">n / 10</code> removes it.</p>
+<div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q6</div>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span> exam06(<span class="ty">int</span> n, <span class="ty">int</span> d) {</span><span class="ln">    <span class="kw">if</span> (n == <span class="st">0</span>) {                        <span class="cm">// base case: no digits left</span></span><span class="ln">        <span class="kw">return</span> <span class="st">0</span>;</span><span class="ln">    }</span><span class="ln">    <span class="kw">if</span> (n % <span class="st">10</span> == d) {                   <span class="cm">// last digit matches</span></span><span class="ln">        <span class="kw">return</span> <span class="st">1</span> + exam06(n / <span class="st">10</span>, d);</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> exam06(n / <span class="st">10</span>, d);            <span class="cm">// last digit does not match</span></span><span class="ln">}</span></pre>
+<p class="rub">Rubric: base case 2 · extract last digit with % 10 2 · correct +1 / +0 accumulation 2 · recursive call on n / 10 2. A loop-based answer earns 0.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q7 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q7</span>
+      <span class="qtitle">String Recursion — Remove Adjacent Duplicates</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Write &nbsp;<code class="inl">public static String exam07(String s)</code>&nbsp; that returns a new string in which every run of <b>adjacent equal characters</b> is reduced to a <b>single</b> character. Characters that are equal but not adjacent are kept.</p>
+<p class="note">Note: you will not get points unless you use recursion (no loops).</p>
+<div class="worked"><b>Worked examples.</b> &nbsp;"aabbbcda" → <b>"abcda"</b> &nbsp;·&nbsp; "xxxx" → <b>"x"</b> &nbsp;·&nbsp; "abc" → <b>"abc"</b> &nbsp;·&nbsp; "" → <b>""</b></div>
+<p class="hint">Hint: compare <code class="inl">s.charAt(0)</code> with <code class="inl">s.charAt(1)</code>; then recurse on <code class="inl">s.substring(1)</code>.</p>
+<div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox tall"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q7</div>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">String</span> exam07(<span class="ty">String</span> s) {</span><span class="ln">    <span class="kw">if</span> (s.length() &lt;= <span class="st">1</span>) {                   <span class="cm">// base case: "" or one char</span></span><span class="ln">        <span class="kw">return</span> s;</span><span class="ln">    }</span><span class="ln">    <span class="kw">if</span> (s.charAt(<span class="st">0</span>) == s.charAt(<span class="st">1</span>)) {        <span class="cm">// duplicate: drop the first one</span></span><span class="ln">        <span class="kw">return</span> exam07(s.substring(<span class="st">1</span>));</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> s.charAt(<span class="st">0</span>) + exam07(s.substring(<span class="st">1</span>));   <span class="cm">// keep it, solve the rest</span></span><span class="ln">}</span></pre>
+<p class="rub">Rubric (10): base case for length 0 <b>and</b> 1 3 (a base case of only "" causes <code class="inl">charAt(1)</code> to crash on one character) · compare first two chars 2 · drop duplicate correctly 2 · keep + concatenate with recursive result 3. A loop-based answer earns 0.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 5 — Q8, Q9
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Recursion — Practice Exam</span></div>
+
+  <!-- ============ Q8 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q8</span>
+      <span class="qtitle">Array Recursion — Is the Array Sorted?</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Write &nbsp;<code class="inl">public static boolean exam08(int[] a, int i)</code>&nbsp; that returns <code class="inl">true</code> if the elements of <code class="inl">a</code> from index <code class="inl">i</code> to the end are in <b>non-decreasing</b> (ascending) order, otherwise <code class="inl">false</code>. The method is first called as <code class="inl">exam08(a, 0)</code>. An empty or one-element array is sorted.</p>
+<p class="note">Note: you will not get points unless you use recursion (no loops).</p>
+<div class="arr"><span class="c">2</span><span class="c">4</span><span class="c">4</span><span class="c">9</span></div>
+<p class="mini">exam08(&#123;2, 4, 4, 9&#125;, 0) → <b>true</b> &nbsp;·&nbsp; exam08(&#123;3, 5, 1&#125;, 0) → <b>false</b> &nbsp;·&nbsp; exam08(&#123;&#125;, 0) → <b>true</b></p>
+<div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q8</div>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">boolean</span> exam08(<span class="ty">int</span>[] a, <span class="ty">int</span> i) {</span><span class="ln">    <span class="kw">if</span> (i &gt;= a.length - <span class="st">1</span>) {          <span class="cm">// 0 or 1 element left: sorted</span></span><span class="ln">        <span class="kw">return</span> <span class="kw">true</span>;</span><span class="ln">    }</span><span class="ln">    <span class="kw">if</span> (a[i] &gt; a[i + <span class="st">1</span>]) {            <span class="cm">// one pair out of order</span></span><span class="ln">        <span class="kw">return</span> <span class="kw">false</span>;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> exam08(a, i + <span class="st">1</span>);          <span class="cm">// check the rest</span></span><span class="ln">}</span></pre>
+<p class="rub">Rubric: base case 3 (must handle the empty array — <code class="inl">i == a.length - 1</code> alone fails for length 0) · compare a[i] with a[i+1] 2 · recursive call with i + 1 2 · correct return values 1.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q9 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q9</span>
+      <span class="qtitle">Two Recursive Calls — Tree, Output and Call Count</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>The method below makes <b>two</b> recursive calls, with a print statement <b>between</b> them.</p>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">void</span> t(<span class="ty">int</span> n) {</span><span class="ln">    <span class="kw">if</span> (n &lt;= <span class="st">0</span>) {</span><span class="ln">        <span class="kw">return</span>;</span><span class="ln">    }</span><span class="ln">    t(n - <span class="st">2</span>);</span><span class="ln">    System.out.print(n + <span class="st">" "</span>);</span><span class="ln">    t(n - <span class="st">1</span>);</span><span class="ln">}</span></pre>
+<p><b>(a)</b> Draw the recursion tree for <code class="inl">t(4)</code> (include the calls that hit the base case). <span class="hint">[5 marks]</span></p>
+<div class="answer-space"><span class="lbl">Recursion tree:</span><div class="codebox tall"></div></div>
+<p><b>(b)</b> What exactly is printed by <code class="inl">t(4)</code>? <span class="hint">[3 marks]</span></p>
+<div class="answer-space"><span class="lbl">Output:</span><div class="writeline"></div></div>
+<p><b>(c)</b> How many calls to <code class="inl">t</code> are made in total (including <code class="inl">t(4)</code> itself)? <span class="hint">[2 marks]</span></p>
+<div class="answer-space"><span class="lbl">Number of calls:</span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q9</div>
+<pre class="code"><span class="ln">                          t(4)</span><span class="ln">               /                    \</span><span class="ln">           t(2)                     t(3)</span><span class="ln">          /    \                  /      \</span><span class="ln">      t(0)     t(1)            t(1)       t(2)</span><span class="ln">              /    \          /    \     /    \</span><span class="ln">          t(-1)   t(0)    t(-1)   t(0) t(0)   t(1)</span><span class="ln">                                              /    \</span><span class="ln">                                          t(-1)   t(0)</span></pre>
+<p>(b) In-order reading of the tree (left subtree, print n, right subtree): <span class="val">2 1 4 1 3 2 1</span></p>
+<p>(c) <span class="val">15</span> calls (7 that print + 8 base-case calls).</p>
+<p class="rub">(a) 5 for a complete tree (−1 per missing/wrong branch) · (b) 3 for the exact sequence (2 if one value misplaced) · (c) 2.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 6 — Q10
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Recursion — Practice Exam</span></div>
+
+  <!-- ============ Q10 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q10</span>
+      <span class="qtitle">Recursive Binary Search</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+<p>Write the <b>recursive binary search</b> &nbsp;<code class="inl">public static int exam10(int[] a, int key, int lo, int hi)</code>&nbsp; that returns the index of <code class="inl">key</code> in the <b>sorted</b> array <code class="inl">a</code> between indices <code class="inl">lo</code> and <code class="inl">hi</code>, or <b>−1</b> if it is not found. It is first called as <code class="inl">exam10(a, key, 0, a.length - 1)</code>. Use <code class="inl">mid = (lo + hi) / 2</code>.</p>
+<p class="note">Note: you will not get points unless you use recursion (no loops).</p>
+<div class="answer-space"><span class="lbl">(a) Write your complete method: [7 marks]</span><div class="codebox tall"></div></div>
+<p><b>(b)</b> For the array below, list the values of <code class="inl">mid</code> in the order they are computed for <code class="inl">key = 56</code> and for <code class="inl">key = 10</code>, and give the returned value. <span class="hint">[3 marks]</span></p>
+<div class="arr"><span class="c">3</span><span class="c">8</span><span class="c">12</span><span class="c">17</span><span class="c">21</span><span class="c">30</span><span class="c">42</span><span class="c">56</span><span class="c">63</span></div>
+<div class="arr idx"><span class="c">0</span><span class="c">1</span><span class="c">2</span><span class="c">3</span><span class="c">4</span><span class="c">5</span><span class="c">6</span><span class="c">7</span><span class="c">8</span></div>
+<div class="answer-space"><span class="lbl">key = 56: mids = ______________ &nbsp; returns ______</span><div class="writeline"></div></div>
+<div class="answer-space"><span class="lbl">key = 10: mids = ______________ &nbsp; returns ______</span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q10</div>
+<pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span> exam10(<span class="ty">int</span>[] a, <span class="ty">int</span> key, <span class="ty">int</span> lo, <span class="ty">int</span> hi) {</span><span class="ln">    <span class="kw">if</span> (lo &gt; hi) {                        <span class="cm">// base case: empty range, not found</span></span><span class="ln">        <span class="kw">return</span> -<span class="st">1</span>;</span><span class="ln">    }</span><span class="ln">    <span class="ty">int</span> mid = (lo + hi) / <span class="st">2</span>;</span><span class="ln">    <span class="kw">if</span> (a[mid] == key) {                  <span class="cm">// base case: found</span></span><span class="ln">        <span class="kw">return</span> mid;</span><span class="ln">    }</span><span class="ln">    <span class="kw">if</span> (key &lt; a[mid]) {</span><span class="ln">        <span class="kw">return</span> exam10(a, key, lo, mid - <span class="st">1</span>);   <span class="cm">// search left half</span></span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> exam10(a, key, mid + <span class="st">1</span>, hi);       <span class="cm">// search right half</span></span><span class="ln">}</span></pre>
+<p>(b) key = 56: mids <span class="val">4, 6, 7</span> → returns <span class="val">7</span>. &nbsp; key = 10: mids <span class="val">4, 1, 2</span> → returns <span class="val">−1</span>.</p>
+<p class="rub">(a) both base cases 3 · correct mid 1 · correct left/right recursive calls with mid ± 1 3 (using mid instead of mid ± 1 can recurse forever) · (b) 1.5 each. A loop-based answer earns 0 for (a).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="endmark">— End of Recursion Practice Exam — Good Luck! —</div>
+  <p class="footline">Data Structures I</p>
+</section>
+
+<script>
+  var btn = document.getElementById('toggleAns');
+  btn.addEventListener('click', function () {
+    var on = document.body.classList.toggle('show-answers');
+    btn.textContent = on ? '🙈 Hide model answers' : '👁 Show model answers';
+    btn.classList.toggle('ghost', !on);
+  });
+</script>
+</body>
+</html>

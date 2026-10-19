@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Algorithm Analysis — Practice Exam (A4 printable)</title>
+<style>
+/* =======================================================================
+   Data Structures I — ALGORITHM ANALYSIS practice exam
+   Print-first, A4. Each question is a CARD. Blue module theme.
+   A "Show model answers" toggle turns the same file into an answer key.
+   ======================================================================= */
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+
+:root{
+  --blue:      #2563eb;
+  --blue-dark: #1e3a5f;
+  --blue-deep: #0f172a;
+  --blue-tint: #eef4ff;
+  --ink:       #17202a;
+  --ink-soft:  #3a4656;
+  --rule:      #cbd5e1;
+  --rule-soft: #e2e8f0;
+  --paper:     #ffffff;
+  --code-bg:   #f6f8fc;
+  --code-rule: #d7e0f0;
+  --warn:      #b42318;
+  --ans:       #1d4ed8;
+  --tag-easy:  #e7f6ec; --tag-easy-i:#1a7f37;
+  --tag-med:   #fef3e0; --tag-med-i: #9a6212;
+  --tag-hard:  #fdeaea; --tag-hard-i:#b42318;
+}
+
+*{ box-sizing:border-box; }
+html,body{
+  margin:0; padding:0;
+  background:#e9edf3;
+  color:var(--ink);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size:11pt; line-height:1.5;
+}
+body{ padding:14mm 0; }
+
+/* ---- A4 sheet ---- */
+.sheet{
+  background:var(--paper);
+  width:210mm; min-height:297mm;
+  margin:0 auto 10mm;
+  padding:15mm 15mm 18mm;
+  box-shadow:0 3px 14px rgba(15,23,42,.18);
+  position:relative;
+}
+
+/* ---- running head ---- */
+.runhead{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid var(--blue-dark);
+  padding-bottom:6px; margin-bottom:14px;
+  font-size:9.5pt; color:var(--blue-dark);
+}
+.runhead b{ font-size:10.5pt; }
+
+/* ================= COVER ================= */
+.cover-top{ text-align:center; }
+.cover-top .uni{ font-size:15pt; font-weight:800; color:var(--blue-deep); }
+.cover-top .fac{ font-size:10.5pt; color:var(--ink-soft); margin-top:2px; }
+.cover-rule{ height:2px; background:var(--blue-dark); margin:12px 0; }
+.cover-title{ font-size:22pt; font-weight:800; color:var(--blue); letter-spacing:.5px; }
+.cover-sub{ font-size:13pt; font-weight:600; margin-top:4px; }
+.cover-tag{
+  display:inline-block; margin-top:10px; padding:4px 16px;
+  background:var(--blue-tint); color:var(--blue); border:1px solid var(--blue);
+  border-radius:999px; font-weight:700; font-size:10.5pt;
+}
+
+.id-grid{
+  margin:22px 0 4px; width:100%; border-collapse:collapse; font-size:11pt;
+}
+.id-grid td{ padding:9px 6px; }
+.id-grid .lbl{ width:120px; font-weight:700; color:var(--blue-dark); }
+.id-grid .line{ border-bottom:1.4px solid #64748b; }
+
+.instr{
+  margin-top:16px; border:1px solid var(--rule);
+  border-left:5px solid var(--blue); border-radius:8px;
+  background:#fafcff; padding:12px 16px;
+}
+.instr h3{ margin:0 0 6px; font-size:11.5pt; color:var(--blue-dark); }
+.instr ul{ margin:0; padding-left:18px; }
+.instr li{ margin:3px 0; }
+
+.marks-tbl{ width:100%; border-collapse:collapse; margin-top:18px; font-size:10pt; text-align:center; }
+.marks-tbl th, .marks-tbl td{ border:1px solid var(--rule); padding:6px 4px; }
+.marks-tbl thead th{ background:var(--blue-dark); color:#fff; }
+.marks-tbl .tot{ background:var(--blue-tint); font-weight:800; }
+
+/* ================= QUESTION CARD ================= */
+.card{
+  border:1px solid var(--rule);
+  border-radius:10px;
+  margin:0 0 16px;
+  overflow:hidden;
+  break-inside:avoid; page-break-inside:avoid;
+  background:#fff;
+}
+.card-head{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  background:linear-gradient(180deg,#f3f7ff,#e9f0ff);
+  border-bottom:1px solid var(--rule);
+  padding:9px 14px;
+}
+.qno{
+  font-weight:800; color:#fff; background:var(--blue);
+  border-radius:6px; padding:3px 11px; font-size:11pt; letter-spacing:.3px;
+}
+.qtitle{ font-weight:700; font-size:11.5pt; color:var(--blue-deep); flex:1 1 240px; }
+.chips{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.chip{ font-size:8.5pt; padding:2px 8px; border-radius:999px; font-weight:700; white-space:nowrap; }
+.chip.clo{ background:#eef2ff; color:#3730a3; border:1px solid #c7d2fe; }
+.chip.so { background:#ecfeff; color:#0e7490; border:1px solid #a5f3fc; }
+.chip.pts{ background:var(--blue-dark); color:#fff; }
+.tag-easy{ background:var(--tag-easy); color:var(--tag-easy-i); border:1px solid var(--tag-easy-i); }
+.tag-med { background:var(--tag-med);  color:var(--tag-med-i);  border:1px solid var(--tag-med-i);  }
+.tag-hard{ background:var(--tag-hard); color:var(--tag-hard-i); border:1px solid var(--tag-hard-i); }
+
+.card-body{ padding:12px 16px 14px; }
+.card-body p{ margin:6px 0; }
+.note{ color:var(--warn); font-style:italic; font-weight:600; font-size:10pt; }
+.hint{ color:var(--ink-soft); font-style:italic; font-size:10pt; }
+.worked{ background:#f5faff; border:1px dashed var(--blue); border-radius:8px; padding:8px 12px; margin:10px 0; font-size:10.5pt; }
+.worked b{ color:var(--blue-dark); }
+
+/* ---- code blocks ---- */
+pre.code{
+  background:var(--code-bg); border:1px solid var(--code-rule);
+  border-left:4px solid var(--blue); border-radius:6px;
+  padding:10px 12px; margin:10px 0; overflow:auto;
+  font-family:'Consolas','DejaVu Sans Mono',monospace; font-size:10pt; line-height:1.45;
+  counter-reset:ln;
+}
+pre.code .ln{ display:block; white-space:pre; }
+pre.code.numbered .ln::before{
+  counter-increment:ln; content:counter(ln);
+  display:inline-block; width:1.6em; margin-right:10px;
+  color:#94a3b8; text-align:right; border-right:1px solid #cbd5e1; padding-right:6px;
+}
+.kw{ color:#7c3aed; font-weight:700; }
+.ty{ color:#0e7490; font-weight:700; }
+.st{ color:#b45309; }
+.cm{ color:#64748b; font-style:italic; }
+code.inl{ background:var(--code-bg); border:1px solid var(--code-rule); border-radius:4px; padding:1px 5px; font-family:'Consolas',monospace; font-size:9.8pt; }
+
+/* ---- answer space ---- */
+.answer-space{ margin-top:10px; }
+.answer-space .lbl{ font-style:italic; color:var(--ink-soft); font-size:10pt; }
+.writeline{ border-bottom:1px solid #94a3b8; height:1.55em; margin-top:.45em; }
+.codebox{ border:1px dashed #94a3b8; border-radius:6px; min-height:120px; margin-top:8px;
+  background:repeating-linear-gradient(#fff,#fff 1.7em,#eef2f7 1.7em,#eef2f7 calc(1.7em + 1px)); }
+.codebox.tall{ min-height:200px; }
+.boxrow{ display:flex; gap:0; margin-top:8px; }
+.boxrow .b{ flex:1; border:1.4px solid var(--blue-dark); border-right:0; height:42px; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.boxrow .b:last-child{ border-right:1.4px solid var(--blue-dark); }
+.boxrow .b .k{ font-size:8pt; color:#64748b; font-weight:600; }
+.mini{ font-size:9pt; color:#64748b; }
+
+/* array cells */
+.arr{ display:flex; margin:8px 0; font-family:'Consolas',monospace; }
+.arr .c{ width:38px; height:38px; border:1.4px solid var(--blue-dark); border-right:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; }
+.arr .c:last-child{ border-right:1.4px solid var(--blue-dark); }
+.arr.idx .c{ border:0; height:auto; color:#64748b; font-size:9pt; }
+
+/* ---- model answer block (hidden until toggled) ---- */
+.answer-key{ display:none; }
+body.show-answers .answer-key{ display:block; }
+.answer-key{
+  margin-top:12px; border:1px solid #bbf7d0; border-left:5px solid #16a34a;
+  background:#f0fdf4; border-radius:8px; padding:10px 14px;
+}
+.answer-key .akh{ font-weight:800; color:#15803d; font-size:10.5pt; margin-bottom:4px; }
+.answer-key pre.code{ border-left-color:#16a34a; background:#f3fdf6; }
+.answer-key .val{ color:#166534; font-weight:800; }
+.answer-key .rub{ color:#0e7490; font-size:9.5pt; font-style:italic; }
+
+/* ---- floating toolbar (screen only) ---- */
+.toolbar{
+  position:fixed; top:14px; right:14px; z-index:50; display:flex; gap:8px;
+  background:#fff; border:1px solid var(--rule); border-radius:10px; padding:8px 10px;
+  box-shadow:0 4px 14px rgba(15,23,42,.18);
+}
+.toolbar button{
+  font:inherit; font-size:10pt; font-weight:700; cursor:pointer;
+  border:1px solid var(--blue); border-radius:7px; padding:7px 12px;
+  background:var(--blue); color:#fff;
+}
+.toolbar button.ghost{ background:#fff; color:var(--blue); }
+.toolbar button:active{ transform:translateY(1px); }
+
+.footline{ text-align:center; margin-top:6px; color:var(--ink-soft); font-size:9.5pt; }
+.endmark{ text-align:center; font-weight:800; color:var(--blue-dark); margin:18px 0 4px; }
+
+/* ================= PRINT ================= */
+@media print{
+  body{ background:#fff; padding:0; }
+  .toolbar{ display:none !important; }
+  .sheet{ box-shadow:none; margin:0; width:auto; min-height:auto; padding:0; }
+  .sheet + .sheet{ page-break-before:always; }
+  .card{ box-shadow:none; }
+}
+
+
+/* ---- small data tables (tracing / comparison) ---- */
+.grid-tbl{ border-collapse:collapse; margin:10px 0; font-size:10pt; text-align:center; }
+.grid-tbl th, .grid-tbl td{ border:1px solid var(--rule); padding:6px 12px; min-width:70px; }
+.grid-tbl thead th{ background:var(--blue-tint); color:var(--blue-dark); }
+.grid-tbl td.blank{ height:30px; }
+.grid-tbl.wide{ width:100%; }
+.cols2{ display:grid; grid-template-columns:1fr 1fr; gap:10px 18px; }
+.cols2 > div{ min-width:0; }
+.cols2 pre.code{ font-size:8.6pt; padding:8px 8px; overflow:visible; }
+.cols2 pre.code.numbered .ln::before{ width:1.2em; margin-right:6px; }
+@media print{ pre.code{ overflow:visible; } }
+.card-body.mcq p{ margin:3px 0; }
+.fn{ font-family:'Consolas','DejaVu Sans Mono',monospace; font-weight:700; }
+</style>
+</head>
+<body>
+
+<!-- ===== screen toolbar ===== -->
+<div class="toolbar">
+  <button id="toggleAns" class="ghost">👁 Show model answers</button>
+  <button onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<section class="sheet cover">
+  <div class="cover-rule"></div>
+  <div class="cover-top">
+    <div class="cover-title">Data Structures I</div>
+    <div class="cover-sub">Algorithm Analysis — Focused Practice Exam</div>
+    <div class="cover-tag">Big-O &middot; Counting Operations &middot; Execution Time &middot; Searching</div>
+  </div>
+  <div class="cover-rule"></div>
+
+  <table class="id-grid">
+    <tr><td class="lbl">Student Name:</td><td class="line"></td></tr>
+    <tr><td class="lbl">Student ID:</td><td class="line"></td></tr>
+    <tr>
+      <td class="lbl">Section:</td><td class="line" style="width:35%"></td>
+      <td class="lbl" style="text-align:right;padding-right:14px">Instructor:</td><td class="line"></td>
+    </tr>
+  </table>
+
+  <div class="instr">
+    <h3>Instructions</h3>
+    <ul>
+      <li>This booklet contains <b>10 questions</b> on algorithm analysis only. <b>Total: 80 marks</b> &middot; Suggested time: <b>60 minutes</b>.</li>
+      <li>Answer <b>all</b> questions in the spaces provided. <b>Place your answers in the boxes provided.</b></li>
+      <li>Unless stated otherwise, count <b>each simple statement</b> (assignment, comparison, arithmetic, <code class="inl">println</code>) as <b>1 operation</b>, and give Big-O for the <b>worst case</b>.</li>
+      <li>log n means log<sub>2</sub>n. Calculators are <b>not</b> allowed — all numbers are chosen to work out by hand.</li>
+      <li>Show your work. Partial credit is given for correct steps. <span class="note">On the coding item, a solution that is not O(n) will not receive full marks.</span></li>
+    </ul>
+  </div>
+
+  <table class="marks-tbl">
+    <thead>
+      <tr><th>Question</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Q5</th><th>Q6</th><th>Q7</th><th>Q8</th><th>Q9</th><th>Q10</th><th class="tot">Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Max Mark</b></td><td>6</td><td>6</td><td>6</td><td>10</td><td>8</td><td>8</td><td>8</td><td>8</td><td>10</td><td>10</td><td class="tot">80</td></tr>
+      <tr><td><b>Obtained</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="tot"></td></tr>
+    </tbody>
+  </table>
+
+  <p class="footline">Topics covered: Big-O concepts · polynomial simplification · growth-rate ordering · code → f(n) → Big-O · exact statement counts · T(n) = c × g(n) · linear vs binary search · comparing algorithms · recursive methods · improving O(n²) to O(n).</p>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Algorithm Analysis — Practice Exam</span></div>
+
+  <!-- ============ Q1 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q1</span>
+      <span class="qtitle">Concepts (Multiple Choice)</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 1 each</span>
+      </span>
+    </div>
+    <div class="card-body mcq">
+
+      <p>Circle the <b>single best</b> answer for each item.</p>
+      <p><b>1.</b> Big-O notation describes:</p>
+      <p>&nbsp;&nbsp;(a) the exact running time in seconds &nbsp;&nbsp; (b) how running time grows with n<br>
+      &nbsp;&nbsp;(c) the memory the program uses &nbsp;&nbsp; (d) the best-case running time only</p>
+      <p><b>2.</b> Which function grows <b>fastest</b> as n becomes very large?</p>
+      <p>&nbsp;&nbsp;(a) n<sup>3</sup> &nbsp;&nbsp; (b) 1000n<sup>2</sup> &nbsp;&nbsp; (c) n<sup>2</sup> log n &nbsp;&nbsp; (d) 2<sup>n</sup></p>
+      <p><b>3.</b> The <b>worst-case</b> running time of binary search on a <b>sorted</b> array of n elements is:</p>
+      <p>&nbsp;&nbsp;(a) O(1) &nbsp;&nbsp; (b) O(log n) &nbsp;&nbsp; (c) O(n) &nbsp;&nbsp; (d) O(n log n)</p>
+      <p><b>4.</b> Reading the element <code class="inl">arr[i]</code> of an array (index i is known) takes:</p>
+      <p>&nbsp;&nbsp;(a) O(1) &nbsp;&nbsp; (b) O(log n) &nbsp;&nbsp; (c) O(n) &nbsp;&nbsp; (d) O(i)</p>
+      <p><b>5.</b> An O(n<sup>2</sup>) algorithm takes 1 second for n = 1,000. For n = 2,000 it will take about:</p>
+      <p>&nbsp;&nbsp;(a) 1 second &nbsp;&nbsp; (b) 2 seconds &nbsp;&nbsp; (c) 4 seconds &nbsp;&nbsp; (d) 8 seconds</p>
+      <p><b>6.</b> Why do we write O(log n) without specifying the base of the logarithm?</p>
+      <p>&nbsp;&nbsp;(a) the base is always 10 &nbsp;&nbsp; (b) logs of different bases differ only by a constant factor<br>
+      &nbsp;&nbsp;(c) log n is always smaller than 1 &nbsp;&nbsp; (d) the base is always e</p>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q1</div>
+        <p>1:&nbsp;<span class="val">(b)</span> &nbsp; 2:&nbsp;<span class="val">(d)</span> &nbsp; 3:&nbsp;<span class="val">(b)</span> &nbsp; 4:&nbsp;<span class="val">(a)</span> &nbsp; 5:&nbsp;<span class="val">(c)</span> &nbsp; 6:&nbsp;<span class="val">(b)</span></p>
+        <p class="rub">1 mark each. (5) T(n) = c·n² → doubling n multiplies the time by 2² = 4. (6) log<sub>a</sub>n = log<sub>b</sub>n / log<sub>b</sub>a, and 1/log<sub>b</sub>a is a constant that Big-O drops.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q2 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q2</span>
+      <span class="qtitle">Polynomial &rarr; Big-O</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 1 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>Give the <b>Big-O</b> of each function (keep the highest-order term, drop coefficients).</p>
+      <table class="grid-tbl wide"><thead><tr><th></th><th>f(n)</th><th>Big-O</th><th></th><th>f(n)</th><th>Big-O</th></tr></thead><tbody><tr><td>(a)</td><td style="text-align:left;white-space:nowrap;padding:4px 8px" class="fn">5n<sup>3</sup> + 200n<sup>2</sup> + 7</td><td class="blank" style="width:18%"></td><td>(d)</td><td style="text-align:left;white-space:nowrap;padding:4px 8px" class="fn">2n<sup>3</sup>(4n<sup>2</sup> + 5) &minus; 9n<sup>4</sup></td><td class="blank" style="width:18%"></td></tr><tr><td>(b)</td><td style="text-align:left;white-space:nowrap;padding:4px 8px" class="fn">1,000,000</td><td class="blank" style="width:18%"></td><td>(e)</td><td style="text-align:left;white-space:nowrap;padding:4px 8px" class="fn">n + log n + &radic;n</td><td class="blank" style="width:18%"></td></tr><tr><td>(c)</td><td style="text-align:left;white-space:nowrap;padding:4px 8px" class="fn">3n log n + 20n + 4</td><td class="blank" style="width:18%"></td><td>(f)</td><td style="text-align:left;white-space:nowrap;padding:4px 8px" class="fn">2<sup>n</sup> + n<sup>10</sup></td><td class="blank" style="width:18%"></td></tr></tbody></table>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q2</div>
+        <table class="grid-tbl wide"><tbody><tr><td>(a)</td><td style="text-align:left" class="fn">5n<sup>3</sup> + 200n<sup>2</sup> + 7</td><td><span class="val">O(n<sup>3</sup>)</span></td></tr><tr><td>(b)</td><td style="text-align:left" class="fn">1,000,000</td><td><span class="val">O(1)</span></td></tr><tr><td>(c)</td><td style="text-align:left" class="fn">3n log n + 20n + 4</td><td><span class="val">O(n log n)</span></td></tr><tr><td>(d)</td><td style="text-align:left" class="fn">2n<sup>3</sup>(4n<sup>2</sup> + 5) &minus; 9n<sup>4</sup></td><td><span class="val">O(n<sup>5</sup>)</span></td></tr><tr><td>(e)</td><td style="text-align:left" class="fn">n + log n + &radic;n</td><td><span class="val">O(n)</span></td></tr><tr><td>(f)</td><td style="text-align:left" class="fn">2<sup>n</sup> + n<sup>10</sup></td><td><span class="val">O(2<sup>n</sup>)</span></td></tr></tbody></table>
+        <p class="rub">1 mark each. (d) expand first: 8n<sup>5</sup> + 10n<sup>3</sup> &minus; 9n<sup>4</sup> → highest term n<sup>5</sup>. (e) n dominates &radic;n and log n. (f) an exponential beats any polynomial.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q3 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q3</span>
+      <span class="qtitle">Ordering Growth Rates</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>Order from <b>slowest-growing</b> (best, first box) to <b>fastest-growing</b> (worst, last box):</p>
+      <p class="fn" style="text-align:center;font-size:11.5pt;margin:2px 0">n<sup>3</sup> &nbsp;&middot;&nbsp; log<sub>2</sub>n &nbsp;&middot;&nbsp; 1 &nbsp;&middot;&nbsp; 2<sup>n</sup> &nbsp;&middot;&nbsp; n log<sub>2</sub>n &nbsp;&middot;&nbsp; &radic;n &nbsp;&middot;&nbsp; n<sup>2</sup> &nbsp;&middot;&nbsp; n</p>
+      <div class="boxrow" style="margin-top:4px"><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q3</div>
+        <p class="fn"><span class="val">1 &lt; log<sub>2</sub>n &lt; &radic;n &lt; n &lt; n log<sub>2</sub>n &lt; n<sup>2</sup> &lt; n<sup>3</sup> &lt; 2<sup>n</sup></span></p>
+        <p class="rub">Full 6 marks for the correct order; deduct 1 mark for each function out of place (minimum 0).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Algorithm Analysis — Practice Exam</span></div>
+
+  <!-- ============ Q4 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q4</span>
+      <span class="qtitle">Java Code &rarr; f(n) &rarr; Big-O</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks · 2.5 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>For each fragment, count the operations inside the loop bodies (each simple statement = 1 operation) to get <b>f(n)</b>, then give its <b>Big-O</b>. Assume n is a power of 2 where it matters.</p>
+      <div class="cols2"><div><p><b>(a)</b></p><pre class="code numbered"><span class="ln"><span class="ty">int</span> a = <span class="st">0</span>, b = <span class="st">0</span>, c = <span class="st">0</span>;</span><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">0</span>; i &lt; n; i++) {</span><span class="ln">    a++;</span><span class="ln">    b++;</span><span class="ln">}</span><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> j = <span class="st">0</span>; j &lt; <span class="st">100</span>; j++) {</span><span class="ln">    c++;</span><span class="ln">}</span></pre><div class="answer-space"><span class="lbl">f(n) =</span><div class="writeline"></div><span class="lbl">Big-O:</span><div class="writeline"></div></div></div><div><p><b>(b)</b></p><pre class="code numbered"><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">0</span>; i &lt; n; i++) {</span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> j = <span class="st">0</span>; j &lt; n; j++) {</span><span class="ln">        <span class="kw">for</span> (<span class="ty">int</span> k = <span class="st">0</span>; k &lt; <span class="st">5</span>; k++) {</span><span class="ln">            sum++;</span><span class="ln">        }</span><span class="ln">    }</span><span class="ln">}</span></pre><div class="answer-space"><span class="lbl">f(n) =</span><div class="writeline"></div><span class="lbl">Big-O:</span><div class="writeline"></div></div></div><div><p><b>(c)</b></p><pre class="code numbered"><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = n; i &gt; <span class="st">1</span>; i /= <span class="st">2</span>) {</span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> j = <span class="st">0</span>; j &lt; n; j++) {</span><span class="ln">        sum++;</span><span class="ln">    }</span><span class="ln">}</span></pre><div class="answer-space"><span class="lbl">f(n) =</span><div class="writeline"></div><span class="lbl">Big-O:</span><div class="writeline"></div></div></div><div><p><b>(d)</b></p><pre class="code numbered"><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">1</span>; i * i &lt;= n; i++) {</span><span class="ln">    sum++;</span><span class="ln">}</span></pre><div class="answer-space"><span class="lbl">f(n) =</span><div class="writeline"></div><span class="lbl">Big-O:</span><div class="writeline"></div></div></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q4</div>
+        <p>(a) first loop n × 2 ops, second loop runs a fixed 100 times → f(n) = <span class="val">2n + 100</span> → <span class="val">O(n)</span></p>
+        <p>(b) n × n × 5 → f(n) = <span class="val">5n<sup>2</sup></span> → <span class="val">O(n<sup>2</sup>)</span> (the k-loop is a constant 5)</p>
+        <p>(c) outer loop halves i: n, n/2, …, 2 → log<sub>2</sub>n iterations; inner n → f(n) = <span class="val">n log<sub>2</sub>n</span> → <span class="val">O(n log n)</span></p>
+        <p>(d) loop runs while i² ≤ n, i.e. i = 1 … &radic;n → f(n) = <span class="val">&radic;n</span> → <span class="val">O(&radic;n)</span></p>
+        <p class="rub">Each part: f(n) 1.5 + Big-O 1. Check (n = 16): (a) 132 · (b) 1280 · (c) 64 · (d) 4.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Algorithm Analysis — Practice Exam</span></div>
+
+  <!-- ============ Q5 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q5</span>
+      <span class="qtitle">Exact Counting — How Many Times?</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>Consider the fragment below.</p>
+      <pre class="code numbered"><span class="ln"><span class="ty">int</span> count = <span class="st">0</span>;</span><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">0</span>; i &lt; n; i++) {</span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> j = i + <span class="st">1</span>; j &lt; n; j++) {</span><span class="ln">        count++;                    <span class="cm">// statement S</span></span><span class="ln">    }</span><span class="ln">}</span></pre>
+      <p><b>(a)</b> For <b>n = 6</b>, how many times is statement S executed? <span class="hint">[2 marks]</span></p>
+      <div class="answer-space"><span class="lbl">Answer:</span><div class="writeline"></div></div>
+      <p><b>(b)</b> Give the exact number of executions of S as a function of n, and its Big-O. <span class="hint">[3 marks]</span></p>
+      <div class="answer-space"><span class="lbl">f(n) =</span><div class="writeline"></div></div><div class="answer-space"><span class="lbl">Big-O:</span><div class="writeline"></div></div>
+      <p><b>(c)</b> How many times does the body of this loop execute when <b>n = 100</b>? Give its Big-O as well. <span class="hint">[3 marks]</span></p>
+      <pre class="code numbered"><span class="ln"><span class="ty">int</span> k = <span class="st">1</span>, ops = <span class="st">0</span>;</span><span class="ln"><span class="kw">while</span> (k &lt; n) {</span><span class="ln">    k = k * <span class="st">3</span>;</span><span class="ln">    ops++;</span><span class="ln">}</span></pre>
+      <div class="answer-space"><span class="lbl">Iterations:</span><div class="writeline"></div></div><div class="answer-space"><span class="lbl">Big-O:</span><div class="writeline"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q5</div>
+        <p>(a) i = 0…5 → inner runs 5 + 4 + 3 + 2 + 1 + 0 = <span class="val">15</span></p>
+        <p>(b) (n&minus;1) + (n&minus;2) + … + 1 + 0 = <span class="val">n(n&minus;1)/2 = n²/2 &minus; n/2</span> → <span class="val">O(n<sup>2</sup>)</span> &nbsp;(check: n = 6 → 15, n = 10 → 45)</p>
+        <p>(c) k takes the values 1, 3, 9, 27, 81 (then 243 stops the loop) → <span class="val">5 iterations</span>; k is multiplied by 3 each time → <span class="val">O(log n)</span> (log<sub>3</sub>n)</p>
+        <p class="rub">(a) 2 · (b) formula 2 + Big-O 1 · (c) count 2 + Big-O 1.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Algorithm Analysis — Practice Exam</span></div>
+
+  <!-- ============ Q6 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q6</span>
+      <span class="qtitle">Execution Time — Using T(n) = c × g(n)</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>Use the model <b>T(n) = c × g(n)</b>: find c from the given data point, then answer. Show your work.</p>
+      <p><b>(a)</b> An algorithm is <b>O(n<sup>2</sup>)</b>. For n = 100 it takes 40 ms. How long does it take for <b>n = 500</b>? <span class="hint">[3 marks]</span></p>
+      <div class="codebox" style="min-height:70px"></div>
+      <p><b>(b)</b> An algorithm is <b>O(log<sub>2</sub> n)</b>. For n = 1,024 it takes 30 ms. How long does it take for <b>n = 2<sup>20</sup></b>? <span class="hint">[2 marks]</span></p>
+      <div class="codebox" style="min-height:60px"></div>
+      <p><b>(c)</b> An algorithm is <b>O(n<sup>3</sup>)</b>. For n = 10 it takes 2 ms. Find the input size <b>n</b> that takes <b>2,000 ms</b>. <span class="hint">[3 marks]</span></p>
+      <div class="codebox" style="min-height:70px"></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q6</div>
+        <p>(a) 40 = c × 100² → c = 40/10,000 = 1/250. &nbsp;T(500) = 500²/250 = 250,000/250 = <span class="val">1,000 ms</span></p>
+        <p>(b) 30 = c × log<sub>2</sub>1024 = c × 10 → c = 3. &nbsp;T(2<sup>20</sup>) = 3 × 20 = <span class="val">60 ms</span></p>
+        <p>(c) 2 = c × 10³ → c = 1/500. &nbsp;2000 = n³/500 → n³ = 1,000,000 → <span class="val">n = 100</span></p>
+        <p class="rub">(a) c 1.5 + answer 1.5 · (b) c 1 + answer 1 · (c) c 1 + equation 1 + n 1.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Algorithm Analysis — Practice Exam</span></div>
+
+  <!-- ============ Q7 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q7</span>
+      <span class="qtitle">Linear vs Binary Search — Best &amp; Worst Case</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>The sorted array <code class="inl">a</code> has n = 15 elements (indices shown below):</p>
+      <div class="arr"><div class="c">3</div><div class="c">7</div><div class="c">11</div><div class="c">15</div><div class="c">19</div><div class="c">23</div><div class="c">27</div><div class="c">31</div><div class="c">35</div><div class="c">39</div><div class="c">43</div><div class="c">47</div><div class="c">51</div><div class="c">55</div><div class="c">59</div></div><div class="arr idx"><div class="c">0</div><div class="c">1</div><div class="c">2</div><div class="c">3</div><div class="c">4</div><div class="c">5</div><div class="c">6</div><div class="c">7</div><div class="c">8</div><div class="c">9</div><div class="c">10</div><div class="c">11</div><div class="c">12</div><div class="c">13</div><div class="c">14</div></div>
+      <p>Count one <b>comparison</b> each time the search examines an element <code class="inl">a[i]</code>. Binary search uses <code class="inl">mid = (low + high) / 2</code> (integer division), starting with low = 0, high = 14.</p>
+      <table class="grid-tbl wide"><thead><tr><th>Key</th><th>Linear search: # comparisons</th><th>Binary search: indices of mid examined</th><th>Binary search: # comparisons</th></tr></thead>
+      <tbody>
+      <tr><td><b>31</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td><b>23</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td><b>40</b> (not present)</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      </tbody></table>
+      <p class="hint">[6 marks · 0.5 per linear cell, 1.5 per binary row]</p>
+      <p><b>(b)</b> Give the <b>best-case</b> and <b>worst-case</b> Big-O of each search on n elements. <span class="hint">[2 marks]</span></p>
+      <table class="grid-tbl"><thead><tr><th></th><th>Best case</th><th>Worst case</th></tr></thead><tbody>
+      <tr><td><b>Linear search</b></td><td class="blank"></td><td class="blank"></td></tr>
+      <tr><td><b>Binary search</b></td><td class="blank"></td><td class="blank"></td></tr></tbody></table>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q7</div>
+        <table class="grid-tbl wide"><thead><tr><th>Key</th><th>Linear</th><th>Binary — mids (value)</th><th>Binary</th></tr></thead><tbody>
+        <tr><td>31</td><td><span class="val">8</span></td><td>7 (31) ✓</td><td><span class="val">1</span></td></tr>
+        <tr><td>23</td><td><span class="val">6</span></td><td>7 (31) → 3 (15) → 5 (23) ✓</td><td><span class="val">3</span></td></tr>
+        <tr><td>40</td><td><span class="val">15</span></td><td>7 (31) → 11 (47) → 9 (39) → 10 (43) → stop (low &gt; high)</td><td><span class="val">4</span></td></tr></tbody></table>
+        <p>(b) Linear: best <span class="val">O(1)</span>, worst <span class="val">O(n)</span> &nbsp;·&nbsp; Binary: best <span class="val">O(1)</span>, worst <span class="val">O(log n)</span></p>
+        <p class="rub">An absent key is the worst case for linear search: all n = 15 elements are compared. Binary search needs at most &lfloor;log<sub>2</sub>15&rfloor; + 1 = 4 comparisons.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Algorithm Analysis — Practice Exam</span></div>
+
+  <!-- ============ Q8 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q8</span>
+      <span class="qtitle">Comparing Two Algorithms — Who Wins for Large n?</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>Two algorithms solve the same problem. Their exact numbers of operations are:</p>
+      <p style="text-align:center" class="fn">T<sub>A</sub>(n) = 8 n log<sub>2</sub>n &nbsp;&nbsp;&nbsp;&nbsp; T<sub>B</sub>(n) = n<sup>2</sup></p>
+      <p><b>(a)</b> Complete the table and mark the faster algorithm for each n. <span class="hint">[4 marks]</span></p>
+      <table class="grid-tbl wide"><thead><tr><th>n</th><th>T<sub>A</sub>(n)</th><th>T<sub>B</sub>(n)</th><th>Faster (A or B)</th></tr></thead><tbody>
+      <tr><td><b>16</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr><tr><td><b>32</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr><tr><td><b>64</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr><tr><td><b>1,024</b></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
+      </tbody></table>
+      <p><b>(b)</b> Between which two table values of n does the faster algorithm change? <span class="hint">[2 marks]</span></p>
+      <div class="answer-space"><span class="lbl">Answer:</span><div class="writeline"></div></div>
+      <p><b>(c)</b> Give the Big-O of each algorithm. Which one should you choose for very large inputs, and why? <span class="hint">[2 marks]</span></p>
+      <div class="answer-space"><span class="lbl">Answer:</span><div class="writeline"></div></div><div class="writeline"></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q8</div>
+        <table class="grid-tbl wide"><thead><tr><th>n</th><th>T<sub>A</sub></th><th>T<sub>B</sub></th><th>Faster</th></tr></thead><tbody>
+        <tr><td>16</td><td>8·16·4 = 512</td><td>256</td><td><span class="val">B</span></td></tr>
+        <tr><td>32</td><td>8·32·5 = 1,280</td><td>1,024</td><td><span class="val">B</span></td></tr>
+        <tr><td>64</td><td>8·64·6 = 3,072</td><td>4,096</td><td><span class="val">A</span></td></tr>
+        <tr><td>1,024</td><td>8·1024·10 = 81,920</td><td>1,048,576</td><td><span class="val">A</span></td></tr></tbody></table>
+        <p>(b) Between <span class="val">n = 32 and n = 64</span> (the exact crossover is at n &asymp; 44: from n = 44 on, A is faster).</p>
+        <p>(c) A is <span class="val">O(n log n)</span>, B is <span class="val">O(n<sup>2</sup>)</span>. Choose <span class="val">A</span>: for small n its constant 8 makes it slower, but n log n grows much more slowly than n², so A wins for all large n.</p>
+        <p class="rub">(a) 0.5 per T value (4 marks); deduct 0.5 for each "Faster" entry that does not match the values · (b) 2 · (c) Big-O 1 + choice with reason 1.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Algorithm Analysis — Practice Exam</span></div>
+
+  <!-- ============ Q9 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q9</span>
+      <span class="qtitle">Big-O of Recursive Methods</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks · 2.5 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>For each recursive method, answer the counting question and give its running time in Big-O.</p>
+      <div class="cols2"><div><p><b>(a)</b> How many calls in total does <code class="inl">sum(5)</code> make (including the first)?</p><pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span> sum(<span class="ty">int</span> n) {</span><span class="ln">    <span class="kw">if</span> (n == <span class="st">0</span>) <span class="kw">return</span> <span class="st">0</span>;</span><span class="ln">    <span class="kw">return</span> n + sum(n - <span class="st">1</span>);</span><span class="ln">}</span></pre><div class="answer-space"><span class="lbl">Count:</span><div class="writeline"></div><span class="lbl">Big-O (in n):</span><div class="writeline"></div></div></div><div><p><b>(b)</b> How many calls in total does <code class="inl">half(64)</code> make?</p><pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span> half(<span class="ty">int</span> n) {</span><span class="ln">    <span class="kw">if</span> (n &lt;= <span class="st">1</span>) <span class="kw">return</span> <span class="st">1</span>;</span><span class="ln">    <span class="kw">return</span> half(n / <span class="st">2</span>) + <span class="st">1</span>;</span><span class="ln">}</span></pre><div class="answer-space"><span class="lbl">Count:</span><div class="writeline"></div><span class="lbl">Big-O (in n):</span><div class="writeline"></div></div></div><div><p><b>(c)</b> How many calls in total does <code class="inl">dbl(4)</code> make?</p><pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span> dbl(<span class="ty">int</span> n) {</span><span class="ln">    <span class="kw">if</span> (n &lt;= <span class="st">1</span>) <span class="kw">return</span> <span class="st">1</span>;</span><span class="ln">    <span class="kw">return</span> dbl(n - <span class="st">1</span>) + dbl(n - <span class="st">1</span>);</span><span class="ln">}</span></pre><div class="answer-space"><span class="lbl">Count:</span><div class="writeline"></div><span class="lbl">Big-O (in n):</span><div class="writeline"></div></div></div><div><p><b>(d)</b> How many lines does <code class="inl">mystery(8)</code> print?</p><pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">void</span> mystery(<span class="ty">int</span> n) {</span><span class="ln">    <span class="kw">if</span> (n &lt;= <span class="st">1</span>) <span class="kw">return</span>;</span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">0</span>; i &lt; n; i++) {</span><span class="ln">        System.out.println(i);</span><span class="ln">    }</span><span class="ln">    mystery(n / <span class="st">2</span>);</span><span class="ln">    mystery(n / <span class="st">2</span>);</span><span class="ln">}</span></pre><div class="answer-space"><span class="lbl">Count:</span><div class="writeline"></div><span class="lbl">Big-O (in n):</span><div class="writeline"></div></div></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q9</div>
+        <p>(a) sum(5) → sum(4) → … → sum(0): <span class="val">6 calls</span>; n + 1 calls, O(1) work each → <span class="val">O(n)</span></p>
+        <p>(b) 64 → 32 → 16 → 8 → 4 → 2 → 1: <span class="val">7 calls</span>; n is halved each call → log<sub>2</sub>n + 1 calls → <span class="val">O(log n)</span></p>
+        <p>(c) calls C(1) = 1, C(n) = 1 + 2·C(n&minus;1): C(2) = 3, C(3) = 7, C(4) = <span class="val">15 calls</span> = 2<sup>n</sup> &minus; 1 → <span class="val">O(2<sup>n</sup>)</span></p>
+        <p>(d) P(1) = 0, P(n) = n + 2·P(n/2): P(2) = 2, P(4) = 8, P(8) = <span class="val">24 lines</span> = n log<sub>2</sub>n. Each of the log<sub>2</sub>n levels prints n lines in total → <span class="val">O(n log n)</span></p>
+        <p class="rub">Each part: count 1 + Big-O 1.5. (c) is the classic trap: two calls on n&minus;1 double the work at every level.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Algorithm Analysis — Practice Exam</span></div>
+
+  <!-- ============ Q10 ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q10</span>
+      <span class="qtitle">Improve an Algorithm — from O(n²) to O(n)</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>The method below returns an array <code class="inl">p</code> where <code class="inl">p[i] = a[0] + a[1] + … + a[i]</code> (prefix sums). Example: a = {4, 1, 3, 2} → p = {4, 5, 8, 10}.</p>
+      <pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span>[] prefixSums(<span class="ty">int</span>[] a) {</span><span class="ln">    <span class="ty">int</span> n = a.length;</span><span class="ln">    <span class="ty">int</span>[] p = <span class="kw">new</span> <span class="ty">int</span>[n];</span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">0</span>; i &lt; n; i++) {</span><span class="ln">        <span class="ty">int</span> s = <span class="st">0</span>;</span><span class="ln">        <span class="kw">for</span> (<span class="ty">int</span> j = <span class="st">0</span>; j &lt;= i; j++) {</span><span class="ln">            s += a[j];              <span class="cm">// statement S</span></span><span class="ln">        }</span><span class="ln">        p[i] = s;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> p;</span><span class="ln">}</span></pre>
+      <p><b>(a)</b> How many times does statement S execute when n = 8? Give the general formula in n. <span class="hint">[2 marks]</span></p>
+      <div class="answer-space"><span class="lbl">Answer:</span><div class="writeline"></div></div>
+      <p><b>(b)</b> What is the Big-O of <code class="inl">prefixSums</code>? <span class="hint">[1 mark]</span></p>
+      <div class="answer-space"><span class="lbl">Big-O:</span><div class="writeline"></div></div>
+      <p><b>(c)</b> Rewrite <code class="inl">prefixSums</code> so that it runs in <b>O(n)</b> and returns the same result. <span class="hint">[7 marks]</span></p>
+      <p class="hint">Hint: p[i] can be computed from p[i&minus;1] — you do not need to start again from a[0].</p>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox tall"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q10</div>
+        <p>(a) inner loop runs 1 + 2 + … + 8 = <span class="val">36</span> times; in general <span class="val">n(n+1)/2</span></p>
+        <p>(b) <span class="val">O(n<sup>2</sup>)</span></p>
+        <pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">static</span> <span class="ty">int</span>[] prefixSums(<span class="ty">int</span>[] a) {</span><span class="ln">    <span class="ty">int</span> n = a.length;</span><span class="ln">    <span class="ty">int</span>[] p = <span class="kw">new</span> <span class="ty">int</span>[n];</span><span class="ln">    <span class="kw">if</span> (n == <span class="st">0</span>) <span class="kw">return</span> p;</span><span class="ln">    p[<span class="st">0</span>] = a[<span class="st">0</span>];</span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">1</span>; i &lt; n; i++) {</span><span class="ln">        p[i] = p[i - <span class="st">1</span>] + a[i];     <span class="cm">// reuse the previous sum</span></span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> p;</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric (c): new array 1 · handle p[0] (and empty array) 2 · single loop 2 · p[i] = p[i&minus;1] + a[i] 2. A solution that still contains a nested loop earns at most 2 marks. A running total <code class="inl">s += a[i]; p[i] = s;</code> is equally correct.</p>
+      </div>
+    </div>
+  </div>
+  <div class="endmark">— End of Algorithm Analysis Practice Exam — Good Luck! —</div>
+</section>
+
+<script>
+  var btn = document.getElementById('toggleAns');
+  btn.addEventListener('click', function () {
+    var on = document.body.classList.toggle('show-answers');
+    btn.textContent = on ? '🙈 Hide model answers' : '👁 Show model answers';
+    btn.classList.toggle('ghost', !on);
+  });
+</script>
+</body>
+</html>

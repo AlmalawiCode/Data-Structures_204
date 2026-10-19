@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arrays &amp; Searching — Practice Exam (A4 printable)</title>
+<style>
+/* =======================================================================
+   Data Structures I — ARRAYS & SEARCHING practice exam
+   Print-first, A4. Each question is a CARD. Blue module theme.
+   A "Show model answers" toggle turns the same file into an answer key.
+   ======================================================================= */
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+
+:root{
+  --blue:      #2563eb;
+  --blue-dark: #1e3a5f;
+  --blue-deep: #0f172a;
+  --blue-tint: #eef4ff;
+  --ink:       #17202a;
+  --ink-soft:  #3a4656;
+  --rule:      #cbd5e1;
+  --rule-soft: #e2e8f0;
+  --paper:     #ffffff;
+  --code-bg:   #f6f8fc;
+  --code-rule: #d7e0f0;
+  --warn:      #b42318;
+  --ans:       #1d4ed8;
+  --tag-easy:  #e7f6ec; --tag-easy-i:#1a7f37;
+  --tag-med:   #fef3e0; --tag-med-i: #9a6212;
+  --tag-hard:  #fdeaea; --tag-hard-i:#b42318;
+}
+
+*{ box-sizing:border-box; }
+html,body{
+  margin:0; padding:0;
+  background:#e9edf3;
+  color:var(--ink);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size:11pt; line-height:1.5;
+}
+body{ padding:14mm 0; }
+
+/* ---- A4 sheet ---- */
+.sheet{
+  background:var(--paper);
+  width:210mm; min-height:297mm;
+  margin:0 auto 10mm;
+  padding:15mm 15mm 18mm;
+  box-shadow:0 3px 14px rgba(15,23,42,.18);
+  position:relative;
+}
+
+/* ---- running head ---- */
+.runhead{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid var(--blue-dark);
+  padding-bottom:6px; margin-bottom:14px;
+  font-size:9.5pt; color:var(--blue-dark);
+}
+.runhead b{ font-size:10.5pt; }
+
+/* ================= COVER ================= */
+.cover-top{ text-align:center; }
+.cover-top .uni{ font-size:15pt; font-weight:800; color:var(--blue-deep); }
+.cover-top .fac{ font-size:10.5pt; color:var(--ink-soft); margin-top:2px; }
+.cover-rule{ height:2px; background:var(--blue-dark); margin:12px 0; }
+.cover-title{ font-size:22pt; font-weight:800; color:var(--blue); letter-spacing:.5px; }
+.cover-sub{ font-size:13pt; font-weight:600; margin-top:4px; }
+.cover-tag{
+  display:inline-block; margin-top:10px; padding:4px 16px;
+  background:var(--blue-tint); color:var(--blue); border:1px solid var(--blue);
+  border-radius:999px; font-weight:700; font-size:10.5pt;
+}
+
+.id-grid{
+  margin:22px 0 4px; width:100%; border-collapse:collapse; font-size:11pt;
+}
+.id-grid td{ padding:9px 6px; }
+.id-grid .lbl{ width:120px; font-weight:700; color:var(--blue-dark); }
+.id-grid .line{ border-bottom:1.4px solid #64748b; }
+
+.instr{
+  margin-top:16px; border:1px solid var(--rule);
+  border-left:5px solid var(--blue); border-radius:8px;
+  background:#fafcff; padding:12px 16px;
+}
+.instr h3{ margin:0 0 6px; font-size:11.5pt; color:var(--blue-dark); }
+.instr ul{ margin:0; padding-left:18px; }
+.instr li{ margin:3px 0; }
+
+.marks-tbl{ width:100%; border-collapse:collapse; margin-top:18px; font-size:10pt; text-align:center; }
+.marks-tbl th, .marks-tbl td{ border:1px solid var(--rule); padding:6px 4px; }
+.marks-tbl thead th{ background:var(--blue-dark); color:#fff; }
+.marks-tbl .tot{ background:var(--blue-tint); font-weight:800; }
+
+/* ================= QUESTION CARD ================= */
+.card{
+  border:1px solid var(--rule);
+  border-radius:10px;
+  margin:0 0 16px;
+  overflow:hidden;
+  break-inside:avoid; page-break-inside:avoid;
+  background:#fff;
+}
+.card-head{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  background:linear-gradient(180deg,#f3f7ff,#e9f0ff);
+  border-bottom:1px solid var(--rule);
+  padding:9px 14px;
+}
+.qno{
+  font-weight:800; color:#fff; background:var(--blue);
+  border-radius:6px; padding:3px 11px; font-size:11pt; letter-spacing:.3px;
+}
+.qtitle{ font-weight:700; font-size:11.5pt; color:var(--blue-deep); flex:1 1 240px; }
+.chips{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.chip{ font-size:8.5pt; padding:2px 8px; border-radius:999px; font-weight:700; white-space:nowrap; }
+.chip.clo{ background:#eef2ff; color:#3730a3; border:1px solid #c7d2fe; }
+.chip.so { background:#ecfeff; color:#0e7490; border:1px solid #a5f3fc; }
+.chip.pts{ background:var(--blue-dark); color:#fff; }
+.tag-easy{ background:var(--tag-easy); color:var(--tag-easy-i); border:1px solid var(--tag-easy-i); }
+.tag-med { background:var(--tag-med);  color:var(--tag-med-i);  border:1px solid var(--tag-med-i);  }
+.tag-hard{ background:var(--tag-hard); color:var(--tag-hard-i); border:1px solid var(--tag-hard-i); }
+
+.card-body{ padding:12px 16px 14px; }
+.card-body p{ margin:6px 0; }
+.note{ color:var(--warn); font-style:italic; font-weight:600; font-size:10pt; }
+.hint{ color:var(--ink-soft); font-style:italic; font-size:10pt; }
+.worked{ background:#f5faff; border:1px dashed var(--blue); border-radius:8px; padding:8px 12px; margin:10px 0; font-size:10.5pt; }
+.worked b{ color:var(--blue-dark); }
+
+/* ---- code blocks ---- */
+pre.code{
+  background:var(--code-bg); border:1px solid var(--code-rule);
+  border-left:4px solid var(--blue); border-radius:6px;
+  padding:10px 12px; margin:10px 0; overflow:auto;
+  font-family:'Consolas','DejaVu Sans Mono',monospace; font-size:10pt; line-height:1.45;
+  counter-reset:ln;
+}
+pre.code .ln{ display:block; white-space:pre; }
+pre.code.numbered .ln::before{
+  counter-increment:ln; content:counter(ln);
+  display:inline-block; width:1.6em; margin-right:10px;
+  color:#94a3b8; text-align:right; border-right:1px solid #cbd5e1; padding-right:6px;
+}
+.kw{ color:#7c3aed; font-weight:700; }
+.ty{ color:#0e7490; font-weight:700; }
+.st{ color:#b45309; }
+.cm{ color:#64748b; font-style:italic; }
+code.inl{ background:var(--code-bg); border:1px solid var(--code-rule); border-radius:4px; padding:1px 5px; font-family:'Consolas',monospace; font-size:9.8pt; }
+
+/* ---- answer space ---- */
+.answer-space{ margin-top:10px; }
+.answer-space .lbl{ font-style:italic; color:var(--ink-soft); font-size:10pt; }
+.writeline{ border-bottom:1px solid #94a3b8; height:1.55em; margin-top:.45em; }
+.codebox{ border:1px dashed #94a3b8; border-radius:6px; min-height:120px; margin-top:8px;
+  background:repeating-linear-gradient(#fff,#fff 1.7em,#eef2f7 1.7em,#eef2f7 calc(1.7em + 1px)); }
+.codebox.tall{ min-height:200px; }
+.boxrow{ display:flex; gap:0; margin-top:8px; }
+.boxrow .b{ flex:1; border:1.4px solid var(--blue-dark); border-right:0; height:42px; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.boxrow .b:last-child{ border-right:1.4px solid var(--blue-dark); }
+.boxrow .b .k{ font-size:8pt; color:#64748b; font-weight:600; }
+.mini{ font-size:9pt; color:#64748b; }
+
+/* array cells */
+.arr{ display:flex; margin:8px 0; font-family:'Consolas',monospace; }
+.arr .c{ width:38px; height:38px; border:1.4px solid var(--blue-dark); border-right:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; }
+.arr .c:last-child{ border-right:1.4px solid var(--blue-dark); }
+.arr.idx .c{ border:0; height:auto; color:#64748b; font-size:9pt; }
+
+/* ---- model answer block (hidden until toggled) ---- */
+.answer-key{ display:none; }
+body.show-answers .answer-key{ display:block; }
+.answer-key{
+  margin-top:12px; border:1px solid #bbf7d0; border-left:5px solid #16a34a;
+  background:#f0fdf4; border-radius:8px; padding:10px 14px;
+}
+.answer-key .akh{ font-weight:800; color:#15803d; font-size:10.5pt; margin-bottom:4px; }
+.answer-key pre.code{ border-left-color:#16a34a; background:#f3fdf6; }
+.answer-key .val{ color:#166534; font-weight:800; }
+.answer-key .rub{ color:#0e7490; font-size:9.5pt; font-style:italic; }
+
+/* ---- floating toolbar (screen only) ---- */
+.toolbar{
+  position:fixed; top:14px; right:14px; z-index:50; display:flex; gap:8px;
+  background:#fff; border:1px solid var(--rule); border-radius:10px; padding:8px 10px;
+  box-shadow:0 4px 14px rgba(15,23,42,.18);
+}
+.toolbar button{
+  font:inherit; font-size:10pt; font-weight:700; cursor:pointer;
+  border:1px solid var(--blue); border-radius:7px; padding:7px 12px;
+  background:var(--blue); color:#fff;
+}
+.toolbar button.ghost{ background:#fff; color:var(--blue); }
+.toolbar button:active{ transform:translateY(1px); }
+
+.footline{ text-align:center; margin-top:6px; color:var(--ink-soft); font-size:9.5pt; }
+.endmark{ text-align:center; font-weight:800; color:var(--blue-dark); margin:18px 0 4px; }
+
+/* ================= PRINT ================= */
+@media print{
+  body{ background:#fff; padding:0; }
+  .toolbar{ display:none !important; }
+  .sheet{ box-shadow:none; margin:0; width:auto; min-height:auto; padding:0; }
+  .sheet + .sheet{ page-break-before:always; }
+  .card{ box-shadow:none; }
+}
+
+
+/* ---- array / trace-table extras ---- */
+.arr .c.hl{ background:var(--blue-tint); color:var(--blue); }
+.arr .c.blank{ color:#cbd5e1; }
+.arrlbl{ display:flex; align-items:center; gap:10px; font-family:'Consolas',monospace; }
+.arrlbl .nm{ font-weight:700; color:var(--blue-dark); min-width:44px; }
+.grid2d{ border-collapse:collapse; margin:8px 0; font-family:'Consolas',monospace; }
+.grid2d td{ width:38px; height:34px; text-align:center; border:1.4px solid var(--blue-dark); font-weight:700; }
+.grid2d th{ font-size:9pt; color:#64748b; font-weight:600; padding:0 6px; }
+.trace{ border-collapse:collapse; width:100%; margin:8px 0; font-size:10pt; text-align:center; }
+.trace th, .trace td{ border:1px solid var(--rule); padding:5px 4px; height:26px; }
+.trace thead th{ background:var(--blue-tint); color:var(--blue-dark); }
+.twocol{ display:flex; gap:18px; flex-wrap:wrap; }
+.twocol > div{ flex:1 1 280px; }
+</style>
+</head>
+<body>
+
+<!-- ===== screen toolbar ===== -->
+<div class="toolbar">
+  <button id="toggleAns" class="ghost">👁 Show model answers</button>
+  <button onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<!-- =====================================================================
+     COVER PAGE
+     ===================================================================== -->
+<section class="sheet cover">
+  <div class="cover-rule"></div>
+  <div class="cover-top">
+    <div class="cover-title">Data Structures I</div>
+    <div class="cover-sub">Arrays &amp; Searching — Focused Practice Exam</div>
+    <div class="cover-tag">1D &amp; 2D Arrays &middot; Linear Search &middot; Binary Search</div>
+  </div>
+  <div class="cover-rule"></div>
+
+  <table class="id-grid">
+    <tr><td class="lbl">Student Name:</td><td class="line"></td></tr>
+    <tr><td class="lbl">Student ID:</td><td class="line"></td></tr>
+    <tr>
+      <td class="lbl">Section:</td><td class="line" style="width:35%"></td>
+      <td class="lbl" style="text-align:right;padding-right:14px">Instructor:</td><td class="line"></td>
+    </tr>
+  </table>
+
+  <div class="instr">
+    <h3>Instructions</h3>
+    <ul>
+      <li>This booklet contains <b>10 questions</b> on arrays and searching only. <b>Total: 80 marks</b> &middot; Suggested time: <b>60 minutes</b>.</li>
+      <li>Answer <b>all</b> questions in the spaces provided. <b>Place your answers in the boxes provided.</b></li>
+      <li>Array indices start at <b>0</b>. Unless stated otherwise, arrays are of type <code class="inl">int[]</code> and are <b>not</b> <code class="inl">null</code>.</li>
+      <li>Binary search uses the standard version: <code class="inl">mid = (low + high) / 2</code> with integer division, <code class="inl">low = mid + 1</code> or <code class="inl">high = mid - 1</code>.</li>
+      <li>Write clear Java. Do <b>not</b> use library methods such as <code class="inl">Arrays.sort</code> or <code class="inl">Arrays.binarySearch</code>. Partial (per-line) credit is given. <span class="note">On recursion items you will not get points unless you use recursion.</span></li>
+    </ul>
+  </div>
+
+  <table class="marks-tbl">
+    <thead>
+      <tr><th>Question</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Q5</th><th>Q6</th><th>Q7</th><th>Q8</th><th>Q9</th><th>Q10</th><th class="tot">Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Max Mark</b></td><td>6</td><td>6</td><td>6</td><td>10</td><td>8</td><td>6</td><td>8</td><td>10</td><td>10</td><td>10</td><td class="tot">80</td></tr>
+      <tr><td><b>Obtained</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="tot"></td></tr>
+    </tbody>
+  </table>
+
+  <p class="footline">Topics covered: array concepts &amp; operation costs · output tracing · linear-search comparisons · binary-search tracing (low / mid / high) · insert &amp; delete with shifting · building a new array · 2D arrays · recursive binary search · merging two sorted arrays.</p>
+</section>
+
+<!-- =====================================================================
+     PAGE 2 — Q1, Q2, Q3
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Arrays &amp; Searching — Practice Exam</span></div>
+
+  <!-- ============ Q1 : MCQ concepts ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q1</span>
+      <span class="qtitle">Array &amp; Searching Concepts (Multiple Choice)</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 1 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Circle the <b>single best</b> answer for each item.</p>
+
+      <p><b>1.</b> Accessing <code class="inl">arr[i]</code> in an array of size <i>n</i> takes:</p>
+      <p>&nbsp;&nbsp;(a) O(n) &nbsp;&nbsp; (b) O(log n) &nbsp;&nbsp; (c) O(1) &nbsp;&nbsp; (d) O(n²)</p>
+
+      <p><b>2.</b> Inserting a new value at the <b>beginning</b> (index 0) of a partially filled array of <i>n</i> elements costs:</p>
+      <p>&nbsp;&nbsp;(a) O(1) &nbsp;&nbsp; (b) O(n) &nbsp;&nbsp; (c) O(log n) &nbsp;&nbsp; (d) O(n log n)</p>
+
+      <p><b>3.</b> Binary search can be applied <b>only</b> when the array is:</p>
+      <p>&nbsp;&nbsp;(a) full &nbsp;&nbsp; (b) of even length &nbsp;&nbsp; (c) sorted &nbsp;&nbsp; (d) free of duplicates</p>
+
+      <p><b>4.</b> The worst-case number of comparisons of <b>linear</b> search on <i>n</i> elements is:</p>
+      <p>&nbsp;&nbsp;(a) 1 &nbsp;&nbsp; (b) n / 2 &nbsp;&nbsp; (c) log₂ n &nbsp;&nbsp; (d) n</p>
+
+      <p><b>5.</b> For a sorted array of <b>1,024</b> elements, binary search needs <b>at most</b> about how many comparisons?</p>
+      <p>&nbsp;&nbsp;(a) 10–11 &nbsp;&nbsp; (b) 32 &nbsp;&nbsp; (c) 512 &nbsp;&nbsp; (d) 1,024</p>
+
+      <p><b>6.</b> Given <code class="inl">int[][] m = new int[3][5];</code>, the value of <code class="inl">m[0].length</code> is:</p>
+      <p>&nbsp;&nbsp;(a) 3 &nbsp;&nbsp; (b) 5 &nbsp;&nbsp; (c) 15 &nbsp;&nbsp; (d) 8</p>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q1</div>
+        <p>1:&nbsp;<span class="val">(c)</span> &nbsp; 2:&nbsp;<span class="val">(b)</span> &nbsp; 3:&nbsp;<span class="val">(c)</span> &nbsp; 4:&nbsp;<span class="val">(d)</span> &nbsp; 5:&nbsp;<span class="val">(a)</span> &nbsp; 6:&nbsp;<span class="val">(b)</span></p>
+        <p class="rub">1 mark each. (5) log₂ 1024 = 10, so binary search takes at most 11 probes (⌊log₂ n⌋ + 1); accept "about 10". (6) <code class="inl">m.length</code> = rows = 3; <code class="inl">m[0].length</code> = columns = 5.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q2 : Output tracing ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q2</span>
+      <span class="qtitle">Output Tracing — Array Loops</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 3 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Use the array below for both parts:</p>
+      <pre class="code"><span class="ln"><span class="ty">int</span>[] a = {<span class="st">4</span>, <span class="st">9</span>, <span class="st">2</span>, <span class="st">7</span>, <span class="st">5</span>, <span class="st">8</span>};</span></pre>
+      <div class="arrlbl"><span class="nm">a</span>
+        <div><div class="arr"><span class="c">4</span><span class="c">9</span><span class="c">2</span><span class="c">7</span><span class="c">5</span><span class="c">8</span></div>
+        <div class="arr idx"><span class="c">0</span><span class="c">1</span><span class="c">2</span><span class="c">3</span><span class="c">4</span><span class="c">5</span></div></div>
+      </div>
+
+      <div class="twocol">
+        <div>
+          <p><b>(a)</b> What is printed? <span class="hint">[3 marks]</span></p>
+          <pre class="code numbered"><span class="ln"><span class="ty">int</span> s = <span class="st">0</span>;</span><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">1</span>; i &lt; a.length; i += <span class="st">2</span>) {</span><span class="ln">    s += a[i];</span><span class="ln">}</span><span class="ln">System.out.println(s);</span></pre>
+          <div class="answer-space"><span class="lbl">Output:</span><div class="writeline"></div></div>
+        </div>
+        <div>
+          <p><b>(b)</b> What is printed? <span class="hint">[3 marks]</span></p>
+          <pre class="code numbered"><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = a.length - <span class="st">1</span>; i &gt;= <span class="st">0</span>; i -= <span class="st">2</span>) {</span><span class="ln">    System.out.print(a[i] + <span class="st">" "</span>);</span><span class="ln">}</span></pre>
+          <div class="answer-space"><span class="lbl">Output:</span><div class="writeline"></div></div>
+        </div>
+      </div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q2</div>
+        <p>(a) odd indices 1, 3, 5 hold 9, 7, 8 → <span class="val">24</span></p>
+        <p>(b) indices 5, 3, 1 → <span class="val">8 7 9</span></p>
+        <p class="rub">3 marks each; 1 mark for the correct indices visited if the final value is wrong.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q3 : Linear search comparisons ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q3</span>
+      <span class="qtitle">Linear Search — Counting Comparisons</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks · 1.5 each</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Linear search scans from index 0 and stops as soon as the target is found. Use this <b>unsorted</b> array:</p>
+      <div class="arrlbl"><span class="nm">arr</span>
+        <div><div class="arr"><span class="c">15</span><span class="c">42</span><span class="c">8</span><span class="c">23</span><span class="c">56</span><span class="c">4</span><span class="c">31</span><span class="c">19</span></div>
+        <div class="arr idx"><span class="c">0</span><span class="c">1</span><span class="c">2</span><span class="c">3</span><span class="c">4</span><span class="c">5</span><span class="c">6</span><span class="c">7</span></div></div>
+      </div>
+      <table class="trace">
+        <thead><tr><th style="width:60%">Question</th><th>Answer</th></tr></thead>
+        <tbody>
+          <tr><td style="text-align:left">(a) Comparisons to find <b>56</b></td><td></td></tr>
+          <tr><td style="text-align:left">(b) Comparisons to search for <b>99</b> (not in the array)</td><td></td></tr>
+          <tr><td style="text-align:left">(c) Best-case number of comparisons (any target)</td><td></td></tr>
+          <tr><td style="text-align:left">(d) Worst-case time complexity in Big-O for <i>n</i> elements</td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q3</div>
+        <p>(a) <span class="val">5</span> (56 is at index 4) &nbsp; (b) <span class="val">8</span> (every element checked) &nbsp; (c) <span class="val">1</span> (target at index 0) &nbsp; (d) <span class="val">O(n)</span></p>
+        <p class="rub">1.5 marks each. A common mistake in (a) is answering 4 (the index) instead of 5 (the number of comparisons).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 3 — Q4, Q5
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Arrays &amp; Searching — Practice Exam</span></div>
+
+  <!-- ============ Q4 : Binary search trace ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q4</span>
+      <span class="qtitle">Binary Search — Trace low / high / mid</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Apply standard iterative binary search to this <b>sorted</b> array (n = 12):</p>
+      <div class="arrlbl"><span class="nm">arr</span>
+        <div><div class="arr"><span class="c">3</span><span class="c">7</span><span class="c">11</span><span class="c">15</span><span class="c">19</span><span class="c">24</span><span class="c">28</span><span class="c">33</span><span class="c">40</span><span class="c">47</span><span class="c">52</span><span class="c">61</span></div>
+        <div class="arr idx"><span class="c">0</span><span class="c">1</span><span class="c">2</span><span class="c">3</span><span class="c">4</span><span class="c">5</span><span class="c">6</span><span class="c">7</span><span class="c">8</span><span class="c">9</span><span class="c">10</span><span class="c">11</span></div></div>
+      </div>
+      <p>For each search, fill one row per iteration of the loop. Write the action taken (<i>found</i>, <i>go right: low = …</i>, or <i>go left: high = …</i>). Then write the value returned.</p>
+
+      <div class="twocol">
+        <div>
+          <p><b>(a)</b> target = <b>47</b> <span class="hint">[4 marks]</span></p>
+          <table class="trace">
+            <thead><tr><th>Iter</th><th>low</th><th>high</th><th>mid</th><th>arr[mid]</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>4</td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+          <p>Returned: ____________</p>
+        </div>
+        <div>
+          <p><b>(b)</b> target = <b>13</b> <span class="hint">[4 marks]</span></p>
+          <table class="trace">
+            <thead><tr><th>Iter</th><th>low</th><th>high</th><th>mid</th><th>arr[mid]</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>2</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>3</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td>4</td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+          <p>Returned: ____________</p>
+        </div>
+      </div>
+      <p><b>(c)</b> What is the <b>maximum</b> number of iterations binary search needs for a sorted array of <b>1,000</b> elements? Show how you got it. <span class="hint">[2 marks]</span></p>
+      <div class="answer-space"><div class="writeline"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q4</div>
+        <div class="twocol">
+          <div>
+            <table class="trace">
+              <thead><tr><th>Iter</th><th>low</th><th>high</th><th>mid</th><th>arr[mid]</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>0</td><td>11</td><td>5</td><td>24</td><td>24 &lt; 47 → low = 6</td></tr>
+                <tr><td>2</td><td>6</td><td>11</td><td>8</td><td>40</td><td>40 &lt; 47 → low = 9</td></tr>
+                <tr><td>3</td><td>9</td><td>11</td><td>10</td><td>52</td><td>52 &gt; 47 → high = 9</td></tr>
+                <tr><td>4</td><td>9</td><td>9</td><td>9</td><td>47</td><td>found</td></tr>
+              </tbody>
+            </table>
+            <p>(a) Returned: <span class="val">9</span></p>
+          </div>
+          <div>
+            <table class="trace">
+              <thead><tr><th>Iter</th><th>low</th><th>high</th><th>mid</th><th>arr[mid]</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>0</td><td>11</td><td>5</td><td>24</td><td>24 &gt; 13 → high = 4</td></tr>
+                <tr><td>2</td><td>0</td><td>4</td><td>2</td><td>11</td><td>11 &lt; 13 → low = 3</td></tr>
+                <tr><td>3</td><td>3</td><td>4</td><td>3</td><td>15</td><td>15 &gt; 13 → high = 2</td></tr>
+                <tr><td>4</td><td colspan="5">low (3) &gt; high (2) → loop stops</td></tr>
+              </tbody>
+            </table>
+            <p>(b) Returned: <span class="val">-1</span> (not found)</p>
+          </div>
+        </div>
+        <p>(c) 2⁹ = 512 &lt; 1000 &lt; 1024 = 2¹⁰, so ⌊log₂ 1000⌋ + 1 = <span class="val">10</span> iterations.</p>
+        <p class="rub">(a), (b): 1 mark per correct row (the 4th row of (b) is the termination check). (c): 1 for the log₂ reasoning, 1 for the value 10.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q5 : Insert with shifting ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q5</span>
+      <span class="qtitle">Insert into a Partially Filled Array (Shifting)</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Array <code class="inl">a</code> has capacity 8 but holds only <code class="inl">size</code> = 4 valid elements:</p>
+      <div class="arrlbl"><span class="nm">a</span>
+        <div><div class="arr"><span class="c">12</span><span class="c">25</span><span class="c">31</span><span class="c">48</span><span class="c blank">–</span><span class="c blank">–</span><span class="c blank">–</span><span class="c blank">–</span></div>
+        <div class="arr idx"><span class="c">0</span><span class="c">1</span><span class="c">2</span><span class="c">3</span><span class="c">4</span><span class="c">5</span><span class="c">6</span><span class="c">7</span></div></div>
+      </div>
+      <p>Write &nbsp;<code class="inl">public static int exam05(int[] a, int size, int pos, int value)</code>&nbsp; that inserts <code class="inl">value</code> at index <code class="inl">pos</code>, shifting the elements at <code class="inl">pos … size-1</code> one place to the right, and returns the <b>new size</b>. Assume <code class="inl">0 ≤ pos ≤ size</code> and <code class="inl">size &lt; a.length</code>.</p>
+      <div class="worked"><b>Worked example.</b> &nbsp;<code class="inl">exam05(a, 4, 1, 19)</code> → a becomes 12, 19, 25, 31, 48 and the method returns <b>5</b>.</div>
+      <p class="hint">Hint: shift starting from the right end, otherwise you overwrite values before moving them.</p>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q5</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">int</span> exam05(<span class="ty">int</span>[] a, <span class="ty">int</span> size, <span class="ty">int</span> pos, <span class="ty">int</span> value) {</span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> i = size; i &gt; pos; i--) {   <span class="cm">// right-to-left shift</span></span><span class="ln">        a[i] = a[i - <span class="st">1</span>];</span><span class="ln">    }</span><span class="ln">    a[pos] = value;</span><span class="ln">    <span class="kw">return</span> size + <span class="st">1</span>;</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: loop starts at <code class="inl">size</code> and goes down 2 · correct stop condition <code class="inl">i &gt; pos</code> 2 · <code class="inl">a[i] = a[i-1]</code> 2 · place value 1 · return size + 1 &nbsp;1. A left-to-right shift copies one value into every cell (−4).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 4 — Q6, Q7
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Arrays &amp; Searching — Practice Exam</span></div>
+
+  <!-- ============ Q6 : Delete with shifting trace ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q6</span>
+      <span class="qtitle">Delete by Index — Trace the Shifting</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">6 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Trace the following code:</p>
+      <pre class="code numbered"><span class="ln"><span class="ty">int</span>[] q = {<span class="st">10</span>, <span class="st">20</span>, <span class="st">30</span>, <span class="st">40</span>, <span class="st">50</span>};</span><span class="ln"><span class="ty">int</span> size = <span class="st">5</span>;</span><span class="ln"><span class="ty">int</span> pos = <span class="st">2</span>;</span><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = pos; i &lt; size - <span class="st">1</span>; i++) {</span><span class="ln">    q[i] = q[i + <span class="st">1</span>];</span><span class="ln">}</span><span class="ln">size--;</span></pre>
+      <p><b>(a)</b> Write the contents of <b>all five</b> cells of <code class="inl">q</code> after the code runs. <span class="hint">[3 marks]</span></p>
+      <div class="boxrow"><div class="b"><span class="k">[0]</span></div><div class="b"><span class="k">[1]</span></div><div class="b"><span class="k">[2]</span></div><div class="b"><span class="k">[3]</span></div><div class="b"><span class="k">[4]</span></div></div>
+      <p style="margin-top:10px"><b>(b)</b> Value of <code class="inl">size</code>: ________ <span class="hint">[1 mark]</span></p>
+      <p><b>(c)</b> What is the worst-case time complexity of deleting by index, and which <code class="inl">pos</code> causes it? <span class="hint">[2 marks]</span></p>
+      <div class="answer-space"><div class="writeline"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q6</div>
+        <p>(a) <span class="val">10 &nbsp;20 &nbsp;40 &nbsp;50 &nbsp;50</span> &nbsp; (b) <span class="val">4</span> &nbsp; (c) <span class="val">O(n)</span>, when <code class="inl">pos = 0</code> (every remaining element shifts left).</p>
+        <p class="rub">Key testing point for (a): the old value in the last cell is <b>not</b> erased; it is just outside the logical size. Writing 0 or leaving it blank loses 1 mark.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q7 : Build a new array ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q7</span>
+      <span class="qtitle">Build a New Array — Keep the Even Values</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">8 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Write &nbsp;<code class="inl">public static int[] exam07(int[] a)</code>&nbsp; that returns a <b>new</b> array containing only the <b>even</b> values of <code class="inl">a</code>, in their original order. The returned array must have <b>exactly</b> the right length (no unused cells). If there are no even values, return an array of length 0.</p>
+      <div class="worked"><b>Worked example.</b> &nbsp;a = {5, 8, 3, 6, 10, 7} &nbsp;→ returns <b>{8, 6, 10}</b> (length 3).</div>
+      <p class="hint">Hint: first count, then create the array, then fill it with a second index.</p>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox tall"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q7</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">int</span>[] exam07(<span class="ty">int</span>[] a) {</span><span class="ln">    <span class="ty">int</span> count = <span class="st">0</span>;                       <span class="cm">// pass 1: count evens</span></span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">0</span>; i &lt; a.length; i++) {</span><span class="ln">        <span class="kw">if</span> (a[i] % <span class="st">2</span> == <span class="st">0</span>) count++;</span><span class="ln">    }</span><span class="ln">    <span class="ty">int</span>[] result = <span class="kw">new</span> <span class="ty">int</span>[count];</span><span class="ln">    <span class="ty">int</span> k = <span class="st">0</span>;                           <span class="cm">// pass 2: fill</span></span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">0</span>; i &lt; a.length; i++) {</span><span class="ln">        <span class="kw">if</span> (a[i] % <span class="st">2</span> == <span class="st">0</span>) {</span><span class="ln">            result[k] = a[i];</span><span class="ln">            k++;</span><span class="ln">        }</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> result;</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: counting pass 2 · allocate <code class="inl">new int[count]</code> 2 · second index <code class="inl">k</code> (not <code class="inl">i</code>) 3 · return 1. Using <code class="inl">result[i] = a[i]</code> gives an out-of-bounds error (−3).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 5 — Q8, Q9
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Arrays &amp; Searching — Practice Exam</span></div>
+
+  <!-- ============ Q8 : 2D arrays ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q8</span>
+      <span class="qtitle">Two-Dimensional Arrays — Trace and Write</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>(a)</b> What is printed? <span class="hint">[3 marks]</span></p>
+      <pre class="code numbered"><span class="ln"><span class="ty">int</span>[][] m = { {<span class="st">1</span>, <span class="st">2</span>, <span class="st">3</span>}, {<span class="st">4</span>, <span class="st">5</span>, <span class="st">6</span>}, {<span class="st">7</span>, <span class="st">8</span>, <span class="st">9</span>} };</span><span class="ln"><span class="ty">int</span> d = <span class="st">0</span>;</span><span class="ln"><span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">0</span>; i &lt; m.length; i++) {</span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> j = <span class="st">0</span>; j &lt; m[i].length; j++) {</span><span class="ln">        <span class="kw">if</span> (i + j == m.length - <span class="st">1</span>) {</span><span class="ln">            d += m[i][j];</span><span class="ln">        }</span><span class="ln">    }</span><span class="ln">}</span><span class="ln">System.out.println(d);</span></pre>
+      <div class="answer-space"><span class="lbl">Output:</span><div class="writeline"></div></div>
+
+      <p style="margin-top:12px"><b>(b)</b> Write &nbsp;<code class="inl">public static int[] exam08(int[][] m)</code>&nbsp; that returns an array holding the <b>maximum of each column</b>. Assume <code class="inl">m</code> is rectangular with at least one row and one column. <span class="hint">[7 marks]</span></p>
+      <div class="twocol">
+        <div>
+          <table class="grid2d">
+            <tr><th></th><th>c0</th><th>c1</th><th>c2</th></tr>
+            <tr><th>r0</th><td>3</td><td>9</td><td>1</td></tr>
+            <tr><th>r1</th><td>7</td><td>2</td><td>8</td></tr>
+            <tr><th>r2</th><td>5</td><td>6</td><td>4</td></tr>
+          </table>
+        </div>
+        <div><div class="worked"><b>Worked example.</b> For the matrix on the left, <code class="inl">exam08(m)</code> returns <b>{7, 9, 8}</b>.</div></div>
+      </div>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q8</div>
+        <p>(a) anti-diagonal cells (0,2), (1,1), (2,0): 3 + 5 + 7 = <span class="val">15</span></p>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">int</span>[] exam08(<span class="ty">int</span>[][] m) {</span><span class="ln">    <span class="ty">int</span>[] result = <span class="kw">new</span> <span class="ty">int</span>[m[<span class="st">0</span>].length];      <span class="cm">// one slot per column</span></span><span class="ln">    <span class="kw">for</span> (<span class="ty">int</span> j = <span class="st">0</span>; j &lt; m[<span class="st">0</span>].length; j++) {   <span class="cm">// columns outside</span></span><span class="ln">        <span class="ty">int</span> max = m[<span class="st">0</span>][j];</span><span class="ln">        <span class="kw">for</span> (<span class="ty">int</span> i = <span class="st">1</span>; i &lt; m.length; i++) {   <span class="cm">// rows inside</span></span><span class="ln">            <span class="kw">if</span> (m[i][j] &gt; max) max = m[i][j];</span><span class="ln">        }</span><span class="ln">        result[j] = max;</span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> result;</span><span class="ln">}</span></pre>
+        <p class="rub">(a) 3 marks (1 for identifying i + j = 2). (b) Rubric: result length = number of columns 1 · columns in the outer loop 2 · max initialised from the column (not 0) 2 · comparison/update 1 · store and return 1.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Q9 : Recursive binary search ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q9</span>
+      <span class="qtitle">Recursive Binary Search</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Write &nbsp;<code class="inl">public static int exam09(int[] a, int low, int high, int target)</code>&nbsp; that searches the <b>sorted</b> range <code class="inl">a[low … high]</code> using binary search and returns the index of <code class="inl">target</code>, or <b>-1</b> if it is not there. The first call is <code class="inl">exam09(a, 0, a.length - 1, target)</code>.</p>
+      <p class="note">Note: you will not get points unless you use recursion (no loops).</p>
+      <div class="worked"><b>Worked example.</b> &nbsp;a = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91}: target 23 → <b>5</b>; target 91 → <b>9</b>; target 10 → <b>-1</b>.</div>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox tall"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q9</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">int</span> exam09(<span class="ty">int</span>[] a, <span class="ty">int</span> low, <span class="ty">int</span> high, <span class="ty">int</span> target) {</span><span class="ln">    <span class="kw">if</span> (low &gt; high) {                   <span class="cm">// base case: empty range</span></span><span class="ln">        <span class="kw">return</span> -<span class="st">1</span>;</span><span class="ln">    }</span><span class="ln">    <span class="ty">int</span> mid = (low + high) / <span class="st">2</span>;</span><span class="ln">    <span class="kw">if</span> (a[mid] == target) {             <span class="cm">// base case: found</span></span><span class="ln">        <span class="kw">return</span> mid;</span><span class="ln">    }</span><span class="ln">    <span class="kw">if</span> (target &lt; a[mid]) {</span><span class="ln">        <span class="kw">return</span> exam09(a, low, mid - <span class="st">1</span>, target);    <span class="cm">// left half</span></span><span class="ln">    }</span><span class="ln">    <span class="kw">return</span> exam09(a, mid + <span class="st">1</span>, high, target);       <span class="cm">// right half</span></span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: base case <code class="inl">low &gt; high</code> → -1 &nbsp;2 · compute mid 1 · found → return mid 2 · left recursive call with <code class="inl">mid - 1</code> 2 · right recursive call with <code class="inl">mid + 1</code> 2 · <b>returning</b> the recursive result 1. Passing <code class="inl">mid</code> instead of <code class="inl">mid ± 1</code> can recurse forever (−2). A loop-based answer earns 0.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PAGE 6 — Q10
+     ===================================================================== -->
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Arrays &amp; Searching — Practice Exam</span></div>
+
+  <!-- ============ Q10 : Merge two sorted arrays ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q10</span>
+      <span class="qtitle">Merge Two Sorted Arrays</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Write &nbsp;<code class="inl">public static int[] exam10(int[] a, int[] b)</code>&nbsp; where both <code class="inl">a</code> and <code class="inl">b</code> are sorted in ascending order. Return a <b>new</b> array of length <code class="inl">a.length + b.length</code> that contains all values of both arrays, also sorted in ascending order. Your method must run in <b>O(n + m)</b>: do <b>not</b> copy everything and then sort.</p>
+      <div class="twocol">
+        <div>
+          <div class="arrlbl"><span class="nm">a</span><div class="arr"><span class="c">1</span><span class="c">4</span><span class="c">9</span></div></div>
+          <div class="arrlbl"><span class="nm">b</span><div class="arr"><span class="c">2</span><span class="c">3</span><span class="c">10</span><span class="c">12</span></div></div>
+        </div>
+        <div>
+          <div class="arrlbl"><span class="nm">result</span><div class="arr"><span class="c hl">1</span><span class="c hl">2</span><span class="c hl">3</span><span class="c hl">4</span><span class="c hl">9</span><span class="c hl">10</span><span class="c hl">12</span></div></div>
+        </div>
+      </div>
+      <p class="hint">Hint: keep one index for <code class="inl">a</code>, one for <code class="inl">b</code>, and one for the result. When one array runs out, copy the rest of the other. Your code must also work when one of the arrays is empty.</p>
+      <div class="answer-space"><span class="lbl">Write your complete method:</span><div class="codebox tall"></div></div>
+
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q10</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public static</span> <span class="ty">int</span>[] exam10(<span class="ty">int</span>[] a, <span class="ty">int</span>[] b) {</span><span class="ln">    <span class="ty">int</span>[] r = <span class="kw">new</span> <span class="ty">int</span>[a.length + b.length];</span><span class="ln">    <span class="ty">int</span> i = <span class="st">0</span>, j = <span class="st">0</span>, k = <span class="st">0</span>;</span><span class="ln">    <span class="kw">while</span> (i &lt; a.length &amp;&amp; j &lt; b.length) {   <span class="cm">// take the smaller front value</span></span><span class="ln">        <span class="kw">if</span> (a[i] &lt;= b[j]) {</span><span class="ln">            r[k++] = a[i++];</span><span class="ln">        } <span class="kw">else</span> {</span><span class="ln">            r[k++] = b[j++];</span><span class="ln">        }</span><span class="ln">    }</span><span class="ln">    <span class="kw">while</span> (i &lt; a.length) r[k++] = a[i++];      <span class="cm">// leftovers of a</span></span><span class="ln">    <span class="kw">while</span> (j &lt; b.length) r[k++] = b[j++];      <span class="cm">// leftovers of b</span></span><span class="ln">    <span class="kw">return</span> r;</span><span class="ln">}</span></pre>
+        <p class="rub">Rubric: allocate correct length 1 · three indices 1 · main loop with <code class="inl">&amp;&amp;</code> condition 2 · compare and copy the smaller, advancing the right indices 3 · copy leftovers of <b>both</b> arrays 2 · return 1. Copying then sorting: max 4/10.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="endmark">— End of Arrays &amp; Searching Practice Exam — Good Luck! —</div>
+  <p class="footline">Data Structures I</p>
+</section>
+
+<script>
+  var btn = document.getElementById('toggleAns');
+  btn.addEventListener('click', function () {
+    var on = document.body.classList.toggle('show-answers');
+    btn.textContent = on ? '🙈 Hide model answers' : '👁 Show model answers';
+    btn.classList.toggle('ghost', !on);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stack — Practice Exam (A4 printable)</title>
+<style>
+/* =======================================================================
+   Data Structures I — STACK practice exam
+   Print-first, A4. Each question is a CARD. Blue module theme (shared with the linked-list exam).
+   A "Show model answers" toggle turns the same file into an answer key.
+   ======================================================================= */
+@page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+
+:root{
+  --blue:      #2563eb;
+  --blue-dark: #1e3a5f;
+  --blue-deep: #0f172a;
+  --blue-tint: #eef4ff;
+  --ink:       #17202a;
+  --ink-soft:  #3a4656;
+  --rule:      #cbd5e1;
+  --rule-soft: #e2e8f0;
+  --paper:     #ffffff;
+  --code-bg:   #f6f8fc;
+  --code-rule: #d7e0f0;
+  --warn:      #b42318;
+  --ans:       #1d4ed8;
+  --tag-easy:  #e7f6ec; --tag-easy-i:#1a7f37;
+  --tag-med:   #fef3e0; --tag-med-i: #9a6212;
+  --tag-hard:  #fdeaea; --tag-hard-i:#b42318;
+}
+
+*{ box-sizing:border-box; }
+html,body{
+  margin:0; padding:0;
+  background:#e9edf3;
+  color:var(--ink);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size:11pt; line-height:1.5;
+}
+body{ padding:14mm 0; }
+
+/* ---- A4 sheet ---- */
+.sheet{
+  background:var(--paper);
+  width:210mm; min-height:297mm;
+  margin:0 auto 10mm;
+  padding:15mm 15mm 18mm;
+  box-shadow:0 3px 14px rgba(15,23,42,.18);
+  position:relative;
+}
+
+/* ---- running head ---- */
+.runhead{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid var(--blue-dark);
+  padding-bottom:6px; margin-bottom:14px;
+  font-size:9.5pt; color:var(--blue-dark);
+}
+.runhead b{ font-size:10.5pt; }
+
+/* ================= COVER ================= */
+.cover-top{ text-align:center; }
+.cover-top .uni{ font-size:15pt; font-weight:800; color:var(--blue-deep); }
+.cover-top .fac{ font-size:10.5pt; color:var(--ink-soft); margin-top:2px; }
+.cover-rule{ height:2px; background:var(--blue-dark); margin:12px 0; }
+.cover-title{ font-size:22pt; font-weight:800; color:var(--blue); letter-spacing:.5px; }
+.cover-sub{ font-size:13pt; font-weight:600; margin-top:4px; }
+.cover-tag{
+  display:inline-block; margin-top:10px; padding:4px 16px;
+  background:var(--blue-tint); color:var(--blue); border:1px solid var(--blue);
+  border-radius:999px; font-weight:700; font-size:10.5pt;
+}
+
+.id-grid{
+  margin:22px 0 4px; width:100%; border-collapse:collapse; font-size:11pt;
+}
+.id-grid td{ padding:9px 6px; }
+.id-grid .lbl{ width:120px; font-weight:700; color:var(--blue-dark); }
+.id-grid .line{ border-bottom:1.4px solid #64748b; }
+
+.instr{
+  margin-top:16px; border:1px solid var(--rule);
+  border-left:5px solid var(--blue); border-radius:8px;
+  background:#fafcff; padding:12px 16px;
+}
+.instr h3{ margin:0 0 6px; font-size:11.5pt; color:var(--blue-dark); }
+.instr ul{ margin:0; padding-left:18px; }
+.instr li{ margin:3px 0; }
+
+.marks-tbl{ width:100%; border-collapse:collapse; margin-top:18px; font-size:10pt; text-align:center; }
+.marks-tbl th, .marks-tbl td{ border:1px solid var(--rule); padding:6px 4px; }
+.marks-tbl thead th{ background:var(--blue-dark); color:#fff; }
+.marks-tbl .tot{ background:var(--blue-tint); font-weight:800; }
+
+/* ================= QUESTION CARD ================= */
+.card{
+  border:1px solid var(--rule);
+  border-radius:10px;
+  margin:0 0 16px;
+  overflow:hidden;
+  break-inside:avoid; page-break-inside:avoid;
+  background:#fff;
+}
+.card-head{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  background:linear-gradient(180deg,#f3f7ff,#e9f0ff);
+  border-bottom:1px solid var(--rule);
+  padding:9px 14px;
+}
+.qno{
+  font-weight:800; color:#fff; background:var(--blue);
+  border-radius:6px; padding:3px 11px; font-size:11pt; letter-spacing:.3px;
+}
+.qtitle{ font-weight:700; font-size:11.5pt; color:var(--blue-deep); flex:1 1 240px; }
+.chips{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.chip{ font-size:8.5pt; padding:2px 8px; border-radius:999px; font-weight:700; white-space:nowrap; }
+.chip.clo{ background:#eef2ff; color:#3730a3; border:1px solid #c7d2fe; }
+.chip.so { background:#ecfeff; color:#0e7490; border:1px solid #a5f3fc; }
+.chip.pts{ background:var(--blue-dark); color:#fff; }
+.tag-easy{ background:var(--tag-easy); color:var(--tag-easy-i); border:1px solid var(--tag-easy-i); }
+.tag-med { background:var(--tag-med);  color:var(--tag-med-i);  border:1px solid var(--tag-med-i);  }
+.tag-hard{ background:var(--tag-hard); color:var(--tag-hard-i); border:1px solid var(--tag-hard-i); }
+
+.card-body{ padding:12px 16px 14px; }
+.card-body p{ margin:6px 0; }
+.note{ color:var(--warn); font-style:italic; font-weight:600; font-size:10pt; }
+.hint{ color:var(--ink-soft); font-style:italic; font-size:10pt; }
+.worked{ background:#f5faff; border:1px dashed var(--blue); border-radius:8px; padding:8px 12px; margin:10px 0; font-size:10.5pt; }
+.worked b{ color:var(--blue-dark); }
+
+/* ---- code blocks ---- */
+pre.code{
+  background:var(--code-bg); border:1px solid var(--code-rule);
+  border-left:4px solid var(--blue); border-radius:6px;
+  padding:10px 12px; margin:10px 0; overflow:auto;
+  font-family:'Consolas','DejaVu Sans Mono',monospace; font-size:10pt; line-height:1.45;
+  counter-reset:ln;
+}
+pre.code .ln{ display:block; white-space:pre; }
+pre.code.numbered .ln::before{
+  counter-increment:ln; content:counter(ln);
+  display:inline-block; width:1.6em; margin-right:10px;
+  color:#94a3b8; text-align:right; border-right:1px solid #cbd5e1; padding-right:6px;
+}
+.kw{ color:#7c3aed; font-weight:700; }
+.ty{ color:#0e7490; font-weight:700; }
+.st{ color:#b45309; }
+.cm{ color:#64748b; font-style:italic; }
+code.inl{ background:var(--code-bg); border:1px solid var(--code-rule); border-radius:4px; padding:1px 5px; font-family:'Consolas',monospace; font-size:9.8pt; }
+
+/* ---- linked-list diagram (CSS boxes) ---- */
+.ll{ display:flex; align-items:center; flex-wrap:nowrap; width:max-content; max-width:none;
+     gap:0; margin:12px 0; font-family:'Consolas','DejaVu Sans Mono',monospace;
+     transform-origin:left center; }
+.ll .headlbl{
+  display:inline-flex; align-items:center; font-weight:700; color:var(--blue-dark);
+  background:var(--blue-tint); border:1.4px solid var(--blue); border-radius:6px;
+  padding:4px 7px; margin-right:2px; font-size:10pt;
+}
+.node{ display:flex; border:1.6px solid var(--blue-dark); border-radius:5px; overflow:hidden; background:#fff; }
+.node .cell{ padding:5px 5px; font-weight:700; font-size:10.5pt; }
+.node .data{ background:#fff; }
+.node .ptr{ background:var(--blue-tint); color:var(--blue); border-left:1.4px solid var(--blue-dark); font-size:8pt; }
+.node .prev{ background:#f1f5f9; color:#475569; border-right:1.4px solid var(--blue-dark); font-size:8pt; }
+.arrow{ flex:0 0 16px; height:0; border-top:2px solid var(--blue-dark); position:relative; }
+.arrow::after{ content:''; position:absolute; right:-1px; top:-5px;
+  border-left:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
+.darrow{ flex:0 0 20px; height:0; border-top:2px solid var(--blue-dark); position:relative; }
+.darrow::after{ content:''; position:absolute; right:-1px; top:-5px;
+  border-left:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
+.darrow::before{ content:''; position:absolute; left:-1px; top:-5px;
+  border-right:8px solid var(--blue-dark); border-top:5px solid transparent; border-bottom:5px solid transparent; }
+.nul{ font-weight:800; color:#475569; padding:6px 2px; font-size:10pt; }
+.curve{ font-weight:700; color:var(--blue-dark); padding:0 6px; font-size:9.5pt; }
+
+/* ---- answer space ---- */
+.answer-space{ margin-top:10px; }
+.answer-space .lbl{ font-style:italic; color:var(--ink-soft); font-size:10pt; }
+.writeline{ border-bottom:1px solid #94a3b8; height:1.55em; margin-top:.45em; }
+.codebox{ border:1px dashed #94a3b8; border-radius:6px; min-height:120px; margin-top:8px;
+  background:repeating-linear-gradient(#fff,#fff 1.7em,#eef2f7 1.7em,#eef2f7 calc(1.7em + 1px)); }
+.codebox.tall{ min-height:200px; }
+.boxrow{ display:flex; gap:0; margin-top:8px; }
+.boxrow .b{ flex:1; border:1.4px solid var(--blue-dark); border-right:0; height:42px; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.boxrow .b:last-child{ border-right:1.4px solid var(--blue-dark); }
+.boxrow .b .k{ font-size:8pt; color:#64748b; font-weight:600; }
+.mini{ font-size:9pt; color:#64748b; }
+
+/* array cells */
+.arr{ display:flex; margin:8px 0; font-family:'Consolas',monospace; }
+.arr .c{ width:38px; height:38px; border:1.4px solid var(--blue-dark); border-right:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; }
+.arr .c:last-child{ border-right:1.4px solid var(--blue-dark); }
+.arr.idx .c{ border:0; height:auto; color:#64748b; font-size:9pt; }
+
+/* ---- model answer block (hidden until toggled) ---- */
+.answer-key{ display:none; }
+body.show-answers .answer-key{ display:block; }
+.answer-key{
+  margin-top:12px; border:1px solid #bbf7d0; border-left:5px solid #16a34a;
+  background:#f0fdf4; border-radius:8px; padding:10px 14px;
+}
+.answer-key .akh{ font-weight:800; color:#15803d; font-size:10.5pt; margin-bottom:4px; }
+.answer-key pre.code{ border-left-color:#16a34a; background:#f3fdf6; }
+.answer-key .val{ color:#166534; font-weight:800; }
+.answer-key .rub{ color:#0e7490; font-size:9.5pt; font-style:italic; }
+
+/* ---- floating toolbar (screen only) ---- */
+.toolbar{
+  position:fixed; top:14px; right:14px; z-index:50; display:flex; gap:8px;
+  background:#fff; border:1px solid var(--rule); border-radius:10px; padding:8px 10px;
+  box-shadow:0 4px 14px rgba(15,23,42,.18);
+}
+.toolbar button{
+  font:inherit; font-size:10pt; font-weight:700; cursor:pointer;
+  border:1px solid var(--blue); border-radius:7px; padding:7px 12px;
+  background:var(--blue); color:#fff;
+}
+.toolbar button.ghost{ background:#fff; color:var(--blue); }
+.toolbar button:active{ transform:translateY(1px); }
+
+.footline{ text-align:center; margin-top:6px; color:var(--ink-soft); font-size:9.5pt; }
+.endmark{ text-align:center; font-weight:800; color:var(--blue-dark); margin:18px 0 4px; }
+
+/* ================= PRINT ================= */
+@media print{
+  body{ background:#fff; padding:0; }
+  .toolbar{ display:none !important; }
+  .sheet{ box-shadow:none; margin:0; width:auto; min-height:auto; padding:0; }
+  .sheet + .sheet{ page-break-before:always; }
+  .card{ box-shadow:none; }
+  html{ background:#fff; }
+}
+
+
+/* ---- vertical stack diagram ---- */
+.infix{ display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:0 2px; margin:34px 0 8px;
+  font-family:'Consolas','DejaVu Sans Mono',monospace; font-size:14pt; font-weight:700; }
+.infix .tk{ padding:0 7px; }
+.infix .mk{ position:relative; width:0; align-self:stretch; }
+.infix .mk b{ position:absolute; left:-6px; top:-40px; color:var(--warn); font-size:12pt; }
+.infix .mk i{ position:absolute; left:-6px; top:-24px; color:var(--warn); font-style:normal; font-size:12pt; }
+.stk-abc{ justify-content:space-around; margin:4px 0; }
+.stk-abc .stk .s{ width:70px; height:27px; border-top:1.6px solid var(--blue-dark); margin-top:-1.6px; }
+.mono{ font-family:'Consolas','DejaVu Sans Mono',monospace; }
+.part-banner{ background:var(--blue-dark); color:#fff; font-weight:800; font-size:11pt; border-radius:8px; padding:7px 14px; margin:0 0 12px; }
+.blank{ color:#94a3b8; }
+p.opts{ margin:2px 0 8px 14px; font-size:10.3pt; }
+.stkrow{ display:flex; gap:28px; align-items:flex-end; flex-wrap:wrap; margin:10px 0; }
+.stk{ display:inline-flex; flex-direction:column; align-items:center; font-family:'Consolas','DejaVu Sans Mono',monospace; }
+.stk .s{ width:64px; height:30px; border:1.6px solid var(--blue-dark); border-top:0;
+  display:flex; align-items:center; justify-content:center; font-weight:700; background:#fff; position:relative; }
+.stk .s:first-of-type{ border-top:1.6px solid var(--blue-dark); }
+.stk .s.empty{ background:#f8fafc; color:#94a3b8; }
+.stk .s.topc{ background:var(--blue-tint); }
+.stk .s.topc::after{ content:'\2190 top'; position:absolute; left:70px; font-size:9pt; color:var(--blue); white-space:nowrap; }
+.stk .base{ width:80px; border-top:3px solid var(--blue-dark); }
+.stk .cap{ font-size:9pt; color:var(--ink-soft); margin-top:4px; }
+
+/* ---- trace tables ---- */
+table.trace{ width:100%; border-collapse:collapse; margin:8px 0; font-size:10pt; }
+table.trace th, table.trace td{ border:1px solid var(--rule); padding:4px 6px; text-align:center; }
+table.trace thead th{ background:var(--blue-tint); color:var(--blue-dark); }
+table.trace td{ height:1.9em; }
+table.trace td.sym{ font-family:'Consolas',monospace; font-weight:700; width:12%; }
+table.trace.mono td{ font-family:'Consolas',monospace; }
+.answer-key table.trace thead th{ background:#dcfce7; color:#166534; }
+</style>
+</head>
+<body>
+
+<!-- ===== screen toolbar ===== -->
+<div class="toolbar">
+  <button id="toggleAns" class="ghost">👁 Show model answers</button>
+  <button onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<!-- =====================================================================
+     COVER PAGE
+     ===================================================================== -->
+<section class="sheet cover">
+  <div class="cover-rule"></div>
+  <div class="cover-top">
+    <div class="cover-title">Data Structures I</div>
+    <div class="cover-sub">Stacks — Focused Practice Exam</div>
+    <div class="cover-tag">Stack ADT &middot; Array vs Linked List &middot; Push &amp; Pop &middot; Infix &rarr; Postfix &middot; Postfix Evaluation</div>
+  </div>
+  <div class="cover-rule"></div>
+
+  <table class="id-grid">
+    <tr><td class="lbl">Student Name:</td><td class="line"></td></tr>
+    <tr><td class="lbl">Student ID:</td><td class="line"></td></tr>
+    <tr>
+      <td class="lbl">Section:</td><td class="line" style="width:35%"></td>
+      <td class="lbl" style="text-align:right;padding-right:14px">Instructor:</td><td class="line"></td>
+    </tr>
+  </table>
+
+  <div class="instr">
+    <h3>Instructions</h3>
+    <ul>
+      <li>This booklet contains <b>14 questions</b> on stacks in two parts. <b>Total: 140 marks</b> &middot; Suggested time: <b>105 minutes</b>.</li>
+      <li><b>Part A (Q1–Q4):</b> the stack as an ADT, array vs linked-list implementations, push and pop. <b>Part B (Q5–Q14):</b> Q5–Q11 convert <b>infix → postfix</b>; Q12–Q14 <b>evaluate</b> a postfix expression.</li>
+      <li>Each arrow (<b>A</b>, <b>B</b>, <b>C</b>) marks the moment <b>just after</b> the token to its left has been processed. Draw the stack contents at that moment, <b>top at the top</b> (fill from the bottom box upward). Not every box has to be used.</li>
+      <li>Precedence: <code class="inl">*</code> <code class="inl">/</code> are higher than <code class="inl">+</code> <code class="inl">-</code>. On an operator, pop while the top is not <code class="inl">(</code> and has <b>higher or equal</b> precedence, then push. Operators of equal precedence are processed <b>left to right</b>.</li>
+      <li>Postfix evaluation rule: <b>1st pop → var1</b>, <b>2nd pop → var2</b>, compute <b>var2 op var1</b>.</li>
+      <li>Place your answers in the boxes provided.</li>
+    </ul>
+  </div>
+
+  <table class="marks-tbl">
+    <thead>
+      <tr><th>Question</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>Q5</th><th>Q6</th><th>Q7</th><th>Q8</th><th>Q9</th><th>Q10</th><th>Q11</th><th>Q12</th><th>Q13</th><th>Q14</th><th class="tot">Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Level</b></td><td>E</td><td>M</td><td>M</td><td>M</td><td>E</td><td>E</td><td>M</td><td>M</td><td>H</td><td>H</td><td>H</td><td>E</td><td>M</td><td>H</td><td class="tot"></td></tr>
+      <tr><td><b>Max Mark</b></td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td class="tot">140</td></tr>
+      <tr><td><b>Obtained</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="tot"></td></tr>
+    </tbody>
+  </table>
+
+  <p class="footline">Level: E = Easy · M = Medium · H = Hard &nbsp;|&nbsp; Topics: stack as an ADT (logical vs physical) · choosing array vs linked list · push &amp; pop in both implementations · infix &rarr; postfix with stack snapshots · postfix evaluation with stack snapshots</p>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+  <div class="part-banner">Part A — Stack ADT, Implementations, Push &amp; Pop &nbsp;(Q1–Q4 · 40 marks)</div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q1</span>
+      <span class="qtitle">Stack as an Abstract Data Type — Logical vs Physical</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p><b>(a)</b> Circle the <b>single best</b> answer. <span class="hint">[4 marks · 1 each]</span></p>
+      <p><b>1.</b> A stack is called an <b>Abstract Data Type (ADT)</b> because:</p>
+      <p class="opts">(a) it is always stored in contiguous memory &nbsp;&nbsp; (b) it defines <i>what</i> the operations do (its behaviour) without specifying <i>how</i> they are implemented &nbsp;&nbsp; (c) it can store only integers &nbsp;&nbsp; (d) it is built into Java</p>
+      <p><b>2.</b> Which statement describes the stack as a <b>logical</b> data structure?</p>
+      <p class="opts">(a) an array of size n with an index <code class='inl'>top</code> &nbsp;&nbsp; (b) a chain of nodes linked by <code class='inl'>next</code> &nbsp;&nbsp; (c) a collection where insertion and deletion happen at one end only (LIFO) &nbsp;&nbsp; (d) a block of consecutive memory addresses</p>
+      <p><b>3.</b> Which of the following is a <b>physical</b> structure that can be used to implement a stack?</p>
+      <p class="opts">(a) LIFO &nbsp;&nbsp; (b) push / pop &nbsp;&nbsp; (c) an array or a linked list &nbsp;&nbsp; (d) an ADT</p>
+      <p><b>4.</b> A program uses only <code class='inl'>push</code>, <code class='inl'>pop</code>, <code class='inl'>top</code> and <code class='inl'>isEmpty</code>. The stack is changed from an array to a linked list. The program:</p>
+      <p class="opts">(a) must be rewritten &nbsp;&nbsp; (b) works unchanged, because the abstract operations stay the same &nbsp;&nbsp; (c) now behaves as FIFO &nbsp;&nbsp; (d) can no longer call <code class='inl'>top()</code></p>
+      <p><b>(b)</b> True or False. <span class="hint">[2 marks · 1 each]</span></p>
+      <p>&nbsp;&nbsp;i. &nbsp;<code class="inl">isFull()</code> is required in a linked-list implementation of a stack. &nbsp;&nbsp; ______</p>
+      <p>&nbsp;&nbsp;ii. A stack's LIFO behaviour is the same whether it is implemented with an array or a linked list. &nbsp;&nbsp; ______</p>
+      <p><b>(c)</b> Explain the difference between the <b>logical view</b> and the <b>physical view</b> of a stack. Give one example of each. <span class="hint">[4 marks]</span></p>
+      <div class="answer-space"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q1</div>
+        <p>(a) 1:&nbsp;<span class="val">(b)</span> &nbsp; 2:&nbsp;<span class="val">(c)</span> &nbsp; 3:&nbsp;<span class="val">(c)</span> &nbsp; 4:&nbsp;<span class="val">(b)</span></p>
+        <p>(b) i.&nbsp;<span class="val">False</span> — a linked stack grows dynamically &nbsp;&nbsp; ii.&nbsp;<span class="val">True</span></p>
+        <p>(c) The <b>logical view</b> describes <i>what</i> a stack is and how it is used: a LIFO collection accessed only at the top through <code class="inl">push</code>, <code class="inl">pop</code>, <code class="inl">top</code>, <code class="inl">isEmpty</code>. The <b>physical view</b> describes <i>how</i> it is stored in memory: e.g. an <b>array</b> with a <code class="inl">top</code> index (contiguous memory) or a <b>linked list</b> whose head is the top (nodes and references). The physical view can change without changing the logical view — that is the essence of abstraction.</p>
+        <p class="rub">Rubric (c): logical = behaviour / operations / LIFO 2 · physical = memory representation with an example (array or linked list) 2.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q2</span>
+      <span class="qtitle">Array vs Linked List — Which Implementation Is Better?</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p><b>(a)</b> For each situation, decide whether an <b>array-based</b> or a <b>linked-list-based</b> stack is the better choice, and give a one-line reason. <span class="hint">[6 marks · 1.5 each]</span></p>
+      <table class="trace"><thead><tr><th style="width:52%">Situation</th><th style="width:14%">Array / Linked list</th><th>Reason</th></tr></thead><tbody><tr><td style="text-align:left">1. An <b>Undo</b> feature in a text editor. The number of actions is unknown and can become very large.</td><td></td><td style="text-align:left"></td></tr><tr><td style="text-align:left">2. A small embedded device. The stack will <b>never hold more than 16</b> values and memory per element must be as small as possible.</td><td></td><td style="text-align:left"></td></tr><tr><td style="text-align:left">3. A browser's <b>Back</b> history. A user may visit thousands of pages and the size changes a lot during a session.</td><td></td><td style="text-align:left"></td></tr><tr><td style="text-align:left">4. A compiler checks balanced brackets in lines that are <b>at most 80 characters</b> long.</td><td></td><td style="text-align:left"></td></tr></tbody></table>
+      <p><b>(b)</b> Complete the comparison table. <span class="hint">[4 marks · 0.5 each]</span></p>
+      <table class="trace"><thead><tr><th style="width:36%">Property</th><th>Array-based stack</th><th>Linked-list-based stack</th></tr></thead><tbody><tr><td style="text-align:left"><b>Size: fixed or dynamic?</b></td><td></td><td></td></tr><tr><td style="text-align:left"><b>Can it overflow? Is <code class="inl">isFull()</code> needed?</b></td><td></td><td></td></tr><tr><td style="text-align:left"><b>Extra memory per element</b></td><td></td><td></td></tr><tr><td style="text-align:left"><b>Time of push / pop</b></td><td></td><td></td></tr></tbody></table>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q2</div>
+        <table class="trace"><thead><tr><th style="width:52%">Situation</th><th style="width:14%">Array / Linked list</th><th>Reason</th></tr></thead><tbody><tr><td style="text-align:left">1. An <b>Undo</b> feature in a text editor. The number of actions is unknown and can become very large.</td><td><span class=val>Linked list</span></td><td style="text-align:left">size is unknown and keeps growing; a linked stack grows dynamically and never overflows.</td></tr><tr><td style="text-align:left">2. A small embedded device. The stack will <b>never hold more than 16</b> values and memory per element must be as small as possible.</td><td><span class=val>Array</span></td><td style="text-align:left">the maximum size is known in advance and an array stores no extra <code class="inl">next</code> reference per element.</td></tr><tr><td style="text-align:left">3. A browser's <b>Back</b> history. A user may visit thousands of pages and the size changes a lot during a session.</td><td><span class=val>Linked list</span></td><td style="text-align:left">the size varies widely; a fixed array would either overflow or waste a lot of unused slots.</td></tr><tr><td style="text-align:left">4. A compiler checks balanced brackets in lines that are <b>at most 80 characters</b> long.</td><td><span class=val>Array</span></td><td style="text-align:left">at most 80 symbols can ever be pushed, so a fixed array of 80 is enough and is simple and fast.</td></tr></tbody></table>
+        <table class="trace"><thead><tr><th style="width:36%">Property</th><th>Array-based stack</th><th>Linked-list-based stack</th></tr></thead><tbody><tr><td style="text-align:left"><b>Size: fixed or dynamic?</b></td><td>fixed when the stack is created</td><td>grows / shrinks dynamically</td></tr><tr><td style="text-align:left"><b>Can it overflow? Is <code class="inl">isFull()</code> needed?</b></td><td>yes — needs <code class="inl">isFull()</code></td><td>no (only if memory runs out) — not needed</td></tr><tr><td style="text-align:left"><b>Extra memory per element</b></td><td>none (but unused slots are wasted)</td><td>one <code class="inl">next</code> reference per node</td></tr><tr><td style="text-align:left"><b>Time of push / pop</b></td><td>O(1)</td><td>O(1)</td></tr></tbody></table>
+        <p class="rub">Rubric (a): correct choice 0.5 + reason 1 per situation. Key idea: <b>known, small maximum size → array</b>; <b>unknown or highly variable size → linked list</b>. Both give O(1) push and pop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q3</span>
+      <span class="qtitle">Push and Pop — Array-Based Stack</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>The class <code class="inl">StackUsingArray&lt;T&gt;</code> has the fields <code class="inl">T[] stack</code>, <code class="inl">int top</code> and <code class="inl">int maxSize</code>. The constructor sets <code class="inl">top = -1</code> (empty stack).</p>
+      <p><b>(a)</b> Fill in the four blanks. <span class="hint">[4 marks · 1 each]</span></p>
+      <pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">boolean</span> push(T element) {</span><span class="ln">    <span class="kw">if</span> ( <span class="blank">______________</span> ) {                 <span class="cm">// (i)</span></span><span class="ln">        System.out.println("Stack Overflow!");</span><span class="ln">        <span class="kw">return</span> <span class="kw">false</span>;</span><span class="ln">    }</span><span class="ln">    <span class="blank">______________</span> = element;               <span class="cm">// (ii)</span></span><span class="ln">    <span class="kw">return</span> <span class="kw">true</span>;</span><span class="ln">}</span><span class="ln"><span class="kw">public</span> T pop() {</span><span class="ln">    <span class="kw">if</span> ( <span class="blank">______________</span> ) {                 <span class="cm">// (iii)</span></span><span class="ln">        System.out.println("Stack Underflow!");</span><span class="ln">        <span class="kw">return</span> <span class="kw">null</span>;</span><span class="ln">    }</span><span class="ln">    T element = <span class="blank">______________</span>;             <span class="cm">// (iv)</span></span><span class="ln">    stack[top--] = <span class="kw">null</span>;               <span class="cm">// clear slot, then top--</span></span><span class="ln">    <span class="kw">return</span> element;</span><span class="ln">}</span></pre>
+      <p><b>(b)</b> A stack is created with <code class="inl">new StackUsingArray&lt;Integer&gt;(4)</code>. Fill in the table for the operations below, in order. <span class="hint">[6 marks]</span></p>
+      <table class="trace mono"><thead><tr><th>Operation</th><th>Value of <code class="inl">top</code> after</th><th>Returned / printed</th></tr></thead><tbody><tr><td class="sym">push(5)</td><td></td><td></td></tr><tr><td class="sym">push(8)</td><td></td><td></td></tr><tr><td class="sym">pop()</td><td></td><td></td></tr><tr><td class="sym">push(3)</td><td></td><td></td></tr><tr><td class="sym">push(7)</td><td></td><td></td></tr><tr><td class="sym">push(1)</td><td></td><td></td></tr><tr><td class="sym">push(9)</td><td></td><td></td></tr><tr><td class="sym">pop()</td><td></td><td></td></tr></tbody></table>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q3</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">boolean</span> push(T element) {</span><span class="ln">    <span class="kw">if</span> ( <span class="val">isFull()  /  top == maxSize - 1</span> ) {                 <span class="cm">// (i)</span></span><span class="ln">        System.out.println("Stack Overflow!");</span><span class="ln">        <span class="kw">return</span> <span class="kw">false</span>;</span><span class="ln">    }</span><span class="ln">    <span class="val">stack[++top</span>] = element;               <span class="cm">// (ii)</span></span><span class="ln">    <span class="kw">return</span> <span class="kw">true</span>;</span><span class="ln">}</span><span class="ln"><span class="kw">public</span> T pop() {</span><span class="ln">    <span class="kw">if</span> ( <span class="val">isEmpty()  /  top == -1</span> ) {                 <span class="cm">// (iii)</span></span><span class="ln">        System.out.println("Stack Underflow!");</span><span class="ln">        <span class="kw">return</span> <span class="kw">null</span>;</span><span class="ln">    }</span><span class="ln">    T element = <span class="val">stack[top</span>];             <span class="cm">// (iv)</span></span><span class="ln">    stack[top--] = <span class="kw">null</span>;               <span class="cm">// clear slot, then top--</span></span><span class="ln">    <span class="kw">return</span> element;</span><span class="ln">}</span></pre>
+        <table class="trace mono"><thead><tr><th>Operation</th><th>Value of <code class="inl">top</code> after</th><th>Returned / printed</th></tr></thead><tbody><tr><td class="sym">push(5)</td><td>0</td><td>—</td></tr><tr><td class="sym">push(8)</td><td>1</td><td>—</td></tr><tr><td class="sym">pop()</td><td>0</td><td>returns 8</td></tr><tr><td class="sym">push(3)</td><td>1</td><td>—</td></tr><tr><td class="sym">push(7)</td><td>2</td><td>—</td></tr><tr><td class="sym">push(1)</td><td>3</td><td>— (now full)</td></tr><tr><td class="sym">push(9)</td><td>3</td><td>Stack Overflow!</td></tr><tr><td class="sym">pop()</td><td>2</td><td>returns 1</td></tr></tbody></table>
+        <p>Final contents (bottom → top): <span class="val">[ 5, 3, 7 ]</span></p>
+        <p class="rub">Rubric (a): 1 per blank. In (ii) <code class="inl">stack[top++]</code> is wrong — it writes at the old index (−1 at the start). (b): 0.5 per <code class="inl">top</code> value (4) · overflow message 1 · popped values 8 and 1: 1.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q4</span>
+      <span class="qtitle">Push and Pop — Linked-List-Based Stack</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+
+      <p>In <code class="inl">StackUsingLinkedList&lt;T&gt;</code> the field <code class="inl">top</code> refers to the first node of the list (the top of the stack); each <code class="inl">Node&lt;T&gt;</code> has <code class="inl">data</code> and <code class="inl">next</code>.</p>
+      <p><b>(a)</b> Fill in the five blanks. <span class="hint">[5 marks · 1 each]</span></p>
+      <pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">void</span> push(T element) {</span><span class="ln">    Node&lt;T&gt; newNode = <span class="kw">new</span> Node&lt;&gt;(element);</span><span class="ln">    newNode.next = <span class="blank">______________</span>;          <span class="cm">// (i)</span></span><span class="ln">    top = <span class="blank">______________</span>;                   <span class="cm">// (ii)</span></span><span class="ln">    size++;</span><span class="ln">}</span><span class="ln"><span class="kw">public</span> T pop() {</span><span class="ln">    <span class="kw">if</span> ( <span class="blank">______________</span> ) {                 <span class="cm">// (iii)</span></span><span class="ln">        System.out.println("Stack Underflow!");</span><span class="ln">        <span class="kw">return</span> <span class="kw">null</span>;</span><span class="ln">    }</span><span class="ln">    T data = <span class="blank">______________</span>;                <span class="cm">// (iv)</span></span><span class="ln">    top = <span class="blank">______________</span>;                   <span class="cm">// (v)</span></span><span class="ln">    size--;</span><span class="ln">    <span class="kw">return</span> data;</span><span class="ln">}</span></pre>
+      <p><b>(b)</b> In <code class="inl">push</code>, a student swaps lines (i) and (ii), writing <code class="inl">top = newNode;</code> before <code class="inl">newNode.next = top;</code>. What goes wrong? <span class="hint">[2 marks]</span></p>
+      <div class="answer-space"><div class="writeline"></div><div class="writeline"></div></div>
+      <p><b>(c)</b> Why are <code class="inl">push</code> and <code class="inl">pop</code> done at the <b>head</b> of the list and not at the tail? State the time complexity of each. <span class="hint">[3 marks]</span></p>
+      <div class="answer-space"><div class="writeline"></div><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q4</div>
+        <pre class="code numbered"><span class="ln"><span class="kw">public</span> <span class="kw">void</span> push(T element) {</span><span class="ln">    Node&lt;T&gt; newNode = <span class="kw">new</span> Node&lt;&gt;(element);</span><span class="ln">    newNode.next = <span class="val">top</span>;          <span class="cm">// (i)</span></span><span class="ln">    top = <span class="val">newNode</span>;                   <span class="cm">// (ii)</span></span><span class="ln">    size++;</span><span class="ln">}</span><span class="ln"><span class="kw">public</span> T pop() {</span><span class="ln">    <span class="kw">if</span> ( <span class="val">isEmpty()  /  top == <span class="kw">null</span></span> ) {                 <span class="cm">// (iii)</span></span><span class="ln">        System.out.println("Stack Underflow!");</span><span class="ln">        <span class="kw">return</span> <span class="kw">null</span>;</span><span class="ln">    }</span><span class="ln">    T data = <span class="val">top.data</span>;                <span class="cm">// (iv)</span></span><span class="ln">    top = <span class="val">top.next</span>;                   <span class="cm">// (v)</span></span><span class="ln">    size--;</span><span class="ln">    <span class="kw">return</span> data;</span><span class="ln">}</span></pre>
+        <p>(b) After <code class="inl">top = newNode</code>, the statement <code class="inl">newNode.next = top</code> makes the new node point to <b>itself</b>. The reference to the old top is lost, so the rest of the stack is lost (and traversal loops forever).</p>
+        <p>(c) Inserting and removing at the head only changes <code class="inl">top</code>, with no traversal: push and pop are both <span class="val">O(1)</span>. Popping at the tail would need a walk to the second-last node — O(n) for a singly linked list.</p>
+        <p class="rub">Rubric: (a) 1 per blank · (b) self-loop / old nodes lost 2 · (c) reason 2 + O(1) 1.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+  <div class="part-banner">Part B — Expression Applications: Infix → Postfix &amp; Postfix Evaluation &nbsp;(Q5–Q14 · 100 marks)</div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q5</span>
+      <span class="qtitle">Infix → Postfix — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Convert</b> the following infix expression into its equivalent <b>postfix</b> expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <div class="infix"><span class="tk">7</span><span class="tk">+</span><span class="tk">3</span><span class="tk">*</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">4</span><span class="tk">-</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">6</span><span class="tk">/</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">2</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Postfix expression: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q5</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">*</div><div class="s">+</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">-</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">/</div><div class="s">-</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Postfix: <span class="val mono">7 3 4 * + 6 2 / -</span> &nbsp; <span class="mini">(value = 16)</span></p>
+        <p class="rub">Rubric: each stack snapshot 2 marks (all symbols in the right order) · postfix 4 marks. At <b>B</b> the <code class="inl">-</code> pops both <code class="inl">*</code> and <code class="inl">+</code> (higher / equal precedence) before it is pushed.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q6</span>
+      <span class="qtitle">Infix → Postfix — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Convert</b> the following infix expression into its equivalent <b>postfix</b> expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <div class="infix"><span class="tk">(</span><span class="tk">9</span><span class="tk">-</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">4</span><span class="tk">)</span><span class="tk">*</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">2</span><span class="tk">+</span><span class="tk">8</span><span class="tk">/</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">4</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Postfix expression: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q6</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">-</div><div class="s">(</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">*</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">/</div><div class="s">+</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Postfix: <span class="val mono">9 4 - 2 * 8 4 / +</span> &nbsp; <span class="mini">(value = 12)</span></p>
+        <p class="rub">Rubric: each stack snapshot 2 marks (all symbols in the right order) · postfix 4 marks. At <b>B</b> the <code class="inl">)</code> has already removed <code class="inl">-</code> and its <code class="inl">(</code>, so only <code class="inl">*</code> is on the stack. Before <b>C</b>, the <code class="inl">+</code> pops <code class="inl">*</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q7</span>
+      <span class="qtitle">Infix → Postfix — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Convert</b> the following infix expression into its equivalent <b>postfix</b> expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <div class="infix"><span class="tk">(</span><span class="tk">4</span><span class="tk">+</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">8</span><span class="tk">)</span><span class="tk">/</span><span class="tk">(</span><span class="tk">6</span><span class="tk">-</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">2</span><span class="tk">)</span><span class="tk">*</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">3</span><span class="tk">-</span><span class="tk">1</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Postfix expression: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q7</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">+</div><div class="s">(</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s topc">-</div><div class="s">(</div><div class="s">/</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">*</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Postfix: <span class="val mono">4 8 + 6 2 - / 3 * 1 -</span> &nbsp; <span class="mini">(value = 8)</span></p>
+        <p class="rub">Rubric: each stack snapshot 2 marks (all symbols in the right order) · postfix 4 marks. At <b>C</b> the <code class="inl">*</code> pops <code class="inl">/</code> (equal precedence) — a common mistake is to leave <code class="inl">/</code> under <code class="inl">*</code>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q8</span>
+      <span class="qtitle">Infix → Postfix — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Convert</b> the following infix expression into its equivalent <b>postfix</b> expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <div class="infix"><span class="tk">5</span><span class="tk">*</span><span class="tk">(</span><span class="tk">6</span><span class="tk">-</span><span class="tk">2</span><span class="tk">*</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">2</span><span class="tk">)</span><span class="tk">+</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">12</span><span class="tk">/</span><span class="tk">(</span><span class="tk">1</span><span class="tk">+</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">3</span><span class="tk">)</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Postfix expression: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q8</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s topc">*</div><div class="s">-</div><div class="s">(</div><div class="s">*</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">+</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s topc">+</div><div class="s">(</div><div class="s">/</div><div class="s">+</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Postfix: <span class="val mono">5 6 2 2 * - * 12 1 3 + / +</span> &nbsp; <span class="mini">(value = 13)</span></p>
+        <p class="rub">Rubric: each stack snapshot 2 marks (all symbols in the right order) · postfix 4 marks. At <b>A</b> the inner <code class="inl">*</code> is pushed on top of <code class="inl">-</code> (higher precedence). At <b>B</b> the <code class="inl">+</code> pops <code class="inl">*</code> so the stack holds only <code class="inl">+</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q9</span>
+      <span class="qtitle">Infix → Postfix — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Convert</b> the following infix expression into its equivalent <b>postfix</b> expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <div class="infix"><span class="tk">2</span><span class="tk">*</span><span class="tk">(</span><span class="tk">9</span><span class="tk">-</span><span class="tk">(</span><span class="tk">4</span><span class="tk">+</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">1</span><span class="tk">)</span><span class="tk">*</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">2</span><span class="tk">)</span><span class="tk">+</span><span class="tk">18</span><span class="tk">/</span><span class="tk">3</span><span class="tk">/</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">2</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Postfix expression: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q9</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s topc">+</div><div class="s">(</div><div class="s">-</div><div class="s">(</div><div class="s">*</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">*</div><div class="s">-</div><div class="s">(</div><div class="s">*</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">/</div><div class="s">+</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Postfix: <span class="val mono">2 9 4 1 + 2 * - * 18 3 / 2 / +</span> &nbsp; <span class="mini">(value = 1)</span></p>
+        <p class="rub">Rubric: each stack snapshot 2 marks (all symbols in the right order) · postfix 4 marks. Nested parentheses: at <b>A</b> two <code class="inl">(</code> are on the stack. At <b>C</b> the second <code class="inl">/</code> pops the first one (left-to-right), so <code class="inl">18 3 / 2 /</code> — not <code class="inl">18 3 2 / /</code>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q10</span>
+      <span class="qtitle">Infix → Postfix — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Convert</b> the following infix expression into its equivalent <b>postfix</b> expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <div class="infix"><span class="tk">(</span><span class="tk">(</span><span class="tk">6</span><span class="tk">+</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">2</span><span class="tk">)</span><span class="tk">*</span><span class="tk">3</span><span class="tk">-</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">4</span><span class="tk">)</span><span class="tk">/</span><span class="tk">(</span><span class="tk">1</span><span class="tk">+</span><span class="tk">2</span><span class="tk">*</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">2</span><span class="tk">)</span><span class="tk">-</span><span class="tk">1</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Postfix expression: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q10</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">+</div><div class="s">(</div><div class="s">(</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">-</div><div class="s">(</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">*</div><div class="s">+</div><div class="s">(</div><div class="s">/</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Postfix: <span class="val mono">6 2 + 3 * 4 - 1 2 2 * + / 1 -</span> &nbsp; <span class="mini">(value = 3)</span></p>
+        <p class="rub">Rubric: each stack snapshot 2 marks (all symbols in the right order) · postfix 4 marks. At <b>B</b> the <code class="inl">-</code> pops <code class="inl">*</code> but stops at <code class="inl">(</code>. At <b>C</b>, <code class="inl">*</code> sits on <code class="inl">+</code> inside the second group, above the waiting <code class="inl">/</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q11</span>
+      <span class="qtitle">Infix → Postfix — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Convert</b> the following infix expression into its equivalent <b>postfix</b> expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <div class="infix"><span class="tk">9</span><span class="tk">-</span><span class="tk">2</span><span class="tk">*</span><span class="tk">3</span><span class="tk">+</span><span class="tk">4</span><span class="tk">*</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">(</span><span class="tk">15</span><span class="tk">/</span><span class="tk">(</span><span class="tk">2</span><span class="tk">+</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">3</span><span class="tk">)</span><span class="tk">-</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">1</span><span class="tk">)</span><span class="tk">/</span><span class="tk">2</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Postfix expression: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q11</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">*</div><div class="s">+</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s topc">+</div><div class="s">(</div><div class="s">/</div><div class="s">(</div><div class="s">*</div><div class="s">+</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">-</div><div class="s">(</div><div class="s">*</div><div class="s">+</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Postfix: <span class="val mono">9 2 3 * - 4 15 2 3 + / 1 - * 2 / +</span> &nbsp; <span class="mini">(value = 7)</span></p>
+        <p class="rub">Rubric: each stack snapshot 2 marks (all symbols in the right order) · postfix 4 marks. At <b>B</b> six symbols are on the stack. At <b>C</b> the <code class="inl">-</code> pops <code class="inl">/</code> but stops at <code class="inl">(</code>. After the final <code class="inl">)</code>, the last <code class="inl">/</code> pops <code class="inl">*</code>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q12</span>
+      <span class="qtitle">Postfix Evaluation — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-easy">EASY</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Evaluate</b> the following postfix expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <p class="hint">Rule: 1st pop → <b>var1</b>, 2nd pop → <b>var2</b>, compute <b>var2 op var1</b> and push the result.</p>
+      <div class="infix"><span class="tk">6</span><span class="tk">2</span><span class="tk">3</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">*</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">+</span><span class="tk">4</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">-</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Final value: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q12</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s topc">3</div><div class="s">2</div><div class="s">6</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">6</div><div class="s">6</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">4</div><div class="s">12</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Final value: <span class="val">8</span></p>
+        <p class="rub mono" style="font-style:normal">*: var1 = 3, var2 = 2 → 2 × 3 = 6<br>+: var1 = 6, var2 = 6 → 6 + 6 = 12<br>-: var1 = 4, var2 = 12 → 12 − 4 = 8</p>
+        <p class="rub">Rubric: each stack snapshot 2 marks · final value 4 marks. At <b>B</b>: var1 = 3, var2 = 2 → 2 * 3 = 6 is pushed back, leaving [6, 6].</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="runhead"><span>Data Structures I</span><span>Stack — Practice Exam</span></div>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q13</span>
+      <span class="qtitle">Postfix Evaluation — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-med">MEDIUM</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Evaluate</b> the following postfix expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <p class="hint">Rule: 1st pop → <b>var1</b>, 2nd pop → <b>var2</b>, compute <b>var2 op var1</b> and push the result.</p>
+      <div class="infix"><span class="tk">8</span><span class="tk">2</span><span class="tk">-</span><span class="tk">3</span><span class="tk">4</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">*</span><span class="tk">+</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">10</span><span class="tk">5</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">/</span><span class="tk">-</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Final value: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q13</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s topc">4</div><div class="s">3</div><div class="s">6</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">18</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s topc">5</div><div class="s">10</div><div class="s">18</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Final value: <span class="val">16</span></p>
+        <p class="rub mono" style="font-style:normal">-: var1 = 2, var2 = 8 → 8 − 2 = 6<br>*: var1 = 4, var2 = 3 → 3 × 4 = 12<br>+: var1 = 12, var2 = 6 → 6 + 12 = 18<br>/: var1 = 5, var2 = 10 → 10 / 5 = 2<br>-: var1 = 2, var2 = 18 → 18 − 2 = 16</p>
+        <p class="rub">Rubric: each stack snapshot 2 marks · final value 4 marks. Order matters for <code class="inl">-</code> and <code class="inl">/</code>: compute <b>var2 op var1</b> (8 − 2, 10 / 5, 18 − 2), never var1 op var2.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head">
+      <span class="qno">Q14</span>
+      <span class="qtitle">Postfix Evaluation — Stack Snapshots</span>
+      <span class="chips">
+        <span class="chip tag-hard">HARD</span>
+        <span class="chip clo">CLO 8</span><span class="chip so">SO-2</span>
+        <span class="chip pts">10 marks</span>
+      </span>
+    </div>
+    <div class="card-body">
+      <p><b>Evaluate</b> the following postfix expression using a stack. Additionally, you must show the <b>contents of the stack</b> at the indicated points (<b>A</b>, <b>B</b>, and <b>C</b>) in the expression.</p>
+      <p class="hint">Rule: 1st pop → <b>var1</b>, 2nd pop → <b>var2</b>, compute <b>var2 op var1</b> and push the result.</p>
+      <div class="infix"><span class="tk">12</span><span class="tk">4</span><span class="tk">2</span><span class="mk"><b>A</b><i>&#8595;</i></span><span class="tk">-</span><span class="tk">/</span><span class="tk">5</span><span class="tk">3</span><span class="tk">*</span><span class="tk">6</span><span class="tk">2</span><span class="mk"><b>B</b><i>&#8595;</i></span><span class="tk">/</span><span class="tk">-</span><span class="mk"><b>C</b><i>&#8595;</i></span><span class="tk">+</span></div>
+      <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+      <div class="answer-space"><span class="lbl">Final value: <span class="mini">[4 marks]</span></span><div class="writeline"></div></div>
+      <div class="answer-key">
+        <div class="akh">Model Answer — Q14</div>
+        <div class="stkrow stk-abc"><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s topc">2</div><div class="s">4</div><div class="s">12</div><div class="base"></div><div class="cap"><b>Stack at A</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s topc">2</div><div class="s">6</div><div class="s">15</div><div class="s">6</div><div class="base"></div><div class="cap"><b>Stack at B</b> · 2 marks</div></div><div class="stk"><div class="s empty"></div><div class="s empty"></div><div class="s empty"></div><div class="s topc">12</div><div class="s">6</div><div class="base"></div><div class="cap"><b>Stack at C</b> · 2 marks</div></div></div>
+        <p>Final value: <span class="val">18</span></p>
+        <p class="rub mono" style="font-style:normal">-: var1 = 2, var2 = 4 → 4 − 2 = 2<br>/: var1 = 2, var2 = 12 → 12 / 2 = 6<br>*: var1 = 3, var2 = 5 → 5 × 3 = 15<br>/: var1 = 2, var2 = 6 → 6 / 2 = 3<br>-: var1 = 3, var2 = 15 → 15 − 3 = 12<br>+: var1 = 12, var2 = 6 → 6 + 12 = 18</p>
+        <p class="rub">Rubric: each stack snapshot 2 marks · final value 4 marks. At <b>B</b> four operands wait on the stack. At <b>C</b>: var1 = 3, var2 = 15 → 15 − 3 = 12. The last <code class="inl">+</code> gives 6 + 12 = 18.</p>
+      </div>
+    </div>
+  </div>
+  <div class="endmark">— End of Stack Practice Exam — Good Luck! —</div>
+  <p class="footline">Data Structures I</p>
+</section>
+
+<script>
+  var btn = document.getElementById('toggleAns');
+  btn.addEventListener('click', function () {
+    var on = document.body.classList.toggle('show-answers');
+    btn.textContent = on ? '🙈 Hide model answers' : '👁 Show model answers';
+    btn.classList.toggle('ghost', !on);
+    fitDiagrams();
+  });
+
+  /* A linked-list chain must always read as ONE line; shrink it to fit
+     the page instead of wrapping a node onto a second line. */
+  function fitDiagrams() {
+    var lls = document.querySelectorAll('.ll');
+    for (var i = 0; i < lls.length; i++) {
+      var ll = lls[i];
+      ll.style.transform = '';
+      var avail = ll.parentElement ? ll.parentElement.clientWidth : 0;
+      if (!avail) continue;
+      var natural = ll.scrollWidth;
+      if (natural > avail) {
+        ll.style.transform = 'scale(' + (avail / natural).toFixed(4) + ')';
+      }
+    }
+  }
+  window.addEventListener('load', fitDiagrams);
+  window.addEventListener('resize', fitDiagrams);
+  window.addEventListener('beforeprint', fitDiagrams);
+  fitDiagrams();
+</script>
+</body>
+</html>
