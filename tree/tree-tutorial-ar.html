@@ -1643,9 +1643,203 @@ node.left = delete(node.left, predecessor.data);  <span class="c">// remove the 
     </div>
 
 <h3>ملخص</h3><table><tr><th>العملية</th><th>الفكرة</th><th>الزمن</th></tr><tr><td><strong>الإضافة Insert</strong></td><td>نقارن، نذهب يسارًا/يمينًا، نضيف ورقة جديدة عند null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>البحث Search</strong></td><td>نقارن، نذهب يسارًا/يمينًا، نتوقف عند القيمة أو null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>Min / Max</strong></td><td>يسارًا (min) أو يمينًا (max) حتى null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>الحذف &mdash; ورقة</strong></td><td>نحذفها (رابط الأب = null)</td><td dir="ltr">O(h)</td></tr><tr><td><strong>الحذف &mdash; ابن واحد</strong></td><td>الابن يأخذ مكانها</td><td dir="ltr">O(h)</td></tr><tr><td><strong>الحذف &mdash; ابنان</strong></td><td>ننسخ الخلف (أصغر يمين) <em>أو</em> السلف (أكبر يسار) ثم نحذف تلك العقدة</td><td dir="ltr">O(h)</td></tr></table>
-<p style="text-align:center;margin-top:18px;"><a class="btn btn-blue" href="BST.java" download style="text-decoration:none;font-size:1.05em;">&#11015; تحميل البرنامج كاملًا: BST.java</a></p><p style="text-align:center;">يُترجَم ويعمل (<code>javac BST.java</code> ثم <code>java BST</code>) ويطبع الشجرة بعد كل حالة.</p>
+<h3 id="bst-full">&#128187; البرنامج الكامل (BST.java)</h3><p>كل الكود السابق في ملف واحد. انسخه في <code>BST.java</code> ثم شغّل <code>javac BST.java</code> و <code>java BST</code>.</p><pre class="bst-code"><span class="c">// =============================================================</span>
+<span class="c">//  Binary Search Tree (BST)  -  CPCS204 Data Structures I</span>
+<span class="c">//  Build the node, insert, search, find min / max,</span>
+<span class="c">//  and delete (leaf, one child, two children).</span>
+<span class="c">// =============================================================</span>
+
+<span class="c">// ---------- 1) The Node ----------</span>
+<span class="k">class</span> <span class="t">Node</span> {
+    <span class="t">int</span> data;      <span class="c">// the value stored in the node</span>
+    <span class="t">Node</span> left;     <span class="c">// reference to the left child  (smaller values)</span>
+    <span class="t">Node</span> right;    <span class="c">// reference to the right child (larger values)</span>
+
+    <span class="t">Node</span>(<span class="t">int</span> data) {
+        <span class="k">this</span>.data = data;
+        <span class="k">this</span>.left = <span class="n">null</span>;
+        <span class="k">this</span>.right = <span class="n">null</span>;
+    }
+}
+
+<span class="c">// ---------- 2) The Tree ----------</span>
+<span class="k">public</span> <span class="k">class</span> <span class="t">BST</span> {
+
+    <span class="t">Node</span> root;     <span class="c">// the tree starts EMPTY</span>
+
+    <span class="t">BST</span>() {
+        root = <span class="n">null</span>;
+    }
+
+    <span class="c">// ---------- 3) INSERT ----------</span>
+    <span class="k">public</span> <span class="k">void</span> insert(<span class="t">int</span> value) {
+        root = insert(root, value);
+    }
+
+    <span class="k">private</span> <span class="t">Node</span> insert(<span class="t">Node</span> node, <span class="t">int</span> value) {
+        <span class="k">if</span> (node == <span class="n">null</span>) {                 <span class="c">// empty spot found</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="t">Node</span>(value);         <span class="c">// create the new node here</span>
+        }
+        <span class="k">if</span> (value &lt; node.data) {            <span class="c">// smaller -&gt; go LEFT</span>
+            node.left = insert(node.left, value);
+        } <span class="k">else</span> <span class="k">if</span> (value &gt; node.data) {     <span class="c">// larger  -&gt; go RIGHT</span>
+            node.right = insert(node.right, value);
+        }
+        <span class="c">// value == node.data : duplicate, do nothing</span>
+        <span class="k">return</span> node;
+    }
+
+    <span class="c">// ---------- 4) SEARCH ----------</span>
+    <span class="k">public</span> <span class="t">boolean</span> search(<span class="t">int</span> key) {
+        <span class="k">return</span> search(root, key);
+    }
+
+    <span class="k">private</span> <span class="t">boolean</span> search(<span class="t">Node</span> node, <span class="t">int</span> key) {
+        <span class="k">if</span> (node == <span class="n">null</span>)      <span class="k">return</span> <span class="n">false</span>;              <span class="c">// reached null: NOT found</span>
+        <span class="k">if</span> (key == node.data)  <span class="k">return</span> <span class="n">true</span>;               <span class="c">// FOUND</span>
+        <span class="k">if</span> (key &lt; node.data)   <span class="k">return</span> search(node.left, key);   <span class="c">// go left</span>
+        <span class="k">else</span>                   <span class="k">return</span> search(node.right, key);  <span class="c">// go right</span>
+    }
+
+    <span class="c">// ---------- 5) MINIMUM and MAXIMUM ----------</span>
+    <span class="c">// Minimum: keep going LEFT until left is null</span>
+    <span class="t">Node</span> findMin(<span class="t">Node</span> node) {
+        <span class="k">while</span> (node.left != <span class="n">null</span>) {
+            node = node.left;
+        }
+        <span class="k">return</span> node;
+    }
+
+    <span class="c">// Maximum: keep going RIGHT until right is null</span>
+    <span class="t">Node</span> findMax(<span class="t">Node</span> node) {
+        <span class="k">while</span> (node.right != <span class="n">null</span>) {
+            node = node.right;
+        }
+        <span class="k">return</span> node;
+    }
+
+    <span class="c">// ---------- 6) DELETE (uses the SUCCESSOR = min of right subtree) ----------</span>
+    <span class="k">public</span> <span class="k">void</span> delete(<span class="t">int</span> key) {
+        root = delete(root, key);
+    }
+
+    <span class="k">private</span> <span class="t">Node</span> delete(<span class="t">Node</span> node, <span class="t">int</span> key) {
+        <span class="k">if</span> (node == <span class="n">null</span>) <span class="k">return</span> <span class="n">null</span>;                    <span class="c">// key not in the tree</span>
+
+        <span class="k">if</span> (key &lt; node.data) {
+            node.left = delete(node.left, key);           <span class="c">// search left</span>
+        } <span class="k">else</span> <span class="k">if</span> (key &gt; node.data) {
+            node.right = delete(node.right, key);         <span class="c">// search right</span>
+        } <span class="k">else</span> {
+            <span class="c">// ===== node.data == key : this is the node to delete =====</span>
+
+            <span class="c">// CASE 1: no children (leaf)  -&gt; just remove it</span>
+            <span class="k">if</span> (node.left == <span class="n">null</span> &amp;&amp; node.right == <span class="n">null</span>) {
+                <span class="k">return</span> <span class="n">null</span>;
+            }
+
+            <span class="c">// CASE 2: one child  -&gt; the child takes the node&#x27;s place</span>
+            <span class="k">if</span> (node.left == <span class="n">null</span>) {
+                <span class="k">return</span> node.right;                        <span class="c">// only a right child</span>
+            }
+            <span class="k">if</span> (node.right == <span class="n">null</span>) {
+                <span class="k">return</span> node.left;                         <span class="c">// only a left child</span>
+            }
+
+            <span class="c">// CASE 3: two children</span>
+            <span class="c">//   a) find the successor = MINIMUM of the RIGHT subtree</span>
+            <span class="t">Node</span> successor = findMin(node.right);
+            <span class="c">//   b) copy its value into this node</span>
+            node.data = successor.data;
+            <span class="c">//   c) delete the successor from the right subtree</span>
+            node.right = delete(node.right, successor.data);
+        }
+        <span class="k">return</span> node;
+    }
+
+    <span class="c">// ---------- 6b) DELETE (uses the PREDECESSOR = max of left subtree) ----------</span>
+    <span class="k">public</span> <span class="k">void</span> deleteUsingPredecessor(<span class="t">int</span> key) {
+        root = deleteP(root, key);
+    }
+
+    <span class="k">private</span> <span class="t">Node</span> deleteP(<span class="t">Node</span> node, <span class="t">int</span> key) {
+        <span class="k">if</span> (node == <span class="n">null</span>) <span class="k">return</span> <span class="n">null</span>;
+
+        <span class="k">if</span> (key &lt; node.data) {
+            node.left = deleteP(node.left, key);
+        } <span class="k">else</span> <span class="k">if</span> (key &gt; node.data) {
+            node.right = deleteP(node.right, key);
+        } <span class="k">else</span> {
+            <span class="k">if</span> (node.left == <span class="n">null</span> &amp;&amp; node.right == <span class="n">null</span>) <span class="k">return</span> <span class="n">null</span>;   <span class="c">// CASE 1</span>
+            <span class="k">if</span> (node.left == <span class="n">null</span>)  <span class="k">return</span> node.right;                  <span class="c">// CASE 2</span>
+            <span class="k">if</span> (node.right == <span class="n">null</span>) <span class="k">return</span> node.left;                   <span class="c">// CASE 2</span>
+
+            <span class="c">// CASE 3: two children</span>
+            <span class="c">//   a) find the predecessor = MAXIMUM of the LEFT subtree</span>
+            <span class="t">Node</span> predecessor = findMax(node.left);
+            <span class="c">//   b) copy its value into this node</span>
+            node.data = predecessor.data;
+            <span class="c">//   c) delete the predecessor from the left subtree</span>
+            node.left = deleteP(node.left, predecessor.data);
+        }
+        <span class="k">return</span> node;
+    }
+
+    <span class="c">// ---------- In-order print (gives SORTED order) ----------</span>
+    <span class="k">void</span> inOrder(<span class="t">Node</span> node) {
+        <span class="k">if</span> (node == <span class="n">null</span>) <span class="k">return</span>;
+        inOrder(node.left);
+        <span class="t">System</span>.out.print(node.data + <span class="s">&quot; &quot;</span>);
+        inOrder(node.right);
+    }
+
+    <span class="k">void</span> preOrder(<span class="t">Node</span> node) {
+        <span class="k">if</span> (node == <span class="n">null</span>) <span class="k">return</span>;
+        <span class="t">System</span>.out.print(node.data + <span class="s">&quot; &quot;</span>);
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+
+    <span class="k">void</span> print(<span class="t">String</span> title) {
+        <span class="t">System</span>.out.print(title + <span class="s">&quot;  in-order: &quot;</span>);
+        inOrder(root);
+        <span class="t">System</span>.out.print(<span class="s">&quot;  | pre-order: &quot;</span>);
+        preOrder(root);
+        <span class="t">System</span>.out.println();
+    }
+
+    <span class="c">// ---------- Demo ----------</span>
+    <span class="k">static</span> <span class="t">BST</span> build(<span class="t">int</span>[] keys) {
+        <span class="t">BST</span> t = <span class="k">new</span> <span class="t">BST</span>();
+        <span class="k">for</span> (<span class="t">int</span> k : keys) t.insert(k);
+        <span class="k">return</span> t;
+    }
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> main(<span class="t">String</span>[] args) {
+        <span class="t">int</span>[] keys = {<span class="n">50</span>, <span class="n">30</span>, <span class="n">70</span>, <span class="n">20</span>, <span class="n">40</span>, <span class="n">60</span>, <span class="n">80</span>, <span class="n">65</span>};
+
+        <span class="t">BST</span> t = build(keys);
+        t.print(<span class="s">&quot;Built tree              &quot;</span>);
+        <span class="t">System</span>.out.println(<span class="s">&quot;search(60) = &quot;</span> + t.search(<span class="n">60</span>));   <span class="c">// true</span>
+        <span class="t">System</span>.out.println(<span class="s">&quot;search(45) = &quot;</span> + t.search(<span class="n">45</span>));   <span class="c">// false</span>
+        <span class="t">System</span>.out.println(<span class="s">&quot;min = &quot;</span> + t.findMin(t.root).data
+                       + <span class="s">&quot;, max = &quot;</span> + t.findMax(t.root).data); <span class="c">// 20, 80</span>
+
+        <span class="c">// each case starts again from the SAME original tree</span>
+        <span class="t">BST</span> a = build(keys); a.delete(<span class="n">20</span>);
+        a.print(<span class="s">&quot;Case 1 leaf: delete 20  &quot;</span>);
+        <span class="t">BST</span> b = build(keys); b.delete(<span class="n">60</span>);
+        b.print(<span class="s">&quot;Case 2 one child: del 60&quot;</span>);
+        <span class="t">BST</span> c = build(keys); c.delete(<span class="n">50</span>);
+        c.print(<span class="s">&quot;Case 3 successor: del 50&quot;</span>);                 <span class="c">// 60 replaces 50</span>
+        <span class="t">BST</span> d = build(keys); d.deleteUsingPredecessor(<span class="n">50</span>);
+        d.print(<span class="s">&quot;Case 3 predecessor: 50  &quot;</span>);                 <span class="c">// 40 replaces 50</span>
+    }
+}</pre>
+<p style="text-align:center;margin-top:18px;"><a class="btn btn-blue" href="BST.java" download style="text-decoration:none;font-size:1.05em;">&#11015; تحميل BST.java</a></p>
 
 </section>
+
 
 
 
