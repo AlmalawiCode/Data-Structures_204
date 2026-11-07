@@ -379,6 +379,7 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true, theme:'base', securityLevel:'loose'});</script>
+<link rel="stylesheet" href="projector-theme.css">
 </head>
 <body>
 <a href="tree-tutorial.html" class="lang-switch-btn">English</a>
@@ -409,6 +410,7 @@
         <a href="#s12">12. الشجرة الثنائية الممتلئة</a>
         <a href="#s13">13. الشجرة الثنائية الكاملة</a>
         <a href="#s14">14. اجتياز الشجرة</a>
+        <a href="#s15">15. شجرة البحث الثنائية (الكود)</a>
     </div>
 </nav>
 
@@ -1484,6 +1486,169 @@ graph TD
 
 </section>
 
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 15 — BINARY SEARCH TREE: BUILD, INSERT, SEARCH, DELETE
+═══════════════════════════════════════════════════════ -->
+<section id="s15">
+    <h2><span class="sec-num">15</span>شجرة البحث الثنائية (BST) &mdash; البناء، الإضافة، البحث، الحذف</h2>
+    <div class="key-concept"><h4>قاعدة BST</h4><p>لكل عقدة: جميع القيم في الشجرة الفرعية <strong>اليسرى أصغر</strong> منها، وجميع القيم في الشجرة الفرعية <strong>اليمنى أكبر</strong> منها. &nbsp; <code dir="ltr">left &lt; node &lt; right</code></p></div>
+    <div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-cap="مثالنا: شجرة BST بُنيت بإضافة القيم: 50, 30, 70, 20, 40, 60, 80, 65"></div>
+    <div class="bst-legend"><span class="lp">المسار</span><span class="lf">وُجد / جديد</span><span class="ld">العقدة المحذوفة</span><span class="lc">ابنها الوحيد</span><span class="ls">الخلف successor</span><span class="lq">السلف predecessor</span></div>
+
+<h3>الخطوة 1 &mdash; بناء العقدة (Node)</h3><p>العقدة صندوق صغير له <strong>ثلاثة أجزاء</strong>: القيمة <strong>data</strong>، ورابط للابن <strong>الأيسر left</strong>، ورابط للابن <strong>الأيمن right</strong>. العقدة الجديدة ليس لها أبناء، لذلك الرابطان <code>null</code>.</p><pre class="bst-code"><span class="k">class</span> <span class="t">Node</span> {
+    <span class="t">int</span> data;      <span class="c">// the value stored in the node</span>
+    <span class="t">Node</span> left;     <span class="c">// reference to the left child  (smaller values)</span>
+    <span class="t">Node</span> right;    <span class="c">// reference to the right child (larger values)</span>
+
+    <span class="t">Node</span>(<span class="t">int</span> data) {
+        <span class="k">this</span>.data = data;
+        <span class="k">this</span>.left = <span class="n">null</span>;
+        <span class="k">this</span>.right = <span class="n">null</span>;
+    }
+}</pre>
+<h3>الخطوة 2 &mdash; بناء صنف الشجرة (BST)</h3><p>الشجرة تحتاج فقط أن تتذكر <strong>الجذر root</strong>. الشجرة الفارغة يكون فيها <code>root = null</code>.</p><pre class="bst-code"><span class="k">public</span> <span class="k">class</span> <span class="t">BST</span> {
+    <span class="t">Node</span> root;     <span class="c">// the tree starts EMPTY</span>
+
+    <span class="t">BST</span>() {
+        root = <span class="n">null</span>;
+    }
+    <span class="c">// insert, search, findMin, findMax, delete ... go here</span>
+}</pre>
+<h3>الخطوة 3 &mdash; إضافة قيمة (Insert)</h3><ol><li>إذا كانت الشجرة (أو الشجرة الفرعية) فارغة &larr; ننشئ العقدة الجديدة <strong>هنا</strong>.</li><li>إذا كانت القيمة <strong>أصغر</strong> من العقدة &larr; نذهب <strong>يسارًا</strong>.</li><li>إذا كانت القيمة <strong>أكبر</strong> من العقدة &larr; نذهب <strong>يمينًا</strong>.</li><li>نكرر حتى نصل إلى <code>null</code>. القيمة الجديدة تُضاف <strong>دائمًا كورقة</strong>.</li></ol><pre class="bst-code"><span class="k">public</span> <span class="k">void</span> insert(<span class="t">int</span> value) {
+    root = insert(root, value);       <span class="c">// start at the root</span>
+}
+
+<span class="k">private</span> <span class="t">Node</span> insert(<span class="t">Node</span> node, <span class="t">int</span> value) {
+    <span class="k">if</span> (node == <span class="n">null</span>) {               <span class="c">// empty spot found</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="t">Node</span>(value);       <span class="c">// create the new node here</span>
+    }
+    <span class="k">if</span> (value &lt; node.data) {          <span class="c">// smaller -&gt; go LEFT</span>
+        node.left = insert(node.left, value);
+    } <span class="k">else</span> <span class="k">if</span> (value &gt; node.data) {   <span class="c">// larger  -&gt; go RIGHT</span>
+        node.right = insert(node.right, value);
+    }
+    <span class="c">// value == node.data : duplicate, do nothing</span>
+    <span class="k">return</span> node;
+}</pre><p>بناء الشجرة كاملة = استدعاء <code>insert</code> لكل قيمة:</p><pre class="bst-code"><span class="t">BST</span> tree = <span class="k">new</span> <span class="t">BST</span>();
+<span class="t">int</span>[] keys = {<span class="n">50</span>, <span class="n">30</span>, <span class="n">70</span>, <span class="n">20</span>, <span class="n">40</span>, <span class="n">60</span>, <span class="n">80</span>, <span class="n">65</span>};
+<span class="k">for</span> (<span class="t">int</span> k : keys) {
+    tree.insert(k);
+}</pre>
+<h4>تتبّع: <code>insert(65)</code></h4><table class="trace"><tr><th>العقدة</th><th>المقارنة</th><th>الإجراء</th></tr><tr><td><strong>50</strong></td><td dir="ltr">65 &gt; 50</td><td>نذهب يمينًا</td></tr><tr><td><strong>70</strong></td><td dir="ltr">65 &lt; 70</td><td>نذهب يسارًا</td></tr><tr><td><strong>60</strong></td><td dir="ltr">65 &gt; 60</td><td>نذهب يمينًا</td></tr><tr><td><strong>null</strong></td><td dir="ltr">مكان فارغ</td><td>ننشئ new Node(65) هنا &#10004;</td></tr></table>
+<div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80" data-path="50,70,60" data-cap="قبل: إضافة 65"></div><div class="bst-arrow">&#8592;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="65:isnew" data-path="50,70,60" data-cap="بعد: 65 أصبح الابن الأيمن لـ 60"></div></div>
+<h3>الخطوة 4 &mdash; البحث عن قيمة (Search)</h3><p>نفس مسار الإضافة: نقارن ثم نذهب يسارًا أو يمينًا. نتوقف عندما <strong>نجد</strong> القيمة (<code>true</code>) أو نصل إلى <code>null</code> (<code>false</code>). لا نزور النصف الآخر من الشجرة أبدًا.</p><pre class="bst-code"><span class="k">public</span> <span class="t">boolean</span> search(<span class="t">int</span> key) {
+    <span class="k">return</span> search(root, key);
+}
+
+<span class="k">private</span> <span class="t">boolean</span> search(<span class="t">Node</span> node, <span class="t">int</span> key) {
+    <span class="k">if</span> (node == <span class="n">null</span>)     <span class="k">return</span> <span class="n">false</span>;                   <span class="c">// reached null: NOT found</span>
+    <span class="k">if</span> (key == node.data) <span class="k">return</span> <span class="n">true</span>;                    <span class="c">// FOUND</span>
+    <span class="k">if</span> (key &lt; node.data)  <span class="k">return</span> search(node.left, key);  <span class="c">// go left</span>
+    <span class="k">else</span>                  <span class="k">return</span> search(node.right, key); <span class="c">// go right</span>
+}</pre>
+<div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="60:found" data-path="50,70,60" data-cap="search(60): 50 &larr; 70 &larr; 60 &#10004; وُجدت"></div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-path="50,30,40" data-cap="search(45): 50 &larr; 30 &larr; 40 &larr; null &#10008; غير موجودة"></div></div>
+<h3>الخطوة 5 &mdash; إيجاد أصغر قيمة وأكبر قيمة (Min / Max)</h3><p><strong>أصغر قيمة</strong> = نستمر <strong>يسارًا</strong> حتى يصبح left هو <code>null</code>. &nbsp; <strong>أكبر قيمة</strong> = نستمر <strong>يمينًا</strong> حتى يصبح right هو <code>null</code>. نحتاج هاتين الدالتين عند حذف عقدة لها ابنان.</p><pre class="bst-code"><span class="c">// Minimum: keep going LEFT until left is null</span>
+<span class="t">Node</span> findMin(<span class="t">Node</span> node) {
+    <span class="k">while</span> (node.left != <span class="n">null</span>) {
+        node = node.left;
+    }
+    <span class="k">return</span> node;
+}
+
+<span class="c">// Maximum: keep going RIGHT until right is null</span>
+<span class="t">Node</span> findMax(<span class="t">Node</span> node) {
+    <span class="k">while</span> (node.right != <span class="n">null</span>) {
+        node = node.right;
+    }
+    <span class="k">return</span> node;
+}</pre>
+<div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="20:found" data-path="50,30,20" data-labels="20:MIN" data-cap="findMin(root): 50 &larr; 30 &larr; 20 &nbsp; (MIN = 20)"></div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="80:found" data-path="50,70,80" data-labels="80:MAX" data-cap="findMax(root): 50 &larr; 70 &larr; 80 &nbsp; (MAX = 80)"></div></div>
+<h3>الخطوة 6 &mdash; حذف عقدة (3 حالات)</h3><p>أولًا <strong>نبحث</strong> عن العقدة (يسارًا / يمينًا). عندما نجدها ننظر كم ابنًا لها:</p>
+<div class="bst-case c1"><h4><span class="bst-tag c1">1</span>الحالة 1 &mdash; ورقة (بدون أبناء): حذف 20</h4><p>العقدة 20 ليس لها أبناء. نحذفها مباشرة: أبوها (30) يصبح <code>left = null</code>.</p><div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="20:del" data-path="50,30" data-cap="قبل: 20 ورقة"></div><div class="bst-arrow">&#8592;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-ops="del:20" data-cap="بعد: حُذفت 20"></div></div><pre class="bst-code"><span class="c">// CASE 1: no children (leaf)</span>
+<span class="k">if</span> (node.left == <span class="n">null</span> &amp;&amp; node.right == <span class="n">null</span>) {
+    <span class="k">return</span> <span class="n">null</span>;          <span class="c">// the parent&#x27;s link becomes null</span>
+}</pre></div>
+<div class="bst-case c2"><h4><span class="bst-tag c2">2</span>الحالة 2 &mdash; ابن واحد: حذف 60</h4><p>العقدة 60 لها ابن واحد فقط (65). الابن <strong>يصعد</strong> ويأخذ مكان 60: الأب 70 يشير الآن إلى 65. وتبقى قاعدة BST صحيحة.</p><div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="60:del,65:child" data-path="50,70" data-cap="قبل: 60 لها ابن واحد (65)"></div><div class="bst-arrow">&#8592;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-ops="del:60" data-hl="65:child" data-cap="بعد: 65 أخذ مكان 60"></div></div><pre class="bst-code"><span class="c">// CASE 2: one child</span>
+<span class="k">if</span> (node.left == <span class="n">null</span>) {
+    <span class="k">return</span> node.right;    <span class="c">// parent now points to the right child</span>
+}
+<span class="k">if</span> (node.right == <span class="n">null</span>) {
+    <span class="k">return</span> node.left;     <span class="c">// parent now points to the left child</span>
+}</pre></div>
+<div class="bst-case c3"><h4><span class="bst-tag c3">3</span>الحالة 3 &mdash; ابنان: حذف 50 (الجذر)</h4><p>العقدة 50 لها ابنان، فلا يمكن حذفها مباشرة. <strong>نستبدل قيمتها</strong> بقيمة تحافظ على قاعدة BST. يوجد <strong>خياران صحيحان</strong>:</p>
+<h4>A. الخيار A &mdash; الخلف (Successor) = أصغر قيمة في الشجرة الفرعية اليمنى</h4><p>نذهب <strong>يمينًا مرة واحدة</strong> (70)، ثم <strong>يسارًا حتى null</strong> (60). الخلف هو <strong>60</strong> (أصغر قيمة أكبر من 50). ننسخ 60 في الجذر ثم نحذف 60 القديمة &mdash; لها ابن واحد (65) فهي <strong>الحالة 2</strong>.</p><div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="50:del,60:succ" data-path="70,60" data-cap="قبل: الخلف للعقدة 50 هو 60"></div><div class="bst-arrow">&#8592;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-ops="del:50" data-hl="60:succ,65:child" data-labels="60:الجذر الجديد" data-cap="بعد: 60 هو الجذر الجديد، و65 صعد"></div></div><pre class="bst-code"><span class="c">// CASE 3 (Option A): use the SUCCESSOR = MINIMUM of the RIGHT subtree</span>
+<span class="t">Node</span> successor = findMin(node.right);             <span class="c">// right once, then left...</span>
+node.data = successor.data;                       <span class="c">// copy 60 into the node</span>
+node.right = delete(node.right, successor.data);  <span class="c">// remove the old 60</span></pre>
+<h4>B. الخيار B &mdash; السلف (Predecessor) = أكبر قيمة في الشجرة الفرعية اليسرى</h4><p>نذهب <strong>يسارًا مرة واحدة</strong> (30)، ثم <strong>يمينًا حتى null</strong> (40). السلف هو <strong>40</strong> (أكبر قيمة أصغر من 50). ننسخ 40 في الجذر ثم نحذف 40 القديمة &mdash; هي ورقة فهي <strong>الحالة 1</strong>.</p><div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="50:del,40:pred" data-path="30,40" data-cap="قبل: السلف للعقدة 50 هو 40"></div><div class="bst-arrow">&#8592;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-ops="delp:50" data-hl="40:pred" data-labels="40:الجذر الجديد" data-cap="بعد: 40 هو الجذر الجديد"></div></div><pre class="bst-code"><span class="c">// CASE 3 (Option B): use the PREDECESSOR = MAXIMUM of the LEFT subtree</span>
+<span class="t">Node</span> predecessor = findMax(node.left);            <span class="c">// left once, then right...</span>
+node.data = predecessor.data;                     <span class="c">// copy 40 into the node</span>
+node.left = delete(node.left, predecessor.data);  <span class="c">// remove the old 40</span></pre>
+<div class="info-box"><strong>لماذا ينجح ذلك؟</strong> الخلف (أصغر قيمة يمين) أكبر من كل قيم اليسار وأصغر من باقي قيم اليمين. والسلف (أكبر قيمة يسار) أكبر من باقي قيم اليسار وأصغر من كل قيم اليمين. لذلك أيٌّ منهما يمكن أن يجلس في الجذر وتبقى القاعدة <code dir="ltr">left &lt; node &lt; right</code> صحيحة. والخلف/السلف له <strong>ابن واحد على الأكثر</strong>، فحذفه دائمًا هو الحالة 1 أو 2.</div></div>
+<h3>دالة <code>delete</code> كاملة (الحالات الثلاث، باستخدام الخلف)</h3><pre class="bst-code"><span class="k">public</span> <span class="k">void</span> delete(<span class="t">int</span> key) {
+    root = delete(root, key);
+}
+
+<span class="k">private</span> <span class="t">Node</span> delete(<span class="t">Node</span> node, <span class="t">int</span> key) {
+    <span class="k">if</span> (node == <span class="n">null</span>) <span class="k">return</span> <span class="n">null</span>;                <span class="c">// key not in the tree</span>
+
+    <span class="k">if</span> (key &lt; node.data) {
+        node.left = delete(node.left, key);       <span class="c">// search left</span>
+    } <span class="k">else</span> <span class="k">if</span> (key &gt; node.data) {
+        node.right = delete(node.right, key);     <span class="c">// search right</span>
+    } <span class="k">else</span> {
+        <span class="c">// ===== node.data == key : this is the node to delete =====</span>
+
+        <span class="c">// CASE 1: no children (leaf)  -&gt; just remove it</span>
+        <span class="k">if</span> (node.left == <span class="n">null</span> &amp;&amp; node.right == <span class="n">null</span>) {
+            <span class="k">return</span> <span class="n">null</span>;
+        }
+
+        <span class="c">// CASE 2: one child  -&gt; the child takes the node&#x27;s place</span>
+        <span class="k">if</span> (node.left == <span class="n">null</span>) {
+            <span class="k">return</span> node.right;                    <span class="c">// only a right child</span>
+        }
+        <span class="k">if</span> (node.right == <span class="n">null</span>) {
+            <span class="k">return</span> node.left;                     <span class="c">// only a left child</span>
+        }
+
+        <span class="c">// CASE 3: two children</span>
+        <span class="c">//   a) find the successor = MINIMUM of the RIGHT subtree</span>
+        <span class="t">Node</span> successor = findMin(node.right);
+        <span class="c">//   b) copy its value into this node</span>
+        node.data = successor.data;
+        <span class="c">//   c) delete the successor from the right subtree</span>
+        node.right = delete(node.right, successor.data);
+    }
+    <span class="k">return</span> node;
+}</pre><p>لاستخدام <strong>السلف</strong> بدلًا من الخلف، استبدل أسطر الحالة 3 بالخيار B أعلاه (<code>findMax(node.left)</code> و <code>node.left = delete(node.left, ...)</code>).</p>
+
+    <h3>مختبر BST التفاعلي &mdash; جرّبه في المحاضرة</h3>
+    <p>اكتب رقمًا واضغط زرًا. تظهر كل خطوة ببطء على الشجرة مع المقارنة التي يقوم بها الكود.</p>
+    <div id="bst-lab">
+        <div class="lab-controls">
+            <input class="lab-input" type="number" min="1" max="99" value="65" dir="ltr">
+            <button class="btn btn-green lab-ins">إضافة Insert</button>
+            <button class="btn btn-blue lab-search">بحث Search</button>
+            <button class="btn btn-red lab-del">حذف (الخلف)</button>
+            <button class="btn btn-purple lab-delp">حذف (السلف)</button>
+            <button class="btn btn-gray lab-reset">إرجاع المثال</button>
+            <button class="btn btn-gray lab-clear">شجرة فارغة</button>
+            <label style="font-weight:700;">السرعة: <input class="lab-speed" type="range" min="250" max="2000" step="250" value="1000" style="direction:rtl;"></label>
+        </div>
+        <div class="bst-legend"><span class="lp">المسار</span><span class="lf">وُجد / جديد</span><span class="ld">العقدة المحذوفة</span><span class="lc">ابنها الوحيد</span><span class="ls">الخلف successor</span><span class="lq">السلف predecessor</span></div>
+        <div class="lab-tree"></div>
+        <div class="lab-inorder"></div>
+        <div class="lab-log"></div>
+    </div>
+
+<h3>ملخص</h3><table><tr><th>العملية</th><th>الفكرة</th><th>الزمن</th></tr><tr><td><strong>الإضافة Insert</strong></td><td>نقارن، نذهب يسارًا/يمينًا، نضيف ورقة جديدة عند null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>البحث Search</strong></td><td>نقارن، نذهب يسارًا/يمينًا، نتوقف عند القيمة أو null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>Min / Max</strong></td><td>يسارًا (min) أو يمينًا (max) حتى null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>الحذف &mdash; ورقة</strong></td><td>نحذفها (رابط الأب = null)</td><td dir="ltr">O(h)</td></tr><tr><td><strong>الحذف &mdash; ابن واحد</strong></td><td>الابن يأخذ مكانها</td><td dir="ltr">O(h)</td></tr><tr><td><strong>الحذف &mdash; ابنان</strong></td><td>ننسخ الخلف (أصغر يمين) <em>أو</em> السلف (أكبر يسار) ثم نحذف تلك العقدة</td><td dir="ltr">O(h)</td></tr></table>
+<p style="text-align:center;margin-top:18px;"><a class="btn btn-blue" href="BST.java" download style="text-decoration:none;font-size:1.05em;">&#11015; تحميل البرنامج كاملًا: BST.java</a></p><p style="text-align:center;">يُترجَم ويعمل (<code>javac BST.java</code> ثم <code>java BST</code>) ويطبع الشجرة بعد كل حالة.</p>
+
+</section>
+
+
+
     <!-- Practice Questions Link -->
     <div style="text-align:center;margin:40px 0 10px;">
         <a href="../questions/binary_tree_question-ar.html" style="
@@ -2009,5 +2174,6 @@ showCompleteExample('ex1');
 
 </script>
 
+<script src="bst-lab.js"></script>
 </body>
 </html>

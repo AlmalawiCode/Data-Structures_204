@@ -345,6 +345,7 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true, theme:'base', securityLevel:'loose'});</script>
+<link rel="stylesheet" href="projector-theme.css">
 </head>
 <body>
 <a href="tree-tutorial-ar.html" class="lang-switch-btn">عربي</a>
@@ -375,6 +376,7 @@
         <a href="#s12">12. Full Binary Tree</a>
         <a href="#s13">13. Complete Binary Tree</a>
         <a href="#s14">14. Tree Traversal</a>
+        <a href="#s15">15. Binary Search Tree (Code)</a>
     </div>
 </nav>
 
@@ -1449,6 +1451,169 @@ graph TD
 
 </section>
 
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 15 — BINARY SEARCH TREE: BUILD, INSERT, SEARCH, DELETE
+═══════════════════════════════════════════════════════ -->
+<section id="s15">
+    <h2><span class="sec-num">15</span>Binary Search Tree (BST) &mdash; Build, Insert, Search, Delete</h2>
+    <div class="key-concept"><h4>The BST Rule</h4><p>For <strong>every</strong> node: all values in the <strong>left</strong> subtree are <strong>smaller</strong>, and all values in the <strong>right</strong> subtree are <strong>larger</strong>. &nbsp; <code>left &lt; node &lt; right</code></p></div>
+    <div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-cap="Our example BST, built by inserting: 50, 30, 70, 20, 40, 60, 80, 65"></div>
+    <div class="bst-legend"><span class="lp">path visited</span><span class="lf">found / new</span><span class="ld">node to delete</span><span class="lc">its only child</span><span class="ls">successor</span><span class="lq">predecessor</span></div>
+
+<h3>Step 1 &mdash; Build the Node</h3><p>A node is a small box with <strong>three parts</strong>: the <strong>data</strong>, a link to the <strong>left</strong> child and a link to the <strong>right</strong> child. A new node has no children, so both links are <code>null</code>.</p><pre class="bst-code"><span class="k">class</span> <span class="t">Node</span> {
+    <span class="t">int</span> data;      <span class="c">// the value stored in the node</span>
+    <span class="t">Node</span> left;     <span class="c">// reference to the left child  (smaller values)</span>
+    <span class="t">Node</span> right;    <span class="c">// reference to the right child (larger values)</span>
+
+    <span class="t">Node</span>(<span class="t">int</span> data) {
+        <span class="k">this</span>.data = data;
+        <span class="k">this</span>.left = <span class="n">null</span>;
+        <span class="k">this</span>.right = <span class="n">null</span>;
+    }
+}</pre>
+<h3>Step 2 &mdash; Build the Tree class</h3><p>The tree only needs to remember the <strong>root</strong>. An empty tree has <code>root = null</code>.</p><pre class="bst-code"><span class="k">public</span> <span class="k">class</span> <span class="t">BST</span> {
+    <span class="t">Node</span> root;     <span class="c">// the tree starts EMPTY</span>
+
+    <span class="t">BST</span>() {
+        root = <span class="n">null</span>;
+    }
+    <span class="c">// insert, search, findMin, findMax, delete ... go here</span>
+}</pre>
+<h3>Step 3 &mdash; Insert (Add) a Value</h3><ol><li>If the tree (or sub-tree) is empty &rarr; create the new node <strong>here</strong>.</li><li>If value <strong>&lt;</strong> node &rarr; go <strong>LEFT</strong>.</li><li>If value <strong>&gt;</strong> node &rarr; go <strong>RIGHT</strong>.</li><li>Repeat until you reach <code>null</code>. A new value is <strong>always added as a leaf</strong>.</li></ol><pre class="bst-code"><span class="k">public</span> <span class="k">void</span> insert(<span class="t">int</span> value) {
+    root = insert(root, value);       <span class="c">// start at the root</span>
+}
+
+<span class="k">private</span> <span class="t">Node</span> insert(<span class="t">Node</span> node, <span class="t">int</span> value) {
+    <span class="k">if</span> (node == <span class="n">null</span>) {               <span class="c">// empty spot found</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="t">Node</span>(value);       <span class="c">// create the new node here</span>
+    }
+    <span class="k">if</span> (value &lt; node.data) {          <span class="c">// smaller -&gt; go LEFT</span>
+        node.left = insert(node.left, value);
+    } <span class="k">else</span> <span class="k">if</span> (value &gt; node.data) {   <span class="c">// larger  -&gt; go RIGHT</span>
+        node.right = insert(node.right, value);
+    }
+    <span class="c">// value == node.data : duplicate, do nothing</span>
+    <span class="k">return</span> node;
+}</pre><p>Building the whole tree = calling <code>insert</code> for each value:</p><pre class="bst-code"><span class="t">BST</span> tree = <span class="k">new</span> <span class="t">BST</span>();
+<span class="t">int</span>[] keys = {<span class="n">50</span>, <span class="n">30</span>, <span class="n">70</span>, <span class="n">20</span>, <span class="n">40</span>, <span class="n">60</span>, <span class="n">80</span>, <span class="n">65</span>};
+<span class="k">for</span> (<span class="t">int</span> k : keys) {
+    tree.insert(k);
+}</pre>
+<h4>Trace: <code>insert(65)</code></h4><table class="trace"><tr><th>At node</th><th>Compare</th><th>Action</th></tr><tr><td><strong>50</strong></td><td dir="ltr">65 &gt; 50</td><td>go RIGHT</td></tr><tr><td><strong>70</strong></td><td dir="ltr">65 &lt; 70</td><td>go LEFT</td></tr><tr><td><strong>60</strong></td><td dir="ltr">65 &gt; 60</td><td>go RIGHT</td></tr><tr><td><strong>null</strong></td><td dir="ltr">empty spot</td><td>create new Node(65) here &#10004;</td></tr></table>
+<div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80" data-path="50,70,60" data-cap="Before: insert 65"></div><div class="bst-arrow">&#8594;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="65:isnew" data-path="50,70,60" data-cap="After: 65 is the right child of 60"></div></div>
+<h3>Step 4 &mdash; Search for a Value</h3><p>Same path as insert: compare and go left or right. Stop when you <strong>find</strong> the key (<code>true</code>) or reach <code>null</code> (<code>false</code>). We never visit the other half of the tree.</p><pre class="bst-code"><span class="k">public</span> <span class="t">boolean</span> search(<span class="t">int</span> key) {
+    <span class="k">return</span> search(root, key);
+}
+
+<span class="k">private</span> <span class="t">boolean</span> search(<span class="t">Node</span> node, <span class="t">int</span> key) {
+    <span class="k">if</span> (node == <span class="n">null</span>)     <span class="k">return</span> <span class="n">false</span>;                   <span class="c">// reached null: NOT found</span>
+    <span class="k">if</span> (key == node.data) <span class="k">return</span> <span class="n">true</span>;                    <span class="c">// FOUND</span>
+    <span class="k">if</span> (key &lt; node.data)  <span class="k">return</span> search(node.left, key);  <span class="c">// go left</span>
+    <span class="k">else</span>                  <span class="k">return</span> search(node.right, key); <span class="c">// go right</span>
+}</pre>
+<div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="60:found" data-path="50,70,60" data-cap="search(60): 50 &rarr; 70 &rarr; 60 &#10004; FOUND"></div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-path="50,30,40" data-cap="search(45): 50 &rarr; 30 &rarr; 40 &rarr; null &#10008; NOT found"></div></div>
+<h3>Step 5 &mdash; Find the Minimum and the Maximum</h3><p><strong>Minimum</strong> = keep going <strong>LEFT</strong> until left is <code>null</code>. &nbsp; <strong>Maximum</strong> = keep going <strong>RIGHT</strong> until right is <code>null</code>. We need these two methods for deleting a node with two children.</p><pre class="bst-code"><span class="c">// Minimum: keep going LEFT until left is null</span>
+<span class="t">Node</span> findMin(<span class="t">Node</span> node) {
+    <span class="k">while</span> (node.left != <span class="n">null</span>) {
+        node = node.left;
+    }
+    <span class="k">return</span> node;
+}
+
+<span class="c">// Maximum: keep going RIGHT until right is null</span>
+<span class="t">Node</span> findMax(<span class="t">Node</span> node) {
+    <span class="k">while</span> (node.right != <span class="n">null</span>) {
+        node = node.right;
+    }
+    <span class="k">return</span> node;
+}</pre>
+<div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="20:found" data-path="50,30,20" data-labels="20:MIN" data-cap="findMin(root): 50 &rarr; 30 &rarr; 20 &nbsp; (MIN = 20)"></div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="80:found" data-path="50,70,80" data-labels="80:MAX" data-cap="findMax(root): 50 &rarr; 70 &rarr; 80 &nbsp; (MAX = 80)"></div></div>
+<h3>Step 6 &mdash; Delete a Node (3 Cases)</h3><p>First <strong>search</strong> for the node (go left / right). When found, check how many children it has:</p>
+<div class="bst-case c1"><h4><span class="bst-tag c1">1</span>Case 1 &mdash; Leaf (no children): delete 20</h4><p>Node 20 has no children. Just remove it: its parent (30) now has <code>left = null</code>.</p><div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="20:del" data-path="50,30" data-cap="Before: 20 is a leaf"></div><div class="bst-arrow">&#8594;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-ops="del:20" data-cap="After: 20 removed"></div></div><pre class="bst-code"><span class="c">// CASE 1: no children (leaf)</span>
+<span class="k">if</span> (node.left == <span class="n">null</span> &amp;&amp; node.right == <span class="n">null</span>) {
+    <span class="k">return</span> <span class="n">null</span>;          <span class="c">// the parent&#x27;s link becomes null</span>
+}</pre></div>
+<div class="bst-case c2"><h4><span class="bst-tag c2">2</span>Case 2 &mdash; One child: delete 60</h4><p>Node 60 has only one child (65). The child <strong>moves up</strong> and takes the place of 60: parent 70 now points to 65. The BST rule still holds.</p><div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="60:del,65:child" data-path="50,70" data-cap="Before: 60 has one child (65)"></div><div class="bst-arrow">&#8594;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-ops="del:60" data-hl="65:child" data-cap="After: 65 took the place of 60"></div></div><pre class="bst-code"><span class="c">// CASE 2: one child</span>
+<span class="k">if</span> (node.left == <span class="n">null</span>) {
+    <span class="k">return</span> node.right;    <span class="c">// parent now points to the right child</span>
+}
+<span class="k">if</span> (node.right == <span class="n">null</span>) {
+    <span class="k">return</span> node.left;     <span class="c">// parent now points to the left child</span>
+}</pre></div>
+<div class="bst-case c3"><h4><span class="bst-tag c3">3</span>Case 3 &mdash; Two children: delete 50 (the root)</h4><p>Node 50 has two children, so we cannot just remove it. We <strong>replace its value</strong> with a value that keeps the BST rule true. There are <strong>two correct choices</strong>:</p>
+<h4>A. Option A &mdash; Successor = MINIMUM of the RIGHT subtree</h4><p>Go <strong>right once</strong> (70), then <strong>left until null</strong> (60). The successor is <strong>60</strong> (the smallest value bigger than 50). Copy 60 into the root, then delete the old 60 &mdash; it has one child (65), so that is <strong>Case 2</strong>.</p><div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="50:del,60:succ" data-path="70,60" data-cap="Before: successor of 50 is 60"></div><div class="bst-arrow">&#8594;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-ops="del:50" data-hl="60:succ,65:child" data-labels="60:new root" data-cap="After: 60 is the new root, 65 moved up"></div></div><pre class="bst-code"><span class="c">// CASE 3 (Option A): use the SUCCESSOR = MINIMUM of the RIGHT subtree</span>
+<span class="t">Node</span> successor = findMin(node.right);             <span class="c">// right once, then left...</span>
+node.data = successor.data;                       <span class="c">// copy 60 into the node</span>
+node.right = delete(node.right, successor.data);  <span class="c">// remove the old 60</span></pre>
+<h4>B. Option B &mdash; Predecessor = MAXIMUM of the LEFT subtree</h4><p>Go <strong>left once</strong> (30), then <strong>right until null</strong> (40). The predecessor is <strong>40</strong> (the largest value smaller than 50). Copy 40 into the root, then delete the old 40 &mdash; it is a leaf, so that is <strong>Case 1</strong>.</p><div class="bst-row"><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-hl="50:del,40:pred" data-path="30,40" data-cap="Before: predecessor of 50 is 40"></div><div class="bst-arrow">&#8594;</div><div class="bst-fig" data-keys="50,30,70,20,40,60,80,65" data-ops="delp:50" data-hl="40:pred" data-labels="40:new root" data-cap="After: 40 is the new root"></div></div><pre class="bst-code"><span class="c">// CASE 3 (Option B): use the PREDECESSOR = MAXIMUM of the LEFT subtree</span>
+<span class="t">Node</span> predecessor = findMax(node.left);            <span class="c">// left once, then right...</span>
+node.data = predecessor.data;                     <span class="c">// copy 40 into the node</span>
+node.left = delete(node.left, predecessor.data);  <span class="c">// remove the old 40</span></pre>
+<div class="info-box"><strong>Why does it work?</strong> The successor (min of right) is bigger than everything on the left and smaller than everything else on the right. The predecessor (max of left) is bigger than everything else on the left and smaller than everything on the right. Either value can sit in the root and the rule <code>left &lt; node &lt; right</code> stays true. The successor/predecessor has <strong>at most one child</strong>, so removing it is always Case 1 or Case 2.</div></div>
+<h3>Full <code>delete</code> method (all 3 cases, successor version)</h3><pre class="bst-code"><span class="k">public</span> <span class="k">void</span> delete(<span class="t">int</span> key) {
+    root = delete(root, key);
+}
+
+<span class="k">private</span> <span class="t">Node</span> delete(<span class="t">Node</span> node, <span class="t">int</span> key) {
+    <span class="k">if</span> (node == <span class="n">null</span>) <span class="k">return</span> <span class="n">null</span>;                <span class="c">// key not in the tree</span>
+
+    <span class="k">if</span> (key &lt; node.data) {
+        node.left = delete(node.left, key);       <span class="c">// search left</span>
+    } <span class="k">else</span> <span class="k">if</span> (key &gt; node.data) {
+        node.right = delete(node.right, key);     <span class="c">// search right</span>
+    } <span class="k">else</span> {
+        <span class="c">// ===== node.data == key : this is the node to delete =====</span>
+
+        <span class="c">// CASE 1: no children (leaf)  -&gt; just remove it</span>
+        <span class="k">if</span> (node.left == <span class="n">null</span> &amp;&amp; node.right == <span class="n">null</span>) {
+            <span class="k">return</span> <span class="n">null</span>;
+        }
+
+        <span class="c">// CASE 2: one child  -&gt; the child takes the node&#x27;s place</span>
+        <span class="k">if</span> (node.left == <span class="n">null</span>) {
+            <span class="k">return</span> node.right;                    <span class="c">// only a right child</span>
+        }
+        <span class="k">if</span> (node.right == <span class="n">null</span>) {
+            <span class="k">return</span> node.left;                     <span class="c">// only a left child</span>
+        }
+
+        <span class="c">// CASE 3: two children</span>
+        <span class="c">//   a) find the successor = MINIMUM of the RIGHT subtree</span>
+        <span class="t">Node</span> successor = findMin(node.right);
+        <span class="c">//   b) copy its value into this node</span>
+        node.data = successor.data;
+        <span class="c">//   c) delete the successor from the right subtree</span>
+        node.right = delete(node.right, successor.data);
+    }
+    <span class="k">return</span> node;
+}</pre><p>To use the <strong>predecessor</strong> instead, replace the Case 3 lines with Option B above (<code>findMax(node.left)</code> and <code>node.left = delete(node.left, ...)</code>).</p>
+
+    <h3>Interactive BST Lab &mdash; Try It in Class</h3>
+    <p>Type a number and press a button. Each step is shown slowly on the tree with the comparison made by the code.</p>
+    <div id="bst-lab">
+        <div class="lab-controls">
+            <input class="lab-input" type="number" min="1" max="99" value="65" dir="ltr">
+            <button class="btn btn-green lab-ins">Insert</button>
+            <button class="btn btn-blue lab-search">Search</button>
+            <button class="btn btn-red lab-del">Delete (successor)</button>
+            <button class="btn btn-purple lab-delp">Delete (predecessor)</button>
+            <button class="btn btn-gray lab-reset">Reset example</button>
+            <button class="btn btn-gray lab-clear">Empty tree</button>
+            <label style="font-weight:700;">Speed: <input class="lab-speed" type="range" min="250" max="2000" step="250" value="1000" style="direction:rtl;"></label>
+        </div>
+        <div class="bst-legend"><span class="lp">path visited</span><span class="lf">found / new</span><span class="ld">node to delete</span><span class="lc">its only child</span><span class="ls">successor</span><span class="lq">predecessor</span></div>
+        <div class="lab-tree"></div>
+        <div class="lab-inorder"></div>
+        <div class="lab-log"></div>
+    </div>
+
+<h3>Summary</h3><table><tr><th>Operation</th><th>Idea</th><th>Time</th></tr><tr><td><strong>Insert</strong></td><td>Compare, go left/right, add as a new leaf at null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>Search</strong></td><td>Compare, go left/right, stop at the key or null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>Min / Max</strong></td><td>Go left (min) or right (max) until null</td><td dir="ltr">O(h)</td></tr><tr><td><strong>Delete &mdash; leaf</strong></td><td>Remove it (parent link = null)</td><td dir="ltr">O(h)</td></tr><tr><td><strong>Delete &mdash; one child</strong></td><td>The child takes its place</td><td dir="ltr">O(h)</td></tr><tr><td><strong>Delete &mdash; two children</strong></td><td>Copy successor (min of right) <em>or</em> predecessor (max of left), then delete that node</td><td dir="ltr">O(h)</td></tr></table>
+<p style="text-align:center;margin-top:18px;"><a class="btn btn-blue" href="BST.java" download style="text-decoration:none;font-size:1.05em;">&#11015; Download the complete program: BST.java</a></p><p style="text-align:center;">It compiles and runs (<code>javac BST.java</code> then <code>java BST</code>) and prints the tree after every case.</p>
+
+</section>
+
+
+
     <!-- Practice Questions Link -->
     <div style="text-align:center;margin:40px 0 10px;">
         <a href="binary_tree_question.html" style="
@@ -1973,5 +2138,6 @@ showCompleteExample('ex1');
 
 </script>
 
+<script src="bst-lab.js"></script>
 </body>
 </html>

@@ -1,0 +1,212 @@
+/* ==========================================================================
+   PROJECTOR THEME (data show) for all Tree pages
+   White pages, black code text, dark high-contrast syntax colours.
+   Loaded LAST in <head> so it overrides the page styles and inline styles.
+   ========================================================================== */
+
+/* ---- White page, no dark gradients ---- */
+html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+body { font-size: 18px; }
+.container {
+    box-shadow: none !important;
+    border: 2px solid #d0d7de;
+}
+
+/* ---- Header: white with dark green text ---- */
+header {
+    background: #ffffff !important;
+    color: #0b3d1f !important;
+    border-bottom: 4px solid #1e8449;
+}
+header h1, header p, header .sub { color: #0b3d1f !important; opacity: 1 !important; }
+header .back-link, .back-link { color: #1a5276 !important; font-weight: 700; }
+header .score-pill { background: #eef7f1 !important; border-color: #1e8449 !important; color: #0b3d1f !important; }
+
+/* ---- Footer ---- */
+footer { background: #ffffff !important; color: #000 !important; border-top: 3px solid #1e8449; }
+footer p { opacity: 1 !important; }
+
+/* ---- Body text darker for projector ---- */
+p, li, td { color: #111111; }
+h2 { color: #0b5a2b !important; }
+h3 { color: #0e6655 !important; }
+
+/* ---- Key-concept boxes: light background, dark text ---- */
+.key-concept {
+    background: #eef7f1 !important;
+    color: #000 !important;
+    border: 2px solid #1e8449;
+}
+.key-concept h4 { color: #0b5a2b !important; }
+
+/* ==========================================================================
+   CODE BLOCKS: white background, black text
+   (covers the inline dark blocks  style="background:#1a2635 ..." )
+   ========================================================================== */
+[style*="background:#1a2635"],
+[style*="background: #1a2635"],
+.code-sol,
+.trav-result,
+.concept-box,
+.badges-panel,
+.queue-panel,
+.bfs-result-row {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #9aa5b1 !important;
+}
+[style*="background:#1a2635"],
+.code-sol {
+    font-size: 1.02em !important;
+    font-weight: 600;
+    line-height: 1.75 !important;
+}
+[style*="background:#1a2635"] *,
+.code-sol, .trav-result {
+    color: #000000;
+}
+code[style*="background:#1e293b"] {
+    background: #f2f4f7 !important;
+    color: #000 !important;
+    border: 1px solid #9aa5b1;
+}
+
+/* Syntax colours remapped to DARK, high-contrast colours */
+[style*="color:#74b9ff"] { color: #0000b3 !important; font-weight: 800; }   /* keywords  -> dark blue  */
+[style*="color:#fdcb6e"] { color: #6a1b9a !important; font-weight: 800; }   /* types     -> dark purple */
+[style*="color:#636e72"] { color: #1b5e20 !important; font-style: italic; } /* comments  -> dark green */
+[style*="color:#e17055"] { color: #b71c1c !important; font-weight: 800; }   /* null      -> dark red   */
+[style*="color:#55efc4"] { color: #a0522d !important; }                     /* strings   -> brown      */
+[style*="background:#1a2635"] [style*="color:#2ecc71"],
+.concept-box [style*="color:#2ecc71"],
+.badges-panel [style*="color:#2ecc71"],
+.queue-panel [style*="color:#2ecc71"],
+.bfs-result-row [style*="color:#2ecc71"],
+.trav-result [style*="color:#2ecc71"],
+[style*="background:#1a2635"] [style*="color:#ecf0f1"],
+.concept-box [style*="color:#ecf0f1"],
+.badges-panel [style*="color:#ecf0f1"],
+.queue-panel [style*="color:#ecf0f1"],
+.bfs-result-row [style*="color:#ecf0f1"],
+.trav-result [style*="color:#ecf0f1"],
+[style*="background:#1a2635"] [style*="color:white"],
+.concept-box [style*="color:white"],
+.badges-panel [style*="color:white"],
+.queue-panel [style*="color:white"],
+.bfs-result-row [style*="color:white"],
+.trav-result [style*="color:white"] { color: #000000 !important; }
+[style*="background:#1a2635"] [style*="color:#f39c12"],
+.concept-box [style*="color:#f39c12"],
+.badges-panel [style*="color:#f39c12"],
+.queue-panel [style*="color:#f39c12"],
+.bfs-result-row [style*="color:#f39c12"],
+.trav-result [style*="color:#f39c12"] { color: #9a4d00 !important; }
+[style*="background:#1a2635"] [style*="color:#e74c3c"],
+.concept-box [style*="color:#e74c3c"],
+.badges-panel [style*="color:#e74c3c"],
+.queue-panel [style*="color:#e74c3c"],
+.bfs-result-row [style*="color:#e74c3c"],
+.trav-result [style*="color:#e74c3c"] { color: #b71c1c !important; }
+
+/* Traversal page panels: dark-on-light headings */
+.concept-box h3, .badges-panel h4 { color: #0b5a2b !important; }
+.queue-panel h4, .bfs-result-label { color: #9a4d00 !important; }
+.queue-empty { color: #444 !important; }
+
+/* Tables */
+th { background: #1e8449 !important; color: #fff !important; }
+
+/* Traversal page: "3 visits" cards and labels that were light-on-dark */
+.visit-card { background: #ffffff !important; }
+.v1 .visit-num { color: #1b5e20 !important; }
+.v2 .visit-num { color: #0d47a1 !important; }
+.v3 .visit-num { color: #6a1b9a !important; }
+.visit-label { color: #111 !important; }
+.badge-node-label { color: #111 !important; }
+.concept-box p[style*="color:#bdc3c7"] { color: #111 !important; }
+.concept-box strong, .concept-box b { color: #000; }
+
+/* ==========================================================================
+   BST section (section 15): code blocks, figures, interactive lab
+   ========================================================================== */
+pre.bst-code {
+    background: #ffffff;
+    color: #000000;
+    border: 2px solid #9aa5b1;
+    border-left: 8px solid #1e8449;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 14px 0 22px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 1.05em;
+    font-weight: 600;
+    line-height: 1.6;
+    overflow-x: auto;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+}
+pre.bst-code .k { color: #0000b3; font-weight: 800; }              /* keyword  */
+pre.bst-code .t { color: #6a1b9a; font-weight: 800; }              /* type     */
+pre.bst-code .c { color: #1b5e20; font-style: italic; font-weight: 600; } /* comment */
+pre.bst-code .n { color: #b71c1c; font-weight: 800; }              /* null/true/false/numbers */
+pre.bst-code .s { color: #a0522d; }                                /* string   */
+pre.bst-code .hl { background: #fff59d; outline: 2px solid #e65100; border-radius: 3px; }
+
+.bst-fig { text-align: center; margin: 10px 0 18px; }
+.bst-svg { display: inline-block; background: #fff; border: 2px solid #d0d7de; border-radius: 10px; padding: 6px; }
+.bst-cap { font-weight: 700; color: #000; margin-top: 6px; font-size: 1em; }
+.bst-row { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; align-items: flex-start; }
+.bst-row > .bst-fig { flex: 1 1 300px; }
+.bst-arrow { align-self: center; font-size: 2.4em; font-weight: 900; color: #000; }
+
+.bst-case {
+    border: 3px solid #1e8449;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 22px 0;
+    background: #ffffff;
+}
+.bst-case.c1 { border-color: #2e7d32; }
+.bst-case.c2 { border-color: #ef6c00; }
+.bst-case.c3 { border-color: #c62828; }
+.bst-case h4 { font-size: 1.25em; color: #000 !important; margin-top: 0; }
+.bst-tag { display: inline-block; padding: 2px 12px; border-radius: 14px; color: #fff; font-weight: 800; margin-inline-end: 8px; }
+.bst-tag.c1 { background: #2e7d32; } .bst-tag.c2 { background: #ef6c00; } .bst-tag.c3 { background: #c62828; }
+
+.bst-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 0; font-weight: 700; color: #000; }
+.bst-legend span::before {
+    content: ''; display: inline-block; width: 18px; height: 18px; border-radius: 50%;
+    vertical-align: -3px; margin-inline-end: 6px; border: 3px solid #000;
+}
+.bst-legend .lp::before { background: #fff59d; border-color: #e65100; }
+.bst-legend .ld::before { background: #c62828; border-color: #7f0000; }
+.bst-legend .ls::before { background: #1565c0; border-color: #0d47a1; }
+.bst-legend .lq::before { background: #6a1b9a; border-color: #4a148c; }
+.bst-legend .lc::before { background: #ef6c00; border-color: #bf360c; }
+.bst-legend .lf::before { background: #2e7d32; border-color: #1b5e20; }
+
+.trace { border-collapse: collapse; margin: 10px 0 20px; width: auto; min-width: 60%; }
+.trace td, .trace th { border: 2px solid #9aa5b1 !important; padding: 8px 14px; font-size: 1em; color: #000; }
+
+#bst-lab { border: 3px solid #1565c0; border-radius: 12px; padding: 18px; background: #fff; }
+#bst-lab .lab-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+#bst-lab .lab-input { width: 90px; font-size: 1.3em; font-weight: 800; padding: 6px 10px; border: 3px solid #000; border-radius: 8px; text-align: center; }
+#bst-lab button { font-size: 1em; }
+#bst-lab .lab-tree { text-align: center; min-height: 220px; }
+#bst-lab .lab-inorder { font-family: Consolas, 'Courier New', monospace; font-weight: 800; font-size: 1.1em; color: #000; text-align: center; margin: 6px 0 10px; direction: ltr; }
+#bst-lab .lab-log { border: 2px solid #9aa5b1; border-radius: 8px; padding: 10px 14px; min-height: 90px; max-height: 260px; overflow-y: auto; font-size: 1.05em; background: #fff; }
+#bst-lab .lab-line { padding: 4px 0; border-bottom: 1px dashed #ccc; color: #000; }
+#bst-lab .lab-line.head { font-weight: 800; color: #0d47a1; }
+#bst-lab .lab-line.ok { color: #1b5e20; font-weight: 800; }
+#bst-lab .lab-line.bad { color: #b71c1c; font-weight: 800; }
+
+/* Intro "NEW TODAY" card: light instead of dark green */
+.ds-card.highlight { background: #eef7f1 !important; border: 3px solid #1e8449 !important; color: #000 !important; }
+.ds-card.highlight h4, .ds-card.highlight p { color: #000 !important; opacity: 1 !important; }
+
+/* Arabic pages: keep inline code left-to-right */
+[dir="rtl"] code { direction: ltr; unicode-bidi: isolate; display: inline-block; }
